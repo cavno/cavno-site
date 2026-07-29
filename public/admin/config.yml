@@ -4,7 +4,7 @@ backend:
   name: github
   repo: cavno/cavno-site                # ← 改成 你的用户名/仓库名
   branch: main
-  base_url: https://sveltia-cms-auth.YOUR-SUBDOMAIN.workers.dev   # ← 部署 OAuth Worker 后替换
+  base_url: https://sveltia-cms-auth.cavno-site.tchow.workers.dev   # ← 部署 OAuth Worker 后替换
 
 site_url: https://cavno.pages.dev
 media_folder: public/covers
