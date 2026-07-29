@@ -9,10 +9,7 @@ export function getStaticPaths() {
   for (const s of nav.sections) {
     paths.push({ params: { path: s.slug }, props: { sectionSlug: s.slug, subSlug: null } });
     for (const sub of s.subsections) {
-      paths.push({
-        params: { path: `${s.slug}/${sub.slug}` },
-        props: { sectionSlug: s.slug, subSlug: sub.slug },
-      });
+      paths.push({ params: { path: `${s.slug}/${sub.slug}` }, props: { sectionSlug: s.slug, subSlug: sub.slug } });
     }
   }
   return paths;
@@ -31,9 +28,17 @@ const ym = (d: Date) => `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(
 const tagFor = (slug: string) =>
   section.subsections.find((x) => x.slug === slug)?.en ?? (slug || '未分类');
 
-const pageTitle = sub
-  ? `${sub.en} · ${section.en} · Cavno`
-  : `${section.en} · Cavno`;
+// 分组视图（仅一级板块页）：按 nav 中的栏目顺序分节，未分类殿后
+const groups = sub ? [] : [
+  ...section.subsections
+    .map((x) => ({ slug: x.slug, en: x.en, zh: x.zh, items: all.filter((i) => i.data.subsection === x.slug) }))
+    .filter((g) => g.items.length > 0),
+  ...(all.some((i) => !i.data.subsection)
+    ? [{ slug: '', en: 'Misc', zh: '未分类', items: all.filter((i) => !i.data.subsection) }] : []),
+];
+const modes = sub ? 'cards,list' : 'cards,list,grouped';
+
+const pageTitle = sub ? `${sub.en} · ${section.en} · Cavno` : `${section.en} · Cavno`;
 const desc = (sub?.desc || section.desc) ?? '';
 ---
 <Base title={pageTitle} description={desc}>
@@ -60,25 +65,100 @@ const desc = (sub?.desc || section.desc) ?? '';
 
 <section class="grid-pad">
   <div class="wrap">
-    <div class="recent-grid">
-      {items.length > 0 ? (
-        items.map((i) => (
-          <ItemCard
-            href={i.data.href}
-            title={i.data.title}
-            summary={i.data.summary}
-            tag={tagFor(i.data.subsection)}
-            date={ym(i.data.date)}
-          />
-        ))
-      ) : (
+    {items.length > 0 ? (
+      <>
+        <div class="view-bar">
+          <span class="v-count">共 {items.length} 项</span>
+          <div class="v-seg" role="group" aria-label="视图切换" data-modes={modes}>
+            <button data-v="cards" aria-pressed="true" title="卡片视图">
+              <svg viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"><rect x="1" y="1" width="6" height="6" rx="1.2"/><rect x="9" y="1" width="6" height="6" rx="1.2"/><rect x="1" y="9" width="6" height="6" rx="1.2"/><rect x="9" y="9" width="6" height="6" rx="1.2"/></svg>
+              <span>卡片</span>
+            </button>
+            <button data-v="list" aria-pressed="false" title="列表视图">
+              <svg viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"><rect x="1" y="2" width="14" height="2.4" rx="1.2"/><rect x="1" y="6.8" width="14" height="2.4" rx="1.2"/><rect x="1" y="11.6" width="14" height="2.4" rx="1.2"/></svg>
+              <span>列表</span>
+            </button>
+            {!sub && (
+              <button data-v="grouped" aria-pressed="false" title="按栏目分组">
+                <svg viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"><rect x="1" y="1" width="9" height="2.6" rx="1.3"/><rect x="1" y="6" width="14" height="2.4" rx="1.2"/><rect x="1" y="10.4" width="14" height="2.4" rx="1.2"/></svg>
+                <span>分组</span>
+              </button>
+            )}
+          </div>
+        </div>
+
+        <div class="catalog" id="catalog" data-view="cards">
+          <div class="v-flat recent-grid">
+            {items.map((i) => (
+              <ItemCard
+                href={i.data.href}
+                title={i.data.title}
+                summary={i.data.summary}
+                tag={tagFor(i.data.subsection)}
+                date={ym(i.data.date)}
+              />
+            ))}
+          </div>
+          {!sub && (
+            <div class="v-grouped">
+              {groups.map((g) => (
+                <section class="g-sec">
+                  <h3 class="g-head">
+                    {g.en} <small>{g.zh} · {g.items.length} 项</small>
+                    {g.slug && <a class="g-more" href={`/${section.slug}/${g.slug}/`}>进入栏目 →</a>}
+                  </h3>
+                  <div class="g-list">
+                    {g.items.map((i) => (
+                      <a class="g-row" href={i.data.href}>
+                        <span class="g-t">{i.data.title}</span>
+                        <span class="g-s">{i.data.summary}</span>
+                        <span class="g-d">{ym(i.data.date)}</span>
+                      </a>
+                    ))}
+                  </div>
+                </section>
+              ))}
+            </div>
+          )}
+        </div>
+      </>
+    ) : (
+      <div class="recent-grid">
         <div class="empty">
           此栏目暂无条目。<br />
-          在 <code>/admin</code> 后台新增，或运行 <code>node scripts/migrate.mjs &lt;源目录&gt; --section={section.slug}{sub ? ` --subsection=${sub.slug}` : ''}</code> 批量导入。
+          在 <code>scripts/migrate-all.mjs</code> 的 PLAN 表中加入源目录后重跑，或用 <code>scripts/convert.mjs</code> 手动转换。
         </div>
-      )}
-    </div>
+      </div>
+    )}
   </div>
 </section>
+
+<script>
+  // 视图切换：URL ?view= 优先，其次 localStorage 记忆，默认卡片
+  const cat = document.getElementById('catalog');
+  const seg = document.querySelector('.v-seg') as HTMLElement | null;
+  if (cat && seg) {
+    const modes = (seg.dataset.modes || 'cards').split(',');
+    const KEY = 'cavno:catalog-view';
+    let v = new URL(location.href).searchParams.get('view') || localStorage.getItem(KEY) || 'cards';
+    if (!modes.includes(v)) v = 'cards';
+    const apply = (nv: string) => {
+      cat.dataset.view = nv;
+      seg.querySelectorAll('button').forEach((b) =>
+        b.setAttribute('aria-pressed', String((b as HTMLElement).dataset.v === nv)));
+    };
+    apply(v);
+    seg.addEventListener('click', (e) => {
+      const b = (e.target as HTMLElement).closest('button');
+      if (!b) return;
+      v = (b as HTMLElement).dataset.v || 'cards';
+      apply(v);
+      try { localStorage.setItem(KEY, v); } catch {}
+      const u = new URL(location.href);
+      u.searchParams.set('view', v);
+      history.replaceState(null, '', u);
+    });
+  }
+</script>
 
 </Base>

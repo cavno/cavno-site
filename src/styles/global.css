@@ -237,3 +237,51 @@ footer.site-foot{background:var(--ink);color:rgba(250,249,245,.72);margin-top:20
 .lp{position:relative;isolation:isolate}
 .crumb-back{display:inline-block;margin-top:6px;font-size:13.5px;color:var(--ink-2)}
 .crumb-back:hover{color:var(--coral-deep)}
+
+/* ---------- 目录视图切换（卡片/列表/分组） ---------- */
+.view-bar{display:flex;align-items:center;justify-content:space-between;gap:14px;margin:-6px 0 22px}
+.v-count{font-family:var(--mono);font-size:12px;color:var(--ink-2);letter-spacing:.06em}
+.v-seg{display:flex;gap:2px;background:var(--panel);border:1px solid var(--line);border-radius:999px;padding:3px}
+.v-seg button{display:flex;align-items:center;gap:6px;border:0;background:none;border-radius:999px;
+  padding:6px 12px;font-size:12.5px;color:var(--ink-2);line-height:1;cursor:pointer}
+.v-seg button svg{width:13px;height:13px;flex:none}
+.v-seg button:hover{color:var(--ink)}
+.v-seg button[aria-pressed="true"]{background:var(--card);color:var(--ink);box-shadow:0 1px 3px rgba(20,20,19,.10)}
+
+/* 列表视图：同一份 DOM，网格改行式，摘要压成单行 */
+.catalog .v-grouped{display:none}
+.catalog[data-view="list"] .v-flat{display:flex;flex-direction:column;gap:6px}
+.catalog[data-view="list"] .item{display:grid;grid-template-columns:auto minmax(0,1.05fr) minmax(0,1fr) auto;
+  align-items:center;gap:16px;padding:11px 16px;border-radius:12px}
+.catalog[data-view="list"] .item:hover{transform:none}
+.catalog[data-view="list"] .item-meta{display:contents}
+.catalog[data-view="list"] .tag{order:0}
+.catalog[data-view="list"] .item h3{order:1;font-size:15px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.catalog[data-view="list"] .item p{order:2;font-size:12.5px;margin:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.catalog[data-view="list"] .date{order:3}
+
+/* 分组视图：按二级栏目分节的紧凑索引 */
+.catalog[data-view="grouped"] .v-flat{display:none}
+.catalog[data-view="grouped"] .v-grouped{display:block}
+.g-sec{margin-bottom:34px}
+.g-head{display:flex;align-items:baseline;gap:10px;font-family:var(--serif);font-weight:600;font-size:19px;margin-bottom:10px}
+.g-head small{font-family:var(--mono);font-weight:400;font-size:11px;color:var(--ink-2)}
+.g-more{margin-left:auto;font-family:var(--sans);font-weight:400;font-size:12.5px;color:var(--ink-2);
+  border-bottom:1px solid var(--line-2);padding-bottom:1px}
+.g-more:hover{color:var(--coral-deep);border-color:var(--coral-deep)}
+.g-list{border:1px solid var(--line);border-radius:14px;background:var(--card);overflow:hidden}
+.g-row{display:grid;grid-template-columns:minmax(0,1.05fr) minmax(0,1fr) auto;gap:16px;align-items:center;padding:11px 16px}
+.g-row + .g-row{border-top:1px solid var(--line)}
+.g-row:hover{background:var(--panel)}
+.g-t{font-family:var(--serif);font-weight:600;font-size:15px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.g-s{font-size:12.5px;color:var(--ink-2);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.g-d{font-family:var(--mono);font-size:11.5px;color:var(--ink-2)}
+
+@media (max-width:720px){
+  .catalog[data-view="list"] .item{grid-template-columns:auto minmax(0,1fr) auto}
+  .catalog[data-view="list"] .item p{display:none}
+  .g-row{grid-template-columns:minmax(0,1fr) auto}
+  .g-s{display:none}
+  .v-seg button span{display:none}
+  .v-seg button{padding:7px 10px}
+}
