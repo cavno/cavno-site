@@ -1,0 +1,50 @@
+name: migrate-legacy
+on: workflow_dispatch
+permissions:
+  contents: write
+jobs:
+  migrate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - name: Clone legacy repos and restore file mtimes
+        run: |
+          set -e
+          mkdir -p _legacy && cd _legacy
+          for r in Investing Reading_and_Thinking Life_Style_and_Skills Working; do
+            git clone -q "https://github.com/cavno/$r"
+            (cd "$r" && git -c core.quotepath=false log --format='COMMIT %ct' --name-only \
+              | awk '/^COMMIT /{t=$2;next} NF{if(!seen[$0]++) print t "\t" $0}' \
+              | while IFS="$(printf '\t')" read -r t f; do [ -f "$f" ] && touch -d "@$t" "$f" || true; done)
+          done
+      - name: Run migrations (include per-work index.html)
+        run: |
+          set -e
+          node scripts/migrate.mjs _legacy/Investing --section=investing --include-index
+          node scripts/migrate.mjs _legacy/Reading_and_Thinking/Books --section=reading --subsection=books --include-index
+          node scripts/migrate.mjs _legacy/Reading_and_Thinking/Philosophy --section=reading --subsection=philosophy --include-index
+          node scripts/migrate.mjs _legacy/Reading_and_Thinking/Thinking --section=reading --subsection=thinking --include-index
+          node scripts/migrate.mjs _legacy/Reading_and_Thinking/Mathematics --section=reading --subsection=math --include-index
+          node scripts/migrate.mjs _legacy/Life_Style_and_Skills/Driving --section=life --subsection=driving --include-index
+          node scripts/migrate.mjs _legacy/Working/Amazon_Tools --section=working --subsection=amazon --include-index
+      - name: Prune hub items, sample items, oversized files
+        run: |
+          set -e
+          cd src/content/items
+          rm -f investing-index.md reading-books-index.md reading-philosophy-index.md reading-thinking-index.md reading-math-index.md life-driving-index.md working-amazon-index.md
+          grep -l '"示例"' *.md | xargs -r rm -f
+          cd ../../..
+          find public/apps -type f -size +25M -print -delete
+          rm -rf _legacy
+          echo "items: $(ls src/content/items/*.md | wc -l)"
+          echo "apps files: $(find public/apps -type f | wc -l)"
+      - name: Commit and push
+        run: |
+          git config user.name "cavno"
+          git config user.email "chowmengen@gmail.com"
+          git add -A
+          git commit -m "migrate legacy sites into public/apps + item entries" -m "Co-Authored-By: Claude Fable 5 <noreply@anthropic.com>"
+          git push
