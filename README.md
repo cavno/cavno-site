@@ -1,6 +1,6 @@
 # Cavno · 个人公开工作台
 
-四个 GitHub Pages 仓库（Investing / Reading_and_Thinking / Life_Style_and_Skills / Working）**重构**后的统一站点：旧的单文件 HTML 页面不再原样粘贴，而是逐页重构为站内原生页面——统一导航外壳、统一设计令牌（claude.com 视觉体系），保留原有内容与交互结构。无后台、无数据库、无 GitHub OAuth，纯静态构建，托管于 Cloudflare Pages。
+四个 GitHub Pages 仓库（Investing / Reading_and_Thinking / Life_Style_and_Skills / Working）**重构**后的统一站点：旧的单文件 HTML 页面不再原样粘贴，而是逐页重构为站内原生页面——统一导航外壳、统一设计令牌（claude.com 视觉体系），保留原有内容与交互结构。无后台、无数据库、无 GitHub OAuth，纯静态构建，托管于 Cloudflare Workers（静态资产）：`https://cavno-site.tchow.workers.dev`。
 
 ## 0. 目录结构
 
@@ -60,30 +60,46 @@ node scripts/convert.mjs _legacy/Investing                        --section=inve
 
 **TOKEN_MAP 怎么补**：`convert.mjs` 顶部的映射表预填了旧羊皮纸/青绿/赭陶体系的常见值；跑一次 `--dry`，报告会列出"未映射颜色清单"（按出现频次排序），把属于旧设计令牌的补进表里、装饰性杂色留着即可，然后 `--force` 重跑。
 
-## 2.5 公共导航（所有页面）
+## 2.5 公共导航：站内页面与 GitHub 旧页
 
-全站导航是唯一公共外壳，由 `src/layouts/Base.astro` 提供：首页、目录页、重构后的旧页、404 全部套用同一份顶栏（sticky 常驻）+ 移动端抽屉 + 页脚，改一处全站生效。顶栏会按当前 URL 自动高亮所在板块（一级按钮加深、下拉中的当前栏目标橙、抽屉自动展开对应板块），子页面任何深度都能一眼定位并跳回。
+**站内页面**（首页/目录页/重构页/404）的公共导航由 `src/layouts/Base.astro` 唯一提供：sticky 顶栏 + 两级下拉 + 移动端抽屉 + 页脚，并按当前 URL 自动高亮所在板块与栏目，改一处全站生效。
 
-兜底通道：个别旧页若暂不重构、以原样 HTML 放进 `public/`，在其 `</body>` 前加一行
+**仍在 GitHub Pages 上的旧页**也能拥有同款导航栏（含二级下拉、当前板块高亮、"回到主站"按钮、移动端折叠），从而随时倒回主站。原理：主站构建时由 `scripts/gen-shell.mjs` 从 `nav.json` 生成 `public/shell.js`，其中所有链接都是指向主站的**绝对地址**，旧页跨域引用一行即可（经典 script 跨域加载不受 CORS 限制，Shadow DOM 渲染不与旧页样式互相污染）：
 
 ```html
-<script src="/shell.js" defer></script>
+<script src="https://cavno-site.tchow.workers.dev/shell.js" defer data-cavno-shell></script>
 ```
 
-即得左上角悬浮导航胶囊（首页 + 四大板块，当前板块高亮）。`shell.js` 由 `scripts/gen-shell.mjs` 从 `nav.json` 自动生成（`npm run dev / build` 时自动执行），用 Shadow DOM 渲染，与旧页样式互不污染。
+批量接入（对旧仓库本地 clone 执行，push 后全站生效）：
 
-## 3. 部署到 Cloudflare Pages（免费）
+```bash
+node scripts/inject-shell.mjs _legacy/Investing
+node scripts/inject-shell.mjs _legacy/Reading_and_Thinking
+node scripts/inject-shell.mjs _legacy/Life_Style_and_Skills
+node scripts/inject-shell.mjs _legacy/Working
+# 然后进各仓库 git add -A && git commit -m "add shared nav" && git push
+```
 
-方式 A（推荐，仓库照常放 GitHub）：Cloudflare Dashboard → Workers & Pages → Pages → 连接仓库 → 预设 Astro（构建 `npm run build`，输出 `dist`）。push 即自动部署。
+幂等可重复执行；`--dry` 预览；`--remove` 一键清除；`--src=` 可改脚本地址（例如把 shell.js 拷进旧仓库后用相对路径，代价是更新不再自动跟随）。要点与注意：
 
-方式 B（完全不连 GitHub）：本地构建后直接上传产物：
+- **前置条件**：主站必须已部署，`astro.config.mjs` 的 `site` 填线上地址（当前为 `https://cavno-site.tchow.workers.dev`）。shell.js 内嵌该地址作兜底；**跨域引用时运行时自动改用脚本实际来源域**，所以即使以后换域名，旧页只要还在引用一个能访问到的 shell.js，链接就自动指对，无需重新注入。
+- **仓库根页注意**：`Reading_and_Thinking`、`Working` 两仓库根目录没有 `index.html`（根页由 GitHub 用 README.md 渲染），注入工具只处理 `.html` 文件，这两个根页默认不会有导航栏。可选补法：在仓库根新建 `_includes/head-custom.html`，内容即上面那行 `<script …>`（GitHub Pages 默认 Jekyll 主题支持该自定义包含，效果上线后自验）；或接受根页无导航。
+- 导航栏固定在顶部并把页面下推 60px；个别自带固定头部的旧页若冲突，在 script 标签上加 `data-nopad` 后自行调整。
+- 旧仓库路径（如 `/Reading_and_Thinking/**`）通过 `gen-shell.mjs` 顶部的 `LEGACY_MAP` 映射到板块，用于高亮当前位置，可自行增删。
+- 本站 `public/` 里未重构的原样页面同样适用这一行引用。
+
+## 3. 部署到 Cloudflare Workers（免费）
+
+线上地址：`https://cavno-site.tchow.workers.dev`（Workers 静态资产，配置见 `wrangler.jsonc`，`name` 与线上 Worker 同名，部署即覆盖更新）。
+
+本地一键部署（首次会引导浏览器登录 Cloudflare）：
 
 ```bash
 npm run build
-npx wrangler pages deploy dist --project-name=cavno-site
+npx wrangler deploy
 ```
 
-免费额度：静态请求与带宽不限量；文件总数 ≤ 20,000、单文件 ≤ 25 MB。部署后把实际地址回填 `astro.config.mjs` 的 `site`。自定义域名在 Pages 项目 Custom domains 绑定（域名需另行注册）。
+若 Worker 是在 Dashboard 连 GitHub 自动构建的，push 即自动部署（构建命令 `npm run build`）。以后绑自定义域名：改 `astro.config.mjs` 的 `site` → 重新 build + 部署即可，旧页无需重新注入（原理见 2.5）。
 
 ## 4. 旧站跳转
 
@@ -93,7 +109,7 @@ GitHub Pages 不支持服务端 301。把 `scripts/redirect-template.html` 复�
 
 - CSS 作用域化按常规 CSS 写法处理（不支持原生 CSS 嵌套语法）；`position:fixed`、`100vh` 布局、脚本直接操作 `document.body` 的页面会在报告中标出，需人工微调（通常是把目标从 body 改为 `.lp`）。
 - 旧页内部的组件形态（圆角、按钮造型等）不会被脚本改变——脚本统一的是色彩、字体与外壳；形态级统一属于逐页精修的范畴。
-- `*.pages.dev` 及未备案的 Cloudflare CDN 在中国大陆可达性不稳定（与 github.io 相当）。要稳定大陆访问需 ICP 备案 + 境内托管，超出本方案边界。
+- `*.workers.dev` / `*.pages.dev` 及未备案的 Cloudflare CDN 在中国大陆可达性不稳定（与 github.io 相当）；shell.js 加载失败时旧页只是没有导航条，内容不受影响。介意的话可用 `--src=` 把 shell.js 拷进各仓库改走同域相对路径，代价是导航更新不再自动跟随。要稳定大陆访问需 ICP 备案 + 境内托管，超出本方案边界。
 
 ## 附：npm 镜像问题
 

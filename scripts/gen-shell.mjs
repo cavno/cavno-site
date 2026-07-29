@@ -1,89 +1,190 @@
 #!/usr/bin/env node
 /**
- * 生成 public/shell.js —— 未转换原始静态页的"兜底公共导航"
+ * 生成 public/shell.js —— 可跨域使用的"主站同款顶部导航栏"
  *
- * 站内正规页面（首页/目录页/重构页）的公共导航由 Base.astro 提供，无需此脚本。
- * 若个别旧页暂不重构、直接以原样 HTML 放进 public/ 目录，只需在其 </body> 前加一行：
+ * 用途：让仍托管在 GitHub Pages（cavno.github.io/**）上的旧静态页面
+ * 也拥有与主站首页一致的导航栏，随时倒回主站。旧页只需一行：
  *
- *     <script src="/shell.js" defer></script>
+ *     <script src="https://<你的主站域名>/shell.js" defer></script>
  *
- * 即可获得一枚悬浮导航胶囊（左上角）：Cavno. → 展开首页与四大板块链接，
- * 当前板块自动高亮。使用 Shadow DOM 渲染，与旧页样式互不污染。
+ * （批量注入见 scripts/inject-shell.mjs；主站 public/ 里的原样页面同样适用）
  *
- * 本脚本以 src/content/nav.json 为唯一数据源，由 npm run dev / build 自动执行，
- * 改导航后无需手动同步。
+ * 关键设计：
+ *   - 所有链接均为绝对地址：构建时内嵌 astro.config.mjs 的 site 字段作兜底，
+ *     跨域引用时运行时自动改用脚本实际来源域（currentScript.src 的 origin）——
+ *     即使 site 配置过时或以后换域名，只要旧页能加载到脚本，链接就指对；
+ *     经典 <script> 跨域加载不受 CORS 限制
+ *   - Shadow DOM 渲染，与旧页样式互不污染
+ *   - 悬停展开二级栏目（隐形桥 + 关闭延迟，与主站行为一致）
+ *   - 依据 LEGACY_MAP 识别旧仓库路径，自动高亮当前板块
+ *   - 顶部自动让位 60px（在 script 标签上加 data-nopad 可关闭）
+ *
+ * 数据源：src/content/nav.json + astro.config.mjs(site)。
+ * 由 npm run dev / build 自动执行；改导航或域名后重新部署主站，
+ * GitHub 上的旧页因为是远程引用会自动跟随，无需逐仓库更新。
  */
 import { promises as fs } from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
+
+/* 旧 GitHub 仓库路径首段 → 新站板块 slug（用于在旧页上高亮当前板块，可自行增删） */
+const LEGACY_MAP = {
+  Investing: 'investing',
+  Reading_and_Thinking: 'reading',
+  Life_Style_and_Skills: 'life',
+  Working: 'working',
+};
+
 const nav = JSON.parse(await fs.readFile(path.join(ROOT, 'src/content/nav.json'), 'utf-8'));
-const data = nav.sections.map((s) => ({ slug: s.slug, en: s.en, zh: s.zh }));
+const cfg = await fs.readFile(path.join(ROOT, 'astro.config.mjs'), 'utf-8');
+const site = (cfg.match(/site:\s*['"]([^'"]+)['"]/)?.[1] ?? '').replace(/\/+$/, '');
+if (!site) {
+  console.error('astro.config.mjs 缺少 site 字段（shell.js 需要绝对地址）'); process.exit(1);
+}
 
-const js = `/* 自动生成：node scripts/gen-shell.mjs（数据源 src/content/nav.json），请勿手改 */
+const data = nav.sections.map((s) => ({
+  slug: s.slug, en: s.en, zh: s.zh,
+  subs: s.subsections.map((x) => ({ slug: x.slug, en: x.en, zh: x.zh })),
+}));
+
+const js = `/* 自动生成：node scripts/gen-shell.mjs（数据源 nav.json + astro.config.site），请勿手改 */
 (function () {
-  if (document.getElementById('cavno-shell')) return;
-  var NAV = ${JSON.stringify(data)};
-  var here = location.pathname.endsWith('/') ? location.pathname : location.pathname + '/';
+  var doc = document;
+  if (doc.getElementById('cavno-shell')) return;
+  var me = doc.currentScript;
+  var noPad = !!(me && me.hasAttribute('data-nopad'));
 
-  var host = document.createElement('div');
-  host.id = 'cavno-shell';
-  var root = host.attachShadow({ mode: 'open' });
+  /* 主站地址：内嵌值兜底；跨域引用时运行时跟随脚本实际来源域。
+     同域引用（主站自身页面，或把 shell.js 拷进旧仓库的本地模式）仍用内嵌值。 */
+  var SITE = ${JSON.stringify(site)};
+  try {
+    if (me && me.src) {
+      var u = new URL(me.src, location.href);
+      if ((u.protocol === 'https:' || u.protocol === 'http:') && u.origin !== location.origin) SITE = u.origin;
+    }
+  } catch (e) {}
+  var NAV = ${JSON.stringify(data)};
+  var MAP = ${JSON.stringify(LEGACY_MAP)};
+
+  function esc(s) {
+    return String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/"/g, '&quot;');
+  }
+
+  /* 当前板块：优先按旧仓库路径映射，其次按新站路径首段 */
+  var seg = location.pathname.split('/').filter(Boolean)[0] || '';
+  var cur = MAP[seg] || '';
+  if (!cur) for (var i = 0; i < NAV.length; i++) if (NAV[i].slug === seg) cur = seg;
 
   var css = [
     ':host{all:initial}',
-    '.wrap{position:fixed;top:14px;left:14px;z-index:2147483000;',
-    "  font-family:-apple-system,BlinkMacSystemFont,'Segoe UI','PingFang SC','Microsoft YaHei',sans-serif}",
-    '.pill{display:flex;align-items:center;gap:8px;cursor:pointer;user-select:none;',
-    '  background:#FAF9F5;color:#141413;border:1px solid #E3E0D5;border-radius:999px;',
-    '  padding:8px 14px;font-size:14px;box-shadow:0 8px 24px rgba(20,20,19,.10)}',
-    ".brand{font-family:'Noto Serif SC','Songti SC',Georgia,serif;font-weight:700;font-size:15px}",
-    '.brand b{color:#D97757;font-weight:700}',
-    '.chev{font-size:10px;color:#63615B;transition:transform .18s}',
-    '.open .chev{transform:rotate(180deg)}',
-    '.panel{margin-top:8px;min-width:210px;background:#fff;border:1px solid #E3E0D5;border-radius:14px;',
-    '  box-shadow:0 16px 40px rgba(20,20,19,.12);padding:8px;display:none}',
-    '.open .panel{display:block}',
-    '.panel a{display:block;padding:9px 12px;border-radius:9px;text-decoration:none;',
-    '  color:#141413;font-size:13.5px;line-height:1.4}',
-    '.panel a small{color:#63615B;font-size:11px;margin-left:6px}',
-    '.panel a:hover{background:#F0EEE6}',
-    '.panel a.cur{color:#C15F3C;font-weight:600}',
-    '.hr{height:1px;background:#E3E0D5;margin:6px 4px}'
+    '*{box-sizing:border-box}',
+    '.bar{position:fixed;top:0;left:0;right:0;height:60px;z-index:2147483000;',
+    '  display:flex;align-items:center;gap:4px;padding:0 18px;',
+    '  background:rgba(250,249,245,.94);-webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px);',
+    '  border-bottom:1px solid #E3E0D5;',
+    "  font-family:-apple-system,BlinkMacSystemFont,'Segoe UI','PingFang SC','Hiragino Sans GB','Microsoft YaHei',sans-serif}",
+    ".brand{font-family:'Noto Serif SC','Songti SC',Georgia,serif;font-weight:700;font-size:19px;",
+    '  color:#141413;text-decoration:none;margin-right:12px;white-space:nowrap}',
+    '.brand b{color:#D97757}',
+    '.it{position:relative;height:100%;display:flex;align-items:center}',
+    '.btn{display:flex;align-items:center;gap:6px;padding:8px 13px;border-radius:999px;',
+    '  font-size:14px;color:#141413;text-decoration:none;white-space:nowrap;line-height:1}',
+    '.btn:hover{background:#ECE9DF}',
+    '.it.cur .btn{background:#ECE9DF;font-weight:600;box-shadow:inset 0 0 0 1px #E3E0D5}',
+    '.cv{font-size:9px;color:#63615B}',
+    '.pn{position:absolute;top:calc(100% - 4px);left:0;min-width:280px;background:#fff;',
+    '  border:1px solid #E3E0D5;border-radius:14px;box-shadow:0 16px 40px rgba(20,20,19,.12);padding:8px;',
+    '  opacity:0;visibility:hidden;transform:translateY(6px);',
+    '  transition:opacity .18s ease,transform .18s ease,visibility 0s linear .28s}',
+    '.pn::before{content:"";position:absolute;left:-8px;right:-8px;top:-12px;height:12px}',
+    '.it:hover .pn{opacity:1;visibility:visible;transform:translateY(0);transition-delay:0s}',
+    '.pn a{display:block;padding:8px 11px;border-radius:9px;color:#141413;text-decoration:none;font-size:13.5px;line-height:1.5}',
+    '.pn a small{color:#63615B;font-size:11px;margin-left:6px}',
+    '.pn a:hover{background:#F0EEE6}',
+    '.ph{border-top:1px solid #E3E0D5;margin-top:4px;padding-top:9px;color:#63615B;font-size:12.5px}',
+    '.sp{flex:1}',
+    '.home{background:#141413;color:#FAF9F5;border-radius:999px;padding:9px 16px;',
+    '  font-size:13px;text-decoration:none;white-space:nowrap}',
+    '.home:hover{background:#000}',
+    '.bg{display:none;background:none;border:0;padding:10px;cursor:pointer;margin-left:auto}',
+    '.bg span{display:block;width:19px;height:2px;background:#141413;margin:4px 0;border-radius:2px}',
+    '.mp{position:fixed;top:60px;left:0;right:0;max-height:calc(100vh - 60px);overflow:auto;',
+    '  background:#FAF9F5;border-bottom:1px solid #E3E0D5;padding:8px 20px 20px;display:none}',
+    '.open .mp{display:block}',
+    ".mp .sec{display:block;font-family:'Noto Serif SC','Songti SC',Georgia,serif;font-weight:700;",
+    '  font-size:16.5px;color:#141413;text-decoration:none;padding:10px 0 4px;margin-top:6px;border-top:1px solid #E3E0D5}',
+    '.mp .sec:first-child{border-top:0;margin-top:0}',
+    '.mp .sub{display:block;color:#63615B;text-decoration:none;font-size:14px;padding:6px 0 6px 14px}',
+    '.mp a.on{color:#C15F3C}',
+    '@media (max-width:860px){.it,.home{display:none}.bg{display:block}}'
   ].join('');
 
-  var links = '<a href="/">\\u9996\\u9875 <small>Home</small></a><div class="hr"></div>';
-  for (var i = 0; i < NAV.length; i++) {
-    var s = NAV[i];
-    var cur = here.indexOf('/' + s.slug + '/') === 0 ? ' class="cur"' : '';
-    links += '<a href="/' + s.slug + '/"' + cur + '>' + s.en + ' <small>' + s.zh + '</small></a>';
+  var items = '';
+  for (var j = 0; j < NAV.length; j++) {
+    var s = NAV[j];
+    var subs = '';
+    for (var k = 0; k < s.subs.length; k++) {
+      var u = s.subs[k];
+      subs += '<a href="' + SITE + '/' + s.slug + '/' + u.slug + '/">' + esc(u.en) +
+              (u.zh !== u.en ? ' <small>' + esc(u.zh) + '</small>' : '') + '</a>';
+    }
+    subs += '<a class="ph" href="' + SITE + '/' + s.slug + '/">\\u8FDB\\u5165 ' + esc(s.zh) + ' \\u677F\\u5757 \\u2192</a>';
+    items += '<div class="it' + (cur === s.slug ? ' cur' : '') + '">' +
+             '<a class="btn" href="' + SITE + '/' + s.slug + '/">' + esc(s.en) + ' <span class="cv">\\u25BC</span></a>' +
+             '<div class="pn">' + subs + '</div></div>';
   }
 
+  var mob = '';
+  for (var m2 = 0; m2 < NAV.length; m2++) {
+    var t = NAV[m2];
+    mob += '<a class="sec' + (cur === t.slug ? ' on' : '') + '" href="' + SITE + '/' + t.slug + '/">' +
+           esc(t.en) + ' ' + esc(t.zh) + '</a>';
+    for (var m3 = 0; m3 < t.subs.length; m3++) {
+      var v = t.subs[m3];
+      mob += '<a class="sub" href="' + SITE + '/' + t.slug + '/' + v.slug + '/">' + esc(v.en) +
+             (v.zh !== v.en ? ' ' + esc(v.zh) : '') + '</a>';
+    }
+  }
+
+  var host = doc.createElement('div');
+  host.id = 'cavno-shell';
+  var root = host.attachShadow({ mode: 'open' });
   root.innerHTML = '<style>' + css + '</style>' +
-    '<div class="wrap" id="w">' +
-      '<div class="pill" id="p" role="button" tabindex="0" aria-haspopup="true" aria-expanded="false">' +
-        '<span class="brand">Cavno<b>.</b></span><span class="chev">\\u25BC</span>' +
-      '</div>' +
-      '<nav class="panel" aria-label="\\u7AD9\\u70B9\\u5BFC\\u822A">' + links + '</nav>' +
+    '<div class="bar" id="w">' +
+      '<a class="brand" href="' + SITE + '/">Cavno<b>.</b></a>' +
+      items +
+      '<span class="sp"></span>' +
+      '<a class="home" href="' + SITE + '/">\\u56DE\\u5230\\u4E3B\\u7AD9</a>' +
+      '<button class="bg" id="bg" aria-label="\\u83DC\\u5355" aria-expanded="false"><span></span><span></span><span></span></button>' +
+      '<nav class="mp" aria-label="\\u7AD9\\u70B9\\u5BFC\\u822A">' + mob + '</nav>' +
     '</div>';
 
   var w = root.getElementById('w');
-  var p = root.getElementById('p');
-  function toggle(force) {
-    var on = typeof force === 'boolean' ? force : !w.classList.contains('open');
+  var bg = root.getElementById('bg');
+  bg.addEventListener('click', function (e) {
+    e.stopPropagation();
+    var on = !w.classList.contains('open');
     w.classList.toggle('open', on);
-    p.setAttribute('aria-expanded', String(on));
-  }
-  p.addEventListener('click', function (e) { e.stopPropagation(); toggle(); });
-  p.addEventListener('keydown', function (e) { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); toggle(); } });
-  document.addEventListener('click', function () { toggle(false); });
-  document.addEventListener('keydown', function (e) { if (e.key === 'Escape') toggle(false); });
+    bg.setAttribute('aria-expanded', String(on));
+  });
+  doc.addEventListener('click', function (e) {
+    var inShell = e.composedPath ? e.composedPath().indexOf(host) !== -1 : false;
+    if (!inShell) { w.classList.remove('open'); bg.setAttribute('aria-expanded', 'false'); }
+  });
+  doc.addEventListener('keydown', function (e) {
+    if (e.key === 'Escape') { w.classList.remove('open'); bg.setAttribute('aria-expanded', 'false'); }
+  });
 
-  document.body.appendChild(host);
+  if (!noPad) {
+    var pad = parseFloat(getComputedStyle(doc.body).paddingTop) || 0;
+    doc.body.style.paddingTop = (pad + 60) + 'px';
+  }
+  doc.body.appendChild(host);
 })();
 `;
 
 await fs.mkdir(path.join(ROOT, 'public'), { recursive: true });
 await fs.writeFile(path.join(ROOT, 'public/shell.js'), js, 'utf-8');
-console.log(`public/shell.js 已生成（${data.length} 个板块）`);
+console.log(`public/shell.js 已生成：主站 ${site}，${data.length} 个板块（含二级下拉）`);
