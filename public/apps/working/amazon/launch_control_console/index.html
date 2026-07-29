@@ -1,0 +1,672 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>新品发射控制台 · </title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@400;600;700;900&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+<style>
+:root{
+  --parchment:#F3EAD3; --paper:#FBF6E9; --teal:#3F7E6B; --teal-dk:#2C5A4C;
+  --terra:#BC4B33; --ink:#2B2620; --muted:#7A7263; --line:#D8CCAE; --gold:#C9A869;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{background:var(--parchment);color:var(--ink);font-family:'Noto Serif SC','Songti SC','STSong','SimSun',serif;line-height:1.78;font-size:15px}
+.hero{max-width:1180px;margin:0 auto;padding:44px 24px 14px}
+.brandline{letter-spacing:.38em;font-size:11px;color:var(--terra);text-transform:uppercase;font-weight:600}
+h1{font-size:34px;color:var(--teal-dk);font-weight:900;margin:6px 0 4px;letter-spacing:.02em}
+.sub{color:var(--muted);font-size:14px;max-width:940px}
+nav#topnav{position:sticky;top:0;z-index:60;background:rgba(243,234,211,.95);backdrop-filter:blur(5px);border-top:1px solid var(--line);border-bottom:1px solid var(--line);margin-top:16px}
+nav#topnav .wrap{max-width:1180px;margin:0 auto;padding:9px 24px;display:flex;gap:16px;flex-wrap:wrap;align-items:center}
+nav#topnav a{color:var(--teal-dk);text-decoration:none;font-size:13px;font-weight:600}
+nav#topnav a:hover{color:var(--terra)}
+main{max-width:1180px;margin:0 auto;padding:16px 24px 70px}
+section.card{background:var(--paper);border:1px solid var(--line);border-radius:10px;padding:26px 28px 22px;margin:22px 0;box-shadow:0 1px 0 rgba(43,38,32,.06)}
+.klabel{font-size:12px;color:var(--terra);letter-spacing:.18em;font-weight:700;margin-bottom:2px}
+h2{font-size:21px;color:var(--teal-dk);font-weight:700;display:flex;align-items:baseline;gap:10px;margin-bottom:4px;flex-wrap:wrap}
+.mnum{font-size:12px;color:#fff;background:var(--teal);padding:2px 9px;border-radius:4px;letter-spacing:.1em;font-weight:600}
+h3{font-size:15.5px;color:var(--teal-dk);margin:18px 0 6px;font-weight:700}
+.caption{color:var(--muted);font-size:13.5px;margin-bottom:12px;max-width:1000px}
+table.t{width:100%;border-collapse:collapse;font-size:13px;margin:10px 0}
+.t th{background:var(--teal);color:#fff;text-align:left;padding:7px 9px;font-weight:600;white-space:nowrap;font-size:12.5px}
+.t td{border-bottom:1px solid var(--line);padding:6px 9px;vertical-align:top}
+.t tr:nth-child(even) td{background:rgba(63,126,107,.045)}
+.tblwrap{overflow-x:auto}
+.num{text-align:right;font-variant-numeric:tabular-nums;white-space:nowrap}
+.good{color:var(--teal-dk);font-weight:700}
+.bad{color:var(--terra);font-weight:700}
+button,.btn{font-family:inherit;background:var(--teal);color:#fff;border:none;border-radius:6px;padding:7px 16px;font-size:13.5px;cursor:pointer;font-weight:600}
+button:hover{background:var(--teal-dk)}
+button.alt{background:var(--terra)}
+button.ghost{background:transparent;color:var(--teal-dk);border:1px solid var(--teal)}
+.chip{display:inline-block;min-width:86px;text-align:center;padding:3px 12px;border-radius:16px;font-weight:900;font-size:14px;background:var(--line);color:var(--muted)}
+.chip.s-hi{background:var(--teal);color:#fff}
+.chip.s-mid{background:var(--gold);color:#fff}
+.chip.s-lo{background:var(--terra);color:#fff}
+.statrow{display:flex;gap:30px;flex-wrap:wrap;margin:12px 0 4px}
+.stat b{font-size:23px;color:var(--teal-dk);font-weight:900}
+.stat span{font-size:12px;color:var(--muted);display:block;margin-top:-3px}
+.chartbox{position:relative;height:360px;margin:12px 0;background:#fff;border:1px solid var(--line);border-radius:8px;padding:10px}
+textarea{width:100%;font-family:inherit;font-size:13px;border:1px solid var(--line);border-radius:6px;padding:8px;background:#fff;line-height:1.6}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.grid4{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}
+@media(max-width:900px){.grid2,.grid4{grid-template-columns:1fr 1fr}}
+@media(max-width:560px){.grid2,.grid4{grid-template-columns:1fr}}
+.note{background:rgba(201,168,105,.16);border-left:3px solid var(--gold);padding:10px 14px;font-size:13px;margin:12px 0;border-radius:0 6px 6px 0}
+.warn{background:rgba(188,75,51,.1);border-left:3px solid var(--terra);padding:10px 14px;font-size:13px;margin:12px 0;border-radius:0 6px 6px 0}
+details{margin:12px 0}
+summary{cursor:pointer;color:var(--teal-dk);font-weight:700;font-size:13.5px}
+input[type=number],input[type=text],input[type=date],select{font-family:inherit;font-size:13px;border:1px solid var(--line);border-radius:5px;padding:5px 8px;background:#fff;width:100%}
+input[type=checkbox]{width:auto;transform:scale(1.15);margin-right:7px}
+label.f{font-size:12.5px;color:var(--muted);display:block;margin:8px 0 2px;font-weight:600}
+label.ck{font-size:13px;display:flex;align-items:flex-start;margin:7px 0;cursor:pointer;line-height:1.5}
+.small{font-size:12px;color:var(--muted)}
+.insight{background:rgba(63,126,107,.07);border:1px solid var(--line);border-radius:8px;padding:12px 16px;font-size:13.5px;margin:10px 0}
+footer{max-width:1180px;margin:0 auto;padding:14px 24px 44px;color:var(--muted);font-size:12px}
+.reason{font-size:13.5px;margin:5px 0;padding-left:14px;position:relative}
+.reason::before{content:'—';position:absolute;left:0;color:var(--terra)}
+/* 判决卡与印章（沿用记分卡） */
+.verdict-card{border:2.5px solid var(--line);border-radius:12px;padding:22px 26px;margin:14px 0;background:#fff;position:relative;overflow:hidden}
+.verdict-card .vtext{font-size:24px;font-weight:900;margin:2px 0 8px}
+.verdict-card.go{border-color:var(--teal)} .verdict-card.go .vtext{color:var(--teal-dk)}
+.verdict-card.cond{border-color:var(--gold)} .verdict-card.cond .vtext{color:#8a6a2a}
+.verdict-card.off{border-color:var(--terra)} .verdict-card.off .vtext{color:var(--terra)}
+.verdict-card.hold{border-color:var(--muted)} .verdict-card.hold .vtext{color:var(--muted)}
+.stamp{position:absolute;right:24px;top:18px;border:3px double currentColor;border-radius:8px;padding:5px 13px;font-weight:900;font-size:16px;transform:rotate(8deg);letter-spacing:.18em;opacity:.85}
+.go .stamp{color:var(--teal-dk)} .cond .stamp{color:#8a6a2a} .off .stamp{color:var(--terra)} .hold .stamp{color:var(--muted)}
+/* 发射时间轴（签名元素） */
+.tl{display:flex;align-items:stretch;height:64px;border:1px solid var(--line);border-radius:8px;overflow:visible;position:relative;background:#fff;margin:14px 0 26px}
+.tl .ph{display:flex;align-items:center;justify-content:center;font-size:12.5px;font-weight:700;color:#fff;position:relative}
+.tl .ph small{position:absolute;bottom:-20px;color:var(--muted);font-weight:400;font-size:11px;white-space:nowrap}
+.tl .gate{position:absolute;top:-11px;transform:translateX(-50%);background:var(--paper);border:2px solid var(--terra);color:var(--terra);border-radius:12px;padding:0 8px;font-size:11px;font-weight:900;z-index:2}
+.tl .now{position:absolute;top:-2px;bottom:-2px;width:3px;background:var(--ink);z-index:3;transform:translateX(-50%)}
+.tl .now::after{content:'当前';position:absolute;top:-20px;left:50%;transform:translateX(-50%);font-size:11px;font-weight:900;color:var(--ink);white-space:nowrap}
+/* 进度条 */
+.pbar{height:26px;background:#fff;border:1px solid var(--line);border-radius:14px;overflow:hidden;position:relative;margin:8px 0}
+.pbar .fill{height:100%;background:linear-gradient(90deg,var(--teal),var(--teal-dk));border-radius:14px 0 0 14px;transition:width .3s}
+.pbar .lbl{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:12.5px;font-weight:900;color:var(--ink)}
+.pbar .tick{position:absolute;top:0;bottom:0;width:2px;background:var(--terra)}
+</style>
+</head>
+<body>
+
+<header class="hero">
+  <div class="brandline"> · Launch Control Console</div>
+  <h1>新品发射控制台</h1>
+  <p class="sub">前八周的广告费买的是信息，不是销量。判决书参数进来，派生出全部阈值：平衡 CVR 定 G2 生死线、P25 定评论里程碑、三本预算账各配燃烧上限。阶段门标准发射前写死，发射后不许临场改口。三件套之后的第四台：记分卡管<b>进不进</b>，本台管<b>发射头 16 周</b>，之后移交预测台与关键词台的稳态节律。</p>
+</header>
+
+<nav id="topnav"><div class="wrap">
+  <a href="#l0">L0 判决书参数</a><a href="#l1">L1 G0 准备</a><a href="#l2">L2 作战日志</a>
+  <a href="#l3">L3 三本账</a><a href="#l4">L4 评论爬坡</a><a href="#l5">L5 阶段门</a>
+  <a href="#l6">L6 本周动作</a><a href="#lx">导出</a>
+  <span style="flex:1"></span>
+  <button id="b_demoA" class="ghost">演示 · 顺产</button>
+  <button id="b_demoB" class="ghost">演示 · 难产</button>
+  <button id="b_calc" class="alt">重算控制台</button>
+</div></nav>
+
+<main>
+
+<div id="timeline"></div>
+
+<!-- ============ L0 ============ -->
+<section id="l0" class="card">
+  <div class="klabel">来自记分卡判决书 · 发射前写死</div>
+  <h2><span class="mnum">L0</span> 判决书参数 → 作战阈值</h2>
+  <p class="caption">左列直接抄记分卡：贡献毛利、CPC 区间、入场评论目标 P25、结构性 CVR 声明。右列是发射假设：类目先验 CVR（尽调转化假设）、评论率、Vine 预期、待验证词数。填完即派生平衡 CVR、平衡 ACOS 与三本账上限——这些数字之后只许被数据推翻，不许被情绪修改。</p>
+  <div class="grid4">
+    <div><label class="f">产品 / 利基名</label><input type="text" id="i_name" placeholder="磁吸分阶忙碌板"></div>
+    <div><label class="f">售价（$）</label><input type="number" id="i_price" step="0.1" placeholder="26.99"></div>
+    <div><label class="f">贡献毛利 / 件（$，记分卡 S3）</label><input type="number" id="i_cm" step="0.1" placeholder="8.7"></div>
+    <div><label class="f">发射日期（选填）</label><input type="date" id="i_launch"></div>
+    <div><label class="f">建议竞价 · 低（$）</label><input type="number" id="i_cpclo" step="0.05" placeholder="0.55"></div>
+    <div><label class="f">建议竞价 · 高（$）</label><input type="number" id="i_cpchi" step="0.05" placeholder="0.85"></div>
+    <div><label class="f">类目先验 CVR（%，尽调假设）</label><input type="number" id="i_priorcvr" step="0.5" placeholder="11"></div>
+    <div><label class="f">先验强度 ν（收缩用）</label><input type="number" id="i_nu" value="150"></div>
+    <div><label class="f">入场评论目标 P25（记分卡 S2）</label><input type="number" id="i_p25" placeholder="90"></div>
+    <div><label class="f">评论率（%，含请求评论按钮）</label><input type="number" id="i_reviewrate" step="0.5" value="3"></div>
+    <div><label class="f">Vine 预期到评（件报 30）</label><input type="number" id="i_vine" value="25"></div>
+    <div><label class="f">评论达标目标周</label><input type="number" id="i_targetweek" value="12"></div>
+    <div><label class="f">待验证词数</label><input type="number" id="i_kws" value="25"></div>
+    <div><label class="f">每词所需点击（含验证期复测）</label><input type="number" id="i_clickskw" value="60"></div>
+    <div><label class="f">单均补贴（$，首发券深度）</label><input type="number" id="i_subsidy" step="0.5" value="2.5"></div>
+    <div><label class="f">补贴运行周数</label><input type="number" id="i_subweeks" value="8"></div>
+    <div><label class="f">位次建仓预算上限（$）</label><input type="number" id="i_rankcap" value="4000"></div>
+    <div style="grid-column:span 3"><label class="f">差异化主张（抄判决书，上架后即标题首屏）</label><input type="text" id="i_claim" placeholder="唯一按 12–36 月龄分阶换件的旅行忙碌板……"></div>
+  </div>
+  <label class="ck"><input type="checkbox" id="ck_structadv"> 判决书含结构性 CVR 优势声明——G2 将按"8 周内必须被 SQP R2 证实"审理</label>
+  <label class="ck"><input type="checkbox" id="ck_surgery"> 详情页手术已完成一轮（主图/首屏/比价已按差评与 SQP 诊断改过）——G2 双不达标时此项决定"复审"还是"退出预案"</label>
+  <div id="l0out"></div>
+</section>
+
+<!-- ============ L1 ============ -->
+<section id="l1" class="card">
+  <div class="klabel">发射前六周 · 转化基建先于流量满配</div>
+  <h2><span class="mnum">L1</span> G0 发射准备检查单 <span class="chip" id="chip_g0">0 / 10</span></h2>
+  <p class="caption">蜜月期是给准备好的人的：listing 半成品上线等于把系统送的曝光烧给一个不会转化的页面。十项全绿才许发射；缺一项，发射日期就该往后挪，而不是清单往下砍。</p>
+  <div class="grid2" id="g0list"></div>
+  <div id="l1out"></div>
+</section>
+
+<!-- ============ L2 ============ -->
+<section id="l2" class="card">
+  <div class="klabel">周度记账 · 控制台的燃料</div>
+  <h2><span class="mnum">L2</span> 作战日志</h2>
+  <p class="caption">每周日收盘记一行，十二列（后三列 SQP 份额在品牌备案生效前留空）：<b>周次, 广告花费, 广告点击, 广告订单, 广告销售额, 周总销售额, 周总件数, 会话, 累计评论, 曝光份额%, 点击份额%, 购买份额%</b>。数据源：广告花费/点击/订单/广告销售额来自广告后台按周汇总；总销售额/件数/会话来自业务报告；份额来自 SQP 周报（与关键词台同一份下载）。</p>
+  <textarea id="ta_log" rows="9" placeholder="1, 95, 140, 8, 216, 288, 11, 200, 2&#10;2, 115, 168, 11, 297, 405, 15, 260, 4&#10;3, 125, 182, 13, 351, 486, 18, 300, 6, 0.8, 0.9, 1.0"></textarea>
+  <div class="maprow" style="margin-top:8px;display:flex;gap:10px;align-items:center"><button id="b_tpl" class="ghost">填入模板行</button><span class="small">改完日志点右上「重算控制台」</span></div>
+  <div id="l2out"></div>
+</section>
+
+<!-- ============ L3 ============ -->
+<section id="l3" class="card">
+  <div class="klabel">烧钱的会计学 · 每笔对应一类资产</div>
+  <h2><span class="mnum">L3</span> 三本预算账燃烧曲线</h2>
+  <p class="caption">信息采购账 = 前 8 周广告花费，上限 = 词数 × 每词点击 × CPC 中位；评论建仓账 = 累计件数 × 单均补贴（补贴运行期内），上限 = 所需订单 × 补贴；位次建仓账 = 第 9 周起超出平衡 ACOS 线的花费差额。曲线穿上限即警报——"再投一点看看"在这三本账里没有合法位置。</p>
+  <div id="l3body"><div class="note">填入 L0 参数与 L2 日志后自动生成。</div></div>
+</section>
+
+<!-- ============ L4 ============ -->
+<section id="l4" class="card">
+  <div class="klabel">评论 = 资本壁垒的建仓进度</div>
+  <h2><span class="mnum">L4</span> 评论爬坡进度条</h2>
+  <p class="caption">目标 = 记分卡的入场评论目标 P25，按目标周线性配速。落后配速时给出缺口与两个合法补法：加 Vine 批次、加深补贴换订单——刷单不在选项里，那是给账号买的空头。</p>
+  <div id="l4body"><div class="note">等待日志数据。</div></div>
+</section>
+
+<!-- ============ L5 ============ -->
+<section id="l5" class="card">
+  <div class="klabel">预注册标准 · 发射后不许改口</div>
+  <h2><span class="mnum">L5</span> 阶段门判决：G1 纪律 · G2 生死 · G3 拐点</h2>
+  <p class="caption">G1（第 2 周末）审探索纪律与转化底线；G2（第 8 周）是核心判决——四象限：收缩 CVR 对平衡线 × R2 对 1.0；G3（第 12 周起）审 TACOS 拐点，决定是否毕业移交稳态节律。G2 的收缩用类目先验（ν 默认 150：先验来自全市场，可信度高于自己的小样本）。</p>
+  <label class="ck"><input type="checkbox" id="ck_g1a"> G1 自证一：前 14 天未按词级 CVR 做过任何加减价决策（只做了意图层否词）</label>
+  <label class="ck"><input type="checkbox" id="ck_g1b"> G1 自证二：发射前预写的否定词表已在第 1 天挂上（错配词没等它烧钱）</label>
+  <div id="l5body"><div class="note">等待日志数据。</div></div>
+</section>
+
+<!-- ============ L6 ============ -->
+<section id="l6" class="card">
+  <div class="klabel">控制台主屏 · 只显示当下该做的事</div>
+  <h2><span class="mnum">L6</span> 本周动作清单</h2>
+  <div id="l6body"><div class="note">根据日志最新周自动判定所处阶段并给出本周 SOP。</div></div>
+</section>
+
+<!-- ============ 导出 ============ -->
+<section id="lx" class="card">
+  <div class="klabel">归档 · 判决要留痕</div>
+  <h2><span class="mnum">出</span> 导出</h2>
+  <div class="maprow" style="display:flex;gap:10px;align-items:center">
+    <button id="b_log_csv">下载发射日志 CSV</button>
+    <button id="b_gate_csv" class="ghost">下载阶段门判决报告 CSV</button>
+    <span class="small" id="lx_msg"></span>
+  </div>
+</section>
+
+</main>
+<footer> Launch Control Console · 四件套之四（尽调 → 发射 → 预测 → 关键词） · 单文件零构建 · 数据仅在本地浏览器解析</footer>
+
+<script id="app">
+//__APPJS_START__
+
+/* ============================ 状态 ============================ */
+const S={ charts:{}, last:null };
+const G0_ITEMS=[
+  '主图 AB 候选 ≥2 套已produced（差异化主张可视觉传达）',
+  'A+ 页面已就绪并预览过移动端',
+  '主图视频已就绪（15–30 秒，首 3 秒讲主张）',
+  '五点 + 后台搜索词按意图词表写完',
+  'Vine 已顶格报 30 件',
+  '定价 = 常规价 + 大额首发券（不污染参考价锚点）',
+  '否定词表已预写（尽调普查里的已知错配词）',
+  '关键词沙盘按意图分类完毕（品牌/竞品/品类/长尾/送礼）',
+  '首批备货 = 参考类爬坡 P70 × 12–16 周（第六周断货不可接受）',
+  '退出预案成文：止损价、清货渠道、触发条件'
+];
+
+//<PURE>
+/* ======================== 纯函数（可测） ======================== */
+function num(v){ if(v==null) return 0; const s=String(v).replace(/[^0-9.\-]/g,''); const f=parseFloat(s); return isFinite(f)?f:0; }
+function pct(v){ const f=num(v); return f>1.5? f/100 : f; }
+function avg(a){ return a.length? a.reduce((x,y)=>x+y,0)/a.length : 0; }
+function clamp(v,lo,hi){ return Math.max(lo,Math.min(hi,v)); }
+function slope(ys){ const n=ys.length; if(n<2) return 0;
+  const xm=(n-1)/2, ym=avg(ys);
+  let nu=0,de=0; for(let i=0;i<n;i++){nu+=(i-xm)*(ys[i]-ym);de+=(i-xm)*(i-xm);}
+  return de? nu/de:0;
+}
+/* 参数派生：判决书 → 作战阈值 */
+function deriveParams(P){
+  const cpcMid=(P.cpcLo+P.cpcHi)/2;
+  const beCVR=P.cm>0? cpcMid/P.cm : null;              // 平衡 CVR（广告不亏下限）
+  const beACOS=(P.price>0&&P.cm>0)? P.cm/P.price : null; // 平衡 ACOS
+  const g2CVR=beCVR!=null? beCVR*0.85 : null;           // G2 生死线（评论未到稳态打八五折）
+  const infoCap=P.kws*P.clicksKw*cpcMid;
+  const organicNeed=Math.max(0,P.p25-P.vine);
+  const ordersNeed=P.reviewRate>0? Math.ceil(organicNeed/P.reviewRate) : 0;
+  const reviewCap=ordersNeed*P.subsidy;
+  return {cpcMid,beCVR,beACOS,g2CVR,infoCap,organicNeed,ordersNeed,reviewCap};
+}
+/* 日志解析：行=周次,广告花费,点击,广告订单,广告销售额,总销售额,总件数,会话,累计评论[,曝光%,点击%,购买%] */
+function parseLogText(txt){
+  return String(txt||'').split(/\n+/).map(x=>x.trim()).filter(Boolean).map(l=>{
+    const p=l.split(/[,，\t]+/).map(x=>x.trim());
+    if(p.length<9) return null;
+    return { wk:Math.round(num(p[0])), adSpend:num(p[1]), adClicks:num(p[2]), adOrders:num(p[3]),
+      adSales:num(p[4]), totalSales:num(p[5]), units:num(p[6]), sessions:num(p[7]), reviews:num(p[8]),
+      impSh:p.length>9&&p[9]!==''?num(p[9])/100:null, clkSh:p.length>10&&p[10]!==''?num(p[10])/100:null, purSh:p.length>11&&p[11]!==''?num(p[11])/100:null };
+  }).filter(x=>x&&x.wk>0).sort((a,b)=>a.wk-b.wk);
+}
+/* 三本账燃烧 */
+function computeBurns(rows,D,P){
+  let info=0,review=0,rank=0;
+  const series=rows.map(r=>{
+    if(r.wk<=8) info+=r.adSpend;
+    if(r.wk<=P.subWeeks) review+=r.units*P.subsidy;
+    if(r.wk>=9 && D.beACOS!=null) rank+=Math.max(0, r.adSpend - r.adSales*D.beACOS);
+    return {wk:r.wk, info, review, rank};
+  });
+  return {series, info, review, rank};
+}
+/* 收缩 CVR（广告口径，截至某周） */
+function shrunkCVRUpto(rows,uptoWk,mu,nu){
+  let X=0,N=0;
+  rows.forEach(r=>{ if(r.wk<=uptoWk){X+=r.adOrders;N+=r.adClicks;} });
+  if(N<=0) return {raw:null,shrunk:null,clicks:0};
+  return {raw:X/N, shrunk:(X+mu*nu)/(N+nu), clicks:N, orders:X};
+}
+/* R2：取截至某周、有份额数据的最近≤3周均值 */
+function r2Upto(rows,uptoWk){
+  const w=rows.filter(r=>r.wk<=uptoWk&&r.clkSh>0&&r.purSh!=null).slice(-3);
+  if(!w.length) return null;
+  return avg(w.map(r=>r.purSh/r.clkSh));
+}
+/* G1（第2周末）：探索纪律 + 转化底线 */
+function g1Verdict(rows,P,D,checks){
+  const w12=rows.filter(r=>r.wk<=2);
+  if(!w12.length) return {status:'pending',notes:['第 1–2 周日志未录入，G1 待审']};
+  const sess=w12.reduce((s,r)=>s+r.sessions,0), units=w12.reduce((s,r)=>s+r.units,0);
+  const sessCVR=sess>0?units/sess:null;
+  const floor=P.priorCVR*0.7;
+  const burn=w12.reduce((s,r)=>s+r.adSpend,0);
+  const notes=[]; let pass=true;
+  if(sessCVR!=null){
+    if(sessCVR>=floor) notes.push('会话 CVR '+(sessCVR*100).toFixed(1)+'% ≥ 尽调假设×0.7（'+(floor*100).toFixed(1)+'%）：转化底线成立，流量问题才轮得到讨论');
+    else { pass=false; notes.push('会话 CVR '+(sessCVR*100).toFixed(1)+'% < 底线 '+(floor*100).toFixed(1)+'%：停止加流量，先做详情页手术——转化问题永远排在流量问题前面'); }
+  } else notes.push('会话数据缺失，转化底线未审');
+  notes.push('前两周信息账燃烧 $'+burn.toFixed(0)+'（上限 $'+D.infoCap.toFixed(0)+'，占 '+(D.infoCap>0?(burn/D.infoCap*100).toFixed(0):'—')+'%）');
+  if(!checks.a){ pass=false; notes.push('纪律自证一未勾：前 14 天词级 CVR 是纯噪音，按它决策 = 把随机数当信号'); }
+  if(!checks.b){ pass=false; notes.push('纪律自证二未勾：预写否定词表第 1 天就该挂上'); }
+  return {status:pass?'pass':'fix', sessCVR, burn, notes};
+}
+/* G2（第8周）：四象限生死判决 */
+function g2Verdict(rows,P,D){
+  const maxWk=rows.length?rows[rows.length-1].wk:0;
+  if(maxWk<7) return {status:'pending',notes:['日志未到第 7–8 周，G2 待审（标准已预注册：收缩 CVR ≥ '+(D.g2CVR*100).toFixed(1)+'% 或 R2 ≥ 1）']};
+  const sc=shrunkCVRUpto(rows,8,P.priorCVR,P.nu);
+  if(sc.clicks<300) return {status:'insufficient',notes:['累计广告点击 '+sc.clicks+' < 300：统计上不足以判决，G2 顺延两周并检查预算投放是否过缓']};
+  const r2=r2Upto(rows,8);
+  const cvrPass=sc.shrunk>=D.g2CVR;
+  const r2Pass=r2!=null&&r2>=1;
+  const notes=['收缩 CVR '+(sc.shrunk*100).toFixed(2)+'%（裸 '+(sc.raw*100).toFixed(2)+'%，'+sc.clicks+' 点击）对生死线 '+(D.g2CVR*100).toFixed(2)+'% → '+(cvrPass?'达标':'未达'),
+    r2==null?'SQP 份额未录入：R2 无法审理（品牌备案未生效则以 CVR 单腿判决）':'R2 = 购买份额 ÷ 点击份额 = '+r2.toFixed(2)+' 对 1.0 → '+(r2Pass?'市场证实结构性转化优势':'相对市场偏弱')];
+  let status,verdict,cls;
+  if(cvrPass&&r2Pass){ status='full'; verdict='G2 通过 · 满配放量'; cls='go';
+    notes.push('两腿全过：品类大词入场，预算从信息定价切换为弹性定价（预测台 F3 接管）'); }
+  else if(cvrPass&&!r2Pass){ status='downgrade'; verdict='G2 通过 · 降档放量'; cls='cond';
+    notes.push('绝对经济性成立但相对市场偏弱：放量继续，份额假设下调，素材侧按 R1/R2 诊断补课'); }
+  else if(!cvrPass&&r2Pass){ status='review'; verdict='G2 附条件 · 两周复审'; cls='hold';
+    notes.push('市场认可差异化（R2≥1）但绝对经济性未达：查 CPC 是否买贵、做提价测试、等评论爬坡后复审——差的可能不是产品是买价'); }
+  else{
+    if(P.surgery){ status='exit'; verdict='G2 未通过 · 执行退出预案'; cls='off';
+      notes.push('双不达标且详情页手术已做过一轮：按发射前成文的止损价与清货渠道执行。早死比慢死便宜——这句话在第八周说，不在第二十周说'); }
+    else{ status='surgery'; verdict='G2 暂缓 · 先手术后复审'; cls='hold';
+      notes.push('双不达标但详情页手术未做：主图/首屏/比价按差评与 SQP 诊断改一轮，两周后复审；复审仍双不达标即退出'); }
+  }
+  if(P.structAdv) notes.push('判决书含结构性 CVR 声明：'+(r2Pass?'已被 R2 证实，声明兑现':'尚未被 R2 证实——该声明是记分卡放行的前提，此处未兑现要回头质疑当初的进入判决'));
+  return {status,verdict,cls,shrunk:sc.shrunk,raw:sc.raw,clicks:sc.clicks,r2,notes};
+}
+/* G3（第12周起）：TACOS 拐点 */
+function g3Verdict(rows){
+  const w9=rows.filter(r=>r.wk>=9&&r.totalSales>0);
+  if(w9.length<4) return {status:'pending',notes:['第 9 周起的放量期数据不足 4 周，G3 待审']};
+  const tac=w9.map(r=>r.adSpend/r.totalSales*100);
+  const org=w9.map(r=>(1-r.adSales/r.totalSales)*100);
+  const sT=slope(tac), sO=slope(org);
+  const notes=['TACOS 斜率 '+sT.toFixed(2)+' pp/周，自然占比斜率 '+(sO>=0?'+':'')+sO.toFixed(2)+' pp/周（近 '+w9.length+' 周）'];
+  if(sT<-0.1||sO>0.15){ notes.push('拐点已现：广告在沉淀自然位资产。毕业——移交预测台月度节律与关键词台周度节律');
+    return {status:'graduate',notes,sT,sO}; }
+  notes.push('拐点未现：TACOS 平台期 + 自然占比不升 = 依赖型警报，重新审视差异化主张是否只是广告位幻觉');
+  return {status:'alert',notes,sT,sO};
+}
+/* 评论配速 */
+function reviewPace(rows,P){
+  if(!rows.length) return null;
+  const last=rows[rows.length-1];
+  const need=P.p25*Math.min(1,last.wk/P.targetWeek);
+  const recent=rows.slice(-3);
+  const wkRate=recent.length>=2? (recent[recent.length-1].reviews-recent[0].reviews)/(recent[recent.length-1].wk-recent[0].wk||1) : last.reviews/Math.max(1,last.wk);
+  const proj=last.reviews+wkRate*Math.max(0,P.targetWeek-last.wk);
+  return {wk:last.wk, have:last.reviews, need, gap:last.reviews-need, wkRate, proj,
+    onTrack:last.reviews>=need*0.9};
+}
+/* 阶段判定 */
+function phaseOf(maxWk){
+  if(maxWk<=0) return {key:'prep',name:'准备期',range:'发射前'};
+  if(maxWk<=2) return {key:'explore',name:'探索模式',range:'第 1–2 周'};
+  if(maxWk<=8) return {key:'validate',name:'验证模式',range:'第 3–8 周'};
+  if(maxWk<=16) return {key:'scale',name:'放量模式',range:'第 9–16 周'};
+  return {key:'steady',name:'稳态',range:'第 17 周起'};
+}
+//</PURE>
+
+/* ======================== 通用工具 ======================== */
+const $=id=>document.getElementById(id);
+function fmt(v,d){ if(v==null||!isFinite(v)) return '—'; return v.toLocaleString('en-US',{maximumFractionDigits:d==null?0:d,minimumFractionDigits:d==null?0:d}); }
+function fp(v,d){ return v==null||!isFinite(v)?'—':(v*100).toFixed(d==null?1:d)+'%'; }
+function money(v){ return v==null||!isFinite(v)?'—':'$'+fmt(v,v>=1000?0:2); }
+function tbl(headers,rows,numCols){
+  numCols=numCols||[];
+  let h='<div class="tblwrap"><table class="t"><thead><tr>'+headers.map((x,i)=>'<th'+(numCols.includes(i)?' class="num"':'')+'>'+x+'</th>').join('')+'</tr></thead><tbody>';
+  rows.forEach(r=>{ h+='<tr>'+r.map((c,i)=>'<td'+(numCols.includes(i)?' class="num"':'')+'>'+c+'</td>').join('')+'</tr>'; });
+  return h+'</tbody></table></div>';
+}
+function drawChart(id,cfg){ if(S.charts[id]){S.charts[id].destroy();} const el=$(id); if(!el) return; S.charts[id]=new Chart(el,cfg); }
+function downloadCSV(name,rows){
+  const csv='\ufeff'+rows.map(r=>r.map(c=>{const s=String(c==null?'':c);return /[",\n]/.test(s)?'"'+s.replace(/"/g,'""')+'"':s;}).join(',')).join('\n');
+  const a=document.createElement('a'); a.href=URL.createObjectURL(new Blob([csv],{type:'text/csv;charset=utf-8'})); a.download=name; a.click();
+  setTimeout(()=>URL.revokeObjectURL(a.href),4000);
+}
+function notesHtml(notes){ return notes.map(n=>'<div class="reason">'+n+'</div>').join(''); }
+
+/* ======================== 读取输入 ======================== */
+function readParams(){
+  return { name:($('i_name').value||'').trim()||'未命名新品',
+    price:num($('i_price').value), cm:num($('i_cm').value),
+    cpcLo:num($('i_cpclo').value), cpcHi:num($('i_cpchi').value),
+    priorCVR:num($('i_priorcvr').value)/100, nu:num($('i_nu').value)||150,
+    p25:num($('i_p25').value), reviewRate:num($('i_reviewrate').value)/100,
+    vine:num($('i_vine').value), targetWeek:num($('i_targetweek').value)||12,
+    kws:num($('i_kws').value)||25, clicksKw:num($('i_clickskw').value)||60,
+    subsidy:num($('i_subsidy').value), subWeeks:num($('i_subweeks').value)||8,
+    rankCap:num($('i_rankcap').value),
+    structAdv:$('ck_structadv').checked, surgery:$('ck_surgery').checked,
+    claim:($('i_claim').value||'').trim() };
+}
+
+/* ======================== 时间轴（签名元素） ======================== */
+function renderTimeline(maxWk){
+  const total=18; // 2(准备)+16
+  const ph=[ {n:'准备',w:2,c:'#8a8578',s:'G0 前'},
+    {n:'探索 1–2 周',w:2,c:'#3F7E6B',s:'买信息'},
+    {n:'验证 3–8 周',w:6,c:'#2C5A4C',s:'三假设过堂'},
+    {n:'放量 9–16 周',w:8,c:'#C9A869',s:'买位次'} ];
+  let h='<div class="tl">';
+  ph.forEach(p=>{ h+='<div class="ph" style="flex:'+p.w+';background:'+p.c+'">'+p.n+'<small>'+p.s+'</small></div>'; });
+  const gates=[{n:'G0',at:2},{n:'G1',at:4},{n:'G2',at:10},{n:'G3',at:14}];
+  gates.forEach(g=>{ h+='<div class="gate" style="left:'+(g.at/total*100)+'%">'+g.n+'</div>'; });
+  if(maxWk>0){ const pos=clamp((2+Math.min(maxWk,16))/total*100,0,100);
+    h+='<div class="now" style="left:'+pos+'%"></div>'; }
+  h+='</div>';
+  $('timeline').innerHTML=h;
+}
+
+/* ======================== L0 / L1 渲染 ======================== */
+function renderL0(P,D){
+  if(!(P.cm>0&&P.cpcLo>0)){ $('l0out').innerHTML='<div class="note">填入贡献毛利与 CPC 区间后派生阈值。</div>'; return; }
+  $('l0out').innerHTML='<div class="statrow">'+
+    '<div class="stat"><b>'+fp(D.beCVR,1)+'</b><span>平衡 CVR = CPC 中位('+money(D.cpcMid)+') ÷ 毛利</span></div>'+
+    '<div class="stat"><b>'+fp(D.g2CVR,1)+'</b><span>G2 生死线（× 0.85，评论未稳态折让）</span></div>'+
+    '<div class="stat"><b>'+fp(D.beACOS,1)+'</b><span>平衡 ACOS = 毛利 ÷ 售价</span></div>'+
+    '<div class="stat"><b>'+money(D.infoCap)+'</b><span>信息账上限 = '+P.kws+' 词 × '+P.clicksKw+' 击 × CPC</span></div>'+
+    '<div class="stat"><b>'+money(D.reviewCap)+'</b><span>评论账上限 = '+fmt(D.ordersNeed)+' 单 × 补贴（P25 缺口 '+fmt(D.organicNeed)+' 评 ÷ 评论率）</span></div>'+
+    '<div class="stat"><b>'+money(P.rankCap)+'</b><span>位次账上限（自定）</span></div></div>'+
+    (P.claim?'<div class="insight">主张在案：「'+P.claim+'」——G2 将审它是否被市场买账。</div>':'<div class="warn">差异化主张为空：记分卡应该已经否决过这种发射，回去补 S4。</div>');
+}
+function renderG0(){
+  const box=$('g0list');
+  if(!box.dataset.built){
+    box.innerHTML=G0_ITEMS.map((t,i)=>'<label class="ck"><input type="checkbox" class="g0" data-i="'+i+'"> '+t+'</label>').join('');
+    box.dataset.built='1';
+    box.querySelectorAll('.g0').forEach(c=>c.addEventListener('change',renderG0));
+  }
+  const n=[...box.querySelectorAll('.g0')].filter(c=>c.checked).length;
+  const chip=$('chip_g0'); chip.textContent=n+' / '+G0_ITEMS.length;
+  chip.className='chip '+(n===10?'s-hi':n>=7?'s-mid':'s-lo');
+  $('l1out').innerHTML = n===10
+    ? '<div class="insight">十项全绿：G0 通过，可发射。蜜月期的曝光即将砸向一个会转化的页面。</div>'
+    : '<div class="warn">'+(10-n)+' 项未绿：发射日期往后挪，清单不许砍。缺哪项就是发射后哪个漏斗层先漏。</div>';
+}
+
+/* ======================== L2–L4 渲染 ======================== */
+function renderL2(rows,D){
+  if(!rows.length){ $('l2out').innerHTML=''; return; }
+  const tr=rows.map(r=>{
+    const acos=r.adSales>0?r.adSpend/r.adSales:null;
+    const tacos=r.totalSales>0?r.adSpend/r.totalSales:null;
+    const adCVR=r.adClicks>0?r.adOrders/r.adClicks:null;
+    const sCVR=r.sessions>0?r.units/r.sessions:null;
+    const r2=(r.clkSh>0&&r.purSh!=null)?r.purSh/r.clkSh:null;
+    return ['W'+r.wk, money(r.adSpend), fmt(r.adClicks), fmt(r.adOrders), fp(adCVR,1), fp(sCVR,1),
+      fp(acos,0), fp(tacos,0), fmt(r.units), fmt(r.reviews), r2!=null?r2.toFixed(2):'—'];
+  });
+  $('l2out').innerHTML=tbl(['周','广告花费','点击','广告订单','广告CVR','会话CVR','ACOS','TACOS','件数','累计评论','R2'],tr,[1,2,3,4,5,6,7,8,9,10]);
+}
+function renderL3(rows,D,P){
+  if(!rows.length){ $('l3body').innerHTML='<div class="note">填入 L0 参数与 L2 日志后自动生成。</div>'; return; }
+  const B=computeBurns(rows,D,P);
+  const pctf=(a,b)=>b>0?(a/b*100).toFixed(0)+'%':'—';
+  let h='<div class="statrow">'+
+    '<div class="stat"><b class="'+(B.info>D.infoCap?'bad':'good')+'">'+money(B.info)+'</b><span>信息账已烧（上限 '+money(D.infoCap)+'，'+pctf(B.info,D.infoCap)+'）</span></div>'+
+    '<div class="stat"><b class="'+(B.review>D.reviewCap&&D.reviewCap>0?'bad':'good')+'">'+money(B.review)+'</b><span>评论账已烧（上限 '+money(D.reviewCap)+'，'+pctf(B.review,D.reviewCap)+'）</span></div>'+
+    '<div class="stat"><b class="'+(B.rank>P.rankCap?'bad':'good')+'">'+money(B.rank)+'</b><span>位次账已烧（上限 '+money(P.rankCap)+'，'+pctf(B.rank,P.rankCap)+'）</span></div></div>';
+  const breach=[];
+  if(B.info>D.infoCap) breach.push('信息账穿限：要么词表太长要么 CPC 超假设——先停增词，回看是否在为没有统计意义的重复点击付费');
+  if(D.reviewCap>0&&B.review>D.reviewCap) breach.push('评论账穿限：补贴换来的订单没换来评论配速，查评论率假设或收窄补贴范围');
+  if(B.rank>P.rankCap) breach.push('位次账穿限：超出平衡线的投入已达上限——位次买不动就该问位次值不值这个价');
+  if(breach.length) h+='<div class="warn">'+notesHtml(breach)+'</div>';
+  h+='<div class="chartbox"><canvas id="c_burn"></canvas></div>';
+  $('l3body').innerHTML=h;
+  const labels=B.series.map(s=>'W'+s.wk);
+  drawChart('c_burn',{type:'line',data:{labels,datasets:[
+    {label:'信息采购账',data:B.series.map(s=>s.info),borderColor:'#3F7E6B',backgroundColor:'#3F7E6B',pointRadius:2,tension:.15},
+    {label:'评论建仓账',data:B.series.map(s=>s.review),borderColor:'#C9A869',backgroundColor:'#C9A869',pointRadius:2,tension:.15},
+    {label:'位次建仓账',data:B.series.map(s=>s.rank),borderColor:'#BC4B33',backgroundColor:'#BC4B33',pointRadius:2,tension:.15},
+    {label:'信息上限',data:labels.map(()=>D.infoCap),borderColor:'#3F7E6B',borderDash:[6,4],pointRadius:0},
+    {label:'评论上限',data:labels.map(()=>D.reviewCap),borderColor:'#C9A869',borderDash:[6,4],pointRadius:0},
+    {label:'位次上限',data:labels.map(()=>P.rankCap),borderColor:'#BC4B33',borderDash:[6,4],pointRadius:0}]},
+    options:{maintainAspectRatio:false,plugins:{legend:{position:'bottom'}},
+      scales:{y:{title:{display:true,text:'累计 $'},beginAtZero:true}}}});
+}
+function renderL4(rows,P){
+  const R=reviewPace(rows,P);
+  if(!R||!(P.p25>0)){ $('l4body').innerHTML='<div class="note">等待日志数据与 P25 目标。</div>'; return; }
+  const pctDone=clamp(R.have/P.p25*100,0,100);
+  const paceTick=clamp(R.need/P.p25*100,0,100);
+  let h='<div class="pbar"><div class="fill" style="width:'+pctDone+'%"></div>'+
+    '<div class="tick" style="left:'+paceTick+'%"></div>'+
+    '<div class="lbl">'+fmt(R.have)+' / '+fmt(P.p25)+'（第 '+R.wk+' 周 · 配速要求 '+fmt(R.need)+'）</div></div>';
+  h+='<div class="statrow">'+
+    '<div class="stat"><b class="'+(R.onTrack?'good':'bad')+'">'+(R.gap>=0?'+':'')+fmt(R.gap)+'</b><span>对配速缺口（红线即配速位置）</span></div>'+
+    '<div class="stat"><b>'+R.wkRate.toFixed(1)+'</b><span>近三周周均到评</span></div>'+
+    '<div class="stat"><b class="'+(R.proj>=P.p25?'good':'bad')+'">'+fmt(R.proj)+'</b><span>按当前速率外推至第 '+P.targetWeek+' 周</span></div></div>';
+  if(!R.onTrack) h+='<div class="warn">落后配速。合法补法只有两个：追加 Vine 批次（若额度未满）、加深首发券换订单基数（记入评论账并盯上限）。第三条路是刷单——那是用账号做空自己。</div>';
+  else h+='<div class="insight">配速在线：评论建仓按计划推进，P25 达成即解锁品类大词的入场资格之一。</div>';
+  $('l4body').innerHTML=h;
+}
+
+/* ======================== L5 阶段门 / L6 动作 ======================== */
+function gateCard(title,cls,stamp,notes){
+  return '<div class="verdict-card '+cls+'"><div class="stamp">'+stamp+'</div>'+
+    '<div class="vtext">'+title+'</div>'+notesHtml(notes)+'</div>';
+}
+function renderL5(rows,P,D){
+  if(!rows.length){ $('l5body').innerHTML='<div class="note">等待日志数据。标准已预注册于 L0。</div>'; return; }
+  let h='';
+  /* G1 */
+  const g1=g1Verdict(rows,P,D,{a:$('ck_g1a').checked,b:$('ck_g1b').checked});
+  h+=gateCard('G1 · 第 2 周末 · 探索纪律与转化底线',
+    g1.status==='pass'?'go':g1.status==='fix'?'cond':'hold',
+    g1.status==='pass'?'通 过':g1.status==='fix'?'整 改':'待 审', g1.notes);
+  /* G2 */
+  const g2=g2Verdict(rows,P,D);
+  if(g2.status==='pending'||g2.status==='insufficient') h+=gateCard('G2 · 第 8 周 · 生死判决','hold','待 审',g2.notes);
+  else h+=gateCard('G2 · 第 8 周 · 生死判决：'+g2.verdict.split('·')[1],g2.cls,
+    {full:'放 量',downgrade:'降 档',review:'复 审',exit:'退 出',surgery:'手 术'}[g2.status], g2.notes);
+  if(g2.shrunk!=null) h+='<div class="chartbox" style="height:300px"><canvas id="c_g2"></canvas></div>';
+  /* G3 */
+  const g3=g3Verdict(rows);
+  h+=gateCard('G3 · 第 12 周起 · TACOS 拐点与毕业',
+    g3.status==='graduate'?'go':g3.status==='alert'?'cond':'hold',
+    g3.status==='graduate'?'毕 业':g3.status==='alert'?'警 报':'待 审', g3.notes);
+  $('l5body').innerHTML=h;
+  S.gates={g1,g2,g3};
+  if(g2.shrunk!=null){
+    const wks=rows.map(r=>r.wk);
+    const sc=wks.map(w=>{const s=shrunkCVRUpto(rows,w,P.priorCVR,P.nu);return s.shrunk!=null?s.shrunk*100:null;});
+    const r2s=rows.map(r=>(r.clkSh>0&&r.purSh!=null)?r.purSh/r.clkSh:null);
+    drawChart('c_g2',{type:'line',data:{labels:wks.map(w=>'W'+w),datasets:[
+      {label:'累计收缩 CVR %',data:sc,borderColor:'#3F7E6B',pointRadius:3,tension:.15,yAxisID:'y'},
+      {label:'G2 生死线',data:wks.map(()=>D.g2CVR*100),borderColor:'#3F7E6B',borderDash:[6,4],pointRadius:0,yAxisID:'y'},
+      {label:'R2（周）',data:r2s,borderColor:'#BC4B33',pointRadius:3,tension:.15,yAxisID:'y2'},
+      {label:'R2 = 1',data:wks.map(()=>1),borderColor:'#BC4B33',borderDash:[6,4],pointRadius:0,yAxisID:'y2'}]},
+      options:{maintainAspectRatio:false,plugins:{legend:{position:'bottom'}},
+        scales:{y:{title:{display:true,text:'CVR %'},beginAtZero:true},
+                y2:{position:'right',grid:{display:false},title:{display:true,text:'R2'},min:0,max:2}}}});
+  }
+}
+const PHASE_SOP={
+  prep:['执行 L1 的 G0 十项清单——这就是本周动作的全部','用参考类爬坡 P70 × 12–16 周下首批备货单','否定词表与关键词沙盘发射前定稿'],
+  explore:['广告结构只开三组：Auto（发现）+ 精准长尾 Broad/Phrase + 竞品 ASIN 定向（打评论低于目标、价格高于你的弱者）','品类大词禁入：零评论打大词测出的 CAC 是假性爆表','每天只盯两个数：listing 会话 CVR 对底线、信息账燃烧对上限','只做意图层否词；词级 CVR 是噪音，看都不看','为 G1 自证留痕：否定词表挂载截图、决策日志'],
+  validate:['每周一：SQP 下载 → 喂关键词台 M2 → 执行否词与素材诊断','毕业机制：收缩 CVR ≥ 类先验且订单 ≥3 的词 → 开 Exact 收割 + 原组否定（搬家不是复制）','双周：搜索词报告 → 关键词台 M4 护栏 → 调价','评论里程碑对照 L4 进度条；落后即触发合法补法','第 8 周整周留给 G2：数据冻结、按预注册标准判决'],
+  scale:['品类大词入场；预算从信息定价切换为弹性定价——预测台 F3 的花费杠杆接管','双高词按 M2 加价保位，把验证过的优势兑现成排名资产','TACOS 从本阶段起周度记账，看斜率不看水平','盯关键词台 M3 的 HHI：别让单词依赖在新品期长成结构性风险','L3 位次账周度对上限：位次买不动就该问位次值不值这个价'],
+  steady:['毕业交接：预测台月度节律（装配→三腿→备货）+ 关键词台周度节律接管','本台归档：导出日志与判决报告，作为下一次发射的参考类曲线','G3 若报依赖警报：回记分卡重审差异化主张——广告位幻觉要在第 16 周戳破']
+};
+function renderL6(rows){
+  const maxWk=rows.length?rows[rows.length-1].wk:0;
+  const ph=phaseOf(maxWk);
+  $('l6body').innerHTML='<div class="statrow"><div class="stat"><b>'+ph.name+'</b><span>'+ph.range+'（日志最新：第 '+(maxWk||0)+' 周）</span></div></div>'+
+    '<div class="insight">'+notesHtml(PHASE_SOP[ph.key])+'</div>'+
+    '<div class="small">防手贱条款：每日十分钟只看预算消耗与库存预警；词级数据每周碰一次，在关键词台里碰。</div>';
+}
+
+/* ======================== 导出 ======================== */
+function exportLog(){
+  const rows=parseLogText($('ta_log').value);
+  if(!rows.length){ $('lx_msg').textContent='日志为空。'; return; }
+  const P=readParams(), D=deriveParams(P);
+  const out=[['周','广告花费','广告点击','广告订单','广告销售额','周总销售额','周总件数','会话','累计评论','曝光份额','点击份额','购买份额','ACOS','TACOS','累计收缩CVR','R2周值']];
+  rows.forEach(r=>{
+    const s=shrunkCVRUpto(rows,r.wk,P.priorCVR,P.nu);
+    out.push([r.wk,r.adSpend,r.adClicks,r.adOrders,r.adSales,r.totalSales,r.units,r.sessions,r.reviews,
+      r.impSh!=null?(r.impSh*100).toFixed(2)+'%':'',r.clkSh!=null?(r.clkSh*100).toFixed(2)+'%':'',r.purSh!=null?(r.purSh*100).toFixed(2)+'%':'',
+      r.adSales>0?(r.adSpend/r.adSales*100).toFixed(1)+'%':'',r.totalSales>0?(r.adSpend/r.totalSales*100).toFixed(1)+'%':'',
+      s.shrunk!=null?(s.shrunk*100).toFixed(2)+'%':'',(r.clkSh>0&&r.purSh!=null)?(r.purSh/r.clkSh).toFixed(2):'']);
+  });
+  downloadCSV('launch-log-'+new Date().toISOString().slice(0,10)+'.csv',out);
+  $('lx_msg').textContent='发射日志已导出。';
+}
+function exportGates(){
+  if(!S.gates){ $('lx_msg').textContent='先重算控制台。'; return; }
+  const P=readParams(), D=deriveParams(P), G=S.gates;
+  const rows=[['字段','值'],['产品',P.name],['差异化主张',P.claim],
+    ['平衡CVR',D.beCVR!=null?(D.beCVR*100).toFixed(2)+'%':''],['G2生死线',D.g2CVR!=null?(D.g2CVR*100).toFixed(2)+'%':''],
+    ['平衡ACOS',D.beACOS!=null?(D.beACOS*100).toFixed(1)+'%':''],
+    ['信息账上限',D.infoCap.toFixed(0)],['评论账上限',D.reviewCap.toFixed(0)],['位次账上限',P.rankCap],
+    ['G1',G.g1.status],['G2',G.g2.verdict||G.g2.status],['G2收缩CVR',G.g2.shrunk!=null?(G.g2.shrunk*100).toFixed(2)+'%':''],
+    ['G2 R2',G.g2.r2!=null?G.g2.r2.toFixed(2):''],['G3',G.g3.status],['生成日期',new Date().toISOString().slice(0,10)]];
+  ['g1','g2','g3'].forEach(k=>G[k].notes.forEach((n,i)=>rows.push([k.toUpperCase()+'笔记'+(i+1),n])));
+  downloadCSV('gate-report-'+P.name.replace(/\s+/g,'-')+'-'+new Date().toISOString().slice(0,10)+'.csv',rows);
+  $('lx_msg').textContent='阶段门判决报告已导出。';
+}
+
+/* ======================== 总装 ======================== */
+function compute(){
+  const P=readParams(), D=deriveParams(P);
+  const rows=parseLogText($('ta_log').value);
+  S.last={P,D,rows};
+  renderTimeline(rows.length?rows[rows.length-1].wk:0);
+  renderL0(P,D); renderG0();
+  renderL2(rows,D); renderL3(rows,D,P); renderL4(rows,P);
+  renderL5(rows,P,D); renderL6(rows);
+}
+
+/* ======================== 演示数据 ======================== */
+function setV(id,v){ $(id).value=v; }
+function setC(id,v){ $(id).checked=v; }
+function demoA(){
+  setV('i_name','磁吸分阶忙碌板（顺产）'); setV('i_price',26.99); setV('i_cm',8.7);
+  setV('i_cpclo',0.55); setV('i_cpchi',0.85); setV('i_priorcvr',11); setV('i_nu',150);
+  setV('i_p25',90); setV('i_reviewrate',3.5); setV('i_vine',25); setV('i_targetweek',14);
+  setV('i_kws',25); setV('i_clickskw',60); setV('i_subsidy',2.5); setV('i_subweeks',8); setV('i_rankcap',4000);
+  setC('ck_structadv',true); setC('ck_surgery',false);
+  setV('i_claim','唯一按 12–36 月龄分阶换件的旅行忙碌板，磁吸模块可单独补购');
+  setC('ck_g1a',true); setC('ck_g1b',true);
+  document.querySelectorAll('.g0').forEach(c=>c.checked=true);
+  $('ta_log').value=[
+    '1, 85, 125, 7, 189, 270, 10, 140, 2',
+    '2, 115, 168, 11, 297, 405, 15, 170, 4',
+    '3, 115, 168, 12, 324, 459, 17, 290, 6, 0.8, 0.9, 1.0',
+    '4, 135, 196, 15, 405, 594, 22, 350, 18, 0.9, 1.0, 1.1',
+    '5, 140, 205, 17, 459, 702, 26, 400, 30, 0.9, 1.0, 1.1',
+    '6, 150, 219, 19, 513, 810, 30, 450, 38, 1.0, 1.2, 1.4',
+    '7, 150, 220, 20, 540, 891, 33, 480, 44, 1.1, 1.3, 1.5',
+    '8, 160, 232, 22, 594, 990, 37, 520, 50, 1.2, 1.4, 1.7',
+    '9, 260, 380, 31, 837, 1539, 57, 720, 56, 1.4, 1.6, 1.9',
+    '10, 300, 435, 36, 972, 1890, 70, 850, 62, 1.5, 1.7, 2.0',
+    '11, 330, 478, 40, 1080, 2214, 82, 950, 70, 1.6, 1.8, 2.1',
+    '12, 350, 507, 43, 1161, 2511, 93, 1050, 78, 1.7, 1.9, 2.2'
+  ].join('\n');
+  compute();
+  $('lx_msg').textContent='演示·顺产：G2 双腿通过（收缩 CVR 过线 + R2>1），三本账全部限内，第 12 周 TACOS 已现拐点。';
+}
+function demoB(){
+  setV('i_name','常规迭代写字板（难产）'); setV('i_price',19.99); setV('i_cm',6.0);
+  setV('i_cpclo',0.8); setV('i_cpchi',1.1); setV('i_priorcvr',12); setV('i_nu',150);
+  setV('i_p25',300); setV('i_reviewrate',3); setV('i_vine',25); setV('i_targetweek',12);
+  setV('i_kws',30); setV('i_clickskw',60); setV('i_subsidy',3); setV('i_subweeks',8); setV('i_rankcap',3000);
+  setC('ck_structadv',false); setC('ck_surgery',true);
+  setV('i_claim','更大尺寸 + 更多颜色的常规迭代');
+  setC('ck_g1a',true); setC('ck_g1b',false);
+  document.querySelectorAll('.g0').forEach((c,i)=>c.checked=i<7);
+  $('ta_log').value=[
+    '1, 210, 220, 9, 180, 300, 15, 380, 2',
+    '2, 230, 242, 11, 220, 352, 18, 420, 4',
+    '3, 240, 253, 13, 260, 380, 19, 450, 7, 0.5, 0.45, 0.35',
+    '4, 250, 263, 14, 280, 420, 21, 470, 16, 0.55, 0.5, 0.4',
+    '5, 255, 268, 15, 300, 450, 22, 490, 24, 0.6, 0.5, 0.4',
+    '6, 260, 274, 16, 320, 480, 24, 510, 28, 0.6, 0.55, 0.42',
+    '7, 265, 279, 16, 320, 500, 25, 520, 31, 0.65, 0.55, 0.44',
+    '8, 270, 284, 17, 340, 520, 26, 540, 34, 0.65, 0.6, 0.45'
+  ].join('\n');
+  compute();
+  $('lx_msg').textContent='演示·难产：收缩 CVR 远低于生死线、R2<1、手术已做——G2 判退出预案；评论配速大幅落后、信息账穿限。';
+}
+function tplLog(){
+  $('ta_log').value='周次, 广告花费, 广告点击, 广告订单, 广告销售额, 周总销售额, 周总件数, 会话, 累计评论, 曝光份额%, 点击份额%, 购买份额%\n1, 95, 140, 8, 216, 288, 11, 200, 2';
+}
+
+/* ======================== 初始化 ======================== */
+function init(){
+  Chart.defaults.font.family="'Noto Serif SC','Songti SC',serif";
+  Chart.defaults.color='#5c5546';
+  Chart.defaults.borderColor='rgba(216,204,174,.55)';
+  renderTimeline(0); renderG0();
+  $('b_calc').addEventListener('click',compute);
+  $('b_demoA').addEventListener('click',demoA);
+  $('b_demoB').addEventListener('click',demoB);
+  $('b_tpl').addEventListener('click',tplLog);
+  $('b_log_csv').addEventListener('click',exportLog);
+  $('b_gate_csv').addEventListener('click',exportGates);
+  ['ck_g1a','ck_g1b'].forEach(id=>$(id).addEventListener('change',()=>{ if(S.last) compute(); }));
+}
+if(typeof document!=='undefined'){
+  if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',init); else init();
+}
+//__APPJS_END__
+</script>
+</body>
+</html>

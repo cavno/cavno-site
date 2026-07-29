@@ -1,0 +1,601 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>亚马逊推广底层逻辑全景图 · 恒等式 / 模型 / 经验常数 × 出价杆 / 结构杆</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,600&family=Noto+Serif+SC:wght@400;500;600;700;900&display=swap" rel="stylesheet">
+<style>
+  :root{
+    /* —— 羊皮纸视觉体系 —— */
+    --parch:      #F3EAD3;   /* 主底 */
+    --parch-2:    #EADFC1;   /* 面板/带 */
+    --parch-3:    #E3D6B4;   /* 卡底 */
+    --ink:        #38332A;   /* 主墨 */
+    --ink-soft:   #6E664F;   /* 次墨 */
+    --rule:       #C9BB98;   /* 细线 */
+    --rule-soft:  #D8CBA8;
+    --teal:       #1E6B62;   /* 出价杆 */
+    --teal-2:     #2E8C80;
+    --terra:      #A9482A;   /* 结构杆(深赭,非默认#D97757) */
+    --terra-2:    #C25E3C;
+    --gold:       #A9821F;   /* 跨杆 / 强调 */
+    --gold-2:     #C6A02E;
+    --shadow:     rgba(56,44,20,.14);
+    --disp: 'Cormorant Garamond', 'Noto Serif SC', serif;
+    --body: 'Noto Serif SC', 'Cormorant Garamond', serif;
+    --mix:  'Cormorant Garamond', 'Noto Serif SC', serif; /* 拉丁/数字走 Cormorant,汉字回落 */
+  }
+
+  *{ box-sizing:border-box; }
+  html{ -webkit-text-size-adjust:100%; }
+  body{
+    margin:0; color:var(--ink);
+    font-family:var(--body); font-weight:400; line-height:1.6;
+    background-color:var(--parch);
+    background-image:
+      radial-gradient(circle at 20% 15%, rgba(169,130,31,.05), transparent 60%),
+      radial-gradient(circle at 85% 80%, rgba(169,72,42,.045), transparent 55%),
+      radial-gradient(rgba(120,98,50,.05) 1px, transparent 1px),
+      radial-gradient(rgba(120,98,50,.035) 1px, transparent 1px);
+    background-size: auto, auto, 4px 4px, 7px 7px;
+    background-position: 0 0, 0 0, 0 0, 2px 3px;
+    min-height:100vh;
+  }
+  ::selection{ background:rgba(169,130,31,.28); }
+
+  /* —— 外框:古地图铜版 plate —— */
+  .plate{
+    max-width:1240px; margin:26px auto; padding:0;
+    border:1px solid var(--rule);
+    box-shadow:0 0 0 6px var(--parch), 0 0 0 7px var(--rule-soft), 0 10px 40px var(--shadow);
+    background:linear-gradient(180deg, rgba(255,251,240,.35), rgba(255,251,240,0) 220px);
+  }
+
+  /* —— 页眉 —— */
+  header{ padding:34px clamp(20px,4vw,54px) 22px; border-bottom:1px solid var(--rule); position:relative; }
+  .eyebrow{ font-family:var(--mix); font-weight:600; font-size:.74rem; letter-spacing:.42em; text-transform:uppercase; color:var(--terra); margin:0 0 10px; }
+  h1{
+    font-family:var(--disp); font-weight:600; line-height:1.04;
+    font-size:clamp(1.9rem,4.4vw,3.35rem); margin:0; color:var(--ink);
+    letter-spacing:.01em;
+  }
+  h1 .zh{ font-family:var(--body); font-weight:700; }
+  h1 .amp{ color:var(--gold); font-style:italic; font-weight:500; padding:0 .12em; }
+  .lede{ margin:16px 0 0; max-width:74ch; font-size:1.015rem; color:var(--ink); }
+  .lede b{ color:var(--terra); font-weight:600; }
+  .lede .t{ color:var(--teal); font-weight:600; }
+  .lede .g{ color:var(--gold); font-weight:600; }
+
+  /* —— 读图法 + 控件 —— */
+  .toolbar{ display:flex; flex-wrap:wrap; gap:26px 40px; align-items:flex-start; padding:20px clamp(20px,4vw,54px); border-bottom:1px solid var(--rule); background:var(--parch-2); }
+  .legend h4, .filters h4{ font-family:var(--mix); font-weight:600; font-size:.68rem; letter-spacing:.28em; text-transform:uppercase; color:var(--ink-soft); margin:0 0 11px; }
+  .legend-row{ display:flex; flex-wrap:wrap; gap:8px 18px; }
+  .lg{ display:inline-flex; align-items:center; gap:9px; font-size:.86rem; color:var(--ink); }
+  .swatch{ width:30px; height:19px; border-radius:2px; background:var(--parch-3); flex:none; }
+  .sw-id{ border:2.5px double var(--ink); }
+  .sw-md{ border:1.6px dashed var(--ink); }
+  .sw-he{ border:1.4px dotted var(--ink); }
+  .dot{ width:13px; height:13px; border-radius:50%; flex:none; }
+  .d-bid{ background:var(--teal); }
+  .d-str{ background:var(--terra); }
+  .d-crs{ background:var(--gold); }
+  .star{ color:var(--gold); font-size:.95rem; }
+
+  .filters{ margin-left:auto; }
+  .chips{ display:flex; flex-wrap:wrap; gap:8px; }
+  .chip{
+    font-family:var(--body); font-size:.82rem; color:var(--ink); cursor:pointer;
+    background:var(--parch); border:1px solid var(--rule); border-radius:20px;
+    padding:5px 15px; transition:all .16s ease; user-select:none;
+  }
+  .chip:hover{ border-color:var(--gold); }
+  .chip[aria-pressed="true"]{ background:var(--ink); color:var(--parch); border-color:var(--ink); }
+  .chip.f-bid[aria-pressed="true"]{ background:var(--teal); border-color:var(--teal); }
+  .chip.f-str[aria-pressed="true"]{ background:var(--terra); border-color:var(--terra); }
+  .chip.f-crs[aria-pressed="true"]{ background:var(--gold); border-color:var(--gold); }
+
+  /* —— 场:列头 —— */
+  .field{ padding:8px clamp(16px,3.4vw,40px) 30px; }
+  .colhead{
+    display:grid; grid-template-columns:var(--cols); gap:var(--cgap);
+    padding:20px 21px 6px 63px; position:sticky; top:0; z-index:5;
+    background:linear-gradient(180deg, var(--parch) 62%, rgba(243,234,211,0));
+  }
+  .colhead > div{ font-family:var(--mix); font-weight:600; letter-spacing:.18em; text-transform:uppercase; font-size:.82rem; text-align:center; padding-bottom:8px; border-bottom:1px solid var(--rule); }
+  .ch-bid{ color:var(--teal); }
+  .ch-crs{ color:var(--gold); }
+  .ch-str{ color:var(--terra); }
+  .colhead .sub{ display:block; font-family:var(--body); font-weight:400; letter-spacing:0; text-transform:none; font-size:.7rem; color:var(--ink-soft); margin-top:3px; }
+
+  /* —— 场:三条可靠性带 —— */
+  :root{ --cols: 1fr 0.82fr 1.72fr; --cgap: clamp(10px,1.6vw,22px); }
+  .band{
+    position:relative; display:grid; grid-template-columns:var(--cols); gap:var(--cgap);
+    padding:20px 20px 20px 62px; margin:16px 0;
+    background:var(--band-bg); border:1px solid var(--rule); border-radius:3px;
+    transition:opacity .25s ease;
+  }
+  .band.l1{ --band-bg:linear-gradient(180deg, rgba(30,107,98,.055), rgba(30,107,98,.02)); }
+  .band.l2{ --band-bg:linear-gradient(180deg, rgba(169,72,42,.05), rgba(169,72,42,.018)); }
+  .band.l3{ --band-bg:linear-gradient(180deg, rgba(169,130,31,.055), rgba(169,130,31,.02)); }
+  /* 左脊标签 */
+  .spine{
+    position:absolute; left:0; top:0; bottom:0; width:46px;
+    display:flex; flex-direction:column; align-items:center; justify-content:center; gap:14px;
+    border-right:1px solid var(--rule);
+  }
+  .spine .seal{ font-size:1.15rem; line-height:1; }
+  .l1 .spine .seal{ color:var(--teal); }
+  .l2 .spine .seal{ color:var(--terra); }
+  .l3 .spine .seal{ color:var(--gold); }
+  .spine .vtxt{ writing-mode:vertical-rl; text-orientation:upright; font-family:var(--body); font-weight:700; letter-spacing:.34em; font-size:.92rem; color:var(--ink); }
+  .spine .rel{ writing-mode:vertical-rl; font-family:var(--mix); font-size:.62rem; letter-spacing:.2em; text-transform:uppercase; color:var(--ink-soft); }
+
+  .col{ display:grid; grid-template-columns:repeat(auto-fill,minmax(148px,1fr)); gap:10px; align-content:start; }
+  .col.crs{ border-left:1px solid var(--rule-soft); border-right:1px solid var(--rule-soft); padding:0 12px; }
+
+  /* —— 节点卡:边框=可靠性,颜色=杠杆 —— */
+  .node{
+    position:relative; text-align:left; cursor:pointer;
+    background:var(--parch-3); color:var(--ink);
+    padding:11px 12px 12px; border-radius:3px;
+    font-family:var(--body); transition:transform .14s ease, box-shadow .14s ease, background .14s;
+    display:flex; flex-direction:column; gap:5px; min-height:74px;
+    -webkit-appearance:none; appearance:none;
+  }
+  /* 边框:可靠性层 */
+  .band.l1 .node{ border:2.5px double var(--nb); }
+  .band.l2 .node{ border:1.6px dashed var(--nb); }
+  .band.l3 .node{ border:1.4px dotted var(--nb); }
+  /* 颜色:杠杆 */
+  .node.bid{ --nb:var(--teal); }
+  .node.str{ --nb:var(--terra); }
+  .node.crs{ --nb:var(--gold); }
+  .node::before{ content:""; position:absolute; left:0; top:0; height:100%; width:3px; background:var(--nb); border-radius:3px 0 0 3px; opacity:.85; }
+  .node:hover{ transform:translateY(-3px); box-shadow:0 8px 20px var(--shadow); background:#efe4c6; }
+  .node:focus-visible{ outline:2px solid var(--gold); outline-offset:2px; }
+  .node .n-title{ font-weight:600; font-size:.95rem; line-height:1.3; color:var(--ink); }
+  .node .n-tag{ font-family:var(--mix); font-size:.78rem; color:var(--ink-soft); line-height:1.35; }
+  .node .n-star{ position:absolute; top:8px; right:9px; color:var(--gold); font-size:.82rem; }
+  .node .n-open{ margin-top:auto; font-family:var(--mix); font-size:.68rem; letter-spacing:.14em; text-transform:uppercase; color:var(--nb); opacity:.72; }
+
+  /* dim state (filters) */
+  .dim{ opacity:.16; filter:saturate(.4); pointer-events:none; }
+  .band.dim{ opacity:.28; }
+
+  /* —— 抽屉 —— */
+  .scrim{ position:fixed; inset:0; background:rgba(40,32,14,.42); opacity:0; visibility:hidden; transition:opacity .28s ease, visibility .28s; z-index:40; backdrop-filter:blur(1.5px); }
+  .scrim.on{ opacity:1; visibility:visible; }
+  .drawer{
+    position:fixed; top:0; right:0; height:100%; width:min(468px,92vw); z-index:50;
+    background:var(--parch); border-left:1px solid var(--rule);
+    box-shadow:-18px 0 44px var(--shadow), inset 6px 0 0 var(--dr-accent,var(--gold));
+    transform:translateX(102%); transition:transform .32s cubic-bezier(.22,.61,.36,1);
+    display:flex; flex-direction:column;
+  }
+  .drawer.on{ transform:translateX(0); }
+  .dr-head{ padding:26px 26px 18px; border-bottom:1px solid var(--rule); position:relative; }
+  .dr-kicker{ font-family:var(--mix); font-weight:600; font-size:.68rem; letter-spacing:.26em; text-transform:uppercase; color:var(--dr-accent,var(--gold)); display:flex; align-items:center; gap:10px; }
+  .dr-kicker .relbadge{ color:var(--ink-soft); }
+  .dr-title{ font-family:var(--body); font-weight:700; font-size:1.42rem; line-height:1.22; margin:11px 0 0; color:var(--ink); }
+  .dr-close{ position:absolute; top:20px; right:20px; width:34px; height:34px; border-radius:50%; border:1px solid var(--rule); background:var(--parch-2); color:var(--ink); font-size:1.15rem; line-height:1; cursor:pointer; transition:all .16s; display:flex; align-items:center; justify-content:center; }
+  .dr-close:hover{ background:var(--ink); color:var(--parch); border-color:var(--ink); }
+  .dr-body{ padding:22px 26px 40px; overflow-y:auto; }
+  .dr-body section{ margin-bottom:20px; }
+  .dr-body h5{ font-family:var(--mix); font-weight:600; font-size:.72rem; letter-spacing:.2em; text-transform:uppercase; color:var(--ink-soft); margin:0 0 8px; display:flex; align-items:center; gap:8px; }
+  .dr-body h5::after{ content:""; flex:1; height:1px; background:var(--rule); }
+  .formula{ font-family:var(--mix); font-size:1.02rem; line-height:1.55; color:var(--ink); background:var(--parch-2); border:1px solid var(--rule); border-radius:3px; padding:12px 14px; }
+  .formula b{ color:var(--terra); font-weight:700; }
+  .logic{ font-size:.98rem; color:var(--ink); }
+  .validate{ font-size:.96rem; color:var(--ink); background:linear-gradient(90deg, rgba(169,130,31,.10), rgba(169,130,31,.02)); border-left:3px solid var(--gold); border-radius:0 3px 3px 0; padding:12px 14px; }
+  .risk{ font-size:.92rem; color:var(--ink); border-left:3px solid var(--terra); background:linear-gradient(90deg, rgba(169,72,42,.08), transparent); border-radius:0 3px 3px 0; padding:11px 14px; }
+  .risk::before{ content:"风险 · 边界　"; font-family:var(--mix); font-weight:600; letter-spacing:.14em; text-transform:uppercase; font-size:.66rem; color:var(--terra); display:block; margin-bottom:4px; }
+
+  /* —— 页脚 —— */
+  footer{ padding:28px clamp(20px,4vw,54px) 34px; border-top:1px solid var(--rule); background:var(--parch-2); }
+  .thesis{ font-family:var(--disp); font-weight:500; font-style:italic; font-size:1.18rem; color:var(--ink); margin:0 0 18px; max-width:80ch; line-height:1.5; }
+  .thesis b{ font-style:normal; color:var(--terra); }
+  .riskbar{ display:grid; grid-template-columns:repeat(auto-fit,minmax(230px,1fr)); gap:12px 22px; }
+  .rk{ font-size:.87rem; color:var(--ink); line-height:1.5; }
+  .rk b{ color:var(--terra); font-weight:600; font-family:var(--mix); letter-spacing:.06em; }
+  .src{ margin-top:22px; padding-top:16px; border-top:1px solid var(--rule); font-family:var(--mix); font-size:.82rem; color:var(--ink-soft); letter-spacing:.04em; }
+
+  @media (max-width:820px){
+    :root{ --cols: 1fr; --cgap:12px; }
+    .colhead{ display:none; }
+    .band{ padding-left:20px; padding-top:52px; }
+    .spine{ width:auto; left:0; right:0; bottom:auto; top:0; height:40px; flex-direction:row; border-right:none; border-bottom:1px solid var(--rule); gap:12px; }
+    .spine .vtxt, .spine .rel{ writing-mode:horizontal-tb; }
+    .col.crs{ border:none; padding:0; }
+    .col::before{ content:attr(data-lever); grid-column:1/-1; font-family:var(--mix); font-size:.68rem; letter-spacing:.2em; text-transform:uppercase; color:var(--ink-soft); padding:6px 0 2px; }
+    .drawer{ top:auto; bottom:0; height:88vh; width:100%; transform:translateY(102%); border-left:none; border-top:1px solid var(--rule); box-shadow:0 -18px 44px var(--shadow), inset 0 6px 0 var(--dr-accent,var(--gold)); border-radius:12px 12px 0 0; }
+    .drawer.on{ transform:translateY(0); }
+  }
+  @media (prefers-reduced-motion:reduce){
+    *{ transition:none !important; animation:none !important; }
+  }
+  /* 载入渐显 */
+  @keyframes rise{ from{ opacity:0; transform:translateY(14px);} to{ opacity:1; transform:none;} }
+  .band{ animation:rise .5s ease both; }
+  .band.l1{ animation-delay:.05s; } .band.l2{ animation-delay:.14s; } .band.l3{ animation-delay:.23s; }
+</style>
+</head>
+<body>
+<div class="plate">
+  <header>
+    <p class="eyebrow">Amazon PPC · Deep Structure Atlas</p>
+    <h1>亚马逊推广<span class="zh">底层逻辑</span>全景图 <span class="amp">×</span> <span style="font-family:var(--disp);font-weight:600;">reliability &amp; levers</span></h1>
+    <p class="lede">这门课不是打法合集,而是三层结构:一组<b>恒等式</b>把不可直接操作的投产比,坍缩成你唯一能设的两根杆——<span class="t">出价</span>与<span class="terra" style="color:var(--terra);font-weight:600">结构</span>。<b>纵向</b>读可靠性(恒真 / 可证伪 / 需标定),<b>横向</b>读杠杆(<span class="t">青=出价</span> · <span style="color:var(--terra);font-weight:600">赭=结构</span> · <span class="g">金=跨杆</span>)。点开任一节点,看它挂着的<span class="g">数据验证方法</span>。</p>
+  </header>
+
+  <div class="toolbar">
+    <div class="legend">
+      <h4>读图法</h4>
+      <div class="legend-row" style="margin-bottom:9px;">
+        <span class="lg"><span class="swatch sw-id"></span>实线双框 = 恒真(恒等式)</span>
+        <span class="lg"><span class="swatch sw-md"></span>长虚线 = 可证伪(模型)</span>
+        <span class="lg"><span class="swatch sw-he"></span>点线 = 需标定(经验常数)</span>
+      </div>
+      <div class="legend-row">
+        <span class="lg"><span class="dot d-bid"></span>出价杆</span>
+        <span class="lg"><span class="dot d-str"></span>结构杆</span>
+        <span class="lg"><span class="dot d-crs"></span>跨杆 · 恒等坍缩点</span>
+        <span class="lg"><span class="star">★</span>核心信息差 / 认识论骨架</span>
+      </div>
+    </div>
+    <div class="filters">
+      <h4>筛选杠杆</h4>
+      <div class="chips" id="chips">
+        <button class="chip" data-f="all" aria-pressed="true">全部</button>
+        <button class="chip f-bid" data-f="bid" aria-pressed="false">出价杆</button>
+        <button class="chip f-str" data-f="str" aria-pressed="false">结构杆</button>
+        <button class="chip f-crs" data-f="crs" aria-pressed="false">跨杆</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="field">
+    <div class="colhead">
+      <div class="ch-bid">出价杆<span class="sub">bid → 拍卖 → CPC / 广告位</span></div>
+      <div class="ch-crs">跨杆<span class="sub">恒等坍缩 · 盈亏</span></div>
+      <div class="ch-str">结构杆<span class="sub">词 / 匹配 / 位置 / 变体 / 类型</span></div>
+    </div>
+
+    <!-- ===== 恒等式层 ===== -->
+    <div class="band l1">
+      <div class="spine"><span class="seal">●</span><span class="vtxt">恒等式</span><span class="rel">Always true</span></div>
+      <div class="col bid" data-lever="出价杆"></div>
+      <div class="col crs" data-lever="跨杆"></div>
+      <div class="col str" data-lever="结构杆"></div>
+    </div>
+
+    <!-- ===== 模型层 ===== -->
+    <div class="band l2">
+      <div class="spine"><span class="seal">◐</span><span class="vtxt">模型</span><span class="rel">Falsifiable</span></div>
+      <div class="col bid" data-lever="出价杆"></div>
+      <div class="col crs" data-lever="跨杆"></div>
+      <div class="col str" data-lever="结构杆"></div>
+    </div>
+
+    <!-- ===== 经验常数层 ===== -->
+    <div class="band l3">
+      <div class="spine"><span class="seal">○</span><span class="vtxt">经验常数</span><span class="rel">Calibrate</span></div>
+      <div class="col bid" data-lever="出价杆"></div>
+      <div class="col crs" data-lever="跨杆"></div>
+      <div class="col str" data-lever="结构杆"></div>
+    </div>
+  </div>
+
+  <footer>
+    <p class="thesis">恒等式坍缩自由度　→　<b>两杆操作(出价 · 结构)</b>　→　机制模型(拍卖 · 坑位 · 变体 · 类型)　→　盈亏分账(投资型 / 盈利型 / 纯利型)。</p>
+    <div class="riskbar">
+      <div class="rk"><b>R1 归因口径</b>　广告归因销售滞后回填(SP 默认 7 天,SB/SD 可到 14 天),花费当日 → 近端 ACOS/CPA/TACOS 一律虚高;数据须陈化 7–14 天再判。</div>
+      <div class="rk"><b>R2 平台会变</b>　建议竞价算法、竞价乘子上限、广告位归类、COSMO、组合预算行为随版本调整;本图为 2024-08 快照,数字以当下实测为准。</div>
+      <div class="rk"><b>R3 单调性假设</b>　a/b/c/d 依赖"竞价↑→位置↑→PP 占比按结构变";低权重老链接 / 乱投放会破坏,此时不适用。</div>
+      <div class="rk"><b>R4 拍卖为简化</b>　adrank=bid·相关性、扣费=下家 adrank/你相关性+0.01 是 GSP 式简化,含 pacing / 预算感知出价等,不可精确验。</div>
+      <div class="rk"><b>R5 常数需标定</b>　PP×5–15、CVR 15/10/7/2–5%、降价 ≤5%/次 等为经验起点,不同类目 / 产品自校。</div>
+      <div class="rk"><b>R6 合规红线</b>　讲价 / 结构优化 / 否定 / 漏斗属正常运营;虚假订单 / 测评 / 刷坑产违反 Amazon ToS、可能触及法规,本图不含此类手法。</div>
+    </div>
+    <div class="src">综述、再组织与可靠性分层自 · 亚马逊高阶推广课程(Soju,2024-08,day1–3,共 276 页) · 恒等式恒真 / 模型可证伪 / 经验常数需本地标定</div>
+  </footer>
+</div>
+
+<!-- 抽屉 -->
+<div class="scrim" id="scrim"></div>
+<aside class="drawer" id="drawer" role="dialog" aria-modal="true" aria-labelledby="drTitle">
+  <div class="dr-head">
+    <div class="dr-kicker" id="drKicker"></div>
+    <h2 class="dr-title" id="drTitle"></h2>
+    <button class="dr-close" id="drClose" aria-label="关闭">✕</button>
+  </div>
+  <div class="dr-body" id="drBody"></div>
+</aside>
+
+<script>
+/* ================= 节点数据 =================
+   layer: l1 恒等式 / l2 模型 / l3 经验常数
+   lever: bid 出价 / str 结构 / crs 跨杆
+   每个节点必含 validate(数据验证)。 */
+const RELNAME = { l1:'恒等式 · 恒真', l2:'模型 · 可证伪', l3:'经验常数 · 需标定' };
+const ACCENT  = { bid:'var(--teal)', str:'var(--terra)', crs:'var(--gold)' };
+
+const NODES = [
+/* ---------- 恒等式层 ---------- */
+{id:'cpa', layer:'l1', lever:'bid', title:'CPA = CPC / CVR', tag:'单次出单成本', star:false,
+ formula:'CPA = 广告花费/广告单 = CPC·click /(CVR·click) = <b>CPC / CVR</b>',
+ logic:'click 在分子分母中消去——单次出单成本只由"点击单价"与"转化率"决定,与点击量无关。这一步是全课杜邦式分解的起点。',
+ validate:'搜索词透视表(SP 搜索词报表 → daily)加计算字段 CPC=spend/click、CVR=order/click,验 CPA=CPC/CVR 与后台 CPA 列一致;不一致处即归因回填未完成。',
+ risk:'分母 order 按 7 天归因回填、spend 当日 → 近端 CPA 虚高。'},
+
+{id:'realbid', layer:'l1', lever:'bid', title:'实际 bid = 底 bid × 策略 × 加价', tag:'中央控制方程', star:true,
+ formula:'实际 bid = 底 bid · 竞价策略乘子 · 广告位加价乘子',
+ logic:'你唯一能直接设的是"底 bid + 策略 + 加价";CPC、广告位、投产比全是它经拍卖后的下游结果。全课所有竞价操作都在动这三项。',
+ validate:'广告位报表逐位对照 CPC/底 bid,反推各位置实际乘子;固定竞价下 实际bid=底bid·加价,可精确核。',
+ risk:'乘子上限 / 行为随策略与平台版本变(见经验常数层 R2)。'},
+
+{id:'acos', layer:'l1', lever:'crs', title:'ACOS = CPA / price ; ROAS = 1/ACOS', tag:'投产比', star:false,
+ formula:'ACOS = 花费/广告销售 = CPC /(CVR·price) = <b>CPA / price</b>　·　ROAS = price·CVR / CPC = 1/ACOS',
+ logic:'投产比 = 单次成本 ÷ 客单价。想降 ACOS 只有三条路:降 CPC、升 CVR、升 price——没有第四条。',
+ validate:'活动 / 搜索词报表 spend÷sales 直接得 ACOS;与 CPA/price 核对。ROAS 取 sales/spend 反算。',
+ risk:'同 CPA,归因口径致近端虚高。'},
+
+{id:'tacos', layer:'l1', lever:'crs', title:'TACOS = ACOS · Y/(X+Y)', tag:'广告花费占比', star:true,
+ formula:'TACOS(=ACOAS) = 花费/总销售 = CPA·Y /[p(X+Y)] = <b>ACOS · 广告单占比</b>　(X=自然单, Y=广告单)',
+ logic:'CPA、售价定值时,TACOS 与总单量无关,只取决于自然:广告的比例(X:Y)。这是反直觉的核心结论——放量本身不改变 TACOS,改变 X:Y 才改变。',
+ validate:'业务报告取总销售(X+Y、price)、广告报表取 Y;找 CPA/price 稳定的两期,看 TACOS 是否只随 Y/(X+Y) 动、与量级无关。',
+ risk:'广告归因会"截胡"本会自然成交的单 → Y 高估、X 低估,TACOS 结构失真。'},
+
+{id:'acoas_le', layer:'l1', lever:'crs', title:'ACOAS ≤ ACOS', tag:'恒真不等式', star:false,
+ formula:'因 广告单占比 Y/(X+Y) ≤ 1　→　ACOAS ≤ ACOS 恒成立',
+ logic:'总销售 ≥ 广告销售,所以广告花费占总销售的比,永远不高于占广告销售的比。用来给"整体投产比"设一个可信下界。',
+ validate:'任一时期两数一除即证(数学恒真);ACOAS=花费/总销售、ACOS=花费/广告销售,前者恒不大于后者。',
+ risk:''},
+
+{id:'profit', layer:'l1', lever:'crs', title:'单品利润三分解', tag:'盈亏骨架', star:false,
+ formula:'单品利润 = 自然单利润 + 盈利型广告利润 + 投资型广告利润(亏本)　·　广告二分:CPA ⋛ 毛利',
+ logic:'广告按 CPA 是否 ≥ 毛利分成"投资型(亏本换未来自然单利润)"与"盈利型(自身盈利)"——全课盈亏逻辑的根。总利润 = 自然单利润 + 广告单利润[(毛利-CPA)·广告单量]。',
+ validate:'活动报表按 ACOS 排序 + 自算毛利率 → 绿(ACOS<毛利)/红分类;边际单利润 = price·(毛利率 − ACOS)。',
+ risk:'毛利率须含头程/尾程/采购/佣金/仓储/货损,漏项会误判投资/盈利。'},
+
+{id:'kengchan', layer:'l1', lever:'str', title:'坑产 = 曝光·CTR·CVR·(p·佣金率+配送费)', tag:'自然排名之源', star:true,
+ formula:'坑产 = 平台从坑位收到的收益 = 曝光·CTR·CVR·(售价·佣金率 + 配送费单价)',
+ logic:'货架电商平台收益最大化 → 自然排名由坑产决定,是关键词 7–14 天短期权重的体现(与累计权重无必然联系)。广告只能干预"预期坑产",真实出单干预"实际坑产"。',
+ validate:'排名追踪工具对照广告单量 / H10 CPR(到首页中部 8 天坑产量),看正向干预是否推动排名;瓶颈位 = 短期内同位被下拽 3 次。',
+ risk:'自然位天花板由价格/星级/BSR/BDLD/黑标等决定,非广告可控。'},
+
+{id:'matchrange', layer:'l1', lever:'str', title:'匹配 = 范围投放', tag:'投放词+触发规则=触发范围', star:false,
+ formula:'广泛 = 正序+乱序长尾包 ; 词组 = 正序长尾包 ; 精准 = 单复数+介词形。全是范围触发。',
+ logic:'用机器视角看投放——乱序、介词、连字符、冠词、单复数、\u2019s、分数都是"中止词",不产生新触发。目的是把被动跑词变主动跑词:预判范围 → 分活动 / 提前否 / 判是否过泛。',
+ validate:'全流量词表(H10 organic 筛选,去 amazon recommended)预判投放词触发的搜索量;搜索词报表回验实际触发是否溢出/过窄。',
+ risk:'新规则下广泛会外溢到 A+C、B+C 与近义词,占比低但需否词兜底。'},
+
+/* ---------- 模型层 ---------- */
+{id:'adrank', layer:'l2', lever:'bid', title:'AD RANK = bid × 相关性得分', tag:'拍卖排序模型', star:false,
+ formula:'广告排序 adrank = 出价 · 关键词相关性(质量)得分；bid 直接挂钩广告位高低。',
+ logic:'同词下 bid 越高、相关性越高,排位越靠前;这是"出价"如何变成"广告位"的桥。',
+ validate:'同词固定相关性(同一精准词)抬 bid,观察广告位阶梯上移;高相关词(高 CTR/CVR)以更低 bid 拿同位置即间接证。',
+ risk:'真实排序含 pacing / 预算感知出价等多因子,adrank=bid·相关性是简化。'},
+
+{id:'charge', layer:'l2', lever:'bid', title:'CPC 扣费 ≈ 下家 adrank / 你相关性 + 0.01', tag:'二价扣费模型', star:false,
+ formula:'CPC 实际扣费 = 下家的 adrank / 你的相关性得分 + 0.01；且 CPC 必定 < bid。',
+ logic:'GSP 式二价——你的相关性越高,同 bid 下实付越低;所以提相关性比提 bid 更省钱。',
+ validate:'拿不到对手 adrank,不可精确验;间接证据:相关性高的词(精准、高 CTR/CVR)同 bid 实际 CPC 系统性更低。',
+ risk:'公式为推测,仅作方向性参考。'},
+
+{id:'sugbid', layer:'l2', lever:'bid', title:'建议竞价祛魅 + 杀熟四因子', tag:'信息差', star:true,
+ formula:'低 ≈ 拿任意位(PP/ASIN)最低价 ; 高 ≈ 起拍到 TOS 价 ; 中位数 ≈ 搜索页价。',
+ logic:'建议竞价被(1)当前产品历史广告表现差(2)同品牌(3)同店铺表现,以及历史出价大方抬高 → 是账号+产品特定、可"讲价"压低的信号,不该照搬。',
+ validate:'批量文件(Bulk)导出建议竞价(低/中/高)列;同账号内对"历史表现差 vs 好"的产品取同词建议价对比,证四因子(控词、精准、5–10 词排偶然)。',
+ risk:'算法随平台版本变,数字仅当下有效。'},
+
+{id:'triangle', layer:'l2', lever:'crs', title:'三竞价三角诊断', tag:'账号层 vs 产品层', star:true,
+ formula:'空白账号价(工具) —— 账号内建议价(杀熟后) —— 实际投放价(实测)',
+ logic:'对比一(账号建议 vs 空白)判账号层是否低权重/被杀熟;对比二(账号建议 vs 实际)判产品层是否高权重、有无压价空间。老链接目标:实际竞价 < 空白账号竞价。',
+ validate:'空白价用工具 / 无历史账号取;账号建议用 Bulk;实际用广告位 / 搜索词报表 CPC;三者交叉定位问题层级。',
+ risk:'空白基准依赖第三方工具,不同工具口径有差。'},
+
+{id:'strategy', layer:'l2', lever:'bid', title:'竞价策略四型', tag:'系统乘子', star:false,
+ formula:'只降低 / 提高降低 / 固定 / 基于规则(ROAS)',
+ logic:'只降低=按表现差(CTR/CVR,非投产比)降、不动底 bid;提高降低=TOS 最高+100%、其他+50%,按转化可能性加;固定=不干预、最适新品纯净数据;基于规则=维持 ROAS ≥ 目标。',
+ validate:'固定 x vs 提高降低 x 同期对照活动比 CPC;只降低下"底 bid 列不变、实际 CPC ≤ x 且降幅落在 CTR/CVR 差处"→ 证按转化可能性、非投产比。',
+ risk:'基于规则门槛(≥30 天 / 近 30 天 ≥30 转化 / 日预算 ≥$10、21 天回退)与上限可能已随版本变。'},
+
+{id:'placement', layer:'l2', lever:'str', title:'广告位曝光结构(独立拍卖)', tag:'TOS / ROS / PP', star:false,
+ formula:'TOS 首页头部 3–4 坑(高 bid) ; ROS 搜索其余 8–12/页(中) ; 独立板块 5/页 ; PP 商品页几十坑(低)。每位置单独竞价排序。',
+ logic:'你买的是坑位对应的曝光;控花费 = 控曝光 = 控出价。商品页曝光恒 > 搜索页曝光(坑多)。',
+ validate:'广告位报表三行(TOS/ROS/PP);加 TOS+X% 后仅 TOS 曝光/CPC 变 → 证位置独立拍卖。',
+ risk:''},
+
+{id:'abcd', layer:'l2', lever:'str', title:'a / b / c / d 竞价分级', tag:'把广告位报表反演成 bid 标定仪', star:true,
+ formula:'只降低/固定 + TOS 不加价 + 三位同 x bid 下读曝光:a(跑不到 TOS,PP>15倍) &lt; b(PP 5–15) &lt; c(TOS/ROS 分摊,卡不住) &lt; d(TOS 占大头,ROS≈TOS)',
+ logic:'a=PP 竞价 / b=ROS 正常 / c=ROS 偏高·TOS 不稳 / d=TOS 稳定卡位。逐步抬 x,得到"本词竞价—位置映射表"。这是全课最可操作的巧思:把报表当标定仪用。',
+ validate:'单词单活动跑够曝光(如 4000+),记录各档 PP:(TOS+ROS) 与 TOS 稳定性,标定 a/b/c/d 阈值。',
+ risk:'依赖单调性;低权重老链接会出现"竞价越高 PP 占比反被放大",此时不适用(见 R3)。'},
+
+{id:'automatch', layer:'l2', lever:'str', title:'自动广告四定位组', tag:'紧密 / 宽泛 / 同类 / 关联', star:false,
+ formula:'紧密(标题内准+泛+属性词) / 宽泛(相关词+长尾,错拼多,建议关) / 同类(同节点竞品页+反查词) / 关联(互补节点 ASIN)',
+ logic:'全流量词库 ≈ 紧密+宽泛会触发的最大范围词库(organic 筛选去掉 amazon recommended 后的强相关词)。',
+ validate:'后台搜索词界面导出可见四定位组明细(搜索词报表本身看不到);对照全流量词表核实覆盖。',
+ risk:''},
+
+{id:'negation', layer:'l2', lever:'str', title:'否定 = 活动内降权匹配', tag:'精准否 / 词组否', star:false,
+ formula:'精准否 AB 只挡 AB/BA、乱序仍过 ; 词组否挡含该序列者、乱序仍过。广泛投 AB + 精准否 AB = 只剩正序+乱序长尾 ; 再词组否 AB = 只剩乱序长尾。',
+ logic:'否定三用途:除错词(词组否错词根)、精细化范围(词组/精准)、差词缩量。否定本质是"对某些词在活动内降权的匹配方式"。',
+ validate:'对错误非核心词做匹配检索(相当于试词组否),在流量词表(新品)或搜索词报表(有数据)看会否掉什么。',
+ risk:''},
+
+{id:'wordroot', layer:'l2', lever:'str', title:'词根分层 & 投放词层级', tag:'上位 / 一级 / 二级 / 三级', star:false,
+ formula:'核心词根(2–3 词不可再短,yoga mat) / 上位词(mat,更泛但含自己) / 非核心词(属性·人群,waterproof);投放词 = 上位 / 一级 A+B / 二级 A+B+C / 三级 A+B+C1+C2。',
+ logic:'层级决定触发范围与竞价梯度,是广告漏斗与翻量的坐标系。',
+ validate:'全流量词表按词根拆分统计搜索量;搜索词报表按层级归并核对实际触发。',
+ risk:''},
+
+{id:'variation', layer:'l2', lever:'str', title:'多变体长板理论 + 加权', tag:'倾斜木桶', star:false,
+ formula:'父体每词只显权重最高的一个子体(占一自然坑) ; 互为变体广告坑不在同板块同页 ; 出单在哪个 ASIN 就加权哪个。',
+ logic:'不遵短板遵长板——变体要错位、各有专长(等长则储水不增)。分工:占自然入口(多主推)/增整体 CVR(尺码全)/增客单(辅推)/占付费入口。',
+ validate:'ABA / H10 Cerebro 查某词父体出现的子体(恒为同一);搜索词报表按广告 ASIN 拆分 + 排名追踪,看成交 ASIN 排名改善更快。',
+ risk:''},
+
+{id:'adtypes', layer:'l2', lever:'str', title:'广告类型功能矩阵', tag:'SP / SB / SBV / SD', star:false,
+ formula:'提权:SP 直接+间接 &gt; SBV &gt; SB ; 占坑:SP/SB/SBV/SD(PT) 有、SD(受众) 无 ; 买单与品宣多型皆能。',
+ logic:'翻量 = 加类型 / 加词 / 加商品投放 / 加变体;缩量 = 删辅助(SD 受众、SB 词+商品、辅推 ASIN)、减间接加权(SBV/SP/SD-ASIN)。',
+ validate:'分类型看各活动 ACOS/CPA 与提权效果(排名追踪);SB/SBV 出价按空白账号起拍(杀熟轻,实际 CPC 常 < 出价)。',
+ risk:''},
+
+{id:'funnel', layer:'l2', lever:'str', title:'广告漏斗(双向)', tag:'Auto/上位→一级→二级→三级→KWE', star:false,
+ formula:'由下至上(转化驱动):从最低 CPC 起、积长尾权重 ; 由上至下(流量驱动):大词最高竞价 → 三级 80% → 二级 50% → 一级 中位数。',
+ logic:'下至上适红海 / 长尾多 / 预算有限 / 流量离散;上至下适小竞争 / 预算多 / 同质化严重。',
+ validate:'推广洞察表 + 搜索词透视表看各层级 CPA / 单量,决定推进方向与省力大词。',
+ risk:'乘子为经验值,见经验常数层。'},
+
+{id:'rankmech', layer:'l2', lever:'crs', title:'坑产 → 自然排名(预期 vs 实际)', tag:'干预模型', star:false,
+ formula:'广告干预预期坑产(CTR/CVR/出单信号,7–14 天短期权重) ; 真实出单干预实际坑产。',
+ logic:'推排名 = 在目标词制造足够坑产,顶到该词实际坑产上限;干预分正向 / 无效 / 反向(表现差)。',
+ validate:'排名追踪对照 H10 CPR 与一周广告单;瓶颈位 = 短期内同位被下拽 3 次。',
+ risk:'天花板由实际坑产 / 价格 / 星级 / BSR / 黑标决定,广告保不住。'},
+
+{id:'boundary', layer:'l2', lever:'crs', title:'两条边界命题', tag:'认识论骨架', star:true,
+ formula:'① 正向干预是推广自然排名的<b>必要不充分</b>条件 ② 广告是维稳自然排名的<b>不充分不必要</b>条件',
+ logic:'广告只动预期坑产(短期权重):既不能单独把排名推上去(还需干预量 + 天花板够高),也保不住由实际坑产决定的位置。这两句划清了"广告能做什么、不能做什么"。',
+ validate:'长周期对照——无坑产变化期自然位是否自稳(证不必要);高干预但天花板受限的词是否推不动(证不充分)。',
+ risk:'用于防止把排名波动全归因于广告。'},
+
+/* ---------- 经验常数层 ---------- */
+{id:'multiplier_cap', layer:'l3', lever:'bid', title:'竞价乘子上限', tag:'TOS +100% / 其他 +50%', star:false,
+ formula:'提高降低下 TOS 最高 2x、其他位 1.5x ; 实际 CPC 常达底 bid 150–200% ; 出价×:TOS 2x、ROS/PP 0.8x~1.5x。',
+ logic:'用"提高降低"时,必须把这层放大预先计入底 bid 的选择,否则实际 CPC 会远超预期。',
+ validate:'提高降低活动的广告位报表核对 TOS CPC ≈ 2x、整体 CPC ≈ 150–200% × 底 bid。',
+ risk:'上限为平台设定,可能随版本变——以当下实测为准。'},
+
+{id:'price_pace', layer:'l3', lever:'bid', title:'降价节奏', tag:'≤5%/次 · ≤2%/天', star:false,
+ formula:'整体降价每次不超 5%、每天约 2% ; 整体抬价可整体或局部搜索词抬。',
+ logic:'缓降以避免权重与曝光结构骤变、触发系统重新学习。',
+ validate:'变更后观察曝光 / CPA 恢复曲线(须陈化 7–14 天再读)。',
+ risk:'经验节奏,不同类目应自校。'},
+
+{id:'survey_bid', layer:'l3', lever:'bid', title:'市调竞价档(示例)', tag:'低 / 中 / 高', star:false,
+ formula:'市调档 低 1.1 / 中 1.3 / 高 1.7 ; 空白账号档 0.4/0.6/1.0 ; 账号建议档 0.6/0.9/1.2(课件示例,美元)。',
+ logic:'用固定档在准词上跑,配合 a/b/c/d 与三角诊断定位竞价结构与压价空间。',
+ validate:'投放卖家基数大的准词(后台点击 / 订单排序前 10)、精准匹配、5–10 词排偶然。',
+ risk:'具体数值随类目 / 时期变,仅作起点。'},
+
+{id:'pp_ratio', layer:'l3', lever:'str', title:'PP ≈ (TOS+ROS) × 5~15', tag:'结构基准比', star:false,
+ formula:'正常竞价下商品页曝光 ≈ 搜索页(TOS+ROS)曝光的 5–15 倍;倍数过高 = 竞价偏低。',
+ logic:'这个比值是 a/b/c/d 判读的骨架——先有正常倍数区间,才谈得上"过大 / 正常 / 偏低"。',
+ validate:'广告位报表算 PP ÷ (TOS+ROS);落区间内为正常,>15 倍即偏低竞价。',
+ risk:'阈值因产品而异,用本品数据重标。'},
+
+{id:'cvr_est', layer:'l3', lever:'str', title:'CVR 估算档', tag:'未推产品粗算', star:false,
+ formula:'低单价 15–30% / 中单价 10% / 高单价 7% / 超高单价 2–5% ; 已推品类看品牌指标品类 CVR。',
+ logic:'放量前评估 CVR 是否正向干预的锚;CVR 估不准,坑产与 CPA 全盘偏。',
+ validate:'购买竞品广告报表参考;跟卖竞品一周后看品类基准 CVR;品牌指标查品类转化率。',
+ risk:'强依赖类目与价格带,必须本地校准。'},
+
+{id:'funnel_mult', layer:'l3', lever:'str', title:'漏斗竞价乘子', tag:'80% / 50% / 中位数', star:false,
+ formula:'由上至下:大词最高竞价(或 TOS 加价测) → 三级 ×70–80% → 二级 ×40–50% → 一级 中位数竞价。',
+ logic:'长尾越深、匹配越精,需越高出价才拿曝光——乘子据此设,让各层都拿到目标曝光。',
+ validate:'各层活动广告位报表看是否拿到目标曝光,反推并微调乘子。',
+ risk:'经验乘子,按离散度 / 竞争度自调。'},
+
+{id:'product_grad', layer:'l3', lever:'str', title:'商品投放梯度', tag:'由宽到精', star:false,
+ formula:'auto 0.7x → category 0.8x → category-refine / ASIN expand 0.8x → ASIN exact 1x。',
+ logic:'商品投放出单同样增关键词出单归因,但不增曝光 / 点击归因;梯度控由宽泛到精准的成本。',
+ validate:'各定位广告位报表 CPA / CVR 对照,校准起始乘子。',
+ risk:'起始乘子为经验值。'},
+
+{id:'exposure_ratio', layer:'l3', lever:'str', title:'曝光量 > 10 : 1', tag:'曝光与搜索量正相关', star:false,
+ formula:'曝光与搜索量正相关(非正比):大词 50w、小词 5w,同活动曝光比 >10:1 ; 同活动亚马逊倾向把预算花完(广告位轮播)。',
+ logic:'大小词混在同活动会互相压制曝光——放量要拆活动,给不同体量的词各自的预算与竞价。',
+ validate:'同活动多词的曝光分布对照各自搜索量;明显失衡即拆活动。',
+ risk:''},
+
+{id:'comp_score', layer:'l3', lever:'crs', title:'竞品表现得分 10/8/6/4', tag:'准词判定', star:false,
+ formula:'10=多竞品(5/5)均前 20 ; 8=均前 40 ; 6=均前 60 ; 4=均前 100。得分高 → 准词 → 投资型;泛词 6–8 → 盈利型。',
+ logic:'用 H10 Cerebro 反查 3–6 头部 ASIN 的综合排名得分,判该词能否推、作投资型还是盈利型。',
+ validate:'反查竞品数控制在 3–6(过多拉低均分致失真);涉品牌名的词看各 ASIN 单独排名。',
+ risk:'不同产品阈值有别;准词 / 泛词占比与流量离散度联动判断。'},
+
+{id:'increment', layer:'l3', lever:'crs', title:'增量三判据', tag:'花完能花的预算', star:false,
+ formula:'① ACOAS ≤ ACOS(恒真) ② ACOS &lt; 毛利 = 盈利型(加花费增总利润、纯利率降) ③ ACOS &lt; 目标 ACOAS = 纯利型(加花费增总利润、且不降纯利率)。',
+ logic:'高盈利广告不限预算;投资型压 CPA 趋平本;盈利型无限放量覆盖投资型成本。亏损型广告不进每日总预算。',
+ validate:'活动报表按 ACOS 对照毛利率与目标 ACOAS 分账;边际单利润 = price·(毛利率 − ACOS) 验证增量正负。',
+ risk:'目标 ACOAS 须按整体盈亏目标反推,非拍脑袋。'}
+];
+
+/* ================= 渲染 ================= */
+function nodeCard(n){
+  const b = document.createElement('button');
+  b.className = 'node ' + n.lever;
+  b.dataset.id = n.id;
+  b.dataset.lever = n.lever;
+  b.setAttribute('aria-haspopup','dialog');
+  b.innerHTML = `${n.star?'<span class="n-star">★</span>':''}
+    <span class="n-title">${n.title}</span>
+    <span class="n-tag">${n.tag}</span>
+    <span class="n-open">展开验证 →</span>`;
+  b.addEventListener('click', ()=>openDrawer(n.id));
+  return b;
+}
+function mount(){
+  NODES.forEach(n=>{
+    const cell = document.querySelector(`.band.${n.layer} .col.${n.lever}`);
+    if(cell) cell.appendChild(nodeCard(n));
+  });
+}
+mount();
+
+/* ================= 抽屉 ================= */
+const scrim=document.getElementById('scrim'), drawer=document.getElementById('drawer');
+let lastFocus=null;
+function openDrawer(id){
+  const n=NODES.find(x=>x.id===id); if(!n) return;
+  lastFocus=document.activeElement;
+  const acc=ACCENT[n.lever];
+  drawer.style.setProperty('--dr-accent',acc);
+  document.getElementById('drKicker').innerHTML =
+    `<span>${n.lever==='bid'?'出价杆':n.lever==='str'?'结构杆':'跨杆'}</span>
+     <span class="relbadge">· ${RELNAME[n.layer]}</span>${n.star?' <span class="star">★</span>':''}`;
+  document.getElementById('drTitle').textContent = n.title;
+  let html = '';
+  if(n.formula)  html += `<section><h5>公式 · 定义</h5><div class="formula">${n.formula}</div></section>`;
+  if(n.logic)    html += `<section><h5>底层逻辑</h5><p class="logic">${n.logic}</p></section>`;
+  if(n.validate) html += `<section><h5>数据验证 ★</h5><div class="validate">${n.validate}</div></section>`;
+  if(n.risk)     html += `<section><div class="risk">${n.risk}</div></section>`;
+  document.getElementById('drBody').innerHTML = html;
+  document.getElementById('drBody').scrollTop = 0;
+  scrim.classList.add('on'); drawer.classList.add('on');
+  document.getElementById('drClose').focus();
+}
+function closeDrawer(){
+  scrim.classList.remove('on'); drawer.classList.remove('on');
+  if(lastFocus) lastFocus.focus();
+}
+document.getElementById('drClose').addEventListener('click',closeDrawer);
+scrim.addEventListener('click',closeDrawer);
+document.addEventListener('keydown',e=>{ if(e.key==='Escape' && drawer.classList.contains('on')) closeDrawer(); });
+
+/* ================= 杠杆筛选 ================= */
+const chips=[...document.querySelectorAll('#chips .chip')];
+let active='all';
+chips.forEach(c=>c.addEventListener('click',()=>{
+  active=c.dataset.f;
+  chips.forEach(x=>x.setAttribute('aria-pressed', x.dataset.f===active ? 'true':'false'));
+  applyFilter();
+}));
+function applyFilter(){
+  document.querySelectorAll('.node').forEach(nd=>{
+    const on = active==='all' || nd.dataset.lever===active;
+    nd.classList.toggle('dim', !on);
+  });
+  // 若整条带在该杠杆下无高亮节点,淡化整带(纯视觉)
+  document.querySelectorAll('.band').forEach(band=>{
+    const anyOn = active==='all' || band.querySelector(`.node.${active}`);
+    band.classList.toggle('dim', !anyOn);
+  });
+}
+</script>
+</body>
+</html>

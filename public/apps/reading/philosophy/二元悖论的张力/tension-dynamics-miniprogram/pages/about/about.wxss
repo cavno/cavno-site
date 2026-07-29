@@ -1,0 +1,106 @@
+.ab-scroll {
+  height: 100vh;
+  box-sizing: border-box;
+}
+.ab-hero {
+  padding: 48rpx 48rpx 20rpx;
+}
+.ab-eyebrow {
+  font-size: 24rpx;
+  letter-spacing: 6rpx;
+  color: var(--ink-faint);
+}
+.ab-title {
+  margin-top: 26rpx;
+  font-size: 64rpx;
+  line-height: 1.32;
+  font-weight: 600;
+  letter-spacing: 3rpx;
+  color: var(--ink);
+  white-space: pre-line;
+}
+.ab-lead {
+  margin-top: 32rpx;
+  font-size: 29rpx;
+  line-height: 1.9;
+  color: var(--ink-soft);
+  letter-spacing: .5rpx;
+  text-align: justify;
+}
+
+.ab-section {
+  padding: 40rpx 48rpx 0;
+}
+.ab-h {
+  display: flex;
+  align-items: center;
+  font-size: 40rpx;
+  font-weight: 600;
+  color: var(--ink);
+  letter-spacing: 2rpx;
+}
+.ab-num {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 56rpx;
+  height: 56rpx;
+  margin-right: 20rpx;
+  font-size: 30rpx;
+  color: #fff;
+  background: var(--accent);
+  border-radius: 10rpx;
+}
+.ab-p {
+  margin-top: 22rpx;
+  font-size: 29rpx;
+  line-height: 1.92;
+  color: var(--ink-soft);
+  letter-spacing: .5rpx;
+  text-align: justify;
+}
+.ab-p .em {
+  color: var(--accent);
+  font-weight: 600;
+}
+
+.ab-quote {
+  margin: 48rpx 40rpx 8rpx;
+  padding: 44rpx 40rpx;
+  background: var(--card);
+  border: 1rpx solid var(--line);
+  border-radius: 22rpx;
+  text-align: center;
+}
+.ab-quote-seal {
+  font-size: 60rpx;
+  letter-spacing: 18rpx;
+  color: var(--accent);
+  text-indent: 18rpx;
+}
+.ab-quote-text {
+  margin-top: 24rpx;
+  font-size: 26rpx;
+  line-height: 1.85;
+  color: var(--ink-soft);
+  letter-spacing: .5rpx;
+}
+
+.ab-foot {
+  margin-top: 64rpx;
+  padding-top: 44rpx;
+  text-align: center;
+  border-top: 1rpx solid var(--line-soft);
+}
+.ab-foot-seal {
+  font-size: 40rpx;
+  letter-spacing: 12rpx;
+  color: var(--accent);
+  text-indent: 12rpx;
+}
+.ab-foot-line {
+  margin-top: 16rpx;
+  font-size: 22rpx;
+  letter-spacing: 2rpx;
+  color: var(--ink-faint);
+}

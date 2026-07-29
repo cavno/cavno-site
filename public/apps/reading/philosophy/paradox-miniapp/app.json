@@ -1,0 +1,61 @@
+{
+  "pages": [
+    "pages/home/home",
+    "pages/category/category",
+    "pages/about/about"
+  ],
+  "subpackages": [
+    {
+      "root": "pkg_a",
+      "pages": [
+        "pages/system/system",
+        "pages/tension/tension"
+      ]
+    },
+    {
+      "root": "pkg_b",
+      "pages": [
+        "pages/system/system",
+        "pages/tension/tension"
+      ]
+    },
+    {
+      "root": "pkg_c",
+      "pages": [
+        "pages/system/system",
+        "pages/tension/tension"
+      ]
+    },
+    {
+      "root": "pkg_d",
+      "pages": [
+        "pages/system/system",
+        "pages/tension/tension"
+      ]
+    }
+  ],
+  "window": {
+    "navigationBarBackgroundColor": "#f3ebda",
+    "navigationBarTitleText": "悖论图谱",
+    "navigationBarTextStyle": "black",
+    "backgroundColor": "#f3ebda"
+  },
+  "tabBar": {
+    "color": "#8a7f6a",
+    "selectedColor": "#a73e2c",
+    "backgroundColor": "#f7f0e0",
+    "borderStyle": "black",
+    "list": [
+      {
+        "pagePath": "pages/home/home",
+        "text": "图谱"
+      },
+      {
+        "pagePath": "pages/about/about",
+        "text": "方法论"
+      }
+    ]
+  },
+  "lazyCodeLoading": "requiredComponents",
+  "sitemapLocation": "sitemap.json"
+}

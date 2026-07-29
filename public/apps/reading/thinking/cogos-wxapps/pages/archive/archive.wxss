@@ -1,0 +1,10 @@
+.meta{position:relative;overflow:hidden;}
+.mv-big{position:absolute;right:16rpx;top:-14rpx;font-size:150rpx;font-weight:900;color:rgba(31,110,107,.08);line-height:1;}
+.m-era{font-size:34rpx;font-weight:900;}
+.m-time{font-size:22rpx;color:var(--ink2);margin-bottom:12rpx;}
+.pplbox{display:flex;flex-wrap:wrap;gap:10rpx;margin-bottom:18rpx;}
+.ppl{font-size:21rpx;background:rgba(93,123,147,.14);border:2rpx solid rgba(93,123,147,.4);
+  color:#42607a;border-radius:999rpx;padding:4rpx 16rpx;}
+.card.dim text{font-size:26rpx;}
+.card.lim{border-color:rgba(192,91,51,.45);background:rgba(192,91,51,.05);}
+.card.lim .klabel{color:#8d4020;}

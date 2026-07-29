@@ -1,0 +1,365 @@
+.lecture-hero {
+  min-height: 500rpx;
+  padding-top: 64rpx;
+  padding-bottom: 56rpx;
+  color: #fffaf0;
+}
+
+.hero-top {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+}
+
+.lecture-number {
+  font-size: 23rpx;
+  font-weight: 700;
+  letter-spacing: 4rpx;
+}
+
+.lecture-date {
+  margin-top: 8rpx;
+  color: rgba(255, 250, 240, 0.65);
+  font-family: "Times New Roman", serif;
+  font-size: 24rpx;
+}
+
+.favorite-button {
+  min-width: 112rpx;
+  padding: 14rpx 20rpx;
+  border: 1rpx solid rgba(255, 250, 240, 0.45);
+  border-radius: 999rpx;
+  color: #fffaf0;
+  font-size: 23rpx;
+}
+
+.favorite-active {
+  border-color: #f0c48e;
+  background: #f0c48e;
+  color: #4a3328;
+}
+
+.lecture-display {
+  max-width: 650rpx;
+  margin-top: 72rpx;
+  font-family: "STSong", "Songti SC", serif;
+  font-size: 58rpx;
+  font-weight: 700;
+  line-height: 1.25;
+}
+
+.lecture-kicker {
+  margin-top: 20rpx;
+  color: rgba(255, 250, 240, 0.8);
+  font-size: 29rpx;
+}
+
+.hero-meta {
+  display: flex;
+  gap: 12rpx;
+  margin-top: 38rpx;
+  color: rgba(255, 250, 240, 0.62);
+  font-size: 22rpx;
+}
+
+.thesis-wrap {
+  margin-top: -36rpx;
+}
+
+.thesis-card {
+  padding: 36rpx;
+}
+
+.thesis-label {
+  color: #a64f32;
+  font-size: 21rpx;
+  font-weight: 700;
+  letter-spacing: 4rpx;
+}
+
+.thesis-text {
+  margin-top: 18rpx;
+  color: #17362f;
+  font-family: "STSong", "Songti SC", serif;
+  font-size: 34rpx;
+  font-weight: 700;
+  line-height: 1.68;
+}
+
+.thesis-opening {
+  margin-top: 24rpx;
+  padding-top: 22rpx;
+  border-top: 1rpx solid rgba(23, 54, 47, 0.1);
+  color: #696257;
+  font-size: 25rpx;
+  line-height: 1.82;
+}
+
+.question-wrap {
+  padding-top: 64rpx;
+  padding-bottom: 42rpx;
+}
+
+.question {
+  display: flex;
+  align-items: flex-start;
+  margin-top: 24rpx;
+  color: #34312c;
+  font-size: 28rpx;
+}
+
+.question-no {
+  width: 68rpx;
+  flex: none;
+  color: #a64f32;
+  font-family: "Times New Roman", serif;
+  font-size: 24rpx;
+  font-weight: 700;
+}
+
+.section-nav {
+  position: sticky;
+  z-index: 5;
+  top: 0;
+  padding: 16rpx 0 18rpx;
+  background: rgba(243, 238, 227, 0.97);
+  white-space: nowrap;
+}
+
+.section-nav-row {
+  display: inline-flex;
+  padding: 0 32rpx;
+}
+
+.section-nav-item {
+  display: inline-flex;
+  align-items: center;
+  max-width: 390rpx;
+  margin-right: 14rpx;
+  padding: 14rpx 20rpx;
+  border: 1rpx solid rgba(23, 54, 47, 0.13);
+  border-radius: 14rpx;
+  background: #fbf8f1;
+  text-align: left;
+}
+
+.nav-no {
+  margin-right: 12rpx;
+  color: #a64f32;
+  font-family: "Times New Roman", serif;
+  font-size: 22rpx;
+}
+
+.nav-title {
+  overflow: hidden;
+  color: #46544f;
+  font-size: 23rpx;
+  text-overflow: ellipsis;
+}
+
+.content {
+  padding-top: 34rpx;
+}
+
+.content-section {
+  scroll-margin-top: 110rpx;
+  margin-bottom: 26rpx;
+  border: 1rpx solid rgba(23, 54, 47, 0.1);
+  border-radius: 24rpx;
+  background: #fbf8f1;
+  overflow: hidden;
+  box-shadow: 0 12rpx 32rpx rgba(42, 35, 26, 0.045);
+}
+
+.section-header {
+  display: flex;
+  align-items: flex-start;
+  width: 100%;
+  padding: 32rpx;
+  text-align: left;
+}
+
+.section-no {
+  width: 72rpx;
+  flex: none;
+  padding-top: 4rpx;
+  color: #a64f32;
+  font-family: "Times New Roman", serif;
+  font-size: 26rpx;
+  font-weight: 700;
+}
+
+.section-header-main {
+  flex: 1;
+  min-width: 0;
+}
+
+.content-title {
+  color: #17362f;
+  font-family: "STSong", "Songti SC", serif;
+  font-size: 35rpx;
+  font-weight: 700;
+  line-height: 1.4;
+}
+
+.content-thesis {
+  margin-top: 12rpx;
+  color: #746d63;
+  font-size: 24rpx;
+  line-height: 1.72;
+}
+
+.collapse-icon {
+  width: 44rpx;
+  flex: none;
+  color: #a64f32;
+  font-size: 38rpx;
+  font-weight: 300;
+  text-align: right;
+}
+
+.section-body {
+  padding: 0 32rpx 34rpx 104rpx;
+}
+
+.paragraph {
+  margin-bottom: 22rpx;
+  color: #3c3832;
+  font-size: 27rpx;
+  line-height: 1.92;
+}
+
+.point-box {
+  margin-top: 30rpx;
+  padding: 26rpx;
+  border-radius: 18rpx;
+  background: #f0eadf;
+}
+
+.point-label,
+.bridge-label {
+  margin-bottom: 16rpx;
+  color: #a64f32;
+  font-size: 20rpx;
+  font-weight: 700;
+  letter-spacing: 4rpx;
+}
+
+.point-row {
+  display: flex;
+  align-items: flex-start;
+  margin-top: 12rpx;
+}
+
+.point-index {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 38rpx;
+  height: 38rpx;
+  margin-right: 14rpx;
+  border-radius: 50%;
+  background: #17362f;
+  color: #fffaf0;
+  font-family: "Times New Roman", serif;
+  font-size: 18rpx;
+}
+
+.point-text {
+  flex: 1;
+  color: #4e4942;
+  font-size: 24rpx;
+  line-height: 1.72;
+}
+
+.bridge-box {
+  margin-top: 24rpx;
+  padding: 24rpx 26rpx;
+  border-left: 6rpx solid #a64f32;
+  background: #fffaf1;
+  color: #5f594f;
+  font-size: 25rpx;
+  line-height: 1.78;
+}
+
+.keyword-wrap {
+  padding-top: 48rpx;
+}
+
+.keyword-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 14rpx;
+  margin-top: 20rpx;
+}
+
+.keyword {
+  padding: 12rpx 22rpx;
+  border: 1rpx solid rgba(23, 54, 47, 0.14);
+  border-radius: 999rpx;
+  background: #fbf8f1;
+  color: #17362f;
+  font-size: 23rpx;
+}
+
+.summary-wrap {
+  padding-top: 46rpx;
+}
+
+.summary-card {
+  padding: 38rpx 34rpx;
+  border-radius: 22rpx;
+  background: #17362f;
+  color: #fff9ec;
+}
+
+.summary-label {
+  color: #d9ae75;
+  font-size: 21rpx;
+  font-weight: 700;
+  letter-spacing: 4rpx;
+}
+
+.summary-text {
+  margin-top: 18rpx;
+  font-family: "STSong", "Songti SC", serif;
+  font-size: 32rpx;
+  font-weight: 700;
+  line-height: 1.75;
+}
+
+.next-wrap {
+  padding-top: 26rpx;
+  padding-bottom: 28rpx;
+}
+
+.next-button {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  padding: 30rpx 32rpx;
+  border: 1rpx solid rgba(23, 54, 47, 0.14);
+  border-radius: 20rpx;
+  background: #fbf8f1;
+  text-align: left;
+}
+
+.next-label {
+  color: #a64f32;
+  font-size: 21rpx;
+  font-weight: 700;
+  letter-spacing: 3rpx;
+}
+
+.next-title {
+  margin-top: 8rpx;
+  color: #17362f;
+  font-size: 28rpx;
+  font-weight: 700;
+}
+
+.next-arrow {
+  color: #17362f;
+  font-size: 44rpx;
+}

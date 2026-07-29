@@ -1,0 +1,105 @@
+<!-- ============ 目录视图 ============ -->
+<view class="page" wx:if="{{view==='toc'}}">
+  <view class="hero">
+    <text class="eyebrow">✦ ΦΙΛΟΣΟΦΙΑ ✦</text>
+    <text class="htitle">十六组核心概念二元对立</text>
+    <text class="hsub">去看古希腊哲学</text>
+    <view class="intro">
+      <text class="ip" wx:for="{{intro}}" wx:key="*this">{{item}}</text>
+    </view>
+  </view>
+
+  <view class="tabs">
+    <view class="tab {{tab==='table'?'on':''}}" data-t="table" bindtap="switchTab">总表 · 十六组</view>
+    <view class="tab {{tab==='flow'?'on':''}}" data-t="flow" bindtap="switchTab">历史脉络</view>
+  </view>
+
+  <!-- 总表网格 -->
+  <view class="grid" wx:if="{{tab==='table'}}">
+    <view class="gcell" wx:for="{{table}}" wx:key="no" data-n="{{item.no}}" bindtap="openByNum">
+      <text class="g-no">N° {{item.no < 10 ? '0' : ''}}{{item.no}}</text>
+      <text class="g-cn">{{item.cn}}</text>
+      <text class="g-gk">{{item.greek}}</text>
+    </view>
+  </view>
+
+  <!-- 历史脉络 -->
+  <view class="flow" wx:if="{{tab==='flow'}}">
+    <block wx:for="{{sections}}" wx:key="idx">
+      <view wx:if="{{!item.synthesis}}" class="sec">
+        <view class="sec-h" data-i="{{item.idx}}" bindtap="openByIdx">
+          <text class="sec-roman">{{item.roman}}</text>
+          <text class="sec-title">{{item.title}}</text>
+        </view>
+        <view class="opp-row" wx:for="{{item.items}}" wx:for-item="o" wx:key="idx" data-i="{{o.idx}}" bindtap="openByIdx">
+          <text class="or-no">{{o.no}}</text>
+          <view class="or-tx"><text class="or-cn">{{o.cn}}</text><text class="or-gk">{{o.greek}}</text></view>
+          <text class="or-arrow">›</text>
+        </view>
+      </view>
+      <view wx:else class="syn-row" data-i="{{item.idx}}" bindtap="openByIdx">
+        <text class="syn-roman">{{item.roman}}</text>
+        <text class="syn-title">{{item.title}}</text>
+      </view>
+    </block>
+  </view>
+
+  <view class="foot">核心二元对立 · 十六组　·　点任一组开始阅读</view>
+</view>
+
+<!-- ============ 阅读视图 ============ -->
+<view class="reader" wx:if="{{view==='read'}}">
+  <view class="rbar">
+    <view class="rb-back" bindtap="toToc">☰ 目录</view>
+    <text class="rb-crumb">{{crumb}}</text>
+    <text class="rb-pos">{{pos}}</text>
+  </view>
+
+  <!-- 阶段导言 -->
+  <block wx:if="{{entry.type==='section'}}">
+    <view class="sect-hero">
+      <text class="sect-roman">{{entry.roman}}</text>
+      <text class="sect-h1">{{entry.title}}</text>
+    </view>
+    <view class="body">
+      <text class="bp" wx:for="{{entry.intro}}" wx:key="*this">{{item}}</text>
+      <view wx:if="{{entry.intro.length===0}}" class="bp muted">本阶段包含以下对立——向下翻页逐一展开。</view>
+    </view>
+  </block>
+
+  <!-- 对立详情 -->
+  <block wx:elif="{{entry.type==='opp'}}">
+    <view class="opp-hero">
+      <text class="oh-no">对立 {{entry.no}}</text>
+      <text class="oh-gk">{{entry.greek}}</text>
+      <text class="oh-cn">{{entry.cn}}</text>
+    </view>
+    <view class="body">
+      <block wx:for="{{entry.body}}" wx:key="*this">
+        <view wx:if="{{item.k==='li'}}" class="li"><text class="li-dot">—</text><text class="li-tx">{{item.text}}</text></view>
+        <text wx:else class="bp">{{item.text}}</text>
+      </block>
+    </view>
+  </block>
+
+  <!-- 总纲 -->
+  <block wx:else>
+    <view class="syn-hero">
+      <text class="sect-roman">{{entry.roman}}</text>
+      <text class="sect-h1">{{entry.title}}</text>
+    </view>
+    <view class="body">
+      <text class="bp" wx:for="{{entry.body}}" wx:key="*this">{{item.text}}</text>
+    </view>
+  </block>
+
+  <!-- 翻页 -->
+  <view class="pager">
+    <view class="pg {{idx===0?'disabled':''}}" bindtap="prev">‹ 上一组</view>
+    <view class="pg2" bindtap="toToc">目录</view>
+    <view class="pg {{idx===total-1?'disabled':''}}" bindtap="next">下一组 ›</view>
+  </view>
+  <view class="rfoot">十六组核心概念二元对立 · 去看古希腊哲学</view>
+
+  <view class="totop {{showTop?'show':''}}" bindtap="toTop">↑</view>
+</view>

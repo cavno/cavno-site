@@ -1,0 +1,45 @@
+<view class="wrap safe">
+  <view class="sechead"><text class="idx">二</text><text class="t">推演工作台 · 五步法</text><text class="en">BENCH</text></view>
+  <view class="seclead">元命题：任何复杂系统的发展，都是在<text class="b">内在逻辑律</text>驱动下、通过处理<text class="b">内部矛盾</text>与外部环境的互动、必然沿特定路径演化的过程。把同一台方法机装上三种文明燃料——逐步执行，看链条如何被推演出来。</view>
+
+  <scroll-view class="chips" scroll-x enhanced show-scrollbar="{{false}}">
+    <view wx:for="{{domains}}" wx:key="name" class="chip {{di===index?'act':''}}"
+      data-i="{{index}}" bindtap="onDomain">
+      <text class="c1">{{index+1}}</text><text class="c2">{{item.name}}</text>
+    </view>
+  </scroll-view>
+
+  <view wx:for="{{d.steps}}" wx:key="index" class="card step {{index >= step ? '' : 'done'}}">
+    <view class="st"><text class="stn">{{index+1}}</text><text class="stt">{{wbsteps[index]}}</text>
+      <text class="std">{{index >= step ? '待执行' : '✓ 已执行'}}</text></view>
+    <view class="sc">{{item}}</view>
+  </view>
+
+  <button wx:if="{{step<5}}" class="btn primary big" hover-class="btn-hover" bindtap="onStep">
+    执行第 {{step+1}} 步 ▸ {{wbsteps[step]}}
+  </button>
+  <view wx:else class="card doneMsg">
+    <text class="dm1">推演完毕。</text>
+    <text class="dm2">同一台方法机，三种文明燃料——链条不是编年史，是相变序列。</text>
+    <button class="btn ghost" hover-class="btn-hover" bindtap="onReset">↺ 重新推演本域</button>
+  </view>
+
+  <view class="card chainbox">
+    <view class="klabel">演化链条（第四步点亮）</view>
+    <view class="chain {{step>=4?'lit':''}}">
+      <block wx:for="{{d.chain}}" wx:key="index">
+        <view class="cpill tg-{{item[2]}}">
+          <text class="cn1">{{item[0]}}</text><text class="cn2">{{item[1]}}</text>
+        </view>
+        <text wx:if="{{index<d.chain.length-1}}" class="cdn">↓</text>
+      </block>
+    </view>
+    <view class="legend">
+      <view class="lg"><view class="li" style="background:#8B8378"></view><text>初态 / 前系统</text></view>
+      <view class="lg"><view class="li" style="background:#1F6E6B"></view><text>1.0 划界与闭合</text></view>
+      <view class="lg"><view class="li" style="background:#C05B33"></view><text>2.0 矛盾驱动</text></view>
+      <view class="lg"><view class="li" style="background:#5D7B93"></view><text>3.0 分层</text></view>
+      <view class="lg"><view class="li" style="background:#B08A2E"></view><text>4.0 开放适应</text></view>
+    </view>
+  </view>
+</view>

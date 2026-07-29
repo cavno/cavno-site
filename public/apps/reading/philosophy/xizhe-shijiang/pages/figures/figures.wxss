@@ -1,0 +1,67 @@
+.fhead { padding: 26rpx 8rpx 30rpx; }
+.fhead-title {
+  display: block;
+  font-size: 52rpx;
+  font-weight: 700;
+  letter-spacing: 4rpx;
+  margin-top: 12rpx;
+}
+.fhead-sub {
+  display: block;
+  margin-top: 10rpx;
+  font-size: 26rpx;
+  color: #6f6452;
+}
+
+.fband {
+  background: #faf5ea;
+  border: 1rpx solid rgba(28, 25, 22, 0.13);
+  border-radius: 16rpx;
+  padding: 26rpx 28rpx 14rpx;
+  margin-bottom: 26rpx;
+}
+.fband-head {
+  display: flex;
+  align-items: center;
+  margin-bottom: 16rpx;
+}
+.fband-bar {
+  width: 14rpx;
+  height: 40rpx;
+  border-radius: 6rpx;
+  margin-right: 16rpx;
+  flex-shrink: 0;
+}
+.fb-terra { background: #a73e2c; }
+.fb-gold { background: #b8893a; }
+.fb-aegean { background: #1d4e5f; }
+.fb-wine { background: #7e2a38; }
+.fb-ink { background: #1c1916; }
+.fband-tx { flex: 1; }
+.fband-era { font-size: 34rpx; font-weight: 700; letter-spacing: 2rpx; }
+.fband-note {
+  display: block;
+  font-size: 22rpx;
+  color: #8a7a5e;
+  margin-top: 2rpx;
+}
+
+.fp {
+  padding: 16rpx 0;
+  border-top: 1rpx dashed rgba(28, 25, 22, 0.15);
+}
+.fp-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  flex-wrap: wrap;
+}
+.fp-name { font-size: 30rpx; font-weight: 700; letter-spacing: 1rpx; }
+.fp-dates { font-size: 21rpx; color: #a89878; letter-spacing: 1rpx; }
+.fp-tag {
+  display: block;
+  margin-top: 4rpx;
+  font-size: 24rpx;
+  line-height: 1.75;
+  color: #5d5346;
+}

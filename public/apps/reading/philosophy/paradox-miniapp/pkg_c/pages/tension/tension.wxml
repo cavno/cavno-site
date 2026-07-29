@@ -1,0 +1,34 @@
+<view class="wrap" wx:if="{{t}}">
+  <view class="head">
+    <view class="h-num">张力 {{num}} · {{sname}}</view>
+    <block wx:if="{{!t.single}}">
+      <view class="h-title">{{t.a}}<text class="h-vs"> ↔ </text>{{t.b}}</view>
+      <view class="h-chips">
+        <text class="chip-a">{{t.a}}</text>
+        <text class="chip-vs">↔</text>
+        <text class="chip-b">{{t.b}}</text>
+      </view>
+    </block>
+    <view class="h-title" wx:else>{{t.a}}</view>
+  </view>
+
+  <view class="body">
+    <block wx:for="{{t.body}}" wx:key="index">
+      <view class="b-h" wx:if="{{item.t==='h'}}">{{item.x}}</view>
+      <view class="b-p" wx:else>{{item.x}}</view>
+    </block>
+  </view>
+
+  <view class="nav">
+    <view class="nv {{hasPrev ? '' : 'nv-dis'}}" bindtap="prev">
+      <text class="nv-dir">← 上一张力</text>
+    </view>
+    <view class="nv nv-mid" bindtap="backSys">
+      <text class="nv-sys">返回系统</text>
+    </view>
+    <view class="nv nv-right {{hasNext ? '' : 'nv-dis'}}" bindtap="next">
+      <text class="nv-dir">下一张力 →</text>
+    </view>
+  </view>
+  <view class="safe-bottom"></view>
+</view>

@@ -1,0 +1,167 @@
+/* ========= 设计系统 =========
+   parchment #f3ebda · ink #1c1916 · terra #a73e2c
+   aegean #1d4e5f · gold #b8893a · wine #7e2a38
+   ============================ */
+
+page {
+  background: #f3ebda;
+  color: #1c1916;
+  font-family: "Songti SC", "Noto Serif SC", "Source Han Serif SC", "STSong", serif;
+  font-size: 30rpx;
+  line-height: 1.85;
+  -webkit-font-smoothing: antialiased;
+}
+
+view, text { box-sizing: border-box; }
+
+/* ---- 页面容器 ---- */
+.wrap { padding: 36rpx 32rpx 120rpx; }
+
+/* ---- 眉题(小标签) ---- */
+.eyebrow {
+  font-size: 22rpx;
+  letter-spacing: 6rpx;
+  color: #8a7a5e;
+  display: block;
+}
+
+/* ---- 分隔符号 ---- */
+.orn {
+  text-align: center;
+  color: #b8893a;
+  font-size: 26rpx;
+  letter-spacing: 14rpx;
+  margin: 30rpx 0 6rpx;
+  display: block;
+}
+
+/* ---- 卡片基底 ---- */
+.card {
+  background: #faf5ea;
+  border: 1rpx solid rgba(28, 25, 22, 0.13);
+  border-radius: 14rpx;
+  padding: 28rpx 28rpx;
+  box-shadow: 0 2rpx 10rpx rgba(28, 25, 22, 0.05);
+}
+
+/* ---- 主色文字 ---- */
+.c-terra { color: #a73e2c; }
+.c-aegean { color: #1d4e5f; }
+.c-gold { color: #b8893a; }
+.c-wine { color: #7e2a38; }
+.c-ink { color: #1c1916; }
+.c-dim { color: #6f6452; }
+
+/* ---- 引用块 ---- */
+.quote {
+  margin: 28rpx 0;
+  padding: 30rpx 32rpx;
+  background: #1c1916;
+  color: #f3ebda;
+  border-radius: 14rpx;
+  position: relative;
+}
+.quote .qmark {
+  font-size: 60rpx;
+  line-height: 1;
+  color: #b8893a;
+  display: block;
+  margin-bottom: 6rpx;
+  font-family: Georgia, serif;
+}
+.quote .qtx {
+  font-size: 31rpx;
+  line-height: 1.9;
+  display: block;
+}
+.quote .qby {
+  display: block;
+  margin-top: 16rpx;
+  font-size: 24rpx;
+  color: rgba(243, 235, 218, 0.65);
+  letter-spacing: 2rpx;
+}
+
+/* ---- 强调横幅 ---- */
+.band {
+  margin: 26rpx 0;
+  padding: 24rpx 28rpx;
+  border-radius: 12rpx;
+  background: rgba(184, 137, 58, 0.12);
+  border: 1rpx solid rgba(184, 137, 58, 0.4);
+  font-size: 28rpx;
+  line-height: 1.85;
+  color: #5d4a22;
+}
+
+/* ---- 通用标题 ---- */
+.h-num {
+  display: inline-block;
+  font-size: 22rpx;
+  letter-spacing: 4rpx;
+  color: #f3ebda;
+  background: #1c1916;
+  border-radius: 6rpx;
+  padding: 4rpx 14rpx;
+  margin-right: 14rpx;
+  vertical-align: middle;
+}
+.h-tx {
+  font-size: 36rpx;
+  font-weight: 700;
+  letter-spacing: 2rpx;
+  vertical-align: middle;
+}
+
+/* ---- 流程链 ---- */
+.flow { margin: 24rpx 0; }
+.flow-item {
+  display: flex;
+  align-items: center;
+  margin-bottom: 6rpx;
+}
+.flow-dot {
+  width: 14rpx;
+  height: 14rpx;
+  border-radius: 50%;
+  background: #a73e2c;
+  margin-right: 18rpx;
+  flex-shrink: 0;
+}
+.flow-line {
+  width: 2rpx;
+  height: 26rpx;
+  background: rgba(28, 25, 22, 0.25);
+  margin-left: 6rpx;
+}
+.flow-tx { font-size: 30rpx; font-weight: 600; }
+
+/* ---- 按钮 ---- */
+.btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 22rpx 30rpx;
+  border-radius: 12rpx;
+  font-size: 28rpx;
+  letter-spacing: 2rpx;
+}
+.btn-dark { background: #1c1916; color: #f3ebda; }
+.btn-line {
+  background: transparent;
+  color: #1c1916;
+  border: 1rpx solid rgba(28, 25, 22, 0.35);
+}
+
+/* ---- 页脚 ---- */
+.foot {
+  margin-top: 70rpx;
+  text-align: center;
+}
+.foot-tx {
+  display: block;
+  font-size: 22rpx;
+  color: #8a7a5e;
+  letter-spacing: 3rpx;
+  line-height: 2;
+}

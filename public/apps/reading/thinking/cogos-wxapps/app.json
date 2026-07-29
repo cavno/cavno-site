@@ -1,0 +1,29 @@
+{
+  "pages": [
+    "pages/lab/lab",
+    "pages/archive/archive",
+    "pages/bench/bench",
+    "pages/arsenal/arsenal"
+  ],
+  "window": {
+    "navigationBarBackgroundColor": "#F3EAD3",
+    "navigationBarTextStyle": "black",
+    "navigationBarTitleText": "认知操作系统",
+    "backgroundColor": "#F3EAD3",
+    "backgroundTextStyle": "dark"
+  },
+  "tabBar": {
+    "color": "#8A7A5C",
+    "selectedColor": "#1F6E6B",
+    "backgroundColor": "#F6EEDC",
+    "borderStyle": "black",
+    "list": [
+      { "pagePath": "pages/lab/lab", "text": "〇 实验室" },
+      { "pagePath": "pages/archive/archive", "text": "一 档案" },
+      { "pagePath": "pages/bench/bench", "text": "二 工作台" },
+      { "pagePath": "pages/arsenal/arsenal", "text": "三 武器库" }
+    ]
+  },
+  "style": "v2",
+  "sitemapLocation": "sitemap.json"
+}

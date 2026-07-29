@@ -1,0 +1,163 @@
+<view class="wrap" wx:if="{{lec}}">
+
+  <!-- 讲次头部 -->
+  <view class="lhead ac-{{lec.accent}}">
+    <view class="lhead-top">
+      <text class="lhead-num">{{lec.num}}</text>
+      <text class="lhead-date">{{lec.date}}</text>
+    </view>
+    <text class="lhead-title">{{lec.title}}</text>
+    <text class="lhead-sub">{{lec.sub}}</text>
+    <view class="lhead-pos">
+      <text>{{lec.pos}}</text>
+    </view>
+    <view class="lhead-q ac-bg-{{lec.accent}}">
+      <text class="lhead-q-label">核心之问</text>
+      <text class="lhead-q-tx">{{lec.q}}</text>
+    </view>
+  </view>
+
+  <!-- 承前启后 -->
+  <view class="link-strip">
+    <view class="link-item">
+      <text class="link-label">承前</text>
+      <text class="link-tx">{{lec.inherit}}</text>
+    </view>
+    <view class="link-item">
+      <text class="link-label">启后</text>
+      <text class="link-tx">{{lec.pass}}</text>
+    </view>
+  </view>
+
+  <!-- 正文 sections -->
+  <block wx:for="{{lec.sections}}" wx:key="k" wx:for-item="s">
+
+    <!-- 节标题 -->
+    <view wx:if="{{s.t === 'h'}}" class="sec-h">
+      <text class="h-num ac-bg-{{lec.accent}}">{{s.n}}</text>
+      <text class="h-tx">{{s.tx}}</text>
+    </view>
+
+    <!-- 导语段落 -->
+    <view wx:elif="{{s.t === 'lead'}}" class="lead">
+      <text wx:for="{{s.tx}}" wx:key="*this" wx:for-item="p" class="lead-p">{{p}}</text>
+    </view>
+
+    <!-- 引言 -->
+    <view wx:elif="{{s.t === 'quote'}}" class="quote">
+      <text class="qmark">「</text>
+      <text class="qtx">{{s.tx}}</text>
+      <text class="qby">—— {{s.by}}</text>
+    </view>
+
+    <!-- 定义卡 -->
+    <view wx:elif="{{s.t === 'def'}}" class="def-card">
+      <view class="def-head">
+        <text class="def-term">{{s.term}}</text>
+        <text class="def-en">{{s.en}}</text>
+      </view>
+      <text class="def-tx">{{s.tx}}</text>
+    </view>
+
+    <!-- 卡组 -->
+    <view wx:elif="{{s.t === 'cards'}}" class="cgrid">
+      <view wx:for="{{s.items}}" wx:key="h" wx:for-item="c" class="cg-card">
+        <text class="cg-h ac-{{lec.accent}}">{{c.h}}</text>
+        <text class="cg-d">{{c.d}}</text>
+      </view>
+    </view>
+
+    <!-- 编号要点 -->
+    <view wx:elif="{{s.t === 'nums'}}" class="nums">
+      <view wx:for="{{s.items}}" wx:key="h" wx:for-item="n" class="num-row">
+        <view class="num-badge ac-bg-{{lec.accent}}"><text>{{index + 1}}</text></view>
+        <view class="num-body">
+          <text class="num-h">{{n.h}}</text>
+          <text class="num-d">{{n.d}}</text>
+        </view>
+      </view>
+    </view>
+
+    <!-- 对照表 -->
+    <view wx:elif="{{s.t === 'vs'}}" class="vs">
+      <view class="vs-head">
+        <text class="vs-a">{{s.a}}</text>
+        <text class="vs-x">×</text>
+        <text class="vs-b">{{s.b}}</text>
+      </view>
+      <view wx:for="{{s.rows}}" wx:key="k" wx:for-item="r" class="vs-row">
+        <text class="vs-k">{{r.k}}</text>
+        <view class="vs-pair">
+          <view class="vs-cell vs-cell-a"><text>{{r.a}}</text></view>
+          <view class="vs-cell vs-cell-b"><text>{{r.b}}</text></view>
+        </view>
+      </view>
+    </view>
+
+    <!-- 链条 -->
+    <view wx:elif="{{s.t === 'flow'}}" class="flow card">
+      <view wx:for="{{s.items}}" wx:key="*this" wx:for-item="f" class="flow-step">
+        <view class="flow-item">
+          <view class="flow-dot ac-bg-{{lec.accent}}"></view>
+          <text class="flow-tx">{{f}}</text>
+        </view>
+        <view wx:if="{{index < s.items.length - 1}}" class="flow-line"></view>
+      </view>
+      <text wx:if="{{s.note}}" class="flow-note">{{s.note}}</text>
+    </view>
+
+    <!-- 人物卡 -->
+    <view wx:elif="{{s.t === 'persons'}}" class="persons">
+      <view wx:for="{{s.items}}" wx:key="name" wx:for-item="p" class="p-card">
+        <view class="p-head">
+          <text class="p-name">{{p.name}}</text>
+          <text class="p-dates">{{p.dates}}</text>
+        </view>
+        <text class="p-tag ac-{{lec.accent}}">{{p.tag}}</text>
+        <view class="p-pts">
+          <view wx:for="{{p.pts}}" wx:key="*this" wx:for-item="pt" class="p-pt">
+            <view class="p-pt-dot"></view>
+            <text class="p-pt-tx">{{pt}}</text>
+          </view>
+        </view>
+      </view>
+    </view>
+
+    <!-- 强调横幅 -->
+    <view wx:elif="{{s.t === 'band'}}" class="band">
+      <text>{{s.tx}}</text>
+    </view>
+
+    <!-- 承上启下 -->
+    <view wx:elif="{{s.t === 'bridge'}}" class="bridge">
+      <text class="bridge-label">承上启下</text>
+      <text class="bridge-tx">{{s.tx}}</text>
+    </view>
+
+    <!-- 书目 -->
+    <view wx:elif="{{s.t === 'books'}}" class="books">
+      <text class="books-label">推荐书目</text>
+      <view wx:for="{{s.items}}" wx:key="h" wx:for-item="b" class="book-row">
+        <text class="book-h">{{b.h}}</text>
+        <text class="book-by">{{b.by}}</text>
+      </view>
+    </view>
+
+  </block>
+
+  <!-- 底部导航 -->
+  <view class="lnav">
+    <view class="lnav-btn {{prev ? '' : 'lnav-dis'}}" bindtap="goPrev">
+      <text>{{prev ? '上一讲 · ' + prev.title : '已是第一讲'}}</text>
+    </view>
+    <view class="lnav-btn lnav-home" bindtap="goHome"><text>脉络</text></view>
+    <view class="lnav-btn {{next ? '' : 'lnav-dis'}}" bindtap="goNext">
+      <text>{{next ? '下一讲 · ' + next.title : '已是第四讲'}}</text>
+    </view>
+  </view>
+
+  <view class="foot">
+    <text class="foot-tx">梅春雷 · 西方哲学史考察十讲 · {{lec.num}}</text>
+  </view>
+
+</view>

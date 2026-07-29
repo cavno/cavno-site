@@ -1,0 +1,341 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>十六组对立 → 形而上学核心问题 · 地质层图谱</title>
+<meta name="description" content="十六组古希腊核心二元对立，如何构成（而非类比）当代形而上学的核心问题——一张亲子关系图谱。">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;1,500;1,600&family=GFS+Didot&family=Noto+Serif+SC:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root{
+  --parchment:#f3ebda; --parchment-light:#faf4e6; --parchment-dark:#e8ddc6;
+  --ink:#1c1916; --ink-soft:#3a342c; --ink-fade:#6e6253;
+  --terracotta:#a73e2c; --terracotta-soft:#d9a89c;
+  --aegean:#1d4e5f; --aegean-soft:#5a8a96; --gold:#b8893a; --gold-soft:#d4b76a;
+  --purple:#6d4a8f; --green:#3f7a52; --grey:#8a7f6d;
+  --line:rgba(28,25,22,.12); --line-strong:rgba(28,25,22,.26);
+  --serif:"Noto Serif SC","Noto Serif CJK SC",Georgia,serif;
+  --display:"Cormorant Garamond","Noto Serif SC",Georgia,serif;
+  --greek:"GFS Didot","Noto Serif SC",Georgia,serif;
+  --mono:"JetBrains Mono","Courier New",monospace;
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+html,body{height:100%;}
+body{background:var(--parchment);
+  background-image:radial-gradient(ellipse at top left,rgba(184,137,58,.06),transparent 50%),radial-gradient(ellipse at bottom right,rgba(29,78,95,.05),transparent 50%);
+  color:var(--ink);font-family:var(--serif);font-size:16px;line-height:1.7;-webkit-font-smoothing:antialiased;overflow:hidden;}
+.greek{font-family:var(--greek);}
+.app{position:relative;z-index:1;height:100vh;display:flex;flex-direction:column;}
+
+header{flex:none;border-bottom:1px solid var(--line);background:rgba(243,235,218,.92);backdrop-filter:blur(8px);padding:14px 24px 10px;}
+.hbar{display:flex;align-items:baseline;gap:14px;flex-wrap:wrap;}
+h1{font-family:var(--display);font-weight:600;font-size:24px;white-space:nowrap;}
+.latin{font-family:var(--greek);font-size:12px;letter-spacing:.18em;color:var(--terracotta);text-transform:uppercase;}
+.sub{font-size:12.5px;color:var(--ink-fade);}
+.tools{margin-left:auto;display:flex;gap:8px;}
+.btn{font-size:13px;color:var(--ink-soft);background:var(--parchment-light);border:1px solid var(--line-strong);border-radius:18px;padding:5px 14px;cursor:pointer;white-space:nowrap;transition:all .2s;}
+.btn:hover{border-color:var(--terracotta);color:var(--terracotta);}
+.legend{display:flex;gap:16px;flex-wrap:wrap;margin-top:9px;font-size:11.5px;color:var(--ink-fade);}
+.lg{display:inline-flex;align-items:center;gap:6px;white-space:nowrap;}
+.lg .ln{width:22px;height:0;display:inline-block;}
+.lg .ln.c{border-top:2.4px solid var(--terracotta);}
+.lg .ln.t{border-top:2px dashed var(--aegean);}
+.lg .ln.d{border-top:2px dashed var(--grey);}
+.lg .ln.e{border-top:2px dotted var(--purple);}
+
+.main{flex:1;display:flex;min-height:0;}
+.mapwrap{flex:1;overflow:auto;padding:10px 6px 40px;}
+.mapwrap svg{display:block;margin:0 auto;}
+.panel{width:400px;flex:none;border-left:1px solid var(--line);background:var(--parchment-light);overflow-y:auto;padding:20px 24px 50px;}
+
+.node{cursor:pointer;}
+.node rect{transition:opacity .22s,stroke-width .15s;}
+.node text{transition:opacity .22s;}
+.node:hover rect{stroke:var(--terracotta);}
+.oppbox{fill:var(--parchment-light);stroke:var(--line-strong);stroke-width:1;}
+.clbox{fill:var(--parchment-light);stroke:var(--line-strong);stroke-width:1;}
+.o-no{fill:var(--terracotta);font-family:var(--mono);font-weight:700;}
+.o-cn{fill:var(--ink);font-family:var(--serif);font-weight:600;}
+.o-gk{fill:var(--ink-fade);font-family:var(--greek);font-style:italic;}
+.c-title{fill:var(--ink);font-family:var(--serif);font-weight:700;}
+.c-eng{fill:var(--ink-fade);font-family:var(--mono);}
+.phaselab{fill:var(--ink-fade);font-family:var(--greek);letter-spacing:.12em;text-transform:uppercase;}
+.grouplab{fill:var(--terracotta);font-family:var(--greek);letter-spacing:.12em;text-transform:uppercase;}
+.phasebg{fill:rgba(29,78,95,.03);}
+
+.edge{fill:none;stroke-linecap:round;transition:stroke-opacity .22s,stroke-width .18s;}
+.edge.c{stroke:var(--terracotta);}
+.edge.t{stroke:var(--aegean);stroke-dasharray:1 5;}
+.edge.d{stroke:var(--grey);stroke-dasharray:6 5;}
+.edge.e{stroke:var(--purple);stroke-dasharray:2 4;}
+.dim{opacity:.08 !important;}
+.dimE{stroke-opacity:.05 !important;}
+.hlE{stroke-opacity:.95 !important;stroke-width:2.6 !important;}
+.node.hl rect{stroke-width:2.2;}
+.node.sel rect{stroke-width:2.8;stroke:var(--terracotta);}
+
+.eyebrow{font-family:var(--greek);font-size:11.5px;letter-spacing:.24em;color:var(--terracotta);text-transform:uppercase;margin-bottom:8px;}
+.p-name{font-family:var(--display);font-size:25px;font-weight:600;line-height:1.2;}
+.p-eng{font-family:var(--mono);font-size:12px;color:var(--ink-fade);margin:4px 0 12px;}
+.tag{display:inline-block;font-size:11px;color:#fff;border-radius:12px;padding:2px 11px;margin-bottom:12px;}
+.tag.c{background:var(--terracotta);} .tag.t{background:var(--aegean);} .tag.d{background:var(--grey);} .tag.e{background:var(--purple);}
+.note{font-size:14px;line-height:1.76;color:var(--ink-soft);}
+.p-label{font-family:var(--greek);font-size:11px;letter-spacing:.22em;color:var(--terracotta);text-transform:uppercase;margin:16px 0 8px;display:flex;align-items:center;gap:9px;}
+.p-label::after{content:'';flex:1;height:1px;background:var(--line);}
+.chips{display:flex;flex-wrap:wrap;}
+.chip{font-size:12.5px;color:var(--ink-soft);background:var(--parchment);border:1px solid var(--line-strong);border-radius:14px;padding:3px 12px;margin:0 6px 8px 0;cursor:pointer;transition:all .16s;}
+.chip:hover{border-color:var(--terracotta);color:var(--terracotta);}
+.chip.dash{border-style:dashed;}
+.guide h3{font-family:var(--display);font-size:20px;font-weight:600;margin-bottom:10px;color:var(--ink);}
+.guide p{font-size:13.5px;line-height:1.74;margin-bottom:10px;color:var(--ink-soft);}
+.guide em{color:var(--terracotta);font-style:italic;} .guide strong{color:var(--ink);}
+.guide .mini{font-size:12.5px;color:var(--ink-fade);}
+@media(max-width:980px){
+  body{overflow:auto;} .app{height:auto;} .main{flex-direction:column;}
+  .panel{width:100%;border-left:none;border-top:1px solid var(--line);}
+  .mapwrap{overflow:visible;}
+}
+</style>
+</head>
+<body>
+<div class="app">
+  <header>
+    <div class="hbar">
+      <h1>十六组对立 → 形而上学核心问题</h1>
+      <span class="latin">Metaphysica · 地质层图谱</span>
+      <span class="sub">不是类比，是亲子关系——形而上学的核心问题是这16组对立被系统化后的名字</span>
+      <div class="tools"><button class="btn" id="btnReset">↺ 重置</button></div>
+    </div>
+    <div class="legend">
+      <span class="lg"><span class="ln c"></span>直接构成</span>
+      <span class="lg"><span class="ln t"></span>门槛 / 前提条件</span>
+      <span class="lg"><span class="ln e"></span>伦理学下游</span>
+      <span class="lg"><span class="ln d"></span>后代问题（希腊阶段尚未结晶）</span>
+    </div>
+  </header>
+
+  <div class="main">
+    <div class="mapwrap"><svg id="map" xmlns="http://www.w3.org/2000/svg"></svg></div>
+    <aside class="panel" id="panel"></aside>
+  </div>
+</div>
+
+<script>
+/* ============ 数据 ============ */
+const PHASES = [
+ {roman:'Ⅰ',lab:'起点',opps:['o1','o2']},
+ {roman:'Ⅱ',lab:'宇宙论',opps:['o3','o4']},
+ {roman:'Ⅲ',lab:'巴门尼德冲击',opps:['o5','o6','o7']},
+ {roman:'Ⅳ',lab:'形而上学搭建',opps:['o11','o12','o10','o8','o9']},
+ {roman:'Ⅴ',lab:'希腊化转向',opps:['o13','o14','o15','o16']},
+];
+const OPPS = {
+ o1:{no:'01',cn:'神话 — 理性',gk:'Μῦθος·Λόγος',note:'哲学得以存在的第一刀：把叙事换成可反驳的命题。这是理性追问本身的门槛，不是形而上学内部的一个问题——它回答的是"追问如何可能"，而非"世界的结构是什么"。'},
+ o2:{no:'02',cn:'自然 — 约定',gk:'Φύσις·Νόμος',note:'把Logos的追问范围从自然推向社会规则。同属门槛/方法论前提：它划定了"可被理性追问"的疆域，为后续存在论追问打开空间，但本身不是存在论问题。'},
+ o3:{no:'03',cn:'无定 — 有限',gk:'Ἄπειρον·Πέρας',note:'本原是否必须有界限——这是"存在论本身"内部最早的分支问题：无限者能否"存在"。同时，它对"界限"的追问也是后世空间/时间形而上学问题的雏形，但尚未结晶为独立的时空理论。'},
+ o4:{no:'04',cn:'一 — 多',gk:'Ἕν·Πολλά',note:'直接就是形而上学教材里独立成章的"一与多问题"（the One and the Many）——统一性、构成、部分与整体理论（mereology）的祖先。'},
+ o5:{no:'05',cn:'真理 — 意见',gk:'Ἐπιστήμη·Δόξα',note:'与11、12共同构成"现象与实在"问题：实在是否等同于我们感知的样子。这是形而上学与知识论的交界，但传统上一直被列入形而上学核心问题，尤其在康德"现象/物自体"之后成为近代形而上学的枢轴。'},
+ o6:{no:'06',cn:'思维 — 存在',gk:'Νοεῖν·Εἶναι',note:'巴门尼德给"存在论本身"装配的公设——把可思等同于可存在。这条公设本身就是"存在论(being qua being)"问题的起源装置，海德格尔称之为整部西方形而上学的onto-theology源头。'},
+ o7:{no:'07',cn:'存在 — 非存在',gk:'Ὄν·Μὴ Ὄν',note:'"存在论本身(being qua being)"——形而上学最原初、最核心的问题——的第一次公开提出。此后整部希腊哲学都在收拾这道题留下的烂摊子。'},
+ o8:{no:'08',cn:'形式 — 质料',gk:'Μορφή·Ὕλη',note:'亚里士多德解答"什么是实体"的方案（hylomorphism）。"实体是什么"本身就是形而上学的经典大问题之一，这一组对立就是它最早的系统性答案。'},
+ o9:{no:'09',cn:'潜能 — 现实',gk:'Δύναμις·Ἐνέργεια',note:'亚里士多德专造的工具，用来回应巴门尼德"变化不可能"。"事物如何在变化中持续为同一物"至今是形而上学核心问题（当代四维主义vs三维主义之争是这一支的后代）。潜能/现实背后也隐含了"因果性"问题，但因果性本身要等休谟之后才被独立问题化。'},
+ o10:{no:'10',cn:'个别 — 共相',gk:"Καθ' ἕκαστον·Καθόλου",note:'柏拉图vs亚里士多德之争，经中世纪唯名论/实在论之辩，直到当代分析形而上学（tropes、bundle theory、natural kinds）——"共相问题(universals)"是一个独立、持续两千余年的形而上学分支。'},
+ o11:{no:'11',cn:'感性 — 理性',gk:'Αἴσθησις·Νοῦς',note:'柏拉图"二重世界"的认知端：感性只能触及现象，理性才能把握本体。与5、12共同构成"现象与实在"问题。'},
+ o12:{no:'12',cn:'现象 — 本体',gk:'Φαινόμενον·Οὐσία',note:'柏拉图"二重世界"的本体端。与5、11是同一组对立的三种表述，共同构成"现象与实在(appearance and reality)"这一形而上学核心问题。'},
+ o13:{no:'13',cn:'必然 — 自由',gk:'Ἀνάγκη·Προαίρεσις',note:'同时是模态形而上学（必然性、可能性的地位）与自由意志问题（与决定论的关系）。德谟克利特/斯多葛/伊壁鸠鲁三种立场几乎穷尽了后世自由意志辩论的全部选项。背后也隐含因果性问题的萌芽。'},
+ o14:{no:'14',cn:'德性 — 快乐',gk:'Ἀρετή·Ἡδονή',note:'伦理学/实践哲学问题——"人生最高的善是什么"，是形而上学范畴向"人该如何生活"的下游延伸，不是形而上学核心问题本身。但其"规范vs事实"的问题结构明显是从前面的存在论辩论降级应用出来的。'},
+ o15:{no:'15',cn:'灵魂 — 肉体',gk:'Ψυχή·Σῶμα',note:'几乎原封不动延续至今的形而上学核心问题——笛卡尔二元论、当代物理主义/涌现论之争都是它的直系后代。同时孕育了"人格同一性(personal identity)"问题的雏形，但后者要到洛克之后才独立结晶。'},
+ o16:{no:'16',cn:'悬置判断 — 不动心',gk:'Ἐποχή·Ἀταραξία',note:'伦理学/实践哲学问题——认识论焦虑如何被安顿，是"如何生活"层面的下游延伸，而非形而上学核心问题本身。'},
+};
+/* 右侧聚类：形而上学核心问题 8 个 + 门槛 2 个(合并显示) + 伦理下游(合并显示) + 后代问题 3 个 */
+const CLUSTERS = [
+ {id:'threshold',grp:'门槛条件',title:'理性追问的门槛',eng:'threshold of inquiry',note:'不是形而上学内部问题，而是形而上学（以及整个哲学）得以开始的前提条件——回答"追问本身如何可能、范围有多大"。类似"科学哲学不是物理学的分支，而是物理学得以被理解为一门学科的前提"。'},
+ {id:'being',grp:'存在论核心',title:'存在论本身',eng:'being qua being',note:'形而上学最原初、最核心的问题——"存在"是什么、作为存在本身有哪些范畴。巴门尼德的公设（思维=存在）此后成为整部西方形而上学的onto-theology起源。'},
+ {id:'onemany',grp:'存在论核心',title:'一与多',eng:'the One and the Many',note:'形而上学教材独立成章的问题——统一性、构成、部分与整体理论(mereology)的祖先。'},
+ {id:'universal',grp:'存在论核心',title:'共相问题',eng:'universals',note:'柏拉图实在论 vs 亚里士多德/唯名论之争，经中世纪到当代分析形而上学(tropes、bundle theory)，两千余年持续的独立分支。'},
+ {id:'substance',grp:'存在论核心',title:'实体理论',eng:'substance',note:'"什么是实体"是形而上学经典大问题之一；hylomorphism(形质论)是它最早的系统性答案。'},
+ {id:'change',grp:'存在论核心',title:'变化与持续',eng:'change / persistence',note:'"事物如何在变化中持续为同一物"——当代四维主义vs三维主义之争是这一支的当代形态。'},
+ {id:'modal',grp:'存在论核心',title:'模态与自由',eng:'modality & free will',note:'必然性/可能性的地位，与自由意志-决定论问题；三种古典立场几乎穷尽了后世的全部选项。'},
+ {id:'appearance',grp:'存在论核心',title:'现象与实在',eng:'appearance & reality',note:'实在是否等同于我们感知的样子——形而上学与知识论的交界，康德"现象/物自体"之后成为近代形而上学的枢轴。'},
+ {id:'mindbody',grp:'存在论核心',title:'心身问题',eng:'mind-body problem',note:'几乎原封不动延续至今——笛卡尔二元论、当代物理主义/涌现论之争的直系源头。'},
+ {id:'ethics',grp:'伦理学下游',title:'规范与安顿',eng:'ethics (downstream)',note:'形而上学范畴向"人该如何生活"的下游延伸——规范vs事实、认识论焦虑如何被安顿，不是形而上学核心问题本身。'},
+ {id:'descendants',grp:'后代问题',title:'尚未结晶的后代',eng:'later crystallizations',note:'休谟之后的因果性(causation)、专门的时空形而上学、洛克之后的人格同一性(personal identity)——要等近代经验论之后才独立结晶，在希腊阶段只是隐含的萌芽。'},
+];
+const EDGES = [
+ ['o1','threshold','t'],['o2','threshold','t'],
+ ['o3','being','c'],['o3','descendants','d'],
+ ['o4','onemany','c'],
+ ['o5','appearance','c'],
+ ['o6','being','c'],
+ ['o7','being','c'],
+ ['o8','substance','c'],
+ ['o9','change','c'],['o9','descendants','d'],
+ ['o10','universal','c'],
+ ['o11','appearance','c'],
+ ['o12','appearance','c'],
+ ['o13','modal','c'],['o13','descendants','d'],
+ ['o14','ethics','e'],
+ ['o15','mindbody','c'],['o15','descendants','d'],
+ ['o16','ethics','e'],
+];
+const ETYPE={c:{lab:'直接构成',cls:'c'},t:{lab:'门槛/前提条件',cls:'t'},d:{lab:'后代（尚未结晶）',cls:'d'},e:{lab:'伦理学下游',cls:'e'}};
+
+/* ============ 布局 ============ */
+const W=1000, LX=40, LW=232, RX=700, RW=260, PADTOP=56, ROWH=58, PHASEGAP=22;
+const box={};
+let cy=PADTOP;
+const phaseRects=[];
+PHASES.forEach(ph=>{
+  const top=cy;
+  ph.opps.forEach(id=>{ box[id]={x:LX,y:cy,w:LW,h:ROWH-8,cx:LX+LW,cy:cy+(ROWH-8)/2}; cy+=ROWH; });
+  phaseRects.push({top,h:cy-top,roman:ph.roman,lab:ph.lab});
+  cy+=PHASEGAP;
+});
+const leftBottom=cy;
+
+/* 右侧：分三组竖排，组间留白，组内均分左侧总高度所占比例 */
+const rightGroups=[
+ {key:'门槛条件',ids:['threshold']},
+ {key:'存在论核心',ids:['being','onemany','universal','substance','change','modal','appearance','mindbody']},
+ {key:'伦理学下游',ids:['ethics']},
+ {key:'后代问题',ids:['descendants']},
+];
+let ry=PADTOP;
+const rightGap=26;
+rightGroups.forEach(g=>{
+  const n=g.ids.length;
+  const rowh = g.key==='存在论核心' ? 50 : 74;
+  g.ids.forEach(id=>{ box[id]={x:RX,y:ry,w:RW,h:rowh-8,cx:RX,cy:ry+(rowh-8)/2}; ry+=rowh; });
+  ry+=rightGap;
+});
+const VBH=Math.max(leftBottom, ry)+20;
+
+function edgePath(f,t){
+  const a=box[f], b=box[t];
+  const x1=a.x+a.w, y1=a.cy, x2=b.x, y2=b.cy;
+  const mx=(x1+x2)/2;
+  return `M${x1},${y1} C${mx},${y1} ${mx},${y2} ${x2},${y2}`;
+}
+
+/* ============ 渲染 ============ */
+function buildMap(){
+  const svg=document.getElementById('map');
+  svg.setAttribute('viewBox',`0 0 ${W} ${VBH}`); svg.setAttribute('width',W); svg.setAttribute('height',VBH);
+  let s='';
+  // phase backgrounds + labels (left)
+  phaseRects.forEach((p,i)=>{
+    if(i%2===0) s+=`<rect class="phasebg" x="10" y="${p.top-4}" width="${LW+60}" height="${p.h+2}" rx="10"/>`;
+    s+=`<text class="phaselab" x="20" y="${p.top+10}" font-size="11">PHASE ${p.roman} · ${p.lab}</text>`;
+  });
+  // group labels (right)
+  let gy=PADTOP;
+  rightGroups.forEach(g=>{
+    s+=`<text class="grouplab" x="${RX}" y="${gy-8}" font-size="10.5" text-anchor="start">${g.key}</text>`;
+    const n=g.ids.length; const rowh=g.key==='存在论核心'?50:74;
+    gy+=n*rowh+rightGap;
+  });
+  // edges
+  EDGES.forEach(([f,t,k])=>{
+    s+=`<path class="edge ${k}" data-f="${f}" data-t="${t}" d="${edgePath(f,t)}" stroke-width="1.4" stroke-opacity="0.28"/>`;
+  });
+  // left nodes (opps)
+  Object.keys(OPPS).forEach(id=>{
+    const o=OPPS[id], b=box[id];
+    let g=`<rect class="oppbox" x="${b.x}" y="${b.y}" width="${b.w}" height="${b.h}" rx="9"/>`;
+    g+=`<text class="o-no" x="${b.x+13}" y="${b.y+21}" font-size="12">N°${o.no}</text>`;
+    g+=`<text class="o-cn" x="${b.x+13}" y="${b.y+38}" font-size="15">${o.cn}</text>`;
+    g+=`<text class="o-gk" x="${b.x+b.w-11}" y="${b.y+21}" font-size="11" text-anchor="end">${o.gk}</text>`;
+    s+=`<g class="node opp" data-id="${id}" tabindex="0"><title>${o.cn}</title>${g}</g>`;
+  });
+  // right nodes (clusters)
+  CLUSTERS.forEach(c=>{
+    const b=box[c.id];
+    let g=`<rect class="clbox" x="${b.x}" y="${b.y}" width="${b.w}" height="${b.h}" rx="9"/>`;
+    g+=`<text class="c-title" x="${b.x+14}" y="${b.y+b.h/2-3}" font-size="15.5">${c.title}</text>`;
+    g+=`<text class="c-eng" x="${b.x+14}" y="${b.y+b.h/2+15}" font-size="10.5">${c.eng}</text>`;
+    s+=`<g class="node cl" data-id="${c.id}" tabindex="0"><title>${c.title}</title>${g}</g>`;
+  });
+  svg.innerHTML=s;
+}
+
+/* ============ 交互 ============ */
+let selected=null;
+function svg(){return document.getElementById('map');}
+function neighborsOf(id){
+  const set=new Set([id]);
+  EDGES.forEach(([f,t])=>{ if(f===id)set.add(t); if(t===id)set.add(f); });
+  return set;
+}
+function applySel(id){
+  const set=neighborsOf(id);
+  svg().querySelectorAll('.node').forEach(n=>{
+    n.classList.remove('dim','hl','sel');
+    const nid=n.dataset.id;
+    if(nid===id) n.classList.add('sel');
+    else if(set.has(nid)) n.classList.add('hl');
+    else n.classList.add('dim');
+  });
+  svg().querySelectorAll('.edge').forEach(e=>{
+    e.classList.remove('dimE','hlE');
+    if(e.dataset.f===id||e.dataset.t===id) e.classList.add('hlE');
+    else e.classList.add('dimE');
+  });
+}
+function clearSel(){
+  svg().querySelectorAll('.node').forEach(n=>n.classList.remove('dim','hl','sel'));
+  svg().querySelectorAll('.edge').forEach(e=>e.classList.remove('dimE','hlE'));
+}
+function renderOppPanel(id){
+  const o=OPPS[id];
+  const outs=EDGES.filter(([f])=>f===id);
+  document.getElementById('panel').innerHTML=`
+   <div class="eyebrow">古希腊对立 · SOURCE</div>
+   <div class="p-name">N°${o.no}　${o.cn}</div>
+   <div class="p-eng greek" style="font-style:italic">${o.gk}</div>
+   <div class="note">${o.note}</div>
+   <div class="p-label">构成 / 指向</div>
+   <div class="chips">${outs.map(([f,t,k])=>`<span class="chip ${k==='d'||k==='t'||k==='e'?'dash':''}" data-target="${t}">${ETYPE[k].lab}：${CLUSTERS.find(c=>c.id===t).title}</span>`).join('')}</div>`;
+  wirePanel();
+}
+function renderClPanel(id){
+  const c=CLUSTERS.find(x=>x.id===id);
+  const ins=EDGES.filter(([,t])=>t===id);
+  document.getElementById('panel').innerHTML=`
+   <div class="eyebrow">${c.grp} · TARGET</div>
+   <div class="p-name">${c.title}</div>
+   <div class="p-eng">${c.eng}</div>
+   <div class="note">${c.note}</div>
+   <div class="p-label">来源对立</div>
+   <div class="chips">${ins.map(([f,,k])=>`<span class="chip ${k==='d'||k==='t'||k==='e'?'dash':''}" data-target="${f}">N°${OPPS[f].no} ${OPPS[f].cn}（${ETYPE[k].lab}）</span>`).join('')}</div>`;
+  wirePanel();
+}
+function wirePanel(){
+  document.getElementById('panel').querySelectorAll('[data-target]').forEach(c=>{
+    c.addEventListener('click',()=>select(c.dataset.target));
+  });
+}
+function select(id){
+  selected=id; applySel(id);
+  if(OPPS[id]) renderOppPanel(id); else renderClPanel(id);
+}
+function guideHTML(){
+  return `<div class="guide">
+   <div class="eyebrow">导读 · LECTORI</div>
+   <h3>不是类比，是亲子关系</h3>
+   <p>左边是十六组古希腊核心二元对立（按五个历史阶段分组）；右边是它们"长成"的当代形而上学核心问题。<strong>亚里士多德那部后来被命名为《形而上学》的著作，本身就是把这些对立系统化、命名、分类的产物</strong>——所以关系不是"例证"，而是<em>地质层</em>：右边是左边被反复开采、命名、精炼后留下的矿脉。</p>
+   <p>四种连线：<strong style="color:var(--terracotta)">实线·直接构成</strong>（该对立本身就是该问题的原初形态）；<strong style="color:var(--aegean)">点划·门槛/前提条件</strong>（对立1、2不是形而上学内部问题，而是理性追问得以开始的前提）；<strong style="color:var(--purple)">点线·伦理学下游</strong>（对立14、16是存在论向"如何生活"的降级应用，不算形而上学核心问题本身）；<strong style="color:var(--grey)">虚线·尚未结晶的后代</strong>（因果性、专门时空形而上学、人格同一性——这些当代问题只隐含在对立3/9/13/15背后，要等近代经验论之后才独立结晶）。</p>
+   <p class="mini">点任一节点：看它的解释与全部连线；再点关联节点可继续追溯。八个"存在论核心"问题（存在论本身、一与多、共相、实体、变化持续、模态自由、现象实在、心身）构成当代形而上学教材的主体目录——它们的问题结构，在希腊阶段就已经完整成形。</p>
+  </div>`;
+}
+
+/* init */
+buildMap();
+document.getElementById('panel').innerHTML=guideHTML();
+svg().addEventListener('click',e=>{const n=e.target.closest('.node'); if(n) select(n.dataset.id);});
+svg().addEventListener('keydown',e=>{if(e.key==='Enter'){const n=e.target.closest('.node'); if(n) select(n.dataset.id);}});
+document.getElementById('btnReset').addEventListener('click',()=>{selected=null; clearSel(); document.getElementById('panel').innerHTML=guideHTML();});
+</script>
+</body>
+</html>

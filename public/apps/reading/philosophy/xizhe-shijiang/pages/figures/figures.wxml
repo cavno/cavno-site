@@ -1,0 +1,30 @@
+<view class="wrap">
+
+  <view class="fhead">
+    <text class="eyebrow">从巫师到加尔文,再到回望者</text>
+    <text class="fhead-title">人物长廊</text>
+    <text class="fhead-sub">四讲出场的思想者,按时代排成一条走廊。</text>
+  </view>
+
+  <view wx:for="{{bands}}" wx:key="id" wx:for-item="bd" class="fband">
+    <view class="fband-head">
+      <view class="fband-bar fb-{{bd.accent}}"></view>
+      <view class="fband-tx">
+        <text class="fband-era">{{bd.era}}</text>
+        <text class="fband-note">{{bd.note}}</text>
+      </view>
+    </view>
+    <view wx:for="{{bd.list}}" wx:key="name" wx:for-item="p" class="fp">
+      <view class="fp-head">
+        <text class="fp-name">{{p.name}}</text>
+        <text class="fp-dates">{{p.dates}}</text>
+      </view>
+      <text class="fp-tag">{{p.tag}}</text>
+    </view>
+  </view>
+
+  <view class="foot">
+    <text class="foot-tx">人物长廊 · 跨四讲综合</text>
+  </view>
+
+</view>

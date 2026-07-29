@@ -1,0 +1,2 @@
+page{ -webkit-font-smoothing:antialiased; }
+view,text{ box-sizing:border-box; }

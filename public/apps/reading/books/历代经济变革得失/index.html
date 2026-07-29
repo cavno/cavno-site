@@ -1,0 +1,823 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>历代经济变革得失 · 内在逻辑重构</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@400;600;700;900&display=swap" rel="stylesheet">
+<style>
+:root{
+  --paper:#F3EAD3;
+  --paper-deep:#EBDEBF;
+  --card:#FAF4E3;
+  --ink:#2E2B24;
+  --ink-soft:#4A463C;
+  --muted:#7C7260;
+  --teal:#1E6B63;
+  --teal-deep:#134E48;
+  --teal-wash:rgba(30,107,99,.08);
+  --terra:#AE4C24;
+  --terra-deep:#8C3B1B;
+  --terra-wash:rgba(174,76,36,.08);
+  --line:#CBB98D;
+  --line-soft:rgba(94,82,55,.22);
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+body{
+  background:var(--paper);
+  color:var(--ink);
+  font-family:"Noto Serif SC","Songti SC","STSong","SimSun",serif;
+  font-size:16.5px;
+  line-height:1.95;
+  letter-spacing:.02em;
+  -webkit-font-smoothing:antialiased;
+}
+::selection{background:var(--teal);color:var(--paper);}
+
+/* ============ 布局骨架 ============ */
+.frame{max-width:1240px;margin:0 auto;padding:0 24px;display:flex;gap:56px;}
+nav.toc{
+  width:196px;flex:0 0 196px;position:sticky;top:0;align-self:flex-start;
+  height:100vh;overflow-y:auto;padding:56px 0 40px;
+  scrollbar-width:thin;scrollbar-color:var(--line) transparent;
+}
+nav.toc .toc-head{font-size:12px;letter-spacing:.35em;color:var(--muted);margin-bottom:18px;font-weight:600;}
+nav.toc a{
+  display:block;color:var(--ink-soft);text-decoration:none;font-size:13px;
+  padding:5px 0 5px 14px;border-left:2px solid transparent;line-height:1.55;
+  transition:color .2s,border-color .2s;
+}
+nav.toc a:hover{color:var(--terra);}
+nav.toc a.on{color:var(--teal-deep);border-left-color:var(--teal);font-weight:700;}
+nav.toc .toc-gap{height:14px;}
+nav.toc .toc-sub{font-size:12px;padding-left:26px;color:var(--muted);}
+nav.toc .toc-sub.on{color:var(--teal-deep);}
+main{flex:1;min-width:0;max-width:880px;padding:0 0 120px;}
+@media (max-width:1020px){
+  nav.toc{display:none;}
+  .frame{display:block;padding:0 18px;}
+  body{font-size:16px;}
+}
+
+/* ============ 卷首 ============ */
+header.hero{padding:88px 0 52px;border-bottom:3px double var(--ink);}
+.hero-eyebrow{font-size:13px;letter-spacing:.5em;color:var(--terra);font-weight:600;margin-bottom:22px;}
+h1.hero-title{font-size:52px;font-weight:900;line-height:1.28;letter-spacing:.06em;margin-bottom:14px;}
+h1.hero-title span{color:var(--teal-deep);}
+.hero-sub{font-size:17px;color:var(--ink-soft);max-width:46em;}
+.hero-meta{margin-top:30px;display:flex;flex-wrap:wrap;gap:10px 26px;font-size:13px;color:var(--muted);}
+.hero-meta b{color:var(--ink);font-weight:600;}
+@media (max-width:640px){h1.hero-title{font-size:36px;}}
+
+/* ============ 章节通用 ============ */
+section{padding-top:76px;}
+.sec-mark{display:flex;align-items:baseline;gap:16px;margin-bottom:8px;}
+.sec-mark .no{font-size:13px;letter-spacing:.3em;color:var(--terra);font-weight:700;}
+.sec-mark .rule{flex:1;height:1px;background:var(--line);}
+h2{font-size:33px;font-weight:900;letter-spacing:.05em;line-height:1.4;margin-bottom:6px;}
+.sec-lede{color:var(--muted);font-size:15px;margin-bottom:30px;}
+h3{font-size:22px;font-weight:700;margin:46px 0 14px;letter-spacing:.04em;}
+h3 .h3-tag{display:inline-block;font-size:12px;font-weight:600;letter-spacing:.18em;color:var(--paper);background:var(--teal);padding:2px 10px;border-radius:2px;vertical-align:4px;margin-right:12px;}
+h3 .h3-tag.terra{background:var(--terra);}
+h4{font-size:17px;font-weight:700;margin:26px 0 8px;color:var(--teal-deep);}
+p{margin:0 0 16px;text-align:justify;}
+p.tight{margin-bottom:8px;}
+em{font-style:normal;color:var(--terra-deep);font-weight:600;}
+strong{font-weight:700;color:var(--ink);}
+u{text-decoration:none;border-bottom:1px solid var(--terra);padding-bottom:1px;}
+.hl-teal{color:var(--teal-deep);font-weight:700;}
+
+/* 结论先行框 */
+.verdict{
+  background:var(--card);border:1px solid var(--line);border-left:5px solid var(--teal);
+  padding:22px 26px;margin:0 0 28px;position:relative;
+}
+.verdict::before{
+  content:"结论先行";position:absolute;top:-11px;left:18px;
+  background:var(--teal);color:var(--paper);font-size:12px;font-weight:700;
+  letter-spacing:.25em;padding:2px 12px 2px 14px;
+}
+.verdict p{font-size:17px;line-height:2;margin-bottom:10px;}
+.verdict p:last-child{margin-bottom:0;}
+.verdict.terra{border-left-color:var(--terra);}
+.verdict.terra::before{content:"变法判词";background:var(--terra);}
+
+/* 引文 */
+blockquote{
+  margin:22px 0;padding:4px 0 4px 22px;border-left:3px solid var(--line);
+  color:var(--ink-soft);font-size:15.5px;
+}
+blockquote .who{display:block;margin-top:6px;font-size:13px;color:var(--muted);letter-spacing:.1em;}
+
+/* 概念卡 */
+.concept{
+  background:var(--card);border:1px solid var(--line);padding:26px 28px 20px;margin:26px 0;
+  box-shadow:3px 3px 0 rgba(94,82,55,.12);
+}
+.concept .c-head{display:flex;align-items:baseline;gap:14px;margin-bottom:12px;flex-wrap:wrap;}
+.concept .c-no{font-size:12px;letter-spacing:.2em;color:var(--paper);background:var(--terra);padding:2px 10px;font-weight:700;}
+.concept .c-title{font-size:20px;font-weight:900;letter-spacing:.05em;}
+.concept .c-eng{font-size:12.5px;color:var(--muted);letter-spacing:.06em;}
+
+/* 数据/清单行 */
+.ledger{margin:14px 0 18px;border-top:1px solid var(--line-soft);}
+.ledger .row{display:flex;gap:18px;padding:11px 4px;border-bottom:1px solid var(--line-soft);align-items:baseline;}
+.ledger .k{flex:0 0 148px;font-weight:700;color:var(--teal-deep);font-size:14.5px;letter-spacing:.03em;}
+.ledger .k.terra{color:var(--terra-deep);}
+.ledger .v{flex:1;font-size:15px;color:var(--ink-soft);line-height:1.85;text-align:justify;}
+.ledger .v b{color:var(--ink);font-weight:700;}
+@media (max-width:640px){.ledger .row{flex-direction:column;gap:2px;}.ledger .k{flex:none;}}
+
+/* 双栏对照 */
+.duel{display:grid;grid-template-columns:1fr 1fr;gap:0;border:1px solid var(--line);margin:24px 0;}
+.duel .side{padding:20px 22px;}
+.duel .side:first-child{border-right:1px solid var(--line);background:var(--teal-wash);}
+.duel .side:last-child{background:var(--terra-wash);}
+.duel .side h5{font-size:16px;font-weight:900;margin-bottom:10px;letter-spacing:.06em;}
+.duel .side:first-child h5{color:var(--teal-deep);}
+.duel .side:last-child h5{color:var(--terra-deep);}
+.duel .side p{font-size:14.5px;line-height:1.9;margin-bottom:8px;}
+.duel .side ul{list-style:none;font-size:14.5px;line-height:1.9;}
+.duel .side ul li{padding-left:1.15em;text-indent:-1.15em;margin-bottom:5px;}
+.duel .side:first-child ul li::before{content:"◆ ";color:var(--teal);font-size:11px;}
+.duel .side:last-child ul li::before{content:"◆ ";color:var(--terra);font-size:11px;}
+@media (max-width:640px){.duel{grid-template-columns:1fr;}.duel .side:first-child{border-right:none;border-bottom:1px solid var(--line);}}
+
+/* 十二讲卡 */
+.lecture{margin:44px 0;border:1px solid var(--ink);background:var(--card);box-shadow:5px 5px 0 rgba(46,43,36,.16);}
+.lecture .lec-band{display:flex;align-items:baseline;gap:16px;padding:16px 26px;border-bottom:1px solid var(--ink);flex-wrap:wrap;background:var(--paper-deep);}
+.lecture .lec-no{font-size:13px;letter-spacing:.22em;font-weight:700;color:var(--terra-deep);}
+.lecture .lec-title{font-size:23px;font-weight:900;letter-spacing:.04em;}
+.lecture .lec-pole{margin-left:auto;font-size:12.5px;color:var(--paper);padding:3px 12px;letter-spacing:.12em;font-weight:600;}
+.lecture .lec-pole.guan{background:var(--teal);}
+.lecture .lec-pole.shang{background:var(--terra);}
+.lecture .lec-pole.mix{background:linear-gradient(90deg,var(--teal) 0%,var(--teal) 49.9%,var(--terra) 50.1%,var(--terra) 100%);}
+.lecture .lec-body{padding:24px 28px 18px;}
+.lecture .anat{margin:0 0 6px;}
+.lecture .anat .a-row{display:flex;gap:18px;padding:12px 0;border-bottom:1px dashed var(--line-soft);}
+.lecture .anat .a-row:last-child{border-bottom:none;}
+.lecture .anat .a-k{flex:0 0 96px;font-size:13.5px;font-weight:700;letter-spacing:.14em;color:var(--muted);padding-top:2px;}
+.lecture .anat .a-v{flex:1;font-size:15.3px;line-height:1.95;text-align:justify;}
+.lecture .anat .a-v p{font-size:15.3px;margin-bottom:10px;}
+.lecture .anat .a-v p:last-child{margin-bottom:0;}
+@media (max-width:640px){.lecture .anat .a-row{flex-direction:column;gap:4px;}.lecture .lec-body{padding:20px 18px 14px;}}
+
+/* 表格 */
+.tbl-wrap{overflow-x:auto;margin:26px 0;border:1px solid var(--ink);}
+table{border-collapse:collapse;width:100%;min-width:760px;font-size:14px;background:var(--card);}
+th{background:var(--ink);color:var(--paper);font-weight:700;padding:10px 12px;text-align:left;letter-spacing:.06em;font-size:13.5px;white-space:nowrap;}
+td{padding:10px 12px;border-bottom:1px solid var(--line-soft);vertical-align:top;line-height:1.75;}
+tr:last-child td{border-bottom:none;}
+td .pole-dot{display:inline-block;width:9px;height:9px;border-radius:50%;margin-right:6px;vertical-align:1px;}
+.pd-g{background:var(--teal);}
+.pd-s{background:var(--terra);}
+.pd-m{background:linear-gradient(90deg,var(--teal) 50%,var(--terra) 50%);}
+td.fate{font-weight:700;}
+td.fate.bad{color:var(--terra-deep);}
+td.fate.good{color:var(--teal-deep);}
+
+/* SVG 图容器 */
+.figure{margin:30px 0;padding:26px 20px 14px;background:var(--card);border:1px solid var(--line);text-align:center;}
+.figure svg{max-width:100%;height:auto;}
+.figure .cap{font-size:13px;color:var(--muted);margin-top:10px;letter-spacing:.08em;line-height:1.7;text-align:center;}
+
+/* 六次国进民退时间轴 */
+.six{margin:26px 0;}
+.six .s-item{display:flex;gap:20px;padding:14px 0;border-bottom:1px solid var(--line-soft);}
+.six .s-yr{flex:0 0 120px;font-weight:900;font-size:19px;color:var(--terra-deep);letter-spacing:.03em;}
+.six .s-yr small{display:block;font-size:11.5px;color:var(--muted);font-weight:600;letter-spacing:.2em;margin-top:2px;}
+.six .s-tx{flex:1;font-size:15px;line-height:1.9;text-align:justify;}
+.six .s-tx b{font-weight:700;}
+@media (max-width:640px){.six .s-item{flex-direction:column;gap:4px;}}
+
+/* 结语一二三四 */
+.finale{counter-reset:fin;margin:28px 0;}
+.fin-block{border:1px solid var(--line);background:var(--card);margin:20px 0;padding:22px 26px 16px;position:relative;}
+.fin-block::before{
+  counter-increment:fin;content:counter(fin,cjk-ideographic);
+  position:absolute;top:-16px;left:20px;background:var(--terra);color:var(--paper);
+  width:32px;height:32px;display:flex;align-items:center;justify-content:center;
+  font-size:16px;font-weight:900;border-radius:50%;
+}
+.fin-block h4{margin-top:2px;color:var(--terra-deep);font-size:18px;}
+.fin-block p{font-size:15.3px;}
+
+footer{margin-top:90px;padding:34px 0 0;border-top:3px double var(--ink);font-size:13px;color:var(--muted);line-height:2;}
+footer b{color:var(--ink);}
+
+/* 顶部返回 */
+#topbtn{
+  position:fixed;right:26px;bottom:26px;width:44px;height:44px;border-radius:50%;
+  background:var(--ink);color:var(--paper);border:none;font-size:18px;cursor:pointer;
+  opacity:0;pointer-events:none;transition:opacity .25s;font-family:inherit;z-index:60;
+}
+#topbtn.show{opacity:.88;pointer-events:auto;}
+</style>
+</head>
+<body>
+<div class="frame">
+
+<nav class="toc" id="toc">
+  <div class="toc-head">目 录</div>
+  <a href="#s0">卷首 · 全书总纲</a>
+  <div class="toc-gap"></div>
+  <a href="#s1">壹 · 概念装置</a>
+  <a class="toc-sub" href="#c-tongyi">统一文化</a>
+  <a class="toc-sub" href="#c-jituan">四大利益集团</a>
+  <a class="toc-sub" href="#c-zhidu">四大基本制度</a>
+  <a class="toc-sub" href="#c-bianzheng">发展—稳定辩证</a>
+  <a class="toc-sub" href="#c-liangji">管仲—商鞅两极</a>
+  <a class="toc-sub" href="#c-guanshang">官商经济三形态</a>
+  <a class="toc-sub" href="#c-guojin">六次国进民退</a>
+  <a class="toc-sub" href="#c-sang">桑弘羊之问</a>
+  <a class="toc-sub" href="#c-shijian">世界时间与自转</a>
+  <a class="toc-sub" href="#c-wuchulu">民间资本五出路</a>
+  <div class="toc-gap"></div>
+  <a href="#s2">贰 · 十二讲因果重构</a>
+  <a class="toc-sub" href="#L1">一 管仲变法</a>
+  <a class="toc-sub" href="#L2">二 商鞅变法</a>
+  <a class="toc-sub" href="#L3">三 汉武帝变法</a>
+  <a class="toc-sub" href="#L4">四 王莽变法</a>
+  <a class="toc-sub" href="#L5">五 世民治国</a>
+  <a class="toc-sub" href="#L6">六 王安石变法</a>
+  <a class="toc-sub" href="#L7">七 明清停滞</a>
+  <a class="toc-sub" href="#L8">八 洋务运动</a>
+  <a class="toc-sub" href="#L9">九 两个民国</a>
+  <a class="toc-sub" href="#L10">十 计划经济</a>
+  <a class="toc-sub" href="#L11">十一 改革开放(上)</a>
+  <a class="toc-sub" href="#L12">十二 改革开放(下)</a>
+  <div class="toc-gap"></div>
+  <a href="#s3">叁 · 回到历史的基本面</a>
+  <a href="#s4">肆 · 历代变法总览</a>
+</nav>
+
+<main>
+
+<!-- ================= 卷首 ================= -->
+<header class="hero" id="s0">
+  <div class="hero-eyebrow">吴晓波 · 二〇一三 · 知识重构</div>
+  <h1 class="hero-title">历代经济变革<span>得失</span></h1>
+  <p class="hero-sub">本文档以原书自身的概念、判断与论证为唯一材料，重构其内在逻辑：从公元前 7 世纪的管仲变法到 2013 年的改革困境，两千七百年的中国经济变革被作者压缩为一场<strong>主题从未更改的大一统博弈</strong>——所有变法都是四大利益集团在四大基本制度框架内的权益再分配，所有兴衰都在"发展—稳定"的钟摆与"放—收"的闭环中循环发生。</p>
+  <div class="hero-meta">
+    <span>研究方法 <b>熊彼特第三路径：通过历史</b></span>
+    <span>分析工具 <b>四大利益集团 × 四大基本制度</b></span>
+    <span>叙事跨度 <b>前 770 — 公元 2013</b></span>
+  </div>
+</header>
+
+<!-- ================= 总纲 ================= -->
+<section id="s0b">
+  <div class="sec-mark"><span class="no">卷首</span><span class="rule"></span></div>
+  <h2>全书总纲：一个方法，两个工具，两个结论</h2>
+  <p class="sec-lede">导论《研究中国的方法》确立全书的问题意识、分析装置与最终判断，其余十二讲皆是这套装置在历史现场的逐次运转。</p>
+
+  <div class="verdict">
+    <p><strong>全书的元判断：</strong>中国经济的崛起既不是科斯所说的"人类行为的意外后果"，也不是任何"某某主义"的胜利，而是<em>两千年经济变革史的一次合理性演进</em>；中国经济制度上的"结构性缺陷"不是失误，而是一个<em>"建设性结果"</em>——它与维持千年统一的中央集权制度存在密不可分的重大关系。理解了这两点，才能理解当前的中国，也才能看清：我们迄今仍有陷入历史闭环逻辑的危险。</p>
+  </div>
+
+  <h3>问题的起点：解释比预测更难</h3>
+  <p>写作的当口（2013 年），关于中国经济的判断呈空前的两极化。一极是"崛起论"：《经济学人》与林毅夫测算中国将在 2030 年前后成为第一大经济体；萨默斯断言三百年后的历史书将把"中国和印度的崛起"列为头等大事；103 岁的科斯出版《变革中国》，给出三个基本性结论——"最伟大"（史上最伟大的经济改革计划）、"非计划"（结果完全出人意料）、"意外性"（哈耶克"人类行为的意外后果"的极佳案例）。另一极是"崩溃论"：克鲁格曼以消费占比过低、投资占 GDP 五成且系于地产泡沫，断言中国经济正在崩溃；黄亚生则否认"中国模式"的存在。作者的判断是：<strong>科斯的三个结论恰恰表明，现有制度经济学框架无法完整解释中国的崛起</strong>。当理论和统计都失灵时，只剩熊彼特的第三条路——通过历史。于是全书回到"中国历史的基本面"，从历代经济变革中探研得失。</p>
+
+  <h3>元前提：为什么"分久必合"只是中国的大势</h3>
+  <p>罗贯中"分久必合，合久必分"八个字被作者拆成一个真正的学术问题：为什么中国合了必再分、分了必再合，而欧洲自罗马帝国崩解后就再没有统一过？东西方在公元 3 世纪之前几乎同步——商鞅变法（前 360）与亚历山大帝国（前 356），汉武帝与凯撒，大汉与罗马双峰并耸；公元 184 年后两大帝国同时瓦解，此后历史"大分流"：中国在 589 年重新统一并从此再未长期分裂，欧洲进入封建制而永别统一。魏斐德对这道"区别点"给出手术刀般的答案：<em>"统一是中国的一种文化。"</em>汤因比统计人类 21 个文明社会，称中国为"唯一延续至今的社会"，其成就正得自统一的文化。但作者立刻翻出这枚硬币的另一面——"统"者归总，"一"者划一，这个词背后站着三个怪物：<strong>集权、独裁、专制</strong>。统一是宿命般的、带终极意义的中国文化，是考察所有治理技术的边界；而选择统一，就无从拒绝它的代价。</p>
+
+  <h3>两个观察与分析工具</h3>
+  <p class="tight">在疆域辽阔、人口众多的地区维持长期统一是极艰巨的工作，治国者必须在<strong>利益分配</strong>与<strong>基本制度建设</strong>两端同时具备卓越智慧——由此导出全书的两件分析工具：</p>
+  <div class="ledger">
+    <div class="row"><div class="k">工具一 · 博弈法</div><div class="v"><b>四大利益集团博弈法</b>——发生于历史以及当下的所有中国问题，都是<b>中央政府、地方政府、有产阶层、无产阶层</b>这四大利益集团互相争斗、博弈和妥协的结果。任何一场变法的实质，都是这四方权益格局的一次重新切分。</div></div>
+    <div class="row"><div class="k">工具二 · 制度法</div><div class="v"><b>四大基本制度分析法</b>——中国是唯一保持了两千年中央集权制度的国家。要维持集权统治，必须在<b>中央与地方的权力分配、全民思想控制、社会精英控制、宏观经济制度</b>四个方面完成制度建设；中国历史上的众多制度创新，本质上都围绕这四大基本制度展开。前工业时期它们呈现为郡县制度、尊儒制度、科举制度、国有专营制度，如四根支柱共同撑起集权政体的大厦，共性是追求各利益集团在行为及思想上的一致性、维持"自上而下的控制"。梁启超言其"循进化之公理，以渐发达，至今代而始完满"——中国实在是大一统制度的"故乡"。</div></div>
+  </div>
+  <p>及至近当代，四大制度的许多内容发生了重大改变，但<u>维持大一统、实行威权治理的基本理念无实质性更变</u>，制度创新的目标与手段依然共轨同辙。对面向未来的中国变革而言，此乃最为严峻的命题之一。</p>
+</section>
+
+<!-- ================= 壹 概念装置 ================= -->
+<section id="s1">
+  <div class="sec-mark"><span class="no">第壹部分</span><span class="rule"></span></div>
+  <h2>概念装置：十件贯穿全书的分析器械</h2>
+  <p class="sec-lede">以下概念在导论中被铸造、在十二讲中被反复运转、在结语中被收拢为判断。每一件都先给出书中的定义性结论，再给出它承担的论证功能。</p>
+
+  <!-- 概念1 统一文化 -->
+  <div class="concept" id="c-tongyi">
+    <div class="c-head"><span class="c-no">概念 〇一</span><span class="c-title">统一文化</span><span class="c-eng">一切治理技术的边界条件</span></div>
+    <p><strong>定义：</strong>统一不是中国的一种状态，而是中国的一种<em>文化</em>——宿命般的、带有终极意义的全民诉求。中国人最害怕、最不愿意、最讨厌、最不能容忍的事情就是"分裂"；大一统国家的成功崛起终结了"乱世"，亲历者对它"无比向往、感激涕零"（汤因比）。</p>
+    <p><strong>论证功能：</strong>这是全书一切推理的<u>不可置疑的前提</u>。它解释了为什么中国对集权的容忍度远高于其他国家；解释了为什么历代变法无论多么惨烈，"消灭国有经济""放弃中央集权"从来不在选项之中；也在结语中被最终确认为"一切自由化改革的边界"——自由化势必削弱中央集权能力，而分权若失控以致边疆独立，则是任何改革者都无法承受的代价。作者称之为"一个十分痛苦的结论：也许我们这一代人终其一生都无法找到其他的抉择"。</p>
+  </div>
+
+  <!-- 概念2 四大利益集团 -->
+  <div class="concept" id="c-jituan">
+    <div class="c-head"><span class="c-no">概念 〇二</span><span class="c-title">四大利益集团博弈法</span><span class="c-eng">所有中国问题的统一解释框架</span></div>
+    <p><strong>定义：</strong>中央政府、地方政府、有产阶层、无产阶层——历史与当下的所有中国问题，都是这四者争斗、博弈、妥协的结果。</p>
+    <p><strong>运转规律（书中反复验证的三条）：</strong></p>
+    <div class="ledger">
+      <div class="row"><div class="k">规律一</div><div class="v">集权式变革必然侵蚀<b>地方政府与有产阶层</b>的利益，故其成功前提是"把人民发动起来"——鼓噪民心的理由古今大抵四个：<b>抵御外侮、防止割据、反贪反腐、反对贫富不均</b>（汉武帝用第一条，王莽四条皆缺，故一成一败）。</div></div>
+      <div class="row"><div class="k">规律二</div><div class="v">集团格局的剧变即是历史转折的信号：文景之治七十年造成商人坐大、诸侯膨胀、官商结盟三重失衡，引出七国之乱与武帝集权；1956 年公私合营则将<b>有产阶层"像毫无作用的盲肠一样整体切除"</b>，四大集团变三大集团，博弈结构本身被改写。</div></div>
+      <div class="row"><div class="k">规律三</div><div class="v">2013 年的困局在于：四大集团都已重新形成各自强大的利益格局与话语权，却<b>共识缺乏、目标多元</b>——政府与民间、中央与地方、有产与无产之间的"公平"成为最亟待化解的社会命题。</div></div>
+    </div>
+  </div>
+
+  <!-- 概念3 四大基本制度 -->
+  <div class="concept" id="c-zhidu">
+    <div class="c-head"><span class="c-no">概念 〇三</span><span class="c-title">四大基本制度分析法</span><span class="c-eng">中央集权大厦的四根支柱</span></div>
+    <p><strong>定义与分工：</strong>专制者要维持集权，必须在四个方向同时完成制度建设——</p>
+    <div class="ledger">
+      <div class="row"><div class="k">郡县制度</div><div class="v">中央与地方的权力分配模式：保证中央的人事任命权，避免地方割据滋生。<b>试验于商鞅，成形于嬴政</b>，王夫之谓"郡县之制，垂二千年而弗能改矣"；唐德刚断言中国三千年只分部落制、封建制、郡县制三段，商鞅之后几无大变。</div></div>
+      <div class="row"><div class="k">尊儒制度</div><div class="v">全民思想的控制模式：扼杀百家争鸣，实现意识形态大统一。<b>定型于汉武帝"罢黜百家，独尊儒术"</b>。顾颉刚点破秦皇汉武的手段之别：始皇不许人民读书，用刑罚制裁，失败了；武帝要人民只读一种书，用利禄引诱，成功了。</div></div>
+      <div class="row"><div class="k">科举制度</div><div class="v">社会精英的控制模式：以公平考试将精英吸纳进体制"为我所用"。<b>始创于隋，奠型于唐</b>，与商鞅军爵制（武士通道）前后勾连，构成平民社会的稳定性；代价是知识分子"丧失独立存在的可能性，进而放弃独立思考的能力"——"太宗皇帝真长策，赚得英雄尽白头"。</div></div>
+      <div class="row"><div class="k">国有专营制度</div><div class="v">宏观经济制度模式：对重要资源实行国营化垄断以控制国计民生。<b>始作俑者为管仲</b>（盐铁专营），完备于桑弘羊。由此中国政府的收入永远由<b>税赋与专营</b>两项构成，政府成为"有赢利任务的经济组织"——国有企业是"看上去像企业的政府"，政府是"看上去像政府的企业"，民营企业集群被间夹其中，成为被博弈的对象。</div></div>
+    </div>
+    <p><strong>论证功能：</strong>每一讲的变法都被放进这个四格框架里"验伤"——它建设了哪根支柱、恶质化了哪根支柱、瓦解了哪根支柱。明清是四大制度的<em>恶质化</em>（废宰相、文字狱、神圣化科举、铁桶阵），民国初年是四大制度的<em>全面崩坏</em>（1400 年来第一次中央权力真空），"文革"则是四大制度<em>集权程度两千年之最</em>。结语中，互联网、NGO、企业家、自由知识分子四股新势力之所以重要，正因为它们分别对四大制度构成了有史以来最重大的挑战。</p>
+  </div>
+
+  <!-- 概念4 发展稳定辩证 -->
+  <div class="concept" id="c-bianzheng">
+    <div class="c-head"><span class="c-no">概念 〇四</span><span class="c-title">发展—稳定辩证 与 治乱闭环</span><span class="c-eng">历代变革的衍变总逻辑</span></div>
+    <p><strong>定义：</strong>历代经济变革的基本衍变逻辑，是一副六字对联——上联"发展是硬道理"，下联"稳定压倒一切"（两句皆出自邓小平之口）。<em>历史从未走出这副对联。</em></p>
+    <p><strong>机制链条：</strong>发展经济必须放活民间→繁荣日久，地方坐大、商人骄纵、中央权威受挑战→于是集权式变革，加强中央控制→势必削减地方、侵蚀民间，生产力下降→政权新一轮不稳定→执政者面临选择：任由矛盾激化，还是再度放权让利？——如此往复。放大到王朝尺度，就是结语中的治乱闭环：</p>
+  </div>
+
+  <div class="figure">
+    <svg viewBox="0 0 720 420" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="治乱闭环示意图">
+      <defs>
+        <marker id="arw" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+          <path d="M0,0 L10,5 L0,10 z" fill="#8C3B1B"/>
+        </marker>
+      </defs>
+      <circle cx="360" cy="210" r="150" fill="none" stroke="#CBB98D" stroke-width="1.5" stroke-dasharray="3 5"/>
+      <!-- 六节点 -->
+      <g font-family="Noto Serif SC, Songti SC, serif" text-anchor="middle">
+        <!-- 开放 top -->
+        <g>
+          <rect x="310" y="22" width="100" height="42" fill="#1E6B63"/>
+          <text x="360" y="49" fill="#F3EAD3" font-size="19" font-weight="700">一开放</text>
+        </g>
+        <!-- 搞活 right-top -->
+        <g>
+          <rect x="560" y="115" width="110" height="42" fill="#1E6B63"/>
+          <text x="615" y="142" fill="#F3EAD3" font-size="19" font-weight="700">就搞活</text>
+        </g>
+        <!-- 失衡 right-bottom -->
+        <g>
+          <rect x="560" y="262" width="110" height="42" fill="#AE4C24"/>
+          <text x="615" y="289" fill="#F3EAD3" font-size="19" font-weight="700">就失衡</text>
+        </g>
+        <!-- 内乱 bottom -->
+        <g>
+          <rect x="310" y="356" width="100" height="42" fill="#AE4C24"/>
+          <text x="360" y="383" fill="#F3EAD3" font-size="19" font-weight="700">就内乱</text>
+        </g>
+        <!-- 闭关 left-bottom -->
+        <g>
+          <rect x="50" y="262" width="110" height="42" fill="#AE4C24"/>
+          <text x="105" y="289" fill="#F3EAD3" font-size="19" font-weight="700">就闭关</text>
+        </g>
+        <!-- 落后 left-top -->
+        <g>
+          <rect x="50" y="115" width="110" height="42" fill="#8C3B1B"/>
+          <text x="105" y="142" fill="#F3EAD3" font-size="19" font-weight="700">就落后</text>
+        </g>
+      </g>
+      <!-- 箭头 -->
+      <g stroke="#8C3B1B" stroke-width="2.2" fill="none" marker-end="url(#arw)">
+        <path d="M418,50 Q530,68 585,110"/>
+        <path d="M617,162 Q625,210 617,257"/>
+        <path d="M585,310 Q530,352 418,372"/>
+        <path d="M303,372 Q190,352 135,310"/>
+        <path d="M103,257 Q95,210 103,162"/>
+        <path d="M135,110 Q190,68 303,44"/>
+      </g>
+      <g font-family="Noto Serif SC, Songti SC, serif" text-anchor="middle">
+        <text x="360" y="192" fill="#8C3B1B" font-size="15" letter-spacing="4">朝代更迭 · 轴心不变</text>
+        <text x="360" y="222" fill="#4A463C" font-size="13" letter-spacing="2">汉 · 唐宋 · 明清 · 民国</text>
+        <text x="360" y="248" fill="#7C7260" font-size="12.5" letter-spacing="2">一落后，再开放</text>
+      </g>
+    </svg>
+    <div class="cap">治乱闭环——"往往一开放就搞活，一搞活就失衡，一失衡就内乱，一内乱就闭关，一闭关就落后，一落后再开放……循环往复，无休无止。"导致这一周期性治理危机的根本原因，正在于权益和财富分配的失衡。</div>
+  </div>
+
+  <!-- 概念5 两极 -->
+  <div class="concept" id="c-liangji">
+    <div class="c-head"><span class="c-no">概念 〇五</span><span class="c-title">管仲—商鞅两极模型</span><span class="c-eng">后世一切变法的钟摆两端</span></div>
+    <p><strong>定义：</strong>管仲变法是重商主义的试验，商鞅变法是重农主义（命令型计划经济）的典范；经历这两场变法之后，影响中国千年历史的治国模式便基本定型。两人"如同左右两极，处于历代经济变革的两端，<em>后世变革，无非如钟摆一般在两者之间摇荡，竟从来没有逃出他们设定的逻辑</em>"。</p>
+    <div class="duel">
+      <div class="side">
+        <h5>管仲极 · 蓝色的、开放的</h5>
+        <ul>
+          <li>放活微观，管制宏观；尊重市场规律的国家干预主义</li>
+          <li>专营≠国营：控制资源与定价，经营权下放民间分利</li>
+          <li>鼓励消费乃至侈靡；以商止战；自由贸易与关税同盟</li>
+          <li>谱系：文景之治 → 唐初世民 → 北洋民国 → 改革开放（上）</li>
+        </ul>
+      </div>
+      <div class="side">
+        <h5>商鞅极 · 黑色的、封闭的</h5>
+        <ul>
+          <li>命令型计划经济鼻祖：国家控制一切生产资料，排斥商贸</li>
+          <li>强国贫民："家不积粟"；民必须弱、怯、愚，方可驱使</li>
+          <li>反智愚民、户籍禁锢、以物易物、战争即目的</li>
+          <li>谱系：汉武帝 → 王莽 → 王安石 → 统制经济 → 计划经济</li>
+        </ul>
+      </div>
+    </div>
+    <p><strong>论证功能：</strong>作者点出一条隐秘的师承链——桑弘羊欣赏商鞅、刘晏欣赏桑弘羊、王安石推崇桑刘、朱镕基观《商鞅》潸然泪下；"在两千多年的国史上，商鞅是命令型计划经济的鼻祖，其后，王安石和陈云则分别是农耕时代和工业化时代的典范型执行者"。而管仲则是"被意识形态谋杀的改革家"：齐国一世而衰使以商治国思想破产，儒家又视其学说为异端，于是他的名字被淹没，他的<u>盐铁专营却被每一代治国者"阳讳其名而阴用其实"</u>。</p>
+  </div>
+
+  <!-- 概念6 官商经济三形态 -->
+  <div class="concept" id="c-guanshang">
+    <div class="c-head"><span class="c-no">概念 〇六</span><span class="c-title">官商经济的三个形态</span><span class="c-eng">贵族经济 → 世族经济 → 士绅经济</span></div>
+    <p><strong>定义：</strong>中国的社会经济形态经历三段演进——先秦至汉初为<strong>贵族经济</strong>；东汉至魏晋南北朝为<strong>世族经济</strong>（血缘维系、闭门成市、坞堡自卫、对中央缺乏忠诚）；隋唐"士商合流"，至宋代定型为<strong>士绅经济</strong>，"历一千年左右的演进，其后再无进步"。<em>这三种经济形态从本质上来说，都是官商经济。</em></p>
+    <p><strong>机制：</strong>士绅经济由三项宋代政策浇筑定型——公开允许官员经商（赵匡胤以经商拉拢将领）、不抑土地兼并（"官品形势之家"占天下一半土地）、对垄断资源授权经营（"买扑"招标制与"钞引"特许制）。授权制在获得垄断利润的前提下激活了市场，却也营造出巨大寻租空间：能拿到牌照的商人大多与权贵有千丝万缕的关系。明清将其恶质化为开中制、折色制、纲盐制与十三行行商制，养出晋商、徽商、十三行三大商帮——"尽管都富可敌国，可都是被豢养大的寄生虫，他们的财富增加与市场的充分竞争无关、与产业开拓无关、与技术革新无关，因而与进步无关"。费正清的总结被全书引为判词：<em>"中国的传统不是制造一个更好的捕鼠机，而是从官方取得捕鼠的特权"</em>；而中国商人最大的成功，是"他们的子孙不再是商人"。</p>
+    <p><strong>判断标准：</strong>"一个国家的资产阶层是否独立且重要，并不取决于其财富的多少，而取决于其获得财富的方式。"</p>
+  </div>
+  <!-- 概念7 国进民退 -->
+  <div class="concept" id="c-guojin">
+    <div class="c-head"><span class="c-no">概念 〇七</span><span class="c-title">六次"国进民退"</span><span class="c-eng">百年现代化史的暗线</span></div>
+    <p><strong>定义：</strong>在百年现代化历史上，国家资本以强制方式夺取民间资本控制权的重大事件先后发生六次。它们不是孤立事故，而是"国有专营制度"这根支柱在现代产业条件下的周期性发作——每一次都以国家目标为名义，每一次都以民间资本的溃退和企业家阶层信心的折损为代价。</p>
+    <div class="six">
+      <div class="s-item"><div class="s-yr">1884<small>第一次</small></div><div class="s-tx"><b>轮船招商局事件。</b>官督商办的"蜜月期"终结：李鸿章借上海金融危机中的挪款丑闻将唐廷枢、徐润、郑观应等买办"净身出局"，盛宣怀以官方身份接掌。郝延平称之为"官僚资本主义产生的转折点"；杨小凯的制度性诊断——政府"既是裁判，又是球员"，利用裁判权力追求球员利益，是为<b>制度化国家机会主义</b>。</div></div>
+      <div class="s-item"><div class="s-yr">1911<small>第二次</small></div><div class="s-tx"><b>铁路国有化。</b>朝廷收回商办铁路，只还民间股东六成现银、四成无息股票，投资人平白承担四成损失。保路运动骤起，湖北新军西调，武昌因之空虚——<b>直接引爆辛亥革命</b>：一次"国进民退"竟成了帝制的送葬曲。</div></div>
+      <div class="s-item"><div class="s-yr">1935<small>第三次</small></div><div class="s-tx"><b>银行国有化。</b>孔祥熙以救济实体为名发行一亿元定向国债，随即宣布该款项用于强制认购中国银行、交通银行增发股票，政府跃升第一大股东；半年内通商、四明、实业诸行相继被控股，国营资本在银行业占比从不足 12% 猛增至 72.8%。王业键判词："企业家作为一个有力量的阶层是终结了。"</div></div>
+      <div class="s-item"><div class="s-yr">1945<small>第四次</small></div><div class="s-tx"><b>敌产国营化。</b>沦陷区约四万亿元日伪产业（"当时中国的九成家产"）的接收之争中，翁文灏、何廉的"混合经济"方案虽经最高国防委员会通过，仍被宋子文的统制经济路线碾压：已接收的 2243 个工矿企业中"拨交"国营者 1017 个，标卖民营者仅 114 个。国家资本从此控制全国 90% 的钢铁、100% 的石油。荣德生上书"能用民力，不必国营"，不为当政者闻。</div></div>
+      <div class="s-item"><div class="s-yr">1956<small>第五次</small></div><div class="s-tx"><b>公私合营。</b>"消灭"私营经济原计划十八年，实际只用七年，历经夹心化、五反查税、边缘化、定息赎买、"绝种"五个阶段；1956 年 1 月，北京十天、上海一纸宣告全行业公私合营。这是<b>最彻底的一次</b>：四大利益集团中的有产阶层"像毫无作用的盲肠一样被整体切除"。</div></div>
+      <div class="s-item"><div class="s-yr">2004–08<small>第六次</small></div><div class="s-tx"><b>从铁本案到四万亿。</b>宏观调控中民营钢铁企业铁本被九部委定为"重大案件"、董事长入狱两年后仅以"虚开抵扣税款发票罪"受审；同期国有钢厂产能狂飙。2008 年"四万亿计划"中国企获得超九成信贷。与前五次不同：决策层表现出<b>极度矛盾分裂的心态</b>——两度国资挺进之间，两度颁布鼓励民营的"非公 36 条"，暴露出"两个毫不动摇"孰轻孰重的经典性困境。</div></div>
+    </div>
+  </div>
+
+  <!-- 概念8 桑弘羊之问 -->
+  <div class="concept" id="c-sang">
+    <div class="c-head"><span class="c-no">概念 〇八</span><span class="c-title">桑弘羊之问 与 千年三辩</span><span class="c-eng">国有经济合法性的原点难题</span></div>
+    <p><strong>定义：</strong>公元前 81 年盐铁会议上，面对群儒对国营化政策的汹汹指责（与民争利、国企劣质、权贵经济），七十四岁的桑弘羊以三问作答：<em>如果不执行国营化政策，战争的开支从哪里出？国家的财政收入从哪里得？地方割据的景象如何化解？</em>而这三项，不正是治国者必须面对的最重要课题吗？——群儒只知汹汹反对，却提不出任何建设性方案，"一直不敢直面那道难解的桑弘羊之问。事实上，直到今天，国人仍然没有找到解决的答案"。</p>
+    <p><strong>千年三辩：</strong>关于"国家到底应该在国民经济中扮演什么角色"，决策层面的制度性思辨在两千年里只发生过三次——公元前 81 年的<strong>盐铁会议</strong>（桑弘羊 vs 群儒）、1069 年的<strong>延和殿廷辩</strong>（王安石 vs 司马光）、1945 年的<strong>战后接收模式之争</strong>（翁文灏何廉的混合经济 vs 宋子文的统制经济）。"千年辩一回"，而三次辩论的胜负走向惊人一致：国营论者赢下政策，输掉长期。司马光在延和殿点破的正是桑弘羊的老话头——"民不益赋而国用饶"不过是既有社会财富在政府与民间的重新分配，"天下财富不在民间就在政府"。</p>
+    <p><strong>配套判断：</strong>由桑弘羊上溯，作者推翻了"中国轻商"的成见——自汉武帝之后的历代统治者从来没有轻视工商业，<em>他们只是抑制民间商人而已</em>。把最能产生利润的工商业收归国家经营，"轻视商人与重视工商，正是一体两面的结果"。这也是儒家治理无能的镜像：儒家反法反得猛烈，一旦掌权却翻来覆去只有"以农为本、轻徭薄赋、克己仁义"三斧头（司马光复相后任命不通财政的小学家当户部尚书，即为讽刺性注脚）——<u>儒家思想在政治上是集权的支柱，在经济思想上却无法与之匹配</u>，此为历代经济治理的重大冲突点，帝国于是长期呈现"儒表法里"。</p>
+  </div>
+
+  <!-- 概念9 世界时间 -->
+  <div class="concept" id="c-shijian">
+    <div class="c-head"><span class="c-no">概念 〇九</span><span class="c-title">世界时间 · 自转惯性 · 超稳定结构</span><span class="c-eng">中西大分流的解释装置</span></div>
+    <p><strong>世界时间（布罗代尔）：</strong>人类文明的进步只出现在少数两三个地方，其余地区处在"轰轰烈烈的历史之外"。两汉时"世界时间"在罗马与长安；公元 6 世纪后中国独享千年；12 世纪起钟摆悄悄西移——1085 年比萨出现市民选举执行官的"自由城市"，1087 年博洛尼亚出现第一所大学："自由的城市催生自由的商业，自由的大学催生自由的思想，而自由的商业和思想又是人类文明走向现代社会的两块奠基石。"在强调中央集权的中国，城市与学校"一直为政权所牢牢控制，这是东西方文明走向不同演进道路的根本性原因"。王安石变法恰处这一历史时刻——空前强化管制的中国，与刚刚萌发自由法权的欧洲，就此分道扬镳。</p>
+    <p><strong>自转惯性：</strong>国家如星球，有与世界文明同步的公转，也有与自身条件相符的自转。农耕时代闭关锁国需要两个条件——土地粮食足以养活国民、人口足以支撑内需市场；宋代"水稻革命"与明代"棉花革命"恰好在"耕""织"两端补齐了技术条件，于是 14 世纪的中国"迅速转身，成为一个自转的小宇宙"。汤因比指出统一国家的统治者"常常对技术进步漠不关心或敌视，因为任何技术变革都会威胁稳定"。<em>预警：</em>当今中国内需权重上升、对外依存下降、新能源普及在望——"实行闭关锁国及社会散沙化的客观条件仍然存在"，中国重回自转状态的危险度在提高，"中国的改革正与全球科技革命进行着一场不确定性的、危险的赛跑"。</p>
+    <p><strong>超稳定结构与高水平停滞（金观涛、刘青峰）：</strong>15 世纪后中国科技累加增长曲线呈长波段水平停滞，西方进入爆发式增长；结论是"科学技术结构和社会结构之间存在适应性"——<u>制度大于技术</u>，中国的落后首先体现在政治体制和社会制度的不思进取。麦迪森的量化注脚：1300–1800 年五百年间，中国人均 GDP 增长率为零。</p>
+  </div>
+
+  <!-- 概念10 五条出路 -->
+  <div class="concept" id="c-wuchulu">
+    <div class="c-head"><span class="c-no">概念 一〇</span><span class="c-title">民间资本的五条出路</span><span class="c-eng">高压之下资本流向的诊断表</span></div>
+    <p><strong>定义（源出中唐，通用全史）：</strong>当国有资本与官僚资本强势霸道时，民间工商资本只剩五条出路——<strong>奢侈消费、交通权贵、购买土地、放高利贷、囤积钱币</strong>。工商利润不向产业资本转化，不存在积累放大的社会机制，而是流入消费市场、土地和高利贷领域。</p>
+    <p><strong>论证功能：</strong>这是全书用以诊断经济体温的一支体温计——"若在某一时期，出现奢侈品消费剧增、文物价格上涨以及土地房产购买热潮，并不代表经济的复苏，<em>而更可能是资本从实业溢出的恶兆</em>。"它在中唐首次显影，在明清商帮（结交官府、供子弟科举、重建宗族）身上重演，在 2013 年的移民潮、地产热与实体空心化（福布斯中国前百富豪六成来自地产；亿元资产企业主 27% 已移民、47% 在考虑）中第三次报警。</p>
+  </div>
+</section>
+
+<!-- ================= 贰 十二讲 ================= -->
+<section id="s2">
+  <div class="sec-mark"><span class="no">第贰部分</span><span class="rule"></span></div>
+  <h2>十二讲因果重构：装置在历史现场的逐次运转</h2>
+  <p class="sec-lede">每讲按同一解剖结构呈现：起点压力（为什么必须变）→ 政策装置（变了什么、对应哪根制度支柱）→ 结果（得与失）→ 遗产（移交给下一场变法的问题）。极性标签标注该场变法在管仲—商鞅钟摆上的位置。</p>
+
+  <!-- L1 -->
+  <div class="lecture" id="L1">
+    <div class="lec-band"><span class="lec-no">第一讲 · 前7世纪</span><span class="lec-title">管仲变法</span><span class="lec-pole guan">管仲极 · 原点</span></div>
+    <div class="lec-body">
+      <div class="verdict terra">
+        <p>两千多年前的"凯恩斯主义"：一个战场逃兵、失败商人辅佐"好吃好田好色"的君主，完成了中国历史上第一场、也许是最成功的经济大变革——却因齐国一世而衰、又与儒家格格不入，成为"被意识形态谋杀的改革家"。他发明的盐铁专营，让中国从此成为一个"独特的国家"。</p>
+      </div>
+      <div class="anat">
+        <div class="a-row"><div class="a-k">起点压力</div><div class="a-v">周幽王死、天子权威丧失，"礼崩乐坏"，争强求富成为时代主题——"所谓国家，从来是血腥竞争的产物"。齐国地狭、滨海、远离政治中心（很像改革开放之初的广东福建），"自古以来，弱者就是变革的发动机"；中国第一场经济变革即呈现一个鲜明特点：<strong>观念的优先往往比资源的优先更重要</strong>。</div></div>
+        <div class="a-row"><div class="a-k">政策装置</div><div class="a-v">
+          <p><strong>① 四民分业（被严重误读的"士农工商"）：</strong>把国民按军士、农民、工匠、商贾分业聚居——同业相聚易交流技艺、促进流通、安于本业、子承父业。此乃<u>并举之义而非尊卑排序</u>；商人出身的管仲将工商抬至与士农并列的"国之石民"。职业化分工使中国社会分工比欧洲早了至少一千年（赵冈），后世"以士为首、以工商为末"的"末商主义"是对它的倒读。</p>
+          <p><strong>② 放活微观，管制宏观：</strong>对内刺激商品经济，对外降低关税（鱼盐自由出口、单一税制、为外商设客舍乃至首开官营"女市"），"天下之商贾归齐若流水"，临淄三十万人为当时世界最大城市（同期雅典不足五万）；同时以财政、税收、价格三手管制宏观——机动农业税率（丰年 15%、中年 10%、下年 5%、饥荒全免，比孟子"什税一"的铁则灵活现实）、国储粮平抑粮价、以价格杠杆"因天下以制天下"。</p>
+          <p><strong>③ 盐铁专营（第四制度的诞生）：</strong>齐桓公要对人口房屋六畜征税，管仲一一否定——税收有形，直接取之于民必招怨怼，最理想的是<em>"取之于无形，使人不怒"</em>。办法七个字："唯官山海为可耳"。<u>寓税于价</u>：盐每升加价，月入六千万钱，一倍于人头税而民无"嚣号"；铁针加价一钱，三十针即抵一人丁税，"无不服籍者"。且专营≠国营：盐是开放民产、国家统购统销（售价可达成本四十倍）；铁是"资产国有、承包经营"——矿山国有（擅采者断足）、开放民间冶坊、民得其七、君得其三。</p>
+          <p><strong>④ 鼓励消费的异端：</strong>"俭则伤事"——不消费则流通减、生产废；《侈靡篇》主张"富者靡之，贫者为之"，凶年由国家兴修宫室台榭以促就业——郭沫若解为"大量消费促进大量生产、主张全面就业"。这种以政府固定资产投资刺激复苏的做法，西方在 1929 年大萧条后才学到手。</p>
+          <p><strong>⑤ 以商止战：</strong>对内，发展商品经济使民富而不反——"仓廪实则知礼节，衣食足则知荣辱"，政之所兴在顺民心、从其四欲；对外，扩大贸易、军事威慑维持均衡：九合诸侯统一关贸税率（市税 2%、关税 1%），俨然区域关税同盟；与鲁梁不协，则以"齐纨鲁缟"式商战（诱其举国织绨而废农，闭关断购，粮价暴涨，其国不战自溃）兵不血刃制服之。</p>
+        </div></div>
+        <div class="a-row"><div class="a-k">结果</div><div class="a-v">齐国四十载而成霸业，形成中国第一个系统性国民经济治理体系与<strong>古典市场经济体制的雏形</strong>。管仲实为"尊重市场规律的国家干预主义者"——中国古代版的凯恩斯。</div></div>
+        <div class="a-row"><div class="a-k">遗产</div><div class="a-v">两笔遗产改写全史：其一，政府收入从此由<strong>税赋＋专营</strong>双轨构成，政府变成"有赢利任务的经济组织"，国企与政府互为镜像，民企被间夹其中——"这一中国式经济体制延续千年，迄今未变"；其二，"和平称霸"随齐国一世而衰宣告破产，暴力扩张路线接管时代——<u>为三百年后的商鞅登场清空了舞台</u>。</div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- L2 -->
+  <div class="lecture" id="L2">
+    <div class="lec-band"><span class="lec-no">第二讲 · 前4世纪</span><span class="lec-title">商鞅变法</span><span class="lec-pole shang">商鞅极 · 原点</span></div>
+    <div class="lec-body">
+      <div class="verdict terra">
+        <p>命令型计划经济的鼻祖。三阶段变法（农耕→军战→中央集权）把秦国改造成"纪律严明、高效好斗的战争机器"，141 年间发动战争 108 次，天下果然是打出来的。他被后世知识阶层引为"口臭三日"的耻辱，却又如"黑色幽灵"飘荡在每一个庙堂之上——"阳讳其名而阴用其实"；毛泽东"百代都行秦政法"，是对他一次遥远的致敬。</p>
+      </div>
+      <div class="anat">
+        <div class="a-row"><div class="a-k">起点压力</div><div class="a-v">孔子之后重建统一的呼声日强（孟子"定于一"、荀子"一制度"、庄子亦怨"道德不一"），各国变法均以强国兼并为目标。秦地贫民淳、几无经济优势，故其变法与齐国相反——"一个是蓝色的、开放的，一个是黑色的、封闭的"。秦孝公二十二岁、商鞅三十岁，"正是百无禁忌的年龄"，强国之术遂极强悍血腥：打仗是检验变法成功与否的唯一标准，"国贫要打，国富更要打"，是为霸道。</div></div>
+        <div class="a-row"><div class="a-k">政策装置</div><div class="a-v">
+          <p><strong>阶段一 · 农耕（把全国变成大农场）：</strong>《垦令》把不务农者统归"恶农、慢惰、倍欲之民"；<u>"废井田，开阡陌"</u>允许开荒买卖——土地私有化自此成为中国最主要的土地所有制，商鞅是"第一个在土地改革中尝到甜头的政治家"（后承者：列宁"和平面包土地"、孙中山"平均地权"、毛泽东"打土豪分田地"、改革开放"包产到户"）。配套的抑商四策登峰造极：控制粮食买卖与矿山国有（断绝非农财路）、工商重税（酒肉课十倍捐）、<u>户籍登记禁止迁徙</u>（中国户口制度的开端）并禁私营旅店、<u>取缔货币以物易物</u>（"金生而粟死，粟生而金死"——古今计划经济者敌视货币之"传统"）。</p>
+          <p><strong>阶段二 · 军战（军爵制度）：</strong>"宗室非有军功论，不得为属籍"——收回全部世袭爵秩，二十等爵一律以杀敌多寡封赐。它彻底抹平贵族与贱民的界限，<em>打造出世界上第一个平民社会</em>；日后军爵制（武士通道）与科举制（文士通道）相互勾连，构成延续千年的平民社会稳定性。国民只许有两种职业：农民（富国）与军人（强兵），种粮—多生—多兵—打仗—得地—再种粮的正循环即"国家目标"。</p>
+          <p><strong>阶段三 · 中央集权：</strong>统一度量衡（平斗桶、权衡、丈尺）；<u>完善并推广郡县制</u>——郡守县令由君王直接任免、不得世袭、每年考核，"与分封制最大的不同"在于人事权归于中央。四大基本制度的第一根支柱由此奠基。</p>
+          <p><strong>思想控制（"不许思想"）：</strong>渭水论法一日杀七百人；变法过半，昔日反对者来赞美，商鞅曰此皆"乱化之民"，尽数流放——不许反对，也不许赞美。"焚书坑儒"正是这一治理模式百年后的合理体现。</p>
+        </div></div>
+        <div class="a-row"><div class="a-k">结果</div><div class="a-v">十年而"道不拾遗、山无盗贼"，民"勇于公战，怯于私斗"，举国皆为国家工具，列国惊呼"虎狼之国"。商鞅本人被车裂灭家而"秦人不怜"，可"后世遵其法"——他是<strong>中国式中央集权制度的奠基之人</strong>，其治秦堪称"一次古典的极权主义运动"（阿伦特三特征之古典对应）。</div></div>
+        <div class="a-row"><div class="a-k">遗产</div><div class="a-v">两条理念从未被后世放弃：<em>不能让民众太富足、太有思想</em>的潜意识沉淀为系统化的愚民政策；<em>国家强大远置于民众富足之前</em>——历代求"国强民安"而非"国强民富"，所谓安者，丰年有饭吃、荒年不饿死而已。商鞅"强国贫民"的分配观（"贫者益之以刑则富，富者损之以赏则贫"）与孟子仁政构成思想史的对峙双峰：孟子生前无用而身后被尊为国家学说，商鞅身后名裂而其术百代阴行——"半法半儒、儒表法里"由此铸成（法家"不许思想"与儒家"只能有一种思想"，本质都是统一思想）。</div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- L3 -->
+  <div class="lecture" id="L3">
+    <div class="lec-band"><span class="lec-no">第三讲 · 前2世纪</span><span class="lec-title">汉武帝变法</span><span class="lec-pole shang">商鞅极 · 集大成</span></div>
+    <div class="lec-body">
+      <div class="verdict terra">
+        <p>顶层设计的集大成者：四大基本制度"试验于商鞅，成形于嬴政，集大成于刘彻"。史上第一次整体配套体制改革造就第一个"半亿帝国"，也留下三笔至今未清的账——政府信用的透支、国企的劣质效率、以及那道无人能答的"桑弘羊之问"。司马光判词：有亡秦之失，而免亡秦之祸。</p>
+      </div>
+      <div class="anat">
+        <div class="a-row"><div class="a-k">起点压力</div><div class="a-v">"文景之治"七十年放权让利（开关梁、弛山泽之禁、三十税一乃至免田租十二年）造就大繁荣——"中国商人第一次获得自由发展之安定时期"（李剑农），却也造成四大集团格局剧变：<strong>自由商人集团崛起</strong>控制冶铁等命脉产业（司马迁笔下"素封"）；<strong>地方诸侯坐大</strong>（吴王刘濞坐拥盐、钱、铁三业，足与中央分庭抗礼）；<strong>权贵与商人结盟</strong>败坏吏治。贾谊晁错献策削藩，引爆"七国之乱"——集权与分权"非此即彼、不可调和"的首要课题自此定型，"两千年以降未曾稍改"。乱平十三年，刘彻登基。他掌握了改革的<u>"时间窗口"</u>三前提：政治集权与思想统一已完成、讨匈战争提供道义号召、文景留下可供攫取的巨大民间财富。</div></div>
+        <div class="a-row"><div class="a-k">政策装置</div><div class="a-v">
+          <p><strong>制度面：</strong>《推恩令》令诸侯自我缩藩＋委派刺史（第一支柱）；"罢黜百家，独尊儒术"以利禄引诱统一思想（第二支柱），七百年百家争鸣戛然而止。</p>
+          <p><strong>产业改革：</strong>六次币制改革后颁"盗铸金钱者死罪令"、铸五铢钱（沿用七百四十年）；盐业循管仲法民产官销；<u>铁业彻底官营</u>——政府不但垄断销售定价，更直接进入制造环节，设铁官四十八处，"今日所谓的中央企业应脱胎于此"；酒榷继起，盐铁酒"三榷"自此历代衍续不断。</p>
+          <p><strong>流通改革（开天辟地）：</strong>桑弘羊操盘——<u>均输</u>（贡品按市价统购、官营运销异地）与<u>平准</u>（国家吞吐物资平抑物价），一管零售一控批发，"功能等同于物资部和物价委员会，是非常典型的计划经济运作模式"（1949 年后陈云构筑的国营流通模式与此非常类似）。</p>
+          <p><strong>税收改革：</strong>算缗令课 10% 财产税，富豪匿财不报，遂颁<u>告缗令</u>鼓励举报、赏没收财产之半——一场"挑动群众告发群众"的运动持续三年，"告缗遍天下"，中产以上之家大多被告发抄产，反对的官员（义纵、颜异）以死罪、"腹诽"论处。</p>
+        </div></div>
+        <div class="a-row"><div class="a-k">结果</div><div class="a-v"><strong>得：</strong>汉成当时世界最强国，人口超五千万（第一个"半亿帝国"）；地方诸侯被剥夺收入来源，集权在经济上获得保障；国企"集中力量办大事"初显——官营后冶铁技术大进（《盐铁论》留下经济思想史上第一段论述规模化生产优势的文字），匈奴"五而当一"。司马迁那句著名评论"民不益赋而天下用饶"，作者点破其反讽：<em>政府增收并非因生产效率提高，而是既有社会财富在政府与民间的重新分配</em>。<br><strong>失：</strong>文景形成的民间经济大繁荣被彻底扼杀，汉朝再无大商巨贾；告缗令使政府"几近无赖"、对民间毫无契约精神，实质是<u>政府信用的一次严重透支</u>——"民偷甘食好衣，不事畜藏之产业"，民众储蓄投资意识从此锐减，历史性后果耐人寻味；铁官所造民用铁器"质量低劣、非常昂贵、还强令购买"——国营事业与生俱来的劣质效率首次显影。晚年"天下困弊，盗贼群起"，68 岁颁《轮台罪己诏》——中国历史上第一份记录在案的皇帝检讨书。</div></div>
+        <div class="a-row"><div class="a-k">遗产</div><div class="a-v">武帝身后六年（前 81），<strong>盐铁会议</strong>召开——中国经济史上最伟大的一次政策辩论。群儒三项指控（与民争利、国企劣质、权贵经济）句句命中，却答不出桑弘羊的三问（战费何出？财政何得？割据何解？）。桑弘羊本人则是"中国历史上第一个把工商业看成富国之本的人"——"富国何必用本农"；他与武帝"最早透彻地看到了工商业所产生的巨大利润，他们的目标在于将工商业中的私人利润转化为国家的利润"。这道题<u>移交给了此后的每一个朝代，包括今天</u>。</div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- L4 -->
+  <div class="lecture" id="L4">
+    <div class="lec-band"><span class="lec-no">第四讲 · 公元1世纪</span><span class="lec-title">王莽变法</span><span class="lec-pole shang">商鞅极 · 极端化</span></div>
+    <div class="lec-body">
+      <div class="verdict terra">
+        <p>第一个社会主义者的改革（胡适语）：一位儒生皇帝对"汉武帝—桑弘羊"模式的极端化模拟，也是历史上第一次、且非常短命的古典社会主义试验。它以最激进的姿态同时开辟财政、货币、土地三大战场，又以最惨烈的方式落幕——改革者本人被砍下脑袋。它的失败不是动机问题，而是一张四项技术条件全数缺席的清单。</p>
+      </div>
+      <div class="anat">
+        <div class="a-row"><div class="a-k">起点压力</div><div class="a-v">武帝之后管制松弛，<strong>世族经济</strong>崛起：以血缘维系传承、招募私属农户不入编户、"闭门成市"多种经营、坞堡自卫拥有私人武装、"一切以家族利益为重，国家意识薄弱"。它在经济上阻断商品大流通，在政治上随时孕生颠覆政权的力量——"四世三公""一门五侯"，门阀不可一世。王莽以外戚篡汉（国号"新"），试图一举改变世族失控的现状。</div></div>
+        <div class="a-row"><div class="a-k">政策装置</div><div class="a-v">
+          <p><strong>财政战场——"五均六筦"：</strong>全面恢复盐铁酒专营与均输平准，六大都市设五均官管制物价、控制供应、办理赊贷、征山泽税。胡寄窗评："在王莽以前，倡议经济管制者如管仲与桑弘羊，对管制政策的必要性都不如王莽所讲的透彻。"作者补刀：所有推行计划经济的人无不以均贫富为口号，实际都是为了加强集权与扩充财政。其计划色彩甚于武帝——零售物价按品质分上中下三等官定，然后才许上市，"无异于用计划之手完全地代替了市场的功能"。</p>
+          <p><strong>货币战场——七年四改：</strong>大钱、小钱、"宝货"六种二十八品、货布货泉……每改一次，"造成民间的一次大破产，监狱里因此人满为患"，政府金融信用几乎破产。</p>
+          <p><strong>土地战场——王田制：</strong>天下田更名"王田"、一律不得买卖、超额者分与宗族乡邻——自商鞅"废井田"之后<u>第一个重新推行土地国有化的政权</u>。两千年间试图将土地全面国有化者严格来讲只有两人：新朝王莽与孙中山，而孙氏只是纸上宣示，王莽付诸实施。配套禁止奴婢买卖——限制土地兼并与限制人口兼并，是打击世族门阀的成套政策。</p>
+        </div></div>
+        <div class="a-row"><div class="a-k">结果</div><div class="a-v">国营化剥夺了民间工商全部利润却没带来国库充盈——他任用巨商经营"五均六筦"，缺乏铁腕监督，官商沆瀣一气掏空国库；币改令金融秩序大乱；王田得罪几乎所有阶层（土地早已是"类货币"的财富承载形式）；用人多疑、十余年换八任大司马。"既得罪了世族和有产者，又得不到无产者支持，而中央又没有增加收入，可谓疲劳天下，一无所得。"公元 23 年，叛军入长安，王莽被杀于渐台。</div></div>
+        <div class="a-row"><div class="a-k">遗产</div><div class="a-v"><strong>与武帝对照的四项技术性差异</strong>（集权改革的成功条件清单）：①经济集权的前提是<u>政治集权已经完成</u>（武帝有七国之乱平定在前，王莽政权合法性未决）；②必须<u>发动底层民众</u>（武帝有对匈战争的民心，王莽的币改开局即伤及基层）；③集权改革本质是财富再分配，须有<u>可供攫取的民间财富</u>（文景七十年 vs 西汉末财经疲弱、财富握于官商一体的世族之手）；④须有<u>忠心高效的执行团队</u>（武帝与桑弘羊合作四十年 vs 王莽好换将帅）。——"疏处应可跑马，密处必不容针"，王莽鲁莽激进，失败乃题中之义。其后刘秀"度田"再战世族，仍以"苟非其时，不如息人"八字告负；世族经济绵延至魏晋南北朝，酿成四百年分裂中的双极景象：<em>国民思想的大解放与工商经济的大倒退并存</em>（货币退化为谷帛、坞堡三千、洛阳六兴六毁、人口 7200 万锐减至不足 1500 万）——由此根植下两个传统价值观：政治上呼唤大一统集权，经济上向往避世小农；《桃花源记》的经济学诠释即是"心理上的返祖现象"。<u>分权自治模式同样找不到促进社会进步的经济制度</u>，中国的国家治理深深陷入集权与分权的两难。</div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- L5 -->
+  <div class="lecture" id="L5">
+    <div class="lec-band"><span class="lec-no">第五讲 · 7世纪</span><span class="lec-title">世民治国</span><span class="lec-pole guan">管仲极 · 盛世版</span></div>
+    <div class="lec-body">
+      <div class="verdict terra">
+        <p>最盛的王朝与最小的政府：科举制补齐四大制度的最后一根支柱、终结世族形态，"小政府"以公廨钱养官、以藩镇养兵，轻税简政造就贞观—开元盛世。但同一套制度安排在 130 年后引爆"安史之乱"——分权过度、干弱枝强，竟是"文景之治"晚期的翻版；刘晏以专营救火成功，中央权威却再不可复，帝国滑入"讨饭财政"与羡余贿赂的暮年。</p>
+      </div>
+      <div class="anat">
+        <div class="a-row"><div class="a-k">起点压力</div><div class="a-v">数百年世族模式与庄园经济困扰历代治国者，王莽亡、刘秀败，"鲜有改造成功者"。隋唐科举制的出现，才"从制度上切断了世族繁衍的根源"。唐太宗亲自打压门阀（修《氏族志》强令崔家降为第三等，"止取今日官爵高下作等级"），中国社会自此完成从世族形态到<strong>士绅形态</strong>的转型——"富贵不过三代"正是唐宋之后平民社会的另类描述。代价同样清晰：科举造成知识阶层对国家权力的绝对依赖，"曾独立存在的知识分子阶层在中国历史上完全地消失了"；商人阶层则仍被排斥在外——太宗明嘱房玄龄：工商杂流"只可以让他们多多发财，一定不能授以官职"，且须着黑衣以别贵贱，此语被历代奉为圭臬。</div></div>
+        <div class="a-row"><div class="a-k">政策装置</div><div class="a-v">
+          <p><strong>小政府三件套：</strong>①<u>轻税简政</u>——山泽税盐税统统废罢、专营产业全数放归民间、农业税五十税一（远低于西汉三十税一）、即位当月停废潼关以东全部关卡、有唐一代商税全免；②<u>公廨钱养官</u>——中央文武最少时 643 人、全国仅七千余人，太宗竟连养官都不肯走财政：选长安七百富户为"捉钱令史"，各贷公廨钱五万、月纳息四千（年息约百分之百），以息养官，纳满一年可派一人短期为官——一笔定向征收的"特别财产税"，褒者谓其粗糙而直接地实现高薪养廉（唐初吏治为历代最好），贬者谓其本质与算缗一致且抬高全社会资金成本；③<u>兵在藩镇</u>——地方财政养驻军，将帅"不久任、不遥领、不兼统"。让富人养官、让地方养兵，中央支出遂少，"小政府"因此而生——李世民算得上史上最精明的治国者之一。</p>
+          <p><strong>有计划的商品经济：</strong>城市空前繁荣（长安人口逾百万、世界最大；城市化率 20.8%，已与 1970 年代末的中国相当），但《唐律》规定交易必须在官划"令市"进行、县下不得有草市；东西两市催鼓而聚、击钲而散，商品先由市司评级定价方可出售，店铺月租官定上限——"长安城里的商品交易，与其城市规划一样，完全在政府的控制、干预之下"。丝路重通，长安为国际贸易中心。专营政策则百年间"更罢更立"数度反复（武则天纳崔融"六不可"罢征关市税；玄宗初刘彤倡盐铁复榷，十年即废）。</p>
+        </div></div>
+        <div class="a-row"><div class="a-k">结果</div><div class="a-v">前所未见的轻税简政＋统一大市场="行千里不持寸铁"的空前太平盛世。但 755 年"安史之乱"一手终结之——<strong>此乱正是分权过度的结果</strong>：节度使领兵之外兼理民政财政、俨然诸侯（安禄山兼统三道、握天下三分之一兵权），而轻赋简政之下中央"管制乏力、干弱枝强"——竟是文景晚期的翻版。乱后"数年间，天下户口什亡八九"。</div></div>
+        <div class="a-row"><div class="a-k">遗产</div><div class="a-v"><strong>刘晏变法（专营制度的归来）：</strong>危机财政的两条老路重演——先仿算缗向江淮富商"率贷"十分之二，继而"尽榷天下盐"。刘晏的修正版更精巧：<u>民产—官收—商销</u>（大减机构成本）、十三巡院打私护商、"常平盐"稳供稳价——一个"效率更高、更注重利益分配的官商合营模式"，盐利十余年增十五倍、占财政半壁，获得桑弘羊式的评价"敛不及民而用度足"。<strong>但经济救火救不了政治失血：</strong>德宗武力削藩反被攻破长安、下《罪己诏》认输，此后中央对盐铁酒专营权"被迫让渡于地方，人财物三权尽失"，皇室实际控制的州不过六分之一；中央财政沦为"讨饭财政"，靠卖官与"羡余"（节度使对皇帝的公开行贿）维持——欧阳修叹："连天子都要干受贿的事情，老百姓就更加不堪了。"中唐并发的两大周期病（土地兼并失控、财政对资源管制依赖日深）与民间资本的<u>五条出路</u>（奢侈消费、交通权贵、购地、高利贷、囤钱）一并移交给宋人。</div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- L6 -->
+  <div class="lecture" id="L6">
+    <div class="lec-band"><span class="lec-no">第六讲 · 11世纪</span><span class="lec-title">王安石变法</span><span class="lec-pole shang">商鞅极 · 终结之作</span></div>
+    <div class="lec-body">
+      <div class="verdict terra">
+        <p>帝制时期最后一次整体配套体制改革："在变法之前是一个中国，变法以后是另外一个中国。"一位道德高尚、百毒不侵的清官，勤勤恳恳、日以继夜地把国家搞亡掉了——变法启动第 57 年北宋灭亡。它的失败给后来的治国者造成巨大心理阴影：自此历代放弃体制内制度创新，"真正严肃的经济问题只剩下一个，那就是——稳定"。而恰在此时，"世界时间"的钟摆悄然西移。</p>
+      </div>
+      <div class="anat">
+        <div class="a-row"><div class="a-k">起点压力</div><div class="a-v"><strong>宋政权的闭环逻辑：</strong>赵匡胤"杯酒释兵权"从制度上刨除了藩镇难题——960 至 1860 年整整九百年，中国再未发生地方挑战中央（第一支柱彻底定型）；但兵权收上来就得中央养兵，宋养兵 140 万为历代之最，"财政收入的百分之八十用在了军费开支上"（朱熹），是为<u>兵政之患</u>。于是宋制呈戏剧性两面：一面对民间空前宽松（取消县下市集之禁、商税极低且公示、程颐"本朝超越古今者五事"、百年不杀大臣），一面国有专营空前严酷（茶盐酒醋矾乃至香药象牙尽入禁榷，私贩矾一两、私盐十斤即处死）——<em>国有资本锁定"资源性、必需性、暴利性"的上游，民间资本散布"分散、难管、利薄"的中下游，"楚河汉界"的格局到宋代完全形成，"并作为一个传统，顽强地衍续到了今天"</em>。加之公开纵容官员经商、不抑兼并、买扑钞引授权经营，<strong>士绅经济（官商经济）就此定型</strong>。开国百年，毛病齐发：贫富悬殊、半数土地入于权贵、中央财政捉襟见肘——闭环转到了"必须改革"的刻度：防地方→收兵权→养兵→增收→扩国营→挤民间→权贵泛滥，"在大一统的治理模式之下，这似乎是一个无法打开的闭环逻辑"。</div></div>
+        <div class="a-row"><div class="a-k">政策装置</div><div class="a-v">
+          <p><strong>延和殿廷辩（千年第二回）：</strong>1069 年，王安石对司马光——开源对节流。王安石要学商鞅、汉武帝、刘晏，行高度集权的国家主义；司马光只有经典儒家的节俭、以农为本、藏富于民。王安石抛出"民不益赋而国用饶"，司马光当场翻脸：这话是桑弘羊拿去欺骗汉武帝的，"天下财富有定量，不在民间就在政府"——作者按：这个观察在经济思想史上很重要，到今天还有争议。二十岁的神宗（历代激进变法皇帝几乎全是年轻人：秦孝公、汉武帝、唐德宗、宋神宗、光绪）六个月后选择了那个说出"天变不足畏，祖宗不足法，人言不足恤"的拗相公。</p>
+          <p><strong>三大法（另立"小国务院"制置三司条例司统筹）：</strong><u>均输法</u>——桑弘羊版本复活，国家统购统销重要生产资料，废止行之多年的买扑钞引通商制；<u>市易法</u>——政府成为最大的商店、银行与物流中心，连水果芝麻都垄断（神宗都觉过分，王安石答：立法关键在是否害民，"不应该因为它的琐碎就罢废了"）；<u>青苗法</u>——王安石独创，官府向农户放贷、息二分、一年两贷。作者判词："跟所有的计划经济大师一样，初衷就是两个：尽可能多地增加财政收入；打击富豪，缩小贫富差距。而其结果也是同样的两个：前者短期内迅速实现、长远注定失败；后者从来不会实现。"</p>
+        </div></div>
+        <div class="a-row"><div class="a-k">结果</div><div class="a-v">国库果然为之一饱（市易司收入相当于两税总收入三成、青苗息钱多到新建 52 座仓库），弊端旋踵而至：均输使发运使衙门成了"权力空前膨胀的政府型公司"，采购价与市场背道而驰，官员中饱私囊；市易"尽收天下之货"，商人绕开汴梁而行，城市商业秩序被彻底破坏；青苗到执行层全盘变味——霉粮放出、新粮收回、压秤加息、摊派指标、灾年抓人，"农民只好卖地卖儿女"。王孝通一言蔽之：自王安石变法之后，"商业早入于衰颓之境矣"。神宗死、新法废、司马光复相却任命不通财政的小学家掌户部——"儒家在经济治理上是多么无能"；随后王党复起，<strong>蔡京把王安石的国家主义推到极致并"毫无悬念地转型为权贵经济"</strong>（悍然废旧盐钞，持钞商人一夜赤贫、上吊跳河者不乏其人）。从 1069 变法到 1126 蔡京罢官，极端国有专营 57 年，恰是北宋由半衰走向灭亡的 57 年。</div></div>
+        <div class="a-row"><div class="a-k">遗产</div><div class="a-v"><strong>三笔遗产，笔笔千斤：</strong>①<u>人物学的警告</u>——王安石清廉、不好色、不敛财、爱国、才华盖世，却制造了一个贪婪的集权制度，其后继者必将贪婪推向极致："在这个世界上，人性的贪婪都是需要制度基础的……<em>比人的贪婪更可怕的是制度的贪婪</em>。"这类"理财大师"往往正是中国式治乱循环的转折点。②<u>改革心理学的休克</u>——如此才华、如此环境、如此全面的配套改革竟惨败至此，"令所有的后来者对激进式变革望而却步"，基于法家战略与儒家伦理的治国手段"进不可得，退亦不可得"；南宋明清历代基本放弃体制内制度创新，用更严酷的管制维持统治，"最终走进了闭关锁国的死胡同"——自王安石之后，中国真正严肃的经济问题只剩"稳定"。③<u>世界时间的错身</u>——1085 年比萨自由城市、1087 年博洛尼亚大学诞生（"城市的空气使人自由"），欧洲长出"自由民、自治城市、私产合法性、限制君权"的法权萌芽；而王安石变法空前强化政府管制，中国的城市与学校始终为政权牢牢控制——"这是东西方文明走向不同演进道路的根本性原因"。20 世纪王安石借国家主义思潮"咸鱼翻身"（梁启超翻案、列宁称许、郭沫若推崇、毛泽东与商鞅并尊），本身即是历代变法同一逻辑的现代回响。</div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- L7 -->
+  <div class="lecture" id="L7">
+    <div class="lec-band"><span class="lec-no">第七讲 · 14–19世纪</span><span class="lec-title">明清停滞</span><span class="lec-pole shang">商鞅极 · 恶质化</span></div>
+    <div class="lec-body">
+      <div class="verdict terra">
+        <p>大陆孤立主义的后果：从 1300 到 1800 年，中国人均 GDP 增长率为零（麦迪森）——外部世界十倍百倍狂奔时，"我们像龟兔赛跑中的那只兔子一样，在一棵枯树下酣睡了五百年"。这不是昏聩，而是一套精密的"专制智慧"：对外铁桶阵，对内散沙术，四大制度全面恶质化，把帝国锻造成一个效率与管理成本同步极低的"超稳定结构"——从"稳定压倒一切"到"稳定压垮一切"。</p>
+      </div>
+      <div class="anat">
+        <div class="a-row"><div class="a-k">起点压力</div><div class="a-v">王安石变法的失败使体制内创新的动力与勇气彻底丧失；南宋偏安、蒙元铁血九十八年之后，明的汉族统治者带着巨大心理阴影立国——黄仁宇："明太祖主要关心的是建立和永远保持一种政治现状，他不关心经济的发展。"帝国不再寻求领土扩张，一亿人的内需市场已经足够；治国者发现了"专制的秘密"：<em>危险无非外患与内忧——除外患，断绝一切联系；解内忧，把人民打成散沙。</em></div></div>
+        <div class="a-row"><div class="a-k">政策装置</div><div class="a-v">
+          <p><strong>四大制度的恶质化：</strong>①朱元璋废宰相、雍正设军机处——皇权彻底倾轧相权，"恐怖平衡"被打破；②《永乐大典》《四库全书》从文本上抹除异端、文字狱使文人俱成"精神上的侏儒"；③科举被神圣化，顺治立卧碑三禁令——生员不得言事、不得立盟结社、不得刊刻文字，"恰好是现代人所要争取的言论自由、结社自由和出版自由"；④宏观上对外遏制贸易、对内男耕女织、工商特权经营。</p>
+          <p><strong>铁桶阵（对外）：</strong>北修长城（丝路日塞，欧洲被迫面向大海——"欧洲文明日后的走向，应当感谢明王朝的闭关政策"）；南禁海运需要"自宫的勇气"——明初坐拥世界最大海港与最强海军、以朝贡秩序为轴心统领西太平洋政治经济联盟（滨下武志），郑和七下西洋正是对这一联盟的大巡检；<u>1492 年的双重巧合</u>：明廷下令闭关锁国之年，哥伦布扬帆西行——"郑和的大战船被搁置朽烂……中国还是决定转过身去背对世界"（保罗·肯尼迪）。清承明制，迁界禁海、乾隆一口通商，把外商圈进广州"夷馆"的铁栅栏；1792 年马戛尔尼使团七项平等通商请求被乾隆一条不准——"天朝无所不有，尔之奇巧不贵"。</p>
+          <p><strong>散沙术（对内）：</strong>朱元璋最爱读《道德经》，以"鸡犬相闻，老死不相往来"为理想图景——把国家打成一盘散沙，人凝聚不起来，就不可能造反。经济载体是<u>男耕女织</u>：宋代"水稻革命"（占城稻两熟三熟，造就第一个亿级人口帝国，统治者失去对外掠夺土地人口的刚性需求）＋明代"棉花革命"（朱元璋强制植棉，棉纺织成第一大手工业，明清年产棉布约六亿匹、总产量是英国工业革命早期的六倍）——两场革命在"耕""织"两端补齐了闭关锁国的必要条件。</p>
+        </div></div>
+        <div class="a-row"><div class="a-k">结果</div><div class="a-v"><strong>世界级悖论：</strong>同样以纺织业起步，英国引爆了工业革命，中国却为自闭创造了条件——因为"一户一织"的家庭纺织几乎没有劳动与时间成本，规模化工场毫无生存空间：<em>从 14 世纪到 19 世纪 80 年代，中国没有出现过一家手工业棉纺织工场</em>（赵冈、陈钟毅）；乡村手工业在欧洲是"工业化原型"，在中国"则变成了机械工业化的障碍"。<strong>城市化的离心现象：</strong>中国城市化率的最高点在 13 世纪的南宋，此后掉头向下（西方恰于同期开始上升）；明清市镇几何级增多（宋 71 座→明 316 座→清中期全国约三万个）而大城市停止扩张，"油水分离"——政治权力集中于城市（权钱交易与奢侈消费中心），经济力量散布于市镇村庄，资本、人才、资源的集聚效应根本无法发挥。男耕女织＋扁平散点市镇＋反流动的户籍制="以保持低效率为前提的超稳定结构"——男耕女织确乎是一个中国式的<u>"唯美主义的诅咒"</u>。"康乾盛世"人口增至三亿、国库积银七千万两，但站在人类发展史角度，"这所谓的盛世实在是一个莫大的讽刺"：同期欧洲 369 项最重要科技成就的 38% 密集诞生，中国经济总量的增加"全部来自于人口倍增的效应"。</div></div>
+        <div class="a-row"><div class="a-k">遗产</div><div class="a-v"><strong>官商泥潭：</strong>买扑钞引在明清完善为特许授权制——开中制（以盐养兵，晋商崛起）→折色制（徽商崛起）→纲盐制（窝本世袭、册上无名不得从业），加上十三行保商制度：三大商帮富可敌国（伍秉鉴为西人眼中的世界首富），却"都是被豢养大的寄生虫"，其财富与竞争、开拓、技术革新无关，"因而与进步无关"；商人发达后三件大事——构筑官商网络、供子弟科举、重建宗族，"以商致富，以宦贵之"。<strong>破局：</strong>1826 年帝国首现贸易逆差（"中国经济被西方超越的标志性事件"）→鸦片战争（西方学界倾向视战争为中国衰落的<u>结果</u>而非原因）；内则白莲教、太平天国耗尽国库，湘淮军以厘金自筹军饷——"自宋太祖之后九百年不复出现的藩镇现象死灰复燃"。超稳定结构被枪炮打破，而"维持大一统的基本制度未遭致命挑战，体制内改革的动力和空间仍然存在"——可惜后来的改革者一次次作出"不可宽恕的最劣选择"。</div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- L8 -->
+  <div class="lecture" id="L8">
+    <div class="lec-band"><span class="lec-no">第八讲 · 1860–1911</span><span class="lec-title">洋务运动</span><span class="lec-pole mix">官督商办 · 输入式</span></div>
+    <div class="lec-body">
+      <div class="verdict terra">
+        <p>缺乏现代性的现代化变革：历代经济变革中最凶险的一役、史上第一次输入式改革。它打下了基本完备的工业化底盘，却因四条制度性缺陷无法让中国真正告别过去；而与它几乎同时起跑的明治维新，用"另一种取舍"拉开了中日百年国运。托克维尔的判词悬在全程上方——"对于一个坏政府来说，最危险的时刻通常就是它开始改革的时刻。"</p>
+      </div>
+      <div class="anat">
+        <div class="a-row"><div class="a-k">起点压力</div><div class="a-v">外敌环伺、财政濒破、意识形态破冰难乎其难，还要完成"从千年农耕文明向工业文明转型的惊险一跃"——李鸿章："我朝处数千年未有之奇局。"但作者首先校正一个流行叙事：<strong>洋务运动不是一场"迟到的运动"</strong>——19 世纪 60 年代中期，美国刚打完南北战争、德国尚未统一、明治维新与洋务几乎同时拉开帷幕（卡内基建钢厂与李鸿章上《置办外国铁厂机器折》同在 1865 年）。"迟到不是落后的理由"，败因另有所在。</div></div>
+        <div class="a-row"><div class="a-k">政策装置</div><div class="a-v">
+          <p><strong>发展与稳定的取舍（铁路之争）：</strong>三十年间朝廷为修不修铁路吵翻了天。除迷信保守外，连支持洋务的曾国藩也反对——铁路加快流通与人口流动，将彻底打破男耕女织的小农结构，"以豪强而夺贫民之利"：典型儒家思维，<em>稳定永远被置于发展之上</em>。铁路之争遂非技术之争而是意识形态之争。李鸿章修 11 公里运煤铁路要谎称"马路"，1891 年全国铁路仅 360 余公里，同期日本已超 3300 公里。</p>
+          <p><strong>国营与民营的取舍（轮船招商局）：</strong>1872 年李鸿章创"官督商办"——近代中国第一个规范意义上的公司章程，"政府与商人在资本的意义上第一次实现对等"；十年间击败英美船务，带动第一批 36 家股份制企业，是为洋务第一个小阳春。但内在逻辑冲突随即爆发：洋务派办洋务的唯一目标是"强兵富国"，政府必须握有主导权并成为最大获益者；而民间能量一旦被激活必然要求放松管制——1884 年借挪款丑闻，买办层被"净身出局"（<u>第一次国进民退</u>）。杨小凯的制度诊断成为全书通用判词：政府垄断工业利益与其独立仲裁者地位相冲突，"既是裁判，又是球员"，制度化国家机会主义压制私人企业。此后洋务派筹资日难（清政府全部税收仅占国民纯收入 2.4%），投资手笔越来越小。</p>
+          <p><strong>中日对比：</strong>日本人出发时也想"西方的技术、东方的道德"，1871 年欧美考察后彻底转向（伊藤博文"始惊、次醉、终狂"）：先改教育、再行宪政（废藩置县、开国会、颁宪法），经济上 1880 年代<u>坚决民营化</u>——官营企业"完成历史使命后售给民间"（"示以实利，以诱人民"），虽有贱卖丑闻，私营化后企业扭亏为盈，三井三菱财阀诞生；甲午赔款 2.6 亿两（合银 3.4 亿两、相当于日本年财政 6.4 倍）投入铁路航运并建立金本位。同期中国：李鸿章 1870 年代即断言中国"独火器万不能及"，张之洞 1894 年仍是"中体西用"——"二十余年思想几无进步"。<em>正是两种不同的路径选择，导致了这两个东亚国家后来截然不同的国运。</em></p>
+        </div></div>
+        <div class="a-row"><div class="a-k">结果</div><div class="a-v"><strong>甲午之后的第二、第三阶段：</strong>"唤起吾国四千年之大梦，实自甲午一役始也"（梁启超）——工业化由政府推动转为民间崛起（四年新设厂矿投资超前二十余年总和），标志性事件有二：状元张謇下海创大生纱厂（费正清："正是这些维新派首创了资产阶级，或者可以说是发明了资产阶级"），与 1900 年商人斡旋"东南互保"——新兴企业家阶层第一次公开参政，也意味着中央权威实质瓦解。庚子赔款 4.5 亿两（本息 9.8 亿，相当于十一年财政收入）后清廷突然激进开放：1904 年《钦定大清商律》使沿袭千年的<u>特许主义被现代商业的准则主义取代</u>，"民之投资于实业者若鹜"，商会联成一体、会员二十万；1905 年匆忙<u>废科举</u>——精英阶层从孔孟中解放的同时，集权者"失去了对全民思想及精英阶层的控制"，反对力量自此散溢体制之外（对照：1977 年改革开放的第一个变革措施正是恢复高考，"一废一复，颇可参研"）。<strong>商人与知识精英在体制外"会师"</strong>→立宪运动（商人是最强推动力："振兴实业之关键在于通过立宪确立法治，限制政权，保障民权"）→朝廷拖延弹压、皇族内阁排汉→1911 年铁路国有化（<u>第二次国进民退</u>：民间股东白担四成损失）→保路运动→武昌起义。清政府"经济改革上超乎寻常的激进开放，政治改革上犹豫摇摆缺乏远见"，相继失去所有群体的信任，颠覆式革命遂成必然。</div></div>
+        <div class="a-row"><div class="a-k">遗产</div><div class="a-v"><strong>四条制度性缺陷（后世变革的反面清单）：</strong>①<u>缺乏顶层设计</u>——由汉族地方官员自发展开而非中央发动，变革随机、因人而异、极易变型中断；②<u>从未涉及财政、货币和土地</u>——"这三大元素是历代经济变革的核心命题"，只在工业领域打"增量改革"，增量对存量没有形成根本替代；③<u>不是普惠性运动</u>——中央政府自始至终未在改革中获得经济利益，"既要承担改革的成本风险、制度风险，又要承担道德风险，却看不到政权因此巩固的迹象"，故朝廷始终对改革抱持敌意，成为最被动的集团，而启动改革者（盛宣怀、李鸿章家族）反成最大获利者与权贵贪腐典型；④<u>现代化有余，现代性不足</u>——"任何经济变革都是政治理念在经济领域的投射性体现，经济制度是政治制度的影子，影子无法背叛本体"，政改滞后使温和改革的"时间窗口"猛然关闭。</div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- L9 -->
+  <div class="lecture" id="L9">
+    <div class="lec-band"><span class="lec-no">第九讲 · 1911–1949</span><span class="lec-title">两个民国</span><span class="lec-pole mix">大自由 → 统制经济</span></div>
+    <div class="lec-body">
+      <div class="verdict terra">
+        <p>三十八年里有两个民国、两场南辕北辙的试验：北洋的大自由大混乱，与国民党的"统制经济"集权变革——无一例外都以失败告终。中国的现代化运动在这一时期陷入进退维艰的闭环型矛盾：放权则乱、集权则死；而商人阶层在 1927 年与暴力政治的结盟，"不仅是对无产阶级的背叛，同时也是对其自身的背叛"。</p>
+      </div>
+      <div class="anat">
+        <div class="a-row"><div class="a-k">起点压力</div><div class="a-v"><strong>北洋民国＝四大基本制度的全面崩坏：</strong>中央对地方失控（联省自治）、思想控制松动（打倒孔家店）、精英全数流散体制之外（科举已废，独立知识分子阶层春秋之后再次集体出现）、产业资源归于民间——"这是自五胡乱华以来，1400 年间第一次出现中央权力真空"，也是继春秋战国、魏晋南北朝之后的<u>第三次思想大解放</u>（三次全数出现在中央集权瓦解或丧失的时期）。绝对自由，而自由又十分吓人：旧治理模式不复存在，建设性的新模式却没有出现，共和政体"很像一个匆忙制造的仿制品"。</div></div>
+        <div class="a-row"><div class="a-k">政策装置</div><div class="a-v">
+          <p><strong>试验一 · 极度自由（1911–1927）：</strong>民营经济空前强大，国史上堪与对应的仅有汉初文景。①<u>金融业民营化</u>——"中行事件"抗令拒兑后，中国银行经三次扩募商股至民资占 99.75%，"昔日的中央银行竟然就此实现了完全的民营化"；上海银行公会联合全国、以拒购国债与中央公开博弈，逼出以关税余额为偿债基金、由海关第三方管理的国债机制——"中央权威一地鸡毛"。②企业家夺回<u>生产资料定价权</u>（面粉、纱布交易所与日商决裂；虞洽卿创第一家正规证券物品交易所）。③第二次工业化浪潮：主角是逐利的新兴企业家、布局轻工民生、以中小企业为主流——"这一特征与 1978 年之后的中国民营公司的成长路径惊人的类似"；工业增长率 13.4%–15%，世界领先。④三种<u>地方自治试验</u>：军阀模范省（阎锡山刻意修窄轨铁路以"闭门成市"——诸侯经济的活化石）、商人自治（1924 年虞洽卿以总商会实际治理上海三年）、模范城市（张謇之南通，"中国最进步的城市"；1922 年民意测验张謇为全国"最景仰之人物"——两千年来商人阶层重要性之顶点）。但这些试验"因缺乏广泛的民众基础和政治理论支持而显得幼稚和缺乏持续性"——白吉尔判词：<em>"一个不自由年代中的自由主义的失败。"</em></p>
+          <p><strong>转折 · 1927：</strong>工人阶层崛起（1913 年 60 万→1924 年逾 500 万）而只有读过马列的共产党人把它当作独立力量来倚重；五卅之后总工会与总商会成对立阵营，"非常脆弱和不成熟的中国市民社会内部出现了分裂"。商人集团没有足够的智慧与耐心走独立工会、社会福利、议会制度的化解之路，"选择了与暴力政治结盟"：出资供蒋介石以武力镇压工人组织——四一二之后，自晚清以来两代人渐进变革从未越出的议会底线，"被中国最优秀的商人精英所抛弃"。共产党则自此向农村转移，由"工人党"渐变为"农民党"。</p>
+          <p><strong>试验二 · 统制经济（1927–1949）：</strong>国民党自诞生即信奉国家主义，理论源头是孙中山（"拟将一概工业组成一极大公司，归诸中国人民公有"；土地国有论者——与王莽并列的唯二）。蒋介石明言"中国经济建设之政策，应为计划经济"，《建设大纲草案》开列国营清单（交通、公用、钢铁、化工、矿业等上游产业）——"与晚清李鸿章、盛宣怀的国营理念，乃至以后中国共产党的经济政策皆有相似之处"。<u>挤压民资五步</u>：组织瓦解（总商会被"商整会"取代）→国债绑架（宋子文设计的循环陷阱，银行所持证券八成为国债，"平等关系从此终结"）→控制交易所→借 1934 金融危机收编民营工业→<b>1935 银行国有化</b>（第三次国进民退，国营资本占比 12%→72.8%，"企业家作为一个有力量的阶层是终结了"）。集权效应亦真实：关税自主、废厘金、法币改革统一货币，1928–1937"黄金十年"工业年均增长 8.7%——与大萧条后各国国家主义潮流（斯大林、希特勒、罗斯福新政）同频共振。</p>
+        </div></div>
+        <div class="a-row"><div class="a-k">结果</div><div class="a-v"><strong>1945 之后的连环失误（政权失血的完整病历）：</strong>①产业——<u>敌产国营化</u>（第四次国进民退），"混合经济"方案被宋子文碾压，2243 个接收企业拨交国营 1017、标卖民营仅 114，国家资本控制钢铁 90%、石油 100%，"一个强大而垄断的国家资本主义格局全面形成"，而国企只恢复生产 852 个、民间企业家彻底失望（荣德生："能用民力，不必国营……官从民出，事不切己，徒然增加浪费而已"——"至今是普世道理，可惜不为当政者闻"）；②货币——法币兑中储券 1:200，2.57 亿沦陷区人民一夜集体破产（"昨天放炮，今天上吊"），继而滥发（三年增 1180 倍）引爆恶性通胀，金圆券"打虎"打到孔令侃便打不下去；③土地——无所作为，而共产党 1947《土地法大纲》明确"耕者有其田"且承认土地私有。"就这样，战后短短五年间，国民党政府在敌产国营化中失去了私营企业家的支持，在货币改革中失去了城市居民的支持，而在土地改革中失去了农民的支持"——最后打出"民主牌"，"而务实的人民在民主牌与土地牌的选择中，毫不犹豫地抓住了后者"。</div></div>
+        <div class="a-row"><div class="a-k">遗产</div><div class="a-v">两个民国为下一个时代留下三重遗产：一套现成的统制经济理论与国营清单（被 1949 年后放大执行）；一份货币失控导致政权崩塌的技术档案（1988 年物价闯关与之"前后参照"）；以及一个再次被验证的铁律——<em>得土地者得民心</em>。</div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- L10 -->
+  <div class="lecture" id="L10">
+    <div class="lec-band"><span class="lec-no">第十讲 · 1949–1976</span><span class="lec-title">计划经济</span><span class="lec-pole shang">商鞅极 · 工业化版</span></div>
+    <div class="lec-body">
+      <div class="verdict terra">
+        <p>从自负到自毁的大试验：始于"致命的自负"，终于"通往奴役之路"（哈耶克书名）。但它并非现代化的改弦易辙，而是"同一终极目标下的、理想主义色彩浓烈的偏执行动"——因为洋务以来各派共持的三大原则从未更改：大一统、强国、国有经济优先。中国的现代化，是一场终极目标从未更改过、经历了多轮技术性试验的长期运动。</p>
+      </div>
+      <div class="anat">
+        <div class="a-row"><div class="a-k">起点压力</div><div class="a-v">作者先立史观：翻检保守派、洋务派、维新派、革命派、国共两党的主张，"在一些根本性的立场上，相近之处远远大于相异之处"——<strong>维持统一与中央集权的大一统原则、抵御外敌的强国原则、发展国营事业节制民间资本的国有优先原则</strong>，三者自洋务确立，历清、民国、当代三代从未放弃。1949–1976 应放在这一史观下反思。</div></div>
+        <div class="a-row"><div class="a-k">政策装置</div><div class="a-v">
+          <p><strong>上海试验（1949，计划经济的体系雏形）：</strong>陈云三管齐下——<u>资本市场管制</u>（查封远东最大证交所，"亚洲金融中心的功能被摘除，香港取代了它的地位"，证交所重回上海是 41 年后）；<u>生产资料管制</u>（"两白一黑"数轮吃进抛售击溃全部民间炒家）；<u>流通渠道管制</u>（全国性贸易公司＋农村供销社垄断每一个重要流通领域，私营染指即为"投机倒把"）。外资则以重征地价税"和平驱逐"（顾准自述）。原料、销售、资本三头一夹，私营制造企业"成了饼干中的夹心层"——毛泽东评价此役"不下于淮海战役"；作者按语：<em>从中可以看到汉武帝变法"平准"和"均输"的明显痕迹</em>。</p>
+          <p><strong>"一五"计划（1953–57，建设模式）：</strong>苏联"156 工程"（8500 名专家、"技术转让史上前所未有"）＋重工业占投资 85%＋斯大林式"全统全包"计委体系（投资、物资、劳力、产品、盈亏全由国家一手统配）。成绩单：GDP 年均 9.2%——"这个数字与 1978 到 2008 年的平均数 9.4% 非常接近"。</p>
+          <p><strong>七年消灭私营（原计划十八年）：</strong>夹心化→"五反"查税（45 万户私营业主 76% 被定"五毒"、资本家被彻底妖魔化——"这种心理反应仅可见于汉武帝的告缗令时期"）→"一五"边缘化→定息赎买（5% 年息的"退出通道"）→"绝种"（毛泽东："就是要使资本主义绝种，小生产也绝种"）；1956 年 1 月，北京十天、上海一纸完成全行业公私合营——<u>第五次国进民退，有产阶层被整体切除</u>，连毛本人都说"谁料得到？现在又没有孔明"。</p>
+          <p><strong>回收土地（政府的三大收益）：</strong>《土地法大纲》颁布 11 年后，分到农民手中的土地经互助组→合作社→人民公社又收归集体——"因为农民失去了对土地交易的处置权，实质上便也失去了所有权，集体化便是国有化的一种表现形式"；明清以来基于小农经济的宗族社会被彻底破坏，"从此，中国人再无故乡"。国家由此获三大收益：①统购统销 32 年，以工农剪刀差为工业化输血（周天勇估算最保守 30 万亿元）；②票证经济在短缺下锁死物价；③户籍＋公社控制人口流动（1700 万知青下乡"以极残酷的方式化解了城市就业的压力"）。判词：<em>"在整个计划经济时期，农民是一个被背叛和剥夺的阶层。"</em>（1958–1978 二十年农民人均收入增长不到 2.6 元。）</p>
+        </div></div>
+        <div class="a-row"><div class="a-k">结果</div><div class="a-v"><strong>两次自毁性运动：</strong>"大跃进"——1070 万吨钢指标催出十万小高炉与"人有多大胆，地有多大产"，300 多万吨废钢、生态破坏、2082 万人突击进城，随后三年大饥荒（刘少奇："三分天灾，七分人祸"），"二五"期间工农业总产值年均增长仅 0.6%；"三线建设"——以"立即要打仗"为前提，17 年投入 2052 亿元、全国一半工业投资，"村落式、瓜蔓式、羊拉屎式"布局，战争没有如期爆发，厂区终成鬼城，"又一次的国力虚耗"。<strong>"文革"十年：</strong>经济指挥体系彻底瘫痪（1968 年成为新中国唯一没有国民经济计划的一年）；就四大基本制度而言，这是"两千年国史中集权程度最高的一个时期"。代价的国际坐标：中国长期增长潜力约 9%，1957–1978 实际仅 5.4%（胡鞍钢）；1960 年中日经济总量相当，1977 年中国不到日本三分之一、只相当于美国十分之一——正是这十年，日本成为超级经济大国、四小龙崛起。</div></div>
+        <div class="a-row"><div class="a-k">遗产</div><div class="a-v">作者驳"若无大跃进文革则计划经济可行"论：国家治理逻辑从 50 年代至改革开放前一以贯之，"文革无非使得计划经济制度的负面性以更剧烈和更极端的方式呈现"。到 1976 年，中国是一个封闭自守、与世界经济基本绝缘、高度集中而没有活力的经济体——再借司马光评汉武帝："有亡秦之失，而免亡秦之祸。"它为改革开放留下两笔资产：<u>把计划经济的弊端彻底暴露，为改革创造了心理空间和体制空间</u>；以及一个从未松动的政治底盘，使下一场改革注定是"在大一统框架内"的技术性突围。</div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- L11 -->
+  <div class="lecture" id="L11">
+    <div class="lec-band"><span class="lec-no">第十一讲 · 1978–1993</span><span class="lec-title">改革开放（上）</span><span class="lec-pole guan">管仲极 · 增量版</span></div>
+    <div class="lec-body">
+      <div class="verdict terra">
+        <p>没有蓝图的改革："总设计师"的称谓容易产生歧义——这实际上是一场且行且思、边做边改的试验。两种既成社会主义模式皆被证伪之后，中国被逼上独自探索之路；变革的真正动力从土地里迸发，数以百万计的农民成为计划经济的"掘墓人"。但 1988 年物价闯关的意外失利，使中国"与全球的民主化浪潮擦肩而过"，也为集权的回归铺好了台阶。</p>
+      </div>
+      <div class="anat">
+        <div class="a-row"><div class="a-k">起点压力</div><div class="a-v">鲜为人注意的事实：决策层最初仍寄望"一五"模式再现——1978 年谷牧遍访西欧、邓小平亲赴日本新加坡招商 120 个项目，但"西欧人和日本人不像苏联人那样无私"，计划流产。理论上同样无路：斯大林—毛泽东的命令型模式"此路不通"；市场社会主义（东欧＋孙冶方"大权独揽、小权分散"）也被其宗师亲口证伪——1979 年偷偷请来的布鲁斯与锡克告诉中国同志，"东欧的试验其实也是失败的"。<strong>两大既成模式皆不通，便把渴望变革的中国逼上一条独自探索、充满不确定性的道路</strong>——"中国特色的社会主义市场经济"的提法应从这一理论层面理解。邓（务实功利，"摸着石头过河""让一部分人先富起来""猫论""不争论"）与陈云（"鸟笼经济"）经济主张有别，但在"四项基本原则"与"稳定压倒一切"上高度共识——<u>这两句话划出了本次经济改革的政治边界</u>。由此勾勒出本轮改革四特征：功利务实、被动渐进、非均衡、不彻底。</div></div>
+        <div class="a-row"><div class="a-k">政策装置</div><div class="a-v">
+          <p><strong>增量改革——由农民发动的工业化运动：</strong>15 年间最重要的经济事件几乎都发生在"城墙"外。小岗村在大旱绝境中被逼上包产到户（"土地出产之少，主要不在于土地肥沃程度，而在于居民是否享有自由"——孟德斯鸠），此乃对人民公社的否定、一次<u>不彻底的土地改革</u>（未触及土地性质，为日后纠纷埋下种子），却一次性解决粮食问题——"粮稳而心定，此举居功阙伟"；更大的效应是农民从土地束缚中"溢出"，洗脚上田、"村村点火，乡乡冒烟"，民营经济在 1956 年"绝种"后复活，对铁桶般的计划体系实施<em>"蚂蚁咬堤"式的侵蚀</em>：制造环节靠"星期天工程师"偷技术，流通环节以自建专业市场破国营渠道（"贿赂门卫、爬下水道、场外摆摊"三法进广交会），金融环节则催生地下钱庄（1984 年"方兴钱庄"开业一天即被查封，民间金融被迫转入地下）。到 1986 年乡镇企业 1515 万家、产值占 GDP 两成——"五分天下有其一"；邓小平坦承："这不是我们中央的功绩……是我个人没有预料到的。"</p>
+          <p><strong>中央的角色（并非无为而治）：</strong>①放权让利——国企扩权试点、财政"分灶吃饭"五大包干，为中央卸包袱、给复苏留空间；②<u>非均衡战略</u>（本轮改革最有创见的一着）——蛇口工业区以土地批租破局、四大特区、十四个沿海城市，"东南沿海优先"彻底打破计划时代的投资布局，"计划经济的中国如同一潭淤泥沉积的死水……只能从最薄弱的角落入手，用力地把水搅浑"；特区、先富、超国民待遇、价格双轨，均是对"均衡性缺陷"的主动打破；③"一手软，一手硬"——经济上放，思想上收。</p>
+          <p><strong>地方的角色：</strong>苏南模式＝"地方政府公司主义"（能人身兼行政领导与企业法人，无偿调动土地税收资源）；温州模式＝官员的<u>冒险支持</u>（第一张个体执照、第一份股份合作制章程——"若没有这些人的冒险支持，私营经济的萌芽是不可思议的事情"）。两种模式共同印证本书基本观点：<em>在大一统集权制度下，中央与地方各有行政诉求、互相博弈补充，"政府从来没有放弃对经济的干预与掌控"</em>——所谓 80 年代"政府无为而治"是不准确的，真实情况是"中央充分放权、地方大胆主导、民间积极参与"。</p>
+          <p><strong>"哪里是改革的主战场"：</strong>1984 年后两派对峙——厉以宁"企业主体改革派"（股份制先行，"改革的成功取决于所有制改革的成功"）vs 吴敬琏"整体协调改革派"（企业、市场、宏观调控三支柱同步配套；区分"行政性分权"与"经济性分权"——"分权的命令经济是一种最坏的命令经济"）。决策层摇摆不定、两案分头试点。作者的复盘：两案"可能都走得通"，也"可能都走不通"——因为布鲁斯 1979 年就告诫过："经济体制改革要以政治体制改革为条件……归根结底，改革是政治和社会问题。"</p>
+        </div></div>
+        <div class="a-row"><div class="a-k">结果</div><div class="a-v"><strong>1988 物价闯关——转折点上的意外失利：</strong>双轨制弊端毕现、通胀抬头之际，决策层采"管住货币、放开物价"方案冒险闯关（若成，则国家把定价权还给市场，计划体制"将无凭借之地"；同年《村民委员会组织法》启动基层民主——经济政治两线"闯关"并举，且与戈尔巴乔夫改革、东欧自由化、台湾开放党禁同处一个世界时刻）。结果公众看涨恐慌引爆全国抢购挤兑，全年零售物价上涨 18.5%，紧急刹车。"在技术层面上，此次失利与 40 年前的金圆券改革颇可前后参照——都因为对民众的非理性预期估计不足而速败"；它使许多已提上日程的改革命题无限期拖延，"甚至在某种意义上，闯关失利使得中国与全球的民主化浪潮擦肩而过"。1989 年政治风波后意识形态趋保守；苏联解体、东欧变色令执政党感到空前危机——"弱中央、强地方""弱政府、强民间"的模式遭到质疑，<u>经济集权主义成为必然性的选择</u>。</div></div>
+        <div class="a-row"><div class="a-k">遗产</div><div class="a-v">80 年代堪与文景、贞观、民国初年并列，是国史上少数民营经济受鼓励的时期；但"一切改革都从违法开始"（民间改革家自诩）的草莽属性，与放权造成的老景象——中央"讨饭财政"（1992 年中央收入仅占 28%、赤字千亿，部分中央机关发不出工资）、"诸侯经济"以邻为壑（江浙年年"蚕茧大战"）——共同构成了下一讲集权回归的全部理由。历史再次移交那道老题：<em>放权的活力与集权的秩序，如何两全？</em></div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- L12 -->
+  <div class="lecture" id="L12">
+    <div class="lec-band"><span class="lec-no">第十二讲 · 1993–2013</span><span class="lec-title">改革开放（下）</span><span class="lec-pole shang">商鞅极 · 现代版</span></div>
+    <div class="lec-body">
+      <div class="verdict terra">
+        <p>集权主义的回归：改革目标从"复苏经济"微妙转移为"加强执政集团的领导能力、增强控制力以及在发展中获得更多的利益"——中央向地方收权，政府与民间争利。操盘者朱镕基是一位倾力重塑中央权威的经济集权主义者，堪与之比较的"正是那些才华超众、褒贬不一的集权主义大师们——从商鞅、桑弘羊、刘晏、王安石到宋子文"。他两度救经济于水火，也布下了直至今日"所有经济特征仍未跳出"的变革之局。</p>
+      </div>
+      <div class="anat">
+        <div class="a-row"><div class="a-k">起点压力</div><div class="a-v">1993 年投资再度过热（上半年固投增 69%），朱镕基以霹雳手段整顿（清三角债、兼掌央行、沈太福极刑），中央随即形成新思路：15 年体制外"外围战"之后，必须转入<strong>整体改革</strong>——十四届三中全会宣布"整体推进，重点突破"，吴敬琏派的整体配套方案被接纳，围绕价格、财政、税收铺开五大变革（分税制、央行体制、汇率并轨、现代企业制度、社保框架）。</div></div>
+        <div class="a-row"><div class="a-k">政策装置</div><div class="a-v">
+          <p><strong>分税制（1994，转折性事件）：</strong>把税源稳、税基广、易征收的税种大部上划（增值税央地 75:25），朱镕基奔波全国逐省谈判、"不入虎穴焉得虎子"——<u>说服广东的代价，是同意将土地出让收入归于地方，"这为日后的土地财政埋下伏笔"</u>。成效立竿见影：中央财政收入占比由 22% 急升至 56%，"中央在经济权力和利益的分配中重新获得主动权"。但这项本属联邦财税制度的安排在中国发生"变异"，成了集权手段——吴敬琏晚年不满的两处刻意"回避"：①<em>事权不清</em>——地方以约 45% 的收入承担约 72% 的支出，公共服务被层层下压到县乡（省以下财权不足 17% 却负担八成民生），"逼得地方政府不得不把自己变成企业去赚钱"；②<em>转移支付不透明</em>——中央不公开支出细目、以"项目建设"落实、拒绝协商机制，地方遂设"驻京办"、"跑部钱进"——"地方一跑部，中央的权威当然就至高无上了"。林德布洛姆"统率性规则"的生动体现。</p>
+          <p><strong>1998"三驾马车"：</strong>亚洲金融危机＋特大洪水＝1988 年后又一次大萧条（95% 工业品供大于求、1275 万下岗）。朱氏三策：积极财政启动城市化基建（国债 5100 亿＋配套信贷）；放开外贸自主权（"中国制造"远征全球，"水落石出"效应下中国取代日本成为亚洲经济火车头）；停止福利分房＋放开按揭，引爆房地产。投资、出口、内需三驾马车自此定型。</p>
+          <p><strong>国企绝地复苏（从"抓大放小"到"国退民进"）：</strong>1995 年国企亏损面超四成、负债率 78.9%，朱镕基放弃放权让利老路，改行"抓大放小"；1998 年韩国大宇破产的刺激下战略转轨——所谓"国退民进"，"并非指国有经济退出产业领域，而是<u>退缩到产业的上游地带，以形成寡头或多寡头经营的优势</u>"。这场所有制大变局"一直没有形成一个全国性的、法制化改革方案"——各地八仙过海，经营层与地方政府、银行上下其手；数以千万计的产业工人以"工龄买断"离岗；划拨 2 万亿国资做实社保个人账户的方案被否，理由是"国有资产流失"——吴敬琏八字判词：<em>"非不能也，是不为也。"</em>"非均衡的发展造成非均衡的财富分配，在经济复苏和物质财富增长的过程中，基层农民及产业工人付出了最大的代价。"</p>
+        </div></div>
+        <div class="a-row"><div class="a-k">结果</div><div class="a-v"><strong>"大国崛起"与朱氏逻辑：</strong>连续 12 年无通胀、GDP 年均 9%、入世、经济总量连超法英德——洋务以来国民财富积聚最多的年代。但格局性遗产同样清晰：①产业由轻转重（钢铁电解铝水泥投资翻倍狂飙）；②<u>央企基本盘</u>成型（国资委辖 189 家、资产 7.13 万亿，聚集石油钢铁金融通信）；③<u>土地财政</u>坐大（2012 年土地出让金 2.68 万亿、占地方财政收入 48.4%，"地价高涨不止，成为困扰中国经济的一个顽症"）；④地产替代制造成第一高利产业（福布斯中国前百富豪六成来自地产且十余年未降——美国历史上这一比例从未超过 5%）；⑤房价成为"民间财富配置的变压器"——农民、低收入者与 80 后 90 后"不得不将未来的 20 年乃至 30 年生命透支于一套房子"。<strong>第六次国进民退：</strong>2004 铁本案（九部委"五宗罪"两年后仅以虚开发票罪受审）为分水岭，民资在上游全线搁浅、"玻璃门"（名义开放、实际限制）成常态；2005"非公 36 条"几无落实；2008"四万亿"国企获九成信贷；至 2012 年，120 家央企以 31.2 万亿资产对阵 1085.72 万户私企的 31.1 万亿注册资本——"以一敌十万"，五大国有银行年利润超民企 500 强净利总和的两倍，而民企只在就业一项握有绝对优势（解决 90% 就业人口）。冯仑那段"合作而不竞争、补充而不替代、附属而不僭越"的自保之道，"颇可以与 1945 年荣德生的那封书信前后呼应"。</div></div>
+        <div class="a-row"><div class="a-k">遗产</div><div class="a-v"><strong>2013 的双重困境：</strong>发展困境——三驾马车成跛脚之势（外贸乏力、地产遭调控、只剩投资独木）、货币严重超发（M2 十年间 18.3→97.4 万亿，全球第一而 GDP 仅为美国 52.5%）、地方债 11 万亿"饮鸩止渴"；公平危机——基尼系数接近 0.5，"权贵资本主义"之警不绝于耳，民间仇富仇官，2013 年的中国"似乎正在成为一个失去共识的年代"——邓氏名言尽被打上问号，而一个更根本的诘问油然而生：<em>"如果我的国家是全球第二或第一大经济体，可是，我买不起房、看不起病、上不起学……那么，强国的意义又在哪里？"强国与利民本是相互依存的命题，当后者不至，前者自然暗淡。</em>四大利益集团各自强大、共识缺乏、目标多元——公平（政府与民间、中央与地方、有产与无产）成为最重大、亟待化解的社会改革命题。历史的三峡中，"我们看到的是一个既熟悉又陌生的中国"。</div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= 叁 结语 ================= -->
+<section id="s3">
+  <div class="sec-mark"><span class="no">第叁部分</span><span class="rule"></span></div>
+  <h2>回到历史的基本面：一、二、三、四</h2>
+  <p class="sec-lede">结语将全书装置收拢为四层判断——一个前提、两个主题、三个战场、四股新势力。作者自陈无力完成"顶层设计"，只在"历史的三峡"中给出基础性判断。</p>
+
+  <div class="verdict">
+    <p>全书的解读始终围绕几个关键词：<strong>财政、货币、土地、产业政策</strong>——在这些看似枯燥的经济名词背后，涌动着的是四大利益集团的权益分配与贫富均衡。这是一个漫长的、以大一统为主题的大国游戏；某种意义上，它与一切贴着"某某主义"标签的意识形态主张无关，当然也不是科斯所归结的"人类行为的意外后果"。</p>
+  </div>
+
+  <div class="finale">
+    <div class="fin-block">
+      <h4>一个不容置疑的前提："统一文化"是一切自由化改革的边界</h4>
+      <p>两千多年里，从来没有另外一种政治制度能够保证统一的维持，故中国对集权的容忍度远高于他国；而这种治理逻辑与自由贸易、市场经济原理存在内在冲突。最近两次短暂的放权型试验——民国初期（1916–1927）与改革开放初期（1978–1989）——尽管刺激了民间经济高速发展，"都没有寻找到维持社会稳定的良方"；若分权失控、边疆独立，"更是任何改革者所无法承受的代价"。这是一个十分痛苦的结论：<em>也许我们这一代人终其一生都无法找到其他的抉择。</em></p>
+      <p>作者进而回应弗格森式的西方共识（大一统对技术与战略发展有"窒息性效果"）：政治大一统曾让中国文明领先世界一千多年——那么窒息究竟是"制度必然的逻辑推导，还是制度劣质化之后的结果"？若是后者，有没有良性化改造的可能？最近三十多年在大一统框架下实现的"自工业革命以来全世界最长久的可持续增长"，又把这一结论带入新的矛盾境地。而郑永年的理论难题悬而未决："在西方，正是社会力量的壮大才驯服了国家力量。但是当社会经济的变迁要由国家来推动时，<strong>谁来驯服国家权力呢？</strong>"环视东亚（菲律宾败、新加坡争议、韩国难复制、台湾民主而经济停滞），作为超级大国的中国面临的困难比列国都大；任何形式的激进主义"都如同一盏大红灯笼上的配饰，而非光亮本身"。保守性的结论：<em>在看得见的未来，中国的改革很可能是一次以自由市场化为取向、以维持"统一文化"为边界、在民主法治与中央集权体制之间寻找平衡点的非西方式改革——这次变革的时间长度很可能超过我们这一代人的生命长度。</em></p>
+    </div>
+
+    <div class="fin-block">
+      <h4>两个永恒性的主题：分权与均富</h4>
+      <p><strong>兴衰的两条规律：</strong>其一，傅斯年周期说——中国拥有最广袤的内需市场与喜乐世俗消费的民众，只要有七十年稳定期必获大繁荣（文景、贞观、范仲淹中兴、康乾莫不如此），故 1978 年后的复苏乃至未来总量超美，"似是周期重演，乃必然发生的大概率事件"；其二，"先开放、后闭关"的治乱闭环——而导致这一周期性治理危机的根本原因，"正在于权益和财富分配的失衡"。由此导出两个永恒主题。</p>
+      <p><strong>分权</strong>有二：中央与地方的权益分配、政府与民间的权益分配——且存在内在次序：<em>若没有中央对地方的分权，政府对民间的分权便不可能发生。</em>毛泽东在"集—分"间的五次摇摆（1950 集、1956 放、1962 集、1966 放、70 年代再集）与改革开放的两段（包干放权→分税制收权）皆为注脚。当下首要课题是重新调整央地财政关系、扩大地方的行政权限与良性增收能力（税制改革抑卖地冲动、提高央企税收地方分成、提高资源税留成、改良投融资平台）——"只有中央与地方重新切分蛋糕，才可能在未来继续做大蛋糕"。<strong>均富</strong>亦有二：政府与民间的均富、有产与无产的均富——次序同理：<em>若没有政府对民间的均富，有产者与无产者之间的均富也不可能发生。</em>2012 年政府在经济活动中的得益比例超过 30%（物流成本三分之一是过路过桥费；房价七成为土地成本与税费），故根本之道在大规模减税与加大医疗教育社保投入——"大一统的中国很难拒绝一个强大的政府，但应该控制它的欲望"。</p>
+    </div>
+
+    <div class="fin-block">
+      <h4>三个最特殊的战场：国有经济、土地和金融业</h4>
+      <p>三者是历代变革的核心命题、"中央集权制度一诞生下来就随体而至的胎记，绝非一刀切除便可一劳永逸"——2012 年知识界"立即私有化、撤销国资委、一人一股分国资"等激进主张"看上去很美"，但回到历史基本面，问题复杂得多。</p>
+      <p><strong>国有经济：</strong>自管仲专营以来，历代政府从来没有一个有勇气消灭国有经济体系——桑弘羊之问至今无答，1998 年后国企借垄断复利不过是"一次并不陌生的历史性回归"。故改革主题不可能是"如何消灭"，而是<u>如何管理及分享其利益所得</u>：政、党、企三分开；"全民企业全民分享"——大部分国有资本注入社保基金池；央企权益由地方以税收留成与利润分享方式参与分配，定向投入社保与公共设施。<strong>土地：</strong>土地国有化确需法理与政策的大检讨，但三重现实使"立即私有化"不可行——土地是政府利益最大、成本最低的收入来源与城镇化政策资源；是消化货币流动性过剩的"大池子"（"比印钞机要可靠得多"）；也是民间财富再分配的"变压器"，处置不当反酿赤贫阶层与更大动荡。可行路径：房产税使地方持续受益而不依赖一次性拍卖；设中央、省两级"土地银行"，出让收入注入、资产化经营、所得投社保；以农用山林地为突破口小步试验所有制改革。<strong>金融：</strong>对金融业的国营化管制"是国民党人的发明"（1935 法币改革后国资全面接管银行业；台湾经两次"金改"终将金融还给民间）——故金融开放是"市场自由化的最关键性战役"；"千开放，万开放，不如让我办银行"已成响亮呼声，温州、前海试点仍体现"中央放权、地方主导、民间参与"的中国式改革特征，"民营银行在中国经济舞台上的再度归来应是可以期待的"。</p>
+    </div>
+
+    <div class="fin-block">
+      <h4>四股前所未见的新势力：互联网、NGO、企业家与自由知识分子</h4>
+      <p>长期大一统之下，中国社会最严重的病症是<strong>四大意识的缺乏</strong>：地方缺乏自治意识、政府与民间缺乏契约意识、知识分子缺乏独立意识、企业家阶层缺乏阶层意识——"中国未来能否有大进步，实取决于此四大意识的唤醒"。而 2013 年的中国，四股民间新势力正使这一缺乏出现被改进的迹象：<strong>互联网</strong>——"它对中国社会的改造，远远大于对美国社会的改造"；商业模式全数变异、国有资本在此领域毫无作为，造就"阳光创业的一代"，电商引爆渠道与消费者革命，博客微博"让传统的舆论管制方式无所适从"。<strong>非政府组织</strong>——宗族与商会两大传统民间组织被摧毁后，中国民间长期"一盘散沙"；如今五万以上的 NGO 大多不在管控范畴之内，"这是中国进入公民社会和中产时代的标志性事件"。<strong>企业家阶层</strong>——千万户私企、四千万个体户，"中国历史上从未出现过如此人数庞大、富有和拥有力量的有产者阶层，可谓千年之一大变"；布罗代尔的旧咒（"对任意征收的恐惧始终挥之不去"）仍在（移民潮为其折射），但绝大多数经营者"有机会以独立、不依附的精神，改变自己的命运，进而改变中国"。<strong>自由知识分子</strong>——废科举曾诱发新文化运动；今日市场空间再次哺育出体制外以专业能力谋生的知识群体与民间智库。<em>四股新势力对维持中央集权的四大基本制度构成了挑战，以"自上而下的控制"为特征的治理模式面临有史以来最重大的一次改造，而其博弈的过程将贯穿整个中国改革的全历程。</em></p>
+      <p>终章的分寸感交给费正清：这位在中国游历十六年的学者 1948 年写道，"中国可能选择的道路，各种事件必须流经的渠道，比我们能够轻易想象到的更窄"；1983 年修订版仍小心翼翼——中国的社会改造"同美国方式大异其趣，令人很难理解"。作者的收束："如果说科斯将中国崛起看成人类行为的意外后果，是一种纯粹的西方视角，那么，真正在中国大地上行走过的费正清却宁愿相信中国走在一条<u>难以理解却符合自身逻辑的、更窄的道路</u>上。也许，他是对的。"</p>
+    </div>
+  </div>
+</section>
+
+<!-- ================= 肆 总览表 ================= -->
+<section id="s4">
+  <div class="sec-mark"><span class="no">第肆部分</span><span class="rule"></span></div>
+  <h2>历代变法总览：一张表看两千七百年</h2>
+  <p class="sec-lede">按书中判断编制。"极性"标注该场变法在管仲—商鞅钟摆上的位置（<span class="pole-dot pd-g"></span>管仲极·放活 / <span class="pole-dot pd-s"></span>商鞅极·管制 / <span class="pole-dot pd-m"></span>混合·摇摆）；"制度贡献"指其对四大基本制度的建设或破坏。</p>
+
+  <div class="tbl-wrap">
+  <table>
+    <thead><tr><th>变法/时期</th><th>年代</th><th>极性</th><th>核心装置</th><th>对四大制度</th><th>书中判词</th></tr></thead>
+    <tbody>
+      <tr><td><b>管仲变法</b></td><td>前7世纪</td><td><span class="pole-dot pd-g"></span>放活</td><td>四民分业·盐铁专营·寓税于价·侈靡促消费·以商止战</td><td>创立"国有专营"支柱；专营≠国营（资产国有、承包经营）</td><td class="fate good">四十载成霸业；被意识形态"谋杀"</td></tr>
+      <tr><td><b>商鞅变法</b></td><td>前356起</td><td><span class="pole-dot pd-s"></span>管制</td><td>废井田开阡陌·抑商四策·军爵制·郡县制·统一度量衡</td><td>奠基郡县制；军爵制开精英通道；"不许思想"</td><td class="fate good">141年战108次而秦并天下；身死而法存</td></tr>
+      <tr><td><b>汉武帝变法</b></td><td>前140–87</td><td><span class="pole-dot pd-s"></span>管制</td><td>推恩令·独尊儒术·盐铁酒官营·均输平准·算缗告缗</td><td>四大制度集大成；尊儒制度定型；央企雏形</td><td class="fate bad">强汉半亿帝国；信用透支，晚年罪己</td></tr>
+      <tr><td><b>王莽变法</b></td><td>公元8–23</td><td><span class="pole-dot pd-s"></span>管制</td><td>五均六筦·七年四改币·王田制（土地国有）</td><td>四条件全缺的极端化模拟</td><td class="fate bad">疲劳天下，一无所得；身死国灭</td></tr>
+      <tr><td><b>世民治国</b></td><td>627–649</td><td><span class="pole-dot pd-g"></span>放活</td><td>轻税简政·专营全废·公廨钱养官·兵在藩镇</td><td>科举制补全第四支柱；世族终结</td><td class="fate good">最盛王朝最小政府；埋下安史之乱</td></tr>
+      <tr><td><b>刘晏变法</b></td><td>758起</td><td><span class="pole-dot pd-m"></span>摇摆</td><td>民产官收商销·常平盐·平准均输归来</td><td>专营制度的高效率修正版</td><td class="fate bad">敛不及民而用度足；救经济难救割据</td></tr>
+      <tr><td><b>王安石变法</b></td><td>1069–85</td><td><span class="pole-dot pd-s"></span>管制</td><td>均输法·市易法·青苗法·制置三司条例司</td><td>最后一次整体配套改革；管制能力空前强化</td><td class="fate bad">57年后北宋亡；此后只剩"稳定"一题</td></tr>
+      <tr><td><b>明清体制</b></td><td>1368–1840</td><td><span class="pole-dot pd-s"></span>管制</td><td>铁桶阵（长城+海禁）·散沙术（男耕女织）·纲盐行商</td><td>四大制度全面恶质化</td><td class="fate bad">五百年人均增长为零的"超稳定结构"</td></tr>
+      <tr><td><b>洋务运动</b></td><td>1860s–94</td><td><span class="pole-dot pd-m"></span>摇摆</td><td>官督商办·军工重工优先·第一批股份制企业</td><td>第一次输入式改革；未涉财政货币土地</td><td class="fate bad">现代化有余现代性不足；1884首启国进民退</td></tr>
+      <tr><td><b>北洋民国</b></td><td>1911–27</td><td><span class="pole-dot pd-g"></span>放活</td><td>金融民营化·交易所·商会自治·模范城市</td><td>四大制度全面崩坏；1400年首现权力真空</td><td class="fate bad">不自由年代中自由主义的失败</td></tr>
+      <tr><td><b>统制经济</b></td><td>1927–49</td><td><span class="pole-dot pd-s"></span>管制</td><td>国债绑架·银行国有化·敌产国营·法币金圆券</td><td>金融管制为国民党人发明；集权重建</td><td class="fate bad">失企业家、失市民、失农民而失天下</td></tr>
+      <tr><td><b>计划经济</b></td><td>1949–76</td><td><span class="pole-dot pd-s"></span>管制</td><td>上海试验·一五156工程·公私合营·人民公社·票证户籍</td><td>集权程度两千年之最；有产阶层被切除</td><td class="fate bad">从自负到自毁；免亡秦之祸而已</td></tr>
+      <tr><td><b>改革开放（上）</b></td><td>1978–93</td><td><span class="pole-dot pd-g"></span>放活</td><td>包产到户·乡镇企业·特区非均衡·财政包干</td><td>增量改革不触存量；政治边界划定</td><td class="fate good">民间复活"五分天下有其一"；闯关失利收场</td></tr>
+      <tr><td><b>改革开放（下）</b></td><td>1993–2013</td><td><span class="pole-dot pd-s"></span>管制</td><td>分税制·三驾马车·国退民进（退守上游）·土地财政</td><td>中央重获主动权；央企基本盘成型</td><td class="fate bad">大国崛起与双重困境并存；第六次国进民退</td></tr>
+    </tbody>
+  </table>
+  </div>
+
+  <h3><span class="h3-tag">收束</span>本书内在逻辑的一句话版本</h3>
+  <p>因为<strong>统一是一种文化</strong>，所以必须<strong>中央集权</strong>；因为要维持集权，所以必须建设<strong>四大基本制度</strong>；因为第四制度（国有专营）使政府成为逐利的经济组织，所以<strong>四大利益集团</strong>的分配失衡成为常态；因为失衡，所以历代变法在<strong>管仲极与商鞅极</strong>之间钟摆式摇荡、在<strong>"发展—稳定"</strong>之间反复取舍，落入<strong>"一放就活、一活就乱、一乱就收、一收就死"</strong>的治乱闭环；因为王安石式整体改革的历史性惨败，帝国后半程选择<strong>自转</strong>而错失<strong>世界时间</strong>；因为救亡，近代以来一切流派共持<strong>大一统、强国、国有优先</strong>三原则，于是百年间六次<strong>国进民退</strong>依次上演；因为 1978 年的放权奇迹与 1994 年的集权回归仍在同一逻辑之内，所以当下的双重困境不是意外，而是<strong>两千年经济变革史的一次合理性演进</strong>——破局之门只在<strong>分权与均富</strong>两个永恒主题、<strong>国有经济/土地/金融</strong>三个特殊战场，以及<strong>四股新势力</strong>能否唤醒四大缺失意识之间。这，就是回到历史基本面之后所看到的中国。</p>
+</section>
+
+<footer>
+  <p><b>文献来源</b>：吴晓波《历代经济变革得失》（浙江大学出版社，2013）。本文档为读书重构，所有概念、判断、论证、数据与引文均忠实转述原书观点，按"结论先行"体例重新组织；原书观点不代表整理者立场。</p>
+  <p><b>体例说明</b>：「结论先行」框为该部分的书中核心判断；「变法判词」框为该讲的总括论断；极性标签标注变法在管仲—商鞅钟摆上的位置；下划线与着色为整理时所加的逻辑强调。</p>
+</footer>
+
+</main>
+</div>
+
+<button id="topbtn" title="回到顶部" aria-label="回到顶部">↑</button>
+
+<script>
+(function(){
+  var btn=document.getElementById('topbtn');
+  window.addEventListener('scroll',function(){
+    btn.classList.toggle('show',window.scrollY>600);
+  },{passive:true});
+  btn.addEventListener('click',function(){window.scrollTo({top:0,behavior:'smooth'});});
+
+  // TOC 高亮
+  var links=Array.prototype.slice.call(document.querySelectorAll('nav.toc a'));
+  var targets=links.map(function(a){return document.querySelector(a.getAttribute('href'));}).filter(Boolean);
+  function onScroll(){
+    var y=window.scrollY+130,cur=null;
+    for(var i=0;i<targets.length;i++){if(targets[i].offsetTop<=y)cur=links[i];}
+    links.forEach(function(a){a.classList.toggle('on',a===cur);});
+  }
+  window.addEventListener('scroll',onScroll,{passive:true});
+  onScroll();
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,80 @@
+/* 认知操作系统 · 全局设计令牌（rpx 体系） */
+page{
+  --paper:#F3EAD3; --paper2:#FAF3E1; --ink:#2A2418; --ink2:#5A4E38;
+  --teal:#1F6E6B; --teal-deep:#14504E; --bright:#7FD1C8;
+  --terra:#C05B33; --terra-b:#D2693F; --gold:#B08A2E; --gold-b:#C99A3A;
+  --slate:#5D7B93; --slate-b:#7FA0BC; --void:#0F1D24; --void2:#14262E;
+  --hair:rgba(52,40,22,.18); --labtx:rgba(240,229,205,.92); --labdim:rgba(240,229,205,.55);
+  background:var(--paper);
+  color:var(--ink);
+  font-family:"Songti SC","STSong","Noto Serif SC",serif;
+  font-size:28rpx; line-height:1.75;
+}
+.wrap{padding:0 28rpx 48rpx;}
+.mono{font-family:"SF Mono",Menlo,Consolas,monospace;}
+
+/* 页头 */
+.eyebrow{font-size:22rpx;letter-spacing:.28em;color:var(--terra);font-weight:600;padding-top:28rpx;}
+.h1{font-size:48rpx;font-weight:900;line-height:1.35;margin:10rpx 0 6rpx;}
+.subt{font-size:26rpx;color:var(--ink2);font-weight:600;margin-bottom:20rpx;}
+.verdict-hero{border-left:8rpx solid var(--teal);background:rgba(31,110,107,.06);
+  padding:20rpx 26rpx;border-radius:0 18rpx 18rpx 0;font-size:27rpx;margin-bottom:24rpx;}
+.verdict-hero .b{color:var(--teal-deep);font-weight:700;}
+
+/* 分节标题 */
+.sechead{display:flex;align-items:baseline;border-bottom:3rpx solid rgba(52,40,22,.28);
+  padding:34rpx 0 12rpx;margin-bottom:10rpx;}
+.sechead .idx{font-size:52rpx;font-weight:900;color:var(--teal);margin-right:18rpx;line-height:1;}
+.sechead .t{font-size:36rpx;font-weight:900;}
+.sechead .en{margin-left:auto;font-size:18rpx;letter-spacing:.18em;color:var(--ink2);}
+.seclead{color:var(--ink2);font-size:25rpx;margin:8rpx 0 22rpx;}
+.seclead .b{color:var(--terra);font-weight:700;}
+
+/* 卡片 */
+.card{background:var(--paper2);border:2rpx solid var(--hair);border-radius:22rpx;
+  padding:26rpx 28rpx;margin-bottom:22rpx;}
+.klabel{font-size:20rpx;letter-spacing:.16em;color:var(--ink2);font-weight:700;margin-bottom:12rpx;}
+
+/* 按钮（触控目标 ≥ 88rpx） */
+.btn{width:100%;min-height:88rpx;display:flex;align-items:center;justify-content:center;
+  border-radius:16rpx;border:3rpx solid rgba(52,40,22,.35);background:var(--paper2);
+  color:var(--ink);font-size:27rpx;font-weight:700;padding:14rpx 30rpx;margin:10rpx 0;
+  font-family:inherit;line-height:1.45;}
+.btn::after{border:none;}
+.btn.primary{background:var(--teal);border-color:var(--teal);color:#F6EFDC;}
+.btn.danger{background:rgba(192,91,51,.10);border-color:var(--terra);color:#8d4020;}
+.btn.gold{background:var(--gold);border-color:var(--gold);color:#FFF8E8;}
+.btn.ghost{background:transparent;border-style:dashed;color:var(--ink2);}
+.btn[disabled]{opacity:.45;background:var(--paper2)!important;color:var(--ink2)!important;border-color:var(--hair)!important;}
+.btn-hover{transform:scale(.985);opacity:.92;}
+
+/* 横滑标签 */
+.chips{white-space:nowrap;margin:6rpx 0 18rpx;}
+.chip{display:inline-flex;flex-direction:column;align-items:center;justify-content:center;
+  min-width:150rpx;min-height:96rpx;padding:10rpx 22rpx;margin-right:14rpx;
+  border:3rpx solid var(--hair);border-radius:18rpx;background:var(--paper2);color:var(--ink2);}
+.chip .c1{font-weight:900;font-size:28rpx;}
+.chip .c2{font-size:20rpx;}
+.chip.act{background:var(--teal);border-color:var(--teal);color:#F6EFDC;}
+.chip.seen{border-color:var(--teal);color:var(--teal-deep);}
+.chip.lock{opacity:.4;}
+
+/* 指纹/仪表条 */
+.mrow{display:flex;align-items:center;margin-bottom:12rpx;font-size:22rpx;}
+.mrow .ml{width:128rpx;color:var(--ink2);}
+.mbar{flex:1;height:14rpx;background:rgba(52,40,22,.10);border-radius:99rpx;overflow:hidden;margin:0 14rpx;}
+.mbar .mi{display:block;height:100%;background:var(--teal);border-radius:99rpx;transition:width .5s ease;}
+.mrow .mv{width:56rpx;text-align:right;font-weight:700;color:var(--teal-deep);}
+
+/* 段落富文本内的品牌类（rich-text 可引用） */
+.verdict{display:block;font-weight:900;color:var(--teal-deep);font-size:29rpx;margin-bottom:10rpx;}
+.hint{display:block;color:var(--ink2);font-size:24rpx;border-top:2rpx dashed var(--hair);padding-top:12rpx;margin-top:12rpx;}
+.final{display:block;font-weight:700;border-left:6rpx solid var(--gold);padding-left:16rpx;}
+.b{font-weight:700;color:var(--teal-deep);}
+.bt{font-weight:700;color:#8d4020;}
+.p{display:block;margin-bottom:12rpx;}
+
+.footer{margin-top:44rpx;border-top:3rpx solid rgba(52,40,22,.28);padding:20rpx 0 10rpx;
+  font-size:21rpx;color:var(--ink2);}
+.footer .fl{display:block;margin-bottom:8rpx;}
+.safe{padding-bottom:env(safe-area-inset-bottom);}

@@ -1,0 +1,16 @@
+{
+  "pages": [
+    "pages/index/index"
+  ],
+  "window": {
+    "navigationBarTitleText": "圣经互动浏览器",
+    "navigationBarBackgroundColor": "#f5f0e6",
+    "navigationBarTextStyle": "black",
+    "backgroundColor": "#f5f0e6",
+    "backgroundTextStyle": "dark",
+    "enablePullDownRefresh": false
+  },
+  "style": "v2",
+  "sitemapLocation": "sitemap.json",
+  "lazyCodeLoading": "requiredComponents"
+}

@@ -1,0 +1,16 @@
+{
+  "description": "认知操作系统 · 逻辑演化实验室（微信小程序版）",
+  "appid": "touristappid",
+  "compileType": "miniprogram",
+  "libVersion": "3.4.0",
+  "projectname": "logic-evolution-lab",
+  "setting": {
+    "es6": true,
+    "enhance": true,
+    "postcss": true,
+    "minified": true,
+    "urlCheck": false,
+    "ignoreUploadUnusedFiles": true
+  },
+  "condition": {}
+}

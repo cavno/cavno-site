@@ -1,0 +1,535 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>计算广告 · 底层逻辑全景图 · eCPM = μ·ν 的演绎下行</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,600&family=Noto+Serif+SC:wght@400;500;600;700;900&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --parch:#F3EAD3; --parch-2:#EADFC1; --parch-3:#E3D6B4;
+    --ink:#38332A; --ink-soft:#6E664F; --rule:#C9BB98; --rule-soft:#D8CBA8;
+    --teal:#1E6B62; --teal-2:#2E8C80;   /* μ 媒体/供给侧 */
+    --terra:#A9482A; --terra-2:#C25E3C; /* ν 广告主/需求侧 */
+    --gold:#A9821F; --gold-2:#C6A02E;   /* 跨 · 机制结构 · 恒等 */
+    --shadow:rgba(56,44,20,.14);
+    --disp:'Cormorant Garamond','Noto Serif SC',serif;
+    --body:'Noto Serif SC','Cormorant Garamond',serif;
+    --mix:'Cormorant Garamond','Noto Serif SC',serif;
+  }
+  *{ box-sizing:border-box; }
+  html{ -webkit-text-size-adjust:100%; }
+  body{
+    margin:0; color:var(--ink); font-family:var(--body); font-weight:400; line-height:1.6;
+    background-color:var(--parch);
+    background-image:
+      radial-gradient(circle at 18% 12%, rgba(169,130,31,.05), transparent 60%),
+      radial-gradient(circle at 86% 82%, rgba(169,72,42,.045), transparent 55%),
+      radial-gradient(rgba(120,98,50,.05) 1px, transparent 1px),
+      radial-gradient(rgba(120,98,50,.035) 1px, transparent 1px);
+    background-size:auto,auto,4px 4px,7px 7px; background-position:0 0,0 0,0 0,2px 3px;
+    min-height:100vh;
+  }
+  ::selection{ background:rgba(169,130,31,.28); }
+
+  .plate{
+    max-width:1300px; margin:26px auto;
+    border:1px solid var(--rule);
+    box-shadow:0 0 0 6px var(--parch),0 0 0 7px var(--rule-soft),0 10px 40px var(--shadow);
+    background:linear-gradient(180deg,rgba(255,251,240,.35),rgba(255,251,240,0) 260px);
+  }
+
+  /* —— HERO:坍缩点方程 —— */
+  header{ padding:34px clamp(20px,4vw,54px) 26px; border-bottom:1px solid var(--rule); text-align:center; position:relative; }
+  .eyebrow{ font-family:var(--mix); font-weight:600; font-size:.74rem; letter-spacing:.42em; text-transform:uppercase; color:var(--terra); margin:0 0 6px; }
+  .booktitle{ font-family:var(--body); font-weight:700; font-size:clamp(1.05rem,2.2vw,1.35rem); color:var(--ink); margin:0 0 18px; letter-spacing:.02em; }
+  .booktitle small{ font-family:var(--mix); font-weight:500; color:var(--ink-soft); font-size:.78em; letter-spacing:.04em; }
+  .equation{ font-family:var(--disp); font-weight:600; font-size:clamp(2.6rem,7vw,5rem); line-height:1; letter-spacing:.01em; display:flex; align-items:baseline; justify-content:center; gap:.14em; flex-wrap:wrap; }
+  .equation .ec{ color:var(--ink); }
+  .equation .eq{ color:var(--ink-soft); font-weight:400; }
+  .equation .mu{ color:var(--teal); font-style:italic; }
+  .equation .nu{ color:var(--terra); font-style:italic; }
+  .equation .dot{ color:var(--gold); font-weight:700; padding:0 .04em; }
+  .equation .sub{ font-size:.32em; color:var(--ink-soft); font-style:normal; font-weight:500; letter-spacing:.04em; align-self:center; margin-left:.4em; }
+  .hero-sub{ margin:18px auto 0; max-width:70ch; font-size:1.02rem; color:var(--ink); }
+  .hero-sub b{ font-weight:600; }
+  .hero-sub .q1{ color:var(--gold); } .hero-sub .q2{ color:var(--terra); } .hero-sub .q3{ color:var(--teal); }
+
+  /* —— 读图法 + 筛选 —— */
+  .toolbar{ display:flex; flex-wrap:wrap; gap:24px 40px; align-items:flex-start; padding:20px clamp(20px,4vw,54px); border-bottom:1px solid var(--rule); background:var(--parch-2); }
+  .legend h4,.filters h4{ font-family:var(--mix); font-weight:600; font-size:.68rem; letter-spacing:.28em; text-transform:uppercase; color:var(--ink-soft); margin:0 0 11px; }
+  .legend-row{ display:flex; flex-wrap:wrap; gap:8px 18px; margin-bottom:9px; }
+  .lg{ display:inline-flex; align-items:center; gap:9px; font-size:.85rem; color:var(--ink); }
+  .swatch{ width:30px; height:19px; border-radius:2px; background:var(--parch-3); flex:none; border-color:var(--ink); }
+  .sw-id{ border:2.5px double var(--ink); }
+  .sw-md{ border:1.6px dashed var(--ink); }
+  .sw-ap{ border:1.4px dotted var(--ink); }
+  .dot{ width:13px; height:13px; border-radius:50%; flex:none; }
+  .d-mu{ background:var(--teal); } .d-nu{ background:var(--terra); } .d-cross{ background:var(--gold); }
+  .star{ color:var(--gold); }
+  .filters{ margin-left:auto; }
+  .chips{ display:flex; flex-wrap:wrap; gap:8px; }
+  .chip{ font-family:var(--body); font-size:.82rem; color:var(--ink); cursor:pointer; background:var(--parch); border:1px solid var(--rule); border-radius:20px; padding:5px 15px; transition:all .16s ease; user-select:none; }
+  .chip:hover{ border-color:var(--gold); }
+  .chip[aria-pressed="true"]{ background:var(--ink); color:var(--parch); border-color:var(--ink); }
+  .chip.f-mu[aria-pressed="true"]{ background:var(--teal); border-color:var(--teal); }
+  .chip.f-nu[aria-pressed="true"]{ background:var(--terra); border-color:var(--terra); }
+  .chip.f-cross[aria-pressed="true"]{ background:var(--gold); border-color:var(--gold); }
+
+  /* —— 场 —— */
+  :root{ --cols:1fr 1.68fr 1fr; --cgap:clamp(10px,1.6vw,22px); }
+  .field{ padding:6px clamp(16px,3.4vw,40px) 30px; }
+  .colhead{ display:grid; grid-template-columns:var(--cols); gap:var(--cgap); padding:20px 21px 6px 66px; position:sticky; top:0; z-index:5; background:linear-gradient(180deg,var(--parch) 60%,rgba(243,234,211,0)); }
+  .colhead>div{ font-family:var(--mix); font-weight:600; letter-spacing:.16em; text-transform:uppercase; font-size:.82rem; text-align:center; padding-bottom:8px; border-bottom:1px solid var(--rule); }
+  .ch-mu{ color:var(--teal); } .ch-cross{ color:var(--gold); } .ch-nu{ color:var(--terra); }
+  .colhead .sub{ display:block; font-family:var(--body); font-weight:400; letter-spacing:0; text-transform:none; font-size:.7rem; color:var(--ink-soft); margin-top:3px; }
+
+  .band{ position:relative; display:grid; grid-template-columns:var(--cols); gap:var(--cgap); padding:20px 20px 20px 64px; margin:14px 0; background:var(--band-bg); border:1px solid var(--rule); border-radius:3px; transition:opacity .25s ease; }
+  .band.b0{ --band-bg:linear-gradient(180deg,rgba(169,130,31,.07),rgba(169,130,31,.02)); }
+  .band.b1{ --band-bg:linear-gradient(180deg,rgba(120,98,50,.045),rgba(120,98,50,.012)); }
+  .band.b2{ --band-bg:linear-gradient(180deg,rgba(120,98,50,.045),rgba(120,98,50,.012)); }
+  .band.b3{ --band-bg:linear-gradient(180deg,rgba(120,98,50,.045),rgba(120,98,50,.012)); }
+  .band.b4{ --band-bg:linear-gradient(180deg,rgba(169,72,42,.05),rgba(169,72,42,.015)); }
+
+  .spine{ position:absolute; left:0; top:0; bottom:0; width:48px; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:12px; border-right:1px solid var(--rule); }
+  .spine .num{ font-family:var(--disp); font-weight:700; font-size:1.5rem; line-height:1; color:var(--gold); }
+  .spine .vtxt{ writing-mode:vertical-rl; text-orientation:upright; font-family:var(--body); font-weight:700; letter-spacing:.28em; font-size:.9rem; color:var(--ink); }
+  .spine .en{ writing-mode:vertical-rl; font-family:var(--mix); font-size:.6rem; letter-spacing:.18em; text-transform:uppercase; color:var(--ink-soft); }
+
+  /* 演绎下行标记 */
+  .descend{ text-align:center; color:var(--gold); font-size:1.1rem; letter-spacing:.5em; padding:2px 0 0; opacity:.6; }
+
+  .col{ display:grid; grid-template-columns:repeat(auto-fill,minmax(150px,1fr)); gap:10px; align-content:start; }
+  .col.cross{ border-left:1px solid var(--rule-soft); border-right:1px solid var(--rule-soft); padding:0 12px; }
+
+  /* —— 节点:颜色=轴,边框=可靠性 —— */
+  .node{ position:relative; text-align:left; cursor:pointer; background:var(--parch-3); color:var(--ink); padding:11px 12px 12px; border-radius:3px; font-family:var(--body); transition:transform .14s ease,box-shadow .14s ease,background .14s; display:flex; flex-direction:column; gap:5px; min-height:76px; -webkit-appearance:none; appearance:none; border-color:var(--nb); }
+  .node.ax-mu{ --nb:var(--teal); } .node.ax-cross{ --nb:var(--gold); } .node.ax-nu{ --nb:var(--terra); }
+  .node.rel-id{ border-style:double; border-width:2.5px; }
+  .node.rel-md{ border-style:dashed; border-width:1.6px; }
+  .node.rel-ap{ border-style:dotted; border-width:1.4px; }
+  .node::before{ content:""; position:absolute; left:0; top:0; height:100%; width:3px; background:var(--nb); border-radius:3px 0 0 3px; opacity:.85; }
+  .node:hover{ transform:translateY(-3px); box-shadow:0 8px 20px var(--shadow); background:#efe4c6; }
+  .node:focus-visible{ outline:2px solid var(--gold); outline-offset:2px; }
+  .node .n-title{ font-weight:600; font-size:.95rem; line-height:1.3; color:var(--ink); }
+  .node .n-tag{ font-family:var(--mix); font-size:.77rem; color:var(--ink-soft); line-height:1.35; }
+  .node .n-star{ position:absolute; top:8px; right:9px; color:var(--gold); font-size:.82rem; }
+  .node .n-open{ margin-top:auto; font-family:var(--mix); font-size:.67rem; letter-spacing:.14em; text-transform:uppercase; color:var(--nb); opacity:.72; }
+
+  .dim{ opacity:.15; filter:saturate(.4); pointer-events:none; }
+
+  /* —— 抽屉 —— */
+  .scrim{ position:fixed; inset:0; background:rgba(40,32,14,.42); opacity:0; visibility:hidden; transition:opacity .28s ease,visibility .28s; z-index:40; backdrop-filter:blur(1.5px); }
+  .scrim.on{ opacity:1; visibility:visible; }
+  .drawer{ position:fixed; top:0; right:0; height:100%; width:min(480px,92vw); z-index:50; background:var(--parch); border-left:1px solid var(--rule); box-shadow:-18px 0 44px var(--shadow),inset 6px 0 0 var(--dr-accent,var(--gold)); transform:translateX(102%); transition:transform .32s cubic-bezier(.22,.61,.36,1); display:flex; flex-direction:column; }
+  .drawer.on{ transform:translateX(0); }
+  .dr-head{ padding:26px 26px 18px; border-bottom:1px solid var(--rule); position:relative; }
+  .dr-kicker{ font-family:var(--mix); font-weight:600; font-size:.68rem; letter-spacing:.24em; text-transform:uppercase; color:var(--dr-accent,var(--gold)); display:flex; align-items:center; gap:9px; flex-wrap:wrap; }
+  .dr-kicker .relbadge{ color:var(--ink-soft); }
+  .dr-title{ font-family:var(--body); font-weight:700; font-size:1.4rem; line-height:1.22; margin:11px 0 0; color:var(--ink); }
+  .dr-close{ position:absolute; top:20px; right:20px; width:34px; height:34px; border-radius:50%; border:1px solid var(--rule); background:var(--parch-2); color:var(--ink); font-size:1.15rem; line-height:1; cursor:pointer; transition:all .16s; display:flex; align-items:center; justify-content:center; }
+  .dr-close:hover{ background:var(--ink); color:var(--parch); border-color:var(--ink); }
+  .dr-body{ padding:22px 26px 40px; overflow-y:auto; }
+  .dr-body section{ margin-bottom:20px; }
+  .dr-body h5{ font-family:var(--mix); font-weight:600; font-size:.72rem; letter-spacing:.2em; text-transform:uppercase; color:var(--ink-soft); margin:0 0 8px; display:flex; align-items:center; gap:8px; }
+  .dr-body h5::after{ content:""; flex:1; height:1px; background:var(--rule); }
+  .formula{ font-family:var(--mix); font-size:1.02rem; line-height:1.55; color:var(--ink); background:var(--parch-2); border:1px solid var(--rule); border-radius:3px; padding:12px 14px; }
+  .formula b{ color:var(--terra); font-weight:700; }
+  .formula .mu{ color:var(--teal); font-style:italic; font-weight:600; }
+  .formula .nu{ color:var(--terra); font-style:italic; font-weight:600; }
+  .logic{ font-size:.98rem; color:var(--ink); }
+  .landing{ font-size:.95rem; color:var(--ink); background:linear-gradient(90deg,rgba(169,130,31,.10),rgba(169,130,31,.02)); border-left:3px solid var(--gold); border-radius:0 3px 3px 0; padding:12px 14px; }
+  .landing b{ color:var(--gold); font-family:var(--mix); font-weight:600; letter-spacing:.04em; }
+  .boundary{ font-size:.9rem; color:var(--ink); border-left:3px solid var(--terra); background:linear-gradient(90deg,rgba(169,72,42,.08),transparent); border-radius:0 3px 3px 0; padding:11px 14px; }
+  .boundary::before{ content:"假设 · 边界"; font-family:var(--mix); font-weight:600; letter-spacing:.14em; text-transform:uppercase; font-size:.66rem; color:var(--terra); display:block; margin-bottom:4px; }
+
+  /* —— 页脚 —— */
+  footer{ padding:28px clamp(20px,4vw,54px) 34px; border-top:1px solid var(--rule); background:var(--parch-2); }
+  .thesis{ font-family:var(--disp); font-weight:500; font-style:italic; font-size:1.16rem; color:var(--ink); margin:0 0 18px; max-width:82ch; line-height:1.5; }
+  .thesis b{ font-style:normal; color:var(--terra); }
+  .riskbar{ display:grid; grid-template-columns:repeat(auto-fit,minmax(240px,1fr)); gap:12px 22px; }
+  .rk{ font-size:.87rem; color:var(--ink); line-height:1.5; }
+  .rk b{ color:var(--terra); font-weight:600; font-family:var(--mix); letter-spacing:.04em; }
+  .src{ margin-top:22px; padding-top:16px; border-top:1px solid var(--rule); font-family:var(--mix); font-size:.82rem; color:var(--ink-soft); letter-spacing:.04em; }
+
+  @media (max-width:860px){
+    :root{ --cols:1fr; --cgap:12px; }
+    .colhead{ display:none; }
+    .band{ padding-left:20px; padding-top:54px; }
+    .spine{ width:auto; left:0; right:0; bottom:auto; top:0; height:42px; flex-direction:row; border-right:none; border-bottom:1px solid var(--rule); gap:12px; }
+    .spine .vtxt,.spine .en{ writing-mode:horizontal-tb; }
+    .col.cross{ border:none; padding:0; }
+    .col:empty{ display:none; }
+    .col::before{ content:attr(data-axis-label); grid-column:1/-1; font-family:var(--mix); font-size:.68rem; letter-spacing:.18em; text-transform:uppercase; color:var(--ink-soft); padding:6px 0 2px; }
+    .drawer{ top:auto; bottom:0; height:88vh; width:100%; transform:translateY(102%); border-left:none; border-top:1px solid var(--rule); box-shadow:0 -18px 44px var(--shadow),inset 0 6px 0 var(--dr-accent,var(--gold)); border-radius:12px 12px 0 0; }
+    .drawer.on{ transform:translateY(0); }
+    .equation{ font-size:clamp(2.2rem,12vw,3rem); }
+  }
+  @media (prefers-reduced-motion:reduce){ *{ transition:none !important; animation:none !important; } }
+  @keyframes rise{ from{ opacity:0; transform:translateY(14px);} to{ opacity:1; transform:none;} }
+  .band{ animation:rise .5s ease both; }
+  .band.b0{ animation-delay:.04s; } .band.b1{ animation-delay:.11s; } .band.b2{ animation-delay:.18s; } .band.b3{ animation-delay:.25s; } .band.b4{ animation-delay:.32s; }
+</style>
+</head>
+<body>
+<div class="plate">
+  <header>
+    <p class="eyebrow">Computational Advertising · Formal Reconstruction</p>
+    <p class="booktitle">《计算广告》刘鹏 · 王超　第 3 版　<small>底层逻辑 · 核心概念 / 核心判断 / 核心推理</small></p>
+    <div class="equation">
+      <span class="ec">eCPM</span><span class="eq">=</span><span class="mu">μ</span><span class="dot">·</span><span class="nu">ν</span><span class="sub">= μ · c · t</span>
+    </div>
+    <p class="hero-sub">一切从这个分解坍缩 —— 对每个因子追问三问:<b class="q1">谁估计</b>(分工)　·　<b class="q2">怎样说真话</b>(机制)　·　<b class="q3">怎样估准</b>(技术)。下行五层即这三问的演绎展开。</p>
+  </header>
+
+  <div class="toolbar">
+    <div class="legend">
+      <h4>读图法</h4>
+      <div class="legend-row">
+        <span class="lg"><span class="swatch sw-id"></span>双线 = 恒真(定义/恒等式/分类)</span>
+        <span class="lg"><span class="swatch sw-md"></span>长虚线 = 机制模型(博弈论·依赖假设)</span>
+        <span class="lg"><span class="swatch sw-ap"></span>点线 = 工程近似(算法/经验)</span>
+      </div>
+      <div class="legend-row" style="margin-bottom:0;">
+        <span class="lg"><span class="dot d-mu"></span>μ 媒体·供给侧</span>
+        <span class="lg"><span class="dot d-nu"></span>ν 广告主·需求侧</span>
+        <span class="lg"><span class="dot d-cross"></span>跨(机制·结构·恒等)</span>
+        <span class="lg"><span class="star">★</span>核心节点</span>
+      </div>
+    </div>
+    <div class="filters">
+      <h4>筛选因子轴</h4>
+      <div class="chips" id="chips">
+        <button class="chip" data-f="all" aria-pressed="true">全部</button>
+        <button class="chip f-mu" data-f="mu" aria-pressed="false">μ 媒体侧</button>
+        <button class="chip f-nu" data-f="nu" aria-pressed="false">ν 广告主侧</button>
+        <button class="chip f-cross" data-f="cross" aria-pressed="false">跨</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="field">
+    <div class="colhead">
+      <div class="ch-mu">μ 媒体侧<span class="sub">供给方 · 点击率</span></div>
+      <div class="ch-cross">机制 · 结构（跨）<span class="sub">分工 · 拍卖 · 恒等 · 架构</span></div>
+      <div class="ch-nu">ν 广告主侧<span class="sub">需求方 · 点击价值</span></div>
+    </div>
+
+    <div class="band b0">
+      <div class="spine"><span class="num">0</span><span class="vtxt">公理层</span><span class="en">Axioms</span></div>
+      <div class="col ax-col mu" data-axis="mu" data-axis-label="μ 媒体侧"></div>
+      <div class="col ax-col cross" data-axis="cross" data-axis-label="跨 · 机制结构"></div>
+      <div class="col ax-col nu" data-axis="nu" data-axis-label="ν 广告主侧"></div>
+    </div>
+    <div class="descend">▼</div>
+
+    <div class="band b1">
+      <div class="spine"><span class="num">1</span><span class="vtxt">分工·计费·形态</span><span class="en">Division</span></div>
+      <div class="col ax-col mu" data-axis="mu" data-axis-label="μ 媒体侧"></div>
+      <div class="col ax-col cross" data-axis="cross" data-axis-label="跨 · 机制结构"></div>
+      <div class="col ax-col nu" data-axis="nu" data-axis-label="ν 广告主侧"></div>
+    </div>
+    <div class="descend">▼</div>
+
+    <div class="band b2">
+      <div class="spine"><span class="num">2</span><span class="vtxt">机制设计</span><span class="en">Mechanism</span></div>
+      <div class="col ax-col mu" data-axis="mu" data-axis-label="μ 媒体侧"></div>
+      <div class="col ax-col cross" data-axis="cross" data-axis-label="跨 · 机制结构"></div>
+      <div class="col ax-col nu" data-axis="nu" data-axis-label="ν 广告主侧"></div>
+    </div>
+    <div class="descend">▼</div>
+
+    <div class="band b3">
+      <div class="spine"><span class="num">3</span><span class="vtxt">技术估计</span><span class="en">Estimation</span></div>
+      <div class="col ax-col mu" data-axis="mu" data-axis-label="μ 媒体侧"></div>
+      <div class="col ax-col cross" data-axis="cross" data-axis-label="跨 · 机制结构"></div>
+      <div class="col ax-col nu" data-axis="nu" data-axis-label="ν 广告主侧"></div>
+    </div>
+    <div class="descend">▼</div>
+
+    <div class="band b4">
+      <div class="spine"><span class="num">4</span><span class="vtxt">元结构·边界</span><span class="en">Meta</span></div>
+      <div class="col ax-col mu" data-axis="mu" data-axis-label="μ 媒体侧"></div>
+      <div class="col ax-col cross" data-axis="cross" data-axis-label="跨 · 机制结构"></div>
+      <div class="col ax-col nu" data-axis="nu" data-axis-label="ν 广告主侧"></div>
+    </div>
+  </div>
+
+  <footer>
+    <p class="thesis">一个目标函数(<b>带约束的整体利润最大化</b>)+ 一个分解恒等式(<b>eCPM = μ·ν</b>)+ 对每个因子的三问(谁估计 · 说真话 · 估准)= 全书。第 3 版的统一钥匙是<b>计算分工</b>:CPC / 程序化 / 智能投放 三形态,是 eCPM 计算在供需两侧的三种切分。</p>
+    <div class="riskbar">
+      <div class="rk"><b>恒真层</b>　eCPM=μ·ν 是定义分解;"计费=分工"、"三形态=三切分"是市场结构分类学;不依赖行为假设,可直接用。</div>
+      <div class="rk"><b>机制模型层</b>　GSP/VCG/迈尔森的最优性依赖理性广告主、对称纳什均衡、μ⊥位置/ν⊥广告等简化;二价"说真话"在预算约束/自动出价下并不严格成立(书自认 oCPX 一价二价的模糊)。</div>
+      <div class="rk"><b>工程近似层</b>　可分解性假设(A2,书自认不合理)、CPC 的 ν(a) 统一报价(式5.6)、价格挤压 κ、MRP、平滑系数,皆经验量、需本地标定。</div>
+      <div class="rk"><b>时代边界</b>　第 3 版(2022)以 cookie / 第三方 DMP 为估计地基;隐私合规(GDPR / 后 cookie / 联邦学习)正抽掉地基 → μ、ν 可估性下降 → 计算分工天平进一步右移(供给方 / 第一方数据)。生成式创意、大模型语义检索/出价是书后方向;知识截止 2026-01,当下进展需联网核实。</div>
+    </div>
+    <div class="src">形式逻辑重构、再组织与三层可靠性标定自 ·《计算广告：互联网商业变现的市场与技术》(第 3 版,刘鹏 · 王超,人民邮电出版社,2022) · 与《亚马逊推广底层逻辑全景图》为配对同源</div>
+  </footer>
+</div>
+
+<div class="scrim" id="scrim"></div>
+<aside class="drawer" id="drawer" role="dialog" aria-modal="true" aria-labelledby="drTitle">
+  <div class="dr-head">
+    <div class="dr-kicker" id="drKicker"></div>
+    <h2 class="dr-title" id="drTitle"></h2>
+    <button class="dr-close" id="drClose" aria-label="关闭">✕</button>
+  </div>
+  <div class="dr-body" id="drBody"></div>
+</aside>
+
+<script>
+const AXNAME  = { mu:'μ 媒体·供给侧', nu:'ν 广告主·需求侧', cross:'跨 · 机制结构' };
+const AXACC   = { mu:'var(--teal)', nu:'var(--terra)', cross:'var(--gold)' };
+const RELNAME = { id:'恒真 · 定义/恒等式', md:'机制模型 · 依赖假设', ap:'工程近似 · 算法/经验' };
+
+const NODES = [
+/* ===== BAND 0 · 公理层 ===== */
+{id:'ecpm',band:'b0',ax:'cross',rel:'id',star:2,title:'eCPM = μ · ν',tag:'核心恒等式 · 坍缩点',
+ formula:'r(a,u,c) = <span class="mu">μ</span>(a,u,c) · <span class="nu">ν</span>(a,u,c) = <span class="mu">μ</span> · c · t　(×1000 省略)',
+ logic:'千次展示期望收益分解为点击率 μ 与点击价值 ν;ν 再分解为转化率 c × 转化价值 t。μ 的行为发生在媒体侧,ν 的行为发生在广告主侧。全书几乎所有产品、机制、技术问题都能从这个分解里找到端倪。',
+ landing:'<b>谁估计</b>：μ / ν 分别可归属供需两侧,归属方式即计费模式。<b>机制</b>：竞价按 eCPM 排序。<b>算法</b>：μ 靠点击率预测,ν 靠转化率/出价/归因。',
+ boundary:'是定义性分解,恒真;但"可加分解到每次展示"依赖 A2 近似。'},
+{id:'coreproblem',band:'b0',ax:'cross',rel:'id',star:1,title:'核心问题:整体利润最大化',tag:'目标函数 A1',
+ formula:'max Σ_{i=1}^{T} ( r_i − q_i )　s.t. 需求方约束(预算 / 量)',
+ logic:'修正 Broder 三点——优化"一组展示"(因量约束,最优 ≠ 逐次独立决策)、去掉"given"(标识未必确定)、优化"策略"而非具体广告。量约束是广告区别于搜索/推荐的关键。',
+ landing:'<b>谁估计</b>：r、q 都要估。<b>机制</b>：约束下的分配。<b>算法</b>：GD 用在线分配,竞价用 eCPM 排序。'},
+{id:'ranking',band:'b0',ax:'cross',rel:'id',star:0,title:'排序原则:CTR 是 eCPM 的特例',tag:'A5',
+ formula:'竞价按 eCPM 价高者得;若所有点击价值相等 → eCPM 排序 ≡ CTR 排序',
+ logic:'CTR 排序是"点击价值都相等"时 eCPM 排序的退化——这使"内容与广告统一排序"的原生广告在逻辑上成立。',
+ landing:'<b>机制</b>：按 eCPM 还是 CTR 排序,是区别广告产品与用户产品(推荐/搜索)的关键策略特征。'},
+{id:'triad',band:'b0',ax:'cross',rel:'id',star:0,title:'三方主体 & (a,u,c) 三元组',tag:'论域 · 定义',
+ formula:'需求方(广告主/代理/采买) — 供给方(媒体/变现平台) — 受众;每次展示 = 三元组 (a,u,c)',
+ logic:'三方博弈是贯穿全书的主线;(a,u,c) 是收入 / 成本共同依赖的三个变量。',
+ landing:'谁估计的分工、机制设计的博弈、技术的特征工程,都在这三方 / 三元组上展开。'},
+{id:'addef',band:'b0',ax:'cross',rel:'id',star:0,title:'广告定义:有偿 + 非人员',tag:'两个可计算前提',
+ formula:'有偿的、非人员的、劝服性信息传播(Arens)',
+ logic:'"有偿"使目标明确(可优化),"非人员"使目标可用计算方式优化——这是计算广告存在的两个逻辑前提。',
+ landing:'由此推广出泛广告命题:一切付费传播渠道皆广告 → 广告位分配的最优方式是内部竞价。'},
+{id:'decomp_assume',band:'b0',ax:'cross',rel:'ap',star:0,title:'可分解性假设',tag:'A2 · 自认不合理',
+ formula:'整体收入 / 成本可加性分解到每次展示',
+ logic:'显然不合理(多次展示效果相关),但线上须逐展示即时决策,故工程采用;用频次控制 / 点击反馈缓解。',
+ landing:'这是全书最底层的工程近似——一切"逐次 eCPM 决策"都建立其上。'},
+{id:'data_attach',band:'b0',ax:'cross',rel:'id',star:0,title:'数据附着 + 泛广告',tag:'A6 / A0',
+ formula:'数据变现附着于流量变现之上;一切付费传播渠道皆广告',
+ logic:'定向广告多出的收入是"数据(如性别)"的变现,但它寄生在广告位流量上——没有流量就没有数据变现的载体。',
+ landing:'公司内多广告产品争夺广告位,最合理分配 = 内部竞价(流量货币化)。'},
+{id:'mu_def',band:'b0',ax:'mu',rel:'id',star:0,title:'μ:点击率 · 媒体侧',tag:'因子一',
+ formula:'μ = 点击率(CTR) = 点击 / 展示;行为发生在媒体上',
+ logic:'越靠有效性漏斗前段(曝光/关注/理解)的因素越影响 μ。供给方占有展示 / 点击数据,天然具备估 μ 的基础。',
+ landing:'<b>谁估计</b>：通常供给方。<b>算法</b>：点击率预测(LR/FM/GBDT+LR/深度)+ 校正 + 位置偏差。'},
+{id:'nu_def',band:'b0',ax:'nu',rel:'id',star:0,title:'ν:点击价值 = c · t · 广告主侧',tag:'因子二',
+ formula:'ν = 点击价值 = 转化率 c × 转化价值 t(= 到达率·转化率·客单价);行为发生在广告主站内',
+ logic:'越靠漏斗后段(接受/保持/决策)越影响 ν。广告主占有站内数据,天然具备估 ν 的基础。',
+ landing:'<b>谁估计</b>：通常需求方经出价通知。<b>算法</b>：转化率预估 + 出价 + 归因。'},
+{id:'brand_effect',band:'b0',ax:'nu',rel:'id',star:0,title:'品牌广告 vs 效果广告',tag:'ν 可归因性',
+ formula:'品牌(ν 难即时归因,中长期) vs 效果(ν 可归因,即时转化)',
+ logic:'两类广告的本质区别就是 ν 的可归因性;这决定了计费(品牌→CPM,效果→CPC/CPA)与优化方式。',
+ landing:'品牌用 CPM(需求方担风险),效果用 CPC(供需分担);第三方监测主要服务品牌主。'},
+{id:'purpose',band:'b0',ax:'nu',rel:'id',star:0,title:'根本目的:低成本用户接触',tag:'非短期转化',
+ formula:'广告主通过媒体达到低成本用户接触(提升选择概率 / 降低性价比苛求);评价 = ROI',
+ logic:'以短期转化为唯一目标会背离方法论(感冒药只投已感冒者是荒谬的);绝对 ROI 常不可算,靠渠道对比评估。',
+ landing:'媒体离转化越近 ROI 越高,但越远离"引导潜在用户";需从整合营销看渠道配合。'},
+
+/* ===== BAND 1 · 分工·计费·形态 ===== */
+{id:'billing_labor',band:'b1',ax:'cross',rel:'id',star:1,title:'计费 = 计算分工',tag:'P1 · 分类学',
+ formula:'eCPM 各因子由谁估计,决定计费模式;风险随之转移',
+ logic:'谁有数据 / 能力谁估计。这是市场结构的分类学——把"计费"从收费方式还原为"分工方式"。',
+ landing:'<b>谁估计</b>：CPM 需求方担全部风险;CPC 供需分担;CPA 供给方担全部风险。'},
+{id:'billing_spectrum',band:'b1',ax:'cross',rel:'id',star:0,title:'计费谱系 CPT/CPM/CPC/CPS/oCPX',tag:'谁估 μ · 谁估 ν',
+ formula:'CPT(需·需) · CPM(需·需) · CPC(供·需) · CPS/CPA(供·供) · oCPX(供·供,客户给 t)',
+ logic:'从 CPT 到 CPA,ν 的估计责任从需求方逐步移交供给方,风险随之转移;oCPX 是 CPC 与 CPA 之间的稳健中间态。',
+ landing:'效果广告 CPC 最能发挥供需长处;品牌广告用 CPM;CPS/CPA/ROI 仅特定环境合理。'},
+{id:'three_forms',band:'b1',ax:'cross',rel:'id',star:2,title:'三大形态 = 三种计算切分',tag:'P2 · 全书主脉',
+ formula:'CPC 广告网络(供 μ / 需 ν) — 程序化 RTB(需求方整 eCPM) — 智能投放 oCPX(供 μ、c / 客户 t)',
+ logic:'CPC / 程序化 / 智能投放不是三种孤立产品,而是 eCPM 计算在供需两侧的三种不同切分——这是第 3 版统一市场与技术的钥匙。',
+ landing:'程序化 = 需求方承担更多(→ CPM + 实时报价);智能投放 = 供给方承担更多(→ oCPX)。'},
+{id:'myerson_structure',band:'b1',ax:'cross',rel:'md',star:1,title:'迈尔森反推市场结构',tag:'C1 · 扶持小客户',
+ formula:'客户数量与活跃度是收入根本;少数大客户的预算可能是毒药',
+ logic:'程序化服务头部强客户 → 强者更强 → 据迈尔森对平台收入未必好;oCPX 降低中小门槛 → 提活跃度 → 利于平台。这条博弈论结论被用作产品方向的第一性依据。',
+ landing:'产品 / 运营各环节应降低小客户门槛、提供扶持;Facebook 900 万活跃账户与 oCPX 直接相关。',
+ boundary:'依赖迈尔森最优拍卖的假设(见机制层),是模型推论而非恒真。'},
+{id:'cpc_natural',band:'b1',ax:'mu',rel:'id',star:0,title:'CPC:自然的计算分工',tag:'供给方 μ / 需求方 ν',
+ formula:'供给方有展示点击数据 → 算 μ;需求方有站内数据 → 评估 ν 并经出价通知',
+ logic:'"谁的数据谁计算"最自然,故 CPC 在 PC 时代接近垄断。但"自然" ≠ "合理"——供需两侧数据价值 / 算力差异巨大,故催生另两个方向。',
+ landing:'<b>谁估计</b>：μ 供给方、ν 需求方。<b>机制</b>：CPC-GSP 二价。<b>算法</b>：CTR 预测 + 客户出价。'},
+{id:'programmatic',band:'b1',ax:'mu',rel:'ap',star:0,title:'程序化 RTB:需求方承担更多',tag:'整 eCPM · 实时报价',
+ formula:'需求方算整个 eCPM 并逐展示实时报价 → CPM 计费;ADX ↔ 股票交易所',
+ logic:'μ 必须逐展示算(否则抹去 (u,c) 失个性化)→ 人工出价界面不适用 → 用程序代人实时报价。程序化的本质 = 适应需求方承担更多计算的实时接口。',
+ landing:'<b>谁估计</b>：需求方(μ、ν 全包)。<b>算法</b>：DSP 侧 CTR 预测 + 点击价值估计 + 出价策略。',
+ boundary:'若需求方算整 eCPM 时抹去 (u,c),体系即失个性化能力。'},
+{id:'ocpx_form',band:'b1',ax:'nu',rel:'id',star:0,title:'智能投放 oCPX:供给方承担更多',tag:'供给方 μ、c / 客户 t',
+ formula:'μ、c 交供给方,客户只给转化价值 t;按 CPX 计费但内部按 t 算 CVR 优化',
+ logic:'不能直接用 CPS/CPA——零成本试投招致劣币驱逐良币(学习期 CVR 被高估,垃圾产品蹭流量拖垮生态);oCPX 把计费与出价分离规避之。',
+ landing:'<b>谁估计</b>：供给方(μ、c)。<b>机制</b>：一价/二价见机制层。<b>算法</b>：CVR 预估(移动 App 下载流程一致性使其可行)。'},
+{id:'cpc_approx',band:'b1',ax:'nu',rel:'ap',star:0,title:'CPC 的个性化近似',tag:'式 5.6 · ν(a)',
+ formula:'CPC 下 r = <span class="mu">μ</span>(a,u,c) · <span class="nu">ν</span>(a) —— 客户统一点击报价抹去各展示间转化率差异',
+ logic:'统一报价 ν(a) 抹去了 (u,c) 对转化率的影响,但供给方的 μ 仍带 (u,c),故整体 eCPM 仍保留细分流量能力。这是 CPC 个性化的边界。',
+ landing:'要更细的个性化(每展示不同 ν),就得走程序化(需求方逐展示算整 eCPM)。'},
+
+/* ===== BAND 2 · 机制设计 ===== */
+{id:'welfare_revenue',band:'b2',ax:'cross',rel:'md',star:1,title:'目标二分:社福最优 vs 收入最优',tag:'机制的两个目标函数',
+ formula:'社会福利最优(广告主 + 平台总收益) vs 收入最优(仅平台)',
+ logic:'前者要"产出最大者得展示"(需客户说真话);后者是平台真实所求。二者导出的机制显著不同——GSP/VCG 追社福,迈尔森追收入。',
+ landing:'<b>机制</b>：设计的根本任务是让客户真实上报 ν(激励相容),再在此上谈收入优化。'},
+{id:'pricing',band:'b2',ax:'cross',rel:'md',star:0,title:'定价问题:一价不稳 → 二价',tag:'为何不按出价收费',
+ formula:'一价 → 赢家不断下调至次高价 +ε(不稳、收入次优);收次高价 → 去除压价动机(稳定 + 收入更高)',
+ logic:'在可重复竞价里,聪明的定价能为整个市场创造更高收益与稳定性。稳定态 = 对称纳什均衡(每条广告的位置都优于换位)。',
+ landing:'<b>机制</b>：这是 GSP / VCG 的动机;定价是位置拍卖最重要的机制。'},
+{id:'gsp',band:'b2',ax:'cross',rel:'md',star:1,title:'GSP 广义第二高价',tag:'主流定价',
+ formula:'各中标者付下一位出价;CPC 情形 q_s = μ_{s+1}·b_{s+1} / μ_s + Δ(乘 μ_s 即 eCPM 二价);定价 ≤ 出价',
+ logic:'实话实说原理成立;单位置社福最优,多位置非最优(VCG 才是),但简单、可向客户解释 → 实际主流。Δ = 货币最小单位(1 美分)历史惯例。',
+ landing:'<b>机制</b>：二价;适用 CPM/CPC/CPS(换 μ 为 μν);κ 与 MRP 在其上叠加调控。'},
+{id:'vcg',band:'b2',ax:'cross',rel:'md',star:1,title:'VCG',tag:'社福最优但非主流',
+ formula:'赢家付"占位对其他参与者造成的价值损害"(外部性);单位置退化为二价',
+ logic:'社福最优、真实、收费最少;但平台收入 &lt; GSP,逻辑复杂难解释、外部性难验证 → 非主流(Facebook 用)。',
+ landing:'理论最优 ≠ 工程首选——GSP 以"近似真实 + 收入 + 可解释"胜出,是典型工程折中。'},
+{id:'squash',band:'b2',ax:'cross',rel:'md',star:0,title:'价格挤压 κ',tag:'平台调控杆',
+ formula:'r = μ · bid^κ;κ→∞ 只看 CTR,κ→0 只看出价',
+ logic:'κ↑ 挤压出价权重(强调质量 / 相关性),κ↓ 强调出价(鼓励竞争、短期提营收)。平台据市场情况主动调向。',
+ landing:'<b>机制</b>：治理"高出价低质量"广告主;或短期财务压力下调 κ 提营收。'},
+{id:'mrp',band:'b2',ax:'cross',rel:'md',star:0,title:'市场保留价 MRP',tag:'起价 / 底价',
+ formula:'赢拍最低价;竞争充分设高、反之设低;最优起价仅依竞价与质量分布,可依 (a,u,c) 动态',
+ logic:'控质量与单价,过高过低皆损收益;可全局或按标的(关键词 / 北区单独)。Yahoo 动态起价实测 +13%。',
+ landing:'<b>机制</b>：按 eCPM 分布找不明显降填充率的 CPM 底价,再按质量分倒算 CPC 底价。'},
+{id:'myerson_auction',band:'b2',ax:'cross',rel:'md',star:1,title:'迈尔森拍卖(收入最优)',tag:'最优拍卖',
+ formula:'出价 → 虚拟出价 → 0 起价过滤 → 虚拟域二价 → 换回真实域;均匀 [0,1] 时 = 二价 + 0.5 起价',
+ logic:'不保证按价排序、甚至可拒绝所有人;惩罚大玩家逼其加价。因不公平、难解释 → 不直接用,但思想被用(对强买家价格歧视)。',
+ landing:'核心启示 = C1:客户数量与活跃度才是收入根本(见分工层)。'},
+{id:'truthtelling',band:'b2',ax:'nu',rel:'md',star:0,title:'说真话原理 / 激励相容',tag:'A7',
+ formula:'合理机制下,客户以真实 ν 出价即达自身最优(实话实说)',
+ logic:'客户无义务说真话;不实则 eCPM 错、排序乱、背离社福最优。二价 / VCG 使真实上报成为占优策略。',
+ landing:'这是整个机制设计层的目标;程序化 / oCPX 的一价化都是对它的偏离,需权衡。'},
+{id:'ocpx_price',band:'b2',ax:'nu',rel:'md',star:1,title:'oCPX 一价 / 二价',tag:'bid cap / cost cap',
+ formula:'t(a) 当 bid → 二价(实际 CPA = 次位 eCPM′/(μ·c) &lt; 出价,保真实 / 社福最优,"出价上限");t(a) 当 price → 一价(平台追踪实际成本动态调真实出价补偿,"花费上限 / 目标花费")',
+ logic:'两种理解对应一价 / 二价的市场性质差异。更进一步是预算表达(只给日预算,平台预测时段价格倒算出价平滑消耗,"傻瓜式")——极大降门槛但违反说真话。',
+ landing:'作者立场——以二价(bid)为基逐步引导市场更合理;一价降教育成本但带来机制问题。',
+ boundary:'预算表达违反说真话原则;时段倒算出价可能高于真实转化价值致亏损 → 需 bid cap 兜底。'},
+{id:'position_auction',band:'b2',ax:'mu',rel:'md',star:0,title:'位置拍卖',tag:'μ⊥位置,ν⊥广告(假设)',
+ formula:'S 个位置按价值排序,A 个广告出价,前 S 个 eCPM 最高者依次入位;假设 μ 仅依位置 s、ν 仅依广告 a',
+ logic:'机制讨论的抽象模型;此独立性假设简化了博弈分析,但现实中位置与广告都同时影响 μ 与 ν。',
+ landing:'是 GSP / VCG / 迈尔森分析的舞台;其假设是这些结论的可证伪点。',
+ boundary:'μ⊥位置、ν⊥广告是近似,真实系统耦合。'},
+
+/* ===== BAND 3 · 技术估计 ===== */
+{id:'framework',band:'b3',ax:'cross',rel:'ap',star:0,title:'个性化系统四件套',tag:'闭环架构',
+ formula:'在线投放引擎 + 离线批处理 + 在线流计算 + 数据高速公路',
+ logic:'日志 → 高速公路 → 离线(批,周期,人群标签/模型)+ 流计算(近实时补充)→ 缓存 → 在线决策,形成闭环;机器自转,人只调策略。',
+ landing:'广告系统 = 大数据产品;跨业务共享离线 / 在线计算平台与用户行为数据。'},
+{id:'objective_spec',band:'b3',ax:'cross',rel:'id',star:1,title:'优化目标特化 GD/ADN/ADX/DSP',tag:'同一目标的四种退化',
+ formula:'GD(μ,ν 常数,约束=合约量) · ADN(r=μ·bid_CPC,成本∝r) · ADX(r=bid_CPM 直接) · DSP(μ,ν,q 全需估,最难)',
+ logic:'同一个 max Σ(r−q) 在四类产品上特化:哪些因子是变量、哪些常数、哪些由出价给定,决定了各系统的算法挑战。',
+ landing:'<b>算法</b>：GD → 在线分配;ADN → 估 μ;ADX → 询价;DSP → 估 μ、ν、q 全套。'},
+{id:'ctr',band:'b3',ax:'mu',rel:'ap',star:1,title:'点击率预测',tag:'特征 > 模型 · 校正',
+ formula:'LR / FM / FFM / GBDT+LR / 深度(Wide&Deep / DeepFM / DIN);关键 = 校正 + 位置偏差 + 平滑(Beta-Binomial)',
+ logic:'eCPM 排序要的是"良好校准的概率"而非仅高 AUC;故校正(calibration)比单纯提 AUC 更关键。特征体系与数据规模的价值 > 模型深度。',
+ landing:'<b>谁估计</b>：供给方(或中间市场)。<b>算法</b>：评测 AUC / COPC;冷启动交给 E&E。'},
+{id:'targeting',band:'b3',ax:'mu',rel:'ap',star:0,title:'受众定向',tag:'上下文 + 行为',
+ formula:'上下文定向(文本主题 LSA/PLSI/LDA/word2vec) + 行为定向(用户画像/DMP/lookalike/新客推荐) + 人口属性预测',
+ logic:'定向标定竞价标的物(标签);越精准的定向越符合需求方利益(市场的钱全来自需求方),但过细会降售卖率。',
+ landing:'<b>谁估计</b>：供给方 / DMP。<b>算法</b>：主题模型 + embedding + LSH 最近邻 + lookalike。'},
+{id:'retrieval',band:'b3',ax:'mu',rel:'ap',star:0,title:'广告检索',tag:'从倒排到语义',
+ formula:'倒排索引 / 布尔表达式检索 / 相关性检索 / 基于 DNN 的语义建模 / 最近邻语义检索',
+ logic:'中小广告主大量增加时需倒排索引与检索;定向条件本质是布尔表达式的匹配。',
+ landing:'<b>算法</b>：倒排 + 布尔匹配 → 向量语义 → ANN;是投放引擎"召回"环节。'},
+{id:'ee',band:'b3',ax:'mu',rel:'ap',star:0,title:'探索与利用 E&E',tag:'冷启动',
+ formula:'bandit:ε-greedy / UCB / Thompson 采样 / 上下文 bandit',
+ logic:'新广告 / 新用户无历史数据,须在"利用已知高 eCPM"与"探索未知潜在高 eCPM"间权衡,把探索成本显式纳入。',
+ landing:'<b>算法</b>：强化学习 / bandit;补 CTR 预测在数据稀疏期的偏差。'},
+{id:'cvr',band:'b3',ax:'nu',rel:'ap',star:0,title:'转化率预估',tag:'比 CTR 难得多',
+ formula:'转化率 c 的建模;难点 = 行业异构(无统一模型) + 数据比点击更稀疏',
+ logic:'移动端因转化多为 App 下载(→ 应用市场,技术视角"真实客户只有应用市场一个")而流程一致 → 可共同建模 → 稀疏缓解 → oCPX 兴起。',
+ landing:'<b>谁估计</b>：oCPX 下供给方。<b>算法</b>：平台推统一建站模板以统一转化流程助建模。'},
+{id:'bidding',band:'b3',ax:'nu',rel:'ap',star:0,title:'出价策略',tag:'预算约束下最优出价',
+ formula:'预算约束下最大化广告主价值 → 线性出价 bid ∝ 点击价值·pCVR / λ(拉格朗日) + 预算平滑 pacing',
+ logic:'DSP 需尽量准确估每次展示期望价值;λ 是预算约束的对偶(影子价格),出价随预算松紧调整。OCPC / oCPX 是其工程化。',
+ landing:'<b>算法</b>：拉格朗日 / 凸优化给出线性出价;pacing 控消耗节奏。',
+ boundary:'线性出价的最优性依赖凸性与静态市场假设;真实竞价环境动态。'},
+{id:'attribution',band:'b3',ax:'nu',rel:'ap',star:0,title:'效果归因',tag:'把 ν 归给谁',
+ formula:'末次 / 首次 / 线性 / 多触点 / 数据驱动归因;增量 / lift(因果口径)',
+ logic:'CPA 类广告存在广告主扣量、蹭品牌曝光的可能 → 需第三方归因保证转化数与计费公正。归因本质是 ν 在多个触点间的分配。',
+ landing:'<b>算法</b>：规则归因 → 数据驱动 / 因果(lift);配合反作弊(作弊分类)。'},
+{id:'allocation',band:'b3',ax:'cross',rel:'ap',star:0,title:'在线分配(GD)',tag:'带约束优化',
+ formula:'合约量为约束、广告效果为目标的带约束优化;对偶 / 高水位 HWM',
+ logic:'GD 要在满足各合约展示量的同时,把效果更好的流量分给广告主;须在线实时逐展示决策。',
+ landing:'<b>谁估计</b>：供给方。<b>算法</b>：带约束优化 / 对偶 / HWM + 流量预测 + 流量塑形 + 频次控制。'},
+
+/* ===== BAND 4 · 元结构·边界 ===== */
+{id:'funnel',band:'b4',ax:'cross',rel:'id',star:1,title:'广告有效性漏斗',tag:'μ·ν 分解的因果叙事',
+ formula:'曝光 → 关注 → 理解 → 接受 → 保持 → 决策;前段影响 μ,后段影响 ν',
+ logic:'A4 的两个因子不是凭空分解,而是把一条传播学漏斗在"媒体侧 / 广告主侧"切开。每阶段对应一项技术(曝光→位置偏差,关注→上下文/原生,理解→精准定向,接受→广告安全/媒体品牌,保持→品牌创意,决策→落地页)。',
+ landing:'前段(μ):位置偏差、上下文定向、原生;后段(ν):落地页、转化优化、客单价。'},
+{id:'two_lines',band:'b4',ax:'cross',rel:'id',star:0,title:'两条演进主线',tag:'交易形态 / 展现逻辑',
+ formula:'主线一:固定位合约 → CPM 合约 GD → 竞价 ADN → 开放 RTB(ADX/DSP);主线二:广告位独立 → 原生广告(内容与广告统一)',
+ logic:'主线一的驱动力 = 让越来越多数据源为决策服务(LUMAscape 即其产品骨架);主线二由 A5(CTR 是 eCPM 特例)提供合法性。',
+ landing:'全书三段 = 市场背景(公理)→ 产品逻辑(推理链 A/B)→ 关键技术(推理链 C),沿这两条主线铺开。'},
+{id:'boundary',band:'b4',ax:'cross',rel:'md',star:1,title:'三层可靠性 + 时代边界',tag:'fallibilist',
+ formula:'恒真(定义/恒等式/分类) — 机制模型(博弈论,依赖理性/纳什/μ⊥位置等假设) — 工程近似(A2/式5.6/κ/MRP 经验)',
+ logic:'二价"说真话"在预算约束 / 自动出价下并不严格成立(书自己在 oCPX 一价二价已承认模糊)。位置拍卖的独立性假设是近似。',
+ landing:'<b>时代边界</b>：第 3 版(2022)以 cookie / 第三方 DMP 为估计基础,隐私合规(GDPR / 后 cookie / 联邦学习)正抽掉地基 → μ、ν 可估性下降 → 计算分工天平进一步右移(供给方 / 第一方数据)。生成式创意、大模型语义检索 / 出价是书后方向。',
+ boundary:'知识截止 2026-01,post-cookie 与生成式演进可能已超书,需联网核实当下。'}
+];
+
+/* ===== 渲染 ===== */
+function nodeCard(n){
+  const b=document.createElement('button');
+  b.className='node ax-'+n.ax+' rel-'+n.rel;
+  b.dataset.id=n.id; b.dataset.ax=n.ax;
+  b.setAttribute('aria-haspopup','dialog');
+  const stars = n.star>=2 ? '★★' : (n.star===1 ? '★' : '');
+  b.innerHTML=`${stars?`<span class="n-star">${stars}</span>`:''}
+    <span class="n-title">${n.title}</span>
+    <span class="n-tag">${n.tag}</span>
+    <span class="n-open">展开 →</span>`;
+  b.addEventListener('click',()=>openDrawer(n.id));
+  return b;
+}
+NODES.forEach(n=>{
+  const cell=document.querySelector(`.band.${n.band} .col.${n.ax}`);
+  if(cell) cell.appendChild(nodeCard(n));
+});
+
+/* ===== 抽屉 ===== */
+const scrim=document.getElementById('scrim'),drawer=document.getElementById('drawer');
+let lastFocus=null;
+function openDrawer(id){
+  const n=NODES.find(x=>x.id===id); if(!n) return;
+  lastFocus=document.activeElement;
+  const acc=AXACC[n.ax];
+  drawer.style.setProperty('--dr-accent',acc);
+  const stars = n.star>=2 ? ' ★★' : (n.star===1 ? ' ★' : '');
+  document.getElementById('drKicker').innerHTML=
+    `<span>${AXNAME[n.ax]}</span><span class="relbadge">· ${RELNAME[n.rel]}</span>${stars?`<span class="star">${stars.trim()}</span>`:''}`;
+  document.getElementById('drTitle').textContent=n.title;
+  let html='';
+  if(n.formula)  html+=`<section><h5>命题 · 公式</h5><div class="formula">${n.formula}</div></section>`;
+  if(n.logic)    html+=`<section><h5>推理 · 逻辑</h5><p class="logic">${n.logic}</p></section>`;
+  if(n.landing)  html+=`<section><h5>落点 · 谁估计 / 机制 / 算法</h5><div class="landing">${n.landing}</div></section>`;
+  if(n.boundary) html+=`<section><div class="boundary">${n.boundary}</div></section>`;
+  const body=document.getElementById('drBody');
+  body.innerHTML=html; body.scrollTop=0;
+  scrim.classList.add('on'); drawer.classList.add('on');
+  document.getElementById('drClose').focus();
+}
+function closeDrawer(){
+  scrim.classList.remove('on'); drawer.classList.remove('on');
+  if(lastFocus) lastFocus.focus();
+}
+document.getElementById('drClose').addEventListener('click',closeDrawer);
+scrim.addEventListener('click',closeDrawer);
+document.addEventListener('keydown',e=>{ if(e.key==='Escape'&&drawer.classList.contains('on')) closeDrawer(); });
+
+/* ===== 因子轴筛选 ===== */
+const chips=[...document.querySelectorAll('#chips .chip')];
+let active='all';
+chips.forEach(c=>c.addEventListener('click',()=>{
+  active=c.dataset.f;
+  chips.forEach(x=>x.setAttribute('aria-pressed', x.dataset.f===active?'true':'false'));
+  document.querySelectorAll('.node').forEach(nd=>{
+    nd.classList.toggle('dim', !(active==='all'||nd.dataset.ax===active));
+  });
+}));
+</script>
+</body>
+</html>

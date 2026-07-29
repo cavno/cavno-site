@@ -1,0 +1,101 @@
+<view class="page-shell home">
+  <view class="hero page-pad">
+    <view class="hero-orbit orbit-one"></view>
+    <view class="hero-orbit orbit-two"></view>
+    <view class="hero-mark">
+      <view class="mark-dot"></view>
+      <view class="mark-line"></view>
+    </view>
+    <view class="eyebrow">西方哲学史考察十讲 · 前四讲</view>
+    <view class="display-title">从巫术到理性，<br />再到信仰</view>
+    <view class="hero-subtitle">追踪人类如何把不确定的世界，逐步加工成象征、故事、概念、教义与个人良知。</view>
+    <button class="hero-action" bindtap="goThread">
+      <text>进入思想脉络</text>
+      <text class="arrow">→</text>
+    </button>
+  </view>
+
+  <view class="manifesto page-pad">
+    <view class="manifesto-index">课程总问题</view>
+    <view class="manifesto-quote">“认识你自己，就是认识历史。”</view>
+    <view class="manifesto-copy">这四讲不是四个互不相关的题目，而是一条文明心智的生成史：人先用象征辨认世界，再用故事解释世界，用理性论证世界，最后用信仰与良知安顿自己。</view>
+  </view>
+
+  <view class="progress-wrap page-pad" wx:if="{{continueLecture}}">
+    <view class="progress-card paper-card">
+      <view>
+        <view class="progress-label">继续阅读</view>
+        <view class="progress-title">{{continueLecture.number}} · {{continueLecture.title}}</view>
+        <view class="progress-meta">已读 {{readCount}} / 4 讲</view>
+      </view>
+      <button class="round-go" data-id="{{continueLecture.id}}" bindtap="goLecture">→</button>
+      <view class="progress-track">
+        <view class="progress-fill" style="width: {{progressPercent}}%;"></view>
+      </view>
+    </view>
+  </view>
+
+  <view class="lecture-section page-pad">
+    <view class="section-top">
+      <view>
+        <view class="eyebrow">四讲精读</view>
+        <view class="section-heading">一条连续的思想史</view>
+      </view>
+      <view class="section-count">04</view>
+    </view>
+
+    <button
+      class="lecture-card"
+      wx:for="{{lectures}}"
+      wx:key="id"
+      data-id="{{item.id}}"
+      bindtap="goLecture"
+    >
+      <view class="lecture-accent" style="background: {{item.color}};"></view>
+      <view class="lecture-no">{{item.number}}</view>
+      <view class="lecture-content">
+        <view class="lecture-title">{{item.title}}</view>
+        <view class="lecture-subtitle">{{item.shortTitle}}</view>
+        <view class="lecture-meta">
+          <text>{{item.date}}</text>
+          <text>·</text>
+          <text>{{item.readTime}}</text>
+        </view>
+      </view>
+      <view class="lecture-state">
+        <text wx:if="{{item.isRead}}" class="read-tag">已读</text>
+        <text wx:if="{{item.isFavorite}}" class="fav-dot">●</text>
+        <text class="card-arrow">↗</text>
+      </view>
+    </button>
+  </view>
+
+  <view class="threads-section">
+    <view class="page-pad section-top threads-heading">
+      <view>
+        <view class="eyebrow">三条暗线</view>
+        <view class="section-heading light-heading">跨越四讲的真正问题</view>
+      </view>
+    </view>
+    <scroll-view class="thread-scroll" scroll-x enhanced show-scrollbar="{{false}}">
+      <view class="thread-row">
+        <view class="thread-card" wx:for="{{hiddenThreads}}" wx:key="title">
+          <view class="thread-number">0{{index + 1}}</view>
+          <view class="thread-title">{{item.title}}</view>
+          <view class="thread-path">{{item.path}}</view>
+          <view class="thread-insight">{{item.insight}}</view>
+        </view>
+      </view>
+    </scroll-view>
+  </view>
+
+  <view class="about-entry page-pad">
+    <button class="about-button paper-card" bindtap="goAbout">
+      <view>
+        <view class="about-title">关于课程阅读版</view>
+        <view class="about-copy">查看四份原始讲义、内容整理原则与使用说明</view>
+      </view>
+      <text>→</text>
+    </button>
+  </view>
+</view>

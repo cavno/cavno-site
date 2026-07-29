@@ -1,0 +1,34 @@
+<view class="wrap safe">
+  <view class="sechead"><text class="idx">一</text><text class="t">版本档案 · 四代对照</text><text class="en">ARCHIVE</text></view>
+  <view class="seclead">同一台机器的四份体检报告。指纹条给出每一代的系统论画像：<text class="b">闭合度 / 开放度 / 变异度 / 张力耐受</text>——四条曲线的翻转，就是整部逻辑史。</view>
+
+  <scroll-view class="chips" scroll-x enhanced show-scrollbar="{{false}}">
+    <view wx:for="{{stages}}" wx:key="v" class="chip {{cur===index?'act':''}}"
+      data-i="{{index}}" bindtap="onTab">
+      <text class="c1">{{item.v}}</text><text class="c2">{{item.era}}</text>
+    </view>
+  </scroll-view>
+
+  <view class="card meta">
+    <view class="mv-big">{{s.v}}</view>
+    <view class="m-era">{{s.era}}</view>
+    <view class="m-time">{{s.time}}</view>
+    <view class="pplbox">
+      <text wx:for="{{s.ppl}}" wx:key="*this" class="ppl">{{item}}</text>
+    </view>
+    <view class="fp">
+      <view wx:for="{{s.fp}}" wx:key="index" class="mrow">
+        <text class="ml">{{fpl[index]}}</text>
+        <view class="mbar"><view class="mi" style="width:{{item}}%"></view></view>
+        <text class="mv">{{item}}</text>
+      </view>
+    </view>
+  </view>
+
+  <view class="card dim"><view class="klabel">系统特征</view><text>{{s.char}}</text></view>
+  <view class="card dim"><view class="klabel">核心机制</view><text>{{s.mech}}</text></view>
+  <view class="card dim"><view class="klabel">典型表现</view><text>{{s.form}}</text></view>
+  <view class="card dim lim"><view class="klabel">局限性 · 下一次相变的入口</view><text>{{s.lim}}</text></view>
+
+  <view class="footer"><text class="fl">四条指纹的翻转轨迹：95→25 · 8→90 · 15→92 · 10→88</text></view>
+</view>

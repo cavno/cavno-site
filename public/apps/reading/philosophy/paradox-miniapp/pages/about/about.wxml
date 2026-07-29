@@ -1,0 +1,31 @@
+<view class="wrap">
+  <view class="t-en">METHOD</view>
+  <view class="t-cn">将思想从线性时间轴解放出来</view>
+  <view class="t-sub">不再问「发生了什么」，而是问「哪些对立张力在此刻达到了临界爆发」。</view>
+
+  <view class="card">
+    <view class="c-h">母悖论 · Mother Paradox</view>
+    <view class="c-p">每一个系统——无论是基督教与佛教、《周易》与《道德经》、夏朝与改革开放、明朝与比特币、《黑暗骑士》与人性本身、哲学与脑科学——都被视作一组永久的对立张力的展开过程。这些张力不会被「解决」，只会在不同的历史与认知压力下被重新管理、重新平衡、重新引爆。</view>
+    <view class="c-p">每个系统都有一个<text class="em">母悖论</text>，它是该系统所有具体张力的总根源；具体张力则是母悖论在不同维度上的变奏与展开。</view>
+  </view>
+
+  <view class="card">
+    <view class="c-h">结构 · Structure</view>
+    <view class="c-p">每个系统页依次呈现：<text class="em">前置框架</text>（分析的入口）→ <text class="em">母悖论</text>（双极对峙与总述）→ <text class="em">具体张力</text>（逐一展开的变奏，点击可读全文）→ <text class="em">元结论</text>（收束全部张力的元层判断）。</view>
+    <view class="c-p">「中国王朝史」按时代顺序铺开三千年的悖论谱系；「学科反思」是各学科对自身的悖论性自我反思——认识论意义上最深刻的张力分析层次。</view>
+  </view>
+
+  <view class="card">
+    <view class="c-h">立场 · Stance</view>
+    <view class="c-p">悖论在此不被视作本体结构的启示，而被视作理性-逻辑工具在自身边界处的显影。因此不做黑格尔式综合：张力不被扬弃，只被悬置、被管理、被重新引爆。元结论标出的不是答案，而是系统无法自我奠基的位置。</view>
+  </view>
+
+  <view class="stats">
+    <view class="s-i"><text class="s-n">{{stats.sys}}</text><text class="s-l">SYSTEMS</text></view>
+    <view class="s-i"><text class="s-n">{{stats.ten}}</text><text class="s-l">TENSIONS</text></view>
+    <view class="s-i"><text class="s-n">{{stats.cat}}</text><text class="s-l">CATEGORIES</text></view>
+  </view>
+
+  <view class="coda">「正统不是真理的终点，而是张力的暂时管理协议。它的稳定性来自其容纳悖论而不假装解决悖论的能力。」</view>
+  <view class="safe-bottom"></view>
+</view>

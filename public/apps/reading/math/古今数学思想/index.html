@@ -1,0 +1,611 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>古今数学思想 · 四代诊断 —— 数学思想的演化史</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@400;500;600;700;900&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --paper:#F3EAD3; --paper2:#F7F0DF; --card:#FBF6EA; --card2:#FDFAF2;
+  --ink:#2B2A26; --ink2:#6B6A64; --ink3:#988B6E;
+  --teal:#0F6E56; --teal-d:#0A4E3D; --teal-l:#E7F1EE;
+  --terra:#C05B33; --terra-d:#993C1D; --gold:#B08A2E;
+  --hair:#DDD1B2; --hair2:#EAE0C6;
+  --g0:#B08A2E; --g0b:#F7EDD6; --g0d:#8A5A0B;
+  --g1:#5F5E5A; --g1b:#F1EFE8; --g1d:#43423E;
+  --g2:#C05B33; --g2b:#FAECE7; --g2d:#8F3A1C;
+  --g3:#2E6DA4; --g3b:#E6F1FB; --g3d:#17558F;
+  --g4:#4C6B23; --g4b:#EAF3DE; --g4d:#3A5C17;
+  --gx:#5B52A8; --gxb:#ECEAF6; --gxd:#3F3785;
+  --serif:'Noto Serif SC','Songti SC','Source Han Serif SC',serif;
+  --mono:'JetBrains Mono',ui-monospace,'Cascadia Code',monospace;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--serif);
+  font-size:16.5px;line-height:1.9;-webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility}
+@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}*{transition:none!important;animation:none!important}}
+.mono{font-family:var(--mono);font-feature-settings:"tnum"}
+.wrap{max-width:1080px;margin:0 auto;padding:0 22px}
+
+/* ---------- sticky nav ---------- */
+.topbar{position:sticky;top:0;z-index:40;background:rgba(243,234,211,.93);
+  backdrop-filter:blur(10px);border-bottom:1px solid var(--hair)}
+.topbar-in{max-width:1080px;margin:0 auto;padding:9px 22px;display:flex;align-items:center;gap:16px}
+.wm{display:flex;flex-direction:column;line-height:1;flex:none}
+.wm .en{font-family:var(--mono);font-size:9px;letter-spacing:.24em;color:var(--teal);margin-bottom:4px}
+.wm .cn{font-size:15px;font-weight:700}
+.nav{display:flex;gap:1px;margin-left:auto;flex-wrap:wrap;overflow-x:auto}
+.nav a{font-family:var(--mono);font-size:11.5px;padding:5px 9px;border-radius:6px;color:var(--ink2);
+  text-decoration:none;white-space:nowrap;transition:.14s}
+.nav a:hover{background:rgba(15,110,86,.09);color:var(--ink)}
+.nav a:focus-visible{outline:2px solid var(--teal);outline-offset:1px}
+
+/* ---------- hero ---------- */
+header.hero{padding:54px 0 34px;border-bottom:1px solid var(--hair)}
+.eyebrow{font-family:var(--mono);font-size:11px;letter-spacing:.24em;color:var(--terra-d);margin-bottom:16px}
+h1{font-size:clamp(32px,6.4vw,58px);font-weight:900;line-height:1.04;margin:0 0 10px;letter-spacing:.01em}
+.hsub{font-size:clamp(15px,2.4vw,19px);font-weight:600;color:var(--teal-d);margin-bottom:8px}
+.hmeta{font-family:var(--mono);font-size:12px;color:var(--ink3);margin-bottom:26px}
+.thesis{max-width:820px;font-size:clamp(16px,2.5vw,18.5px);line-height:1.88;
+  background:var(--teal-l);border-left:4px solid var(--terra);border-radius:3px;padding:18px 24px}
+.thesis b{color:var(--teal-d)}
+.stats{display:flex;flex-wrap:wrap;gap:22px 38px;margin-top:28px}
+.stat .n{font-family:var(--mono);font-size:25px;font-weight:700;color:var(--teal);line-height:1}
+.stat .l{font-size:12px;color:var(--ink2);margin-top:6px;letter-spacing:.03em}
+
+/* ---------- sections ---------- */
+section{padding:46px 0;border-bottom:1px solid var(--hair)}
+section:last-of-type{border-bottom:none}
+.sh{display:flex;align-items:baseline;gap:13px;margin-bottom:6px;flex-wrap:wrap}
+.sh .gid{font-family:var(--mono);font-size:20px;font-weight:700;color:var(--gc,var(--teal))}
+.sh h2{font-size:clamp(21px,3.4vw,27px);font-weight:700;margin:0;line-height:1.25}
+.sh .vb{font-family:var(--mono);font-size:10.5px;padding:2px 9px;border-radius:20px;
+  border:1px solid var(--gc,var(--teal));color:var(--gcd,var(--teal-d));background:var(--gcb,var(--teal-l))}
+.sh .chs{font-family:var(--mono);font-size:11.5px;color:var(--ink3);margin-left:auto}
+.lead{color:var(--ink2);font-size:14.5px;max-width:780px;margin:8px 0 22px}
+p{margin:0 0 .8em;text-align:justify}
+strong{font-weight:700;color:var(--teal-d)}
+em{font-style:normal;color:var(--terra-d);font-weight:600}
+.g0{--gc:var(--g0);--gcb:var(--g0b);--gcd:var(--g0d)}
+.g1{--gc:var(--g1);--gcb:var(--g1b);--gcd:var(--g1d)}
+.g2{--gc:var(--g2);--gcb:var(--g2b);--gcd:var(--g2d)}
+.g3{--gc:var(--g3);--gcb:var(--g3b);--gcd:var(--g3d)}
+.g4{--gc:var(--g4);--gcb:var(--g4b);--gcd:var(--g4d)}
+.gx{--gc:var(--gx);--gcb:var(--gxb);--gcd:var(--gxd)}
+
+/* ---------- version spine ---------- */
+.spine{display:flex;gap:7px;align-items:stretch;overflow-x:auto;padding:4px 0 12px}
+.gnode{flex:1 1 0;min-width:122px;background:var(--card);border:1px solid var(--hair);
+  border-top:3px solid var(--c);border-radius:10px;padding:12px 13px 13px}
+.gnode .id{font-family:var(--mono);font-size:17px;font-weight:700;color:var(--c);line-height:1}
+.gnode .nm{font-size:14.5px;font-weight:700;margin:6px 0 3px}
+.gnode .yr{font-family:var(--mono);font-size:10px;color:var(--ink3)}
+.gnode .ch{font-family:var(--mono);font-size:10px;color:var(--cd);margin-top:5px}
+.spine .arw{align-self:center;color:var(--ink3);opacity:.55;flex:none}
+
+/* ---------- cards & callouts ---------- */
+.box{background:var(--card);border:1px solid var(--hair);border-radius:11px;padding:17px 20px;margin:18px 0}
+.box.kline{border-left:4px solid var(--gold);background:#FBF5E6}
+.box.frame{border-left:4px solid var(--teal)}
+.box.debt{border-left:4px solid var(--terra);background:#F9EEE7}
+.box .bt{font-family:var(--mono);font-size:11px;letter-spacing:.08em;margin-bottom:7px}
+.box.kline .bt{color:var(--gold)}
+.box.frame .bt{color:var(--teal)}
+.box.debt .bt{color:var(--terra-d)}
+.box p:last-child{margin-bottom:0}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:15px;margin:18px 0}
+@media(max-width:760px){.grid2{grid-template-columns:1fr}}
+
+/* ---------- tables ---------- */
+.tw{overflow-x:auto;border:1px solid var(--hair);border-radius:11px;margin:20px 0;background:var(--card2)}
+table{border-collapse:separate;border-spacing:0;width:100%;min-width:620px;font-size:14px}
+th{background:var(--teal);color:#F6EFDF;padding:9px 12px;text-align:left;font-weight:700;
+  font-size:13px;border-bottom:1px solid var(--teal-d);position:sticky;top:0}
+td{padding:9px 12px;border-bottom:1px solid var(--hair2);vertical-align:top;line-height:1.65}
+tr:last-child td{border-bottom:none}
+tr:nth-child(even) td{background:rgba(0,0,0,.018)}
+td .mn{font-family:var(--mono);font-size:11.5px;color:var(--terra-d);font-weight:700;white-space:nowrap}
+td .yr{font-family:var(--mono);font-size:11px;color:var(--ink3);white-space:nowrap}
+.tag{display:inline-block;font-family:var(--mono);font-size:10px;padding:1px 7px;border-radius:4px;
+  border:1px solid;white-space:nowrap}
+.t0{color:var(--g0d);background:var(--g0b);border-color:var(--g0)}
+.t1{color:var(--g1d);background:var(--g1b);border-color:var(--g1)}
+.t2{color:var(--g2d);background:var(--g2b);border-color:var(--g2)}
+.t3{color:var(--g3d);background:var(--g3b);border-color:var(--g3)}
+.t4{color:var(--g4d);background:var(--g4b);border-color:var(--g4)}
+.tx{color:var(--gxd);background:var(--gxb);border-color:var(--gx)}
+
+/* ---------- figures ---------- */
+figure{margin:26px 0;text-align:center}
+figure svg{max-width:100%;height:auto;background:var(--card2);border:1px solid var(--hair2);
+  border-radius:10px;padding:8px}
+figcaption{font-family:var(--mono);font-size:11px;color:var(--ink3);margin-top:9px}
+
+/* ---------- ledger (signature) ---------- */
+.ledger{background:var(--card2);border:1px solid var(--hair);border-radius:12px;overflow:hidden;margin:22px 0}
+.lrow{display:grid;grid-template-columns:96px 1fr 128px;gap:0;border-bottom:1px solid var(--hair2);align-items:stretch}
+.lrow:last-child{border-bottom:none}
+.lrow.hd{background:var(--teal);color:#F6EFDF;font-family:var(--mono);font-size:11.5px;letter-spacing:.05em}
+.lrow.hd>div{padding:8px 13px}
+.lrow>.ly{font-family:var(--mono);font-size:11.5px;color:var(--terra-d);font-weight:700;
+  padding:13px;border-right:1px solid var(--hair2);display:flex;align-items:center}
+.lrow>.lb{padding:13px 15px}
+.lrow>.lb .h{font-size:15px;font-weight:700;margin-bottom:3px}
+.lrow>.lb .d{font-size:13px;color:var(--ink2);line-height:1.6}
+.lrow>.ls{padding:13px;border-left:1px solid var(--hair2);display:flex;align-items:center;
+  font-family:var(--mono);font-size:11px;color:var(--terra-d)}
+.lrow.settled>.ls{color:var(--g4d)}
+@media(max-width:700px){.lrow{grid-template-columns:74px 1fr}.lrow>.ls{grid-column:1/-1;border-left:none;
+  border-top:1px dashed var(--hair2);padding:8px 13px}.lrow.hd>div:last-child{display:none}}
+
+footer{max-width:1080px;margin:0 auto;padding:26px 22px 64px;border-top:1px solid var(--hair);
+  font-family:var(--mono);font-size:11.5px;color:var(--ink3);line-height:2}
+footer b{color:var(--ink2)}
+@media(max-width:720px){.wrap{padding:0 15px}header.hero{padding:34px 0 24px}section{padding:34px 0}}
+</style>
+</head>
+<body>
+
+<div class="topbar"><div class="topbar-in">
+  <div class="wm"><span class="en">COGNITIVE&nbsp;OS · 案外案</span><span class="cn">古今数学思想 · 四代诊断</span></div>
+  <nav class="nav">
+    <a href="#judge">判词</a><a href="#kline">作者立场</a><a href="#axis">版本轴</a>
+    <a href="#xu">序</a><a href="#v1">1.0</a><a href="#mid">间代</a><a href="#v2">2.0</a>
+    <a href="#v3">3.0</a><a href="#v4">4.0</a><a href="#vx">∞</a>
+    <a href="#ledger">无穷账簿</a><a href="#rhyme">韵脚</a><a href="#settle">收账</a><a href="#residue">残余</a>
+  </nav>
+</div></div>
+
+<div class="wrap">
+
+<header class="hero" id="judge">
+  <div class="eyebrow">莫里斯·克莱因《古今数学思想》· 51 章 · 三册 · 四代版本迭代诊断</div>
+  <h1>真理的丧失</h1>
+  <div class="hsub">一部四代演化史，作者用另一套词汇提前五十年写完了</div>
+  <div class="hmeta">Morris Kline, Mathematical Thought from Ancient to Modern Times（1972）· 中译三册 · 诊断日期 2026-07</div>
+
+  <div class="thesis">
+    这本书不是"又一个可供框架分析的系统"。它是<b>框架零件的原产地档案</b>——分层、元语言、悖论、位移，这些词全部是从这本书讲的那段历史里长出来的。
+    所以本篇的正确姿态不是"应用"，是<em>校准</em>：贴合处一律折价，只有偏差处算真发现。
+    而最大的偏差在结尾——克莱因给这段历史的拓扑判词是 <b>环</b>（数学走了一个圆圈，最终只能建立在实用的基础上），框架的读法是 <b>梯</b>。
+    两个判词都不全对。真正的形状在第十二节。
+  </div>
+
+  <div class="stats">
+    <div class="stat"><div class="n">51</div><div class="l">章 · 从美索不达米亚到哥德尔</div></div>
+    <div class="stat"><div class="n">25</div><div class="l">个世纪 · 克莱因自述跨度</div></div>
+    <div class="stat"><div class="n">6</div><div class="l">副账本 · 无穷这枚母悖论换过的</div></div>
+    <div class="stat"><div class="n">0</div><div class="l">次结清</div></div>
+    <div class="stat"><div class="n">2</div><div class="l">笔欠账 · 由作者自己申报</div></div>
+  </div>
+</header>
+
+<!-- ============ 作者立场 ============ -->
+<section id="kline">
+  <div class="sh"><span class="gid">壹</span><h2>先给作者定位：这本书自己站在哪一代</h2><span class="chs">序 · 第43章 · 第51章</span></div>
+  <p class="lead">诊断对象不是"数学史本身"，是"克莱因讲述的数学史"。所以第一步必须把讲述者的立场、判据与自报的盲点摆上台面——否则后面所有判词都会把作者的偏见当成史实。</p>
+
+  <p><strong>他的中心论点是一句否定句</strong>：数学不是一堆关于自然的真理。全书的脊柱是第43章第4节的标题——<em>真理的丧失</em>。他的叙事线是：数学诞生于直觉与经验；希腊人把严密性立为目标；随后两千年里数学被当作自然界的真实描述（希腊人、笛卡儿、牛顿、欧拉都相信自己在揭示天地万物的数学设计）；而负数、复数、四元数、非欧几何、n 维几何、病态函数、超限数这一串"在真实世界里没有直接对应物"的概念被逐一引进，迫使数学家承认数学是人为的创造物；到 1900 年，数学与实在分裂，它失去了对自然界真理的所有权。</p>
+
+  <div class="box kline">
+    <div class="bt">克莱因的判据（第43章第4节）</div>
+    <p>他把"真理"的退守划成三段：<strong>几何先失</strong>（非欧几何使欧氏公理从自明真理降为一种选择；高斯早在 19 世纪初就把几何判为经验科学，该与力学并列）→ <strong>算术后守</strong>（高斯、克罗内克、弗雷格都退到"真理存在于算术、因而存在于分析"这道防线）→ <strong>算术亦失</strong>（非交换代数尤其四元数与矩阵，逼出那个问题：凭什么普通数享有"是真实世界的真理"这种特权？亥姆霍兹随后攻击算术的真理性——雨点相加不产生两个雨点，并联电阻不能相加，两个音调可以同时等于中间那个音调而耳朵仍能分辨它们）。到 19 世纪末，盛行的看法是数学里一切公理都是任意的。</p>
+  </div>
+
+  <p>用框架的词汇：<strong>克莱因写的是"自创生 ≠ 自我担保"的编年史</strong>。数学做到了操作闭合（形式化、公理化、自产元件），却在同一过程中发现自我奠基不可能。这与框架第 18 案的判词是同一句话，只是他用的词是"真理的丧失"，框架用的词是"元层外借"。<em>这不是巧合，是同源</em>——框架的这条判词本来就是从这段历史里提炼的。</p>
+
+  <div class="grid2">
+    <div class="box debt">
+      <div class="bt">⚖ 作者自报欠账之一 · 幸存者偏差（#7）</div>
+      <p>克莱因在序里明说：忽略中国、日本、玛雅文化，<strong>因为他们的工作对数学思想的主流没有重大影响</strong>。这个判据是循环的——主流由幸存者定义，幸存者又定义主流。框架欠账 #7 说"'科学'这个单数名词是欧洲血脉的家谱"，此处得到作者亲笔背书。他同时排除概率论与差分演算，理由是在所考虑的时期未起重要作用。</p>
+    </div>
+    <div class="box debt">
+      <div class="bt">⚖ 作者自报欠账之二 · 顺序理想化（#8）</div>
+      <p>他明说：为使叙述连贯，每一发展<strong>要等到它已经成熟、占重要地位并产生影响时才论述</strong>——所以非欧几何放在 19 世纪讲，尽管寻找平行公理替代物的努力早在欧几里得时代就开始并从未中断。这是框架欠账 #8 的教科书自白：<em>代际顺序是按成熟度回溯重排的，不是历史的行军路线</em>。</p>
+    </div>
+  </div>
+
+  <div class="box frame">
+    <div class="bt">■ 他自己也反 1.0 —— 关于教科书的那一段</div>
+    <p>序里有一段专门骂教科书：系统的逻辑叙述给人一种幻觉，仿佛数学家理所当然地从定理走到定理、能克服任何困难、课程已成定局。而历史教的相反：一个科目由不同方向的点滴积累而成，常常需要几十年甚至几百年才迈出有意义的几步；已取得的成就往往只是开始。<strong>用框架的话：教科书是一份 1.0 的呈现，覆盖在一段其实是 2.0 与 3.0 反复搏斗的历史之上。</strong>克莱因写这本书的动机之一，就是拆掉这层 1.0 的粉刷。</p>
+  </div>
+</section>
+
+<!-- ============ 版本轴 ============ -->
+<section id="axis">
+  <div class="sh"><span class="gid">贰</span><h2>版本轴：51 章落在六格里</h2><span class="chs">全书</span></div>
+  <p class="lead">判据只有一条：当数学遇到它当时的架构消化不了的对象（不可通约量、负数、复数、无穷小、发散级数、非欧空间、实无穷、悖论），它做了什么。这个动作即代际。</p>
+
+  <div class="spine">
+    <div class="gnode" style="--c:var(--g0);--cd:var(--g0d)"><div class="id">序</div><div class="nm">划第一刀</div>
+      <div class="yr">前 6 世纪</div><div class="ch">第 3 章</div></div>
+    <span class="arw">→</span>
+    <div class="gnode" style="--c:var(--g1);--cd:var(--g1d)"><div class="id">1.0</div><div class="nm">封闭 · 拒收</div>
+      <div class="yr">前 300 — 1500</div><div class="ch">第 4–8 章</div></div>
+    <span class="arw">→</span>
+    <div class="gnode" style="--c:var(--g2);--cd:var(--g2d)"><div class="id">间代</div><div class="nm">用而不认</div>
+      <div class="yr">1200 — 1665</div><div class="ch">第 9–16 章</div></div>
+    <span class="arw">→</span>
+    <div class="gnode" style="--c:var(--g2);--cd:var(--g2d)"><div class="id">2.0</div><div class="nm">耗散 · 燃烧</div>
+      <div class="yr">1665 — 1872</div><div class="ch">第 17–26 章</div></div>
+    <span class="arw">→</span>
+    <div class="gnode" style="--c:var(--g3);--cd:var(--g3d)"><div class="id">3.0</div><div class="nm">分层 · 位移</div>
+      <div class="yr">1830 — 1931</div><div class="ch">第 27–43、51 章</div></div>
+    <span class="arw">→</span>
+    <div class="gnode" style="--c:var(--g4);--cd:var(--g4d)"><div class="id">4.0</div><div class="nm">生态 · 共存</div>
+      <div class="yr">1940 —</div><div class="ch">第 44–51 章</div></div>
+    <span class="arw">→</span>
+    <div class="gnode" style="--c:var(--gx);--cd:var(--gxd)"><div class="id">∞</div><div class="nm">镜厅</div>
+      <div class="yr">1931 —</div><div class="ch">第 51 章</div></div>
+  </div>
+
+  <div class="tw">
+  <table>
+    <thead><tr><th>章</th><th>克莱因的章题</th><th>消化不了的输入</th><th>处置动作</th><th>代</th></tr></thead>
+    <tbody>
+      <tr><td class="mn">1–2</td><td>美索不达米亚 · 埃及的数学</td><td>无——不问"为什么必然对"</td><td>配方集：对了就用</td><td><span class="tag t0">序前</span></td></tr>
+      <tr><td class="mn">3</td><td>古典希腊数学的产生</td><td>经验规则的可靠性</td><td>划第一刀：只留演绎必然</td><td><span class="tag t0">序</span></td></tr>
+      <tr><td class="mn">4</td><td>欧几里得和阿波罗尼斯</td><td>不可通约量（第十篇专门分类）</td><td>围堵：量与数分家，代数几何化</td><td><span class="tag t1">1.0</span></td></tr>
+      <tr><td class="mn">5–6</td><td>亚历山大时期：几何三角 · 算术代数</td><td>实无穷</td><td>穷竭法躲开它</td><td><span class="tag t1">1.0</span></td></tr>
+      <tr><td class="mn">7</td><td>希腊人对自然形成理性观点的过程</td><td>—</td><td>装上形而上学执照："数学设计"信念</td><td><span class="tag t1">1.0</span></td></tr>
+      <tr><td class="mn">8</td><td>希腊世界的衰替（含"希腊数学的局限性"）</td><td>代数的独立性、负数、无理数</td><td>脆断：作者亲自列出局限性清单</td><td><span class="tag t1">1.0</span></td></tr>
+      <tr><td class="mn">9–13</td><td>印度和阿拉伯 · 中世纪 · 文艺复兴 · 16-17 世纪算术代数</td><td>零、负数、无理数、复数</td><td><b>用而不认</b>：经常使用、始终怀疑</td><td><span class="tag t2">间代</span></td></tr>
+      <tr><td class="mn">14–15</td><td>射影几何的肇始 · 坐标几何</td><td>透视法里的无穷远点</td><td>新原理出现；代数与几何联姻</td><td><span class="tag t2">间代</span></td></tr>
+      <tr><td class="mn">16</td><td>科学的数学化（含函数概念）</td><td>运动与变化</td><td>把效度法庭外包给物理学</td><td><span class="tag t2">间代</span></td></tr>
+      <tr><td class="mn">17</td><td>微积分的创立（含"微积分的可靠性"）</td><td>无穷小＝零∧非零</td><td><b>接上传动轴当燃料烧</b></td><td><span class="tag t2">2.0</span></td></tr>
+      <tr><td class="mn">19–20</td><td>18 世纪的微积分 · 无穷级数</td><td>发散级数、收敛性</td><td>宁给和数赋义，不问求和法</td><td><span class="tag t2">2.0</span></td></tr>
+      <tr><td class="mn">21–25</td><td>常微分方程 · 偏微分方程 · 解析与微分几何 · 变分法 · 代数</td><td>存在性、唯一性、次序交换</td><td>几乎无人问津，产出爆炸</td><td><span class="tag t2">2.0</span></td></tr>
+      <tr><td class="mn">26</td><td>18 世纪的数学（含"证明的问题"）</td><td>严密性本身</td><td>公开嘲笑严密性：<b>英雄年代</b></td><td><span class="tag t2">2.0</span></td></tr>
+      <tr><td class="mn">31 · 49</td><td>伽罗瓦理论 · 抽象代数的出现</td><td>五次方程不可解</td><td>位移：从解方程改为研究结构</td><td><span class="tag t3">3.0</span></td></tr>
+      <tr><td class="mn">32–33</td><td>四元数向量 · 行列式和矩阵</td><td>乘法交换律失效</td><td>放弃交换律，保住系统 → 算术真理性受挑战</td><td><span class="tag t3">3.0</span></td></tr>
+      <tr><td class="mn">36 · 38</td><td>非欧几里得几何 · 射影几何与度量几何</td><td>平行公理不可证</td><td><b>公理从启示改判为约定</b>；模型给出相对一致性</td><td><span class="tag t3">3.0</span></td></tr>
+      <tr><td class="mn">40</td><td>分析中注入严密性</td><td>无穷小这个"对象"</td><td>ε-δ：把它位移进量词</td><td><span class="tag t3">3.0</span></td></tr>
+      <tr><td class="mn">41</td><td>实数和超限数的基础</td><td>实数是什么 → 实无穷</td><td>构造实数需要实无穷 → 康托尔编户</td><td><span class="tag t3">3.0</span></td></tr>
+      <tr><td class="mn">42</td><td>几何基础（"欧几里得中的缺陷"）</td><td>欧几里得偷用图形直觉</td><td>希尔伯特重铸：彻底去直觉化</td><td><span class="tag t3">3.0</span></td></tr>
+      <tr><td class="mn">43</td><td>19 世纪的数学（公理化运动 · 真理的丧失 · 相容性问题）</td><td>"数学为真"这个信念</td><td>三线汇合，判据迁移完成</td><td><span class="tag t3">3.0</span></td></tr>
+      <tr><td class="mn">47</td><td>发散级数（非正式应用 → 渐近级数 → 可和性）</td><td>2.0 时代最非法的燃料</td><td><b>追认式立法</b>：野生突变被收编转正</td><td><span class="tag t4">4.0</span></td></tr>
+      <tr><td class="mn">44–46 · 48 · 50</td><td>实变函数论 · 积分方程 · 泛函分析 · 张量分析 · 拓扑</td><td>—</td><td>诸分支各占辖区，公理化蔓延</td><td><span class="tag t4">4.0</span></td></tr>
+      <tr><td class="mn">51</td><td>数学基础（悖论 · 三学派 · 一些新近的发展）</td><td>集合论悖论、不完备性</td><td>三学派分头处置 → 独立性 → 公理成为选项</td><td><span class="tag tx">∞ / 4.0</span></td></tr>
+    </tbody>
+  </table>
+  </div>
+</section>
+
+<!-- ============ 序 ============ -->
+<section id="xu" class="g0">
+  <div class="sh"><span class="gid">序</span><h2>划第一刀：把配方判为噪声</h2><span class="vb">开界</span><span class="chs">第 1–3 章</span></div>
+  <p>克莱因把巴比伦与埃及各给一章，然后各给一节"评价"与"总结"。结论一致：那是<strong>配方集</strong>——绳测、面积公式、经验规则，对了就用，没有人问"为什么必然对"。他连巴比伦代数的技巧水平都承认不低，但那不构成数学思想。</p>
+  <p>第一刀落在第 3 章：爱奥尼亚、毕达哥拉斯、埃利亚、诡辩、柏拉图、欧多克索斯、亚里士多德七个学派串成一条动作——<em>把"经验上够用"整体判为噪声，只保留能从少数自明起点用纯演绎链接出来的东西</em>。这一刀切掉的不是错误答案，是<strong>一整类曾经合法的知识形态</strong>。</p>
+  <p>而第 7 章"希腊人对自然形成理性观点的过程"给出了这一刀的形而上学执照——克莱因专门列了一节叫"数学设计信念的发展"。<strong>1.0 不只需要公理，还需要一个理由相信公理为真</strong>；希腊人的理由是宇宙按数学设计。这条执照要到两千三百年后才被吊销，而吊销它的那一章标题就是"真理的丧失"。</p>
+</section>
+
+<!-- ============ 1.0 ============ -->
+<section id="v1" class="g1">
+  <div class="sh"><span class="gid">1.0</span><h2>封闭：两次拒收，一次围堵</h2><span class="vb">拒收</span><span class="chs">第 4–8 章</span></div>
+
+  <p><strong>第一次消化不良：不可通约量。</strong>这里有一枚只有看目录才看得见的证据——《原本》第十篇的标题是"不可公度量的分类"。<em>欧几里得为不可通约量专门写了一整篇，用来给它们分类，而不是修改"数"的定义。</em>这是围堵的教科书动作：在指定位置容纳异物，换取全域不崩。代价是量与数分家、代数被束缚于几何。</p>
+
+  <div class="box frame">
+    <div class="bt">■ 围堵的连锁代价：三维天花板</div>
+    <p>克莱因在第43章第3节把这条代价追到底：只要代数被束缚于几何，<strong>多于三个量的乘积就会被拒绝</strong>。于是亚里士多德说除了三维没有别的大小，还加一句"因为 3 是一个完全数"；沃利斯把高维空间称作自然界里的怪物，说连幻想也想象不出第四维；卡丹、笛卡儿、帕斯卡、莱布尼茨都考虑过第四维而以荒谬排除；默比乌斯 1827 年发现镜像图形能在四维叠合，随即又说这种空间不能想象所以叠合不可能；库默尔到 1860 年代还在嘲弄四维几何。<em>一次成功的围堵，锁死了两千年的维数上限。</em></p>
+  </div>
+
+  <p><strong>第二次消化不良：实无穷。</strong>克莱因在全书最后一节亲手点名：无穷这个概念对希腊人已经在无理数上造成问题，<em>而他们在穷竭法中躲开了它</em>。穷竭法是一台精巧的规避装置——用可以任意接近但从不抵达的有限过程，绕开需要实无穷的那一步。1.0 的标准动作：不是解决，是设计一条不必面对它的路线。</p>
+
+  <p><strong>脆断的验尸报告由作者亲自出具</strong>：第 8 章第 2 节标题就是"希腊数学的局限性"，第 3 节是"希腊人留给后代的问题"。1.0 的失败模式在此完整显形——它内部一致得无懈可击（这正是它长寿的原因），但它<em>没有降级模式</em>：不能"部分地"承认无理数，不能"稍微"允许四维。要动，就得动地基。</p>
+</section>
+
+<!-- ============ 间代 ============ -->
+<section id="mid" class="g2">
+  <div class="sh"><span class="gid">间代</span><h2>用而不认：燃料装载期</h2><span class="vb">悬置</span><span class="chs">第 9–16 章</span></div>
+  <p class="lead">框架的四代表里没有这一格，但克莱因用了八章。它不是 1.0 也不是 2.0，是<em>一段长达四百年的会计悬置</em>——对象已在使用，户口尚未办理。</p>
+
+  <p>零、负数、无理数、复数，在印度、阿拉伯、中世纪与文艺复兴的算术里被<strong>持续使用而始终不被承认</strong>。克莱因的措辞很准：因为这两种数在自然界中没有"实在性"，所以直到 19 世纪初，虽已经常被人使用，但仍然受到怀疑。</p>
+
+  <div class="box kline">
+    <div class="bt">克莱因的反直觉判词：成功的围堵会推迟换代</div>
+    <p>负数被解释成直线上的定向距离、复数被解释成平面上的点或向量——这些几何解释给了它们直观意义，使它们变得可以接受。<strong>但克莱因紧接着说：也可能因此推延了对"数学处理人为概念"这一点的认识。</strong></p>
+    <p style="margin-top:.6em">这句话给框架的 R2（圣化围堵）补了一款此前没有的条目：<em>围堵的代价不只是盲点上移，还包括延迟觉悟——一个足够成功的补丁，会让系统更晚发现自己需要换代。</em>补丁越漂亮，换代越迟。</p>
+  </div>
+
+  <p>第 16 章"科学的数学化"是这一段真正的枢纽，因为它安装了 2.0 引擎运转两百年所必需的那件东西：<strong>一个外部效度法庭</strong>。笛卡儿的科学观、伽利略的研究方式、函数概念——数学从此把"我的结论对不对"这个问题的裁决权，交给了物理世界。这件事的全部后果，在下一节。</p>
+</section>
+
+<!-- ============ 2.0 ============ -->
+<section id="v2" class="g2">
+  <div class="sh"><span class="gid">2.0</span><h2>耗散：英雄年代（1665–1872）</h2><span class="vb">燃烧</span><span class="chs">第 17–26 章</span></div>
+  <p class="lead">这是全书最厚的一段，也是框架 2.0 判词的原产地。克莱因不是"被诊断出" 2.0——他<em>写了一份 2.0 引擎的操作手册</em>，第 26 章第 3 节"证明的问题"整节都是运行日志。</p>
+
+  <p><strong>燃料的化学式</strong>：微积分的 dx 在同一次计算里必须先非零（才能作除数）后为零（才能被扔掉）。第 17 章第 8 节的标题就是"微积分的可靠性"——它从诞生之日起就受到攻击，而机器照转。</p>
+
+  <div class="box kline">
+    <div class="bt">运行日志（第26章第3节，转述）</div>
+    <p>分析里那些较细致的问题——级数与积分的收敛性、微分与积分次序的交换、高阶微分的使用、微分方程解的存在性——几乎无人问津。数学家能工作，完全归功于<strong>运算法则是清楚的</strong>。</p>
+    <p style="margin-top:.6em">对符号的信任远远超过对逻辑的信任：因为无穷级数对一切 x 有同一个符号形式，收敛与发散的区别看来不需要注意；即使认识到 1＋2＋3＋… 的和是无穷，他们<em>宁愿试图给和数赋予一种意义，而不愿对求和法提出疑问</em>。欧拉被公式迷住，一看到公式就情不自禁要演算。</p>
+    <p style="margin-top:.6em">而最关键的那句是审计制度的自白：<strong>结论在物理上的正确性，保证了它在数学上也必定是正确的。</strong></p>
+  </div>
+
+  <div class="box frame">
+    <div class="bt">■ 这一段修正了框架的一条判词：引擎可以租用别人的法庭</div>
+    <p>框架说 2.0 的病根是"引擎审计不了引擎"——扬弃是否有效由引擎自己宣布，因此整机不可证伪。<em>数学的 2.0 是这条判词的一个反例，而且是有益的反例。</em></p>
+    <p style="margin-top:.6em">它之所以能烧两百零七年而不脆断，正因为它<strong>不由自己审计</strong>：它把效度法庭外包给了物理学，每天用行星位置的预测精度过审。这不是自证，是真实的外部约束——只不过约束的是结果，不是地基。</p>
+    <p style="margin-top:.6em">于是 1872 年前后的停机也有了新解释：<strong>不是良心发现，是租约到期。</strong>19 世纪数学职业化、脱离物理学供养自立门户，效度法庭从"能否预测木星"换成"同行能否重跑证明"。克莱因自己给了这条的钥匙——他说这少数追求严密性的努力值得注意，因为它们表明<em>严密化的标准是随时代而变的</em>。标准随时代变，因为法庭随出资人变。</p>
+  </div>
+
+  <p><strong>2.0 对 1.0 的公开鄙视</strong>，克莱因收集了一串：拉克鲁瓦在教程序言里说希腊人烦恼的那种琐碎东西我们不再需要了；克莱罗抱怨欧几里得自找麻烦去证明两个相交圆的圆心不同这类常识，说那是为了对付顽固的诡辩论者、而今天局面倒转、这类推理只会掩盖真理使读者厌倦；赫内-弗朗斯基被巴黎科学院批评缺乏严密性，回答说这是迂腐、一种偏爱手段而忽视目的的迂腐。达朗贝尔 1743 年的自评最坦白：一直以来更关心的是扩大建筑，而不是给基础补充强度。</p>
+
+  <p>克莱因给这一段的命名是<em>英雄年代</em>——在理论完全没有保证的情况下极端相信结论，愿意如此勇敢地冲杀向前。他同时替 18 世纪辩护：以有限的人手，这个世纪的伟大创造大大超过任何其他世纪，而 19、20 世纪的人倾向于抓住其中的错误来贬低它。<strong>这是框架欠账 #10（拉卡托斯反诉：修补不是病理）在数学史上的完整版本——2.0 的"不严密"不是缺陷，是那个阶段唯一可行的生产方式。</strong></p>
+</section>
+
+<!-- ============ 3.0 ============ -->
+<section id="v3" class="g3">
+  <div class="sh"><span class="gid">3.0</span><h2>分层：三条独立的位移线，汇合于 1900</h2><span class="vb">位移</span><span class="chs">第 27–43、51 章</span></div>
+  <p class="lead">框架讲 3.0 通常只讲一条线（ε-δ 把无穷小位移进量词）。这本书的目录暴露出<em>三条彼此独立、动机不同、几乎同时抵达的位移线</em>——而它们的会合点就是"真理的丧失"。</p>
+
+  <figure>
+    <svg viewBox="0 0 760 300" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="三条3.0位移线汇合于1900年真理的丧失">
+      <defs>
+        <marker id="ar" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
+          <path d="M0,0 L6,3 L0,6 z" fill="#44443f"/>
+        </marker>
+      </defs>
+      <style>
+        .lb{fill:#2B2A26;font-family:'Noto Serif SC',serif;font-size:13px;font-weight:600}
+        .sm{fill:#6B6A64;font-family:'JetBrains Mono',monospace;font-size:10px}
+        .ln{stroke:#2E6DA4;stroke-width:2;fill:none}
+        .nd{fill:#E6F1FB;stroke:#2E6DA4;stroke-width:1.2}
+        .hub{fill:#FAECE7;stroke:#C05B33;stroke-width:2}
+      </style>
+      <text class="sm" x="24" y="24">三条独立的 3.0 位移线</text>
+
+      <!-- line A -->
+      <text class="lb" x="24" y="62">甲 · 分析严格化</text>
+      <text class="sm" x="24" y="78">第 40 → 41 章</text>
+      <rect class="nd" x="180" y="46" width="132" height="30" rx="5"/>
+      <text class="sm" x="192" y="65">ε-δ：无穷小→量词</text>
+      <rect class="nd" x="330" y="46" width="130" height="30" rx="5"/>
+      <text class="sm" x="342" y="65">实数构造→实无穷</text>
+      <path class="ln" d="M150,61 L178,61" marker-end="url(#ar)"/>
+      <path class="ln" d="M314,61 L328,61" marker-end="url(#ar)"/>
+      <path class="ln" d="M462,61 Q560,61 570,128" marker-end="url(#ar)"/>
+
+      <!-- line B -->
+      <text class="lb" x="24" y="140">乙 · 非欧几何</text>
+      <text class="sm" x="24" y="156">第 36 → 38 章</text>
+      <rect class="nd" x="180" y="124" width="132" height="30" rx="5"/>
+      <text class="sm" x="192" y="143">公理：启示→约定</text>
+      <rect class="nd" x="330" y="124" width="130" height="30" rx="5"/>
+      <text class="sm" x="342" y="143">模型→相对一致</text>
+      <path class="ln" d="M150,139 L178,139" marker-end="url(#ar)"/>
+      <path class="ln" d="M314,139 L328,139" marker-end="url(#ar)"/>
+      <path class="ln" d="M462,139 L554,139" marker-end="url(#ar)"/>
+
+      <!-- line C -->
+      <text class="lb" x="24" y="218">丙 · 结构与公理化</text>
+      <text class="sm" x="24" y="234">第 31·32·42 章</text>
+      <rect class="nd" x="180" y="202" width="132" height="30" rx="5"/>
+      <text class="sm" x="192" y="221">交换律可放弃</text>
+      <rect class="nd" x="330" y="202" width="130" height="30" rx="5"/>
+      <text class="sm" x="342" y="221">希尔伯特去直觉化</text>
+      <path class="ln" d="M150,217 L178,217" marker-end="url(#ar)"/>
+      <path class="ln" d="M314,217 L328,217" marker-end="url(#ar)"/>
+      <path class="ln" d="M462,217 Q560,217 570,150" marker-end="url(#ar)"/>
+
+      <!-- hub -->
+      <rect class="hub" x="556" y="118" width="180" height="42" rx="7"/>
+      <text class="lb" x="576" y="136" style="fill:#993C1D">1900 · 真理的丧失</text>
+      <text class="sm" x="576" y="152">第43章第4节</text>
+      <text class="sm" x="556" y="192">数学与实在分裂：</text>
+      <text class="sm" x="556" y="208">一切公理都是任意的</text>
+    </svg>
+    <figcaption>三条线动机各异——甲为补微积分的账，乙为破平行公理，丙为放弃运算律与剔除图形直觉；三者都把"真"位移成"在何系统内可推"</figcaption>
+  </figure>
+
+  <p><strong>甲线（第 40 → 41 章）：分析严格化。</strong>ε-δ 里没有任何"既零又非零"的对象，只有量词嵌套——矛盾之物被溶解成逻辑之形。但章序本身就是账单：<em>第 40 章"分析中注入严密性"之后紧接第 41 章"实数和超限数的基础"</em>，因为要让 ε-δ 严格，先得说清实数是什么；构造实数需要实无穷；于是第 41 章第 6 到 9 节一路走到"集合论在 20 世纪初的状况"，而第 51 章第 2 节就是"集合论的悖论"。<strong>处理旧矛盾的手术刀，亲手放进了下一场危机的病原体——这条判词在克莱因的目录里是三章连号的。</strong></p>
+
+  <p><strong>乙线（第 36 → 38 章）：非欧几何。</strong>克莱因说得比框架更狠：非欧几何的冲击<em>被几乎所有数学家所特有的保守主义和封闭思想延误了</em>。他给出一串迟到清单——勒让德 1794 年仍相信欧氏公理是自明真理；约翰·波尔约以为绝对真理是欧氏与双曲共有的那些公理（他不知道椭圆几何）；黎曼 1854 年仍相信某些空间命题是先验的；凯莱在英国科学促进协会的主席致词里坚称几何命题对欧氏空间不只近似为真而是绝对为真；凯莱与克莱因（Felix Klein）本人做过非欧几何工作，却把它当成"在欧氏几何中引进新距离函数得到的新奇结果"，没看出它和欧氏一样基本。罗素 1897 年放弃了欧氏的先验性，却把射影几何立为先验——克莱因的评语是：<em>无非用一种射影癖代替了欧几里得癖</em>。</p>
+
+  <p><strong>丙线（第 31、32、42 章）：结构与公理化。</strong>伽罗瓦把"这个方程能不能解"位移成"它的置换群是什么结构"；四元数与矩阵证明<strong>运算律本身可以被放弃</strong>（交换律不是真理，是一项可选配置）——这一步直接引爆了算术的真理性；希尔伯特的《几何基础》剔除欧几里得偷用的图形直觉，把几何变成纯形式的符号游戏。三者共同完成一次判据迁移：<em>从"公理为真"迁到"公理只是推理的出发点"</em>。</p>
+
+  <div class="box frame">
+    <div class="bt">■ 三学派 = 三种代际策略，同时开工</div>
+    <p>第 51 章把危机的三条应对并排放着，而它们恰好是三个不同的代际动作：<strong>逻辑派与形式派＝强化闭合</strong>（1.0 之梦穿上 3.0 工具重返，要为整座塔封顶：一致且完备）；<strong>直观派＝回缩</strong>（布劳威尔的截肢方案，退回可构造的锚，R1）；<strong>元数学＝分层</strong>（数学看数学，真正的 3.0）。克莱因给三家的总判词是：都没有达到目的，没有对数学提供一个可以普遍接受的途径；哥德尔 1931 年以后的发展也没有实质改变这种状况。</p>
+  </div>
+</section>
+
+<!-- ============ 4.0 ============ -->
+<section id="v4" class="g4">
+  <div class="sh"><span class="gid">4.0</span><h2>生态：公理成为选项</h2><span class="vb">共存</span><span class="chs">第 44–51 章</span></div>
+
+  <p>4.0 的门槛在第 51 章最后一节被跨过，而克莱因把话说得很直白：哥德尔 1940 年证明选择公理与广义连续统假设不可反证；科恩 1963 年证明这两条对策梅洛-弗伦克尔系统是独立的、不能以该系统为基础证明；<strong>这些结果意味着，可以随意去构造数学的新系统，在其中这两条有争议的公理有一条或两条全被否定。</strong></p>
+
+  <p>这就是 4.0 的签名：<em>多方案并存，有效性环境相对</em>。"连续统假设真吗"这个问题失效了，取而代之的是"在哪个模型里"。判据从真值迁移到辖区——与非欧几何那次迁移同型，只是这一次动的是集合论的地基。</p>
+
+  <div class="box frame">
+    <div class="bt">■ 第 47 章是一枚完整的追认式立法（R3）</div>
+    <p>看这一章的节序：发散级数的<em>非正式应用</em> → 渐近级数的<em>正式理论</em> → <em>可和性</em>。</p>
+    <p style="margin-top:.6em">发散级数是 2.0 时代最非法的燃料——欧拉拿它算出正确结果，阿贝尔骂它是魔鬼的发明。而 20 世纪给它办了户口：先承认它在渐近意义下有严格内容，再用可和性理论给"和"重新定义。<strong>野生变异区的成功突变，被母体收编转正。</strong>这是 R3 在数学内部最干净的一例，而且它证明了 2.0 烧过的东西不会白烧——燃料最后被追认为资产。</p>
+  </div>
+</section>
+
+<!-- ============ ∞ ============ -->
+<section id="vx" class="gx">
+  <div class="sh"><span class="gid">∞</span><h2>镜厅：唯一亲手签署自己诊断书的系统</h2><span class="vb">照己</span><span class="chs">第 51 章</span></div>
+
+  <p>数学在图谱里的独特位置：它是唯一一个<strong>在自己内部构造出关于自己的不可判定语句</strong>的系统。希尔伯特纲领的手段（元数学＝把数学的证明当作数学对象来研究）本身就是再进入，而哥德尔编码把元层算术化塞回对象层——工具吃掉了梦想。</p>
+
+  <p>克莱因的收尾选了两段引文当墓志铭。布尔巴基的乐观版：经过 25 个世纪，数学家已经有了改正错误的锻炼，从而看到他们的科学更加丰富而不是更加贫困，这使他们有权安详地展望未来。而外尔的版本更准，克莱因也明说更恰当：<em>关于数学最终基础和最终意义的问题还是没有解决；我们不知道向哪里去找它的最后解答，或者根本就不能期望会有一个最后的客观回答。</em>外尔把"数学化"比作语言或音乐——一种具有原始独创性的人类创造性活动，其历史性不容许完全客观的有理化。</p>
+
+  <p>用框架的话：<strong>给数学下最终判词，需要一个数学之外的元语言，而这个"之外"它拿不到。</strong>这与框架第 97 号系统（认知操作系统自身判词从缺）是同一个结构位置。外尔那句"不知道向哪里去找"，就是悬置戳的最高级形态。</p>
+</section>
+
+<!-- ============ 无穷账簿 · 签名件 ============ -->
+<section id="ledger">
+  <div class="sh"><span class="gid">叁</span><h2>无穷这枚母悖论：六副账本，零次结清</h2><span class="chs">贯穿全书 25 个世纪</span></div>
+  <p class="lead">这张账是本书的真正脊柱，而且是克莱因亲手指认的：他在最后一节说，1930 年后留下的两个大问题——证明经典分析与集合论的相容性、在严格直观的根基上重建数学——<em>困难的根源都在于无穷</em>；这个概念对希腊人已经在无理数上造成问题，此后一直是争论的题目，并使外尔说数学是无限的科学。</p>
+
+  <div class="ledger" role="table" aria-label="无穷的六副账本">
+    <div class="lrow hd" role="row"><div>时期</div><div>记账方式</div><div>结清状态</div></div>
+    <div class="lrow"><div class="ly">前 5–3 世纪</div><div class="lb">
+      <div class="h">禁入</div><div class="d">芝诺的悖论使实无穷成为禁区；亚里士多德只许潜无穷；穷竭法专门设计成绕开它的路线。第 3–5 章。</div>
+      </div><div class="ls">未结 · 改为规避</div></div>
+    <div class="lrow"><div class="ly">1665–1872</div><div class="lb">
+      <div class="h">用而不认</div><div class="d">无穷小当燃料烧，无穷级数按符号形式操作，发散级数照用；莱布尼茨称之为有良好根据的虚构。第 17、19、20 章。</div>
+      </div><div class="ls">未结 · 挂账两百年</div></div>
+    <div class="lrow"><div class="ly">1872 前后</div><div class="lb">
+      <div class="h">位移进量词</div><div class="d">ε-δ 使"无穷小"这个名词消失，只剩有限量之间的关系图式。第 40 章。</div>
+      </div><div class="ls">未结 · 转出到实数</div></div>
+    <div class="lrow"><div class="ly">1872–1897</div><div class="lb">
+      <div class="h">编户入册</div><div class="d">戴德金分割与康托尔基本列构造实数，必须承认实无穷集合；超限基数与序数正式立户。第 41 章。</div>
+      </div><div class="ls">未结 · 引发悖论</div></div>
+    <div class="lrow"><div class="ly">1901–1931</div><div class="lb">
+      <div class="h">三家分账</div><div class="d">集合论悖论爆发；逻辑派与形式派要给它封顶，直观派要把它截肢，元数学要给它分层。三家皆未达到目的。第 51 章第 2–7 节。</div>
+      </div><div class="ls">未结 · 三家皆挂</div></div>
+    <div class="lrow"><div class="ly">1940–1963</div><div class="lb">
+      <div class="h">随境而异</div><div class="d">哥德尔与科恩：选择公理与连续统假设独立于 ZF。无穷的"大小"不再有唯一答案，成为模型的函数。第 51 章第 8 节。</div>
+      </div><div class="ls">未结 · 改判为选项</div></div>
+  </div>
+
+  <p><strong>六次换账本，零次结清，但每副新账本都算得更多。</strong>这正是框架 R12 的定义，而数学是它的原产地。要注意最后一副账本的性质：把问题改判为"选项"不是结清，是<em>把未结清这件事制度化</em>——4.0 不消除悖论，它给悖论发辖区。</p>
+</section>
+
+<!-- ============ 韵脚 ============ -->
+<section id="rhyme">
+  <div class="sh"><span class="gid">肆</span><h2>韵脚对账：这本书供给的标本</h2></div>
+  <p class="lead">只列命中项，并注明标本出自哪一章。最值得注意的一条在最后——作者本人就是他所写历史里的一枚韵脚。</p>
+
+  <div class="tw">
+  <table>
+    <thead><tr><th>韵脚</th><th>本书标本</th><th>出处</th></tr></thead>
+    <tbody>
+      <tr><td><span class="mn">R12</span> 账簿三部曲</td><td>无穷：禁入 → 用而不认 → 位移 → 编户 → 三家分账 → 随境而异。六副账本，零次结清；克莱因亲自指认无穷是两个遗留问题的共同根源。<b>原产地案例。</b></td><td class="yr">贯穿</td></tr>
+      <tr><td><span class="mn">R10</span> 封顶仪式定律</td><td>克莱因在序里替这条定律提供了两枚标本，而且是当作警告用的：凯莱说"射影几何就是全部几何"，西尔维斯特断言"代数不变量理论已经总结了数学中的全部精华"——两者都已湮没。他用它们来说明为什么不能对新近发展作客观估价。另加勒让德 1794 年仍视欧氏公理为自明真理。</td><td class="yr">序 · 第43章</td></tr>
+      <tr><td><span class="mn">R11</span> 迟到入场</td><td>非欧几何的冲击被数学家特有的保守与封闭延误；高斯私下研究而不发表；格拉斯曼 1844 年的 n 维几何遭顽固抵抗，库默尔到 1860 年代还在嘲弄四维。<b>克莱因用的词是"延误"，与框架的"补票入场"同指一事。</b></td><td class="yr">第36 · 43章</td></tr>
+      <tr><td><span class="mn">R2</span> 圣化围堵</td><td>欧几里得第十篇把不可通约量单列一篇分类，不动数的定义；负数复数的几何解释使它们可接受——<b>而克莱因说这因此推延了觉悟</b>，给 R2 补了"延迟换代"这一款。</td><td class="yr">第4 · 43章</td></tr>
+      <tr><td><span class="mn">R3</span> 追认式立法</td><td>发散级数：非正式应用 → 渐近级数的正式理论 → 可和性。2.0 时代最非法的燃料被 20 世纪追认为资产。</td><td class="yr">第47章</td></tr>
+      <tr><td><span class="mn">R6</span> 棘轮</td><td>严密性标准单向上升不可回退（克莱因：严密化的标准随时代而变，但方向是单调的）。<b>但他判这枚棘轮拧过了头</b>——过分追求严密性将引入绝境而失去真正意义。</td><td class="yr">第26 · 51章</td></tr>
+      <tr><td><span class="mn">R7</span> 元层安放处</td><td>三步走完：<b>外包</b>（18 世纪：结论在物理上正确保证数学上正确）→ <b>内化</b>（19 世纪：高斯、克罗内克、弗雷格退守"真理在算术"）→ <b>证明不可能</b>（哥德尔：一致性须外借）。椅子最终空置。</td><td class="yr">第26 · 43 · 51章</td></tr>
+      <tr><td><span class="mn">R13</span> 悬置戳</td><td>克莱因自己盖的：对许多较新发展的重要性目前还不能作客观估价，历史会作出它自己的、更可靠的评价。</td><td class="yr">序</td></tr>
+      <tr><td><span class="mn">R1</span> 回缩模块</td><td>直观派（布劳威尔）是教科书式的 ad fontes；克罗内克拒绝超限数。<b>而最锋利的标本是作者本人</b>——见下。</td><td class="yr">第51章</td></tr>
+    </tbody>
+  </table>
+  </div>
+
+  <div class="box debt">
+    <div class="bt">⚖ 最锋利的一处：作者本人是他所写历史里的一枚 R1</div>
+    <p>克莱因在序里写下这样一段：数学大树已伸张出成百的分支，但它毕竟是一个整体；<strong>如果一些分支专题对数学的心脏无所贡献，它们就不会开花结果——而我们被分裂的学科正面临这种危险</strong>；跟这种危险作斗争最稳妥的办法，也许就是去了解数学的过去成就、传统和目标。他并援引希尔伯特：数学是一个有机体，生命力的必要条件是所有各部分不可分离的结合。</p>
+    <p style="margin-top:.6em">他在末章的判词更明确：过分追求严密性将引入绝境而失去它的真正意义；数学仍然活跃而富有生命力，<em>但它只能建立在实用的基础上</em>。</p>
+    <p style="margin-top:.6em">这是一次标准的回缩动作：面对 4.0 的辖区化与抽象化过载，主张回到源头（与物理的联系、整体性、实用基础）。<strong>写下这部四代演化史的人，站在 4.0 门口执行了 R1。</strong>按奥尔森案的提醒，回缩未必是病理——ad fontes 也可以是生命之泉；此处不下总判。但必须记账：<em>这本书的语调是哀悼，而哀悼是一种代际立场，不是中立描述。</em></p>
+  </div>
+</section>
+
+<!-- ============ 收账 ============ -->
+<section id="settle">
+  <div class="sh"><span class="gid">伍</span><h2>步五收账：这本书把框架顶回来的地方</h2></div>
+  <p class="lead">零摩擦警报在本案最响，所以只有偏差处算发现。五条，按锋利度排列。</p>
+
+  <h3 style="font-size:18px;margin:26px 0 8px">其一 · 环、梯，还是螺旋</h3>
+  <p>克莱因给全书的拓扑判词是<strong>环</strong>：关于数学适当逻辑基础的问题、特别是直观主义的兴起，在某种较广的意义上显示出数学走了一个圆圈——这门学科起始于直觉的和经验的基础，严密性在希腊成为目标并似乎即将达到，而过分追求严密性反而引入绝境，最后数学只能建立在实用的基础上。<em>起点是实用，终点是实用。环。</em></p>
+  <p>框架的读法是<strong>梯</strong>：1.0 → 2.0 → 3.0 → 4.0，每一格都解决了上一格的死法又带来新的死法。</p>
+
+  <figure>
+    <svg viewBox="0 0 700 250" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="环、梯、螺旋三种读法对照">
+      <defs>
+        <marker id="kar" markerWidth="8" markerHeight="8" refX="5" refY="3" orient="auto">
+          <path d="M0,0 L6,3 L0,6 z" fill="#B08A2E"/>
+        </marker>
+      </defs>
+      <style>
+        .t{fill:#2B2A26;font-family:'Noto Serif SC',serif;font-size:13px;font-weight:700}
+        .s{fill:#6B6A64;font-family:'JetBrains Mono',monospace;font-size:9.5px}
+        .k{stroke:#B08A2E;stroke-width:2;fill:none}
+        .f{stroke:#2E6DA4;stroke-width:2;fill:none}
+        .h{stroke:#0F6E56;stroke-width:2.2;fill:none}
+        .dot{fill:#FBF6EA;stroke:#6B6A64;stroke-width:1.2}
+      </style>
+      <!-- ring -->
+      <text class="t" x="30" y="26">克莱因：环</text>
+      <text class="s" x="30" y="42">回到实用</text>
+      <path class="k" d="M100,82 A58,58 0 1 1 96,82" marker-end="url(#kar)"/>
+      <circle class="dot" cx="100" cy="82" r="5"/>
+      <text class="s" x="66" y="74">实用</text>
+      <circle class="dot" cx="158" cy="140" r="5"/>
+      <text class="s" x="166" y="144">严密</text>
+      <circle class="dot" cx="100" cy="198" r="5"/>
+      <text class="s" x="72" y="216">绝境</text>
+      <text class="s" x="60" y="240">起点＝终点</text>
+
+      <!-- ladder -->
+      <text class="t" x="268" y="26">框架：梯</text>
+      <text class="s" x="268" y="42">单调升级</text>
+      <path class="f" d="M280,200 L280,80 M340,200 L340,80"/>
+      <path class="f" d="M280,180 L340,180 M280,150 L340,150 M280,120 L340,120 M280,90 L340,90"/>
+      <text class="s" x="348" y="184">1.0</text><text class="s" x="348" y="154">2.0</text>
+      <text class="s" x="348" y="124">3.0</text><text class="s" x="348" y="94">4.0</text>
+      <text class="s" x="268" y="240">无回头</text>
+
+      <!-- helix -->
+      <text class="t" x="470" y="26">实为：螺旋</text>
+      <text class="s" x="470" y="42">判据回归，元层升一层</text>
+      <path class="h" d="M500,206 C560,186 560,166 500,150 C440,134 440,114 500,98 C560,82 560,66 500,54"/>
+      <circle class="dot" cx="500" cy="206" r="5"/>
+      <text class="s" x="510" y="212">实用（不自知）</text>
+      <circle class="dot" cx="500" cy="54" r="5"/>
+      <text class="s" x="510" y="58">实用（自知）</text>
+      <text class="s" x="470" y="240">同一判据 · 不同元层</text>
+    </svg>
+    <figcaption>两个判词都不全对：判据确实回到了实用，但回来的时候它知道自己是实用了</figcaption>
+  </figure>
+
+  <p><strong>裁决：都不全对，形状是螺旋。</strong>克莱因把"判据"与"对判据的自知"混成了一件事。18 世纪的实用主义<em>不知道自己是实用主义</em>——它以为自己在描述自然的真理，所以才需要把审计外包给物理学。20 世纪的实用主义<em>知道自己是实用主义</em>——公理是选项、有效性随模型而异、外尔明说不知道最终解答在哪里。同一个判据，位移了一层元自知。</p>
+  <p>这恰好是 3.0 的签名动作用在框架自己身上：<em>位移，不是消除</em>。所以给欠账 #12（循环拓扑不是梯上一格）补一条：<strong>环与梯之外还有第三种形状——回到原判据、但升了一层元自知。识别它的方法是问：回来的那个东西，知不知道自己回来了。</strong></p>
+
+  <h3 style="font-size:18px;margin:30px 0 8px">其二 · 2.0 的引擎可以租用别人的法庭</h3>
+  <p>框架说 2.0 的病根是引擎审计不了引擎。数学的 2.0 是个有益的反例：它把效度法庭外包给物理学（结论在物理上的正确性保证它在数学上正确），因此获得了真实的外部约束——约束的是结果，不是地基。<strong>立新账：2.0 的存活期长短，取决于它能否租到一座外部法庭；停机时点由租约到期决定，不由良心决定。</strong>数学烧了两百零七年而不死，是因为行星每天替它过审；1872 年前后职业化、脱离物理供养，法庭易主，账才被追。</p>
+
+  <h3 style="font-size:18px;margin:30px 0 8px">其三 · 围堵成功会推迟换代</h3>
+  <p>克莱因关于负数复数几何解释"推延了觉悟"的那句判词，给 R2 补了一款：<strong>围堵的代价不只是盲点上移，还包括延迟觉悟。补丁越漂亮，系统越晚发现自己需要换代。</strong>欧几里得第十篇把不可通约量分类分得越精细，"数的定义需要改"这件事就越不紧迫；三维天花板锁死两千年，靠的正是"代数几何化"这个成功的围堵。</p>
+
+  <h3 style="font-size:18px;margin:30px 0 8px">其四 · 棘轮装对方向，不等于拧到底是对的</h3>
+  <p>严密性标准单向上升，是这段历史里最干净的一枚 R6 棘轮。但克莱因判它拧过了头——过分追求严密性会引入绝境。<strong>给 R6 补一款：一枚装对方向的棘轮，仍可能因为没有停止条件而把系统拧进绝境。</strong>而框架此前的表述（"对应原理是唯一装对方向的那枚"）隐含地把"装对方向"当成了好事，这一步是跳的。</p>
+
+  <h3 style="font-size:18px;margin:30px 0 8px">其五 · 欠账 #7 与 #8 由作者自己申报</h3>
+  <p>幸存者偏差与顺序理想化这两笔账，不是框架抓到的，是克莱因在序里主动交的：忽略中国日本玛雅因其对主流无重大影响（判据循环）；每一发展等到成熟才论述因而非欧几何被放进 19 世纪（按成熟度重排）。<strong>这件事本身值得记一笔：一个系统主动申报自己的盲点，与框架从外部指认它的盲点，是两种不同的账目。前者说明这本书自己就带着一个元层。</strong></p>
+</section>
+
+<!-- ============ 残余 ============ -->
+<section id="residue">
+  <div class="sh"><span class="gid">残余</span><h2>诚实的残余</h2></div>
+  <div class="box debt">
+    <p><strong>其一，零摩擦警报，本案最响。</strong>这本书是框架零件的原产地档案。分层、元语言、位移、盲点上移——这些词全部是从它讲的这段历史里抄来的。所以"数学史符合四代框架"这句话近乎同语反复，没有信息量。上文唯一可信的部分是第十二节那五条偏差，其余全部按校准折价，不按发现计。</p>
+
+    <p style="margin-top:.8em"><strong>其二，我读的不是这三册书。</strong>我读的是 51 章的完整目录，加序、第26章第3节、第43章第3与第4节、第51章第8节这五处承重原文。抽样集中在克莱因的<em>论点章节</em>，因此这份重构必然偏向思想史而弱于技术史——而全书大半篇幅是技术史：椭圆函数、积分方程、张量分析、自守函数、代数几何这些章节我基本没有读。<strong>判词的覆盖面窄于书的覆盖面，而我上面的语气没有每处都体现这一点。</strong></p>
+
+    <p style="margin-top:.8em"><strong>其三，时间空档五十四年。</strong>英文原版 1972 年，内容止于 20 世纪头几十年。克莱因的判词只有工作票效力，而这张票已经过期：他没看到四色定理的计算机证明（1976）、费马大定理（1995）、独立性结果的常态化、证明助手与形式化验证（Lean、Coq），也没看到三维挂谷猜想的结清（2025）。<em>其中最需要重审的是他那句"数学只能建立在实用的基础上"</em>——形式化验证正在把"实用基础"重新机械化为可逐行审计的形式基础，这是他预见不到的第三条路：不是回到确定性，也不是停在实用，而是把"可检验"从人的共识外化成机器可重跑的对象。<strong>螺旋可能还在往上走一圈。</strong></p>
+
+    <p style="margin-top:.8em"><strong>其四，价值科目缺失（#14）在本案的形态。</strong>克莱因写的是一部"丧失"的历史，语调是哀悼——真理的丧失、被分裂的学科、面临的危险。框架只能把这一切记成"判据迁移"与"辖区化"。<em>同一件事，对他是损失，对框架是升级。</em>而框架的账本里没有"损失"这个科目——它只有闭合度、张力、变异度。所以本篇在最关键的地方读不懂它的分析对象：这本书为什么写得像一封挽辞。</p>
+
+    <p style="margin-top:.8em"><strong>其五，最后一条留给作者。</strong>克莱因说历史会作出它自己的、更可靠的评价，并用凯莱与西尔维斯特两句已经湮没的断言提醒读者不要给新近发展下判词。<em>这条提醒同样适用于本篇——包括适用于框架本身。</em>四代版本迭代这套词汇，也可能是又一句"射影几何就是全部几何"。</p>
+  </div>
+
+  <p style="margin-top:22px;font-family:var(--mono);font-size:13px;color:var(--ink2)">
+  形态可断言：三线并进的 3.0，收在可证不可结清的 4.0。<br/>
+  时点须悬置：无穷这枚母悖论六副账本之后仍未结清；形式化验证是否构成第七副，判据待补。<br/>
+  添的是一层，而非顶层——绘图者所在的楼层，不在图上。未济。</p>
+</section>
+
+</div>
+
+<footer>
+  <b>古今数学思想 · 四代诊断</b>　·　莫里斯·克莱因著，中译三册 51 章　·　认知操作系统 · 四代版本迭代<br/>
+  判据：当数学遇到它当时的架构消化不了的对象时，它做了什么　·　<b>代际是策略光谱，不是先进／落后排名</b><br/>
+  本篇是校准，不是应用——数学是本框架零件的原产地，贴合处一律折价，偏差处才是黄金<br/>
+  <b>形态可断言，时点须悬置</b>　·　未济
+</footer>
+
+</body>
+</html>

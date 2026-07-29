@@ -1,0 +1,25 @@
+.acard .an{font-weight:900;font-size:30rpx;}
+.acard .ae{font-size:19rpx;color:var(--ink2);letter-spacing:.04em;}
+.acard .ab{font-size:22rpx;color:var(--terra);font-weight:700;margin:6rpx 0 10rpx;}
+.acard .apos{display:inline-block;font-size:19rpx;background:rgba(93,123,147,.14);
+  border:2rpx solid rgba(93,123,147,.4);color:#42607a;border-radius:999rpx;
+  padding:2rpx 16rpx;margin-bottom:12rpx;}
+.acard .adef{font-size:25rpx;}
+.acard .adeep{font-size:24rpx;color:var(--ink2);border-top:2rpx dashed var(--hair);
+  margin-top:14rpx;padding-top:14rpx;}
+.acard .more{font-size:20rpx;color:var(--teal);margin-top:12rpx;}
+.acard.open{border-color:var(--teal);}
+.ins{position:relative;padding-left:96rpx;}
+.ins .no{position:absolute;left:26rpx;top:22rpx;font-size:40rpx;font-weight:900;color:var(--terra);}
+.ins .it{font-weight:900;font-size:27rpx;margin-bottom:4rpx;}
+.ins .id{font-size:24rpx;color:var(--ink2);}
+.setcard{position:relative;overflow:hidden;padding:34rpx 30rpx;}
+.setcard .big{position:absolute;right:18rpx;top:-6rpx;font-size:140rpx;font-weight:900;
+  color:rgba(31,110,107,.08);line-height:1;}
+.setcard .sh{font-size:31rpx;font-weight:900;color:var(--teal-deep);margin-bottom:12rpx;}
+.setcard .sp{font-size:26rpx;margin-bottom:12rpx;}
+.setcard .pj{border-left:6rpx solid var(--terra);padding-left:18rpx;font-weight:700;font-size:26rpx;}
+.coda{margin:26rpx 0;border:3rpx dashed rgba(52,40,22,.35);border-radius:22rpx;
+  padding:28rpx 30rpx;background:rgba(243,234,211,.6);}
+.coda .ch{font-size:26rpx;font-weight:900;color:var(--terra);letter-spacing:.1em;margin-bottom:10rpx;}
+.coda .cp{font-size:26rpx;}

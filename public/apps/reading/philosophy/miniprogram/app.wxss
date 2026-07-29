@@ -1,0 +1,57 @@
+/* ====== 全局变量与基础样式 ====== */
+page {
+  --ink: #14110f;
+  --ink-soft: #2a2520;
+  --paper: #f4ede0;
+  --paper-warm: #ebe1cc;
+  --paper-deep: #d9cdb3;
+  --gold: #b88746;
+  --gold-bright: #d4a574;
+  --gold-deep: #8b5e2b;
+  --crimson: #6b2b2b;
+  --moss: #4a5c3a;
+  --slate: #6a6358;
+  --line: rgba(20, 17, 15, 0.15);
+
+  background: #f4ede0;
+  color: #14110f;
+  font-family: "Songti SC", "STSong", "Noto Serif CJK SC", serif;
+  font-size: 28rpx;
+  line-height: 1.75;
+}
+
+view, text, scroll-view { box-sizing: border-box; }
+
+/* ====== 通用排版组件 ====== */
+.section-label {
+  font-style: italic;
+  letter-spacing: 6rpx;
+  color: var(--gold-deep);
+  font-size: 22rpx;
+  text-transform: uppercase;
+  display: flex;
+  align-items: center;
+  margin-bottom: 24rpx;
+}
+.section-label::before {
+  content: "";
+  width: 48rpx;
+  height: 1rpx;
+  background: var(--gold);
+  margin-right: 18rpx;
+}
+
+.latin {
+  font-style: italic;
+  letter-spacing: 1rpx;
+  color: var(--gold-deep);
+}
+
+/* 按压反馈 */
+.card-hover {
+  opacity: 0.85;
+  transform: scale(0.985);
+}
+.nav-hover {
+  background: rgba(20, 17, 15, 0.06);
+}

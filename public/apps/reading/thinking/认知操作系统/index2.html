@@ -1,0 +1,1111 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>认知操作系统 · 逻辑史的系统论重构</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@400;600;700;900&display=swap" rel="stylesheet">
+<style>
+:root{
+  --paper:#F3EAD3; --paper2:#FAF3E1; --paper3:#EBDFC2;
+  --ink:#2A2418; --ink2:#5A4E38;
+  --teal:#1F6E6B; --teal-deep:#14504E; --bright:#7FD1C8;
+  --terra:#C05B33; --terra-b:#D2693F;
+  --gold:#B08A2E; --gold-b:#C99A3A;
+  --slate:#5D7B93; --slate-b:#7FA0BC;
+  --void:#0F1D24; --void2:#14262E;
+  --labtx:rgba(240,229,205,.92); --labdim:rgba(240,229,205,.55);
+  --hair:rgba(52,40,22,.18);
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{
+  background:var(--paper);
+  background-image:radial-gradient(rgba(120,96,52,.05) 1px, transparent 1.4px);
+  background-size:26px 26px;
+  color:var(--ink);
+  font-family:"Noto Serif SC","Source Han Serif SC","Songti SC",serif;
+  font-size:16px; line-height:1.9;
+}
+.mono{font-family:ui-monospace,"SF Mono","JetBrains Mono",Menlo,Consolas,monospace}
+.wrap{max-width:1160px;margin:0 auto;padding:0 22px}
+a{color:var(--teal)}
+::selection{background:rgba(31,110,107,.25)}
+
+/* ---------- nav ---------- */
+nav{position:sticky;top:0;z-index:50;background:rgba(243,234,211,.88);backdrop-filter:blur(8px);border-bottom:1px solid var(--hair)}
+nav .wrap{display:flex;align-items:center;gap:20px;height:52px}
+nav .brand{font-weight:900;font-size:15px;letter-spacing:.06em;color:var(--teal-deep)}
+nav .links{display:flex;gap:2px;margin-left:auto;flex-wrap:wrap}
+nav .links a{text-decoration:none;font-size:13px;color:var(--ink2);padding:5px 10px;border-radius:8px}
+nav .links a:hover{background:rgba(31,110,107,.1);color:var(--teal-deep)}
+
+/* ---------- hero ---------- */
+header{padding:72px 0 30px}
+.eyebrow{font-size:13px;letter-spacing:.34em;color:var(--terra);font-weight:600}
+h1{font-size:clamp(34px,5.4vw,58px);font-weight:900;line-height:1.22;margin:14px 0 6px;color:#211b10}
+.subt{font-size:clamp(16px,2.2vw,21px);color:var(--ink2);font-weight:600;margin-bottom:26px}
+.verdict-hero{border-left:4px solid var(--teal);background:rgba(31,110,107,.06);padding:16px 22px;border-radius:0 12px 12px 0;max-width:900px;font-size:16.5px}
+.verdict-hero b{color:var(--teal-deep)}
+.pipeline{display:flex;flex-wrap:wrap;align-items:center;gap:8px;margin:26px 0 8px}
+.pipe{background:var(--paper2);border:1px solid var(--hair);border-radius:999px;padding:6px 15px;font-size:13.5px;font-weight:600}
+.pipe b{color:var(--teal-deep);margin-right:5px}
+.parr{color:var(--terra);font-weight:700}
+.cta{display:inline-block;margin-top:22px;background:var(--teal);color:#F6EFDC;text-decoration:none;padding:12px 26px;border-radius:12px;font-weight:700;font-size:15.5px;box-shadow:0 10px 24px -12px rgba(20,80,78,.6)}
+.cta:hover{background:var(--teal-deep)}
+
+/* ---------- sections ---------- */
+.sec{margin:88px auto 0}
+.sechead{display:flex;align-items:baseline;gap:16px;border-bottom:2px solid rgba(52,40,22,.28);padding-bottom:10px;margin-bottom:8px}
+.sechead .idx{font-size:40px;font-weight:900;color:var(--teal);line-height:1}
+.sechead h2{font-size:clamp(22px,3vw,30px);font-weight:900}
+.sechead .en{margin-left:auto;font-size:12px;letter-spacing:.22em;color:var(--ink2)}
+.seclead{color:var(--ink2);font-size:15px;margin:10px 0 24px;max-width:920px}
+.seclead b{color:var(--terra)}
+
+/* ---------- lab ---------- */
+.lab{background:var(--void);border:1px solid #0A141A;border-radius:20px;padding:20px 20px 24px;color:var(--labtx);
+  box-shadow:0 30px 70px -34px rgba(15,29,36,.75), inset 0 1px 0 rgba(127,209,200,.14)}
+.labhead{display:flex;flex-wrap:wrap;align-items:baseline;gap:14px;margin-bottom:14px}
+.labhead .lt{font-weight:900;font-size:18px;color:var(--bright)}
+.labhead .ln{font-size:12.5px;color:var(--labdim)}
+#rail{display:flex;gap:6px;flex-wrap:wrap;margin:2px 0 16px;position:relative}
+.rstop{background:transparent;border:1px solid rgba(127,209,200,.22);color:var(--labdim);border-radius:10px;
+  padding:6px 12px;font-family:inherit;font-size:12px;cursor:pointer;display:flex;flex-direction:column;align-items:center;min-width:74px;line-height:1.4}
+.rstop b{font-size:13.5px;color:var(--labtx)}
+.rstop:disabled{opacity:.32;cursor:default}
+.rstop.seen{border-color:rgba(127,209,200,.45)}
+.rstop.cur{background:rgba(127,209,200,.12);border-color:var(--bright)}
+.rstop.cur b{color:var(--bright)}
+.labgrid{display:grid;grid-template-columns:minmax(0,1fr) 300px;gap:16px}
+.stagewrap{position:relative;border:1px solid rgba(127,209,200,.16);border-radius:14px;overflow:hidden;
+  background:radial-gradient(1100px 620px at 50% 26%, var(--void2) 0%, var(--void) 62%)}
+#stage{display:block;width:100%;height:auto;user-select:none}
+#hud{position:absolute;top:10px;left:14px;font-size:12px;color:var(--labdim)}
+#hud b{color:var(--bright);font-weight:600}
+#hud .run{color:var(--bright);animation:runblink 1.2s steps(2) infinite}
+.spanel{background:#122129;border:1px solid rgba(127,209,200,.14);border-radius:12px;padding:12px 14px;margin-bottom:12px}
+.spanel h4{font-size:12px;letter-spacing:.18em;color:var(--labdim);font-weight:600;margin-bottom:9px}
+#kview{font-size:11.5px;color:var(--labdim);margin-bottom:8px;line-height:1.6}
+#kview a{color:var(--gold-b);text-decoration:none}
+.law{display:flex;justify-content:space-between;align-items:baseline;gap:8px;border:1px solid rgba(127,209,200,.14);border-radius:9px;padding:6px 10px;margin-bottom:6px;font-size:12.5px;transition:border-color .4s,background .4s}
+.law .lname{font-weight:700;color:var(--labtx)}
+.law .lf{color:var(--labdim);font-size:10.5px;margin-left:5px}
+.law .lst{color:var(--labdim);text-align:right;font-size:11.5px;line-height:1.5}
+.law.off{opacity:.42}
+.law.on{border-color:rgba(127,209,200,.5)}.law.on .lst{color:var(--bright)}
+.law.rigid{border-color:var(--bright);background:rgba(127,209,200,.08)}.law.rigid .lst{color:var(--bright)}
+.law.engine{border-color:var(--terra-b);background:rgba(210,105,63,.1);animation:pulseSlow 1.6s infinite}.law.engine .lst{color:var(--terra-b)}
+.law.warn{border-color:var(--terra-b)}.law.warn .lst{color:var(--terra-b)}
+.law.rel{border-style:dashed;border-color:var(--gold-b)}.law.rel .lst{color:var(--gold-b)}
+.mrow{display:grid;grid-template-columns:52px 1fr 34px;align-items:center;gap:8px;margin-bottom:8px;font-size:11.5px;color:var(--labdim)}
+.mbar{height:8px;background:rgba(240,229,205,.1);border-radius:99px;overflow:hidden}
+.mbar i{display:block;height:100%;width:0;border-radius:99px;transition:width .9s ease}
+#m-closure{background:var(--bright)}#m-tension{background:var(--terra-b)}#m-variety{background:var(--gold-b)}#m-entropy{background:var(--slate-b)}
+.mval{text-align:right;color:var(--labtx)}
+#syslog{height:168px;overflow-y:auto;font-size:11px;line-height:1.75;color:var(--labdim);scrollbar-width:thin}
+#syslog .ln{border-left:2px solid rgba(127,209,200,.2);padding-left:8px;margin-bottom:3px}
+#syslog .ok{color:var(--bright);border-color:rgba(127,209,200,.5)}
+#syslog .err{color:var(--terra-b);border-color:rgba(210,105,63,.6)}
+#syslog .warn{color:var(--gold-b);border-color:rgba(201,154,58,.55)}
+#syslog .sys{color:var(--slate-b)}
+.narrbox{margin-top:14px;background:#122129;border:1px solid rgba(127,209,200,.14);border-radius:12px;padding:16px 20px}
+#narr{font-size:15px;line-height:2.0}
+#narr p{margin-bottom:10px}
+#narr p:last-child{margin-bottom:0}
+#narr .verdict{border-left:3px solid var(--bright);padding-left:12px;font-weight:700;color:#EAF4F1;font-size:15.5px}
+#narr .hint{color:var(--labdim);font-size:13px}
+#narr .final{border-left:3px solid var(--gold-b);padding-left:12px;color:#F1E8CF}
+#narr i{color:var(--gold-b);font-style:italic}
+#narr b{color:var(--bright)}
+#actions{display:flex;flex-wrap:wrap;gap:10px;margin-top:14px;align-items:center}
+.abtn{font-family:inherit;font-size:14px;font-weight:700;padding:10px 18px;border-radius:11px;cursor:pointer;
+  background:transparent;color:var(--labtx);border:1.5px solid rgba(240,229,205,.4);transition:all .25s}
+.abtn:hover{border-color:var(--labtx);background:rgba(240,229,205,.06)}
+.abtn.primary{background:var(--bright);border-color:var(--bright);color:#0F1D24}
+.abtn.primary:hover{background:#95E0D8}
+.abtn.danger{border-color:var(--terra-b);color:var(--terra-b)}
+.abtn.danger:hover{background:rgba(210,105,63,.14)}
+.abtn.gold{border-color:var(--gold-b);color:var(--gold-b)}
+.abtn.gold:hover{background:rgba(201,154,58,.14)}
+.abtn:disabled{opacity:.4;cursor:default}
+.abtn:focus-visible{outline:2px solid var(--gold-b);outline-offset:2px}
+.truthbox{display:flex;align-items:center;gap:10px;background:rgba(201,154,58,.1);border:1px dashed var(--gold-b);
+  border-radius:11px;padding:8px 14px;font-size:13px;color:var(--gold-b)}
+.truthbox input{accent-color:#C99A3A;width:130px}
+.truthbox b{color:#F1E8CF;font-family:ui-monospace,Menlo,monospace}
+
+/* ---------- SVG anim classes ---------- */
+.trans-med{transition:transform .9s cubic-bezier(.35,.1,.25,1),opacity .6s ease}
+.trans-slow{transition:stroke-dashoffset 1.55s ease,opacity .8s ease}
+.fade-in{animation:fadeIn .8s ease both}
+.rise{animation:riseIn .7s ease both}
+.pop{animation:fadeIn .5s ease both}
+.march{animation:march 1.6s linear infinite}
+.flick{animation:flick .5s steps(2) infinite}
+.shake{animation:shakeK .38s ease}
+.osc{animation:oscx 1.3s ease-in-out infinite}
+.osc2{animation:oscx2 1.3s ease-in-out infinite}
+.wob{animation:wobY .5s ease-in-out infinite}
+.pulse-slow{animation:pulseSlow 2.2s ease-in-out infinite}
+.pulse-ring{animation:ringPulse 1.6s ease-out infinite}
+.floaty.f0{animation:floaty1 5.5s ease-in-out infinite}
+.floaty.f1{animation:floaty2 6.5s ease-in-out infinite}
+.floaty.f2{animation:floaty3 7.2s ease-in-out infinite}
+.drift.d0{animation:driftA 11s ease-in-out infinite alternate}
+.drift.d1{animation:driftB 14s ease-in-out infinite alternate}
+.drift.d2{animation:driftC 17s ease-in-out infinite alternate}
+.nest{transition:transform 1.15s cubic-bezier(.4,.05,.2,1);transform-origin:450px 280px;transform-box:view-box}
+.clickable{cursor:pointer}
+@keyframes fadeIn{from{opacity:0}to{opacity:1}}
+@keyframes riseIn{from{opacity:0;transform:translateY(26px)}to{opacity:1;transform:none}}
+@keyframes march{to{stroke-dashoffset:-36}}
+@keyframes flick{50%{opacity:.25}}
+@keyframes shakeK{0%,100%{transform:none}25%{transform:translate(3px,-2px)}55%{transform:translate(-3px,2px)}80%{transform:translate(2px,1px)}}
+@keyframes oscx{50%{transform:translateX(4px)}}
+@keyframes oscx2{50%{transform:translateX(-4px)}}
+@keyframes wobY{50%{transform:translateY(4px)}}
+@keyframes pulseSlow{50%{opacity:.45}}
+@keyframes ringPulse{0%{transform:scale(.8);opacity:.9}100%{transform:scale(1.5);opacity:0}}
+@keyframes floaty1{50%{transform:translateY(-7px)}}
+@keyframes floaty2{50%{transform:translateY(6px)}}
+@keyframes floaty3{50%{transform:translate(4px,-5px)}}
+@keyframes driftA{to{transform:translate(16px,10px)}}
+@keyframes driftB{to{transform:translate(-14px,14px)}}
+@keyframes driftC{to{transform:translate(10px,-16px)}}
+@keyframes runblink{50%{opacity:.35}}
+
+/* ---------- 档案矩阵 ---------- */
+.mtabs{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:16px}
+.mtab{font-family:inherit;font-size:14px;font-weight:700;padding:9px 18px;border-radius:11px;border:1.5px solid var(--hair);background:var(--paper2);color:var(--ink2);cursor:pointer}
+.mtab.act{background:var(--teal);border-color:var(--teal);color:#F6EFDC}
+.mpanel{background:var(--paper2);border:1px solid var(--hair);border-radius:16px;padding:24px;display:grid;grid-template-columns:290px 1fr;gap:26px}
+.mmeta .mv{font-size:44px;font-weight:900;color:var(--teal);line-height:1}
+.mmeta .mera{font-size:19px;font-weight:900;margin:4px 0 2px}
+.mmeta .mtime{font-size:13px;color:var(--ink2);margin-bottom:12px}
+.pplbox{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:18px}
+.ppl{font-size:12px;background:rgba(31,110,107,.09);border:1px solid rgba(31,110,107,.25);color:var(--teal-deep);border-radius:999px;padding:3px 10px}
+.fp{font-size:12px;color:var(--ink2)}
+.fprow{display:grid;grid-template-columns:66px 1fr 30px;gap:8px;align-items:center;margin-bottom:6px}
+.fpbar{height:7px;background:rgba(52,40,22,.12);border-radius:99px;overflow:hidden}
+.fpbar i{display:block;height:100%;border-radius:99px;background:var(--teal);transition:width .8s ease}
+.mdims{display:grid;gap:14px}
+.mdim{border-left:3px solid var(--teal);padding-left:14px}
+.mdim.lim{border-color:var(--terra)}
+.mdim dt{font-size:12px;letter-spacing:.2em;color:var(--ink2);font-weight:700;margin-bottom:2px}
+.mdim dd{font-size:15px}
+
+/* ---------- 工作台 ---------- */
+.wb{background:var(--paper2);border:1px solid var(--hair);border-radius:16px;padding:24px}
+.wbtabs{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:20px}
+.wbgrid{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:26px}
+.step{border:1px solid var(--hair);border-radius:12px;padding:12px 16px;margin-bottom:10px;background:rgba(243,234,211,.5);transition:all .4s}
+.step .st{font-weight:900;font-size:14.5px;color:var(--ink2)}
+.step .st b{color:var(--teal);margin-right:8px;font-size:16px}
+.step .sc{font-size:14px;margin-top:4px;display:none}
+.step .pend{font-size:12.5px;color:rgba(90,78,56,.55)}
+.step.done{background:#fff8;border-color:rgba(31,110,107,.4)}
+.step.done .st{color:var(--ink)}
+.step.done .sc{display:block}
+.step.done .pend{display:none}
+.wbbtns{display:flex;gap:10px;flex-wrap:wrap;margin-top:14px}
+.wbtn{font-family:inherit;font-size:14px;font-weight:700;padding:9px 18px;border-radius:11px;cursor:pointer;border:1.5px solid var(--teal);background:var(--teal);color:#F6EFDC}
+.wbtn.ghost{background:transparent;color:var(--teal-deep)}
+.wbtn:disabled{opacity:.4;cursor:default}
+.chainbox h5{font-size:13px;letter-spacing:.16em;color:var(--ink2);margin-bottom:12px}
+.chain{display:flex;flex-direction:column;gap:2px}
+.cnode{display:flex;align-items:center;gap:12px;opacity:.32;transform:translateX(8px);transition:all .55s ease}
+.chain.lit .cnode{opacity:1;transform:none}
+.chain.lit .cnode:nth-child(1){transition-delay:.0s}.chain.lit .cnode:nth-child(2){transition-delay:.12s}
+.chain.lit .cnode:nth-child(3){transition-delay:.24s}.chain.lit .cnode:nth-child(4){transition-delay:.36s}
+.chain.lit .cnode:nth-child(5){transition-delay:.48s}.chain.lit .cnode:nth-child(6){transition-delay:.6s}
+.chain.lit .cnode:nth-child(7){transition-delay:.72s}
+.cnode .cpill{flex:1;border-radius:10px;border:1px solid var(--hair);background:#fff7;padding:8px 13px;border-left-width:5px}
+.cnode .cn1{font-weight:700;font-size:14.5px}
+.cnode .cn2{font-size:11.5px;color:var(--ink2)}
+.cnode .cdn{color:var(--terra);font-weight:900;width:10px}
+.tg-init{border-left-color:#8B8378}.tg-s1{border-left-color:var(--teal)}.tg-s2{border-left-color:var(--terra)}
+.tg-s3{border-left-color:var(--slate)}.tg-s4{border-left-color:var(--gold)}.tg-sp{border-left-color:#8B8378;border-left-style:dashed}
+.legend{display:flex;flex-wrap:wrap;gap:12px;font-size:12px;color:var(--ink2);margin-top:14px}
+.legend i{display:inline-block;width:11px;height:11px;border-radius:3px;margin-right:5px;vertical-align:-1px}
+
+/* ---------- 武器库 ---------- */
+.arsgrid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+.acard{background:var(--paper2);border:1px solid var(--hair);border-radius:14px;padding:18px 20px;cursor:pointer;transition:box-shadow .3s}
+.acard:hover{box-shadow:0 14px 30px -18px rgba(42,36,24,.4)}
+.acard .an{font-size:18px;font-weight:900}
+.acard .ae{font-size:11.5px;letter-spacing:.08em;color:var(--ink2)}
+.acard .ab{font-size:12.5px;color:var(--terra);font-weight:700;margin:4px 0 8px}
+.acard .apos{display:inline-block;font-size:11px;background:rgba(93,123,147,.14);border:1px solid rgba(93,123,147,.4);color:#42607a;border-radius:999px;padding:2px 9px;margin-bottom:8px}
+.acard .adef{font-size:14px}
+.acard .adeep{max-height:0;overflow:hidden;transition:max-height .5s ease;font-size:13.5px;color:var(--ink2);border-top:1px dashed var(--hair)}
+.acard.open .adeep{max-height:260px;margin-top:10px;padding-top:10px}
+.acard .more{font-size:11.5px;color:var(--teal);margin-top:8px}
+
+/* ---------- 洞察 ---------- */
+.insgrid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+.ins{background:var(--paper2);border:1px solid var(--hair);border-radius:14px;padding:16px 18px}
+.ins .no{font-size:22px;font-weight:900;color:var(--terra)}
+.ins .it{font-weight:900;font-size:15.5px;margin:2px 0 4px}
+.ins .id{font-size:13.5px;color:var(--ink2)}
+
+/* ---------- 结算 ---------- */
+.setgrid{display:grid;grid-template-columns:1fr 1fr;gap:18px}
+.setcard{background:var(--paper2);border:1px solid var(--hair);border-radius:16px;padding:26px;position:relative;overflow:hidden}
+.setcard .big{position:absolute;right:14px;top:2px;font-size:88px;font-weight:900;color:rgba(31,110,107,.08);line-height:1}
+.setcard h3{font-size:19px;font-weight:900;margin-bottom:10px;color:var(--teal-deep)}
+.setcard p{font-size:15px;margin-bottom:8px}
+.setcard .pj{border-left:3px solid var(--terra);padding-left:12px;font-weight:700}
+.coda{margin-top:20px;border:1.5px dashed rgba(52,40,22,.35);border-radius:16px;padding:22px 26px;background:rgba(243,234,211,.6)}
+.coda h4{font-size:15px;font-weight:900;color:var(--terra);margin-bottom:8px;letter-spacing:.1em}
+.coda p{font-size:15px}
+
+footer{margin:90px 0 46px;border-top:2px solid rgba(52,40,22,.28);padding-top:18px;font-size:13px;color:var(--ink2)}
+footer .fline{margin-bottom:6px}
+
+@media (max-width:980px){
+  .labgrid{grid-template-columns:1fr}
+  .mpanel{grid-template-columns:1fr}
+  .wbgrid{grid-template-columns:1fr}
+  .arsgrid{grid-template-columns:1fr 1fr}
+  .insgrid{grid-template-columns:1fr 1fr}
+  .setgrid{grid-template-columns:1fr}
+}
+@media (max-width:620px){
+  .arsgrid,.insgrid{grid-template-columns:1fr}
+  nav .links{display:none}
+}
+@media (prefers-reduced-motion:reduce){
+  *{animation:none!important;transition:none!important}
+  html{scroll-behavior:auto}
+}
+</style>
+</head>
+<body>
+
+<nav><div class="wrap">
+  <span class="brand">认知操作系统 · Cognitive OS</span>
+  <div class="links">
+    <a href="#sec-lab">〇 实验室</a><a href="#sec-matrix">一 档案</a><a href="#sec-wb">二 工作台</a>
+    <a href="#sec-ars">三 武器库</a><a href="#sec-ins">四 洞察</a><a href="#sec-set">五 结算</a>
+  </div>
+</div></nav>
+
+<header class="wrap">
+  <div class="eyebrow">系统论 × 逻辑史 · 一台可亲手运行的演化模型</div>
+  <h1>认知操作系统：<br>逻辑的四次大版本迭代</h1>
+  <div class="subt">一部"系统架构的扩张史"——从封闭到开放，从降熵到代谢悖论</div>
+  <div class="verdict-hero">
+    最该被剥掉的幻觉，是"逻辑是一组被人类逐渐<b>发现</b>的永恒真理"。换成系统论的语言：逻辑是一个<b>自组织系统</b>，它的整部历史只做一件事——反复尝试<b>操作闭合</b>（成为完整、一致、自我奠基的封闭系统），又反复撞上同一堵墙：<b>闭合必然逼出自指，自指必然暴露悖论</b>。它最终学会的不是消除悖论，而是<b>代谢</b>悖论。
+  </div>
+  <div class="pipeline">
+    <span class="pipe"><b>1.0</b>防火墙</span><span class="parr">→</span>
+    <span class="pipe"><b>2.0</b>辩证引擎</span><span class="parr">→</span>
+    <span class="pipe"><b>3.0</b>分层塔</span><span class="parr">→</span>
+    <span class="pipe"><b>4.0</b>自适应生态</span>
+  </div>
+  <a class="cta" href="#sec-lab">进入实验室，亲手划下第一刀 ↓</a>
+</header>
+
+<!-- ================= 〇 实验室 ================= -->
+<section class="sec wrap" id="sec-lab">
+  <div class="sechead"><span class="idx">〇</span><h2>演化实验室</h2><span class="en">EVOLUTION LAB</span></div>
+  <p class="seclead">这不是动画，是一台<b>状态机</b>：每一次相变都由你触发。左侧舞台是被观察的"逻辑系统"，右侧是它的四律内核、系统仪表与运行日志。相位轨道可回跳已解锁的相位复演。</p>
+  <div class="lab">
+    <div class="labhead"><span class="lt">◉ 系统在线</span><span class="ln">观察对象：逻辑（Cognitive OS）· 观察框架：系统论 · 注意最后一个相位</span></div>
+    <div id="rail"></div>
+    <div class="labgrid">
+      <div>
+        <div class="stagewrap">
+          <svg id="stage" viewBox="0 0 900 560" xmlns="http://www.w3.org/2000/svg">
+            <defs>
+              <marker id="arrT" markerWidth="9" markerHeight="9" refX="6.5" refY="3" orient="auto"><path d="M0,0L8,3L0,6z" fill="#D2693F"/></marker>
+              <marker id="arrP" markerWidth="9" markerHeight="9" refX="6.5" refY="3" orient="auto"><path d="M0,0L8,3L0,6z" fill="rgba(240,229,205,.5)"/></marker>
+              <radialGradient id="rg0"><stop offset="0%" stop-color="#2A7F7A" stop-opacity=".4"/><stop offset="100%" stop-color="#2A7F7A" stop-opacity=".05"/></radialGradient>
+              <radialGradient id="rg1"><stop offset="0%" stop-color="#7FA0BC" stop-opacity=".4"/><stop offset="100%" stop-color="#7FA0BC" stop-opacity=".05"/></radialGradient>
+              <radialGradient id="rg2"><stop offset="0%" stop-color="#D2693F" stop-opacity=".38"/><stop offset="100%" stop-color="#D2693F" stop-opacity=".05"/></radialGradient>
+              <radialGradient id="rg3"><stop offset="0%" stop-color="#C99A3A" stop-opacity=".4"/><stop offset="100%" stop-color="#C99A3A" stop-opacity=".05"/></radialGradient>
+              <radialGradient id="rg4"><stop offset="0%" stop-color="#7FD1C8" stop-opacity=".36"/><stop offset="100%" stop-color="#7FD1C8" stop-opacity=".05"/></radialGradient>
+              <radialGradient id="rg5"><stop offset="0%" stop-color="#8B8378" stop-opacity=".4"/><stop offset="100%" stop-color="#8B8378" stop-opacity=".05"/></radialGradient>
+            </defs>
+            <g id="gWorld">
+              <g id="gEnv"></g><g id="gSys"></g><g id="gFx"></g><g id="gLbl"></g>
+            </g>
+            <g id="gOverlay"></g>
+          </svg>
+          <div id="hud" class="mono"></div>
+        </div>
+        <div class="narrbox">
+          <div id="narr"></div>
+          <div id="actions"></div>
+        </div>
+      </div>
+      <div>
+        <div class="spanel">
+          <h4>四律内核监视器</h4>
+          <div id="kview">四律内核 · 实时状态</div>
+          <div class="law off" id="law-id"><span><span class="lname">同一律</span><span class="lf mono">A=A</span></span><span class="lst">未安装</span></div>
+          <div class="law off" id="law-nc"><span><span class="lname">矛盾律</span><span class="lf mono">¬(A∧¬A)</span></span><span class="lst">未安装</span></div>
+          <div class="law off" id="law-em"><span><span class="lname">排中律</span><span class="lf mono">A∨¬A</span></span><span class="lst">未安装</span></div>
+          <div class="law off" id="law-sr"><span><span class="lname">充足理由律</span><span class="lf mono">Why</span></span><span class="lst">未安装</span></div>
+        </div>
+        <div class="spanel">
+          <h4>系统仪表</h4>
+          <div class="mrow"><span>闭合度</span><div class="mbar"><i id="m-closure"></i></div><span class="mval" id="v-closure">0</span></div>
+          <div class="mrow"><span>张力</span><div class="mbar"><i id="m-tension"></i></div><span class="mval" id="v-tension">0</span></div>
+          <div class="mrow"><span>变异度</span><div class="mbar"><i id="m-variety"></i></div><span class="mval" id="v-variety">0</span></div>
+          <div class="mrow"><span>熵通量</span><div class="mbar"><i id="m-entropy"></i></div><span class="mval" id="v-entropy">0</span></div>
+        </div>
+        <div class="spanel">
+          <h4>运行日志</h4>
+          <div id="syslog" class="mono"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= 一 档案 ================= -->
+<section class="sec wrap" id="sec-matrix">
+  <div class="sechead"><span class="idx">一</span><h2>版本档案 · 四代系统对照</h2><span class="en">SYSTEM ARCHIVE</span></div>
+  <p class="seclead">同一台机器的四份体检报告。指纹条给出每一代的系统论画像：<b>闭合度 / 开放度 / 变异度 / 张力耐受</b>——四条曲线的翻转，就是整部逻辑史。</p>
+  <div class="mtabs" id="mtabs"></div>
+  <div class="mpanel" id="mpanel"></div>
+</section>
+
+<!-- ================= 二 工作台 ================= -->
+<section class="sec wrap" id="sec-wb">
+  <div class="sechead"><span class="idx">二</span><h2>推演工作台 · 五步法</h2><span class="en">DERIVATION BENCH</span></div>
+  <p class="seclead">元命题：任何复杂系统的发展，都是在<b>内在逻辑律</b>驱动下、通过处理<b>内部矛盾</b>与外部环境的互动、必然沿特定路径演化的过程。下面把同一台方法机装上三种文明燃料——逐步执行，看链条如何被推演出来。</p>
+  <div class="wb">
+    <div class="wbtabs" id="wbtabs"></div>
+    <div class="wbgrid">
+      <div id="wbsteps"></div>
+      <div class="chainbox">
+        <h5>演化链条（第四步点亮）</h5>
+        <div class="chain" id="wbchain"></div>
+        <div class="legend">
+          <span><i style="background:#8B8378"></i>初态 / 前系统</span>
+          <span><i style="background:#1F6E6B"></i>1.0 划界与闭合</span>
+          <span><i style="background:#C05B33"></i>2.0 矛盾驱动</span>
+          <span><i style="background:#5D7B93"></i>3.0 分层</span>
+          <span><i style="background:#B08A2E"></i>4.0 开放适应</span>
+        </div>
+      </div>
+    </div>
+    <div class="wbbtns" id="wbbtns"></div>
+  </div>
+</section>
+
+<!-- ================= 三 武器库 ================= -->
+<section class="sec wrap" id="sec-ars">
+  <div class="sechead"><span class="idx">三</span><h2>概念武器库</h2><span class="en">CONCEPT ARSENAL</span></div>
+  <p class="seclead">实验室里每一个相变背后的系统论硬核概念。点击卡片展开深注与判词。</p>
+  <div class="arsgrid" id="arsgrid"></div>
+</section>
+
+<!-- ================= 四 洞察 ================= -->
+<section class="sec wrap" id="sec-ins">
+  <div class="sechead"><span class="idx">四</span><h2>核心洞察 · 为什么这个方法能推导几乎一切</h2><span class="en">CORE INSIGHTS</span></div>
+  <div class="insgrid" id="insgrid"></div>
+</section>
+
+<!-- ================= 五 结算 ================= -->
+<section class="sec wrap" id="sec-set">
+  <div class="sechead"><span class="idx">五</span><h2>两笔结算</h2><span class="en">FINAL SETTLEMENT</span></div>
+  <p class="seclead">系统论在这两点上不只是描述工具，而是立场的盟友——而且是比维特根斯坦<b>更具操作性</b>的盟友。</p>
+  <div class="setgrid">
+    <div class="setcard"><span class="big">壹</span>
+      <h3>坐实语言极限 / 哥德尔式立场</h3>
+      <p>不完备、盲点、悖论，被系统论严格锁在<b>观察系统这一侧</b>——它们是"观察的形式"的属性，不是"被观察的存在"的结构。von Foerster 与 Luhmann 反复强调：悖论在区分的运作里，不在世界里。</p>
+      <p class="pj">悖论暴露的是工具的极限，不是存在的结构。维特根斯坦—哥德尔—塔尔斯基一系，在此获得系统论的工程学背书。</p>
+    </div>
+    <div class="setcard"><span class="big">贰</span>
+      <h3>去本体论化的黑格尔</h3>
+      <p>黑格尔把再进入、矛盾、否定之否定<b>放进了存在本身</b>（Geist 的自我运动就是 Being 在自相矛盾中前进）。Luhmann 把那台辩证引擎原封保留，却只让它在观察 / 沟通系统的操作里运转，坚决拒绝将其升格为存在的结构。</p>
+      <p class="pj">承认辩证法的机制，否认辩证法的本体论：矛盾驱动的是系统，永远不是自在之物。引擎从"存在的发动机舱"被拆下，装回了它本该待的地方——观察者的工作台。</p>
+    </div>
+  </div>
+  <div class="coda">
+    <h4>诚实的残余</h4>
+    <p>系统论自己也跑不出它所描述的那条律。"用系统论观察逻辑系统"这个动作本身，就是又一次再进入——它必须用"系统 / 环境"这个区分来看一切，而它看不见自己正站在这个区分上。它的盲点，就在它划下那一刀的刀刃上。地图终究画进了它自己要描绘的疆域。它没有比它所分析的对象站得更高——它只是把那座无穷塔又往上添了一层，并且诚实地知道：自己添的是一层，而非顶层。</p>
+  </div>
+</section>
+
+<footer class="wrap">
+  <div class="fline">依据《用现代的系统论的观点去分析和总结逻辑这套系统的发展历史》与《系统视角》元框架重构 · 单文件 · 零构建 · 状态机交互</div>
+  <div class="fline">安装区分 → 梦想闭合 → 撞上变异度铁律 → 再进入危机 → 层级解悖 → 打开成生态 —— ἐποχή，从终点到引擎舱。</div>
+</footer>
+
+<script>
+'use strict';
+/* ============ 基础工具 ============ */
+const $=s=>document.querySelector(s);
+const SVGNS='http://www.w3.org/2000/svg';
+function E(tag,attrs,parent){const n=document.createElementNS(SVGNS,tag);if(attrs)for(const k in attrs){if(k==='text')n.textContent=attrs[k];else n.setAttribute(k,attrs[k]);}if(parent)parent.appendChild(n);return n;}
+function H(tag,cls,html,parent){const n=document.createElement(tag);if(cls)n.className=cls;if(html!=null)n.innerHTML=html;if(parent)parent.appendChild(n);return n;}
+let timers=[];
+function T(fn,ms){const id=setTimeout(fn,ms);timers.push([0,id]);return id;}
+function IV(fn,ms){const id=setInterval(fn,ms);timers.push([1,id]);return id;}
+function killTimers(){for(const[k,id]of timers)k?clearInterval(id):clearTimeout(id);timers=[];}
+function raf2(fn){requestAnimationFrame(()=>requestAnimationFrame(fn));}
+const C={bright:'#7FD1C8',teal:'#2A7F7A',terra:'#D2693F',gold:'#C99A3A',slate:'#7FA0BC',paper:'#F0E5CD',dim:'rgba(240,229,205,.45)'};
+const SUP=['⁰','¹','²','³','⁴'],SUB=['₀','₁','₂','₃','₄','₅'];
+const sup=n=>SUP[n]||n, sub=n=>SUB[n]||n;
+
+const gWorld=$('#gWorld'),gEnv=$('#gEnv'),gSys=$('#gSys'),gFx=$('#gFx'),gLbl=$('#gLbl'),gOv=$('#gOverlay');
+function clearLayers(){
+  [gEnv,gSys,gFx,gLbl,gOv].forEach(g=>{g.innerHTML='';g.removeAttribute('style');g.removeAttribute('class');});
+  gWorld.innerHTML='';[gEnv,gSys,gFx,gLbl].forEach(g=>gWorld.appendChild(g));
+  gWorld.removeAttribute('style');
+}
+function hud(html){$('#hud').innerHTML=html;}
+function narr(html){$('#narr').innerHTML=html;}
+function narrAdd(html){$('#narr').insertAdjacentHTML('beforeend',html);}
+function setActions(list){const a=$('#actions');a.innerHTML='';return list.map(it=>{
+  if(it.el){a.appendChild(it.el);return null;}
+  const b=H('button','abtn '+(it.kind||''),it.label,a);b.onclick=it.fn;if(it.dis)b.disabled=true;return b;});}
+function log(msg,cls){const box=$('#syslog');H('div','ln '+(cls||''),msg,box);
+  while(box.children.length>80)box.removeChild(box.firstChild);box.scrollTop=box.scrollHeight;}
+function setMeters(o){const map={closure:'closure',tension:'tension',variety:'variety',entropy:'entropy'};
+  for(const k in map){if(o[k]==null)continue;$('#m-'+map[k]).style.width=Math.min(100,o[k])+'%';$('#v-'+map[k]).textContent=Math.round(o[k]);}}
+function setKernel(map){[['law-id'],['law-nc'],['law-em'],['law-sr']].forEach(([id])=>{
+  const chip=$('#'+id);const cfg=map&&map[id];
+  chip.className='law '+(cfg?cfg.m:'off');
+  chip.querySelector('.lst').textContent=cfg?cfg.s:'未安装';});}
+
+/* ============ 相位引擎 ============ */
+const PH=['void','closed','dialectic','reentry','tower','ecology','mirror'];
+const PHMETA={void:['序','划界'],closed:['1.0','稳态封闭'],dialectic:['2.0','辩证引擎'],reentry:['3.0','再进入'],tower:['3.0⁺','分层塔'],ecology:['4.0','逻辑生态'],mirror:['∞','镜厅']};
+let visited=new Set(),current=null;
+function renderRail(){const r=$('#rail');r.innerHTML='';PH.forEach(p=>{
+  const m=PHMETA[p];
+  const d=H('button','rstop'+(p===current?' cur':'')+(visited.has(p)?' seen':''),'<b>'+m[0]+'</b><span>'+m[1]+'</span>',r);
+  d.disabled=!visited.has(p);
+  d.onclick=()=>{if(visited.has(p)&&p!==current)goPhase(p);};});}
+function goPhase(p){killTimers();clearLayers();current=p;visited.add(p);
+  $('#kview').textContent='四律内核 · 实时状态';
+  renderRail();PHASES[p].enter();}
+
+/* 带位移的节点（外层定位，内层可挂动画类） */
+function mkNode(x,y,big,small,fill,stroke,parent){
+  const g=E('g',null,parent||gSys);g.style.transform='translate('+x+'px,'+y+'px)';
+  const inner=E('g',null,g);
+  E('circle',{cx:0,cy:0,r:27,fill:fill,'fill-opacity':.25,stroke:stroke,'stroke-width':2},inner);
+  E('text',{x:0,y:-1,'text-anchor':'middle',fill:'#F0E5CD','font-size':17,'font-weight':'700',text:big},inner);
+  E('text',{x:0,y:14,'text-anchor':'middle',fill:'rgba(240,229,205,.7)','font-size':10,text:small},inner);
+  raf2(()=>g.classList.add('trans-med'));
+  return {g,inner};}
+/* 位移粒子 */
+function mkDot(x,y,r,fill,animCls){
+  const g=E('g',null,gFx);g.style.transform='translate('+x+'px,'+y+'px)';
+  const c=E('circle',{cx:0,cy:0,r:r,fill:fill},g);
+  if(animCls)c.setAttribute('class',animCls);
+  raf2(()=>g.classList.add('trans-med'));
+  return g;}
+
+const PHASES={};
+
+/* ============ 序 · 虚空与第一刀 ============ */
+PHASES.void={
+enter(){
+  hud('相位 <b>序</b> · 前逻辑虚空');
+  setMeters({closure:2,tension:8,variety:12,entropy:90});
+  setKernel(null);
+  const words=['神话','流变','混沌','经验','天象','命运','巫术','梦'];
+  for(let i=0;i<26;i++)E('circle',{cx:60+Math.random()*780,cy:40+Math.random()*480,r:1.2+Math.random()*2.2,fill:C.dim,class:'drift d'+(i%3)},gEnv);
+  words.forEach((w,i)=>E('text',{x:90+((i*173)%700),y:70+((i*97)%420),fill:'rgba(240,229,205,.15)','font-size':15,class:'drift d'+(i%3),text:w},gEnv));
+  narr('<p class="verdict">逻辑的"夸克"不是真理，是区分。</p>'+
+   '<p>Spencer-Brown 在《Laws of Form》里把整座逻辑大厦还原成一个最小动作：<b>draw a distinction</b>——在虚空里划一刀，标出"里"与"外"。同一律不是在陈述真理，而是在<b>执行划界</b>；矛盾律禁止站在刀刃上；排中律禁止停在灰带里；充足理由律驱动系统向源头追问。四条律合起来，是"如何让一个区分保持为干净区分"的操作规程。</p>'+
+   '<p class="hint">面前是前逻辑的虚空——神话、流变、高熵。请执行第一个操作。</p>');
+  setActions([{label:'划下一刀 · Draw a Distinction',kind:'primary',fn:()=>this.cut()}]);
+  log('[BOOT] 前逻辑环境载入: 神话叙事 / 经验流变 / 熵 = 90','sys');
+},
+cut(){
+  setActions([]);
+  const circ=E('circle',{cx:450,cy:280,r:150,fill:'none',stroke:C.bright,'stroke-width':2.2,'stroke-dasharray':'943'},gSys);
+  circ.style.strokeDashoffset='943';circ.classList.add('trans-slow');
+  raf2(()=>{circ.style.strokeDashoffset='0';});
+  log('[CUT] 区分执行中: 在虚空里划一刀……','ok');
+  T(()=>{
+    E('circle',{cx:450,cy:280,r:150,fill:'rgba(127,209,200,.07)',class:'fade-in'},gSys);
+    E('text',{x:450,y:290,'text-anchor':'middle',fill:C.bright,'font-size':40,'font-weight':'700',class:'fade-in',text:'A'},gLbl);
+    E('text',{x:450,y:318,'text-anchor':'middle',fill:'rgba(127,209,200,.6)','font-size':12,class:'fade-in',text:'里 · 可言说'},gLbl);
+    E('text',{x:762,y:118,fill:'rgba(210,105,63,.85)','font-size':26,'font-weight':'700',class:'fade-in',text:'¬A'},gLbl);
+    E('text',{x:762,y:140,fill:'rgba(210,105,63,.55)','font-size':12,class:'fade-in',text:'外 · 非自身'},gLbl);
+    log('[CUT] 完成: 里 = A ／ 外 = ¬A · determinatio est negatio','ok');
+  },1500);
+  const boots=[['law-id','划界操作 · 在线','同一律'],['law-nc','禁站刀刃 · 在线','矛盾律'],['law-em','禁入灰带 · 在线','排中律'],['law-sr','追源驱动 · 在线','充足理由律']];
+  boots.forEach((b,i)=>T(()=>{const chip=$('#'+b[0]);chip.className='law on';chip.querySelector('.lst').textContent=b[1];
+    log('[KERNEL] '+b[2]+' 上线','ok');},1800+i*430));
+  T(()=>{
+    setMeters({closure:38,tension:8,variety:22,entropy:56});
+    narrAdd('<p>内核已点亮。每作一个区分，就同时生出它的非自身——这套刀法的全部<b>变异度</b>，就是系统此后可用的全部资本。整部逻辑史，是这套刀法试图<b>对自己下刀</b>时发生的事。</p>');
+    setActions([{label:'启动 1.0 · 稳态封闭系统',kind:'primary',fn:()=>goPhase('closed')}]);
+  },3800);
+}};
+
+/* ============ 1.0 · 稳态封闭 ============ */
+PHASES.closed={
+enter(){
+  this.t=0;this.cracks=0;this.tension=6;this.si=0;this.frozen=false;
+  this.slots=[[380,205],[520,205],[560,300],[450,360],[345,300]];
+  this.paradoxes=['芝诺 · 飞矢不动（连续性）','赫拉克利特 · 万物皆流（时间）','克里特人说谎者（自指前兆）'];
+  hud('相位 <b>1.0</b> · 定理 <b id="c-thm">0</b> · 拒收 <b id="c-rej">0</b>');
+  setMeters({closure:92,tension:6,variety:18,entropy:22});
+  setKernel({'law-id':{s:'基准协议 · 刚性',m:'rigid'},'law-nc':{s:'零容忍 · 刚性',m:'rigid'},'law-em':{s:'非真即假 · 刚性',m:'rigid'},'law-sr':{s:'刚性传导',m:'rigid'}});
+  this.ring=E('circle',{cx:450,cy:280,r:175,fill:'rgba(127,209,200,.05)',stroke:C.bright,'stroke-width':3},gSys);
+  E('rect',{x:617,y:266,width:16,height:28,rx:3,fill:'#1F6E6B',stroke:C.bright,'stroke-width':1},gSys);
+  E('text',{x:648,y:284,fill:'rgba(240,229,205,.5)','font-size':11,text:'输入口'},gLbl);
+  this.lat=E('g',null,gSys);
+  const pts=[[450,280],[450,215],[506,247],[506,313],[450,345],[394,313],[394,247]];
+  const links=[[0,1],[0,2],[0,3],[0,4],[0,5],[0,6],[1,2],[2,3],[3,4],[4,5],[5,6],[6,1]];
+  links.forEach(l=>E('line',{x1:pts[l[0]][0],y1:pts[l[0]][1],x2:pts[l[1]][0],y2:pts[l[1]][1],stroke:'rgba(127,209,200,.35)','stroke-width':1},this.lat));
+  pts.forEach(p=>E('circle',{cx:p[0],cy:p[1],r:4.5,fill:C.bright},this.lat));
+  E('text',{x:450,y:478,'text-anchor':'middle',fill:'rgba(240,229,205,.55)','font-size':12,text:'公理格 · 三段论 / 几何公理体系'},gLbl);
+  narr('<p class="verdict">1.0 的全部智慧是一道防火墙：确立硬边界，强行降熵。</p>'+
+   '<p>面对神话叙事与经验流变，亚里士多德的形式逻辑假设前提与结论之间存在<b>绝对刚性传导</b>。A=A 是基准协议——滤除时间维度与状态的连续变化，把万物锁进离散、静止的坐标点。封闭、线性、确定。</p>'+
+   '<p class="hint">试试两种投喂：清晰命题会被干净吸收；而无法划界的边缘输入——看系统如何反应。</p>');
+  setActions([{label:'投喂清晰命题',fn:()=>this.clean()},{label:'注入 '+this.paradoxes[0],kind:'danger',fn:()=>this.par()}]);
+  log('[1.0] 硬边界建立: 熵被强行滤出系统','sys');
+},
+clean(){
+  if(this.frozen)return;
+  const g=mkDot(878,255,5,C.paper);
+  raf2(()=>{g.style.transform='translate(628px,280px)';});
+  T(()=>{const s=this.slots[this.si%this.slots.length];this.si++;
+    g.style.transform='translate('+s[0]+'px,'+s[1]+'px)';
+    T(()=>{g.remove();
+      E('circle',{cx:s[0],cy:s[1],r:4,fill:C.bright,class:'pop'},this.lat);
+      E('line',{x1:s[0],y1:s[1],x2:450,y2:280,stroke:'rgba(127,209,200,.3)','stroke-width':1,class:'pop'},this.lat);
+      this.t++;const el=$('#c-thm');if(el)el.textContent=this.t;
+      log('[1.0] 刚性传导完成 → 定理 #'+this.t+' 已入格','ok');
+      setMeters({closure:92,tension:this.tension,variety:18+this.t*2,entropy:22});
+    },720);
+  },880);
+},
+par(){
+  if(this.frozen)return;
+  const name=this.paradoxes[this.cracks];
+  const g=mkDot(878,300,6,C.terra,'wob');
+  raf2(()=>{g.style.transform='translate(632px,290px)';});
+  T(()=>{
+    g.style.transform='translate(706px,252px)';g.style.opacity='0';
+    gSys.setAttribute('class','shake');T(()=>gSys.removeAttribute('class'),420);
+    this.cracks++;const el=$('#c-rej');if(el)el.textContent=this.cracks;
+    this.tension=Math.min(96,this.tension+30);
+    setMeters({closure:92-this.cracks*9,tension:this.tension,variety:18+this.t*2,entropy:22+this.cracks*4});
+    const cracks=['M615,240 l16,-18 l-8,-14 l14,-12','M608,326 l18,12 l-4,16 l16,10','M626,282 l22,4 l10,14'];
+    E('path',{d:cracks[this.cracks-1],stroke:C.terra,'stroke-width':2,fill:'none',class:'fade-in'},gSys);
+    log('[1.0][ERR] 无法划界的边缘输入被拒: '+name+' · 张力 +30','err');
+    T(()=>g.remove(),520);
+    if(this.cracks>=3)this.freeze();
+    else setActions([{label:'投喂清晰命题',fn:()=>this.clean()},{label:'注入 '+this.paradoxes[this.cracks],kind:'danger',fn:()=>this.par()}]);
+  },920);
+},
+freeze(){
+  this.frozen=true;
+  this.ring.setAttribute('stroke',C.terra);
+  this.lat.setAttribute('class','flick');
+  E('text',{x:450,y:118,'text-anchor':'middle',fill:C.terra,'font-size':21,'font-weight':'700',class:'fade-in',text:'⚠ 系统卡死 — BOUNDARY_INTEGRITY_FAIL'},gLbl);
+  setKernel({'law-id':{s:'基准协议 · 刚性',m:'rigid'},'law-nc':{s:'过载: 连续 / 流变 / 自指',m:'warn'},'law-em':{s:'非真即假 · 刚性',m:'rigid'},'law-sr':{s:'传导中断',m:'warn'}});
+  setMeters({closure:42,tension:96,variety:24,entropy:40});
+  narrAdd('<p>封闭系统为维持绝对一致性而拒绝一切矛盾。遇到无法划界的输入，它不降级、不协商——直接报错卡死。这是极其脆弱的稳态：<b>脆断</b>是它唯一的失败模式。</p>');
+  log('[1.0][FATAL] 稳态系统脆断在即 · 唯一出路: 架构升级','err');
+  setActions([{label:'脆断 → 升级 2.0',kind:'primary',fn:()=>this.shatter()}]);
+},
+shatter(){
+  setActions([]);
+  for(let i=0;i<7;i++){const a=Math.PI*2*i/7;
+    const g=E('g',null,gFx);
+    E('path',{d:'M0,0 l26,8 l-6,22 l-24,-8 z',fill:'rgba(127,209,200,.5)'},g);
+    g.style.transform='translate('+(450+Math.cos(a)*175)+'px,'+(280+Math.sin(a)*175)+'px)';
+    raf2(()=>{g.classList.add('trans-med');
+      requestAnimationFrame(()=>{g.style.transform='translate('+(450+Math.cos(a)*340)+'px,'+(280+Math.sin(a)*340)+'px) rotate('+Math.round(a*120)+'deg)';g.style.opacity='0';});});}
+  gSys.style.opacity='0';gSys.style.transition='opacity .8s';
+  log('[1.0] 脆断。碎片将成为 2.0 的燃料。','warn');
+  T(()=>goPhase('dialectic'),950);
+}};
+
+/* ============ 2.0 · 悖论驱动 ============ */
+PHASES.dialectic={
+enter(){
+  this.n=0;this.y=400;
+  hud('相位 <b>2.0</b> · 扬弃 <b id="c-auf">0</b> 次 · 耗散中');
+  setMeters({closure:40,tension:34,variety:42,entropy:62});
+  setKernel({'law-id':{s:'锁定当前正题',m:'on'},'law-nc':{s:'翻转为引擎',m:'engine'},'law-em':{s:'仍然刚性',m:'rigid'},'law-sr':{s:'驱动扬弃',m:'on'}});
+  E('circle',{cx:450,cy:280,r:195,fill:'rgba(127,209,200,.03)',stroke:C.bright,'stroke-width':1.6,'stroke-dasharray':'10 8',class:'march'},gSys);
+  E('text',{x:450,y:64,'text-anchor':'middle',fill:'rgba(210,105,63,.6)','font-size':12,class:'pulse-slow',text:'↓ 熵入'},gLbl);
+  E('text',{x:450,y:508,'text-anchor':'middle',fill:'rgba(210,105,63,.6)','font-size':12,class:'pulse-slow',text:'↑ 熵出'},gLbl);
+  E('text',{x:96,y:272,fill:'rgba(240,229,205,.45)','font-size':11,text:'远离平衡态'},gLbl);
+  E('text',{x:96,y:290,fill:'rgba(240,229,205,.45)','font-size':11,text:'耗散结构'},gLbl);
+  this.spine=E('polyline',{points:'450,400',fill:'none',stroke:'rgba(201,154,58,.5)','stroke-width':1.5,'stroke-dasharray':'4 4'},gSys);
+  this.thesis=mkNode(450,400,'正','A'+sup(0),'#2A7F7A',C.bright);
+  narr('<p class="verdict">2.0 的范式跃迁：Bug 被翻转为引擎。</p>'+
+   '<p>认知范围扩大、输入激增，刚性边界崩塌，系统内部必然生成互斥指令——康德的<b>二律背反</b>。黑格尔随即建立了一个绝妙的正反馈机制：正题在运行中必然耗散、异化出反题；结构性张力逼迫系统不能停留原处，必须通过<b>扬弃</b>（Aufheben）自组织跃迁到包含前两者的新层级。系统从静态平衡进化为远离平衡态的<b>耗散结构</b>——一棵吞噬矛盾、不断自我扩容的动态演化树。</p>');
+  setActions([{label:'异化出反题 ¬A'+sup(0),kind:'danger',fn:()=>this.anti()}]);
+  log('[2.0] 系统进入耗散态: 边界开放熵通量 · 矛盾律已征用为引擎','sys');
+},
+anti(){
+  const y=this.y;
+  this.antiN=mkNode(630,y,'反','¬A'+sup(this.n),'#C05B33',C.terra);
+  this.antiN.g.style.opacity='0';raf2(()=>{this.antiN.g.style.opacity='1';});
+  this.tl=E('line',{x1:482,y1:y,x2:598,y2:y,stroke:C.terra,'stroke-width':1.6,'stroke-dasharray':'6 5',class:'march fade-in'},gSys);
+  this.thesis.inner.classList.add('osc');this.antiN.inner.classList.add('osc2');
+  log('[2.0] 正题在运行中耗散,异化出反题 ¬A'+sup(this.n)+' — 结构性张力建立','warn');
+  setMeters({closure:38,tension:66,variety:44+this.n*10,entropy:66});
+  setActions([{label:'扬弃 Aufheben ⊕',kind:'gold',fn:()=>this.auf()}]);
+},
+auf(){
+  const y=this.y,ny=y-95;this.n++;
+  setActions([]);
+  E('circle',{cx:450,cy:y,r:27,fill:'none',stroke:'rgba(240,229,205,.14)','stroke-width':1.5},gSys);
+  E('circle',{cx:630,cy:y,r:27,fill:'none',stroke:'rgba(210,105,63,.18)','stroke-width':1.5},gSys);
+  this.tl.style.opacity='.1';
+  this.thesis.inner.classList.remove('osc');this.antiN.inner.classList.remove('osc2');
+  this.thesis.g.style.transform='translate(450px,'+ny+'px)';
+  this.antiN.g.style.transform='translate(450px,'+ny+'px)';
+  this.antiN.g.style.opacity='0';
+  T(()=>{
+    this.thesis.g.style.opacity='0';
+    const syn=mkNode(450,ny,'合','A'+sup(this.n),'#B08A2E',C.gold);
+    this.spine.setAttribute('points',this.spine.getAttribute('points')+' 450,'+ny);
+    const el=$('#c-auf');if(el)el.textContent=this.n;
+    log('[2.0] 扬弃完成: A'+sup(this.n)+' := A'+sup(this.n-1)+' ⊕ ¬A'+sup(this.n-1)+' · 系统自我扩容','ok');
+    setMeters({closure:36,tension:26,variety:46+this.n*12,entropy:64});
+    T(()=>{
+      const txts=syn.inner.querySelectorAll('text');
+      txts[0].textContent='正';
+      const cc=syn.inner.querySelector('circle');cc.setAttribute('fill','#2A7F7A');cc.setAttribute('stroke',C.bright);
+      const old=this.thesis;old.g.remove();this.antiN.g.remove();
+      this.thesis=syn;this.y=ny;
+      if(this.n<3){
+        setActions([{label:'再异化 · 反题 ¬A'+sup(this.n),kind:'danger',fn:()=>this.anti()}]);
+      }else{
+        narrAdd('<p>这台引擎没有刹车：矛盾无阻生成，可能失控——这是它的局限。但真正终结这个阶段的不是失控，而是一个特殊输入。从 Organon 到莱布尼茨的 <i>calculemus</i>，两千年的闭合之梦要求系统去运算<b>它自己</b>。</p>');
+        setActions([{label:'梦想闭合 · 让系统运算自身',kind:'primary',fn:()=>goPhase('reentry')}]);
+      }
+    },760);
+  },900);
+}};
+
+/* ============ 3.0 · 再进入危机 ============ */
+PHASES.reentry={
+enter(){
+  this.ex=0;
+  hud('相位 <b>3.0</b> · 闭合之梦 → 再进入');
+  setMeters({closure:78,tension:30,variety:70,entropy:30});
+  setKernel({'law-id':{s:'A = A(A) ？',m:'warn'},'law-nc':{s:'即将振荡',m:'warn'},'law-em':{s:'即将现盲区',m:'warn'},'law-sr':{s:'自证请求排队中',m:'warn'}});
+  E('text',{x:450,y:50,'text-anchor':'middle',fill:'rgba(240,229,205,.5)','font-size':11.5,class:'mono',text:'Organon → characteristica universalis ( calculemus ) → Begriffsschrift → Hilbert 1928'},gLbl);
+  E('circle',{cx:450,cy:270,r:150,fill:'rgba(127,209,200,.05)',stroke:C.bright,'stroke-width':2.4},gSys);
+  for(let i=0;i<18;i++){const a=Math.random()*6.28,rr=20+Math.random()*112;
+    E('circle',{cx:450+Math.cos(a)*rr,cy:270+Math.sin(a)*rr,r:2,fill:'rgba(127,209,200,.4)'},gSys);}
+  E('text',{x:450,y:452,'text-anchor':'middle',fill:'rgba(240,229,205,.55)','font-size':12,text:'表达力已极致: 算术已内嵌 · 系统请求为自身奠基'},gLbl);
+  narr('<p class="verdict">闭合之梦撞上变异度铁律：强到能描述自身的闭合系统，躲不开自指。</p>'+
+   '<p>两千年是同一个梦——让逻辑成为<b>自创生系统</b>（Maturana-Varela）：自己生产构成自己的元件、自己为自己奠基、操作完全闭合。希尔伯特纲领是这个梦最清醒、最数学化的表述。现在，执行它。</p>');
+  setActions([{label:'执行 PROVE( CONSISTENT( SELF ) )',kind:'primary',fn:()=>this.run()}]);
+  log('[3.0] 目标: 用有限手段在系统内部证明自身一致且完备','sys');
+},
+run(){
+  setActions([]);
+  const p=E('path',{d:'M450,120 C560,36 780,58 745,175 C725,242 640,216 598,188',fill:'none',stroke:C.terra,'stroke-width':2,'marker-end':'url(#arrT)','stroke-dasharray':'560'},gFx);
+  p.style.strokeDashoffset='560';p.classList.add('trans-slow');
+  raf2(()=>{p.style.strokeDashoffset='0';});
+  E('text',{x:756,y:116,fill:C.terra,'font-size':13,'font-weight':'700',class:'fade-in',text:'re-entry 再进入'},gLbl);
+  log('[3.0] 系统把自身操作施加于自身: 区分重入其区分出的空间','warn');
+  T(()=>{
+    const g=E('g',{class:'fade-in'},gSys);
+    E('rect',{x:368,y:246,width:164,height:46,rx:9,fill:'rgba(15,29,36,.92)',stroke:C.terra,'stroke-width':1.6},g);
+    E('text',{x:450,y:274,'text-anchor':'middle',fill:C.paper,'font-size':15,text:'「本句为假」'},g);
+    this.bC=E('circle',{cx:562,cy:250,r:16,fill:'#2A7F7A'},gSys);
+    this.bT=E('text',{x:562,y:255,'text-anchor':'middle',fill:'#0F1D24','font-size':12,'font-weight':'700',text:'真'},gSys);
+    let iv=520,tr=true;
+    const step=()=>{tr=!tr;this.bT.textContent=tr?'真':'假';this.bC.setAttribute('fill',tr?'#2A7F7A':'#C05B33');
+      iv=Math.max(130,iv*0.82);T(step,iv);};
+    T(step,iv);
+    log('[3.0][OSC] 真值振荡: 二值无法消化的"虚值"在时间中显形','err');
+    T(()=>this.ashby(),2400);
+  },1500);
+},
+ashby(){
+  const g=E('g',{class:'fade-in'},gLbl);
+  E('text',{x:120,y:452,fill:C.paper,'font-size':12.5,'font-weight':'700',text:'Ashby 必要变异度: 只有变异度能吸收变异度'},g);
+  E('text',{x:120,y:478,fill:'rgba(240,229,205,.7)','font-size':11,text:'V ( 系统: 有限公理 )'},g);
+  this.b1=E('rect',{x:296,y:468,width:180,height:12,rx:6,fill:'#2A7F7A'},g);
+  E('text',{x:120,y:504,fill:'rgba(240,229,205,.7)','font-size':11,text:'V ( 目标: 全部真理 ∋ 自身 )'},g);
+  this.b2=E('rect',{x:296,y:494,width:300,height:12,rx:6,fill:'#C05B33'},g);
+  this.gap=E('text',{x:610,y:504,fill:C.terra,'font-size':12,text:'← 永远追不上'},g);
+  narrAdd('<p>Ashby 必要变异度定律给出系统论的"为什么"：有限公理系统的变异度，永远追不上"全部真理 ∋ 关于它自己的真理"。<i>谨慎：这是启发性的桥，不是等号——严格定理属于哥德尔、塔尔斯基、图灵。</i></p>');
+  setActions([{label:'扩充公理系统 ＋',fn:()=>this.expand()}]);
+  setMeters({closure:78,tension:68,variety:72,entropy:30});
+},
+expand(){
+  this.ex++;
+  const w1=180+this.ex*70,w2=Math.min(500,300+this.ex*100);
+  this.b1.setAttribute('width',w1);this.b2.setAttribute('width',w2);
+  this.gap.setAttribute('x',296+w2+12);
+  log('[3.0] 公理扩充: V(系统)↑ — 但"关于扩充后系统的真理"同步膨胀 · 差距不闭合','warn');
+  if(this.ex>=2)this.trip();
+},
+trip(){
+  setActions([]);
+  const items=[['哥德尔 1931','真而不可证之句存在'],['塔尔斯基 1933','真谓词不可内部定义'],['图灵 1936','停机问题不可判定']];
+  items.forEach((it,i)=>T(()=>{
+    const g=E('g',{class:'fade-in'},gSys);const x=182+i*186;
+    E('rect',{x:x,y:330,width:170,height:52,rx:9,fill:'rgba(127,160,188,.16)',stroke:C.slate,'stroke-width':1.4},g);
+    E('text',{x:x+85,y:352,'text-anchor':'middle',fill:C.paper,'font-size':14,'font-weight':'700',text:it[0]},g);
+    E('text',{x:x+85,y:370,'text-anchor':'middle',fill:'rgba(240,229,205,.65)','font-size':10.5,text:it[1]},g);
+    log('[3.0] 显影 '+(i+1)+'/3: '+it[0]+' — '+it[1],'err');
+  },380+i*520));
+  T(()=>{
+    narrAdd('<p>同一条<b>变异度不足</b>，在三个领域的显影。希尔伯特之梦不是被一个意外杀死的，是被一条系统论必然律杀死的。系统被迫承认：当观测者成为被观测系统的一部分，几何形状会发生拓扑学坍塌。</p>');
+    setActions([{label:'分层解悖 · Entparadoxierung',kind:'primary',fn:()=>goPhase('tower')}]);
+  },2300);
+}};
+
+/* ============ 3.0⁺ · 分层塔 ============ */
+PHASES.tower={
+enter(){
+  this.n=0;
+  hud('相位 <b>3.0⁺</b> · 悖论位移 <b id="c-shift">0</b> 次 · 消除 <b>0</b> 次');
+  setMeters({closure:66,tension:44,variety:74,entropy:34});
+  setKernel({'law-id':{s:'按层级索引: A =ₙ A',m:'on'},'law-nc':{s:'以分层阻断自指',m:'on'},'law-em':{s:'层内有效 · 留有盲区',m:'warn'},'law-sr':{s:'奠基外包至上一层',m:'on'}});
+  this.addSlab(0,true);
+  this.chip=E('g',null,gFx);
+  E('rect',{x:-48,y:-13,width:96,height:26,rx:13,fill:'#C05B33'},this.chip);
+  E('text',{x:0,y:4,'text-anchor':'middle',fill:'#0F1D24','font-size':11,'font-weight':'700',text:'「本句为假」'},this.chip);
+  this.chip.style.transform='translate(560px,482px)';
+  raf2(()=>this.chip.classList.add('trans-med'));
+  narr('<p class="verdict">悖论从未被解决，只被推迟——这叫解悖（Entparadoxierung, Luhmann）。</p>'+
+   '<p>罗素的类型论、塔尔斯基的对象语言 / 元语言、亚里士多德的"同一时间、同一方面"、那句常见的免责脚注"在同一语境下"——全是同一招：<b>把再进入发生的那个点切开，塞进上一层</b>。高维元系统可以解释低维对象系统，但不能解释自身；每个元层级都带着自己的新盲点：你能用它看，看不见它。</p>'+
+   '<p class="hint">试着继续加盖。数一数：悖论被消除了几次？</p>');
+  setActions([{label:'加盖元层级 L'+sub(1),kind:'primary',fn:()=>this.add()}]);
+  log('[3.0⁺] 解悖机制上线: 位移,而非消除','sys');
+},
+slabY(i){return 452-i*74;},
+addSlab(i,instant){
+  const w=520-i*42,x=450-w/2,y=this.slabY(i);
+  const g=E('g',{class:instant?'':'rise'},gSys);
+  E('rect',{x:x,y:y,width:w,height:60,rx:10,fill:'rgba(127,160,188,'+(0.10+i*0.02)+')',stroke:C.slate,'stroke-width':1.4},g);
+  E('text',{x:x+16,y:y+27,fill:C.paper,'font-size':14,'font-weight':'700',text:'L'+sub(i)},g);
+  E('text',{x:x+48,y:y+27,fill:'rgba(240,229,205,.6)','font-size':10.5,text:i===0?'对象语言 · 谈论世界':'元语言 · 谈论 L'+sub(i-1)},g);
+  E('rect',{x:x-7,y:y+22,width:14,height:14,rx:2,fill:'#0F1D24',stroke:C.terra,'stroke-width':1.2,transform:'rotate(45 '+x+' '+(y+29)+')'},g);
+  if(i===1){E('text',{x:x-124,y:y+26,fill:'rgba(210,105,63,.85)','font-size':11,text:'盲点: 能用它看,'},g);
+    E('text',{x:x-124,y:y+41,fill:'rgba(210,105,63,.85)','font-size':11,text:'看不见它'},g);}
+},
+add(){
+  if(this.n>=4)return;
+  this.n++;const i=this.n;
+  this.addSlab(i);
+  const seamY=this.slabY(i)+67;
+  this.chip.style.transform='translate(560px,'+seamY+'px)';
+  const el=$('#c-shift');if(el)el.textContent=this.n;
+  log('[3.0⁺] 悖论位移 → 塞进 L'+sub(i)+' 与 L'+sub(i-1)+' 的夹层 · 新盲点已生成','warn');
+  setMeters({closure:66,tension:Math.max(24,44-this.n*5),variety:74+this.n*3,entropy:34});
+  if(this.n>=4){
+    E('text',{x:450,y:132,'text-anchor':'middle',fill:C.paper,'font-size':22,text:'⋮'},gLbl);
+    E('text',{x:450,y:106,'text-anchor':'middle',fill:'rgba(240,229,205,.6)','font-size':13,text:'∞ 观察者观察观察者的无限塔'},gLbl);
+    log('[3.0⁺] von Foerster: 控制论的控制论的控制论…… 无穷回退','err');
+    narrAdd('<p>塔尔斯基的真值层级，在系统论里就是一座观察者观察观察者的无限塔。健康的复杂系统必须<b>层级嵌套、且存在盲区</b>——不存在全知全能的扁平主系统。是时候承认这一点了。</p>');
+    setActions([{label:'放弃"唯一封闭系统"之梦 → 打开',kind:'primary',fn:()=>goPhase('ecology')}]);
+  }else if(this.n>=2){
+    setActions([{label:'再加一层 L'+sub(this.n+1),fn:()=>this.add()},
+      {label:'放弃"唯一封闭系统"之梦 → 打开',kind:'primary',fn:()=>goPhase('ecology')}]);
+  }else{
+    setActions([{label:'再加一层 L'+sub(this.n+1),fn:()=>this.add()}]);
+  }
+}};
+
+/* ============ 4.0 · 逻辑生态 ============ */
+PHASES.ecology={
+enter(){
+  hud('相位 <b>4.0</b> · 整体算力 <b class="run">RUNNING ▮▮▮</b>');
+  setMeters({closure:22,tension:24,variety:92,entropy:70});
+  this.globalK={'law-id':{s:'局域协议 · 环境相对',m:'rel'},'law-nc':{s:'弗协调区: 爆炸律停用',m:'rel'},'law-em':{s:'直觉主义 / 模糊区: 停用',m:'rel'},'law-sr':{s:'让位于拟合与收敛',m:'rel'}};
+  setKernel(this.globalK);
+  $('#kview').textContent='全局视图 · 点击气泡查看局部内核';
+  const B=this.bubbles=[
+   {n:'经典逻辑',s:'局域有效 · 工程与日常',x:225,y:170,r:56,g:'rg0',laws:{'law-id':['A=A · 刚性','rigid'],'law-nc':['在线','on'],'law-em':['在线','on'],'law-sr':['在线','on']}},
+   {n:'直觉主义',s:'Brouwer / Heyting',x:412,y:122,r:60,g:'rg1',laws:{'law-id':['构造性同一','on'],'law-nc':['在线','on'],'law-em':['停用: 未构造即未定','off'],'law-sr':['证明 = 构造','on']}},
+   {n:'弗协调逻辑',s:'Priest / da Costa',x:622,y:168,r:64,g:'rg2',laws:{'law-id':['在线','on'],'law-nc':['局部容纳 p∧¬p','off'],'law-em':['在线','on'],'law-sr':['爆炸律已拆除','rel']}},
+   {n:'多值 / 模糊',s:'Łukasiewicz / Zadeh',x:272,y:345,r:62,g:'rg3',laws:{'law-id':['以隶属度索引','rel'],'law-nc':['梯度化','rel'],'law-em':['废除: p ∈ [0,1]','off'],'law-sr':['在线','on']}},
+   {n:'贝叶斯 / 神经网络',s:'真值 = 权重 · 概率波',x:508,y:352,r:74,g:'rg4',laws:{'law-id':['分布同一','rel'],'law-nc':['损失函数惩罚','rel'],'law-em':['连续状态空间','off'],'law-sr':['拟合与收敛','rel']}},
+   {n:'模态 / 相关 / 线性',s:'各管一片论域',x:706,y:336,r:50,g:'rg5',laws:{'law-id':['跨可能世界索引','rel'],'law-nc':['相关性约束','rel'],'law-em':['视系统而定','warn'],'law-sr':['资源敏感','rel']}}];
+  const flows=['M268,212 C330,262 330,292 300,318','M458,158 C520,152 562,152 592,162','M328,352 C390,362 418,362 446,354','M562,322 C602,292 618,252 630,218','M602,382 C642,372 662,358 672,348'];
+  flows.forEach(d=>E('path',{d:d,fill:'none',stroke:'rgba(127,209,200,.22)','stroke-width':1.4,'stroke-dasharray':'5 7',class:'march'},gEnv));
+  B.forEach((b,i)=>{
+    const g=E('g',{class:'floaty f'+(i%3)},gSys);b.el=g;
+    b.circle=E('circle',{cx:b.x,cy:b.y,r:b.r,fill:'url(#'+b.g+')',stroke:'rgba(240,229,205,.35)','stroke-width':1.2,class:'clickable'},g);
+    E('text',{x:b.x,y:b.y-4,'text-anchor':'middle',fill:C.paper,'font-size':13.5,'font-weight':'700',text:b.n},g);
+    E('text',{x:b.x,y:b.y+14,'text-anchor':'middle',fill:'rgba(240,229,205,.62)','font-size':10,text:b.s},g);
+    b.circle.addEventListener('click',()=>this.inspect(i));
+  });
+  const bb=B[4];
+  const net=[[bb.x-32,bb.y+26],[bb.x-8,bb.y+38],[bb.x+20,bb.y+28],[bb.x+6,bb.y+48],[bb.x+34,bb.y+44]];
+  net.forEach((p,i)=>{if(i>0)E('line',{x1:net[i-1][0],y1:net[i-1][1],x2:p[0],y2:p[1],stroke:'rgba(127,209,200,.4)','stroke-width':1},bb.el);});
+  net.forEach(p=>E('circle',{cx:p[0],cy:p[1],r:3,fill:C.bright,class:'pulse-slow'},bb.el));
+  const fb=B[3];
+  this.tTerra=E('circle',{cx:fb.x,cy:fb.y+36,r:9,fill:'#C05B33','fill-opacity':.53},fb.el);
+  this.tTeal=E('circle',{cx:fb.x,cy:fb.y+36,r:9,fill:'#2A7F7A','fill-opacity':.53},fb.el);
+  this.tTxt=E('text',{x:fb.x,y:fb.y+58,'text-anchor':'middle',fill:C.paper,'font-size':11,class:'mono',text:'p = 0.50'},fb.el);
+  narr('<p class="verdict">二十世纪真正的转向：放弃"唯一封闭系统"这个梦本身——从一个逻辑，到逻辑的生态。</p>'+
+   '<p>直觉主义砍掉排中律；弗协调逻辑砍掉爆炸律，允许<b>局部</b>容纳矛盾而不全盘崩溃；多值 / 模糊逻辑砍掉二值原则，真值成为 [0,1] 上的连续分布；贝叶斯网络与神经网络索性把推理变成高维参数空间里的<b>拟合与收敛</b>——像一个不断对冲 Delta 与 Gamma 风险的动态平衡网络。有效性彻底<b>环境相对</b>："在同一语境下"从谦卑的免责脚注，升级为整个体系的结构原理。</p>'+
+   '<p class="hint">拖动真值滑杆感受连续状态空间；然后注入一枚悖论，与 1.0 的反应对照。</p>');
+  const box=document.createElement('div');box.className='truthbox';
+  box.innerHTML='<span>真值 p</span><input id="tslide" type="range" min="0" max="100" value="50"><b id="tval">0.50</b>';
+  const btns=setActions([{el:box},{label:'向生态注入一枚悖论',kind:'danger',fn:()=>this.inject()}]);
+  this.injBtn=btns.filter(Boolean)[0];
+  $('#tslide').addEventListener('input',e=>{
+    const p=e.target.value/100;
+    this.tTeal.setAttribute('fill-opacity',(0.12+0.78*p).toFixed(2));
+    this.tTerra.setAttribute('fill-opacity',(0.12+0.78*(1-p)).toFixed(2));
+    this.tTxt.textContent='p = '+p.toFixed(2);$('#tval').textContent=p.toFixed(2);
+    setKernel(this.globalK);
+  });
+  log('[4.0] 生态上线: 6 个子逻辑 · 有效性 = 环境相对','ok');
+},
+inspect(i){
+  const b=this.bubbles[i];
+  const m={};for(const k in b.laws)m[k]={s:b.laws[k][0],m:b.laws[k][1]};
+  setKernel(m);
+  $('#kview').innerHTML='局部内核: <b>'+b.n+'</b> · <a href="javascript:void(0)" id="kback">返回全局</a>';
+  const back=$('#kback');
+  if(back)back.onclick=()=>{setKernel(this.globalK);$('#kview').textContent='全局视图 · 点击气泡查看局部内核';
+    this.bubbles.forEach(x=>x.circle.setAttribute('stroke','rgba(240,229,205,.35)'));};
+  this.bubbles.forEach(x=>x.circle.setAttribute('stroke','rgba(240,229,205,.35)'));
+  b.circle.setAttribute('stroke',C.gold);
+  log('[4.0] 检视局部内核: '+b.n,'sys');
+},
+inject(){
+  if(this.injBtn){this.injBtn.disabled=true;this.injBtn.textContent='悖论已入生态';}
+  const fb=this.bubbles[2];
+  const g=mkDot(450,8,7,C.terra,'wob');
+  raf2(()=>{g.style.transform='translate('+fb.x+'px,'+(fb.y+20)+'px)';});
+  T(()=>{
+    g.remove();
+    E('circle',{cx:fb.x,cy:fb.y+20,r:16,fill:'none',stroke:C.terra,'stroke-width':1.6,class:'pulse-ring','transform-origin':fb.x+'px '+(fb.y+20)+'px'},fb.el);
+    const t=E('text',{x:fb.x,y:fb.y+25,'text-anchor':'middle',fill:C.terra,'font-size':11,class:'mono',text:'p ∧ ¬p'},fb.el);
+    let on=true;IV(()=>{on=!on;t.setAttribute('opacity',on?1:.45);},700);
+    E('text',{x:120,y:508,fill:C.terra,'font-size':12,class:'mono fade-in',text:'1.0 ✗ 卡死'},gLbl);
+    E('text',{x:236,y:508,fill:C.bright,'font-size':12,class:'mono fade-in',text:'4.0 ✓ 代谢'},gLbl);
+    log('[4.0] 悖论落点: 弗协调区 — 爆炸律已拆除,矛盾被局部围堵','warn');
+    log('[4.0] 局部冗余消化局部矛盾 · 整体网络在"不完备"中持续输出','ok');
+    log('[4.0] 对照 1.0: 同类输入 → 全系统卡死','sys');
+    narrAdd('<p>希腊怀疑派的悬置（ἐποχή）是<b>绝望的终点</b>——四个开关全拨到 off，logos 耗尽了自己。现代逻辑把这份悬置<b>焊进了架构</b>：盲点不再是失败的标志，而是系统得以生产的地方。悬置从终点变成了引擎舱。</p>');
+    const nb=H('button','abtn primary','尾声 · 把镜头拉远',$('#actions'));
+    nb.onclick=()=>goPhase('mirror');
+  },1100);
+}};
+
+/* ============ ∞ · 镜厅 ============ */
+PHASES.mirror={
+enter(){
+  this.k=0;
+  hud('相位 <b>∞</b> · 嵌套深度 <b id="c-depth">0</b>');
+  setMeters({closure:30,tension:38,variety:95,entropy:60});
+  setKernel({'law-id':{s:'指向自身……',m:'warn'},'law-nc':{s:'指向自身……',m:'warn'},'law-em':{s:'指向自身……',m:'warn'},'law-sr':{s:'指向自身……',m:'warn'}});
+  const g=E('g',null,gSys);
+  E('circle',{cx:200,cy:268,r:34,fill:'none',stroke:C.bright,'stroke-width':2},g);
+  E('circle',{cx:200,cy:268,r:3,fill:C.bright},g);
+  E('text',{x:200,y:326,'text-anchor':'middle',fill:'rgba(240,229,205,.6)','font-size':11,text:'1.0 防火墙'},g);
+  E('path',{d:'M340,296 q10,-26 26,-14 q16,12 2,26 q-20,14 -30,-6 q-10,-26 18,-40 q30,-14 44,10',fill:'none',stroke:C.gold,'stroke-width':2},g);
+  E('text',{x:368,y:326,'text-anchor':'middle',fill:'rgba(240,229,205,.6)','font-size':11,text:'2.0 辩证引擎'},g);
+  [[0,58],[1,46],[2,34]].forEach(s=>E('rect',{x:532-s[1],y:290-s[0]*20,width:s[1]*2,height:13,rx:4,fill:'rgba(127,160,188,.35)',stroke:C.slate,'stroke-width':1},g));
+  E('text',{x:532,y:326,'text-anchor':'middle',fill:'rgba(240,229,205,.6)','font-size':11,text:'3.0 分层塔'},g);
+  [[664,252,16],[696,270,12],[674,290,10]].forEach(b=>E('circle',{cx:b[0],cy:b[1],r:b[2],fill:'url(#rg4)',stroke:'rgba(240,229,205,.4)','stroke-width':1},g));
+  E('text',{x:678,y:326,'text-anchor':'middle',fill:'rgba(240,229,205,.6)','font-size':11,text:'4.0 自适应生态'},g);
+  [[242,268,296,278],[422,276,466,282],[592,282,640,272]].forEach(a=>E('line',{x1:a[0],y1:a[1],x2:a[2],y2:a[3],stroke:'rgba(240,229,205,.35)','stroke-width':1.4,'marker-end':'url(#arrP)'},g));
+  E('text',{x:450,y:186,'text-anchor':'middle',fill:'rgba(240,229,205,.5)','font-size':13,text:'—— 你刚刚运行完的整部逻辑史 ——'},g);
+  narr('<p class="verdict">最后一个诚实的残余：系统论自己，也跑不出它所描述的那条律。</p>'+
+   '<p>"用系统论观察逻辑系统"这个动作本身，就是又一次<b>再进入</b>——它必须用"系统 / 环境"这个区分来看一切，而它看不见自己正站在这个区分上。它的盲点，就在它划下那一刀的刀刃上。</p>'+
+   '<p class="hint">那就诚实到底：把观察者也框进来。</p>');
+  setActions([{label:'再划一刀（把观察者框进来）',kind:'primary',fn:()=>this.cut()}]);
+  log('[∞] 第二序警告: 客观性是"以为观察可以没有观察者"的错觉','sys');
+},
+cut(){
+  this.k++;
+  const el=$('#c-depth');if(el)el.textContent=this.k;
+  setActions([]);
+  const W=E('g',{class:'nest'});
+  while(gWorld.firstChild)W.appendChild(gWorld.firstChild);
+  gWorld.appendChild(W);
+  raf2(()=>{W.style.transform='scale(0.66)';});
+  const R=E('g',null,gWorld);
+  const r=238+this.k*8;
+  const ring=E('circle',{cx:450,cy:280,r:r,fill:'none',stroke:C.bright,'stroke-width':1.8,'stroke-dasharray':String(Math.ceil(2*Math.PI*r))},R);
+  ring.style.strokeDashoffset=String(Math.ceil(2*Math.PI*r));ring.classList.add('trans-slow');
+  raf2(()=>{ring.style.strokeDashoffset='0';});
+  const ang=this.k===1?-0.6:-2.42;
+  const ex=450+Math.cos(ang)*(r+42),ey=280+Math.sin(ang)*(r+42);
+  const eye=E('g',{class:'fade-in'},R);
+  E('ellipse',{cx:ex,cy:ey,rx:19,ry:11,fill:'none',stroke:C.bright,'stroke-width':1.6},eye);
+  E('circle',{cx:ex,cy:ey,r:4,fill:C.bright},eye);
+  E('text',{x:ex,y:ey+28,'text-anchor':'middle',fill:'rgba(240,229,205,.78)','font-size':11.5,text:this.k===1?'观察者: 系统论':'观察者′: 正在读这块屏幕的你'},eye);
+  const ba=this.k===1?2.2:0.7;
+  const bx=450+Math.cos(ba)*r,by=280+Math.sin(ba)*r;
+  E('rect',{x:bx-6,y:by-6,width:12,height:12,rx:2,fill:'#0F1D24',stroke:C.terra,'stroke-width':1.4,transform:'rotate(45 '+bx+' '+by+')',class:'fade-in'},R);
+  if(this.k===1)E('text',{x:bx+14,y:by+4,fill:'rgba(210,105,63,.85)','font-size':11,class:'fade-in',text:'盲点: 在"系统 / 环境"这一刀的刀刃上'},R);
+  log('[∞] 再进入 #'+this.k+': 观察行为被框进被观察者 · 新盲点生成于新刀刃','warn');
+  if(this.k===1){
+    T(()=>{
+      narrAdd('<p>框住了。但注意：这个新的框，又是一次划界——它自己的盲点已经在新的刀刃上生成。而且，还有一个观察者没被框进来。</p>');
+      setActions([{label:'再划一刀（把你也框进来）',kind:'primary',fn:()=>this.cut()}]);
+    },1700);
+  }else{
+    T(()=>this.final(),1800);
+  }
+},
+final(){
+  [[758,102],[788,82],[812,66]].forEach((p,i)=>E('circle',{cx:p[0],cy:p[1],r:4-i,fill:'rgba(240,229,205,'+(0.5-i*0.15)+')',class:'fade-in'},gWorld));
+  E('text',{x:836,y:56,fill:'rgba(240,229,205,.4)','font-size':16,class:'fade-in',text:'…'},gWorld);
+  narrAdd('<p class="final">地图终究画进了它自己要描绘的疆域。它没有比它所分析的对象站得更高——只是把那座无穷塔又往上添了一层，并且诚实地知道：<b>自己添的是一层，而非顶层。</b></p>');
+  PH.forEach(p=>visited.add(p));renderRail();
+  setActions([
+    {label:'↺ 重新推演（回到虚空）',fn:()=>{goPhase('void');}},
+    {label:'↓ 继续阅读: 档案与结算',fn:()=>{const s=$('#sec-matrix');if(s&&s.scrollIntoView)s.scrollIntoView({behavior:'smooth'});}}
+  ]);
+  log('[∞] 推演完成 · 塔又高了一层 · 全部相位已解锁,可回跳复演','ok');
+}};
+
+/* ============ 一 · 档案矩阵 ============ */
+const STAGES=[
+ {v:'1.0',era:'古希腊形式逻辑',time:'公元前 5–4 世纪',ppl:['巴门尼德','芝诺（压力测试员）','亚里士多德','欧几里得'],
+  char:'封闭、线性、确定性——假设前提与结论之间存在绝对刚性传导。',
+  mech:'硬边界屏蔽信息熵：A=A 作为基准协议，滤除时间维度与状态流变，把万物锁进离散、静止的坐标点。',
+  form:'三段论、几何公理体系；一切知识被要求编入同一张静态之网。',
+  lim:'零矛盾容忍。遇到无法划界的边缘输入（连续性、变化、自指）即报错卡死——脆断是唯一失败模式。',
+  fp:[95,8,15,10]},
+ {v:'2.0',era:'康德 — 黑格尔',time:'18–19 世纪',ppl:['康德','黑格尔'],
+  char:'远离平衡态的耗散结构——靠吞吐矛盾与熵流维持并升级秩序。',
+  mech:'二元悖论从 Bug 翻转为引擎：正题耗散出反题，结构性张力逼迫系统经扬弃自组织跃迁到新层级。',
+  form:'二律背反；辩证法；一棵吞噬矛盾、不断自我扩容的动态演化树。',
+  lim:'引擎没有刹车：矛盾无阻生成，可能导致系统失控；且它把机制误读成了存在本身（见「结算 · 贰」）。',
+  fp:[40,45,55,70]},
+ {v:'3.0',era:'现代数理逻辑',time:'1879 – 1936',ppl:['弗雷格','罗素','希尔伯特','哥德尔','塔尔斯基','图灵'],
+  char:'反身性系统——表达力抵达极致后开始运算自身；分层、递归、元系统嵌套。',
+  mech:'自指短路以分层阻断：类型论、对象语言 / 元语言。悖论被位移到更高层级，而非消除。',
+  form:'罗素悖论、说谎者振荡、哥德尔不完备、塔尔斯基真值层级、图灵停机。',
+  lim:'不存在绝对完备的系统；每个元层级带着新盲点；解悖 = 推迟，塔无穷高。',
+  fp:[65,35,70,50]},
+ {v:'4.0',era:'多值逻辑 — AI 概率计算',time:'20 世纪中叶至今',ppl:['Brouwer','Łukasiewicz','Zadeh','Priest','Pearl 一系'],
+  char:'开放、非线性、概率性的复杂适应系统——一个逻辑的生态。',
+  mech:'真值连续化 p ∈ [0,1]；在动态环境中拟合与收敛；局部冗余代谢局部矛盾，整体在不完备中持续输出。',
+  form:'直觉主义、弗协调、模糊 / 多值、贝叶斯网络、神经网络。',
+  lim:'真值不再绝对，解释力依赖模型与数据；有效性彻底环境相对。',
+  fp:[25,90,92,88]}];
+const FPL=['闭合度','开放度','变异度','张力耐受'];
+let mIdx=0;
+function renderMatrix(){
+  const tabs=$('#mtabs');tabs.innerHTML='';
+  STAGES.forEach((s,i)=>{const b=H('button','mtab'+(i===mIdx?' act':''),s.v+' · '+s.era,tabs);b.onclick=()=>{mIdx=i;renderMatrix();};});
+  const s=STAGES[mIdx],p=$('#mpanel');
+  p.innerHTML='<div class="mmeta"><div class="mv">'+s.v+'</div><div class="mera">'+s.era+'</div><div class="mtime">'+s.time+'</div>'+
+   '<div class="pplbox">'+s.ppl.map(x=>'<span class="ppl">'+x+'</span>').join('')+'</div>'+
+   '<div class="fp">'+s.fp.map((v,i)=>'<div class="fprow"><span>'+FPL[i]+'</span><div class="fpbar"><i style="width:'+v+'%"></i></div><span>'+v+'</span></div>').join('')+'</div></div>'+
+   '<dl class="mdims">'+
+   '<div class="mdim"><dt>系统特征</dt><dd>'+s.char+'</dd></div>'+
+   '<div class="mdim"><dt>核心机制</dt><dd>'+s.mech+'</dd></div>'+
+   '<div class="mdim"><dt>典型表现</dt><dd>'+s.form+'</dd></div>'+
+   '<div class="mdim lim"><dt>局限性 · 下一次相变的入口</dt><dd>'+s.lim+'</dd></div></dl>';
+}
+
+/* ============ 二 · 工作台 ============ */
+const WBSTEPS=['确定系统边界与原始公理','识别内在矛盾与张力源','分析矛盾的处理机制','推导系统的演化路径','预测未来的发展趋势'];
+const DOMAINS=[
+ {name:'西方哲学',
+  steps:['论域＝可被理性言说与公共辩护之物；公理＝思维与存在同一（巴门尼德）、A=A（本质锁定，滤除时间）、理由链有终点（第一原理）、真理唯一且永恒。环境＝神话与流变的高熵输入——另有两枚致命输入潜伏在门外：主体自身与语言自身，它们等系统的表达力长成才来叩门。',
+   '断层线按淤积速率（非响度）排序：系统与自身（能否自我奠基）＞主体与客体＞语言与世界＞理性与经验＞静与动。芝诺最响，却被分层暂存两千年；真正的头号科目一直不出声——响度≠载荷，这是张力审计的第一课。',
+   '逐代审计"上次遇到矛盾它做了什么"：1.0 拒收＋升维隐藏（芝诺被拒，柏拉图两世界，亚氏整合续命）；休谟处拒收失败爆仓 → 2.0 康德划界＋黑格尔把矛盾律改装为引擎（无刹车）；弗雷格令表达力跨阈 → 罗素 1901 再进入 → 3.0 类型论 / 理想语言分层位移，证实原则自噬 → 1975 后 4.0 各传统各管论域、自然化拟合——"在同一语境下"从免责脚注升格为结构原理。',
+   '沿右侧链条推演：康德不是天才的偶然，是休谟爆仓后的必然会计处理；语言转向不是时尚，是自指危机的强制分层——每个节点都是上一节点未代谢张力的结算方式。',
+   '当前位置 4.0 中段。主导未代谢张力：自反性（哲学的元地位——被认知科学与 AI 收编的压力）、自然化之后规范性从何而来、非人类心智进入概念生产。约束集：回不去统一大体系（变异度不许），升维额度已用尽，只能生态化。形态可断言，时点须悬置。'],
+  chain:[['神话与流变','前逻辑高熵初态','init'],['巴门尼德—亚里士多德','划界闭合 · A=A 防火墙','s1'],['休谟问题','因果性拒收失败 · 脆断在即','s2'],['康德—黑格尔','二律背反 → 辩证引擎','s2'],['罗素—哥德尔','再进入 · 语言分层塔','s3'],['后分析多元生态','围堵分工 · 有效性环境相对','s4'],['AI 入场 · 悬置为纪律','新环境脉冲 · ἐποχή 焊进架构','sp']]},
+ {name:'基督教思想',
+  steps:['论域＝救赎与启示真理；公理＝启示不可错（正典＝A=A 之锚）、一神独一（排他划界：determinatio est negatio 的极端形态）、道成肉身与三位一体——注意：两枚 p∧¬p 被公然焊进地基、救赎史有终点（末世论＝充足理由律的时间化）。环境＝罗马多神世界、希腊哲学、苦难与死亡、解释的持续增殖。',
+   '张力清单按淤积速率排序：教会权威 vs 个体良知（1517 爆仓）≈ 文本同一 vs 解释增殖（每次抄写、翻译与布道都是变异度制造机）＞ 神义论（全能 ∧ 全善 ∧ 恶存在——永不结账，每次灾难重开）＞ 信仰 vs 理性（近代被科学接管后放大）。地基里的一与三、神与人两案反而不淤积——机制见下一步。',
+   '独门机制：奥秘（mysterium）＝圣化围堵——迦克墩 451 用四个否定词（不混淆、不改变、不分割、不离散）给神人二性圈出一块逻辑无管辖权的特区，比弗协调逻辑早一千五百年。此外逐代：1.0 信经公理化＋正典封界＋异端审判执法；2.0 经院把辩证法驯化为 quaestio 格式（矛盾制度化为方法），唯名论异化为内部反题；宗教改革＝再进入事件——sola scriptura 让每个信徒直接运算文本，解释权自指（谁解释"谁有权解释"？），分层压不住即以分裂释放；3.0 宗派平行分层、神被位移为"第一因"、康德再移入实践理性公设层、历史批判把启示切成"历史的耶稣 / 信仰的基督"——每次位移带新盲点；4.0 普世运动＝弗协调共存，梵二承认多元环境，"终极关怀"＝真值连续化。',
+   '沿右侧链条推演：改革不是路德的性格，是解释权自指的必然爆点；自由派神学不是软弱，是历史学输入逼出的强制分层。并注意它独有的回缩模块：每次开放都伴随原教旨反弹——它的 1.0 从未退场，而是作为生态位常驻。',
+   '当前位置 4.0 生态中段、带强 1.0 残余。主导张力：北方世俗化（环境输入枯竭）vs 全球南方爆发（变异度迁移）；AI 与生物技术正在冲击"人是什么"这条隐公理。形态分布：重心南移＋灵恩生态扩张 / 欧洲博物馆化冻结 / 数字教会 / 与科学分工化的神学。形态可断言，时点须悬置。'],
+  chain:[['耶稣运动','末世共同体 · 前系统','init'],['尼西亚—迦克墩','信经公理化 · 奥秘＝圣化围堵','s1'],['经院辩证','矛盾被驯化为方法（quaestio）','s2'],['宗教改革','再进入: 解释权的自指','s2'],['宗派分层 · 神的位移','平行分层＋第一因元层级','s3'],['历史批判','启示切分: 历史的耶稣 / 信仰的基督','s3'],['普世生态 · 全球南方','弗协调共存 · 有效性环境相对','s4']]},
+ {name:'数学思想',
+  steps:['论域＝数与形；公理＝欧几里得 / 皮亚诺；环境＝计数经验与物理直觉。',
+   '无穷与有限、连续与离散、可证与为真——表达力每上一个台阶，张力就换一副面孔。',
+   '公理化（希尔伯特：终极闭合尝试）→ 自指（集合论悖论）→ 分层（类型论 / ZFC 层级 / 范畴论）→ 外包（机器辅助证明）。',
+   '沿右侧链条推演：闭合之梦被变异度铁律击穿——3.0 的完整标本。',
+   '推演未来：证明从个体洞见转为人机生态的搜索与验证；真理供给从演绎独占转向概率加权的发现网络——数学正在进入自己的 4.0。'],
+  chain:[['算术直觉','具体经验','init'],['公理化体系','形式逻辑闭合','s1'],['集合论基础','自指危机','s3'],['哥德尔不完备','系统盲区','s3'],['类型论 / 范畴论','分层解决','s3'],['计算机科学','复杂适应','s4'],['AI 数学 / 自动化发现','新范式','s4']]}];
+let wbD=0,wbS=0;
+function renderWB(){
+  const tabs=$('#wbtabs');tabs.innerHTML='';
+  DOMAINS.forEach((d,i)=>{const b=H('button','mtab'+(i===wbD?' act':''),d.name,tabs);
+    b.onclick=()=>{wbD=i;wbS=0;renderWB();};});
+  const d=DOMAINS[wbD];
+  const st=$('#wbsteps');st.innerHTML='';
+  d.steps.forEach((tx,i)=>{
+    H('div','step'+(i<wbS?' done':''),
+     '<div class="st"><b>'+(i+1)+'</b>'+WBSTEPS[i]+'</div><div class="sc">'+tx+'</div><div class="pend">待执行</div>',st);});
+  const ch=$('#wbchain');ch.className='chain'+(wbS>=4?' lit':'');ch.innerHTML='';
+  d.chain.forEach((c,i)=>{
+    H('div','cnode','<span class="cdn">'+(i<d.chain.length-1?'↓':'')+'</span><div class="cpill tg-'+c[2]+'"><div class="cn1">'+c[0]+'</div><div class="cn2">'+c[1]+'</div></div>',ch);});
+  const bt=$('#wbbtns');bt.innerHTML='';
+  if(wbS<5){
+    const b=H('button','wbtn','执行第 '+(wbS+1)+' 步 ▸ '+WBSTEPS[wbS],bt);
+    b.onclick=()=>{wbS++;renderWB();};
+  }else{
+    H('span',null,'<b style="color:var(--teal-deep)">推演完毕。</b> 同一台方法机，三种文明燃料——链条不是编年史，是相变序列。',bt);
+    const r=H('button','wbtn ghost','重新推演本域',bt);r.onclick=()=>{wbS=0;renderWB();};
+  }
+}
+
+/* ============ 三 · 武器库 ============ */
+const ARSENAL=[
+ {n:'区分 / 再进入',en:'Distinction / Re-entry',by:'G. Spencer-Brown',pos:'序章 · 3.0 危机',
+  def:'逻辑的最小动作是划界；当区分重新进入它区分出的空间，产生二值无法消化的"虚值"，在时间中显形为振荡。',
+  deep:'说谎者句的真假来回翻转、罗素集、哥德尔"我不可证"、塔尔斯基真谓词——全是再进入事件。Varela 后来用一个自主的第三值把振荡形式化。判词：危机不是内容错了，是几何形状塌了。'},
+ {n:'自创生',en:'Autopoiesis',by:'Maturana & Varela',pos:'3.0 · 闭合之梦',
+  def:'系统自己生产构成自己的元件、自己为自己奠基、操作上完全闭合。',
+  deep:'从 Organon 到 calculemus 到希尔伯特纲领，两千年是同一个梦：让逻辑成为自产自销的自创生系统。坏消息：一旦真的操作闭合、又强到能描述自身，就再也躲不开自指。判词：闭合的完成时，就是崩溃的进行时。'},
+ {n:'必要变异度定律',en:'Law of Requisite Variety',by:'W. R. Ashby',pos:'3.0 · 铁律',
+  def:'只有变异度能吸收变异度：调节器的变异度必须不小于被控系统。',
+  deep:'有限公理系统的变异度有限，而"全部真理 ∋ 关于它自己的真理"变异度更高——控制端永远追不上。谨慎：这是启发性的桥，不是等号；严格定理属于哥德尔、塔尔斯基、图灵。判词：希尔伯特之梦死于必然律，不死于意外。'},
+ {n:'盲点 / 二阶控制论',en:'Blind Spot / 2nd-order Cybernetics',by:'H. von Foerster',pos:'3.0 · 尾声',
+  def:'每个观察用一个区分看世界，却看不见自己正在用的那个区分——如同眼睛看不见自己的盲点。',
+  deep:'"客观性是以为观察可以没有观察者的那种错觉。" 1900–1936 的危机，本质是逻辑第一次被迫把观察者放回系统内部。判词：没有无盲点的上帝视角，只有一座观察者观察观察者的塔。'},
+ {n:'解悖',en:'Entparadoxierung',by:'N. Luhmann',pos:'3.0 · 分层塔',
+  def:'系统奠基于一个悖论，只能把它藏起来、展开、移走——永远不能消除。',
+  deep:'类型论、对象语言 / 元语言、亚里士多德"同一时间同一方面"、那句免责脚注"在同一语境下"——全是同一招：把再进入点切开塞进上一层。判词：所有解药都是止痛药，病灶只被推迟。'},
+ {n:'耗散结构',en:'Dissipative Structure',by:'I. Prigogine',pos:'2.0 · 引擎',
+  def:'远离平衡态的系统靠吞吐熵流维持并升级自身秩序。',
+  deep:'黑格尔辩证引擎的物理学近亲：正题耗散出反题，张力驱动扬弃跃迁。区别在于 Luhmann 只让这台引擎在观察系统里转，拒绝装回存在本身（见「结算 · 贰」）。判词：矛盾是燃料，不是故障。'}];
+function renderArsenal(){
+  const g=$('#arsgrid');g.innerHTML='';
+  ARSENAL.forEach(a=>{
+    const c=H('div','acard',
+     '<div class="an">'+a.n+'</div><div class="ae">'+a.en+'</div><div class="ab">'+a.by+'</div>'+
+     '<span class="apos">出场: '+a.pos+'</span><div class="adef">'+a.def+'</div>'+
+     '<div class="adeep">'+a.deep+'</div><div class="more">▸ 点击展开深注与判词</div>',g);
+    c.onclick=()=>{c.classList.toggle('open');
+      c.querySelector('.more').textContent=c.classList.contains('open')?'▾ 收起':'▸ 点击展开深注与判词';};});
+}
+
+/* ============ 四 · 洞察 ============ */
+const INSIGHTS=[
+ ['逻辑律是认知的硬约束','不管是理性还是信仰、数学还是艺术，都无法违背四条底层逻辑律——它们是所有认知系统的"操作系统内核"。'],
+ ['矛盾是发展的必然动力','任何系统内部都会产生矛盾；处理矛盾的方式，决定了它的发展方向与高度。'],
+ ['分层是解决复杂性的唯一途径','从简单到复杂，系统必须通过分层、抽象、元视角来处理自指与无穷回归。'],
+ ['开放是高级系统的标志','越高级的系统，越能拥抱不确定性、模糊性与多元性，而不是追求绝对确定。'],
+ ['历史是逻辑的展开','过去发生的一切，本质上是逻辑在特定条件下的必然演化，不是偶然的堆积。'],
+ ['未来是可推演的','掌握当前系统的状态与矛盾，就能推导它下一步的必然选择与可能形态——推演给出的是相变序列与形态分布，不是事件的时间表。']];
+function renderInsights(){
+  const g=$('#insgrid');g.innerHTML='';
+  INSIGHTS.forEach((it,i)=>H('div','ins','<div class="no">'+'①②③④⑤⑥'[i]+'</div><div class="it">'+it[0]+'</div><div class="id">'+it[1]+'</div>',g));
+}
+
+/* ============ 启动 ============ */
+renderMatrix();renderWB();renderArsenal();renderInsights();
+renderRail();
+goPhase('void');
+</script>
+</body>
+</html>

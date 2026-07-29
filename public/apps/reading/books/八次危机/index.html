@@ -1,0 +1,617 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>八次危机：内在逻辑重构 · 温铁军《八次危机》全书观点结构化呈现</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@400;500;700;900&display=swap" rel="stylesheet">
+<style>
+:root{
+  --paper:#F3EAD3; --paper2:#EAE0C2; --card:#FAF4E2; --card2:#F6EED8;
+  --ink:#2A241B; --ink2:#5C5140; --ink3:#8A7C63;
+  --teal:#1E6B63; --teal-deep:#134D46; --teal-wash:#E2EBE2;
+  --terra:#B7492E; --terra-deep:#8C3520; --terra-wash:#F2E0D2;
+  --gold:#96762F; --line:#D9C9A4; --line2:#C9B788;
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+body{background:var(--paper);color:var(--ink);font-family:'Noto Serif SC','Songti SC','SimSun',serif;font-size:16px;line-height:1.95;letter-spacing:.02em;}
+.wrap{max-width:1080px;margin:0 auto;padding:0 28px;}
+a{color:var(--teal-deep);text-decoration:none;}
+strong{font-weight:700;}
+em{font-style:normal;color:var(--terra-deep);font-weight:700;}
+.src{font-size:.78em;color:var(--ink3);letter-spacing:.04em;white-space:nowrap;}
+
+/* ---------- top nav ---------- */
+nav{position:sticky;top:0;z-index:50;background:rgba(243,234,211,.94);backdrop-filter:blur(6px);border-bottom:1.5px solid var(--line2);}
+nav .wrap{display:flex;align-items:center;gap:18px;padding:10px 28px;flex-wrap:wrap;}
+nav .brand{font-weight:900;font-size:15px;color:var(--terra-deep);letter-spacing:.12em;margin-right:6px;}
+nav a{font-size:13px;color:var(--ink2);letter-spacing:.06em;padding:2px 0;border-bottom:2px solid transparent;}
+nav a:hover{color:var(--terra);border-bottom-color:var(--terra);}
+
+/* ---------- hero ---------- */
+header{padding:64px 0 30px;border-bottom:3px double var(--line2);}
+.eyebrow{font-size:13px;letter-spacing:.5em;color:var(--gold);font-weight:700;margin-bottom:14px;}
+h1{font-size:44px;font-weight:900;line-height:1.3;letter-spacing:.06em;}
+h1 .lite{color:var(--teal-deep);}
+.subtitle{margin-top:14px;font-size:16px;color:var(--ink2);max-width:820px;}
+.meta{margin-top:20px;font-size:13px;color:var(--ink3);letter-spacing:.05em;}
+
+/* ---------- section scaffolding ---------- */
+section{padding:56px 0 8px;}
+.sec-head{display:flex;align-items:baseline;gap:16px;margin-bottom:26px;border-bottom:1.5px solid var(--line);padding-bottom:12px;}
+.sec-no{font-size:13px;letter-spacing:.3em;color:var(--gold);font-weight:700;}
+h2{font-size:30px;font-weight:900;letter-spacing:.08em;}
+h3{font-size:20px;font-weight:900;color:var(--teal-deep);margin:34px 0 12px;letter-spacing:.05em;}
+h4{font-size:16.5px;font-weight:700;color:var(--terra-deep);margin:22px 0 8px;}
+p{margin-bottom:14px;text-align:justify;}
+.lead{font-size:17.5px;}
+.lead::first-line{font-weight:700;}
+.conclusion{background:var(--card);border-left:5px solid var(--terra);padding:16px 22px;margin:18px 0 22px;font-size:17px;box-shadow:0 1px 0 var(--line);}
+.conclusion b{color:var(--terra-deep);}
+.note{background:var(--card2);border:1px dashed var(--line2);padding:14px 20px;margin:16px 0;font-size:14.5px;color:var(--ink2);}
+.note b{color:var(--teal-deep);}
+
+/* ---------- matrix (signature) ---------- */
+.matrix{margin:26px 0 10px;border:2px solid var(--ink);background:var(--card);}
+.matrix .mrow{display:grid;grid-template-columns:210px 1fr 1fr;border-bottom:1.5px solid var(--line2);}
+.matrix .mrow:last-child{border-bottom:none;}
+.matrix .mhead{background:var(--ink);color:var(--paper);font-size:13.5px;letter-spacing:.1em;font-weight:700;}
+.matrix .mhead>div{padding:10px 16px;border-right:1px solid rgba(243,234,211,.25);}
+.matrix .mcell{padding:14px 16px;border-right:1.5px solid var(--line2);font-size:14px;line-height:1.8;}
+.matrix .mcell:last-child{border-right:none;}
+.matrix .mwave{background:var(--teal-wash);}
+.matrix .mwave b{display:block;color:var(--teal-deep);font-size:15px;margin-bottom:2px;}
+.matrix .mwave span{color:var(--ink2);font-size:12.5px;}
+.matrix .mcris b{font-size:15px;color:var(--ink);}
+.matrix .mcris a{color:inherit;border-bottom:1px dotted var(--line2);}
+.tag{display:inline-block;font-size:11.5px;font-weight:700;letter-spacing:.12em;padding:1px 8px;border:1.5px solid;border-radius:2px;margin-left:8px;vertical-align:2px;}
+.tag.soft{color:var(--teal-deep);border-color:var(--teal);}
+.tag.hard{color:var(--terra-deep);border-color:var(--terra);}
+.tag.mix{color:var(--gold);border-color:var(--gold);}
+
+/* ---------- crisis card ---------- */
+.crisis{background:var(--card);border:1.5px solid var(--line2);border-top:6px solid var(--teal);margin:34px 0;padding:28px 32px 22px;position:relative;box-shadow:2px 3px 0 rgba(42,36,27,.08);}
+.crisis.hard{border-top-color:var(--terra);}
+.crisis.mix{border-top-color:var(--gold);}
+.crisis .c-head{display:flex;justify-content:space-between;align-items:flex-start;gap:20px;flex-wrap:wrap;margin-bottom:6px;}
+.crisis .c-title{font-size:23px;font-weight:900;letter-spacing:.04em;line-height:1.45;}
+.crisis .c-title .cn{color:var(--terra-deep);margin-right:10px;}
+.crisis .c-sub{font-size:13.5px;color:var(--ink3);letter-spacing:.06em;margin-top:2px;}
+.seal{flex-shrink:0;width:88px;height:88px;border:3px solid var(--terra);border-radius:50%;display:flex;flex-direction:column;align-items:center;justify-content:center;color:var(--terra);font-weight:900;transform:rotate(-8deg);font-size:15px;letter-spacing:.15em;line-height:1.4;opacity:.9;}
+.seal small{font-size:10px;letter-spacing:.2em;font-weight:700;}
+.seal.soft{border-color:var(--teal);color:var(--teal);}
+.seal.mix{border-color:var(--gold);color:var(--gold);}
+.facts{display:flex;flex-wrap:wrap;gap:0;border:1px solid var(--line2);background:var(--card2);margin:14px 0 18px;}
+.facts>div{flex:1 1 160px;padding:10px 14px;border-right:1px solid var(--line2);min-width:150px;}
+.facts>div:last-child{border-right:none;}
+.facts .k{font-size:11.5px;letter-spacing:.14em;color:var(--gold);font-weight:700;}
+.facts .v{font-size:14px;color:var(--ink);line-height:1.7;margin-top:2px;}
+
+/* ---------- causal chain ---------- */
+.chain{display:flex;flex-wrap:wrap;align-items:stretch;gap:0;margin:16px 0 20px;}
+.chain .cnode{background:var(--paper);border:1.5px solid var(--ink2);padding:8px 13px;font-size:13.5px;line-height:1.6;max-width:220px;display:flex;align-items:center;text-align:center;position:relative;}
+.chain .cnode.start{border-color:var(--teal-deep);background:var(--teal-wash);font-weight:700;}
+.chain .cnode.boom{border-color:var(--terra);background:var(--terra-wash);font-weight:700;color:var(--terra-deep);}
+.chain .cnode.land{border-style:double;border-width:4px;font-weight:700;}
+.chain .carr{align-self:center;padding:0 6px;color:var(--terra);font-weight:900;font-size:17px;}
+.chain .carr small{display:block;font-size:10px;color:var(--ink3);letter-spacing:.08em;text-align:center;font-weight:400;line-height:1.2;}
+.chain-label{font-size:12px;letter-spacing:.24em;color:var(--gold);font-weight:700;margin:14px 0 6px;}
+
+/* ---------- misc components ---------- */
+.duo{display:grid;grid-template-columns:1fr 1fr;gap:22px;margin:18px 0;}
+.duo>div{background:var(--card2);border:1px solid var(--line2);padding:16px 20px;font-size:14.5px;}
+.duo b{display:block;font-size:15px;margin-bottom:6px;}
+.duo .pos b{color:var(--teal-deep);}
+.duo .neg b{color:var(--terra-deep);}
+.law{border:1.5px solid var(--line2);border-left:6px solid var(--teal-deep);background:var(--card);padding:18px 24px;margin:20px 0;}
+.law .law-t{font-size:17px;font-weight:900;color:var(--teal-deep);margin-bottom:6px;letter-spacing:.05em;}
+.law p{font-size:15px;margin-bottom:8px;}
+.quoteblock{border-left:4px solid var(--gold);padding:8px 20px;margin:16px 0;color:var(--ink2);font-size:15px;background:linear-gradient(90deg,rgba(150,118,47,.07),transparent);}
+
+/* ---------- timeline ---------- */
+.timeline{border-left:3px solid var(--line2);margin:20px 0 20px 8px;padding-left:26px;}
+.tl{position:relative;padding:2px 0 16px;}
+.tl::before{content:"";position:absolute;left:-33px;top:12px;width:11px;height:11px;background:var(--paper);border:3px solid var(--teal);border-radius:50%;}
+.tl.crash::before{border-color:var(--terra);background:var(--terra-wash);}
+.tl .y{font-weight:900;color:var(--teal-deep);font-size:15.5px;letter-spacing:.06em;}
+.tl.crash .y{color:var(--terra-deep);}
+.tl .t{font-size:14px;color:var(--ink2);line-height:1.8;}
+
+/* ---------- footer ---------- */
+footer{margin-top:70px;border-top:3px double var(--line2);padding:30px 0 60px;font-size:13.5px;color:var(--ink2);}
+footer b{color:var(--ink);}
+
+@media (max-width:760px){
+  h1{font-size:31px;} h2{font-size:24px;}
+  .matrix .mrow{grid-template-columns:1fr;}
+  .matrix .mcell{border-right:none;border-bottom:1px solid var(--line2);}
+  .duo{grid-template-columns:1fr;}
+  .crisis{padding:22px 18px;}
+  .seal{width:74px;height:74px;font-size:13px;}
+}
+</style>
+</head>
+<body>
+
+<nav><div class="wrap">
+<span class="brand">八次危机 · 逻辑重构</span>
+<a href="#thesis">总纲</a>
+<a href="#method">概念与方法</a>
+<a href="#origin">起点 1949–57</a>
+<a href="#pre3">改革前三次</a>
+<a href="#ref3">内源三次</a>
+<a href="#imp2">输入两次</a>
+<a href="#laws">横向规律</a>
+<a href="#end">终局与警告</a>
+<a href="#chrono">年表</a>
+</div></nav>
+
+<header><div class="wrap">
+<div class="eyebrow">温铁军《八次危机：中国的真实经验 1949—2009》</div>
+<h1>成本向何处转嫁，<span class="lite">危机就在何处着陆</span></h1>
+<p class="subtitle">本页依据原书自序、概念提示、引言、四章正文与大事年表，将全书的理论框架、八次危机的发生顺序、每一次危机的触发—传导—应对—着陆—代价链条，以及贯穿六十年的横向规律，作忠实的结构化重构。全部论断与数据均取自书中，章节出处以〔〕标注；本页不掺入编者评断。</p>
+<div class="meta">凡例：<span class="tag soft">软着陆</span> 危机代价成功向"三农"转嫁或由其承载，城市体制得以延续；<span class="tag hard">硬着陆</span> 无法向农村转嫁，危机爆发并滞留于城市，倒逼财税与经济体制重大变革；<span class="tag mix">混合</span> 书中兼用两种表述、需按其原文语境理解。</div>
+</div></header>
+
+<!-- ============================================================ 总纲 -->
+<section id="thesis"><div class="wrap">
+<div class="sec-head"><span class="sec-no">壹</span><h2>总纲：一个命题统摄八次危机</h2></div>
+
+<div class="conclusion"><b>核心命题（成本转嫁论）：</b>后发国家的工业化绕不开资本原始积累；西方靠殖民扩张把原始积累与危机的代价向外转嫁，中国无此可能，只能对内转嫁。六十年国家工业化史上，<b>凡危机代价能够直接向农村转嫁的，集中于城市的产业资本就实现"软着陆"，原有体制得以维持；凡不能向农村转嫁的，危机就在城市"硬着陆"，随之引发国家财税制度乃至经济体制的重大变革。</b>〔引言；第一章·一·（二）〕</div>
+
+<p class="lead">这不是对个别年份的解释，而是全书用来解构 1949—2009 当代经济史的统一分析工具。书中据此给出三条骨架：<strong>其一</strong>，新中国六十年实际遭遇九次经济危机，但 1949—1950 年的恶性通胀属民国 1935 年币制改革以来长期通胀危机的延续，与工业化时代的周期危机无直接关系，故计为<em>八次</em>〔引言〕。<strong>其二</strong>，这八次危机的峰谷交替，可归因于不同政治家先后<em>四次引入"外资"</em>造成的外债与赤字压力——每一次外资运作，都伴生两次危机〔第四章·一〕。<strong>其三</strong>，前六次危机的主因是国内<em>资本极度稀缺</em>条件下的赤字，属内生性危机，政府以紧缩应对；1997 与 2008 两次则发生在中国"告别短缺、进入过剩"并纳入全球化之后，属外部诱发的<em>输入型危机</em>，政府一反常态以扩张（"政府进入"）应对〔第三章引言；第四章〕。</p>
+
+<div class="chain-label">总传导模型〔引言；第二章〕</div>
+<div class="chain">
+<div class="cnode start">资本极度稀缺的<br>后发人口大国</div>
+<div class="carr">→<small>唯赖外资</small></div>
+<div class="cnode">引进外资<br>（苏联／西方／全球化）</div>
+<div class="carr">→<small>主权负债</small></div>
+<div class="cnode boom">外债·财政赤字<br>累积至爆发</div>
+<div class="carr">→<small>危机在城市爆发</small></div>
+<div class="cnode">能否向"三农"<br>转嫁代价？</div>
+<div class="carr">→<small>能</small></div>
+<div class="cnode land" style="border-color:var(--teal-deep);color:var(--teal-deep)">软着陆<br>体制延续</div>
+<div class="carr">／<small>不能</small></div>
+<div class="cnode land" style="border-color:var(--terra);color:var(--terra-deep)">硬着陆<br>倒逼改革</div>
+</div>
+
+<h3>四次外资 × 八次危机总览</h3>
+<p>书中反复归纳的现象律：<strong>"60 年 4 次引进外资各伴生 2 次危机"</strong>——引进国外设备与技术，三至五年后国内赤字爆发〔第四章·一〕。下表即全书的骨骼；各次危机的着陆判定，均取自书中原始表述。</p>
+
+<div class="matrix">
+<div class="mrow mhead"><div>外资波次</div><div>伴生危机（前）</div><div>伴生危机（后）</div></div>
+<div class="mrow">
+  <div class="mcell mwave"><b>第一次外资 · 1950—1959</b><span>朝鲜战争纳入苏联地缘战略，苏联投资约 54 亿美元（156 项），军重工业为主，附带"全盘苏化"上层建筑</span></div>
+  <div class="mcell mcris"><b><a href="#c1">危机一 · 1958—1960</a></b><span class="tag soft">软着陆</span><br>苏联中辍投资→放权大跃进→赤字爆发；1961—63 精简下放上千万城市人口</div>
+  <div class="mcell mcris"><b><a href="#c2">危机二 · 1968—1970</a></b><span class="tag soft">软着陆</span><br>三线建设自主投资＋1966 还清苏债→再度赤字；第二次上山下乡</div>
+</div>
+<div class="mrow">
+  <div class="mcell mwave"><b>第二次外资 · 1972—1979</b><span>中美缓和后引进欧美日设备："四三方案"（43 亿美元）接续华国锋更大规模的"八二方案"（82 亿美元）</span></div>
+  <div class="mcell mcris"><b><a href="#c3">危机三 · 1974—1976</a></b><span class="tag soft">软着陆</span><br>四三方案投产、赤字连破百亿；最后一次上山下乡</div>
+  <div class="mcell mcris"><b><a href="#c4">危机四 · 1979—1981</a></b><span class="tag mix">硬着陆·借三农复苏</span><br>洋跃进＋福利赎买→赤字 300 亿；不能再下乡→城市硬着陆，大包干开启改革</div>
+</div>
+<div class="mrow">
+  <div class="mcell mwave"><b>第三次外资 · 1980s—1994</b><span>放权让利下地方分散引资、特区与沿海开放；"关键要把出口创汇搞上去"，中央承担还债责任</span></div>
+  <div class="mcell mcris"><b><a href="#c5">危机五 · 1988—1990</a></b><span class="tag hard">硬着陆</span><br>货币化＋价格闯关→滞胀；治理整顿，代价部分转嫁乡镇企业</div>
+  <div class="mcell mcris"><b><a href="#c6">危机六 · 1993—1994</a></b><span class="tag mix">名义软着陆·城乡共担</span><br>三大赤字同步爆发；汇率并轨、分税制、下岗分流"铁血"应对</div>
+</div>
+<div class="mrow">
+  <div class="mcell mwave"><b>第四次外资 · 1997—2008</b><span>纳入金融资本主导的全球化：入世、FDI 第一大国、外资占进出口过半，对外依存度约 70%</span></div>
+  <div class="mcell mcris"><b><a href="#c7">危机七 · 1997—1998</a></b><span class="tag mix">政府进入·三农承载</span><br>东亚金融危机输入→通缩萧条；国债投资＋金融改革＋产业化改革</div>
+  <div class="mcell mcris"><b><a href="#c8">危机八 · 2008—2009</a></b><span class="tag soft">软着陆</span><br>华尔街海啸输入；4 万亿救市，赖 2003 年起三农新政预先修复的"蓄水池"</div>
+</div>
+</div>
+
+<div class="note"><b>为什么"改革元年"应是 1980 而非 1978？</b>书中开宗明义：若以危机爆发之年划分当代经济史，比 1978 更合适的年份是 1980——因为中国的经济体制改革本来就源于政府在经济危机发生时作出的应对调整，1979—1981 年危机与其后的农村改革构成直接因果〔第二章引言；第三章·一〕。同理，全书对"开放与改革"的判词是：<em>开放先于改革，开放推进改革</em>〔第三章·一·（二）〕。</div>
+</div></section>
+
+<!-- ============================================================ 概念与方法 -->
+<section id="method"><div class="wrap">
+<div class="sec-head"><span class="sec-no">贰</span><h2>概念与方法：读懂全书的五把钥匙</h2></div>
+
+<p class="lead">作者自称其研究为"批判政策学"：超脱研究者身处其中的利益结构约束，"去意识形态化""去价值判断"，只对已经发生的经验过程作范畴归纳与证伪比较〔自序〕。分析工具是政治经济学构建框架、新制度经济学的交易费用理论作辅助，并借鉴沃勒斯坦"世界系统论"（核心—半边缘—边缘的剩余输送结构）与阿明"依附理论"中的"去依附"观点〔引言〕。判定危机的经济指标为：宏观增速、财政赤字、金融存贷差、固定资产投资增速与物价指数〔第二章引言〕。以下五个概念是全书给定的阅读工具〔概念提示〕。</p>
+
+<div class="law"><div class="law-t">概念一 · 资本与政府："政府公司主义"</div><p>资本主义阶段人类造出的两个"异己产品"：经济基础方面是资本，上层建筑方面是政府。由政府权力直接占有或垄断掌控的资本即国家资本，其内在结合于政府，客观上形成"政府公司化"（government corporatism），并势必导致"权力资本化"。这是理解中央与地方政府六十年行为的总钥匙。</p></div>
+
+<div class="law"><div class="law-t">概念二 · 城市化与危机周期：资本积聚＝风险同步集中</div><p>资本愈益积聚于城市，而资本积聚与风险集中不仅等量而且同步——政府在追求城市化的制度收益时，不自觉地制造了城市与生俱来的风险集中危机，并呈周期性爆发。所以内生于工业文明的经济危机总是率先爆发于城市；冲击有多大，取决于城市能把成本向农村转嫁多少。</p></div>
+
+<div class="law"><div class="law-t">概念三 · 政治现代化成本与债务危机</div><p>西方"现代化政体"内含"高成本上推＝高负债累积"的负债机制；盲目照搬西方政体的发展中国家会有类似甚至更惨重的逻辑结果。2007—2011 年全球金融／债务危机即此规律的总爆发。这一概念也用于解释中国基层"过高成本的上层建筑"与分散小农的对立（见危机六、七的农民负担问题）。</p></div>
+
+<div class="law"><div class="law-t">概念四 · "成本转嫁论"与发展陷阱</div><p>西方各阶段的危机代价主要向殖民地和发展中国家转嫁，这是发展中国家贫困的主因。战后一百多个解殖国家照搬西方"发展主义"却无处对外转嫁成本，大多堕入"发展陷阱"。能跳出陷阱者，大都有某种<em>对内转嫁</em>成本的条件——中国改革之前的城市危机主要向集体化农村转嫁而在城市"软着陆"；此后的危机主要在城市"硬着陆"，因而引发"改革"。</p></div>
+
+<div class="law"><div class="law-t">概念五 · 危机软着陆与加强三农</div><p>中国在资本原始积累与产业扩张阶段都采行了不同名义的"亲资本"政策；在完全没有规模资本可用的阶段，则以"劳动力集中投入替代资本"。2005 年起把"新农村建设"作为国家战略、连年增加数万亿投资、吸纳数千万农民非农就业，是 2009 年成功应对全球危机、实现城乡双赢"软着陆"的前提。作者自注：此条尚属经验层次归纳，理性高度不足。</p></div>
+
+<h3>三个被数据颠覆的成见〔自序〕</h3>
+<p><strong>其一，关于意识形态。</strong>1949—1953 年城市搞的主要是民族资本主义，1953—1959 年搞的是国家资本主义；这十年的演变不取决于主观确立何种主义，而取决于客观上处于"区域热战＋西方封锁"压力下的<em>内向型资本原始积累</em>阶段。1956 年的农村集体化并非农业自身的制度需要，其实质是"集体化＋机械化"，目的是以乡为单位建立高级社、承载城市资本品下乡、完成工农两大部类交换、提取农业剩余。1960 年的严重危机，本质是外资突然中辍时十年原始积累巨大代价的总爆发——原始积累不仅从农民身上提取剩余，城市资本危机的代价也向农村转嫁，所以"城市资本原始积累的危机却在农村饿死人"。</p>
+<p><strong>其二，关于政治体制。</strong>中国并没有西方人所说"中央化"集权体制的经济条件：决定政府体制的核心是财政税收，而自 1957 年苏联中辍投资以来，中央财税占比长期在 30% 以下，大炼钢铁、大跃进、文革等代价最大的时段甚至不足 20%——实际是"地方化"为主的资源资本化过程，"责任中央承担、收益地方占有"，"条块分割、尾大不掉"是延续至今的最大难题。1994 年分税制才把地方占比从 70% 以上调到约 50%，中央手里才有了调控之"米"。</p>
+<p><strong>其三，关于城乡二元结构。</strong>中国真正的比较优势既非"劳动力无限供给"，也非私有化市场化的"改革红利"（这两条一般发展中人口大国都有），而在于基本制度：城乡二元结构＋土地均分制之下，乡村内生的"农户理性"与"村社理性"得以<em>内部化处置外部性风险</em>——亿万打工者以聚落于村社的家庭为单位，用非市场化平均分得的无风险资产（土地）承担非农就业风险，把风险收益拱手让渡给企业家和发达地区政府。这才是中国能长期维持低价劳动力的真实内因。</p>
+
+<div class="quoteblock">书中对世界体系的引申：当今"核心—半边缘—边缘"结构已恶化为"双输"博弈——中国这样的国家向核心国家作<strong>双重输送</strong>：既输送实物产品形成贸易顺差、推动西方增发货币，又以累积的贸易盈余购买西方国债、把剩余送回其资本市场，促使金融资本愈益泡沫化〔引言〕。阿明的"去依附"本是对中国 1960 年代外资中辍后仍自力更生完成工业化的提炼；而九十年代后期以来，中国的"融入"本质上是构建"再依附"之后剩余向外输送的过程〔引言〕。</div>
+</div></section>
+
+<!-- ============================================================ 起点 -->
+<section id="origin"><div class="wrap">
+<div class="sec-head"><span class="sec-no">叁</span><h2>逻辑起点：1949—1957，二元结构如何铸成</h2></div>
+
+<div class="conclusion"><b>结论：</b>八次危机的全部制度前提在头八年铸成——土改让 88% 的人口对城市经济"去依附"，吸纳了民国遗留的通胀危机；朝鲜战争带来的苏联外资把中国推入军重工业优先的国家资本主义；为向高度分散的小农成规模提取剩余，统购统销、集体化与三要素"政府所有制"相继确立，<b>城乡二元结构由此成为此后一切危机转嫁的制度载体</b>。〔第二章·一〕</div>
+
+<h3>两大初始约束</h3>
+<p>中国是在几乎不具备工业化内外部条件的情况下进入工业化的。<strong>约束一：农民高度分散。</strong>三次土地革命奠定了国家政治建设的基础，也造成 1950 年占总人口 88% 的五亿农民回归传统农业文明——上亿高度分散、种养兼业的"粮猪小农"，与必须成规模占有农业剩余的国家之间，交易费用高到无法交易。书中"铁犁下不了乡"的故事即此矛盾的缩影：成本 29 元售价 39 元的双轮双铧犁，无论政府怎样动员，农民就是不买——村社内部木匠打架、铁匠打铧即可耕田，且多种经营不走现金〔专栏3〕。<strong>约束二：资本绝对稀缺。</strong>只有对外开放吸引外资才能推进工业化，而这又要求按外资的制度需求改造本国上层建筑——对百年浴血才重获主权的中国，这是更大的制度成本。这就是后发国家普遍的"发展陷阱"悖论〔引言；自序〕。</p>
+
+<h3>民国危机的化解：三农第一次充当稳定器</h3>
+<p>新中国经济建设的起点本身就是一场从民国延续下来的危机：1949 年农业总产量只有战前的 75%，灾民四千万，财政赤字占支出 46.4%，国民党带走全部黄金储备后新政权大量发钞，物价暴涨五至六倍。危机全在城市，农村却稳定得多——政府以土地革命的名义按自然村产权边界均分土地，客观上使"三农"实现了对高风险城市经济的<em>"去依附"</em>，也完成了构建政治国家所必须的最广泛国民动员（均田免赋，农民忠于国家）。这是"农村吸纳城市危机"机制的第一次运用，也与其他未经土地革命的发展中国家构成基本制度区别〔第二章·一〕。</p>
+
+<h3>朝鲜战争：外资从天而降，路径就此锁定</h3>
+<div class="chain-label">初始制度链〔第二章·一；大事年表 1950—1958〕</div>
+<div class="chain">
+<div class="cnode start">1950 朝鲜战争<br>中国纳入苏联地缘战略</div>
+<div class="carr">→</div>
+<div class="cnode">苏联援助约 54 亿美元<br>156 项军重工业＋专家体系</div>
+<div class="carr">→</div>
+<div class="cnode">国家资本主义工业化<br>＋"全盘苏化"上层建筑</div>
+<div class="carr">→<small>需成规模提取农业剩余</small></div>
+<div class="cnode">1953 统购统销<br>1956 合作化·社会主义改造</div>
+<div class="carr">→</div>
+<div class="cnode boom">城乡二元结构确立<br>三要素政府所有制</div>
+</div>
+<p>本拟渐进发展"民族资本主义"的新民主主义方针（1947 年提出、《共同纲领》确认，毛泽东当年还刻意反对"民粹主义"），被朝鲜战争改写：1950—1959 年苏联合计约 54 亿美元的设备与技术投资（含朝战军事开支）拉动中国迅速走出萧条，进入高速原始积累。但外资势必转化为主权负债；与之配套，国家在 1956 年完成对私人工商业与小农经济的"社会主义改造"，实现生产力三要素的"政府所有制"：<strong>土地</strong>——1954 年批复国营单位占用市郊土地不必付费，城市土地增值收益归政府（其间已出现第一轮"圈地热"，被征十万亩中四成闲置浪费）；<strong>劳动力</strong>——封闭城乡就业市场，集中全部劳动力用于国家基建，占有全部剩余价值；<strong>资金</strong>——绝对垄断货币发行与金融，占有铸币税与货币化增值。私有制在新中国只存在了不到七年，就被改造为"资本内化于政府"的<em>政府公司主义</em>体制——它被证明既有利于缩短原始积累时间、加快产业资本扩张，也是一种直接大规模对农民转嫁制度成本与危机代价的制度类型〔第二章·一〕。而"满头乱发没法抓，编成辫子就好抓"——合作化把四亿农民纳入四百万个初级社，正是为统购统销解决与分散小农之间的交易费用问题〔大事年表 1953〕。</p>
+
+<div class="note"><b>三农为国家积累的总账（孔祥智测算，书中专栏1）：</b>新中国成立六十年，农民仅通过三条渠道就为国家建设积累至少 <b>17.3 万亿元</b>——工农产品价格"剪刀差"1.26 万亿（1952—1997，年均 274.8 亿）；农民工廉价劳动力贡献（工资差额＋未缴社保）11.6 万亿；土地征占贡献约 4.4 万亿（土地增值中农民所得不足 10%，地方政府得 60—70%）。这是"对内提取＋对内转嫁"机制的量化底账。</div>
+
+<p>1955—1957 年，裂痕出现：苏共二十大批斯大林、中方 1955 年底即提"以苏为鉴"（《论十大关系》）；随着中国在中长铁路、旅顺、长波电台、联合舰队等主权问题上的坚持，苏联于 1957 年突然中辍对"二五"计划的整体投资。"外资势必转化为国家主权负债和政府赤字危机"的规律，即将第一次应验〔第二章·二；大事年表 1955—1957〕。</p>
+</div></section>
+
+<!-- ============================================================ 改革前三次 -->
+<section id="pre3"><div class="wrap">
+<div class="sec-head"><span class="sec-no">肆</span><h2>1958—1976：工业化初期的三次危机（第一、二次外资伴生）</h2></div>
+
+<p class="lead">改革前三十年即国家工业化的内向型"资本原始积累阶段"，经济大起大落，约每 7—8 年爆发一次城市危机。三次危机的化解方式高度一致：向高度组织化的人民公社与国营、集体农场<em>直接转移城市过剩劳动力</em>——1960、1968、1975 年前后三波"上山下乡"总计约 2000 万城市知青，外加几乎同等规模的农村"回乡青年"（合计约 4000 万人），同时政府加大提取农业剩余，内向型地转嫁工业化与城市化的代价。统计显示：每次危机发生，下乡知青即大规模增加；危机过后则显著减少。1960 年城镇就业 1.3 亿，1962 年骤降至 4537 万——两年减少约 8500 万（65%）。一般市场经济体失业率超 10% 即生动乱，中国靠公社化的集体组织几乎全额吸纳了被城市排斥的失业人群，而以"阶级斗争"为名的政治运动则不断消纳社会紧张〔第二章引言〕。</p>
+
+<!-- 危机一 -->
+<div class="crisis" id="c1">
+<div class="c-head"><div>
+<div class="c-title"><span class="cn">危机一</span>1958—1960 · 苏联援华投资中断之后</div>
+<div class="c-sub">第一次外资的第一波伴生危机 ｜ 出处：第二章·二</div>
+</div><div class="seal soft">软着陆<small>转嫁三农</small></div></div>
+
+<div class="facts">
+<div><div class="k">触发</div><div class="v">1957 苏联中辍"二五"投资，1960 撤走专家；涉主权谈判无果（毛："你把中国拿去吧，我上井冈山！"）</div></div>
+<div><div class="k">爆发指标</div><div class="v">1960 赤字危机总爆发；1961 财政收入 −37.8%、支出 −44.7%；经济连续快速回落</div></div>
+<div><div class="k">社会代价</div><div class="v">城镇就业 1.3 亿→4537 万；1960—62"未增加人口"约 2000 万，新生儿死亡率 140‰</div></div>
+<div><div class="k">着陆方式</div><div class="v">1961—63 动员上千万城市人口下乡生产自救＋"农民退出"政策调整</div></div>
+</div>
+
+<div class="chain-label">传导链</div>
+<div class="chain">
+<div class="cnode start">苏联中辍投资<br>"二五"计划胎死腹中</div>
+<div class="carr">→<small>1958 郑州会议</small></div>
+<div class="cnode">"调动两个积极性"<br>财权骤放地方（支出占比 29%→55.7%）</div>
+<div class="carr">→<small>无学习机制</small></div>
+<div class="cnode">大炼钢铁·大跃进·公社化<br>以劳动替代趋零的资本</div>
+<div class="carr">→<small>维持偏重工业高积累</small></div>
+<div class="cnode boom">1960 赤字爆发<br>叠加对苏还债（农产品）</div>
+<div class="carr">→<small>转嫁</small></div>
+<div class="cnode land" style="border-color:var(--teal-deep)">精简城市人口下乡<br>＋队为基础·三自一包</div>
+</div>
+
+<p>危机的直接原因是战略性外资"陡然归零"。中央毫无预案，1958 年初提出"调动两个积极性"——发动地方政府参与原被中央垄断的工业建设，靠动员国内特别是地方财政勉力维持重工业拉动；初尝财权、计划权与企业管理权的地方政府没有工业化"学习机制"，只能照搬苏联投资期的重工模式与战争年代的国民动员，遂有"大炼钢铁"（1958 年底投入钢铁行业劳动力 9000 万，连带超一亿）与人民公社化——其经济实质是以大规模劳动力集中投入替代稀缺程度近于零的资金要素，投入国家工业化必需的大型基建，再反过来形成对国有装备制造业的需求。这就是马恩不可能预见的"以 L 替代 K"的原始积累经验〔自序；第二章·二〕。财政收支在 1958 年双增 35%、虚火三年，1960 年在实现 572.29 亿元建国以来最高财政收入的同时经济转入负增长，高额赤字挤占正常运行开支，危机全面爆发。</p>
+<p><strong>着陆机制有两层。</strong>其一是"排斥劳动"：1961 年起"休养生息"，动员上千万城市人口到农村生产自救，这是城市产业资本得以软着陆的基础性条件。其二是"农民退出"：1961 年对集体化政策作实质调整——改"一大二公"为"队为基础"（核算单位退回自然村），允许"三自一包"、自留地等约占农地 15%——放松了国家资本主义对农民的全面控制。农业随之恢复，农业税占财政收入比重由 8% 升至 22%，财政好转；1961 年后刘少奇、陈云主持收回下放权力，中央财政支出占比回到 50—60%。书中特别指出：1962—63 的复苏并非城市工业增长所致，而恰在于"农民退出"——这一机制十五年后改名"大包干"再度上演，实质却变成"政府退出"不经济的农业〔第二章·二及脚注〕。同期中国在农产品严重短缺中仍以农牧产品与稀有矿产偿还约 54 亿美元苏联债务，客观加剧了灾难性后果；人们约定俗成称之为"三年自然灾害"。</p>
+<div class="note"><b>制度遗产：</b>地方"土围子"习性与苏式科层官僚主义嫁接，铸成"条块分割、尾大不掉"的痼疾；"一放就乱、一收就死"的治乱循环自此成为体制常数——1980 年代与 1992 年的两轮放权过热，都是 1958 年的重演〔自序；第三章·四〕。</div>
+</div>
+
+<!-- 危机二 -->
+<div class="crisis" id="c2">
+<div class="c-head"><div>
+<div class="c-title"><span class="cn">危机二</span>1968—1970 · "三线建设"中的战略调整与经济危机</div>
+<div class="c-sub">第一次外资的第二波伴生危机（自主投资接续） ｜ 出处：第二章·三</div>
+</div><div class="seal soft">软着陆<small>二次下乡</small></div></div>
+
+<div class="facts">
+<div><div class="k">触发</div><div class="v">全面封锁＋周边"环形恶化"（中苏陈兵、越战、反攻大陆、美苏核讹诈）→ 备战型三线建设</div></div>
+<div><div class="k">投入规模</div><div class="v">1965—75 全国基建资金近半投向三线；1965—71 投 340.8 亿；至 80 年代中央累计约 2052 亿</div></div>
+<div><div class="k">叠加因素</div><div class="v">1966 彻底偿清苏东外债；文革冲击生产，沿海工业维持简单再生产</div></div>
+<div><div class="k">着陆方式</div><div class="v">1968—70 又有上千万知青下乡（第二次上山下乡）</div></div>
+</div>
+
+<div class="chain-label">传导链</div>
+<div class="chain">
+<div class="cnode start">地缘热战边缘<br>"三五"计划让位</div>
+<div class="carr">→<small>"要饭的也得有根打狗棍"</small></div>
+<div class="cnode">原子弹＋三线建设<br>产业资本空间大转移</div>
+<div class="carr">→<small>耗资巨大·几无收益</small></div>
+<div class="cnode boom">财政赤字再累积<br>＋1966 还清苏债</div>
+<div class="carr">→<small>"赤字＋失业"</small></div>
+<div class="cnode land" style="border-color:var(--teal-deep)">1968 知青下乡<br>农村集体再吸纳</div>
+</div>
+
+<p>这次危机除一般经济因素外，还具有典型的"上层建筑反作用于经济基础"的特点：五十年代照搬的苏式重工业管理体制，始终难与"自力更生、艰苦奋斗"的经济方针一致。六十年代初关于"三五"计划本有"农轻重协调"的正确指导思想，但"树欲静而风不止"——中印边境战争、印支战争、美机舰八百余次侵入、美苏先后策划核打击——最终形成毛泽东主导的决策：集中最好的科技力量上核武器，宁受损失也把沿海基础工业迁往内地，形成"大三线＋小三线"的战备经济。三线建设是国家产业资本的空间移动而非结构升级，企业分散布局难以配套，用任何西方微观经济学作成本收益分析都"绝对负面"——但书中强调必须放回地缘政治语境理解，且它建成了 1100 多个大中型企业与成昆等多条铁路，形成打不垮的战略后方，为 1973 年中美战略接近提供了筹码，也是 1999 年西部大开发的历史底本〔专栏5〕。代价的归宿一如上次：赤字累积爆发，1968—1970 年再有上千万知青下乡，靠向农村转嫁实现软着陆。书中就此追问：艰苦奋斗延续的既然仍是苏化时期遗留的国家资本主义工业结构，那么随之维护和加强的，难道不是与之相适应的官僚化上层建筑吗——这正是六十年代不断发生群众运动的深层背景〔第二章·三；自序〕。</p>
+</div>
+
+<!-- 危机三 -->
+<div class="crisis" id="c3">
+<div class="c-head"><div>
+<div class="c-title"><span class="cn">危机三</span>1974—1976 · 最后一次"上山下乡"</div>
+<div class="c-sub">第二次外资（四三方案）的第一波伴生危机 ｜ 出处：第二章·四、五</div>
+</div><div class="seal soft">软着陆<small>末次下乡</small></div></div>
+
+<div class="facts">
+<div><div class="k">外资背景</div><div class="v">1971 基辛格密访、1972 尼克松访华，美国解除 20 年封锁；周恩来主持"四三方案"，实际引进西方设备 42.4 亿美元</div></div>
+<div><div class="k">结构意图</div><div class="v">调整"缺重少轻／偏军偏重"结构——化肥、化纤（的确良）、轻工；与夭折的"三五"殊途同归</div></div>
+<div><div class="k">爆发指标</div><div class="v">1974 年起设备投产，财政赤字连续突破 100 亿（财政总盘不足 800 亿）</div></div>
+<div><div class="k">着陆方式</div><div class="v">1974—76 以毛泽东晚年威望动员数百万城市劳动力下乡——第三次亦即最后一次</div></div>
+</div>
+
+<div class="chain-label">传导链</div>
+<div class="chain">
+<div class="cnode start">1969 珍宝岛冲突<br>美苏矛盾可资利用</div>
+<div class="carr">→<small>1972 中美缓和</small></div>
+<div class="cnode">四三方案引进西方设备<br>（昂贵"服务"不再有苏式传帮带）</div>
+<div class="carr">→<small>1974 投产</small></div>
+<div class="cnode boom">赤字连破百亿<br>扩大再生产能力枯竭</div>
+<div class="carr">→<small>路径依赖</small></div>
+<div class="cnode land" style="border-color:var(--teal-deep)">第三次上山下乡<br>集体"大锅饭"兜底</div>
+</div>
+
+<p>与五十年代不同，七十年代引进不再有战略同盟的优惠：除支付昂贵的"服务"成本，还得在上层建筑领域"洗心革面"——从照搬苏联体制转向适应西方生产线的制度需求，经济与政治体制改革由此被主管经济的高官们渐次提出并"被演进着"。引进的即期红利是显著的：1972—74 化肥产量翻番带动农业增产，城市第一次有了的确良、尼龙袜与洗衣粉。但危机机制照旧：1974 年后赤字连破百亿，第三次上山下乡随即启动——此时文革热情已退、1972 年后高投资带动部分城市就业，青年不愿下乡，运动难以顺畅贯彻，社会不满酝酿。书中的总判词：农村"大锅饭"式的集体分配虽非农业发展的客观要求，也未必维护农民利益，却在原始积累期起到了意想不到的作用——以"内部化"特性化解外部性风险的"中国特色农民社会主义"，二十年内三次默默承载了总计约四千万人规模的城市危机代价。<em>1976 年毛泽东去世，后任者无论谁遭遇城市危机，都不可能再像他那样三次向农村送去成千上万的失业群体——此后的城市危机一般都在城里"硬着陆"</em>（书中注明的两个例外：1979—80 与 2008—09）〔第二章·五〕。</p>
+</div>
+
+<div class="note"><b>承前启后——"四三"到"八二"：</b>毛、周的四三方案与华国锋 1977—78 年的更大规模引进只有数量之别、内容一致，故书中把整个七十年代对欧美日的成规模引进统称"第二次外资"。1978 年一年就签下 22 个大项目、金额 78 亿美元，另有 50 亿美元意向——而当年财政收入不过 1132 亿元人民币。第一次外资被后来批为"极左"冒进，第二次被批为"洋跃进"，但八十年代以后的政府仍内生性地延续了"政府公司化"直接引资的路径依赖〔第二章·四〕。</div>
+</div></section>
+
+<!-- ============================================================ 改革以来内源三次 -->
+<section id="ref3"><div class="wrap">
+<div class="sec-head"><span class="sec-no">伍</span><h2>1978—1997：改革以来的三次内源性危机（第二、三次外资伴生）</h2></div>
+
+<p class="lead">这是官方所称"工业化中期阶段"——原始积累完成后的产业资本结构调整与扩张期。三次危机（第四、五、六次）仍主要缘于国内因素，但转嫁条件已根本改变：农村改革"去组织化"、农产品市场化之后，不可能再借集体化组织直接分送城市失业人口、提取三农剩余。于是——除危机四因农村改革反过来促成城市复苏之外，危机五与危机六都不得不在城里"硬着陆"，并且都对三农造成较大负面影响；波动幅度则较初期收窄〔第三章引言〕。书中对这一段的另一条主线判断：政府为减轻财政压力反复推行"甩包袱"（政策圈行话；学术上雅称"政府退出"），微观上是农业与国企承包、宏观上是财政分级承包、拨改贷、利改税，直至九十年代的股份制、下岗分流与公共品产业化——每一步"改革"背后都是财政金融压力〔第三章〕。</p>
+
+<!-- 危机四 -->
+<div class="crisis mix" id="c4">
+<div class="c-head"><div>
+<div class="c-title"><span class="cn">危机四</span>1979—1981 · 改革以来第一次危机与借助"三农"的复苏</div>
+<div class="c-sub">第二次外资的第二波伴生危机 ｜ 出处：第三章·一</div>
+</div><div class="seal mix">硬着陆<small>三农启动复苏</small></div></div>
+
+<div class="facts">
+<div><div class="k">赤字成因</div><div class="v">洋跃进过度投资（1978 工业基建投资 +55.8%）＋过渡期福利"赎买"（1979—81 减收增支 925 亿，各项合计 1400 余亿）</div></div>
+<div><div class="k">爆发指标</div><div class="v">1979 赤字 170 亿、1980 年 127 亿；增速 11.7%→5.2%；1981 投资增速 −10.51%</div></div>
+<div><div class="k">城市代价</div><div class="v">知青大返城（1978—79 调离农村 650 万），1979 城镇待业 1500 万（极端估计至 4000 万）；治安恶化→1981 起"严打"</div></div>
+<div><div class="k">化解引擎</div><div class="v">大包干＋提价休养生息＋乡镇企业异军突起 → 1982 复苏、1983—88 高涨</div></div>
+</div>
+
+<div class="chain-label">传导链（危机 → 改革的因果原型）</div>
+<div class="chain">
+<div class="cnode start">八二方案＋福利刚性<br>高积累与高消费并举</div>
+<div class="carr">→</div>
+<div class="cnode boom">1979—80 赤字 300 亿<br>危机爆发·萧条</div>
+<div class="carr">→<small>不可能再下乡</small></div>
+<div class="cnode">硬着陆在城市<br>返城潮·待业·严打</div>
+<div class="carr">→<small>财政甩包袱</small></div>
+<div class="cnode">大包干＝政府退出<br>不经济的农业</div>
+<div class="carr">→<small>三要素归农</small></div>
+<div class="cnode land" style="border-color:var(--gold);color:var(--gold)">乡镇企业异军突起<br>内需拉动黄金增长</div>
+</div>
+
+<p><strong>危机的账本。</strong>财政危机由两笔叠加：一是七十年代以来投资过度的累积赤字——"四三方案"已使 1974 年后赤字连破百亿，华国锋班子又在缺乏可行性论证下推出"八二方案"，22 个大项目约半数是 1978 年 12 月 20 日之后十天抢签的，全部所需外汇 130 亿美元、折合人民币连同国内配套逾 600 亿；二是过渡期政府为构建合法性的休养生息开支——提高农副产品收购价、城镇安置就业、涨工资发奖金、建职工住宅，1979—81 年仅此减收增支 925 亿元，远超原设想的 600 亿。书中点破其矛盾：一个没有外部资源输入的社会，不可能既高积累又高消费；靠赤字透支政府信用，终将严重入不敷出。政策文件事后把"主要责任"记在"投资过度"头上，但这场政权交替期的危机与经济改革构成直接因果〔第三章·一；专栏6—8〕。</p>
+<p><strong>着陆与化解。</strong>毛去世后的政府不可能再向三农直接转嫁，危机硬着陆在城市。应对之道即后来所称的"改革"，书中还原为两个动作。<em>其一，"政府退出不经济的农业"。</em>决策线索清晰可考："工业、农业都要甩掉一些包袱"——在地广人稀、贫困地区"索性实行包产到户……减少国家的负担"；杜润生向姚依林建议"让农民自己包生产、包肚子，两头有利"。人民公社因支农工业品统销涨价、农产品统购价不变而高负债运行，早成财政包袱；大包干让政府甩出农村公共管理与农民福利保障，换来的是把土地承包权、生产自主权、经营收益权还给农民——1982 年起五个一号文件"三十几个允许允许又允许、可以可以也可以"。1984 年中央以政治形式在全国彻底推开，农村利益主体由约 70 万个大队（另一处作 80 万）、480 万个生产队（另一处作 400 万）变为两亿多农户。农业超常规增产的当年归纳是三因素"各占三分之一"：承包制、价格调整（1979 粮价 +20.8%，主产品累计约 +49%）、此前集体化年代大规模劳动投入建成的农田水利。<em>其二，农村资源自我资本化。</em>政府在归还农业剩余收益权的同时，连带归还了土地与劳动力在农村内部"资本化"的权利——乡镇企业以村社内部化机制、不计代价的劳动替代资本完成原始积累（不靠国家财政与贷款），1988 年前产出年增 30% 以上，高出国营工业十个百分点；其发展的三个中国特色因素：农民（购买力回流填补城市紧缩留下的需求真空、吸纳通胀风险）、农村（约三分之二村社仍有集体资产，村社理性低成本进入工业积累）、市场（低档消费品需求爆发而国家工业仍偏军重、几无对手）〔第三章·一·（二）〕。</p>
+<p><strong>结果与遗产。</strong>1982 年复苏、随后五六年高涨；1988 年通胀再起之前，农民收入连续四年快于市民、城乡差距缩小，农村消费一度占社会零售总额 60% 以上——书中称之为"内需拉动型的黄金增长"，并认定这段被后来利益集团刻意忽略的经验，正是"科学发展观"的历史原型。同期外贸体制两大禁区被突破（接受外国政府贷款、允许外商投资，"基本上国际贸易惯用的做法都可以干"），1979—80 年批准四个经济特区——但在统收统支体制下没有厘清哪级政府对新增国家债务负责，"责任中央承担、收益地方占有"的责权利错位，为放权让利与开发区热埋下总根。危机应对中政府也曾照例压抑社队企业（"以小挤大"之争、1981 年调整、1983 年加税），却压而不住——因为此时既无公社可送人、农口政策部门又暂时具有保护三农的决策地位，向三农转嫁的政策没有产生实质效果。这是六十年中三农第一次不作为代价承担者、而作为<em>复苏引擎</em>出场〔第三章·一〕。</p>
+</div>
+
+<!-- 危机五 -->
+<div class="crisis hard" id="c5">
+<div class="c-head"><div>
+<div class="c-title"><span class="cn">危机五</span>1988—1990 · 价格闯关与滞胀</div>
+<div class="c-sub">第三次外资背景下的第一波危机 ｜ 出处：第三章·二、三</div>
+</div><div class="seal">硬着陆<small>部分转嫁乡企</small></div></div>
+
+<div class="facts">
+<div><div class="k">爆发指标</div><div class="v">1988 CPI 18.6%（月度峰值 26.7%）；增速 11.6%→4.1%（1989）→3.8%（1990）；1989 投资 −8.23%；全口径赤字达财政收入 25.1%</div></div>
+<div><div class="k">货币面</div><div class="v">1988 现金投放 679.5 亿（1987 年 236 亿、1978 年 16.6 亿）；M0 增速 46.72%</div></div>
+<div><div class="k">危机形态</div><div class="v">通胀＋"三角债"连锁负债、生产停滞 —— 典型滞胀；连带 1989 政治风波、西方第二次封锁与"中国崩溃论"</div></div>
+<div><div class="k">代价归宿</div><div class="v">城市硬着陆；乡镇企业被"两头在外"排拒、农村公共投入削减，农民收入增速 1989—91 连降三年</div></div>
+</div>
+
+<div class="chain-label">传导链</div>
+<div class="chain">
+<div class="cnode start">城市改革放权让利<br>财政包干·拨改贷</div>
+<div class="carr">→<small>铸币税替代财政</small></div>
+<div class="cnode">货币化加速增发<br>＋双轨制隐性成本（官倒寻租·短缺投机）</div>
+<div class="carr">→<small>1988 价格闯关</small></div>
+<div class="cnode boom">抢购风潮·恶性通胀<br>CPI 18.6%</div>
+<div class="carr">→<small>治理整顿"双紧"</small></div>
+<div class="cnode">三角债·生产停滞<br>滞胀·1989 风波</div>
+<div class="carr">→<small>调控偏向城市</small></div>
+<div class="cnode land" style="border-color:var(--terra);color:var(--terra-deep)">硬着陆城市<br>乡企让出原料与市场</div>
+</div>
+
+<p><strong>发生机制。</strong>两大主因：其一，短缺经济下乡村工业化与高增长带来消费投资"两旺"，货币发行过多必然引发通胀——八十年代初"拨改贷"实行财政金融分家后，1986—89 年 M2 年均新增 1500 多亿，而 1988 年新增货币大部分以现金形态滞留（M0 独涨），一旦需求过旺必致物价飞涨。其二，激进改革引爆了双轨制掩盖的两块制度成本：部门与官倒公司结合的设租寻租成本、短缺条件下的投机暴利成本——1988 年 8 月北戴河会议通过价格工资改革方案并经中央媒体公布，"物价闯关"引发全社会抢购，7、8 月物价几呈直线上升〔专栏9〕。9 月十三届三中全会决定治理整顿、计划手段"双紧"，存贷利率骤提之下企业资金链断裂，"三角债"蔓延为全国现象——通胀与停滞并存，是为改革前危机所没有的滞胀形态。中央除减少货币发行、提高利率外，别无调控地方的金融手段，只能照例削减国有单位投资，萧条随之而来；高涨期绷紧的社会矛盾在危机压力下爆发为 1989 年政治风波，招致西方自 1971 年以来的第二次封锁〔第三章·二〕。</p>
+<p><strong>向三农的转嫁与历史性后果。</strong>此次转嫁的对象仍是乡镇企业，方式有二：以 1988 年初正式发文的"沿海经济发展战略"要求乡镇企业"两头在外、大进大出"，让出国内原料与产品市场（其内在初衷，书中判为城市工业再陷原料资金紧张时"城市工业优先"的老逻辑，"沿海与内地争夺原料"乃托辞）；同时削减地方与乡村公共品维持费用。技术落后、资金外汇人才三缺的乡镇企业（无锡出口自行车检验批批不合格、专业人才仅占职工 0.75%）根本无力"两头在外"，大面积关停〔专栏10—12〕。后果有三：农民现金收入增速 1989—91 连降三年，被迫外出——九十年代初"民工潮"由此发端（1988 年起允许农民进城务工经商，1992 年 4 月因财政库存补贴压力取消粮票，进城再无口粮之忧，1993 年外出劳力陡增至 4000 万以上）；农民消费被人为压抑导致内需不足，<em>整个国民经济由内需拉动转向对外向型经济的依赖</em>——这正是九十年代迫不及待纳入全球化的脚注；八十年代为三农代言的两个中央决策机构（中央农研室、国务院农研中心）于 1989—90 年被撤销，三农自此失去宏观协调层面的利益代表〔第三章·二及脚注〕。而取消粮票这一财政压力下的政策，还派生了更吊诡的结果：货币真正还原为一般等价物，中国由此进入"货币化时期"。</p>
+<div class="note"><b>外汇硬约束——第三次外资的逻辑：</b>八十年代中期外贸连年逆差，外汇储备由 1983 年 89.01 亿美元跌至 1987 年 29.23 亿美元，外债债务率升至 77.1%——"出口换汇每得一美元，超过一半甚至四分之三是给国家还债"。这就是"关键要把出口创汇搞上去"的全部由来，也是王建"国际大循环"构想（农村劳动力转移纳入国际循环，以劳动密集出口换汇）与中央沿海战略几乎同时出台的宏观背景〔第三章·三；专栏11、12〕。</div>
+</div>
+
+<!-- 危机六 -->
+<div class="crisis mix" id="c6">
+<div class="c-head"><div>
+<div class="c-title"><span class="cn">危机六</span>1993—1994 · 三大赤字同步爆发（"中国的九三年"）</div>
+<div class="c-sub">第三次外资背景下的第二波危机 ｜ 出处：第三章·四；自序·二</div>
+</div><div class="seal mix">名义软着陆<small>城乡共担</small></div></div>
+
+<div class="facts">
+<div><div class="k">三大赤字</div><div class="v">财政（占 GDP 仅 12.6%，向银行透支）；金融（银行资本金被吃空、严重贷差、"白条子"横行）；外汇（储备 211.99 亿−短债 135.46 亿＝76.53 亿美元，不抵当年 122.2 亿逆差；长期外债 700.27 亿）</div></div>
+<div><div class="k">爆发指标</div><div class="v">1994 CPI 24.1%，改革以来最高；综合负债率超 GDP 的 140%</div></div>
+<div><div class="k">应对</div><div class="v">1993.6"铁血十六条"；1994 汇率一步并轨（本币大幅贬值约五成）＋分税制＋国债货币同步大增发；国企下岗分流＋公共品产业化两大"政府退出"</div></div>
+<div><div class="k">代价归宿</div><div class="v">1995—2000 国有与城镇集体在岗减少 4800 万；农民负担激增、第二轮圈地；官方 1997 年宣布"软着陆"（增速 14.2%→9.7%、物价 21.7%→6%）</div></div>
+</div>
+
+<div class="chain-label">传导链</div>
+<div class="chain">
+<div class="cnode start">1992 南方谈话·十四大<br>"发展才是硬道理"</div>
+<div class="carr">→<small>放权＋翻牌公司 20 余万家</small></div>
+<div class="cnode">四热四高四紧一乱<br>股·期·房三大投机市场开闸</div>
+<div class="carr">→<small>中央被迫承债·印钞"三班倒"</small></div>
+<div class="cnode boom">1993 财·金·汇<br>三大赤字同步爆发</div>
+<div class="carr">→<small>壮士断腕</small></div>
+<div class="cnode">汇率并轨·分税制<br>下岗分流·公共品产业化</div>
+<div class="carr">→<small>存量贱卖·代价社会化</small></div>
+<div class="cnode land" style="border-color:var(--gold);color:var(--gold)">1996—97 宣布软着陆<br>外向型格局定型</div>
+</div>
+
+<p><strong>发生机制：改革以来第一次投机性需求过热引致的危机。</strong>1990—91 萧条期未及总结"价格闯关"教训，1992 年南方谈话即促推经济从复苏直接跳入高涨；十四大确立市场经济目标后，"政企分开"催生的翻牌公司（当年新办 20 余万家）借"政治正确"之名行设租寻租之实；各地以"硬道理"为名扩投资、办集资（利率 20—40%），股票、期货、房地产三大高风险市场开闸吸走全社会投机资金。体制病灶与 1958 年同构：仍是层层分散的放权让利模式、仍是"一统就死、一放就乱"，只是这次中央财政占比过低无力兜底，只能开动印钞机（1993 年新增货币 1528.7 亿），十几个省告急"资金欠缺"、各色"条子"代币流通，金融机构普遍贷差、深度负利率下金融寻租愈演愈烈，银行大办证券房地产信托公司自我异化——1993 年末通胀陡升的同时，中央直接控制的财政、金融、外汇三大领域赤字同时爆发。书中把 1992 年后的乱象与 1958 年放权后的大跃进直接对举：1958 之乱演变为 1960 之危机，1992 之乱同样演化为 1994 年 CPI 24.1%、国企职工大规模下岗、农民土地大规模被征占〔第三章·四〕。</p>
+<p><strong>应对："远比后来欧债危机大刀阔斧的紧缩"。</strong>1993 年 6 月《十六条》在政策圈内称"铁血十六条"；1994 年三大宏观改革出台：外汇改革一步并轨、本币名义汇率一次性大幅贬值（书中先后表述为 52% 与 57%，官方牌价由 1∶5.7 左右并至 1∶8.7 上下），人为造出全球要素低谷，当年出口 +31.9%，自 1993 年最后一次严重逆差后中国转入连年顺差；分税制把地方财税占比从 70% 以上压到约一半——但以地方仍可操纵的 1993 年为返还基数（当年后四个月地方收入突击暴增 40.2%），实为与地方的一场"交易"，其延续便是 1994 年宏观调控"雷声大雨点小"，而地方失去财源后"以地生财"几近疯狂；第三是国债与货币同步大增发。更史无前例的是两大"政府退出"的存量处置：政府退出中小非垄断国企，直接推行"下岗分流、减员增效"——111 个试点城市分流富余人员 1687 万，1995—2000 年国有与城镇集体在岗人员减少 4800 万，大量职工未及建立社保医保即"裸体下岗"、低价买断工龄；政府退出公共福利，住房、教育、医疗产业化——教育经费占 GDP 由 1990 年 3.04% 跌至 1996 年 2.46%，个人卫生支出占卫生总费用由 37%（1990）升至 59%（1999），信息绝对不对称领域的产业化随即滋生"四大黑"式的系统性溃败。作者在自序中说，几乎按捺不住写一部中国的《九三年》：法国有 1793 年大革命，中国有 1993 年大危机压力下的大改革——"这种'通过深化改革'渡过严重危机的实际经验，别说欧债危机下的欧洲国家学不起，世界上任何国家都不敢学"〔自序·二；第三章·四〕。</p>
+<p><strong>代价判定：城乡共担。</strong>书中明确反对把这次仅以 CPI 与 GDP 衡量的"软着陆"简单肯定——伴随它的是数千万下岗、公共事业民营化、乡村治理劣化与三农问题呈爆发趋势。对三农的影响正反两面：正面是 1993—96 年官方粮价累计提高 105%、1996 年提前四年实现万亿斤产量，取消粮票扫清劳动力流动障碍、民工潮弥补乡企倒闭的收入缺口；负面是分税制后"财权上收、事权下移"层层甩包袱——乡村两级"自收自支"，农民成为农村公共品的主要出资人，负担剧增、群体性事件抬头；金融资本开始异化于实体（专栏13：证交所开业"开启金融资本异化于产业资本的新时代"），越无流动性的领域越遭"金融排斥"，林业"四荒拍卖"与林权市场化沦为典型灾难〔专栏14〕；土地资本化机制根本改变——从八十年代农村自主"以地兴企"（增值留在村社，用于福利与支农）变为九十年代政府"以地生财"（1992—93 房地产投资连年翻倍、1993 年征地 27.1 万公顷峰值；增值分配：农民 5—10%、村集体 25—30%、政府及部门 60—70%），第二轮圈地运动由此展开〔专栏15〕。总判词：这次危机是内发型与输入型危机的过渡与分水岭——产业资本走向过剩、金融资本大扩张、经济转向外向，此后中国受国际周期的影响越来越大〔第三章·四·（二）〕。</p>
+</div>
+</div></section>
+
+<!-- ============================================================ 输入型两次 -->
+<section id="imp2"><div class="wrap">
+<div class="sec-head"><span class="sec-no">陆</span><h2>1997 与 2008：两次"输入型"危机（第四次外资伴生）</h2></div>
+
+<p class="lead">九十年代中后期激进改革造成内需下降，中国加快融入全球化——书中称之为"第四次外资"：跨国资本对中国经济的主导地位不断加强（新世纪跨国公司几乎控制中国全部高附加值产业及其出口并成为主要获利者），中国日渐成为全球资本化主导国家对外转嫁代价的载体，危机也转为输入型。两次输入型危机"别无二致"：危机前经济都高度依赖出口，外部金融危机一来，先是外需骤降、增长下滑、就业承压；与此前六次紧缩应对完全相反，政府都以大规模扩张性财政政策扩投资、拉内需——"政府进入"取代"政府退出"，成为应对输入型危机的基本经验。两次的最大不同：2008—09 的救市较多延续了 2003 年以来的三农新政投入，带动资金与劳动力回流农村，部分修复了"劳动力池"，并促成县域经济"第二资产池"〔第四章·一〕。</p>
+
+<!-- 危机七 -->
+<div class="crisis mix" id="c7">
+<div class="c-head"><div>
+<div class="c-title"><span class="cn">危机七</span>1997—1998 · 东亚金融危机的输入</div>
+<div class="c-sub">第四次外资的第一波危机 ｜ 出处：第四章·二</div>
+</div><div class="seal mix">政府进入<small>三农承载</small></div></div>
+
+<div class="facts">
+<div><div class="k">结构前提</div><div class="v">1994—97 调控致内需降、依存度升：1997 年出口对增长拉动 4.2 个百分点、贡献率 44.4%，已超投资成第一动力；同年中国"告别短缺、进入过剩"（马洪判断；林毅夫"双重过剩"）</div></div>
+<div><div class="k">触发与形态</div><div class="v">1997.7 东亚金融危机 → 1998 出口增速骤降至 0.5%；物价连续 15 个月下行，1998—2002 通货紧缩型萧条</div></div>
+<div><div class="k">应对</div><div class="v">金融改革（注资 2700 亿＋剥离 1.3 万亿不良，1998—2005 累计投入 3.24 万亿）；积极财政（1998—2000 国债 3600 亿，12 年国债带动投资逾 10 万亿）；住房教育医疗产业化；三提出口退税</div></div>
+<div><div class="k">代价归宿</div><div class="v">GDP"保七争八"（7.8%／7.6%）；农民收入增速史无前例连降 4 年；农业就业 1997—2002 回升 2030 万（＝劳动力池吸纳的城市失业）；群体性事件 1997 年 1.5 万起→1999 年 3.2 万起</div></div>
+</div>
+
+<div class="chain-label">传导链</div>
+<div class="chain">
+<div class="cnode start">外向依存已成<br>＋国内告别短缺</div>
+<div class="carr">→<small>1997 东亚风暴</small></div>
+<div class="cnode boom">外需骤降<br>过剩矛盾全面显化</div>
+<div class="carr">→<small>通缩·萧条</small></div>
+<div class="cnode">积极货币难行<br>（县级支行仅 20 万贷款权）</div>
+<div class="carr">→<small>转向</small></div>
+<div class="cnode">积极财政·国债基建<br>＋金融甩包袱改革</div>
+<div class="carr">→<small>"政府进入"</small></div>
+<div class="cnode land" style="border-color:var(--gold);color:var(--gold)">增长保住<br>三农与下岗者承载代价</div>
+</div>
+
+<p><strong>为什么是输入型。</strong>1994—97 连续宏观调控促成"内需下降＋依存度上升"的结构剧变，前者客观成为后者的序曲：官方 1997 年初刚宣布"软着陆"成功（投资增速自 1993 年峰值 61.8% 回落至 8.9%），下半年东亚金融危机就打掉了外需，而"净出口的增长在一定程度上掩盖了供求总量关系的变化"（马洪）——1998 年出口增速跌到 0.5%，供大于求的矛盾裸露，中国没来得及复苏就落入通缩陷阱。传统政治经济学据 1998 年始现的过剩把此后危机仍判为内生，书中批为教条：1997—98 与 2008—09 从发生机制看，都属转向外向型之后由外部因素诱发的输入型危机。国际机理：1971 年美元与黄金脱钩、1973 年浮动汇率之后，欧美以"提高净资本流动率维持实际消费"，产业外移＋资本收益回流，对发展中国家的剥削远超五六十年代；对外全开放的发展中经济体，必然遭遇外资流入抢占资源、获利后抽逃的规律——苏东、中国与东亚相继纳入"病入膏肓"的西方货币体系后循此发生连锁〔第四章·二·（一）〕。</p>
+<p><strong>"政府进入"三板斧。</strong>其一，金融甩包袱改革。恰在中共十五大第一次于党代会报告确认"资本要素市场"的当口，东亚危机"当头棒喝"了呆坏账恶性增加的国内金融——1997 年 11 月全国金融工作会议启动国有金融市场化：清理信托、城信社与农村合作基金会（关闭海南发展银行为标志性案例〔专栏17〕），注资四大行 2700 亿、四大资产公司剥离 1.3 万亿不良，1998—2005 年为金融稳定累计投入约 3.24 万亿元——超过 2004 年全国财政收入（2.63 万亿），金融系统综合债务相对国家财政的比重超过 120%。书中把这理解为一场制度交易：中央以国债与货币主权替地方支付了原始积累的资金代价，换得的制度收益是——中央垄断控制的金融资本于 2002 年从地方产业的羁绊中挣脱，"顺势演化成独立于地方实体产业的垄断资本"，拉开"金融深化"大幕；代价是地方与中小企业融资恶化、县以下金融机构大规模撤并，国有金融基本撤出农业农村（2002 年农村贷款仅占全社会 10.4%），"金融排斥"降临三农（连配套农行改制的"粮改"也因与分散农户交易成本过高而失败〔专栏18〕）。其二，积极财政。1998 年 3 月先试"积极的金融政策"不果（银行权力已上收），夏季转向大规模国债——至 2000 年发长期建设国债 3600 亿，投向基建；此后十二年国债带动投资 10 万亿以上、连同地方平台约 20 万亿，西部大开发（1999）、东北振兴（2001）、中部崛起（2003）相继出台，高速公路里程升至世界第二——欠发达地区与农村"正好成为政府名正言顺增加投资的主要领域"。其三，以货币深化拉"需求"：住房货币化、教育医疗产业化，把再生产成本推给民众的同时吸纳了增发的货币。三管齐下守住"保七争八"〔第四章·二·（二）〕。</p>
+<p><strong>三农承载与"三治"劣化。</strong>农村再次发挥劳动力"蓄水池"作用：农业就业人数 1997 年 34840 万逐年回升至 2002 年 36870 万，新增的 2030 万"农业就业"即城市危机排出的失业打工者。但代价沉重：粮价效益双降、乡镇企业在过剩与紧缩夹击下被"转让债务式"私有化改制——改制后企业不再以社区就业最大化为目标，"资本增密排斥劳动"、不再反哺社区；农村金融改革与教育医疗产业化成为抽取农村资金的"抽水机"，农村高利贷大面积发生（基层税务竟借高利贷完税再转嫁农民）；分税制"财权上收、事权下移"叠加基层刚性供养，农民成为公共品主要出资人，"户交户结"等政策使干群交易成本陡然显化——农民收入增速史无前例连降四年，负担类中央文件密集出台（1999 年农业部长专项报告），群体性事件由 1997 年 1.5 万起翻番至 1999 年 3.2 万起以上（2003 年 6 万、2005 年 8.6 万），乡村干部"劣绅化"与"精英俘获"蔓延——第三轮乡村治理危机成型〔第四章·二·（三）；专栏19〕。</p>
+<div class="note"><b>通往 2008 的七年——第四次外资的展开：</b>1998 年国债基建打造的"第一资产池"，成为 2001 年入世后 FDI 大举进入的硬件前提。王建将三十年开放归纳为三阶段：八十年代<b>资金依赖</b>→九十年代<b>市场依赖</b>→新千年<b>金融依赖</b>〔专栏20〕。第三次国际产业转移（金融资本时代的整链、高端化转移）叠加人民币"对内高利率＋对外低币值"，使中国 1998—2008 年间成为全球 FDI 第一大国：500 强全面进入，在华美资跨国公司年均利润率由不足 20% 升至逾 30%，外资企业占进出口由 2002 年 52.2% 升至 2011 年逾 60%；原材料与产品的定价权、相关制度的定制权"两头在外"。中国以商品与资本"双重输出"的方式"赎买发展权"——这正是"中美国（Chimerica）"面纱之一角，也是"去依附→再依附"的完成式〔第四章·三〕。</div>
+</div>
+
+<!-- 危机八 -->
+<div class="crisis" id="c8">
+<div class="c-head"><div>
+<div class="c-title"><span class="cn">危机八</span>2008—2009 · 华尔街金融海啸的输入</div>
+<div class="c-sub">第四次外资的第二波危机 ｜ 出处：第四章·四</div>
+</div><div class="seal soft">软着陆<small>三农预筑</small></div></div>
+
+<div class="facts">
+<div><div class="k">结构前提</div><div class="v">对外依存度约 70%（2006 年 66%）；"三大过剩"（劳动力 1.3—2 亿剩余、金融存差 2007Q3 达 1.25 万亿、制造业产能）；"两匹野马拖一头瘦驴"的三驾马车失衡；地方"以地套现"第三轮圈地（土地融资占基建 6—8 成）撑起"高投资＋高负债＝高增长"</div></div>
+<div><div class="k">触发与形态</div><div class="v">2007 次贷→2008.9 雷曼破产；出口对 GDP 拉动 2.6%→0.8%；输入型通胀（PPI 8.1%、CPI 月度 8.7%）叠加外需骤降；沿海企业大面积倒闭，约 2500 万农民工失业</div></div>
+<div><div class="k">应对</div><div class="v">4 万亿投资（中央 1.18 万亿；首批 1200 亿中涉农超三分之一、纯基建仅 250 亿）；出口退税七次上调</div></div>
+<div><div class="k">软着陆前提</div><div class="v">2003 起"三农重中之重"→2006 废止农业税→2003—09 财政支农累计约 3.1 万亿（户均约 1.5 万）——劳动力池与县域"第二资本池"提前修复；返乡者 64—67.6% 回流农业</div></div>
+</div>
+
+<div class="chain-label">传导链</div>
+<div class="chain">
+<div class="cnode start">全球化深度嵌入<br>依存度约 70%</div>
+<div class="carr">→<small>2008 海啸</small></div>
+<div class="cnode boom">外需骤降＋输入型通胀<br>2500 万农民工失业</div>
+<div class="carr">→<small>但 3 年前已投</small></div>
+<div class="cnode">三农新政·新农村建设<br>蓄水池预先修复</div>
+<div class="carr">→<small>返乡有承接</small></div>
+<div class="cnode">4 万亿救市<br>涉农逾三分之一</div>
+<div class="carr">→</div>
+<div class="cnode land" style="border-color:var(--teal-deep);color:var(--teal-deep)">城乡双赢式软着陆<br>（书中核心正面案例）</div>
+</div>
+
+<p><strong>危机前的结构：过剩碰撞过剩。</strong>1997—2008 是"国内外两个产能过剩的碰撞"：国内在 2003—07 连续两位数增长中强化了"三大过剩"，内需长期不振（劳动力无限供给压低工资——中国制造业工资成本占增加值仅 9.3%，发达国家为 35—50%），产品只能外流成巨额顺差；地方政府在分税制（1994）与金融上收（1998—2002）后唯余土地可资运作——低价征地、经土储与城投抵押套贷搞基建（东南沿海基建六成靠土地融资、西部 70—80%），营业税跃居地方第一大税种（2006 年占 43.3%），"以地套现"的第三轮圈地铸成"高投资＋高负债＝高增长"模式；对外则深度嵌入美国主导的金融全球化。华尔街海啸一来，两头受击：出口拉动骤降，同时国际热钱涌入大宗商品制造输入型通胀——"通胀＋生产过剩"的温和滞胀表象之下，是典型的输入型危机〔第四章·四·（一）〕。</p>
+<p><strong>软着陆为何可能：三年前埋下的伏笔。</strong>书中把这一次判定为"更有准备、更有基础的应对"，其关键不在 4 万亿本身，而在 2003 年以来的战略预置：1998 年十五届三中全会以"第二轮承包（延长三十年）"让农民再次按人均分地托底；1999 年林毅夫针对"双重过剩"提出新农村建设投资建议，2001 年圣诞节进入中央视野；2003 年胡锦涛提出"三农问题重中之重"，2004 起免税＋直补，2005 年"新农村建设"列为"十一五"八大战略之首，2006 年 1 月 1 日废止《农业税条例》——延续两千余年的皇粮国税终结；2003—2009 年国家财政支农累计约 3.1 万亿元，平均每农户约 1.5 万元。传导机制三条：史无前例的支农投入吸纳了过剩资本与产能、提供大量在地非农就业，修复劳动力池；惠农投入带动农村消费（农民边际消费倾向 75.3% 高于市民 69.5%，"给点阳光就灿烂"）；资源回流缓和了税费时代的官民对抗，重建了三农承载代价的社会基础。于是当 2009 年 2500 万农民工失业返乡时（71.3% 来自制造与建筑业），64—67.6% 得以回流农业与县域，纾解了城市就业与治安压力——对已"无地可耕"的新生代打工者，这道缓冲尤为关键〔第四章·四·（二）（三）；专栏22〕。4 万亿的投向也与 1998 年不同：首批中央新增 1200 亿中，农村民生与基建 340 亿、保障房 100 亿、社会事业 130 亿、节能生态 120 亿，纯重大基建仅 250 亿——涉农超过三分之一。书之判词：这次是"以三农为载体实现的软着陆"，但<em>得益于事先大规模投入与连续惠农</em>，与此前半个世纪"简单向三农转嫁危机代价"的做法不可同日而语——是城乡双赢的重要案例；其代价（内地基建占地引发的征地冲突、"用明天的产能过剩掩盖今天的产能过剩"、地方债务）本质上仍属制度成本转嫁，尚待观察〔第四章·四〕。</p>
+</div>
+
+<h3>两次输入型危机的对照〔第四章·四·（四）〕</h3>
+<div class="duo">
+<div class="pos"><b>相同：举国体制的"政府进入"</b>都与宏观调控降温期叠加发生；都先试放松银根不果（资金放不出去），再转向大规模国债投资"集中力量办大事"；都以基建投资对冲外需下降。1998 年打造的东南沿海"第一资产池"，被下一周期的高增长证明有效。</div>
+<div class="neg"><b>不同：环境与成本已换了人间</b>1998 年处于市场需求上升期——住房货币化、银行改制、医教产业化创造出的新增需求，恰可吸纳大规模增发的货币、稀释政府债务；2008 年则是需求下行期：货币化红利已被利益集团"短期吃尽"，金融部门上市后成为异化于产业、追逐流动性的独立资本力量，与集中政治体制依托的资金调控形成本质对立；"高投资高负债高增长"迁延日久，综合债务规模巨大——同样的药方，制度成本大得多。且输入型危机本不可能靠国内政策化解：没有国际规则定制权而只用国内政策，势必形成巨大代价。</div>
+</div>
+</div></section>
+
+<!-- ============================================================ 横向规律 -->
+<section id="laws"><div class="wrap">
+<div class="sec-head"><span class="sec-no">柒</span><h2>横向规律：贯穿六十年的七条线</h2></div>
+
+<div class="law"><div class="law-t">一 · 外资—负债—危机律</div>
+<p>四次引进外资，每次都以国家主权承担负债，设备投产、还本付息之日即赤字爆发之时——苏联投资对应 1960、1968 两次危机；四三／八二方案对应 1974、1979 两次；放权引资对应 1988、1993 两次；全球化对应 1997、2008 两次输入型危机。对外开放对中国从来是双刃剑：资本短缺期推动发展的工具，也是其后数年经济困境的始作俑者——而正是这种内在矛盾，迫使决策层不得不进行内外政策的调整与变革〔第一章·一；第四章·一〕。</p></div>
+
+<div class="law"><div class="law-t">二 · 转嫁—着陆律（全书定理）</div>
+<p>凡能向农村直接转嫁危机代价的，城市产业资本即"软着陆"、原有体制得以维持（危机一、二、三，及预先投入后承载的危机八）；凡不能转嫁的，危机在城市"硬着陆"、导致财税乃至经济体制重大变革（危机四催生农村改革与特区开放，危机五催生沿海外向战略，危机六催生分税制、汇改与国企改制，危机七催生金融改革与产业化改革）。从整体稳定看，"三农"对城市产业资本危机"化危为机"起了载体作用——这是中国屡历危机而"幸免于发展陷阱之难"的内因；李培林的中苏社会结构弹性对比、景维民关于乡镇企业缓冲分权破坏的研究，皆为旁证〔引言；第一章·一·（二）〕。</p></div>
+
+<div class="law"><div class="law-t">三 · 危机—改革律</div>
+<p>中国的经济体制改革本来就源于政府在危机发生时的应对调整；"几乎每次政府重大决策的出台都有财政金融压力的背景"。改革的两种形态：资本短缺期的"政府退出／甩包袱"（大包干、拨改贷、利改税、分税制、下岗分流、公共品产业化——收益归强势集团、成本转嫁社会），与过剩期应对输入型危机的"政府进入"（国债投资、金融注资、区域战略、三农新政）。1961 年"农民退出"与 1980 年"政府退出"同一机制换了主语，是这条规律最精妙的注脚〔第二章·四；第三章〕。</p></div>
+
+<div class="law"><div class="law-t">四 · 阶段—形态律</div>
+<p>产业资本三段论：原始积累（1950s—70s，资本极度稀缺→内生赤字危机，靠"以劳动替代资本"与下乡转嫁渡过）→ 结构调整与产业扩张（1980s—90s，货币化推进→通胀型／三大赤字型危机，紧缩应对）→ 产业过剩＋金融资本崛起（1997 后，"告别短缺"→输入型危机，扩张应对；金融资本 2002 年起异化于产业资本，"金融排斥"降临无流动性领域）。危机形态随阶段而变，转嫁机制一以贯之〔引言；第二、三章〕。</p></div>
+
+<div class="law"><div class="law-t">五 · 央地治乱循环律</div>
+<p>财税占比决定体制实质：中央占比长期低于 30% 的中国，实为"地方化的资源资本化"过程。1958、1980s、1992 三次放权，三次演成地方"大干快上"的过热，三次以全社会承担的危机收场；而"责任中央承担、收益地方占有"的责权利错位从统收统支时代一直贻害至今——地方以地生财、以地套现皆其变体。1994 年分税制以"必要的妥协"换取推行，被称为在单一政治体制下构建了"联邦制的财税基础"，为央地关系的后续演变埋下伏笔〔自序·一；第三章·一、四〕。</p></div>
+
+<div class="law"><div class="law-t">六 · 三轮圈地律</div>
+<p>土地资本化主体与收益归宿三变：八十年代乡镇企业"以地兴企"——生产性占地，增值留在村社、用于福利支农，带动农民非农就业；九十年代分税制后地方政府"以地生财"——消费性变现，土地本身成为经营对象，增值归政府与开发商（农民不足一成）；新世纪"以地套现"——土地抵押融资对接过剩金融资本，撑起高负债高投资模式。三轮圈地对应三次危机的消化与酝酿，也把征地冲突推成农村群体性事件的第一来源〔第一章；第三章·四；第四章·四〕。</p></div>
+
+<div class="law"><div class="law-t">七 · 双重输送与去依附—再依附律</div>
+<p>对外维度上，中国六十年走了一个来回：五十年代因维护主权遭撤资，六十年代以自力更生实现阿明意义上的"去依附"——外援中辍而工业化不中断，是中国经验区别于一般发展中国家的特殊性所在；九十年代危机压力下"高利率＋低币值"对接西方"币缘战略"，加以对外资的超国民待遇，完成"再依附"——以商品与资本向核心国家"双重输送"，换取危机中的喘息与发展权。2008 年核心区金融海啸的爆发与转嫁，正是这一世界结构的规律性结果〔引言；第四章·三〕。</p></div>
+</div></section>
+
+<!-- ============================================================ 终局与警告 -->
+<section id="end"><div class="wrap">
+<div class="sec-head"><span class="sec-no">捌</span><h2>终局与警告：蓄水池正在失效</h2></div>
+
+<div class="conclusion"><b>书的结论性忧虑：</b>三农之所以能六十年充当危机载体，在于其"池底"——农村土地成员权共有制——尚未打破：2.4 亿农户大多还有"一亩三分地"作无风险资产，300 多万个村社还有内部化处理负外部性的回旋余地。<b>而这一基础性条件正在系统性衰减；当城市化率实实在在突破 50%，就是不能再依靠二元结构向乡土社会转嫁城市资本危机代价的标志——此后的城市危机只能爆发在城市，代价也集中在城市"硬着陆"。</b>〔第一章〕</div>
+
+<p><strong>衰减的四条渠道〔第一章·二〕。</strong>其一，人的"死库容"化：优质青壮劳动力二十年净流出，其资本化收益被内外资与发达地区政府占有，代价甩给中西部——农业从业者女性占 53.2%、留守妇女近 5000 万、八成留守老人仍务农；遭"多阶剥夺"后返乡的第一代农民工"残值偏低"，难以再被资本化——"无论水库有多大，死库容不能用于发电"。其二，池底制度被自毁：2003 年新《农村土地承包法》确立"新增人口不再分地"，农民无偿获得村内无风险土地财产的预期消失，村社理性中最核心的风险内部化机制被极大削弱——书中斥之为强势集团"得了便宜还卖乖"、照搬西方话语自毁农村基本制度。其三，新生代的阶级化：93% 初中以上学历的新生代打工者既难融入城市、又被"去乡土知识"的制式教育推出农村，在"生产线＋集中食宿"的开发区中被催生为自觉的"新工人阶级"——"13 连跳"与广本大罢工是其两面；两代打工之后，他们已从风险厌恶的小有产者剩余劳动力，历史性地变为经典意义上的城市工人阶级，并开始主导中国社会结构性矛盾。其四，央地导向的对立：银行改制后中央进入资本过剩的"白领政府"阶段、得以转向"亲民生"（工业反哺农业的"两个阶段两个反哺"论断），而资本依旧短缺的地方政府仍在"发展主义"下疯狂征地、招商、透支生态——后税费时代，征地与环境污染取代税费成为农村冲突的主要根源（失地农民 2005 年已达四五千万、年增二三百万）。</p>
+
+<p><strong>三条政策建议〔自序·三；第一章·二·（三）〕。</strong>其一，渐生态文明之进改变战略目标——以城乡包容、内涵多样的生态化目标替代"发展主义"，并使之成为中国主导的创新话语。其二，顺资本过剩之势改造发展模式——自觉改造以快速城市化为资本扩张载体、加速两极分化的中国版"盎格鲁—撒克逊野蛮资本主义"；构建驱使垄断资本服从国家长远利益的法律，与中央对地方政府公司化竞争有效调控的制度。其三，急应对危机之需改良发展政策——长期增加中西部与三农公共投入，鼓励乡土社会文化建设，<em>稳定乡土中国承载城市资本危机代价的基础性条件</em>；以中央垄断金融为基础组建统筹县域"新农村建设＋城镇化"双轮驱动的基建投资机构，把国家涉农投资对接到乡村综合性合作组织上，防止普惠投资被"精英俘获"。作者自陈：这些建议大抵仍拘泥于其本应长期批判的"发展主义"话语之内——"不可能拔着头发离开地球"；这也是其自嘲从改革者"退步"为改良者的原因。"后续之作，改良者说。引而不发，大象无形。"〔自序〕</p>
+
+<div class="quoteblock">书中对"中国经验／中国模式"叙事的冷处理：只有在看似成功时才有"经验""模式"之说，危机时刻则全是"崩溃""失败"之词——中央政府的很多政策并非先验创新，而只能是危机压力下符合认识论规律的应对性抉择；把八十年代的存量大调整说成"增量改革"，是理论家的事后包装〔第三章·一〕。全书自我定位亦然：对当代周期性危机的描述"只不过归纳了后发国家工业化的一般进程，并无新意"——所求者，唯"成本转嫁论"之一般性而已〔引言〕。</div>
+</div></section>
+
+<!-- ============================================================ 年表 -->
+<section id="chrono"><div class="wrap">
+<div class="sec-head"><span class="sec-no">玖</span><h2>事件年表：顺序即因果</h2></div>
+<p>按书中"大事年表"与正文合并的最简时序。<span style="color:var(--terra-deep);font-weight:700">■ 危机年份</span>以红点标出；每个红点之前，几乎都能找到一次外资／放权／货币化的种因。</p>
+
+<div class="timeline">
+<div class="tl"><div class="y">1949—1950</div><div class="t">均分制土改：88% 人口"去依附"，吸纳民国恶性通胀（赤字占支出 46.4%、物价涨 5—6 倍）；农民忠于国家，国民动员完成。</div></div>
+<div class="tl"><div class="y">1950—1953</div><div class="t">朝鲜战争→苏联援助（累计约 54 亿美元、156 项）；战时经济拉动城市走出萧条；1953 统购统销，合作化解决与四亿小农的交易费用。</div></div>
+<div class="tl"><div class="y">1956—1957</div><div class="t">社会主义改造完成，三要素政府所有制、政府公司主义确立；中苏主权分歧显化，1957 苏联中辍"二五"投资。</div></div>
+<div class="tl crash"><div class="y">1958—1960 ■ 危机一</div><div class="t">郑州会议放权→大跃进（地方支出占比 29%→55.7%）→1960 赤字总爆发；城镇就业两年减约 8500 万；对苏还债加剧短缺。</div></div>
+<div class="tl"><div class="y">1961—1963</div><div class="t">休养生息：上千万城市人口下乡；"队为基础""三自一包"农民部分退出；中央收权，经济复苏。</div></div>
+<div class="tl"><div class="y">1964—1966</div><div class="t">地缘"环形恶化"→原子弹＋三线建设（基建资金近半西移）；1966 彻底偿清苏东外债。</div></div>
+<div class="tl crash"><div class="y">1968—1970 ■ 危机二</div><div class="t">备战投资＋还债→赤字再爆；第二次知青下乡上千万，软着陆。</div></div>
+<div class="tl"><div class="y">1971—1973</div><div class="t">珍宝岛后中美战略接近；尼克松访华、封锁解除；"四三方案"引进西方设备 42.4 亿美元，调整偏重结构（化肥化纤）。</div></div>
+<div class="tl crash"><div class="y">1974—1976 ■ 危机三</div><div class="t">设备投产、赤字连破百亿（财政盘子约 800 亿）；第三次亦最后一次上山下乡；1976 毛泽东去世——下乡转嫁模式终结。</div></div>
+<div class="tl"><div class="y">1977—1978</div><div class="t">华国锋"洋跃进"：一年签约 78 亿美元＋意向 50 亿（财政收入仅 1132 亿）；知青大返城；外贸两大禁区突破。</div></div>
+<div class="tl crash"><div class="y">1979—1981 ■ 危机四</div><div class="t">赤字 170＋127 亿；城市硬着陆（待业 1500 万—数千万、严打）；大包干＝政府退出农业，特区设立；乡镇企业起步。</div></div>
+<div class="tl"><div class="y">1982—1987</div><div class="t">五个一号文件；1984 全面推开承包、财政"分灶吃饭"、拨改贷利改税；乡企年增 30%＋，内需拉动黄金增长，农民收入四年快于市民。</div></div>
+<div class="tl crash"><div class="y">1988—1990 ■ 危机五</div><div class="t">货币化＋价格闯关→CPI 18.6%、抢购；治理整顿→三角债、滞胀；1989 风波、西方封锁；沿海战略令乡企"两头在外"，农民收入连降三年。</div></div>
+<div class="tl"><div class="y">1992</div><div class="t">南方谈话；股期房三大投机市场开闸；官员下海、翻牌公司 20 余万家；取消粮票——货币化时代与民工潮同时开启。</div></div>
+<div class="tl crash"><div class="y">1993—1994 ■ 危机六</div><div class="t">财·金·汇三大赤字同步爆发（综合负债率超 GDP 140%）；铁血十六条；1994 汇率并轨（贬值约五成）、分税制、国债货币大增发；CPI 24.1%。</div></div>
+<div class="tl"><div class="y">1995—1997</div><div class="t">国企"下岗分流减员增效"（1995—2000 在岗减 4800 万）、公共品产业化；粮价累计提 105%；1997 年初宣布"软着陆"；出口成第一拉动力。</div></div>
+<div class="tl crash"><div class="y">1997—1998 ■ 危机七</div><div class="t">东亚金融危机输入→1998 出口增速 0.5%、通缩 15 个月；金融工作会议启动银行甩包袱改革；夏季转向国债积极财政；二轮承包延长三十年。</div></div>
+<div class="tl"><div class="y">1999—2007</div><div class="t">西部大开发、东北振兴、中部崛起；2001 入世→FDI 第一；2002 金融改革完成、中央金融资本独立化；2003"三农重中之重"，2005 新农村建设列八大战略之首，2006 废止农业税；地方"以地套现"第三轮圈地，高投资高负债高增长。</div></div>
+<div class="tl crash"><div class="y">2008—2009 ■ 危机八</div><div class="t">华尔街海啸→出口拉动 2.6%→0.8%、2500 万农民工失业；4 万亿救市（涉农逾三分之一）；返乡者 64—67.6% 回流农业与县域——预筑的蓄水池承载，软着陆。</div></div>
+</div>
+</div></section>
+
+<footer><div class="wrap">
+<p><b>凡例与出处。</b>本页为温铁军《八次危机：中国的真实经验 1949—2009》（东方出版社）全书观点的忠实结构化重构。所有命题、数据、判词与因果表述均取自原书之自序、概念提示、第一部分引言、第一章"发展陷阱和中国经验"、第二至四章各次危机正文（含专栏 1—22）与大事年表；〔〕内为章节出处提示。凡书中不同处数字略有出入者（如 1994 年贬值幅度 50%／52%／57%，1988 年 CPI 18.5%／18.6%，四三方案 43／42.4 亿美元），均已并列注明。书中"软着陆／硬着陆"判定在个别危机上兼有两种表述（危机四"硬着陆在城市"而"借助三农复苏"；危机六官方称软着陆而书判其"有欠客观"），本页以混合标签如实呈现，未作调和。</p>
+<p><b>边界说明。</b>本页职责是"按照书中的观点完整自洽地呈现"，故通篇不引入书外数据、不作立场评断；书中带有强烈论战色彩的判断（如对主流改革叙事、对特定政策集团的批评）均按原意保留，其成立与否属另一层讨论。</p>
+</div></footer>
+
+</body>
+</html>

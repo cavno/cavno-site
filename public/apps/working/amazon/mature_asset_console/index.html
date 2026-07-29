@@ -1,0 +1,664 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>老品资产管理台 · </title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@400;600;700;900&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+<style>
+:root{
+  --parchment:#F3EAD3; --paper:#FBF6E9; --teal:#3F7E6B; --teal-dk:#2C5A4C;
+  --terra:#BC4B33; --ink:#2B2620; --muted:#7A7263; --line:#D8CCAE; --gold:#C9A869;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{background:var(--parchment);color:var(--ink);font-family:'Noto Serif SC','Songti SC','STSong','SimSun',serif;line-height:1.78;font-size:15px}
+.hero{max-width:1180px;margin:0 auto;padding:44px 24px 14px}
+.brandline{letter-spacing:.38em;font-size:11px;color:var(--terra);text-transform:uppercase;font-weight:600}
+h1{font-size:34px;color:var(--teal-dk);font-weight:900;margin:6px 0 4px;letter-spacing:.02em}
+.sub{color:var(--muted);font-size:14px;max-width:940px}
+nav#topnav{position:sticky;top:0;z-index:60;background:rgba(243,234,211,.95);backdrop-filter:blur(5px);border-top:1px solid var(--line);border-bottom:1px solid var(--line);margin-top:16px}
+nav#topnav .wrap{max-width:1180px;margin:0 auto;padding:9px 24px;display:flex;gap:16px;flex-wrap:wrap;align-items:center}
+nav#topnav a{color:var(--teal-dk);text-decoration:none;font-size:13px;font-weight:600}
+nav#topnav a:hover{color:var(--terra)}
+main{max-width:1180px;margin:0 auto;padding:16px 24px 70px}
+section.card{background:var(--paper);border:1px solid var(--line);border-radius:10px;padding:26px 28px 22px;margin:22px 0;box-shadow:0 1px 0 rgba(43,38,32,.06)}
+.klabel{font-size:12px;color:var(--terra);letter-spacing:.18em;font-weight:700;margin-bottom:2px}
+h2{font-size:21px;color:var(--teal-dk);font-weight:700;display:flex;align-items:baseline;gap:10px;margin-bottom:4px;flex-wrap:wrap}
+.mnum{font-size:12px;color:#fff;background:var(--teal);padding:2px 9px;border-radius:4px;letter-spacing:.1em;font-weight:600}
+h3{font-size:15.5px;color:var(--teal-dk);margin:18px 0 6px;font-weight:700}
+.caption{color:var(--muted);font-size:13.5px;margin-bottom:12px;max-width:1000px}
+table.t{width:100%;border-collapse:collapse;font-size:13px;margin:10px 0}
+.t th{background:var(--teal);color:#fff;text-align:left;padding:7px 9px;font-weight:600;white-space:nowrap;font-size:12.5px}
+.t td{border-bottom:1px solid var(--line);padding:6px 9px;vertical-align:top}
+.t tr:nth-child(even) td{background:rgba(63,126,107,.045)}
+.tblwrap{overflow-x:auto}
+.num{text-align:right;font-variant-numeric:tabular-nums;white-space:nowrap}
+.good{color:var(--teal-dk);font-weight:700}
+.bad{color:var(--terra);font-weight:700}
+button,.btn{font-family:inherit;background:var(--teal);color:#fff;border:none;border-radius:6px;padding:7px 16px;font-size:13.5px;cursor:pointer;font-weight:600}
+button:hover{background:var(--teal-dk)}
+button.alt{background:var(--terra)}
+button.ghost{background:transparent;color:var(--teal-dk);border:1px solid var(--teal)}
+.statrow{display:flex;gap:30px;flex-wrap:wrap;margin:12px 0 4px}
+.stat b{font-size:23px;color:var(--teal-dk);font-weight:900}
+.stat span{font-size:12px;color:var(--muted);display:block;margin-top:-3px}
+.chartbox{position:relative;height:340px;margin:12px 0;background:#fff;border:1px solid var(--line);border-radius:8px;padding:10px}
+textarea{width:100%;font-family:inherit;font-size:13px;border:1px solid var(--line);border-radius:6px;padding:8px;background:#fff;line-height:1.6}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.grid3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px}
+.grid4{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}
+@media(max-width:900px){.grid2,.grid3,.grid4{grid-template-columns:1fr 1fr}}
+@media(max-width:560px){.grid2,.grid3,.grid4{grid-template-columns:1fr}}
+.note{background:rgba(201,168,105,.16);border-left:3px solid var(--gold);padding:10px 14px;font-size:13px;margin:12px 0;border-radius:0 6px 6px 0}
+.warn{background:rgba(188,75,51,.1);border-left:3px solid var(--terra);padding:10px 14px;font-size:13px;margin:12px 0;border-radius:0 6px 6px 0}
+details{margin:8px 0}
+summary{cursor:pointer;color:var(--teal-dk);font-weight:700;font-size:13px}
+input[type=number],input[type=text],select{font-family:inherit;font-size:13px;border:1px solid var(--line);border-radius:5px;padding:5px 8px;background:#fff;width:100%}
+input[type=checkbox]{width:auto;transform:scale(1.15);margin-right:7px}
+label.f{font-size:12.5px;color:var(--muted);display:block;margin:8px 0 2px;font-weight:600}
+label.ck{font-size:13px;display:flex;align-items:flex-start;margin:7px 0;cursor:pointer;line-height:1.5}
+.small{font-size:12px;color:var(--muted)}
+.insight{background:rgba(63,126,107,.07);border:1px solid var(--line);border-radius:8px;padding:12px 16px;font-size:13.5px;margin:10px 0}
+footer{max-width:1180px;margin:0 auto;padding:14px 24px 44px;color:var(--muted);font-size:12px}
+.reason{font-size:13.5px;margin:5px 0;padding-left:14px;position:relative}
+.reason::before{content:'—';position:absolute;left:0;color:var(--terra)}
+.verdict-card{border:2.5px solid var(--line);border-radius:12px;padding:22px 26px;margin:14px 0;background:#fff;position:relative;overflow:hidden}
+.verdict-card .vtext{font-size:24px;font-weight:900;margin:2px 0 8px}
+.verdict-card.go{border-color:var(--teal)} .verdict-card.go .vtext{color:var(--teal-dk)}
+.verdict-card.cond{border-color:var(--gold)} .verdict-card.cond .vtext{color:#8a6a2a}
+.verdict-card.off{border-color:var(--terra)} .verdict-card.off .vtext{color:var(--terra)}
+.verdict-card.hold{border-color:var(--muted)} .verdict-card.hold .vtext{color:var(--muted)}
+.stamp{position:absolute;right:24px;top:18px;border:3px double currentColor;border-radius:8px;padding:5px 13px;font-weight:900;font-size:16px;transform:rotate(8deg);letter-spacing:.18em;opacity:.85}
+.go .stamp{color:var(--teal-dk)} .cond .stamp{color:#8a6a2a} .off .stamp{color:var(--terra)} .hold .stamp{color:var(--muted)}
+/* 警报卡 */
+.alarm{border:1px solid var(--line);border-radius:9px;padding:13px 15px;background:#fff}
+.alarm h4{font-size:14px;color:var(--ink);display:flex;align-items:center;margin-bottom:4px}
+.dot{width:12px;height:12px;border-radius:50%;display:inline-block;margin-right:9px;flex:none}
+.dot.g{background:var(--teal)} .dot.y{background:var(--gold)} .dot.r{background:var(--terra);box-shadow:0 0 0 4px rgba(188,75,51,.18)}
+.alarm .ev{font-size:12.5px;color:var(--muted);margin:2px 0 4px}
+/* ACOS 区间带 */
+.band{height:34px;border-radius:17px;position:relative;margin:34px 8px 30px;background:linear-gradient(90deg,#3F7E6B 0%,#C9A869 55%,#BC4B33 100%);opacity:.92}
+.btick{position:absolute;top:-8px;bottom:-8px;width:3px;background:var(--ink);border-radius:2px}
+.btick span{position:absolute;top:-22px;left:50%;transform:translateX(-50%);font-size:11.5px;font-weight:900;white-space:nowrap;color:var(--ink)}
+.btick.below span{top:auto;bottom:-24px}
+/* 战役时间轴 */
+.tl{display:flex;align-items:stretch;height:60px;border:1px solid var(--line);border-radius:8px;overflow:visible;position:relative;background:#fff;margin:16px 0 26px}
+.tl .ph{display:flex;align-items:center;justify-content:center;font-size:12.5px;font-weight:700;color:#fff;position:relative}
+.tl .ph small{position:absolute;bottom:-20px;color:var(--muted);font-weight:400;font-size:11px;white-space:nowrap}
+.tl .now{position:absolute;top:-2px;bottom:-2px;width:3px;background:var(--ink);z-index:3;transform:translateX(-50%)}
+.tl .now::after{content:'今天';position:absolute;top:-20px;left:50%;transform:translateX(-50%);font-size:11px;font-weight:900;color:var(--ink);white-space:nowrap}
+</style>
+</head>
+<body>
+
+<header class="hero">
+  <div class="brandline"> · Mature Asset Console</div>
+  <h1>老品资产管理台</h1>
+  <p class="sub">老品的广告费买两样东西：利润流与保险。本台是警报器架构：三组月度序列进来，先判生命周期档位（档位决定一切），再给三本账分配与 [m·b, m] 目标 ACOS 区间，六路警报常开——不响不进战斗节律。第一刀永远是品牌 / 非品牌拆分：合并口径的 ACOS 在老品语境里近乎噪音。五件套收官：尽调 → 发射 → <b>守成</b> → 预测 → 关键词。</p>
+</header>
+
+<nav id="topnav"><div class="wrap">
+  <a href="#a0">A0 数据台</a><a href="#a1">A1 档位</a><a href="#a2">A2 三本账</a>
+  <a href="#a3">A3 ACOS 区间</a><a href="#a4">A4 警报面板</a><a href="#a5">A5 Q4 战役</a><a href="#ax">导出</a>
+  <span style="flex:1"></span>
+  <button id="b_demoA" class="ghost">演示 · 现金牛</button>
+  <button id="b_demoB" class="ghost">演示 · 失血</button>
+  <button id="b_calc" class="alt">重算体检</button>
+</div></nav>
+
+<main>
+
+<!-- ============ A0 ============ -->
+<section id="a0" class="card">
+  <div class="klabel">三组月度序列 + 一组状态量 · 建议 15–24 个月</div>
+  <h2><span class="mnum">A0</span> 数据台</h2>
+  <p class="caption">拆分序列来自广告后台：按 campaign 打标品牌/非品牌后各取月度花费与广告销售额，店铺总销售额取业务报告；SQP 序列与预测台腿 C 同源（月度归档直接复制）；评论对照来自首页普查习惯（每月记一次我方与首页前十竞品的累计评论均值）。有 13 个月以上才出同比，不足时退化为动量并降低判定置信度。</p>
+  <div class="grid3">
+    <div><label class="f">品牌/非品牌拆分（月份, 品牌花费, 品牌广告销售, 非品牌花费, 非品牌广告销售, 店铺总销售额）</label><textarea id="ta_split" rows="8" placeholder="2025-04, 820, 5100, 4200, 13600, 42500"></textarea></div>
+    <div><label class="f">SQP 份额序列（月份, 市场购买量, 我方购买量）</label><textarea id="ta_share" rows="8" placeholder="2025-04, 52400, 2210"></textarea></div>
+    <div><label class="f">评论速度对照（月份, 我方累计评论, 首页前十竞品平均累计评论）</label><textarea id="ta_review" rows="8" placeholder="2025-04, 1180, 2350"></textarea></div>
+  </div>
+  <h3>状态量与经济参数</h3>
+  <div class="grid4">
+    <div><label class="f">毛利率 m（%，广告前）</label><input type="number" id="i_m" step="0.5" placeholder="38"></div>
+    <div><label class="f">花费弹性 b（预测台 F3 / 实验校准）</label><input type="number" id="i_b" step="0.02" placeholder="0.28"></div>
+    <div><label class="f">月度广告总预算（$，留空取最近月实际）</label><input type="number" id="i_budget" placeholder=""></div>
+    <div><label class="f">当前评分</label><input type="number" id="i_rating" step="0.1" placeholder="4.6"></div>
+    <div><label class="f">评分警报阈值</label><input type="number" id="i_ratingth" step="0.1" value="4.3"></div>
+    <div><label class="f">R1 最新值（关键词台 M2）</label><input type="number" id="i_r1" step="0.01" placeholder="1.12"></div>
+    <div><label class="f">R2 最新值（关键词台 M2）</label><input type="number" id="i_r2" step="0.01" placeholder="1.05"></div>
+    <div><label class="f">核心词建议竞价 · 本月（$）</label><input type="number" id="i_cpcnow" step="0.05" placeholder="0.92"></div>
+    <div><label class="f">核心词建议竞价 · 上月（$）</label><input type="number" id="i_cpcprev" step="0.05" placeholder="0.88"></div>
+    <div><label class="f">现有 + 在途库存（件）</label><input type="number" id="i_inv" placeholder="4200"></div>
+    <div><label class="f">近 4 周周均销量（件）</label><input type="number" id="i_weekly" placeholder="380"></div>
+    <div><label class="f">补货周期（周）</label><input type="number" id="i_lead" value="6"></div>
+    <div><label class="f">旺季峰值起点月（玩具=11）</label><input type="number" id="i_peak" min="1" max="12" value="11"></div>
+    <div><label class="f">战役提前周数（ranking push）</label><input type="number" id="i_pushwk" value="9"></div>
+  </div>
+  <label class="ck"><input type="checkbox" id="ck_exit"> 战略退出标记（品类衰退或主动退出决策已做）——勾选即直接进入退役收割档</label>
+</section>
+
+<!-- ============ A1 ============ -->
+<section id="a1" class="card">
+  <div class="klabel">档位决定一切 · 每季度审一次，日常不动</div>
+  <h2><span class="mnum">A1</span> 生命周期档位判定</h2>
+  <p class="caption">判定树（优先级从上到下）：战略退出标记 → 退役收割；品类深度收缩且无份额进攻 → 退役收割；份额被侵蚀（连续下滑或斜率恶化）→ 防御战；市场增长且有份额抬升证据 → 再加速；其余 → 现金牛。证据链：非品牌销量同比、SQP 市场同比、份额 12 月斜率、TACOS 结构、相对评论速度比。</p>
+  <div id="a1verdict"><div class="note">填入序列后点右上「重算体检」，或先载入演示。</div></div>
+  <div id="a1charts"></div>
+</section>
+
+<!-- ============ A2 ============ -->
+<section id="a2" class="card">
+  <div class="klabel">防御买保险 · 效率买利润 · 扩张买期权</div>
+  <h2><span class="mnum">A2</span> 三本账分配建议</h2>
+  <p class="caption">建议比例由档位查表；"实际防御占比"用品牌词花费占总花费近似（自家关联位自我占位若单独打标可并入）。效率/扩张的内部切分需要 campaign 打标，工具给出额度、执行在广告后台。防御账的真实回报每年用 1–2 次增量性实验校准，其余部分按保费入账。</p>
+  <div id="a2body"><div class="note">等待拆分序列。</div></div>
+</section>
+
+<!-- ============ A3 ============ -->
+<section id="a3" class="card">
+  <div class="klabel">ACOS* = m × b · 从玄学到状态函数</div>
+  <h2><span class="mnum">A3</span> 目标 ACOS 区间 [m·b, m]</h2>
+  <p class="caption">ln-ln 弹性模型下利润最大化一阶条件：S=A·x^b，π=mS−x，dπ/dx=0 ⇒ 最优 ACOS = m·b。区间下限 m·b 是纯短期利润最大化（收割档贴这里），上限 m 是平衡线（防御 / 再加速档可贴近甚至短期越过）。带上的刻度：档位锚点、非品牌 ACOS、综合 ACOS——老品健康度看非品牌那根刻度。</p>
+  <div id="a3body"><div class="note">等待毛利率、弹性与拆分序列。</div></div>
+</section>
+
+<!-- ============ A4 ============ -->
+<section id="a4" class="card">
+  <div class="klabel">例外管理 · 不响不进战斗节律</div>
+  <h2><span class="mnum">A4</span> 常开警报面板</h2>
+  <p class="caption">六路警报，每路绑定预先写好的诊断路径与动作菜单——响铃时执行，不开会。绿 = 正常巡航；黄 = 进入观察，本周内复核；红 = 触发预案，进对应工具的战斗节律。</p>
+  <div id="a4body" class="grid3"><div class="note" style="grid-column:1/-1">等待数据。</div></div>
+</section>
+
+<!-- ============ A5 ============ -->
+<section id="a5" class="card">
+  <div class="klabel">老品独有的第四维 · 已知的未来</div>
+  <h2><span class="mnum">A5</span> Q4 战役倒计时</h2>
+  <p class="caption">位次是资产，淡季 CPC 买坑远比旺季便宜：ranking push 从峰值月前 9 周开打（蓄势），峰值 8 周冲刺（BF/CM 分时竞价），随后 5 周兑现——1 月不硬撑位次，让旺季买来的动量顺势兑现成自然单。库存按报童旺季参数（Cu 抬升）提前锁定，预算曲线按季节指数预铺而非临时追加。</p>
+  <div id="a5body"></div>
+  <h3>战役检查单</h3>
+  <div id="q4list" class="grid2"></div>
+</section>
+
+<!-- ============ 导出 ============ -->
+<section id="ax" class="card">
+  <div class="klabel">体检要留痕 · 季度对比靠归档</div>
+  <h2><span class="mnum">出</span> 导出</h2>
+  <div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap">
+    <button id="b_report">下载资产体检报告 CSV</button>
+    <button id="b_series" class="ghost">下载月度派生序列 CSV</button>
+    <span class="small" id="ax_msg"></span>
+  </div>
+</section>
+
+</main>
+<footer> Mature Asset Console · 五件套之五（尽调 → 发射 → 守成 → 预测 → 关键词） · 单文件零构建 · 数据仅在本地浏览器解析</footer>
+
+<script id="app">
+//__APPJS_START__
+
+/* ============================ 状态 ============================ */
+const S={ charts:{}, last:null };
+const GEAR_SPLIT={
+  '再加速':{def:0.15,eff:0.60,exp:0.25,logic:'扩张账加码，容忍 ACOS 短期越过平衡线买位次——增量市场里份额比当期利润值钱'},
+  '现金牛':{def:0.15,eff:0.75,exp:0.10,logic:'效率优先，在利润最大化点附近运营；扩张账保持常驻期权仓不清零'},
+  '防御战':{def:0.30,eff:0.60,exp:0.10,logic:'防御账升档：品牌词保位、自家关联位满配占位、核心词竞价升级；先止血再谈增长'},
+  '退役收割':{def:0.10,eff:0.85,exp:0.05,logic:'停扩张、防御逐季递减、目标 ACOS 贴 m·b 收利润，库存按报童反向清仓'}
+};
+const Q4_ITEMS=['预算曲线已按季节指数预铺（非旺季临时追加）','礼品词组预算切换日期已定（10 月初）',
+  'BF/CM 周分时竞价方案已写好','旺季报童参数已锁（Cu 抬升、服务水平右移，备货单已下）',
+  '1 月回落纪律已写入日历（不硬撑位次，让动量兑现成自然单）','主图 AB 新一轮已排期（对抗审美疲劳）'];
+
+//<PURE>
+/* ======================== 纯函数（可测） ======================== */
+function num(v){ if(v==null) return 0; const s=String(v).replace(/[^0-9.\-]/g,''); const f=parseFloat(s); return isFinite(f)?f:0; }
+function avg(a){ return a.length? a.reduce((x,y)=>x+y,0)/a.length : 0; }
+function clamp(v,lo,hi){ return Math.max(lo,Math.min(hi,v)); }
+function slope(ys){ const n=ys.length; if(n<2) return 0;
+  const xm=(n-1)/2, ym=avg(ys);
+  let nu=0,de=0; for(let i=0;i<n;i++){nu+=(i-xm)*(ys[i]-ym);de+=(i-xm)*(i-xm);}
+  return de? nu/de:0;
+}
+function ymKey(s){ const m=String(s).trim().replace(/[\/年]/g,'-').replace(/月/,'').match(/^(\d{4})-(\d{1,2})/);
+  return m? m[1]+'-'+String(+m[2]).padStart(2,'0') : null; }
+function ymAdd(ym,k){ const p=ym.split('-').map(Number); const t=p[0]*12+(p[1]-1)+k; return Math.floor(t/12)+'-'+String(t%12+1).padStart(2,'0'); }
+/* 三个粘贴区解析 */
+function parseSplit(txt){
+  return String(txt||'').split(/\n+/).map(x=>x.trim()).filter(Boolean).map(l=>{
+    const p=l.split(/[,，\t]+/).map(x=>x.trim()); if(p.length<6) return null;
+    const ym=ymKey(p[0]); if(!ym) return null;
+    return {ym, bs:num(p[1]), bS:num(p[2]), ns:num(p[3]), nS:num(p[4]), store:num(p[5])};
+  }).filter(Boolean).sort((a,b)=>a.ym<b.ym?-1:1);
+}
+function parsePairSeries(txt){ // 月份, v1, v2
+  return String(txt||'').split(/\n+/).map(x=>x.trim()).filter(Boolean).map(l=>{
+    const p=l.split(/[,，\t]+/).map(x=>x.trim()); if(p.length<3) return null;
+    const ym=ymKey(p[0]); if(!ym) return null;
+    return {ym, a:num(p[1]), b:num(p[2])};
+  }).filter(Boolean).sort((a,b)=>a.ym<b.ym?-1:1);
+}
+/* 派生：拆分序列 → 结构指标 */
+function deriveSplit(rows){
+  return rows.map(r=>{
+    const adS=r.bS+r.nS, sp=r.bs+r.ns;
+    return {...r, adS, sp,
+      brandSh: adS>0? r.bS/adS : null,          // 品牌销售占广告销售比
+      nbTACOS: r.store>0? r.ns/r.store : null,   // 非品牌 TACOS
+      nbACOS: r.nS>0? r.ns/r.nS : null,
+      blACOS: adS>0? sp/adS : null };
+  });
+}
+/* 同比或动量：series=[{ym,v}] → {g, mode} */
+function yoyOrMom(series){
+  if(series.length<6) return {g:null, mode:'insufficient'};
+  const map=new Map(series.map(s=>[s.ym,s.v]));
+  const last=series[series.length-1].ym;
+  const gs=[];
+  for(let j=0;j<3;j++){ const m=ymAdd(last,-j), p=ymAdd(m,-12);
+    if(map.has(m)&&map.has(p)&&map.get(p)>0) gs.push(map.get(m)/map.get(p)-1); }
+  if(gs.length>=2) return {g:avg(gs), mode:'yoy'};
+  const l3=series.slice(-3).map(s=>s.v), p3=series.slice(-6,-3).map(s=>s.v);
+  return {g: avg(p3)>0? avg(l3)/avg(p3)-1 : null, mode:'momentum'};
+}
+/* 份额连续下滑月数（容忍 0.02pp 噪音） */
+function downStreak(shares){ // shares 为小数
+  let n=0;
+  for(let i=shares.length-1;i>0;i--){
+    if(shares[i] < shares[i-1]-0.0002) n++; else break;
+  }
+  return n;
+}
+/* 档位判定树 */
+function gearOf(ev){
+  // ev:{exitFlag, mktG, mktMode, shareSlope(pp/月), streak, nbG, nbMode, shareNow}
+  const why=[];
+  const gtxt=(g,mode)=>g==null?'数据不足':((g>=0?'+':'')+(g*100).toFixed(1)+'%'+(mode==='momentum'?'（动量口径）':''));
+  why.push('市场购买量同比 '+gtxt(ev.mktG,ev.mktMode)+' · 非品牌广告销售同比 '+gtxt(ev.nbG,ev.nbMode));
+  why.push('份额 12 月斜率 '+(ev.shareSlope>=0?'+':'')+ev.shareSlope.toFixed(3)+' pp/月 · 连续下滑 '+ev.streak+' 个月');
+  if(ev.exitFlag) return {gear:'退役收割', cls:'off', why:['战略退出标记已勾：判定树短路',...why]};
+  if(ev.mktG!=null && ev.mktG<-0.10 && ev.shareSlope<=0.02)
+    return {gear:'退役收割', cls:'off', why:['品类深度收缩（'+(ev.mktG*100).toFixed(1)+'%）且无份额进攻证据',...why]};
+  if(ev.streak>=3 || ev.shareSlope<-0.05)
+    return {gear:'防御战', cls:'cond', why:['份额被侵蚀：'+(ev.streak>=3?'连续 '+ev.streak+' 个月下滑':'斜率 '+ev.shareSlope.toFixed(3)+' pp/月'),...why]};
+  if(ev.mktG!=null && ev.mktG>0.08 && (ev.shareSlope>0.03 || (ev.nbG!=null&&ev.nbG>ev.mktG)))
+    return {gear:'再加速', cls:'go', why:['市场增长且份额有抬升证据（斜率或非品牌增速跑赢市场）',...why]};
+  return {gear:'现金牛', cls:'go', why:['市场平稳、份额未受侵蚀：进入效率运营态',...why]};
+}
+/* ACOS 区间与档位锚点 */
+function acosBand(m,b,gear){
+  const lo=m*b, hi=m;
+  const anchorPct={'退役收割':0.02,'现金牛':0.40,'防御战':0.85,'再加速':1.0}[gear]!=null?{'退役收割':0.02,'现金牛':0.40,'防御战':0.85,'再加速':1.0}[gear]:0.4;
+  return {lo, hi, anchor: lo+(hi-lo)*anchorPct,
+    note: gear==='再加速'?'再加速档可短期越过上限买位次，越限部分记入扩张账':gear==='退役收割'?'收割档贴下限运营，越高越是在给平台白打工':''};
+}
+/* 六路警报 */
+function alarmShare(ev){
+  if(ev.streak>=3||ev.shareSlope<-0.05) return {lv:'r',ev:'连续下滑 '+ev.streak+' 月 · 斜率 '+ev.shareSlope.toFixed(3)+' pp/月'};
+  if(ev.streak===2||ev.shareSlope<-0.02) return {lv:'y',ev:'连续下滑 '+ev.streak+' 月 · 斜率 '+ev.shareSlope.toFixed(3)+' pp/月'};
+  return {lv:'g',ev:'斜率 '+(ev.shareSlope>=0?'+':'')+ev.shareSlope.toFixed(3)+' pp/月'};
+}
+function alarmFunnel(r1,r2){
+  if(r1==null&&r2==null) return {lv:'y',ev:'R1/R2 未填（去关键词台 M2 取最新值）'};
+  const bad=[], watch=[];
+  if(r1!=null){ if(r1<1) bad.push('R1='+r1.toFixed(2)); else if(r1<1.1) watch.push('R1='+r1.toFixed(2)); }
+  if(r2!=null){ if(r2<1) bad.push('R2='+r2.toFixed(2)); else if(r2<1.1) watch.push('R2='+r2.toFixed(2)); }
+  if(bad.length) return {lv:'r',ev:bad.join(' · ')+' 跌穿 1.0'};
+  if(watch.length) return {lv:'y',ev:watch.join(' · ')+' 贴线'};
+  return {lv:'g',ev:'R1='+(r1!=null?r1.toFixed(2):'—')+' · R2='+(r2!=null?r2.toFixed(2):'—')};
+}
+function alarmCost(now,prev){
+  if(!(now>0&&prev>0)) return {lv:'y',ev:'建议竞价未填（草稿广告读价法，月度记录）'};
+  const chg=now/prev-1;
+  if(chg>=0.20) return {lv:'r',ev:'建议竞价环比 +'+(chg*100).toFixed(0)+'%：疑似新玩家烧钱进场',chg};
+  if(chg>=0.10) return {lv:'y',ev:'建议竞价环比 +'+(chg*100).toFixed(0)+'%',chg};
+  return {lv:'g',ev:'建议竞价环比 '+(chg>=0?'+':'')+(chg*100).toFixed(0)+'%',chg};
+}
+function alarmReview(rev, rating, th){
+  let ratio=null;
+  if(rev.length>=4){
+    const mine=[], comp=[];
+    for(let i=Math.max(1,rev.length-3);i<rev.length;i++){ mine.push(rev[i].a-rev[i-1].a); comp.push(rev[i].b-rev[i-1].b); }
+    ratio = avg(comp)>0? avg(mine)/avg(comp) : null;
+  }
+  const parts=[]; let lv='g';
+  if(ratio!=null){ parts.push('相对评论速度比 '+ratio.toFixed(2));
+    if(ratio<0.8) lv='r'; else if(ratio<1) lv='y'; }
+  else parts.push('评论对照数据不足 4 期');
+  if(rating>0&&th>0){ parts.push('评分 '+rating.toFixed(1)+' / 阈值 '+th.toFixed(1));
+    if(rating<th) lv='r'; }
+  return {lv, ev:parts.join(' · '), ratio};
+}
+function alarmInventory(inv,weekly,lead){
+  if(!(weekly>0)) return {lv:'y',ev:'周均销量未填',cover:null};
+  const cover=inv/weekly;
+  if(cover<lead){
+    const ladder=[]; let m=1;
+    for(let w=1;w<=Math.max(1,Math.ceil(cover));w++){ m*=0.85; ladder.push({w,mult:m}); }
+    return {lv:'r',ev:'覆盖 '+cover.toFixed(1)+' 周 < 补货周期 '+lead+' 周：启动滑翔程序',cover,ladder};
+  }
+  if(cover<lead+4) return {lv:'y',ev:'覆盖 '+cover.toFixed(1)+' 周：进入下单窗口（补货周期 '+lead+' 周 + 4 周缓冲）',cover};
+  return {lv:'g',ev:'覆盖 '+cover.toFixed(1)+' 周',cover};
+}
+function alarmIllusion(split){
+  if(split.length<7) return {lv:'y',ev:'拆分序列不足 7 个月，利润幻觉检测未启用'};
+  const last6=split.slice(-6);
+  const shSlope=slope(last6.map(r=>r.brandSh*100));   // pp/月
+  const nb=yoyOrMom(split.map(r=>({ym:r.ym,v:r.nS})));
+  if(shSlope>0.5 && nb.g!=null && nb.g<0)
+    return {lv:'r',ev:'品牌销售占比 +'+shSlope.toFixed(2)+' pp/月 且非品牌销售 '+(nb.g*100).toFixed(1)+'%：报表变好是因为获客在枯竭',shSlope,nbG:nb.g};
+  if(shSlope>0.5) return {lv:'y',ev:'品牌销售占比 +'+shSlope.toFixed(2)+' pp/月：占比上行，盯非品牌盘',shSlope};
+  return {lv:'g',ev:'品牌占比斜率 '+(shSlope>=0?'+':'')+shSlope.toFixed(2)+' pp/月',shSlope};
+}
+/* Q4 战役状态（now 注入以便测试） */
+function campaignState(now, peakMonth, pushWk){
+  const y0=now.getUTCFullYear();
+  function anchors(y){
+    const peak=Date.UTC(y, peakMonth-1, 1);
+    const push=peak - pushWk*7*86400000;
+    const sprintEnd=peak + 8*7*86400000;
+    const end=peak + 13*7*86400000;
+    return {push,peak,sprintEnd,end};
+  }
+  let A=anchors(y0-1);
+  if(now.getTime()>A.end) A=anchors(y0);
+  if(now.getTime()>A.end) A=anchors(y0+1);
+  const t=now.getTime();
+  let phase, days;
+  if(t<A.push){ phase='倒计时'; days=Math.ceil((A.push-t)/86400000); }
+  else if(t<A.peak){ phase='蓄势（ranking push）'; days=Math.ceil((A.peak-t)/86400000); }
+  else if(t<A.sprintEnd){ phase='冲刺（BF/CM）'; days=Math.ceil((A.sprintEnd-t)/86400000); }
+  else { phase='兑现回落'; days=Math.ceil((A.end-t)/86400000); }
+  return {phase, days, pushDate:new Date(A.push), peakDate:new Date(A.peak), endDate:new Date(A.end),
+    frac: clamp((t-A.push)/(A.end-A.push),0,1)};
+}
+//</PURE>
+
+/* ======================== 通用工具 ======================== */
+const $=id=>document.getElementById(id);
+function fmt(v,d){ if(v==null||!isFinite(v)) return '—'; return v.toLocaleString('en-US',{maximumFractionDigits:d==null?0:d,minimumFractionDigits:d==null?0:d}); }
+function fp(v,d){ return v==null||!isFinite(v)?'—':(v*100).toFixed(d==null?1:d)+'%'; }
+function money(v){ return v==null||!isFinite(v)?'—':'$'+fmt(v,v>=1000?0:2); }
+function tbl(headers,rows,numCols){
+  numCols=numCols||[];
+  let h='<div class="tblwrap"><table class="t"><thead><tr>'+headers.map((x,i)=>'<th'+(numCols.includes(i)?' class="num"':'')+'>'+x+'</th>').join('')+'</tr></thead><tbody>';
+  rows.forEach(r=>{ h+='<tr>'+r.map((c,i)=>'<td'+(numCols.includes(i)?' class="num"':'')+'>'+c+'</td>').join('')+'</tr>'; });
+  return h+'</tbody></table></div>';
+}
+function drawChart(id,cfg){ if(S.charts[id]){S.charts[id].destroy();} const el=$(id); if(!el) return; S.charts[id]=new Chart(el,cfg); }
+function downloadCSV(name,rows){
+  const csv='\ufeff'+rows.map(r=>r.map(c=>{const s=String(c==null?'':c);return /[",\n]/.test(s)?'"'+s.replace(/"/g,'""')+'"':s;}).join(',')).join('\n');
+  const a=document.createElement('a'); a.href=URL.createObjectURL(new Blob([csv],{type:'text/csv;charset=utf-8'})); a.download=name; a.click();
+  setTimeout(()=>URL.revokeObjectURL(a.href),4000);
+}
+function notesHtml(notes){ return notes.map(n=>'<div class="reason">'+n+'</div>').join(''); }
+function readInputs(){
+  return { m:num($('i_m').value)/100, b:num($('i_b').value),
+    budget:$('i_budget').value===''?null:num($('i_budget').value),
+    rating:num($('i_rating').value), ratingTh:num($('i_ratingth').value),
+    r1:$('i_r1').value===''?null:num($('i_r1').value), r2:$('i_r2').value===''?null:num($('i_r2').value),
+    cpcNow:num($('i_cpcnow').value), cpcPrev:num($('i_cpcprev').value),
+    inv:num($('i_inv').value), weekly:num($('i_weekly').value), lead:num($('i_lead').value)||6,
+    peak:clamp(num($('i_peak').value)||11,1,12), pushWk:num($('i_pushwk').value)||9,
+    exitFlag:$('ck_exit').checked };
+}
+
+/* ======================== 总计算 ======================== */
+function compute(){
+  const P=readInputs();
+  const split=deriveSplit(parseSplit($('ta_split').value));
+  const share=parsePairSeries($('ta_share').value).map(r=>({...r, sh:r.a>0?r.b/r.a:null})).filter(r=>r.sh!=null);
+  const rev=parsePairSeries($('ta_review').value);
+  /* 证据链 */
+  const mkt=yoyOrMom(share.map(r=>({ym:r.ym,v:r.a})));
+  const nb=yoyOrMom(split.map(r=>({ym:r.ym,v:r.nS})));
+  const shPct=share.slice(-12).map(r=>r.sh*100);
+  const ev={ exitFlag:P.exitFlag, mktG:mkt.g, mktMode:mkt.mode, nbG:nb.g, nbMode:nb.mode,
+    shareSlope: shPct.length>=4? slope(shPct):0, streak: downStreak(share.map(r=>r.sh)),
+    shareNow: share.length? share[share.length-1].sh : null };
+  const gear=(split.length||share.length)? gearOf(ev) : null;
+  const alarms={ share:alarmShare(ev), funnel:alarmFunnel(P.r1,P.r2), cost:alarmCost(P.cpcNow,P.cpcPrev),
+    review:alarmReview(rev,P.rating,P.ratingTh), inv:alarmInventory(P.inv,P.weekly,P.lead), illusion:alarmIllusion(split) };
+  const band=(P.m>0&&P.b>0&&gear)? acosBand(P.m,P.b,gear.gear) : null;
+  const camp=campaignState(new Date(), P.peak, P.pushWk);
+  S.last={P,split,share,rev,ev,gear,alarms,band,camp};
+  renderA1(); renderA2(); renderA3(); renderA4(); renderA5();
+}
+
+/* ======================== A1–A3 渲染 ======================== */
+function renderA1(){
+  const {gear,split,share,rev}=S.last;
+  if(!gear){ $('a1verdict').innerHTML='<div class="note">序列为空。</div>'; $('a1charts').innerHTML=''; return; }
+  const stamp={'再加速':'加 速','现金牛':'现 金 牛','防御战':'防 御','退役收割':'收 割'}[gear.gear];
+  $('a1verdict').innerHTML='<div class="verdict-card '+gear.cls+'"><div class="stamp">'+stamp+'</div>'+
+    '<div class="vtext">'+gear.gear+'</div>'+notesHtml(gear.why)+
+    '<div class="small" style="margin-top:8px">该档花钱逻辑：'+GEAR_SPLIT[gear.gear].logic+'。档位季度复审，警报可临时越权（如库存红灯直接进滑翔程序）。</div></div>';
+  let h='';
+  if(split.length) h+='<div class="grid2"><div><h3>结构体检：品牌/非品牌与利润幻觉视图</h3><div class="chartbox"><canvas id="c_split"></canvas></div></div>';
+  if(share.length) h+='<div><h3>份额体检：市场量 × 我方份额</h3><div class="chartbox"><canvas id="c_share"></canvas></div></div></div>';
+  else if(split.length) h+='</div>';
+  if(rev.length>=2) h+='<h3>护城河体检：评论速度对照</h3><div class="chartbox" style="height:300px"><canvas id="c_review"></canvas></div>';
+  $('a1charts').innerHTML=h;
+  if(split.length){
+    drawChart('c_split',{type:'bar',data:{labels:split.map(r=>r.ym),datasets:[
+      {label:'非品牌花费',data:split.map(r=>r.ns),backgroundColor:'#3F7E6B',stack:'s'},
+      {label:'品牌花费',data:split.map(r=>r.bs),backgroundColor:'#C9A869',stack:'s'},
+      {label:'品牌销售占比 %',data:split.map(r=>r.brandSh!=null?r.brandSh*100:null),type:'line',borderColor:'#BC4B33',pointRadius:2,yAxisID:'y2',tension:.2},
+      {label:'非品牌 TACOS %',data:split.map(r=>r.nbTACOS!=null?r.nbTACOS*100:null),type:'line',borderColor:'#2C5A4C',borderDash:[6,4],pointRadius:2,yAxisID:'y2',tension:.2}]},
+      options:{maintainAspectRatio:false,plugins:{legend:{position:'bottom'}},
+        scales:{x:{stacked:true},y:{stacked:true,title:{display:true,text:'花费 $'}},y2:{position:'right',grid:{display:false},title:{display:true,text:'%'},beginAtZero:true}}}});
+  }
+  if(share.length){
+    drawChart('c_share',{type:'bar',data:{labels:share.map(r=>r.ym),datasets:[
+      {label:'市场购买量',data:share.map(r=>r.a),backgroundColor:'#3F7E6B'},
+      {label:'我方份额 %',data:share.map(r=>r.sh*100),type:'line',borderColor:'#BC4B33',pointRadius:3,yAxisID:'y2',tension:.2}]},
+      options:{maintainAspectRatio:false,plugins:{legend:{position:'bottom'}},
+        scales:{y:{title:{display:true,text:'市场购买量'}},y2:{position:'right',grid:{display:false},title:{display:true,text:'份额 %'}}}}});
+  }
+  if(rev.length>=2){
+    const mine=[],comp=[],ratio=[],lbl=[];
+    for(let i=1;i<rev.length;i++){ lbl.push(rev[i].ym);
+      const dm=rev[i].a-rev[i-1].a, dc=rev[i].b-rev[i-1].b;
+      mine.push(dm); comp.push(dc); ratio.push(dc>0?dm/dc:null); }
+    drawChart('c_review',{type:'bar',data:{labels:lbl,datasets:[
+      {label:'我方月新增评论',data:mine,backgroundColor:'#3F7E6B'},
+      {label:'竞品前十均值月新增',data:comp,backgroundColor:'#C9A869'},
+      {label:'速度比（我/竞）',data:ratio,type:'line',borderColor:'#BC4B33',pointRadius:3,yAxisID:'y2',tension:.2},
+      {label:'比值 = 1',data:lbl.map(()=>1),type:'line',borderColor:'#BC4B33',borderDash:[6,4],pointRadius:0,yAxisID:'y2'}]},
+      options:{maintainAspectRatio:false,plugins:{legend:{position:'bottom'}},
+        scales:{y:{title:{display:true,text:'月新增评论'}},y2:{position:'right',grid:{display:false},min:0,title:{display:true,text:'速度比'}}}}});
+  }
+}
+function renderA2(){
+  const {P,split,gear}=S.last;
+  if(!gear||!split.length){ $('a2body').innerHTML='<div class="note">等待拆分序列。</div>'; return; }
+  const g=GEAR_SPLIT[gear.gear];
+  const last=split[split.length-1];
+  const budget=P.budget!=null? P.budget : last.sp;
+  const l3=split.slice(-3);
+  const actualDef=avg(l3.map(r=>r.sp>0?r.bs/r.sp:0));
+  let h='<div class="statrow">'+
+    '<div class="stat"><b>'+money(budget)+'</b><span>月度总预算（'+(P.budget!=null?'手填':'取最近月实际')+'）</span></div>'+
+    '<div class="stat"><b>'+fp(actualDef,0)+'</b><span>实际防御占比（品牌花费近似，近3月）</span></div>'+
+    '<div class="stat"><b>'+fp(g.def,0)+'</b><span>'+gear.gear+'档建议防御占比</span></div></div>';
+  const rows=[['防御账（品牌词 + 自家关联位占位 + 核心词保位）',fp(g.def,0),money(budget*g.def),'保费入账：真实增量每年 1–2 次实验校准；保额对标"竞品占据品牌词一个月"的销量损失'],
+    ['效率账（关键词台整套节律托管）',fp(g.eff,0),money(budget*g.eff),'周度 M2 四象限 · 双周 M4 收缩调价 · 月度 M3 错配；总量由 A3 区间锚点反推'],
+    ['扩张账（常驻期权仓）',fp(g.exp,0),money(budget*g.exp),'小额 Auto 发现新词 · SD/DSP 试仓 · 新版位测试；单项设上限与判定周期，毕业进效率账']];
+  h+=tbl(['账目','建议占比','建议额度','执行说明'],rows,[1,2]);
+  const gap=actualDef-g.def;
+  if(Math.abs(gap)>0.07) h+='<div class="'+(gap>0?'warn':'note')+'">实际防御占比与建议差 '+(gap>0?'+':'')+fp(gap,0)+'：'+
+    (gap>0?'防御超配——通常是品牌词在吃预算的舒适区（ACOS 好看），把差额挪回效率/扩张账，并做一次品牌词增量实验验证保费值不值'
+          :'防御欠配——'+(gear.gear==='防御战'?'防御战档下这是裸奔：立即补齐品牌词保位与自家关联位占位':'确认自家详情页关联位是否已被自我占位'))+'</div>';
+  $('a2body').innerHTML=h;
+}
+function renderA3(){
+  const {P,split,gear,band}=S.last;
+  if(!band){ $('a3body').innerHTML='<div class="note">等待毛利率、弹性与档位。</div>'; return; }
+  const l3=split.slice(-3);
+  const nbA=l3.length? avg(l3.map(r=>r.nbACOS).filter(x=>x!=null)) : null;
+  const blA=l3.length? avg(l3.map(r=>r.blACOS).filter(x=>x!=null)) : null;
+  const pos=v=>clamp((v-band.lo)/(band.hi-band.lo)*100,-4,112);
+  let h='<div class="statrow">'+
+    '<div class="stat"><b>'+fp(band.lo,1)+'</b><span>下限 m·b = '+fp(P.m,0)+' × '+P.b.toFixed(2)+'（短期利润最大化）</span></div>'+
+    '<div class="stat"><b>'+fp(band.anchor,1)+'</b><span>'+gear.gear+'档锚点</span></div>'+
+    '<div class="stat"><b>'+fp(band.hi,1)+'</b><span>上限 m（平衡线）</span></div>'+
+    '<div class="stat"><b class="'+(nbA!=null&&nbA>band.hi?'bad':'good')+'">'+fp(nbA,1)+'</b><span>非品牌 ACOS（近3月，健康度真指标）</span></div></div>';
+  h+='<div class="band">'+
+    '<div class="btick" style="left:'+pos(band.anchor)+'%"><span>锚点 '+fp(band.anchor,0)+'</span></div>'+
+    (nbA!=null?'<div class="btick below" style="left:'+pos(nbA)+'%;background:#BC4B33"><span style="color:#BC4B33">非品牌 '+fp(nbA,0)+'</span></div>':'')+
+    (blA!=null?'<div class="btick below" style="left:'+pos(blA)+'%;background:#7A7263"><span style="color:#7A7263">综合 '+fp(blA,0)+'</span></div>':'')+
+  '</div>';
+  const drift=nbA!=null? nbA-band.anchor : null;
+  h+='<div class="insight">'+(band.note?band.note+'。':'')+
+    (drift==null?'':drift>0.03?'非品牌 ACOS 高出锚点 '+fp(drift,1)+'：按档位逻辑该向锚点压——双周 M4 调价往下带，压出来的差额是纯利润。'
+      :drift<-0.03?'非品牌 ACOS 低于锚点 '+fp(Math.abs(drift),1)+'：在'+gear.gear+'档下这是欠投——弹性 b='+P.b.toFixed(2)+' 意味着还有可盈利的量没买。'
+      :'非品牌 ACOS 贴合锚点：区间运营到位。')+
+    ' 综合 ACOS 与非品牌的差距就是品牌词的美化幅度——那是报表化妆品，不是经营信号。</div>';
+  $('a3body').innerHTML=h;
+}
+
+/* ======================== A4 警报面板 / A5 战役 ======================== */
+const PLAYBOOK={
+  share:{t:'份额警报',p:'诊断：预测台 F4 看市场量同比（是盘子缩了还是被抢了）→ 关键词台 M2 双比率定位漏斗层。动作菜单：R1 掉→素材位次战（主图/视频位/保位竞价）；R2 掉→比价战（价差>+10% 即跟价或让量，档位决定选项）。'},
+  funnel:{t:'漏斗警报',p:'R1<1：搜索结果页素材相对位次战败——主图 AB、视频位、评分星级。R2<1：详情页/比价战败——查 SQP 价差列，竞品降价或大促是最常见元凶。数据源：关键词台 M2 周更。'},
+  cost:{t:'成本警报',p:'建议竞价环比 +20% 通常 = 新玩家烧钱进场。动作：防御账预备升级（核心词保位）、扩张账暂停增仓、观察 4 周判断是脉冲还是常态。读价法：草稿广告读建议竞价，每月记一次。'},
+  review:{t:'评论警报',p:'速度比<1 = 护城河相对变浅：QA 维护、请求评论按钮全覆盖、Vine 补批（变体额度）、差评根因进产品迭代清单。评分跌破阈值：先查最新差评聚类是否指向批次质量问题。'},
+  inv:{t:'库存警报',p:'覆盖 < 补货周期：立即下单 + 启动滑翔程序（断货前逐周 bid −15% 让排名软着陆；断货硬着陆的排名重置成本远高于让掉的毛利）。恢复到货后反向阶梯爬回。'},
+  illusion:{t:'利润幻觉警报',p:'品牌占比上行 + 非品牌下行 = 获客枯竭被品牌词报表掩盖。动作：立即做品牌/非品牌拆分复盘，非品牌 TACOS 定为第一 KPI，扩张账重启新词发现——报表越好看越要查。'}
+};
+function renderA4(){
+  const {alarms}=S.last;
+  const order=['share','funnel','cost','review','inv','illusion'];
+  let h='';
+  order.forEach(k=>{
+    const a=alarms[k], pb=PLAYBOOK[k];
+    h+='<div class="alarm"><h4><span class="dot '+a.lv+'"></span>'+pb.t+'</h4><div class="ev">'+a.ev+'</div>'+
+       '<details><summary>预案</summary><div class="small" style="padding-top:6px">'+pb.p+'</div></details>';
+    if(k==='inv'&&a.ladder){
+      h+=tbl(['断货前第 N 周','bid 系数'],a.ladder.map(x=>['第 '+x.w+' 周','× '+x.mult.toFixed(2)]),[1]);
+    }
+    h+='</div>';
+  });
+  $('a4body').innerHTML=h;
+  const reds=order.filter(k=>alarms[k].lv==='r').length;
+  if(reds>=3) $('a4body').innerHTML+='<div class="warn" style="grid-column:1/-1"><b>'+reds+' 路红灯并发</b>：这不是六个独立故障，大概率是同一个因（新强敌进场 / 品类价格战 / 自身断货史）在六个仪表上的投影。先找共因，再按预案分头处置。</div>';
+}
+function renderA5(){
+  const {P,camp}=S.last;
+  const fmtD=d=>d.toISOString().slice(0,10);
+  let h='<div class="statrow">'+
+    '<div class="stat"><b>'+camp.phase+'</b><span>当前战役状态</span></div>'+
+    '<div class="stat"><b>'+camp.days+' 天</b><span>'+(camp.phase==='倒计时'?'距 ranking push 开打（'+fmtD(camp.pushDate)+'）':'距本阶段结束')+'</span></div>'+
+    '<div class="stat"><b>'+fmtD(camp.peakDate)+'</b><span>峰值月起点 · 提前 '+P.pushWk+' 周蓄势</span></div></div>';
+  const ph=[{n:'蓄势 · ranking push',w:P.pushWk,c:'#3F7E6B',s:'淡季 CPC 买坑'},
+    {n:'冲刺 · BF/CM',w:8,c:'#BC4B33',s:'分时竞价 + 礼品词组'},
+    {n:'兑现回落',w:5,c:'#C9A869',s:'不硬撑位次'}];
+  const total=ph.reduce((s,p)=>s+p.w,0);
+  h+='<div class="tl">'+ph.map(p=>'<div class="ph" style="flex:'+p.w+';background:'+p.c+'">'+p.n+'<small>'+p.s+'</small></div>').join('')+
+     (camp.frac>0&&camp.frac<1?'<div class="now" style="left:'+(camp.frac*100)+'%"></div>':'')+'</div>';
+  h+='<div class="insight">蓄势期动作：核心词与礼品词逐周加 bid（位次建仓走扩张账逻辑记账）；冲刺期：BF/CM 周分时竞价、库存红线盯 A4；回落期：1 月让 TACOS 自然下行，动量兑现成自然单——用广告费给旺季排名续命是最贵的怀旧。</div>';
+  $('a5body').innerHTML=h;
+  const box=$('q4list');
+  if(!box.dataset.built){
+    box.innerHTML=Q4_ITEMS.map((t,i)=>'<label class="ck"><input type="checkbox" class="q4" data-i="'+i+'"> '+t+'</label>').join('');
+    box.dataset.built='1';
+  }
+}
+
+/* ======================== 导出 ======================== */
+function exportReport(){
+  if(!S.last||!S.last.gear){ $('ax_msg').textContent='先重算体检。'; return; }
+  const {P,gear,alarms,band,ev,camp}=S.last;
+  const lvName={g:'绿',y:'黄',r:'红'};
+  const rows=[['字段','值'],['档位',gear.gear],['判定依据',gear.why.join('；')],
+    ['市场同比',ev.mktG!=null?(ev.mktG*100).toFixed(1)+'%（'+ev.mktMode+'）':''],
+    ['非品牌同比',ev.nbG!=null?(ev.nbG*100).toFixed(1)+'%（'+ev.nbMode+'）':''],
+    ['份额斜率(pp/月)',ev.shareSlope.toFixed(3)],['份额连续下滑月数',ev.streak],
+    ['ACOS区间',band?(band.lo*100).toFixed(1)+'% ~ '+(band.hi*100).toFixed(1)+'%':''],
+    ['档位锚点',band?(band.anchor*100).toFixed(1)+'%':''],
+    ['三本账建议', '防御 '+(GEAR_SPLIT[gear.gear].def*100)+'% / 效率 '+(GEAR_SPLIT[gear.gear].eff*100)+'% / 扩张 '+(GEAR_SPLIT[gear.gear].exp*100)+'%'],
+    ['战役状态',camp.phase+'（'+camp.days+' 天）'],['生成日期',new Date().toISOString().slice(0,10)]];
+  ['share','funnel','cost','review','inv','illusion'].forEach(k=>rows.push([PLAYBOOK[k].t,lvName[alarms[k].lv]+' · '+alarms[k].ev]));
+  downloadCSV('asset-checkup-'+new Date().toISOString().slice(0,10)+'.csv',rows);
+  $('ax_msg').textContent='体检报告已导出——季度对比就靠这份归档。';
+}
+function exportSeries(){
+  if(!S.last||!S.last.split.length){ $('ax_msg').textContent='拆分序列为空。'; return; }
+  const rows=[['月份','品牌花费','品牌广告销售','非品牌花费','非品牌广告销售','店铺总销售','品牌销售占比','非品牌TACOS','非品牌ACOS','综合ACOS','SQP市场量','我方份额']];
+  const shMap=new Map(S.last.share.map(r=>[r.ym,r]));
+  S.last.split.forEach(r=>{
+    const s=shMap.get(r.ym);
+    rows.push([r.ym,r.bs,r.bS,r.ns,r.nS,r.store,
+      r.brandSh!=null?(r.brandSh*100).toFixed(1)+'%':'',r.nbTACOS!=null?(r.nbTACOS*100).toFixed(2)+'%':'',
+      r.nbACOS!=null?(r.nbACOS*100).toFixed(1)+'%':'',r.blACOS!=null?(r.blACOS*100).toFixed(1)+'%':'',
+      s?s.a:'',s&&s.sh!=null?(s.sh*100).toFixed(2)+'%':'']);
+  });
+  downloadCSV('asset-series-'+new Date().toISOString().slice(0,10)+'.csv',rows);
+  $('ax_msg').textContent='派生序列已导出。';
+}
+
+/* ======================== 演示数据 ======================== */
+function setV(id,v){ $(id).value=v; }
+function mkRows(fn,n,startYm){ const out=[]; for(let t=0;t<n;t++) out.push(fn(t, t===0?startYm:null)); return out; }
+function demoA(){ /* 现金牛：市场温和增长、份额稳、结构健康 */
+  const n=15, start='2025-04';
+  let ym=start; const sp=[],sh=[],rv=[];
+  for(let t=0;t<n;t++){
+    const bs=800+t*6, bS=5100+t*60;
+    const ns=4200+t*30, nS=13600+t*95, store=42500+t*330;
+    sp.push([ym,bs,bS,ns,nS,store].join(', '));
+    const mkt=52400+t*180, mine=Math.round(mkt*(0.0420+0.00008*t));
+    sh.push([ym,mkt,mine].join(', '));
+    rv.push([ym,1180+t*28,2350+t*25].join(', '));
+    ym=ymAdd(ym,1);
+  }
+  $('ta_split').value=sp.join('\n'); $('ta_share').value=sh.join('\n'); $('ta_review').value=rv.join('\n');
+  setV('i_m',38); setV('i_b',0.28); setV('i_budget',''); setV('i_rating',4.6); setV('i_ratingth',4.3);
+  setV('i_r1',1.15); setV('i_r2',1.12); setV('i_cpcnow',0.92); setV('i_cpcprev',0.88);
+  setV('i_inv',4200); setV('i_weekly',380); setV('i_lead',6); setV('i_peak',11); setV('i_pushwk',9);
+  $('ck_exit').checked=false;
+  compute();
+  $('ax_msg').textContent='演示·现金牛：档位判"现金牛"，六路全绿，非品牌 ACOS 高于档位锚点——A3 会告诉你差额压下来就是纯利润。';
+}
+function demoB(){ /* 失血：份额侵蚀 + 利润幻觉 + 库存滑翔 + 全面告警 */
+  const n=15, start='2025-04';
+  let ym=start; const sp=[],sh=[],rv=[];
+  for(let t=0;t<n;t++){
+    const bs=900, bS=5700+t*36;
+    const ns=5200-t*62, nS=16000-t*295, store=46000-t*385;
+    sp.push([ym,bs,bS,Math.round(ns),Math.round(nS),Math.round(store)].join(', '));
+    const mkt=58000-t*70, share=0.0450-0.00052*t, mine=Math.round(mkt*share);
+    sh.push([ym,Math.round(mkt),mine].join(', '));
+    rv.push([ym,2100+t*12,3100+t*23].join(', '));
+    ym=ymAdd(ym,1);
+  }
+  $('ta_split').value=sp.join('\n'); $('ta_share').value=sh.join('\n'); $('ta_review').value=rv.join('\n');
+  setV('i_m',36); setV('i_b',0.24); setV('i_budget',''); setV('i_rating',4.2); setV('i_ratingth',4.3);
+  setV('i_r1',0.90); setV('i_r2',0.97); setV('i_cpcnow',1.15); setV('i_cpcprev',0.90);
+  setV('i_inv',950); setV('i_weekly',310); setV('i_lead',6); setV('i_peak',11); setV('i_pushwk',9);
+  $('ck_exit').checked=false;
+  compute();
+  $('ax_msg').textContent='演示·失血：防御战档 + 六路告警并发（含利润幻觉红灯与库存滑翔程序）——注意 A4 底部的"共因"提示。';
+}
+
+/* ======================== 初始化 ======================== */
+function init(){
+  Chart.defaults.font.family="'Noto Serif SC','Songti SC',serif";
+  Chart.defaults.color='#5c5546';
+  Chart.defaults.borderColor='rgba(216,204,174,.55)';
+  $('b_calc').addEventListener('click',compute);
+  $('b_demoA').addEventListener('click',demoA);
+  $('b_demoB').addEventListener('click',demoB);
+  $('b_report').addEventListener('click',exportReport);
+  $('b_series').addEventListener('click',exportSeries);
+}
+if(typeof document!=='undefined'){
+  if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',init); else init();
+}
+//__APPJS_END__
+</script>
+</body>
+</html>

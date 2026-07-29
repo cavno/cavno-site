@@ -1,0 +1,816 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>五步法 · 通用系统推演引擎</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@400;600;700;900&display=swap" rel="stylesheet">
+<style>
+:root{
+  --paper:#F3EAD3;--paper2:#FAF3E1;--ink:#2A2418;--ink2:#5A4E38;
+  --teal:#1F6E6B;--teal-deep:#14504E;--bright:#7FD1C8;
+  --terra:#C05B33;--terra-b:#D2693F;--gold:#B08A2E;--gold-b:#C99A3A;
+  --slate:#5D7B93;--slate-b:#7FA0BC;--void:#0F1D24;--void2:#14262E;
+  --labtx:rgba(240,229,205,.92);--labdim:rgba(240,229,205,.55);--hair:rgba(52,40,22,.18);
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{background:var(--paper);background-image:radial-gradient(rgba(120,96,52,.05) 1px,transparent 1.4px);background-size:26px 26px;
+  color:var(--ink);font-family:"Noto Serif SC","Source Han Serif SC","Songti SC",serif;font-size:16px;line-height:1.9}
+.mono{font-family:ui-monospace,"SF Mono",Menlo,Consolas,monospace}
+.wrap{max-width:1180px;margin:0 auto;padding:0 22px}
+::selection{background:rgba(31,110,107,.25)}
+b{color:inherit}
+
+nav{position:sticky;top:0;z-index:60;background:rgba(243,234,211,.92);backdrop-filter:blur(8px);border-bottom:1px solid var(--hair)}
+nav .row1{display:flex;align-items:center;gap:16px;height:50px;flex-wrap:wrap}
+nav .brand{font-weight:900;font-size:15px;color:var(--teal-deep);letter-spacing:.05em}
+.systabs{display:flex;gap:6px;margin-left:auto}
+.systab{font-family:inherit;font-weight:700;font-size:13.5px;padding:6px 14px;border-radius:10px;border:1.5px solid var(--hair);background:var(--paper2);color:var(--ink2);cursor:pointer}
+.systab.act{background:var(--teal);border-color:var(--teal);color:#F6EFDC}
+nav .row2{display:flex;gap:4px;padding:6px 0 8px;flex-wrap:wrap}
+nav .row2 a{text-decoration:none;font-size:12.5px;color:var(--ink2);padding:4px 11px;border-radius:8px;border:1px solid transparent}
+nav .row2 a:hover{background:rgba(31,110,107,.1);color:var(--teal-deep)}
+nav .row2 a b{color:var(--terra);margin-right:4px}
+
+header{padding:44px 0 8px}
+.eyebrow{font-size:12.5px;letter-spacing:.3em;color:var(--terra);font-weight:600}
+h1{font-size:clamp(28px,4.4vw,46px);font-weight:900;line-height:1.25;margin:10px 0 4px}
+.subt{font-size:clamp(15px,2vw,19px);color:var(--ink2);font-weight:600;margin-bottom:18px}
+.verdict-hero{border-left:4px solid var(--teal);background:rgba(31,110,107,.06);padding:14px 20px;border-radius:0 12px 12px 0;max-width:960px;font-size:15.5px}
+.verdict-hero b{color:var(--teal-deep)}
+#sysbanner{margin-top:16px;font-size:14px;color:var(--ink2)}
+#sysbanner b{color:var(--terra)}
+
+.sec{margin:66px auto 0}
+.sechead{display:flex;align-items:baseline;gap:14px;border-bottom:2px solid rgba(52,40,22,.28);padding-bottom:8px;margin-bottom:6px}
+.sechead .idx{font-size:34px;font-weight:900;color:var(--teal);line-height:1}
+.sechead h2{font-size:clamp(20px,2.6vw,27px);font-weight:900}
+.sechead .en{margin-left:auto;font-size:11px;letter-spacing:.2em;color:var(--ink2)}
+.seclead{color:var(--ink2);font-size:14.5px;margin:8px 0 20px;max-width:960px}
+.seclead b{color:var(--terra)}
+.card{background:var(--paper2);border:1px solid var(--hair);border-radius:14px;padding:18px 20px}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+.klabel{font-size:11.5px;letter-spacing:.18em;color:var(--ink2);font-weight:700;margin-bottom:6px}
+
+/* step1 */
+.axcard{border:1px solid var(--hair);border-radius:12px;padding:12px 15px;background:rgba(243,234,211,.55);cursor:pointer;transition:all .3s}
+.axcard:hover{border-color:var(--teal)}
+.axcard.open{background:#fff8;border-color:var(--teal)}
+.axcard .axn{font-weight:900;font-size:15px}
+.axcard .axn b{color:var(--teal);margin-right:8px}
+.axcard .axc{font-size:13.5px;color:var(--ink2);margin-top:2px}
+.axcard .axd{display:none;margin-top:8px;border-top:1px dashed var(--hair);padding-top:8px;font-size:13px}
+.axcard.open .axd{display:block}
+.axd .tagrej{display:inline-block;background:rgba(192,91,51,.12);border:1px solid rgba(192,91,51,.4);color:#8d4020;border-radius:999px;padding:1px 9px;font-size:11.5px;margin:2px 3px 0 0}
+.statevec{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}
+.sv{background:var(--void);color:var(--labtx);border-radius:10px;padding:8px 10px;text-align:center}
+.sv .svv{font-size:20px;font-weight:900;color:var(--bright)}
+.sv .svk{font-size:10.5px;color:var(--labdim)}
+.envrow{display:flex;flex-wrap:wrap;gap:6px}
+.envc{font-size:12px;border-radius:999px;padding:3px 11px;border:1px solid}
+.env-ok{background:rgba(31,110,107,.1);border-color:rgba(31,110,107,.4);color:var(--teal-deep)}
+.env-edge{background:rgba(176,138,46,.12);border-color:rgba(176,138,46,.5);color:#7d621f}
+.env-fatal{background:rgba(192,91,51,.12);border-color:rgba(192,91,51,.5);color:#8d4020}
+
+/* step2 */
+.matrix{width:100%;border-collapse:collapse;font-size:12px}
+.matrix th,.matrix td{border:1px solid var(--hair);padding:5px 7px;text-align:center}
+.matrix th{background:rgba(31,110,107,.08);font-size:11.5px}
+.matrix td.rowh{text-align:left;font-weight:700;font-size:12.5px;background:rgba(243,234,211,.6)}
+.c-ok{color:var(--teal);font-weight:900}.c-edge{color:var(--gold);font-weight:900}.c-rej{color:var(--terra);font-weight:900}
+.sortbar{display:flex;gap:8px;align-items:center;margin-bottom:12px;font-size:13px}
+.sortbtn{font-family:inherit;font-weight:700;font-size:12.5px;padding:5px 13px;border-radius:9px;border:1.5px solid var(--hair);background:var(--paper2);cursor:pointer;color:var(--ink2)}
+.sortbtn.act{background:var(--terra);border-color:var(--terra);color:#fff6ea}
+.fault{border:1px solid var(--hair);border-radius:11px;padding:10px 14px;margin-bottom:8px;background:rgba(243,234,211,.5)}
+.fault .fn{font-weight:900;font-size:14.5px}
+.fault .fn .rank{color:var(--terra);margin-right:8px}
+.fault .fd{font-size:13px;color:var(--ink2);margin:2px 0 6px}
+.fbars{display:grid;grid-template-columns:64px 1fr 34px;gap:6px;align-items:center;font-size:11px;color:var(--ink2)}
+.fbar{height:7px;background:rgba(52,40,22,.1);border-radius:99px;overflow:hidden}
+.fbar i{display:block;height:100%;border-radius:99px}
+.fb-loud i{background:var(--slate)}.fb-silt i{background:var(--terra)}
+
+/* step3 */
+.genchips{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:14px}
+.genchip{font-family:inherit;font-weight:900;font-size:13.5px;padding:7px 15px;border-radius:10px;border:1.5px solid var(--hair);background:var(--paper2);cursor:pointer;color:var(--ink2)}
+.genchip.act{color:#fff6ea}
+.g1.act{background:var(--teal);border-color:var(--teal)}
+.g2.act{background:var(--terra);border-color:var(--terra)}
+.g3.act{background:var(--slate);border-color:var(--slate)}
+.g4.act{background:var(--gold);border-color:var(--gold)}
+.mechbadge{display:inline-block;font-size:12px;font-weight:700;border-radius:999px;padding:3px 12px;margin:0 6px 6px 0;background:rgba(31,110,107,.1);border:1px solid rgba(31,110,107,.4);color:var(--teal-deep)}
+.acct{display:inline-block;font-size:12px;font-weight:700;border-radius:6px;padding:2px 10px;background:rgba(192,91,51,.1);border:1px dashed rgba(192,91,51,.55);color:#8d4020}
+.ptable{width:100%;border-collapse:collapse;font-size:12.5px;margin-top:10px}
+.ptable td,.ptable th{border:1px solid var(--hair);padding:4px 8px;text-align:center}
+.ptable th{background:rgba(31,110,107,.08)}
+.crisis{border-left:3px solid var(--terra);padding:6px 12px;margin-top:8px;background:rgba(192,91,51,.05);font-size:13.5px}
+.crisis b{color:#8d4020}
+.formula{background:var(--void);color:var(--bright);border-radius:10px;padding:10px 14px;font-size:13px;margin-top:10px;overflow-x:auto;white-space:nowrap}
+
+/* step4 lab */
+.lab{background:var(--void);border:1px solid #0A141A;border-radius:18px;padding:18px;color:var(--labtx);box-shadow:0 26px 60px -30px rgba(15,29,36,.7)}
+.modebar{display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin-bottom:12px}
+.modebtn{font-family:inherit;font-weight:700;font-size:13px;padding:6px 15px;border-radius:10px;border:1.5px solid rgba(127,209,200,.35);background:transparent;color:var(--labdim);cursor:pointer}
+.modebtn.act{background:var(--bright);border-color:var(--bright);color:#0F1D24}
+.labgrid{display:grid;grid-template-columns:minmax(0,1fr) 300px;gap:14px}
+.chartwrap{background:radial-gradient(1000px 500px at 50% 20%,var(--void2),var(--void) 65%);border:1px solid rgba(127,209,200,.16);border-radius:12px;padding:8px 8px 4px;position:relative}
+svg.chart{display:block;width:100%;height:auto;user-select:none}
+.ctrl{display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin-top:10px}
+.cbtn{font-family:inherit;font-weight:700;font-size:13px;padding:7px 14px;border-radius:9px;border:1.5px solid rgba(240,229,205,.4);background:transparent;color:var(--labtx);cursor:pointer}
+.cbtn.primary{background:var(--bright);border-color:var(--bright);color:#0F1D24}
+.cbtn:disabled{opacity:.4;cursor:default}
+.ctrl select{font-family:inherit;background:#122129;color:var(--labtx);border:1px solid rgba(127,209,200,.3);border-radius:8px;padding:5px 8px;font-size:12.5px}
+.ctrl input[type=range]{flex:1;min-width:120px;accent-color:#7FD1C8}
+.legend{display:flex;gap:12px;flex-wrap:wrap;font-size:11.5px;color:var(--labdim);margin-top:8px}
+.legend label{cursor:pointer;display:flex;gap:5px;align-items:center}
+.legend i{width:16px;height:3px;border-radius:2px;display:inline-block}
+.spanel{background:#122129;border:1px solid rgba(127,209,200,.14);border-radius:11px;padding:11px 13px;margin-bottom:11px}
+.spanel h4{font-size:11px;letter-spacing:.18em;color:var(--labdim);font-weight:600;margin-bottom:8px}
+.rvgrid{display:grid;grid-template-columns:1fr 1fr;gap:6px;font-size:11.5px}
+.rv{background:rgba(240,229,205,.05);border-radius:8px;padding:5px 9px;display:flex;justify-content:space-between}
+.rv b{color:var(--bright)}
+.tprog{height:9px;background:rgba(240,229,205,.1);border-radius:99px;overflow:hidden;margin:6px 0 2px}
+.tprog i{display:block;height:100%;background:var(--terra-b);border-radius:99px;transition:width .2s}
+#evlist,#evlist2{max-height:220px;overflow-y:auto;font-size:11.5px;scrollbar-width:thin}
+.ev{border-left:2px solid rgba(127,209,200,.25);padding:3px 8px;margin-bottom:4px;cursor:pointer;color:var(--labdim);line-height:1.55}
+.ev:hover{color:var(--labtx)}
+.ev.past{border-color:var(--bright);color:var(--labtx)}
+.ev.tr{border-color:var(--gold-b)}
+.ev .ey{color:var(--gold-b);font-weight:700;margin-right:6px}
+.outbanner{margin-top:10px;border-radius:10px;padding:9px 14px;font-size:13.5px;font-weight:700;border:1.5px solid}
+.out-ok{border-color:var(--bright);color:var(--bright);background:rgba(127,209,200,.08)}
+.out-dead{border-color:var(--terra-b);color:var(--terra-b);background:rgba(210,105,63,.1)}
+.out-frozen{border-color:var(--slate-b);color:var(--slate-b);background:rgba(127,160,188,.1)}
+.sliders{display:grid;grid-template-columns:1fr 1fr;gap:10px 16px;margin-top:6px}
+.sl{font-size:12px;color:var(--labdim)}
+.sl b{color:var(--labtx)}
+.sl input{width:100%;accent-color:#C99A3A}
+.kernelbox{margin-top:14px;background:#122129;border:1px dashed rgba(201,154,58,.5);border-radius:11px;padding:12px 16px;font-size:12.5px;color:var(--labdim)}
+.kernelbox .mono{color:var(--gold-b)}
+details.kern summary{cursor:pointer;color:var(--gold-b);font-weight:700;font-size:13px}
+
+/* step5 */
+.posbox{border-left:4px solid var(--terra);background:rgba(192,91,51,.06);padding:12px 18px;border-radius:0 12px 12px 0;margin-bottom:16px;font-size:15px}
+.formbar{display:grid;grid-template-columns:230px 1fr 46px;gap:10px;align-items:center;margin-bottom:8px;font-size:13.5px}
+.fmb{height:14px;background:rgba(52,40,22,.1);border-radius:99px;overflow:hidden}
+.fmb i{display:block;height:100%;background:var(--teal);border-radius:99px;transition:width .6s}
+.toggles{display:flex;gap:10px;flex-wrap:wrap;margin:12px 0}
+.tgl{font-family:inherit;font-size:12.5px;font-weight:700;padding:6px 13px;border-radius:999px;border:1.5px solid var(--hair);background:var(--paper2);cursor:pointer;color:var(--ink2)}
+.tgl.on{background:var(--gold);border-color:var(--gold);color:#fff8e8}
+.exit{border:1px solid var(--hair);border-radius:10px;padding:9px 13px;margin-bottom:8px;font-size:13.5px;background:rgba(243,234,211,.5)}
+.exit b{color:#8d4020}
+.stamp{display:inline-block;border:2px solid var(--terra);color:var(--terra);border-radius:8px;padding:4px 14px;font-weight:900;transform:rotate(-2deg);font-size:14px;margin-top:8px}
+.falsify{border:1.5px dashed rgba(52,40,22,.4);border-radius:12px;padding:12px 16px;font-size:14px;background:rgba(243,234,211,.6);margin-top:14px}
+.falsify b{color:var(--teal-deep)}
+
+.coda{margin-top:20px;border:1.5px dashed rgba(52,40,22,.35);border-radius:14px;padding:18px 22px;background:rgba(243,234,211,.6);font-size:14px}
+.coda h4{color:var(--terra);font-weight:900;margin-bottom:6px;letter-spacing:.08em}
+.coda ol{margin-left:20px}
+footer{margin:70px 0 40px;border-top:2px solid rgba(52,40,22,.28);padding-top:14px;font-size:12.5px;color:var(--ink2)}
+@media(max-width:980px){.grid2,.grid3,.labgrid,.sliders{grid-template-columns:1fr}.statevec{grid-template-columns:repeat(4,1fr)}.formbar{grid-template-columns:1fr;gap:4px}}
+@media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}html{scroll-behavior:auto}}
+</style>
+</head>
+<body>
+
+<nav><div class="wrap">
+ <div class="row1">
+  <span class="brand">五步法 · 通用系统推演引擎</span>
+  <div class="systabs" id="systabs"></div>
+ </div>
+ <div class="row2">
+  <a href="#s1"><b>壹</b>初始化台</a><a href="#s2"><b>贰</b>张力扫描台</a><a href="#s3"><b>叁</b>机制审计台</a>
+  <a href="#s4"><b>肆</b>演化运行台</a><a href="#s5"><b>伍</b>预测台</a><a href="#coda">残余</a>
+ </div>
+</div></nav>
+
+<header class="wrap">
+ <div class="eyebrow">结构审计 × 动力学推演 · 三台机器，同一套语法</div>
+ <h1>五步法推演引擎</h1>
+ <div class="subt">前三步逆向工程（重构发生学）· 第四步正向推演（让机器自己跑）· 第五步条件外推（形态，不是事件）</div>
+ <div class="verdict-hero">判词：五步法不是分析清单，是一次<b>受控的再进入</b>。本引擎将其编译为可执行程序——三个系统（西方哲学 / 数学思想 / 金融市场）经<b>历史校准</b>逐年积分运行，相变由张力越阈触发；另附<b>反事实沙盘</b>：调参数亲手验证"相变序列拓扑锁定，时间表与出口开放"。</div>
+ <div id="sysbanner"></div>
+</header>
+
+<section class="sec wrap" id="s1">
+ <div class="sechead"><span class="idx">壹</span><h2>初始化台 · 边界 / 公理 / 环境</h2><span class="en">BOUNDARY &amp; AXIOMS</span></div>
+ <p class="seclead">重演系统诞生的那一刀：<b>公理是最不被辩护的命题</b>；边界看拒收记录，不听自我叙述；逆向审视——点开每条公理，看它隐藏的前提与它签发的敌人。右下为初始状态向量（模型单位 0–100）。</p>
+ <div class="grid2">
+  <div class="card"><div class="klabel">公理清单（点击展开：隐藏前提 + 消化不了的输入）</div><div id="axioms"></div></div>
+  <div>
+   <div class="card" style="margin-bottom:14px"><div class="klabel">边界与环境输入流</div><div id="boundary"></div></div>
+   <div class="card"><div class="klabel">初始状态向量 t₀ <span id="t0y"></span></div><div class="statevec" id="statevec"></div>
+    <div style="font-size:11.5px;color:var(--ink2);margin-top:8px">C 闭合度 · Vs 系统变异度 · Ve 环境变异度 · E 表达力 · O 开放度 · L 层级数 · T 张力 · B 盲点债务</div></div>
+  </div>
+ </div>
+</section>
+
+<section class="sec wrap" id="s2">
+ <div class="sechead"><span class="idx">贰</span><h2>张力扫描台 · 断层线与淤积速率</h2><span class="en">TENSION SCAN</span></div>
+ <p class="seclead">矛盾不用找，它是划界的结构性赠品——要找的是<b>淤积在哪</b>。上表：公理逐条追问"消化不了哪类输入"（✓消化 ⚠边缘 ✗拒收）。下表：断层线双排序——<b>响度≠载荷</b>，切换排序看名次翻转。</p>
+ <div class="card" style="margin-bottom:16px;overflow-x:auto"><div class="klabel">公理 × 输入 消化矩阵</div><table class="matrix" id="matrix"></table></div>
+ <div class="card">
+  <div class="sortbar"><span class="klabel" style="margin:0">断层线排序：</span>
+   <button class="sortbtn" id="sortLoud">按响度（历史书写的）</button>
+   <button class="sortbtn act" id="sortSilt">按淤积速率（张力所在的）</button>
+  </div>
+  <div id="faults"></div>
+ </div>
+</section>
+
+<section class="sec wrap" id="s3">
+ <div class="sechead"><span class="idx">叁</span><h2>机制审计台 · 代际响应函数</h2><span class="en">MECHANISM AUDIT</span></div>
+ <p class="seclead">一个系统处在哪一代，不看它说什么，看它<b>上一次遇到矛盾时做了什么</b>。四种会计科目：拒收＝记在未来 / 转化＝当燃料烧 / 推迟＝塞进上层 / 围堵＝坏账不许传染。没有任何机制能"消除"矛盾。</p>
+ <div class="genchips" id="genchips"></div>
+ <div class="grid2">
+  <div class="card" id="gencard"></div>
+  <div class="card"><div class="klabel">四类机制响应曲线对比（输入通量 φ → 张力增量 dT）</div>
+   <svg id="mechcurves" viewBox="0 0 440 260" style="width:100%;height:auto"></svg>
+   <div style="font-size:12px;color:var(--ink2)">同一通量下：拒斥几乎全额记账；辩证烧掉一半换变异度；分层记得少、但每次吸收累积盲点债务 B（虚线）；围堵最低、且局部化。</div>
+  </div>
+ </div>
+</section>
+
+<section class="sec wrap" id="s4">
+ <div class="sechead"><span class="idx">肆</span><h2>演化运行台 · 时空动态推演</h2><span class="en">EVOLUTION RUN</span></div>
+ <p class="seclead">让机器自己跑：边界与公理给初始态（壹），张力清单给压力方向（贰），机制清单给响应函数（叁）——三者合成，序列被锁定。色带＝代际；锯齿＝张力 T；虚线＝变异度赤字 Ve−Vs；阶梯＝层级 L；▲＝相变；◤＝再进入；✚＝近脆断。每个相变旁的灰色残影＝<b>未走的出口</b>。</p>
+ <div class="lab">
+  <div class="modebar">
+   <button class="modebtn act" id="mHist">历史校准模式</button>
+   <button class="modebtn" id="mSand">反事实沙盘</button>
+   <span style="font-size:11.5px;color:var(--labdim)">历史模式：参数经史实标定，事件脉冲逐年注入 · 沙盘：纯涌现动力学，无脚本</span>
+  </div>
+  <div id="histblock">
+   <div class="labgrid">
+    <div>
+     <div class="chartwrap"><svg class="chart" id="chart1" viewBox="0 0 900 400"></svg></div>
+     <div class="ctrl">
+      <button class="cbtn primary" id="playBtn">▶ 运行</button>
+      <button class="cbtn" id="resetBtn">↺</button>
+      <select id="speed"><option value="1">1×</option><option value="2" selected>2×</option><option value="4">4×</option><option value="8">8×</option></select>
+      <input type="range" id="scrub" min="0" max="719" value="0">
+     </div>
+     <div class="legend" id="legend1"></div>
+    </div>
+    <div>
+     <div class="spanel"><h4>实时状态向量</h4><div class="rvgrid" id="readout"></div>
+      <div style="font-size:11px;color:var(--labdim);margin-top:8px">张力 / 相变阈值 θ<span id="thv"></span></div>
+      <div class="tprog"><i id="tbar"></i></div>
+      <div style="font-size:11px;color:var(--labdim)">距脆断线 1.35θ：<b id="tdeath" style="color:var(--terra-b)"></b></div>
+     </div>
+     <div class="spanel"><h4>相图 · 开放度 × 变异度</h4><svg id="phase1" viewBox="0 0 260 220" style="width:100%;height:auto"></svg></div>
+     <div class="spanel"><h4>事件检察器（点击跳转）</h4><div id="evlist"></div></div>
+    </div>
+   </div>
+  </div>
+  <div id="sandblock" style="display:none">
+   <div class="labgrid">
+    <div>
+     <div class="chartwrap"><svg class="chart" id="chart2" viewBox="0 0 900 400"></svg></div>
+     <div class="ctrl">
+      <button class="cbtn primary" id="runSand">▶ 运行沙盘</button>
+      <button class="cbtn" id="ghostBtn">保留为叠影</button>
+      <button class="cbtn" id="clearGhost">清空叠影</button>
+      <span style="font-size:11.5px;color:var(--labdim)" id="ghostn"></span>
+     </div>
+     <div id="outbanner"></div>
+    </div>
+    <div>
+     <div class="spanel"><h4>沙盘参数（通用抽象系统 · 300 系统年）</h4>
+      <div class="sliders">
+       <div class="sl">环境变异度增速 g <b id="v_g"></b><input type="range" id="p_g" min="20" max="130" value="62"></div>
+       <div class="sl">公理刚性 R（吸收衰减）<b id="v_r"></b><input type="range" id="p_r" min="60" max="170" value="100"></div>
+       <div class="sl">升级延迟 D（年）<b id="v_d"></b><input type="range" id="p_d" min="0" max="70" value="12"></div>
+       <div class="sl">外部补贴 S（通量抵扣）<b id="v_s"></b><input type="range" id="p_s" min="0" max="30" value="0"></div>
+       <div class="sl">反动回缩（首次相变后）<b id="v_reg"></b><input type="range" id="p_reg" min="0" max="1" value="0"></div>
+      </div>
+     </div>
+     <div class="spanel"><h4>出口判读</h4>
+      <div style="font-size:12px;color:var(--labdim);line-height:1.8">主序列 G1→G4 之外的三个出口：<br>✗ <b style="color:var(--terra-b)">脆断死亡</b>：T ≥ 1.35θ 仍未升级<br>❄ <b style="color:var(--slate-b)">冻结</b>：补贴压住张力，停在低代<br>↩ <b style="color:var(--gold-b)">回缩</b>：相变后反动，重闭合再淤积</div></div>
+     <div class="spanel"><h4>沙盘事件</h4><div id="evlist2"></div></div>
+    </div>
+   </div>
+  </div>
+  <details class="kern kernelbox"><summary>模型内核 · 差分方程与判定规则</summary>
+   <div style="margin-top:8px" class="mono">
+    Ve ← Ve·(1+g)　　φ = k·max(0, Ve−Vs) + 事件脉冲<br>
+    T ← T + φ·(1−a)·R − δ·T　　Vs ← Vs + β + c·a·φ　　E ← E + ε·Vs<br>
+    E ≥ E* → 注入再进入脉冲（系统开始运算自身）<br>
+    T ≥ θ(gen) → 相变：gen+1, T←0.35T, O↑, L↑　|　T ≥ 1.35θ → 脆断 ✗<br>
+    补贴：φ ← max(0, φ−S)　|　冻结判定：终局 gen&lt;4 且 T 长期 &lt; 0.9θ 且 S&gt;0
+   </div>
+   <div style="margin-top:6px">诚实条款：参数经历史校准（相变年份按史实锚定），模型给出的是<b style="color:var(--gold-b)">结构的形状</b>，不是测量值。启发性的桥，不是等号。</div>
+  </details>
+ </div>
+</section>
+
+<section class="sec wrap" id="s5">
+ <div class="sechead"><span class="idx">伍</span><h2>预测台 · 约束集与形态分布</h2><span class="en">MORPHOLOGY FORECAST</span></div>
+ <p class="seclead">预测的对象是<b>形态，不是事件</b>：当前代际 ＋ 主导未代谢张力 ＋ 机制菜单的下一档 ⇒ 形态分布。纪律：形态可断言，时点须悬置，并声明可证伪条件。切换假设开关，看分布如何平移。</p>
+ <div class="posbox" id="posbox"></div>
+ <div class="grid2">
+  <div class="card"><div class="klabel">形态分布（概率加权 · 假设开关可平移）</div>
+   <div class="toggles" id="toggles"></div><div id="forms"></div></div>
+  <div>
+   <div class="card" style="margin-bottom:14px"><div class="klabel">约束集 · 必然选择</div><ul id="constraints" style="margin-left:20px;font-size:14px"></ul></div>
+   <div class="card"><div class="klabel">失效出口 × 先行指标</div><div id="exits"></div><div class="stamp">形态可断言 · 时点须悬置</div></div>
+  </div>
+ </div>
+ <div class="falsify" id="falsify"></div>
+</section>
+
+<section class="sec wrap" id="coda">
+ <div class="coda"><h4>方法自检 · 五步法跑五步法（诚实的残余）</h4>
+  <ol>
+   <li><b>边界与公理</b>：论域＝可被"系统/环境"区分把握的演化；公理＝发展受律则支配、矛盾内生于划界。这两条在方法内部同样不被辩护。</li>
+   <li><b>张力源</b>：必然 vs 偶然（序列锁定 vs 出口开放）；以及自指——预测者在系统内部，本引擎的输出会反过来改变被预测者（金融系统对此最敏感）。</li>
+   <li><b>处理机制</b>：分层（把"时点"悬置到不可断言层）＋ 围堵（可证伪条件把错误局部化）——它用的正是它审计别人的那几招。</li>
+   <li><b>演化路径</b>：这套方法自己也从 1.0 的决定论叙事，走到了现在这份带误差条、带出口相图的 4.0 形态。</li>
+   <li><b>预测</b>：它的下一形态大概率是被真实数据校准或被反例击穿——它的盲点在"系统/环境"那一刀的刀刃上。它添了一层，并知道添的是一层。</li>
+  </ol>
+ </div>
+</section>
+
+<footer class="wrap">
+ <div>五步法推演引擎 · 单文件 · 零构建 · 历史模式参数经校准，沙盘模式纯涌现 · 所有数值为模型单位（0–100），刻画结构形状而非测量值</div>
+</footer>
+
+<script>
+'use strict';
+const $=s=>document.querySelector(s);
+const NS='http://www.w3.org/2000/svg';
+function E(t,a,p){const n=document.createElementNS(NS,t);if(a)for(const k in a){if(k==='text')n.textContent=a[k];else n.setAttribute(k,a[k]);}if(p)p.appendChild(n);return n;}
+function H(t,c,h,p){const n=document.createElement(t);if(c)n.className=c;if(h!=null)n.innerHTML=h;if(p)p.appendChild(n);return n;}
+const CL={g1:'#2A7F7A',g2:'#C05B33',g3:'#5D7B93',g4:'#B08A2E',bright:'#7FD1C8',terra:'#D2693F',gold:'#C99A3A',slate:'#7FA0BC',paper:'#F0E5CD',dim:'rgba(240,229,205,.5)'};
+const GBAND={g1:'rgba(42,127,122,.13)',g2:'rgba(192,91,51,.13)',g3:'rgba(93,123,147,.15)',g4:'rgba(176,138,46,.13)'};
+
+/* ================= 数据：三个系统 ================= */
+const SYSTEMS=[
+{id:'phil',name:'西方哲学',t0:-600,t1:2030,t0label:'（前600 · 米利都）',
+ axis:[[-600,0,.20],[0,1500,.14],[1500,1800,.16],[1800,2030,.50]],
+ inputs:[['自然现象','ok'],['数学','ok'],['变化与运动','edge'],['感官杂多','edge'],['异文化异见','edge'],['主体自身','fatal'],['语言自身','fatal']],
+ axioms:[
+  {n:'A1 存在可被言说',c:'思维与存在同一（巴门尼德）——logos 可及即实在。',h:'隐藏前提：语言的结构＝世界的结构。',rej:['纯粹流变','不可言说者','语言自身']},
+  {n:'A2 同一律锚 A=A',c:'事物具有自身同一的本质，可被定义锁定。',h:'隐藏前提：滤除时间——本质不随流变。',rej:['变化与运动','连续过程','历史性']},
+  {n:'A3 理由链有终点',c:'充足理由律：存在第一原理／本原，回退必须停止。',h:'隐藏前提：奠基不可无穷回退——但为何不可，从未被辩护。',rej:['无穷回退','自奠基问题','主体自身']},
+  {n:'A4 真理唯一且永恒',c:'真理独立于视角、时代与语言。',h:'隐藏前提：观察者不进入被观察者。',rej:['视角多元','异文化异见','观察者效应']}],
+ matrix:[['ok','ok','rej','edge','edge','rej','rej'],['ok','ok','rej','edge','ok','edge','rej'],['ok','ok','ok','edge','edge','rej','edge'],['ok','ok','edge','rej','rej','edge','rej']],
+ init:{C:92,Vs:18,Ve:30,E:15,O:8,L:1,T:5,B:0},
+ faults:[
+  {n:'F1 一与多',d:'本原的统一 vs 现象的杂多——被本原论诸派分化处理，部分代谢。',loud:78,silt:38},
+  {n:'F2 静与动',d:'A=A vs 万物皆流——芝诺把它推到归谬极限；拒收后由柏拉图分层暂存。',loud:92,silt:55},
+  {n:'F3 理性与经验',d:'公理演绎 vs 感官输入——贯穿始终，在休谟处爆仓（因果性无法演绎奠基）。',loud:70,silt:74},
+  {n:'F4 主体与客体',d:'认识者如何触达被认识者——笛卡尔后加速淤积，康德处触发相变。',loud:60,silt:86},
+  {n:'F5 语言与世界',d:'说出的 vs 所是的——潜伏两千年，十九世纪末陡增，引爆语言转向。',loud:34,silt:80},
+  {n:'F6 系统与自身',d:'哲学能否为自身奠基——说谎者→证实原则自噬→自反性。终局科目，淤积最快。',loud:26,silt:95}],
+ gens:[
+  {id:'G1',cls:'g1',name:'实体形而上学',era:'前600 — 1781',mechs:['分化（本原诸派）','分层（两世界）','整合（四因·大全）','拒斥（边缘输入）'],acct:'推迟 ＋ 记在未来',p:{a:.25,d:.002,c:.35,th:62},
+   crises:[['芝诺悖论（前450）','拒收连续性；柏拉图以理念／可感两世界升维隐藏——第一次分层解悖。'],['休谟问题（1739）','因果性拒收失败，张力冲顶——独断论沉睡被打断，逼出代际手术。']]},
+  {id:'G2',cls:'g2',name:'批判—辩证',era:'1781 — 1900',mechs:['划界（现象/物自体）','否定—扬弃（引擎）','转化（矛盾为燃料）'],acct:'转化 ＝ 当燃料烧',p:{a:.55,d:.0024,c:.9,th:70},
+   crises:[['二律背反（1781）','康德把矛盾锁进"理性越界报告"——工具极限的病理学；黑格尔随后把同一台引擎装进存在本身。'],['体系解体（19世纪末）','引擎无刹车：绝对精神大厦在实证科学与尼采锤下失控解体。']]},
+  {id:'G3',cls:'g3',name:'语言—逻辑分层',era:'1900 — 1975',mechs:['分层（元语言/类型论）','抽象（理想语言）','再闭合尝试（逻辑实证）'],acct:'推迟 ＝ 塞进上层',p:{a:.70,d:.0028,c:.7,th:76},
+   crises:[['罗素悖论（1901）','说谎者复活于集合论；动作：类型论位移——悖论塞进禁语层。'],['证实原则自噬（1936前后）','可证实性标准自身不可证实——纲领被自指判死，维也纳学派解体。']]},
+  {id:'G4',cls:'g4',name:'多元实用生态',era:'1975 — 今',mechs:['围堵（各传统各管论域）','拟合（自然化：连续于科学）','局部有效'],acct:'围堵 ＝ 坏账不传染',p:{a:.85,d:.0034,c:.6,th:84},
+   crises:[['相对主义指控（1980s）','动作：分工化——"在同一语境下"从脚注升级为结构原理。'],['AI 进入概念生产（2023—）','非人类心智闯入论域：环境变异度暴涨，尚未代谢。']]}],
+ events:[
+  {y:-585,l:'泰勒斯问本原',n:'充足理由律点火：追问启动。',s:6},
+  {y:-500,l:'赫拉克利特/巴门尼德对峙',n:'F2 断层线正面开战：流变 vs 存在。',s:8},
+  {y:-450,l:'芝诺悖论',n:'连续性输入被推到归谬极限——拒收失败样本。',s:16,tp:'crisis'},
+  {y:-387,l:'柏拉图两世界',n:'分层解悖首演：矛盾切开，塞进理念层。',s:-14,tp:'mech'},
+  {y:-335,l:'亚里士多德体系',n:'整合：四因＋三段论收编全域，T 释放。',s:-12,tp:'mech'},
+  {y:1274,l:'经院大全（阿奎那）',n:'整合续命：信仰与理性的行政合并。',s:-6,tp:'mech'},
+  {y:1637,l:'笛卡尔怀疑',n:'F4 激活：主体登场，认识论转向点火。',s:12},
+  {y:1739,l:'休谟问题',n:'因果性演绎奠基失败——G1 的 1929。',s:26,tp:'crisis'},
+  {y:1781,l:'康德《纯粹理性批判》',n:'相变 G1→G2：划界＋先验分层，矛盾移交批判法庭。',tp:'trans'},
+  {y:1807,l:'黑格尔《精神现象学》',n:'辩证引擎点火：矛盾正式转燃料。',s:-8,tp:'mech'},
+  {y:1879,l:'弗雷格概念文字',n:'表达力 E 跃升：逻辑可谈论自身的前夜。',s:6,e:14},
+  {y:1901,l:'罗素悖论',n:'再进入：系统运算自身，二值振荡显形。相变 G2→G3。',tp:'trans',re:1},
+  {y:1921,l:'《逻辑哲学论》',n:'理想语言：最后的闭合冲刺——"不可说者"被划出界。',s:6},
+  {y:1931,l:'哥德尔不完备',n:'再进入判决书：真而不可证。',s:14,re:1,tp:'crisis'},
+  {y:1953,l:'《哲学研究》',n:'语言游戏：有效性开始环境相对化——生态前奏。',s:-8,tp:'mech'},
+  {y:1962,l:'库恩《科学革命的结构》',n:'范式：真理的历史化，唯一主架构松动。',s:6},
+  {y:1975,l:'自然化/多元转向',n:'相变 G3→G4：放弃唯一奠基，哲学生态化。',tp:'trans'},
+  {y:2010,l:'实验哲学/认知接口',n:'围堵与分工成熟：各传统局域运转。',s:-5,tp:'mech'},
+  {y:2023,l:'AI 进入概念生产',n:'新环境脉冲：待代谢，去向未定。',s:14,tp:'crisis'}],
+ g_era:[.16,.34,.52,.72],
+ s5:{pos:'当前位置：<b>G4 中段</b>。主导未代谢张力：① F6 自反性——哲学的元地位问题（被认知科学与 AI 收编的压力，淤积最快）；② 规范性来源——自然化之后，"应当"从哪里来；③ AI：非人类概念生产者进入论域，环境变异度暴涨。',
+  cons:['不可能回到统一大体系——变异度不许（塔已见顶，升维额度用尽）','必须与经验科学连续、或明确分工——中间地带不可持有','自指问题不可再靠升维解决——只能生态化围堵'],
+  forms:[['认知科学—哲学融合生态',35,'哲学作为概念层，实验与建模作为地基'],['概念工程专业化',25,'哲学转型为"定义的设计与维护"行业'],['AI 协作哲学',20,'机器辅助论证、形式化形而上学、自动反例'],['公共伦理治理转向',15,'AI 伦理需求＝外部输血，应用哲学扩张'],['传统体系哲学复辟',5,'尾部：需要外部权威补贴才能维持']],
+  exits:[['学院冻结','先行指标：引用圈闭化、职位收缩下的自我复制率上升'],['被科学整体收编','先行指标：哲学系并入认知科学系的机构比率']],
+  fal:'可证伪条件：若出现被跨传统广泛接受的统一形而上学体系并稳定运行三十年，则本推演关于"生态化不可逆"的判断即被证伪。',
+  tg:[{l:'AI 大规模进入概念生产',d:[0,5,15,0,-5],dd:'AI 协作与概念工程形态吸走概率质量'},{l:'公共资金转向应用伦理',d:[-5,0,0,12,-2],dd:'外部输血放大治理转向'}]}},
+
+{id:'math',name:'数学思想',t0:-600,t1:2030,t0label:'（前600 · 毕达哥拉斯前夜）',
+ axis:[[-600,0,.16],[0,1600,.12],[1600,1900,.28],[1900,2030,.44]],
+ inputs:[['计数与贸易','ok'],['测地与天文','ok'],['无理量','edge'],['无穷过程','edge'],['物理新需求','edge'],['自身基础','fatal'],['超人类规模证明','fatal']],
+ axioms:[
+  {n:'A1 万物皆数（可公度）',c:'一切量可由整数比表达（毕达哥拉斯）。',h:'隐藏前提：离散可以穷尽连续。',rej:['无理量','连续统']},
+  {n:'A2 证明＝有限演绎',c:'从公理出发的有限步推导是真理的唯一通道。',h:'隐藏前提：真理集合是有限手段可达的。',rej:['实无穷','不可判定命题','超人类规模证明']},
+  {n:'A3 几何直观可靠',c:'欧氏空间是唯一真空间，直观即公理来源。',h:'隐藏前提：人类感知的空间＝数学的空间。',rej:['非欧几何','病态函数','高维对象']},
+  {n:'A4 确定且完备',c:'每个良定问题皆有唯一确定答案（希尔伯特：我们必须知道）。',h:'隐藏前提：系统外不存在关于系统的真理。',rej:['自身基础','独立命题','停机问题']}],
+ matrix:[['ok','ok','rej','edge','edge','rej','rej'],['ok','ok','edge','rej','edge','rej','rej'],['ok','ok','edge','edge','rej','edge','ok'],['ok','ok','ok','edge','edge','rej','rej']],
+ init:{C:90,Vs:20,Ve:26,E:18,O:10,L:1,T:4,B:0},
+ faults:[
+  {n:'F1 离散与连续',d:'数 vs 量——√2、芝诺、实数构造；早期淤积极高，1872 结账。',loud:80,silt:58},
+  {n:'F2 有限与无穷',d:'有限证明 vs 无穷对象——微积分处爆响，康托处相变。',loud:95,silt:72},
+  {n:'F3 直观与形式',d:'几何直觉 vs 逻辑严格——非欧 1829、魏尔斯特拉斯怪物 1872：直观公理折断。',loud:66,silt:52},
+  {n:'F4 可证与为真',d:'系统与自身：真理是否＝可证性。终局科目，哥德尔结算。',loud:40,silt:96},
+  {n:'F5 存在与构造',d:'排中律之争——纯存在性证明 vs 直觉主义构造要求（1907 Brouwer）。',loud:48,silt:60},
+  {n:'F6 纯粹与应用',d:'内部标准 vs 物理输入——δ 函数先用后严格化：低响度持续淤积。',loud:30,silt:44}],
+ gens:[
+  {id:'G1',cls:'g1',name:'公理化直观',era:'前600 — 1665',mechs:['拒斥（无理量传说级拒收）','分化（数/量分治）','局部围堵（欧多克索斯比例论）','整合（欧几里得）'],acct:'拒收 ＋ 精巧隔离',p:{a:.30,d:.002,c:.5,th:60},
+   crises:[['√2 危机（前500）','希帕索斯传说＝字面拒收；动作：几何化隔离——量与数分治，比例论是早熟的围堵。'],['芝诺无穷（前450）','无穷过程被禁入证明；穷竭法＝带脚镣的极限。']]},
+  {id:'G2',cls:'g2',name:'无穷小辩证',era:'1665 — 1872',mechs:['否定—扬弃（dx 既≠0 又=0：矛盾公然当燃料）','形式操作先行','转化（危机→定义）'],acct:'转化 ＝ 当燃料烧',p:{a:.60,d:.0024,c:1.0,th:68},
+   crises:[['贝克莱攻击（1734）','"消逝量的幽灵"＝矛盾律对无穷小的正式抗议；系统选择带病狂奔——因为产出太高。'],['发散级数/傅里叶乱象（1800s）','形式操作失控；动作：柯西—魏尔斯特拉斯严格化——把矛盾扬弃进 ε-δ 定义。']]},
+  {id:'G3',cls:'g3',name:'基础分层',era:'1872 — 1963',mechs:['分层（类型论/ZFC 层级）','抽象（公理化集合论）','再闭合冲刺（希尔伯特纲领）'],acct:'推迟 ＝ 塞进上层',p:{a:.72,d:.0028,c:.8,th:76},
+   crises:[['罗素悖论（1901）','再进入：集合运算自身；动作：类型论＋ZFC——悖论位移进 proper class 禁区。'],['哥德尔（1931）＋独立性（1963）','真而不可证＋CH 不可判定＝盲区实测；分层塔封顶失败，被迫改道。']]},
+  {id:'G4',cls:'g4',name:'计算—概率生态',era:'1963 — 今',mechs:['外包（机器证明/形式化验证）','围堵（经典/构造/可计算各管一片）','拟合（概率方法·启发式发现）'],acct:'围堵 ＋ 外包',p:{a:.85,d:.0034,c:.7,th:85},
+   crises:[['四色定理（1976）','证明之"真"首次外包给机器——同行评议的元层级手术。'],['望月 ABC 事件（2012–2020）','人类验证变异度不足实测；动作：Lean/Coq 形式化运动加速——评议升级为机器可检查。']]}],
+ events:[
+  {y:-530,l:'万物皆数',n:'A1 立法：离散帝国主义。',s:6},
+  {y:-500,l:'√2 危机',n:'可公度公理被自家勾股定理刺穿——内生反例。',s:18,tp:'crisis'},
+  {y:-370,l:'欧多克索斯比例论',n:'早熟的围堵：不可公度量被安全隔离。',s:-12,tp:'mech'},
+  {y:-300,l:'欧几里得《原本》',n:'整合：公理化闭合的第一座圣殿。',s:-8,tp:'mech'},
+  {y:1665,l:'微积分诞生',n:'相变 G1→G2：无穷小引擎点火——p∧¬p 公然当燃料。',tp:'trans'},
+  {y:1734,l:'贝克莱《分析学家》',n:'矛盾律的抗议书：消逝量的幽灵。',s:16,tp:'crisis'},
+  {y:1821,l:'柯西《分析教程》',n:'扬弃启动：极限概念收编无穷小。',s:-8,tp:'mech'},
+  {y:1829,l:'非欧几何',n:'A3 折断：直观不再是公理来源。',s:14,tp:'crisis'},
+  {y:1872,l:'严格化完成＋实无穷入场',n:'相变 G2→G3：戴德金/康托——连续统被算术化，无穷成对象。',tp:'trans'},
+  {y:1901,l:'罗素悖论',n:'再进入：集合论运算自身。',s:18,re:1,tp:'crisis'},
+  {y:1928,l:'希尔伯特纲领',n:'闭合冲刺：一致性＋完备性＋可判定，全要。',s:6},
+  {y:1931,l:'哥德尔不完备',n:'再进入判决：变异度铁律的三重显影之一。',s:16,re:1,tp:'crisis'},
+  {y:1936,l:'图灵机',n:'E 跃升：计算成为对象——为 G4 铸造地基。',e:16,s:4},
+  {y:1963,l:'科恩：CH 独立',n:'相变 G3→G4：盲区实测坐实，唯一宇宙之梦终结。',tp:'trans'},
+  {y:1976,l:'四色定理机器证明',n:'证明外包元年。',s:-6,tp:'mech'},
+  {y:1994,l:'怀尔斯证明 FLT',n:'人类单脑证明的巅峰——也是黄昏。',s:4},
+  {y:2012,l:'望月 ABC',n:'验证变异度危机：无人能查的证明。',s:14,tp:'crisis'},
+  {y:2017,l:'Lean 社区化',n:'形式化工业启动：围堵＋外包制度化。',s:-6,tp:'mech'},
+  {y:2024,l:'AlphaProof',n:'发现概率化：新范式脉冲，待代谢。',s:12,tp:'crisis'}],
+ g_era:[.18,.55,.62,.80],
+ s5:{pos:'当前位置：<b>G4 加速段</b>。主导未代谢张力：① 人类可验证性 vs 证明规模（淤积最快——望月事件是先兆而非孤例）；② 发现的概率化 vs 确定性叙事（AI 给出"大概率为真"的猜想工厂）；③ 纯粹标准 vs 算力经济学（算力＝新补贴，也是新依赖）。',
+  cons:['不可能回到"人类单脑可验证"作为唯一标准——规模不许','形式化不可逆——机器可检查一旦成为底线，无法撤回','经典/构造/可计算多标准并存不可归一——生态锁定'],
+  forms:[['人机协同证明生态',40,'形式化为地基，人类做纲领与审计'],['核心/前沿二分',25,'可形式化核心 ＋ 概率化前沿（物理式数学）'],['AI 自主发现工业',20,'机器产猜想与证明，人类做验收'],['构造主义复兴',10,'程序即证明——Curry-Howard 从边缘转正'],['基础再统一（HoTT）',5,'同伦类型论成为新 ZFC：尾部']],
+  exits:[['算力冻结','先行指标：大型形式化项目经费与算力供给中断'],['信任脆断','先行指标：被广泛引用的 AI 证明被证伪、撤稿连锁']],
+  fal:'可证伪条件：若 2035 年主流期刊仍以纯人类验证为唯一标准且运转良好，则"验证危机"被本推演高估。',
+  tg:[{l:'算力成本骤降',d:[5,0,8,0,-3],dd:'协同与自主发现形态加速'},{l:'重大 AI 证明丑闻',d:[-5,5,-10,5,0],dd:'信任回摆：概率质量流向保守形态'}]}},
+
+{id:'fin',name:'金融市场',t0:1870,t1:2030,t0label:'（1870 · 古典金本位成熟）',
+ axis:[[1870,2030,1]],
+ inputs:[['贸易结算','ok'],['储蓄—投资匹配','ok'],['恐慌与挤兑','edge'],['战争财政','edge'],['创新资产','edge'],['系统自身的模型','fatal'],['相关性→1 的系统态','fatal']],
+ axioms:[
+  {n:'A1 价格包含信息',c:'价格是分散信息的充分统计量（有效市场之雏形）。',h:'隐藏前提：观察价格的人不改变价格。',rej:['反身性','内生泡沫','系统自身的模型']},
+  {n:'A2 货币有外生锚',c:'币值系于外生物（黄金→美元→央行信用）。',h:'隐藏前提：锚的供给与经济弹性需求无关。',rej:['恐慌与挤兑','危机流动性饥渴','弹性增长需求']},
+  {n:'A3 风险可分散可定价',c:'大数定律＋正态：组合可驯服个体风险。',h:'隐藏前提：相关性稳定、尾部够薄。',rej:['肥尾','相关性→1 的系统态']},
+  {n:'A4 参与者外生',c:'人人都是价格接受者，模型在市场之外。',h:'隐藏前提：没有玩家大到成为自己模型的反例。',rej:['系统自身的模型','巨型对冲流','政策反身性']}],
+ matrix:[['ok','ok','edge','edge','edge','rej','rej'],['ok','ok','rej','rej','edge','edge','rej'],['ok','ok','edge','ok','edge','edge','rej'],['ok','ok','edge','edge','ok','rej','rej']],
+ init:{C:88,Vs:22,Ve:30,E:20,O:12,L:1,T:6,B:0},
+ faults:[
+  {n:'F1 流动性与波动性内生矛盾',d:'稳定制造不稳定（Minsky）：低波动诱导杠杆，杠杆以流动性蒸发一次性清偿。头号科目。',loud:44,silt:90},
+  {n:'F2 锚的刚性 vs 弹性需求',d:'金本位十字架→特里芬难题：制度化二律背反。G1–G2 主科目，1971 结账。',loud:96,silt:50},
+  {n:'F3 微观理性 vs 合成谬误',d:'个体避险＝集体踩踏：1987 组合保险、2008 去杠杆螺旋。',loud:82,silt:62},
+  {n:'F4 风险转移 vs 风险消灭',d:'衍生分层只位移不消除——每层新盲点（模型假设）。G3 主科目。',loud:70,silt:68},
+  {n:'F5 模型与市场的反身性',d:'系统与自身：定价模型进入被定价对象——87/98/08 三次再进入，0DTE-gamma 是当前前沿。',loud:52,silt:88},
+  {n:'F6 央行救助 vs 道德风险',d:'put 期权化：每次救助把尾部上移一层——主权层之上无层。当前淤积最快。',loud:74,silt:94}],
+ gens:[
+  {id:'G1',cls:'g1',name:'金本位刚性锚',era:'1870 — 1933',mechs:['拒斥（清算主义：让破产出清）','真实票据论','私人救助补丁（1907→Fed 1913）'],acct:'拒收 ＝ 记在未来',p:{a:.15,d:.002,c:.4,th:58},
+   crises:[['1907 恐慌','私人层救助（摩根客厅）；补丁：1913 年立 Fed——但锚的公理未动。'],['1929–33','拒斥到底（清算一切）→ 银行体系三分之一死亡、金本位崩——三系统中唯一的准脆断实录。']]},
+  {id:'G2',cls:'g2',name:'凯恩斯—布雷顿辩证',era:'1933 — 1971',mechs:['否定—扬弃（市场↔国家→管理型资本主义）','行政围堵（资本管制）','双层设计'],acct:'转化 ＋ 硬围堵',p:{a:.50,d:.0024,c:.7,th:66},
+   crises:[['特里芬难题（1960）','制度化二律背反：美元须流出供流动性 ∧ 须稀缺保兑换——同一公理推出互斥指令。'],['黄金池崩溃（1968）','动作：黄金双层价——字面的分层；三年后公理级手术。']]},
+  {id:'G3',cls:'g3',name:'法币浮动＋衍生分层塔',era:'1971 — 2008',mechs:['分层（衍生塔 L1→L5：期权→组合保险→CDS→CDO→CDO²）','抽象（BS 元语言）','转化（风险证券化）'],acct:'推迟 ＝ 塞进上层',p:{a:.70,d:.0028,c:.9,th:74},
+   crises:[['1987 黑色星期一','再进入实盘首演：组合保险模型集体执行→自我实现崩盘。'],['LTCM（1998）→ 2008','套利者大到成为自己模型的反例；2008：AAA＝"真而不可证"，相关性→1 击穿全部层间假设——塔内修补失效，被迫跃迁。']]},
+  {id:'G4',cls:'g4',name:'宏观审慎生态',era:'2008 — 今',mechs:['围堵（CCP 中央清算/SIFI 圈护）','冗余（Basel 缓冲）','概率化（ES 替代 VaR：承认肥尾）','沙盘制度化（压力测试）','波动率国家做市（央行 put）'],acct:'围堵 ＋ 主权补贴',p:{a:.82,d:.0034,c:.6,th:82},
+   crises:[['2020.3 美债失灵','围堵升级到主权层：无限 QE——最后做市商登基。'],['2023 SVB/瑞信','定向围堵成功样本：局部死亡，未传染——但每次成功都把 F6 的账做大一笔。']]}],
+ events:[
+  {y:1873,l:'长萧条开局',n:'通缩性出清：刚性锚的日常代价。',s:8},
+  {y:1907,l:'尼克博克恐慌',n:'挤兑＝弹性需求撞刚性锚；私人救助＋催生 Fed。',s:16,tp:'crisis'},
+  {y:1913,l:'Fed 成立',n:'第一块机制补丁：最后贷款人入编。',s:-8,tp:'mech'},
+  {y:1929,l:'大崩盘',n:'清算主义总测试开始。',s:24,tp:'crisis'},
+  {y:1933,l:'近脆断＋罗斯福',n:'相变 G1→G2：距脆断线一步——存款保险/管制/弃金，公理带血改写。',tp:'trans',nd:1},
+  {y:1944,l:'布雷顿森林',n:'合题制度化：可调整钉住＋资本管制。',s:-10,tp:'mech'},
+  {y:1960,l:'特里芬难题',n:'二律背反被命名：淤积进入明账。',s:12},
+  {y:1968,l:'黄金双层价',n:'字面分层：官价/市价两个真值。',s:10,tp:'crisis'},
+  {y:1971,l:'尼克松关金窗',n:'相变 G2→G3：A2 公理手术——锚从外生物改为主权信用。',tp:'trans'},
+  {y:1973,l:'Black-Scholes',n:'元语言诞生：关于价格的价格。E 跃升，塔开始起建。',e:18,s:4,tp:'mech'},
+  {y:1987,l:'黑色星期一',n:'再进入 #1：对冲模型交易自己。',s:18,re:1,tp:'crisis'},
+  {y:1998,l:'LTCM',n:'再进入 #2：套利者成为自己模型的反例。',s:14,re:1,tp:'crisis'},
+  {y:2000,l:'网络泡沫',n:'A1 的内生泡沫条款兑现。',s:10},
+  {y:2008,l:'全球金融危机',n:'再进入 #3＋相变 G3→G4：分层塔总决算，近脆断。',tp:'trans',re:1,nd:1},
+  {y:2010,l:'闪电崩盘',n:'算法层自指预演：微观结构的 1987。',s:8,tp:'crisis'},
+  {y:2020,l:'疫情流动性危机',n:'美债都失灵→无限 QE：围堵登顶主权层。',s:16,tp:'crisis'},
+  {y:2023,l:'SVB/瑞信',n:'局部围堵成功——F6 账面再加一笔。',s:8,tp:'crisis'},
+  {y:2025,l:'0DTE/gamma 生态',n:'当前前沿：日内期权流反身定价——新自指层孕育中。',s:10,tp:'crisis'}],
+ g_era:[.55,.60,.85,1.0],
+ s5:{pos:'当前位置：<b>G4 中段</b>。主导未代谢张力：① F6 央行 put→尾部主权化（淤积最快：每次救助抬高脆断线，但主权信用是塔顶——之上无层）；② F5′ 算法—AI 同质化（同模型＝相关性→1 的制造机：下一次再进入在孕育）；③ 被动化淤积——价格发现的变异度萎缩，A1 被慢性掏空。',
+  cons:['不可能退回外生锚——变异度不许（金本位复辟属倒退出口，非演化）','央行收不回 put——时间不一致性锁死（承诺不救不可信）','分层额度用尽：主权之上无层——只能横向生态化（围堵/多极/冗余）'],
+  forms:[['多极货币—监管生态',30,'区域化围堵、CBDC 并存、清算多中心'],['波动率国家化深化',30,'央行资产负债表＝永久做市商，市场半行政化'],['算法宏观审慎',20,'AI 做市引发新再进入后，对模型层立法'],['平行系统夺权',12,'链上清算/私链货币重要化：影子的影子'],['主权层脆断',8,'储备货币信用事件——尾部，非零']],
+  exits:[['日本化冻结','先行指标：实际利率长期为负＋波动率死亡＋僵尸企业占比抬升'],['主权脆断','先行指标：长端主权债与黄金相关性转负、央行独立性立法被侵蚀']],
+  fal:'可证伪条件：若下一次 ≥2008 量级的全球危机中，央行不扩表而系统存活，则"put 不可收回"即被证伪。',
+  tg:[{l:'AI 交易占比过半',d:[0,-3,12,-2,-2],dd:'新再进入提前，算法审慎形态吸走质量'},{l:'财政主导常态化',d:[-4,6,-3,-2,7],dd:'赤字货币化：国家化加深，主权尾部变厚'}]}}
+];
+
+/* ================= 全局状态 ================= */
+let SI=0, SORTMODE='silt', GEN=0, MODE='hist';
+let series=null, playIdx=0, playing=false, speedV=2;
+let visibleLines={T:true,gap:true,L:true,E:false,C:false};
+let ghosts=[], sandSeries=null, sandPlay=0, sandPlaying=false;
+const N=720;
+
+/* ================= 模拟引擎 ================= */
+function xFrac(sys,y){let acc=0;for(const[a,b,w]of sys.axis){if(y<=b)return acc+w*Math.max(0,(y-a))/(b-a);acc+=w;}return 1;}
+function sampleYears(sys){const ys=[];for(let i=0;i<N;i++){const f=i/(N-1);let acc=0;
+  for(const[a,b,w]of sys.axis){if(f<=acc+w+1e-9){ys.push(a+(b-a)*Math.min(1,(f-acc)/w));break;}acc+=w;}}
+  ys[N-1]=sys.t1;return ys;}
+function buildHistory(sys){
+  const ys=sampleYears(sys);
+  const st={...sys.init};let gen=0,dead=false,transReady=false;
+  const S={years:ys,T:[],Vs:[],Ve:[],E:[],C:[],O:[],L:[],gen:[],B:[],events:[],trans:[],nd:[],re:[]};
+  const evs=sys.events.map(e=>({...e,idx:null}));
+  for(let i=0;i<N;i++){
+    const y=ys[i],dy=i?ys[i]-ys[i-1]:0;
+    const g=sys.g_era[gen]/100,p=sys.gens[gen].p;
+    if(dy>0&&!dead){
+      st.Ve=Math.min(140,st.Ve*Math.pow(1+g,dy));
+      let phi=0.0015*Math.max(0,st.Ve-st.Vs)*dy;
+      for(const e of evs){if(e.idx===null&&y>=e.y){e.idx=i;
+        if(e.s>0)phi+=e.s; if(e.s<0)st.T=Math.max(4,st.T+e.s);
+        if(e.e)st.E=Math.min(100,st.E+e.e);
+        if(e.re)S.re.push(i);
+        if(e.nd)S.nd.push(i);
+        if(e.tp==='trans'){transReady=true;st.T=Math.max(st.T,p.th*1.02);}
+        S.events.push({i,e});}}
+      st.T=Math.max(2,st.T+phi*(1-p.a)-p.d*st.T*dy);
+      st.Vs=Math.min(100,st.Vs+0.012*dy+p.c*p.a*phi);
+      st.E=Math.min(100,st.E+0.0005*st.Vs*dy);
+      st.B=Math.min(100,(st.B||0)+(gen===2?2.2:0.3)*phi);
+      if(transReady&&st.T>=p.th&&gen<3){gen++;S.trans.push(i);st.T*=0.35;transReady=false;
+        st.O=Math.min(100,st.O+18);st.C=Math.max(15,st.C-16);
+        if(gen===2)st.L=3; if(gen===3)st.L=5; if(gen===1)st.L=2;}
+      st.C=Math.max(14,st.C-0.004*dy);st.O=Math.min(96,st.O+0.006*dy*(gen+1));
+    }
+    S.T.push(st.T);S.Vs.push(st.Vs);S.Ve.push(Math.min(140,st.Ve));S.E.push(st.E);
+    S.C.push(st.C);S.O.push(st.O);S.L.push(st.L);S.gen.push(gen);S.B.push(st.B||0);
+  }
+  S.sys=sys;return S;
+}
+const SBGENS=[{a:.18,th:55,c:.5,d:.006},{a:.5,th:65,c:.85,d:.008},{a:.7,th:75,c:.75,d:.010},{a:.85,th:86,c:.6,d:.014}];
+function buildSandbox(P){
+  const ys=[];for(let i=0;i<N;i++)ys.push(i*300/(N-1));
+  let st={C:90,Vs:20,Ve:38,E:16,O:10,L:1,T:5,B:0},gen=0,dead=false,deadIdx=-1,reFired=false,regDone=false,pendSince=-1,regAt=-1;
+  const S={years:ys,T:[],Vs:[],Ve:[],E:[],C:[],O:[],L:[],gen:[],B:[],trans:[],re:[],log:[],dead:false,regressed:false};
+  for(let i=0;i<N;i++){
+    const dy=i?ys[i]-ys[i-1]:0,p=SBGENS[gen];
+    if(dy>0&&!dead){
+      st.Ve=Math.min(160,st.Ve*Math.pow(1+P.g/100,dy));
+      let phi=0.11*Math.max(0,st.Ve-st.Vs)*dy;
+      if(!reFired&&st.E>=70){reFired=true;phi+=26;S.re.push(i);S.log.push([ys[i],'再进入：E≥70，系统开始运算自身（脉冲 +26）','re']);}
+      phi=Math.max(0,phi-P.S*dy);
+      st.T=Math.max(2,st.T+phi*(1-p.a)*P.R-p.d*st.T*dy);
+      st.Vs=Math.min(100,st.Vs+0.06*dy+p.c*p.a*phi);
+      st.E=Math.min(100,st.E+0.010*st.Vs*dy);
+      if(st.T>=p.th*1.35){dead=true;deadIdx=i;S.dead=true;S.log.push([ys[i],'脆断 ✗：T='+st.T.toFixed(0)+' ≥ 1.35θ，卡死于 G'+(gen+1),'dead']);}
+      else if(st.T>=p.th&&gen<3){
+        if(pendSince<0)pendSince=ys[i];
+        if(ys[i]-pendSince>=P.D){gen++;S.trans.push(i);pendSince=-1;st.T*=0.35;st.O=Math.min(100,st.O+18);st.C=Math.max(15,st.C-15);st.L=[1,2,3,5][gen];
+          S.log.push([ys[i],'相变 → G'+(gen+1)+'（张力越阈，延迟 '+P.D+' 年后执行）','tr']);
+          if(P.reg&&!regDone){regDone=true;regAt=ys[i]+18;}}
+      } else pendSince=pendSince>=0&&st.T<p.th?-1:pendSince;
+      if(regAt>0&&ys[i]>=regAt){regAt=-1;gen=Math.max(0,gen-1);S.regressed=true;S.trans.push(i);st.C=Math.min(92,st.C+14);st.O=Math.max(6,st.O-14);
+        S.log.push([ys[i],'反动回缩 ↩：退回 G'+(gen+1)+'，重闭合——张力将以更快速率再淤积','reg']);st.T*=0.8;}
+    }
+    S.T.push(st.T);S.Vs.push(st.Vs);S.Ve.push(Math.min(150,st.Ve));S.E.push(st.E);S.C.push(st.C);S.O.push(st.O);S.L.push(st.L);S.gen.push(gen);S.B.push(0);
+  }
+  const endGen=S.gen[N-1];
+  if(S.dead)S.outcome=['out-dead','✗ 出口：脆断死亡 —— 卡死于 G'+(endGen+1)+'。刚性/延迟/压力的组合超过了升级窗口。'];
+  else if(endGen<3&&P.S>0&&S.T.slice(-Math.floor(N*.3)).every(t=>t<SBGENS[endGen].th*0.92))S.outcome=['out-frozen','❄ 出口：冻结 —— 补贴压住张力，系统停在 G'+(endGen+1)+'（选择压力被外部输血抵消）。'];
+  else if(endGen<3)S.outcome=['out-frozen','◌ 停滞于 G'+(endGen+1)+' —— 环境压力不足以驱动完整序列（低压演化）。'];
+  else S.outcome=['out-ok','✓ 完整序列 G1→G4'+(S.regressed?'（途中经历一次回缩）':'')+' —— 拓扑锁定，节奏由参数决定。'];
+  return S;
+}
+
+/* ================= 图表 ================= */
+const PLOT={x0:52,x1:876,y0:22,y1:342};
+function px(sys,y){return PLOT.x0+(PLOT.x1-PLOT.x0)*xFrac(sys,y);}
+function pxLin(t){return PLOT.x0+(PLOT.x1-PLOT.x0)*t/300;}
+function py(v){return PLOT.y1-(PLOT.y1-PLOT.y0)*Math.min(118,v)/118;}
+function drawChart(svg,S,upTo,lin){
+  svg.innerHTML='';
+  const X=lin?(t=>pxLin(t)):(y=>px(S.sys,y));
+  // bands
+  let bStart=0;
+  for(let i=1;i<=N;i++){if(i===N||S.gen[i]!==S.gen[i-1]){
+    const g=S.gen[bStart];
+    E('rect',{x:X(S.years[bStart]),y:PLOT.y0,width:Math.max(1,X(S.years[Math.min(i,N-1)])-X(S.years[bStart])),height:PLOT.y1-PLOT.y0,fill:GBAND['g'+(g+1)]},svg);
+    E('text',{x:X(S.years[bStart])+8,y:PLOT.y0+16,fill:CL.dim,'font-size':11,'font-weight':'700',text:'G'+(g+1)+(lin?'':' '+(S.sys.gens[g].name))},svg);
+    // thresholds
+    const th=(lin?SBGENS:S.sys.gens.map(x=>x.p))[g].th;
+    E('line',{x1:X(S.years[bStart]),x2:X(S.years[Math.min(i,N-1)]),y1:py(th),y2:py(th),stroke:'rgba(240,229,205,.35)','stroke-dasharray':'5 5','stroke-width':1},svg);
+    E('line',{x1:X(S.years[bStart]),x2:X(S.years[Math.min(i,N-1)]),y1:py(th*1.35),y2:py(th*1.35),stroke:'rgba(210,105,63,.5)','stroke-dasharray':'2 5','stroke-width':1},svg);
+    bStart=i;}}
+  E('text',{x:PLOT.x1-2,y:py((lin?SBGENS:S.sys.gens.map(x=>x.p))[S.gen[N-1]].th*1.35)-4,fill:'rgba(210,105,63,.7)','font-size':10,'text-anchor':'end',text:'脆断线 1.35θ'},svg);
+  // axes
+  E('line',{x1:PLOT.x0,y1:PLOT.y1,x2:PLOT.x1,y2:PLOT.y1,stroke:'rgba(240,229,205,.4)'},svg);
+  E('line',{x1:PLOT.x0,y1:PLOT.y0,x2:PLOT.x0,y2:PLOT.y1,stroke:'rgba(240,229,205,.4)'},svg);
+  [0,25,50,75,100].forEach(v=>{E('line',{x1:PLOT.x0-4,x2:PLOT.x0,y1:py(v),y2:py(v),stroke:'rgba(240,229,205,.4)'},svg);
+    E('text',{x:PLOT.x0-8,y:py(v)+4,fill:CL.dim,'font-size':10,'text-anchor':'end',text:v},svg);});
+  const ticks=lin?[0,50,100,150,200,250,300]:S.sys.events.filter(e=>e.tp==='trans').map(e=>e.y).concat([S.sys.t0,S.sys.t1]);
+  ticks.forEach(t=>{E('line',{x1:X(t),x2:X(t),y1:PLOT.y1,y2:PLOT.y1+5,stroke:'rgba(240,229,205,.4)'},svg);
+    E('text',{x:X(t),y:PLOT.y1+18,fill:CL.dim,'font-size':10,'text-anchor':'middle',text:lin?t:(t<0?'前'+(-t):t)},svg);});
+  E('text',{x:PLOT.x1,y:PLOT.y1+34,fill:CL.dim,'font-size':10.5,'text-anchor':'end',text:lin?'系统年（抽象时间）':'年份（时间轴分段压缩）'},svg);
+  // ghosts (sandbox)
+  if(lin&&ghosts.length){ghosts.forEach(gh=>{
+    E('polyline',{points:gh.pts,fill:'none',stroke:'rgba(240,229,205,.22)','stroke-width':1.3},svg);
+    E('text',{x:gh.tx,y:gh.ty,fill:'rgba(240,229,205,.4)','font-size':10,text:gh.tag},svg);});}
+  // ghost exits at transitions (history)
+  S.trans.forEach((ti,k)=>{const x=X(S.years[ti]);
+    E('path',{d:'M'+x+','+py(S.T[ti]/0.35*0.35)+' l14,-26',stroke:'rgba(210,105,63,.4)','stroke-width':1.4,'stroke-dasharray':'3 3',fill:'none'},svg);
+    E('text',{x:x+16,y:py(S.T[ti])-28,fill:'rgba(210,105,63,.55)','font-size':9.5,text:'✗'},svg);
+    E('path',{d:'M'+x+','+py(S.T[ti])+' l18,0',stroke:'rgba(127,160,188,.4)','stroke-width':1.4,'stroke-dasharray':'3 3',fill:'none'},svg);
+    if(k===0)E('text',{x:x+16,y:py(S.T[ti])+14,fill:'rgba(127,160,188,.55)','font-size':9.5,text:'未走的出口'},svg);});
+  // series
+  const mk=(arr,color,w,dash,step)=>{let pts='';for(let i=0;i<=upTo;i++){const x=X(S.years[i]).toFixed(1),y=py(arr[i]).toFixed(1);
+    if(step&&i&&arr[i]!==arr[i-1])pts+=' '+x+','+py(arr[i-1]).toFixed(1);pts+=' '+x+','+y;}
+    E('polyline',{points:pts.trim(),fill:'none',stroke:color,'stroke-width':w,'stroke-dasharray':dash||'none'},svg);};
+  if(visibleLines.C)mk(S.C,'rgba(42,127,122,.8)',1.2);
+  if(visibleLines.E)mk(S.E,CL.gold,1.4);
+  if(visibleLines.gap)mk(S.Ve.map((v,i)=>Math.max(0,v-S.Vs[i])),CL.slate,1.5,'6 4');
+  if(visibleLines.L)mk(S.L.map(l=>l*9),CL.bright,1.6,null,true);
+  if(visibleLines.T)mk(S.T,CL.terra,2.3);
+  // markers
+  S.trans.forEach(ti=>{if(ti<=upTo){E('path',{d:'M'+(X(S.years[ti])-6)+','+(py(S.T[ti])+12)+' l6,-11 l6,11 z',fill:CL.gold},svg);}});
+  S.re.forEach(ri=>{if(ri<=upTo)E('text',{x:X(S.years[ri]),y:py(S.T[ri])-10,fill:CL.terra,'font-size':13,'text-anchor':'middle','font-weight':'700',text:'◤'},svg);});
+  (S.nd||[]).forEach(ni=>{if(ni<=upTo)E('text',{x:X(S.years[ni])+4,y:py(S.T[ni])-16,fill:'#FF8A5C','font-size':13,'font-weight':'900',text:'✚ 近脆断'},svg);});
+  // playhead
+  const hx=X(S.years[upTo]);
+  E('line',{x1:hx,x2:hx,y1:PLOT.y0,y2:PLOT.y1,stroke:'rgba(240,229,205,.55)','stroke-width':1},svg);
+  E('text',{x:hx,y:PLOT.y0-6,fill:CL.paper,'font-size':11,'font-weight':'700','text-anchor':'middle',text:lin?Math.round(S.years[upTo])+' 年':(S.years[upTo]<0?'前'+Math.round(-S.years[upTo]):Math.round(S.years[upTo]))},svg);
+}
+function drawPhase(svg,S,upTo){
+  svg.innerHTML='';
+  E('rect',{x:34,y:8,width:212,height:180,fill:'rgba(240,229,205,.03)',stroke:'rgba(240,229,205,.2)',rx:8},svg);
+  E('text',{x:140,y:206,fill:CL.dim,'font-size':10,'text-anchor':'middle',text:'开放度 O →'},svg);
+  E('text',{x:14,y:100,fill:CL.dim,'font-size':10,transform:'rotate(-90 14 100)','text-anchor':'middle',text:'变异度 Vs →'},svg);
+  E('text',{x:44,y:182,fill:CL.dim,'font-size':9,text:'封闭·低变'},svg);
+  E('text',{x:186,y:22,fill:CL.dim,'font-size':9,text:'开放·高变'},svg);
+  const gx=o=>34+212*o/100, gy=v=>188-180*v/100;
+  let last=null;
+  for(let i=0;i<=upTo;i+=4){const g=S.gen[i];const x=gx(S.O[i]),y=gy(S.Vs[i]);
+    if(last)E('line',{x1:last[0],y1:last[1],x2:x,y2:y,stroke:CL['g'+(g+1)],'stroke-width':2,'stroke-linecap':'round'},svg);
+    last=[x,y];}
+  if(last){E('circle',{cx:last[0],cy:last[1],r:4,fill:CL.paper},svg);}
+}
+
+/* ================= 渲染：五工位 ================= */
+function sys(){return SYSTEMS[SI];}
+function renderSysTabs(){const t=$('#systabs');t.innerHTML='';SYSTEMS.forEach((s,i)=>{
+  const b=H('button','systab'+(i===SI?' act':''),s.name,t);b.onclick=()=>{SI=i;GEN=0;renderAll();};});}
+function r1(){const s=sys();
+  $('#sysbanner').innerHTML='当前系统：<b>'+s.name+'</b> · 时间轴 '+(s.t0<0?'前'+(-s.t0):s.t0)+' — '+s.t1+' · 五个工位已按此系统重配';
+  $('#t0y').textContent=s.t0label;
+  const ax=$('#axioms');ax.innerHTML='';
+  s.axioms.forEach(a=>{const c=H('div','axcard','<div class="axn"><b>'+a.n.split(' ')[0]+'</b>'+a.n.split(' ').slice(1).join(' ')+'</div><div class="axc">'+a.c+'</div>'+
+   '<div class="axd"><div style="margin-bottom:4px">🕳 '+a.h+'</div><div>签发的敌人（消化不了）：'+a.rej.map(r=>'<span class="tagrej">'+r+'</span>').join('')+'</div></div>',ax);
+   c.onclick=()=>c.classList.toggle('open');});
+  const bd=$('#boundary');bd.innerHTML='';
+  H('div',null,'<div style="font-size:13px;margin-bottom:6px">环境输入流（<span style="color:var(--teal-deep)">●可消化</span> / <span style="color:#7d621f">●边缘</span> / <span style="color:#8d4020">●致命·潜伏</span>）：</div>',bd);
+  const er=H('div','envrow',null,bd);
+  s.inputs.forEach(([n,c])=>H('span','envc env-'+c,n,er));
+  H('div',null,'<div style="font-size:12.5px;color:var(--ink2);margin-top:10px">边界判定：看拒收记录——被门口弹回去的输入（上表 ✗ 列），比章程更诚实。致命类输入在系统年轻时不叩门，它们等表达力长成。</div>',bd);
+  const sv=$('#statevec');sv.innerHTML='';
+  Object.entries(s.init).forEach(([k,v])=>H('div','sv','<div class="svv">'+v+'</div><div class="svk">'+k+'</div>',sv));
+}
+function r2(){const s=sys();
+  const m=$('#matrix');m.innerHTML='';
+  let head='<tr><th style="text-align:left">公理 ＼ 输入</th>'+s.inputs.map(i=>'<th>'+i[0]+'</th>').join('')+'</tr>';
+  const sym={ok:'<span class="c-ok">✓</span>',edge:'<span class="c-edge">⚠</span>',rej:'<span class="c-rej">✗</span>'};
+  s.axioms.forEach((a,r)=>{head+='<tr><td class="rowh">'+a.n+'</td>'+s.matrix[r].map(c=>'<td>'+sym[c]+'</td>').join('')+'</tr>';});
+  m.innerHTML=head;
+  const f=$('#faults');f.innerHTML='';
+  const list=[...s.faults].sort((a,b)=>SORTMODE==='silt'?b.silt-a.silt:b.loud-a.loud);
+  list.forEach((x,i)=>{H('div','fault','<div class="fn"><span class="rank">#'+(i+1)+'</span>'+x.n+'</div><div class="fd">'+x.d+'</div>'+
+   '<div class="fbars"><span>响度</span><div class="fbar fb-loud"><i style="width:'+x.loud+'%"></i></div><span>'+x.loud+'</span></div>'+
+   '<div class="fbars"><span>淤积速率</span><div class="fbar fb-silt"><i style="width:'+x.silt+'%"></i></div><span>'+x.silt+'</span></div>',f);});
+  $('#sortLoud').className='sortbtn'+(SORTMODE==='loud'?' act':'');
+  $('#sortSilt').className='sortbtn'+(SORTMODE==='silt'?' act':'');
+}
+function r3(){const s=sys();
+  const gc=$('#genchips');gc.innerHTML='';
+  s.gens.forEach((g,i)=>{const b=H('button','genchip '+g.cls+(i===GEN?' act':''),g.id+' '+g.name+'｜'+g.era,gc);
+   b.onclick=()=>{GEN=i;r3();};});
+  const g=s.gens[GEN],card=$('#gencard');
+  card.innerHTML='<div class="klabel">'+g.id+' · '+g.name+'（'+g.era+'）</div>'+
+   '<div style="margin-bottom:4px">'+g.mechs.map(m=>'<span class="mechbadge">'+m+'</span>').join('')+'</div>'+
+   '<div style="margin:6px 0 2px;font-size:13px">会计科目：<span class="acct">'+g.acct+'</span></div>'+
+   '<table class="ptable"><tr><th>吸收率 a</th><th>耗散 δ</th><th>转化 c</th><th>相变阈 θ</th><th>脆断线</th></tr>'+
+   '<tr><td>'+g.p.a+'</td><td>'+g.p.d+'</td><td>'+g.p.c+'</td><td>'+g.p.th+'</td><td>'+(g.p.th*1.35).toFixed(0)+'</td></tr></table>'+
+   '<div class="formula">dT = φ·(1−'+g.p.a+') − '+g.p.d+'·T　｜　dVs = β + '+g.p.c+'·'+g.p.a+'·φ</div>'+
+   '<div class="klabel" style="margin-top:12px">危机记录 · 上次遇到矛盾时它做了什么</div>'+
+   g.crises.map(c=>'<div class="crisis"><b>'+c[0]+'</b> —— '+c[1]+'</div>').join('');
+  drawMechCurves();
+}
+function drawMechCurves(){const svg=$('#mechcurves');svg.innerHTML='';
+  const X=v=>50+v*3.5,Y=v=>220-v*1.8;
+  E('line',{x1:50,y1:220,x2:420,y2:220,stroke:'rgba(52,40,22,.4)'},svg);
+  E('line',{x1:50,y1:220,x2:50,y2:20,stroke:'rgba(52,40,22,.4)'},svg);
+  E('text',{x:420,y:238,'font-size':11,fill:'#5A4E38','text-anchor':'end',text:'输入通量 φ →'},svg);
+  E('text',{x:20,y:20,'font-size':11,fill:'#5A4E38',text:'dT'},svg);
+  const cur=[['拒斥 a=.15',.15,'#C05B33',null],['辩证 a=.55',.55,'#B08A2E',null],['分层 a=.72',.72,'#5D7B93','B↑'],['围堵 a=.85',.85,'#1F6E6B',null]];
+  cur.forEach(([n,a,col,tag],k)=>{let pts='';for(let v=0;v<=100;v+=5)pts+=X(v)+','+Y(v*(1-a))+' ';
+    E('polyline',{points:pts.trim(),fill:'none',stroke:col,'stroke-width':2.2},svg);
+    E('text',{x:X(100)+2,y:Y(100*(1-a))+4,'font-size':11,fill:col,'font-weight':'700',text:n},svg);
+    if(tag){let p2='';for(let v=0;v<=100;v+=5)p2+=X(v)+','+Y(v*.32)+' ';
+     E('polyline',{points:p2.trim(),fill:'none',stroke:col,'stroke-width':1.2,'stroke-dasharray':'4 4'},svg);
+     E('text',{x:X(58),y:Y(58*.32)-6,'font-size':10,fill:col,text:'盲点债务 B'},svg);}});
+}
+function r4(){series=buildHistory(sys());playIdx=0;playing=false;$('#playBtn').textContent='▶ 运行';
+  $('#scrub').value=0;renderLegend();renderEvList();frame();}
+function renderLegend(){const lg=$('#legend1');lg.innerHTML='';
+  const items=[['T','张力 T',CL.terra],['gap','变异度赤字 Ve−Vs',CL.slate],['L','层级 L×9',CL.bright],['E','表达力 E',CL.gold],['C','闭合度 C','#2A7F7A']];
+  items.forEach(([k,n,c])=>{const l=H('label',null,'<i style="background:'+c+'"></i>'+n,lg);
+   const cb=document.createElement('input');cb.type='checkbox';cb.checked=visibleLines[k];l.prepend(cb);
+   cb.onchange=()=>{visibleLines[k]=cb.checked;frame();};});}
+function renderEvList(){const el=$('#evlist');el.innerHTML='';
+  series.events.forEach(({i,e})=>{const d=H('div','ev'+(e.tp==='trans'?' tr':''),'<span class="ey">'+(e.y<0?'前'+(-e.y):e.y)+'</span>'+e.l+'<br><span style="font-size:10.5px">'+e.n+'</span>',el);
+   d.onclick=()=>{playIdx=i;playing=false;$('#playBtn').textContent='▶ 运行';frame();};d.dataset.i=i;});}
+function frame(){drawChart($('#chart1'),series,playIdx,false);drawPhase($('#phase1'),series,playIdx);
+  $('#scrub').value=playIdx;
+  const i=playIdx,S=series,g=S.gen[i],p=sys().gens[g].p;
+  const ro=$('#readout');ro.innerHTML='';
+  const y=S.years[i];
+  [['年份',y<0?'前'+Math.round(-y):Math.round(y)],['代际','G'+(g+1)],['张力 T',S.T[i].toFixed(0)],['赤字 Ve−Vs',Math.max(0,S.Ve[i]-S.Vs[i]).toFixed(0)],
+   ['变异度 Vs',S.Vs[i].toFixed(0)],['表达力 E',S.E[i].toFixed(0)],['层级 L',S.L[i]],['盲点债 B',S.B[i].toFixed(0)]]
+   .forEach(([k,v])=>H('div','rv',k+'<b>'+v+'</b>',ro));
+  $('#thv').textContent=' = '+p.th+'（G'+(g+1)+'）';
+  $('#tbar').style.width=Math.min(100,S.T[i]/p.th*100)+'%';
+  $('#tdeath').textContent=Math.max(0,p.th*1.35-S.T[i]).toFixed(0)+' 模型单位';
+  document.querySelectorAll('#evlist .ev').forEach(d=>d.classList.toggle('past',+d.dataset.i<=i));
+}
+let rafId=null;
+function tick(){if(!playing)return;playIdx=Math.min(N-1,playIdx+speedV);frame();
+  if(playIdx>=N-1){playing=false;$('#playBtn').textContent='↺ 已到 2030';return;}
+  rafId=requestAnimationFrame(tick);}
+function r5(){const s=sys(),d=s.s5;
+  $('#posbox').innerHTML=d.pos;
+  const cn=$('#constraints');cn.innerHTML='';d.cons.forEach(c=>H('li',null,c,cn));
+  const tg=$('#toggles');tg.innerHTML='';
+  const state=d.tg.map(()=>false);
+  function paintForms(){const base=d.forms.map(f=>f[1]);
+    d.tg.forEach((t,ti)=>{if(state[ti])t.d.forEach((dd,k)=>base[k]+=dd);});
+    const sum=base.reduce((a,b)=>a+Math.max(1,b),0);
+    const fm=$('#forms');fm.innerHTML='';
+    d.forms.forEach((f,k)=>{const p=Math.max(1,base[k])/sum*100;
+      H('div','formbar','<span><b>'+f[0]+'</b><br><span style="font-size:11.5px;color:var(--ink2)">'+f[2]+'</span></span>'+
+       '<div class="fmb"><i style="width:'+p+'%"></i></div><span style="font-weight:900;color:var(--teal-deep)">'+p.toFixed(0)+'%</span>',fm);});}
+  d.tg.forEach((t,ti)=>{const b=H('button','tgl',t.l+'（'+t.dd+'）',tg);
+    b.onclick=()=>{state[ti]=!state[ti];b.classList.toggle('on');paintForms();};});
+  paintForms();
+  const ex=$('#exits');ex.innerHTML='';
+  d.exits.forEach(e=>H('div','exit','<b>'+e[0]+'</b> · '+e[1],ex));
+  $('#falsify').innerHTML='<b>可证伪条件</b>：'+d.fal;
+}
+/* ================= 沙盘 ================= */
+function sandParams(){return{g:+$('#p_g').value/1,R:+$('#p_r').value/100,D:+$('#p_d').value,S:+$('#p_s').value/10,reg:+$('#p_reg').value};}
+function paintSlVals(){const p=sandParams();$('#v_g').textContent=(p.g/100).toFixed(2)+' %/年';$('#v_r').textContent=p.R.toFixed(2)+'×';
+  $('#v_d').textContent=p.D+' 年';$('#v_s').textContent=p.S.toFixed(1)+' /年';$('#v_reg').textContent=p.reg?'开':'关';}
+function runSand(){const p=sandParams();
+  sandSeries=buildSandbox({g:p.g/100,R:p.R,D:p.D,S:p.S,reg:p.reg});
+  sandPlay=0;sandPlaying=true;sandTick();
+  const el=$('#evlist2');el.innerHTML='';
+  sandSeries.log.forEach(([y,t,c])=>H('div','ev'+(c==='tr'?' tr':''),'<span class="ey">'+Math.round(y)+'年</span>'+t,el));
+  if(!sandSeries.log.length)H('div','ev','（无事件：低压平流层）',el);
+  const ob=$('#outbanner');ob.className='outbanner '+sandSeries.outcome[0];ob.textContent=sandSeries.outcome[1];}
+function sandTick(){if(!sandPlaying||!sandSeries)return;sandPlay=Math.min(N-1,sandPlay+8);
+  drawChart($('#chart2'),sandSeries,sandPlay,true);
+  if(sandPlay<N-1)requestAnimationFrame(sandTick);else sandPlaying=false;}
+function renderAll(){renderSysTabs();r1();r2();r3();r4();r5();}
+
+/* ================= 事件绑定 ================= */
+$('#sortLoud').onclick=()=>{SORTMODE='loud';r2();};
+$('#sortSilt').onclick=()=>{SORTMODE='silt';r2();};
+$('#playBtn').onclick=()=>{if(playIdx>=N-1)playIdx=0;playing=!playing;
+  $('#playBtn').textContent=playing?'⏸ 暂停':'▶ 运行';if(playing)tick();};
+$('#resetBtn').onclick=()=>{playing=false;playIdx=0;$('#playBtn').textContent='▶ 运行';frame();};
+$('#speed').onchange=e=>{speedV=+e.target.value;};
+$('#scrub').oninput=e=>{playing=false;$('#playBtn').textContent='▶ 运行';playIdx=+e.target.value;frame();};
+$('#mHist').onclick=()=>{MODE='hist';$('#mHist').classList.add('act');$('#mSand').classList.remove('act');
+  $('#histblock').style.display='';$('#sandblock').style.display='none';};
+$('#mSand').onclick=()=>{MODE='sand';$('#mSand').classList.add('act');$('#mHist').classList.remove('act');
+  $('#histblock').style.display='none';$('#sandblock').style.display='';
+  if(!sandSeries){paintSlVals();runSand();}};
+$('#runSand').onclick=runSand;
+$('#ghostBtn').onclick=()=>{if(!sandSeries)return;if(ghosts.length>=4)ghosts.shift();
+  let pts='';for(let i=0;i<N;i+=3)pts+=pxLin(sandSeries.years[i]).toFixed(1)+','+py(sandSeries.T[i]).toFixed(1)+' ';
+  const tag=(sandSeries.dead?'✗':sandSeries.outcome[0]==='out-frozen'?'❄':'✓')+' g='+(+$('#p_g').value/100).toFixed(2)+' R='+(+$('#p_r').value/100).toFixed(1)+' D='+$('#p_d').value+' S='+(+$('#p_s').value/10).toFixed(1);
+  ghosts.push({pts:pts.trim(),tag,tx:pxLin(sandSeries.years[N-1])-150,ty:py(sandSeries.T[N-1])-6});
+  $('#ghostn').textContent='叠影 ×'+ghosts.length+'（轨迹的分布）';drawChart($('#chart2'),sandSeries,sandPlay,true);};
+$('#clearGhost').onclick=()=>{ghosts=[];$('#ghostn').textContent='';if(sandSeries)drawChart($('#chart2'),sandSeries,sandPlay,true);};
+['p_g','p_r','p_d','p_s','p_reg'].forEach(id=>{$('#'+id).oninput=()=>paintSlVals();});
+
+window.APP={SYSTEMS,buildHistory,buildSandbox,go:i=>{SI=i;renderAll();},setPlay:i=>{playIdx=i;frame();},get series(){return series;},runSand,sandParams,get sand(){return sandSeries;}};
+renderAll();paintSlVals();
+</script>
+</body>
+</html>

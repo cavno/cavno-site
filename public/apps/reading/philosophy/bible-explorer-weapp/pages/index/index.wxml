@@ -1,0 +1,167 @@
+<page-meta page-style="{{drawerOpen ? 'overflow: hidden;' : ''}}"></page-meta>
+
+<view class="app {{theme === 'dark' ? 'theme-dark' : ''}}">
+
+  <!-- 页头 -->
+  <view class="header">
+    <view class="header-top">
+      <view class="brand">
+        <view class="brand-title serif">圣经互动浏览器</view>
+        <view class="brand-sub">Biblical Atlas</view>
+      </view>
+      <view class="theme-toggle" bindtap="toggleTheme" hover-class="toggle-hover">◐</view>
+    </view>
+    <view class="brand-tagline">从结构、历史、叙事、人物、主题 —— 五个维度系统理解 66 卷正典</view>
+  </view>
+
+  <!-- 标签栏（吸顶） -->
+  <scroll-view class="tabs" scroll-x="{{true}}" enhanced="{{true}}" show-scrollbar="{{false}}">
+    <view
+      wx:for="{{tabs}}"
+      wx:key="id"
+      class="tab {{active === item.id ? 'tab-active' : ''}}"
+      data-tab="{{item.id}}"
+      bindtap="switchTab">
+      <text class="tab-num">{{item.num}}</text>
+      <text class="tab-label serif">{{item.label}}</text>
+    </view>
+  </scroll-view>
+
+  <view class="content">
+
+    <!-- Ⅰ 概览 -->
+    <view hidden="{{active !== 'overview'}}">
+      <view class="testaments">
+        <view class="testament" wx:for="{{testaments}}" wx:for-item="t" wx:key="eng">
+          <view class="t-eyebrow">{{t.eng}}</view>
+          <view class="t-title serif">{{t.name}}</view>
+          <view class="t-meta">{{t.meta}} · {{t.tagline}}</view>
+          <view class="cat" wx:for="{{t.categories}}" wx:for-item="c" wx:key="id">
+            <view class="cat-head">
+              <text class="cat-name serif">{{c.name}}</text>
+              <text class="cat-meta">{{c.meta}}</text>
+            </view>
+            <view class="books">
+              <view
+                class="book serif"
+                wx:for="{{c.books}}"
+                wx:for-item="b"
+                wx:key="id"
+                data-id="{{b.id}}"
+                bindtap="openDetail"
+                hover-class="book-hover">{{b.name}}</view>
+            </view>
+          </view>
+        </view>
+      </view>
+    </view>
+
+    <!-- Ⅱ 时间线 -->
+    <view hidden="{{active !== 'timeline'}}">
+      <view class="timeline">
+        <block wx:for="{{timeline}}" wx:for-item="era" wx:key="eraTitle">
+          <view class="era">
+            {{era.era}}
+            <text class="era-title serif">{{era.eraTitle}}</text>
+          </view>
+          <view
+            class="event"
+            wx:for="{{era.events}}"
+            wx:for-item="ev"
+            wx:key="id"
+            data-id="{{ev.id}}"
+            bindtap="openDetail"
+            hover-class="event-hover">
+            <view class="event-dot"></view>
+            <view class="event-title serif">{{ev.title}}</view>
+            <view class="event-brief">{{ev.brief}}</view>
+            <text class="event-ref">{{ev.ref}}</text>
+          </view>
+        </block>
+      </view>
+    </view>
+
+    <!-- Ⅲ 故事 -->
+    <view hidden="{{active !== 'stories'}}">
+      <view class="section" wx:for="{{stories}}" wx:for-item="sec" wx:key="label">
+        <view class="section-label">{{sec.label}}</view>
+        <view class="cards">
+          <view
+            class="card"
+            wx:for="{{sec.items}}"
+            wx:for-item="it"
+            wx:key="id"
+            data-id="{{it.id}}"
+            bindtap="openDetail"
+            hover-class="card-hover">
+            <view class="card-title serif">{{it.title}}</view>
+            <view class="card-sub">{{it.sub}} · {{it.ref}}</view>
+          </view>
+        </view>
+      </view>
+    </view>
+
+    <!-- Ⅳ 人物 -->
+    <view hidden="{{active !== 'figures'}}">
+      <view class="section" wx:for="{{figures}}" wx:for-item="g" wx:key="era">
+        <view class="section-label">{{g.era}}</view>
+        <view class="cards">
+          <view
+            class="card"
+            wx:for="{{g.items}}"
+            wx:for-item="it"
+            wx:key="id"
+            data-id="{{it.id}}"
+            bindtap="openDetail"
+            hover-class="card-hover">
+            <view class="card-title serif">{{it.name}}</view>
+            <view class="card-sub">{{it.role}}</view>
+          </view>
+        </view>
+      </view>
+    </view>
+
+    <!-- Ⅴ 主题 -->
+    <view hidden="{{active !== 'themes'}}">
+      <view class="section">
+        <view class="section-label">圣经的八大主题</view>
+        <view
+          class="theme-card"
+          wx:for="{{themes}}"
+          wx:key="id"
+          data-id="{{item.id}}"
+          bindtap="openDetail"
+          hover-class="theme-card-hover">
+          <view class="theme-name serif">{{item.name}}</view>
+          <view class="theme-desc">{{item.brief}}</view>
+        </view>
+      </view>
+    </view>
+
+  </view>
+
+  <!-- 页脚 -->
+  <view class="footer">正典依据新教传统的 66 卷 · 内容仅供学习与研究</view>
+
+  <!-- 详情抽屉 -->
+  <view class="drawer {{drawerOpen ? 'open' : ''}}">
+    <view class="drawer-overlay" bindtap="closeDetail" catchtouchmove="noop"></view>
+    <view class="drawer-panel">
+      <view class="drawer-close" bindtap="closeDetail" hover-class="close-hover">✕</view>
+      <scroll-view class="drawer-scroll" scroll-y="{{true}}" enhanced="{{true}}" show-scrollbar="{{false}}">
+        <view class="d-eyebrow">{{drawerData.eyebrow}}</view>
+        <view class="d-title serif">{{drawerData.title}}</view>
+        <view class="d-sub">{{drawerData.sub}}</view>
+        <view class="d-meta" wx:if="{{drawerData.meta.length}}">
+          <view class="d-meta-item" wx:for="{{drawerData.meta}}" wx:for-item="m" wx:key="label">
+            <text class="d-meta-label">{{m.label}}</text>
+            <text>{{m.value}}</text>
+          </view>
+        </view>
+        <rich-text class="d-body" nodes="{{drawerData.bodyNodes}}"></rich-text>
+        <view class="drawer-foot-space"></view>
+      </scroll-view>
+    </view>
+  </view>
+
+</view>

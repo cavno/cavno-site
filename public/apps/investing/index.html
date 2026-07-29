@@ -1,0 +1,464 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>投资研究 · 综合工作台 · CAVNO</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@400;600;700;900&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --parchment:#F3EAD3; --paper:#FBF6E9; --card:#F8F1DF;
+  --teal:#3F7E6B; --teal-dk:#2C5A4C; --teal-wash:#E4EFEA;
+  --terra:#BC4B33; --ink:#2B2620; --muted:#7A7263;
+  --line:#D8CCAE; --line-soft:#E0D2B2; --gold:#C9A869; --faint:#A39781;
+  --rack-w:278px; --bar-h:52px;
+  --serif:"Noto Serif SC","Songti SC",serif;
+  --mono:"JetBrains Mono","SFMono-Regular",Consolas,monospace;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html,body{height:100%}
+body{
+  font-family:var(--serif); color:var(--ink); background:var(--parchment);
+  display:flex; overflow:hidden;
+}
+a{color:inherit}
+:focus-visible{outline:2px solid var(--teal); outline-offset:2px; border-radius:2px}
+
+/* ───────── 仪器架（侧栏） ───────── */
+#rack{
+  width:var(--rack-w); flex:0 0 var(--rack-w); height:100%;
+  background:var(--paper); border-right:1px solid var(--line);
+  display:flex; flex-direction:column; z-index:40;
+}
+.brand{padding:20px 18px 16px; border-bottom:3px double var(--line)}
+.brand .eyebrow{
+  font-family:var(--mono); font-size:10px; letter-spacing:.22em;
+  color:var(--terra); margin-bottom:8px;
+}
+.brand h1{font-size:19px; font-weight:900; line-height:1.35; letter-spacing:.02em}
+.brand .tagline{
+  margin-top:7px; font-size:11px; color:var(--muted); letter-spacing:.05em;
+}
+#racknav{
+  flex:1; overflow-y:auto; padding:6px 0 14px;
+  scrollbar-width:thin; scrollbar-color:var(--line) transparent;
+}
+#racknav::-webkit-scrollbar{width:8px}
+#racknav::-webkit-scrollbar-thumb{background:var(--line); border-radius:4px; border:2px solid var(--paper)}
+#racknav::-webkit-scrollbar-track{background:transparent}
+.g-block{margin-top:14px}
+#racknav .g-head{
+  display:flex; align-items:center; gap:9px;
+  margin:0 14px 5px; padding:10px 3px;
+  border-bottom:1px solid var(--line-soft);
+}
+.g-mark{
+  width:7px; height:7px; flex:0 0 auto;
+  background:var(--ga,var(--teal)); transform:rotate(45deg);
+}
+#racknav .g-name{
+  font-size:15.5px; font-weight:900; letter-spacing:.1em;
+  color:var(--ink); line-height:1.3;
+}
+#racknav .g-count{
+  margin-left:auto; font-family:var(--mono);
+  font-size:10px; letter-spacing:.08em; color:var(--faint);
+}
+.navitem{
+  display:flex; align-items:baseline; gap:10px; width:100%;
+  padding:9px 18px 9px 15px; border:0; border-left:3px solid transparent;
+  background:none; text-align:left; cursor:pointer; text-decoration:none;
+  font-family:var(--serif); font-size:14.5px; font-weight:600; color:var(--ink);
+  line-height:1.5; transition:background .15s,border-color .15s,color .15s;
+}
+.navitem .idx{font-family:var(--mono); font-size:10px; color:var(--faint); flex:0 0 auto; transform:translateY(-1px)}
+.navitem.home{margin:6px 0 2px}
+.navitem:hover{background:var(--gw,var(--teal-wash)); border-left-color:var(--ga,var(--teal))}
+.navitem[aria-current="page"]{
+  background:var(--gd,var(--teal-dk)); border-left-color:var(--ga,var(--teal)); color:var(--paper);
+}
+.navitem[aria-current="page"] .idx{color:var(--parchment); opacity:.8}
+.rackfoot{
+  padding:12px 18px; border-top:1px solid var(--line);
+  font-family:var(--mono); font-size:10px; letter-spacing:.06em; color:var(--muted);
+  display:flex; justify-content:space-between; align-items:center;
+}
+.rackfoot a{text-decoration:none; color:var(--teal-dk)}
+.rackfoot a:hover{color:var(--terra)}
+
+/* ───────── 舞台 ───────── */
+#stage{flex:1; height:100%; display:flex; flex-direction:column; min-width:0}
+#topbar{
+  height:var(--bar-h); flex:0 0 var(--bar-h);
+  display:flex; align-items:center; gap:12px; padding:0 16px;
+  background:var(--parchment); border-bottom:1px solid var(--line);
+}
+#menuBtn{display:none}
+.crumb{min-width:0; flex:1; display:flex; align-items:baseline; gap:10px; overflow:hidden}
+.crumb .fn{
+  font-family:var(--mono); font-size:10px; letter-spacing:.18em;
+  color:var(--terra); white-space:nowrap;
+}
+.crumb .cur{
+  font-size:15px; font-weight:700; white-space:nowrap;
+  overflow:hidden; text-overflow:ellipsis;
+}
+.tbtn{
+  font-family:var(--serif); font-size:12.5px; font-weight:600;
+  color:var(--teal-dk); background:var(--paper);
+  border:1px solid var(--line); padding:6px 11px; cursor:pointer;
+  white-space:nowrap; text-decoration:none; line-height:1; border-radius:2px;
+  transition:border-color .15s,color .15s,background .15s;
+}
+.tbtn:hover{border-color:var(--teal); color:var(--paper); background:var(--teal)}
+.tbtn.sq{padding:6px 9px; font-family:var(--mono); font-size:12px}
+.toolonly{display:none}
+body.in-tool .toolonly{display:inline-block}
+
+#main{flex:1; position:relative; min-height:0; background:var(--parchment)}
+
+/* ───────── 总览 ───────── */
+#overview{position:absolute; inset:0; overflow-y:auto; padding:34px 34px 60px}
+.hero{max-width:1060px; margin:0 auto 8px}
+.hero .eyebrow{
+  font-family:var(--mono); font-size:11px; letter-spacing:.26em; color:var(--terra);
+}
+.hero h2{font-size:33px; font-weight:900; margin:10px 0 12px; letter-spacing:.02em}
+.hero .rule{height:3px; border-top:1px solid var(--ink); border-bottom:1px solid var(--ink); margin:0 0 14px}
+.hero p{font-size:14px; line-height:1.9; color:var(--muted); max-width:760px}
+.hero p b{color:var(--teal-dk); font-weight:700}
+
+.group{max-width:1060px; margin:36px auto 0}
+.group .g-head{display:flex; align-items:center; gap:10px; flex-wrap:wrap; padding-bottom:10px; border-bottom:3px double var(--line)}
+.group h3{font-size:19px; font-weight:900; letter-spacing:.08em}
+.group .note{font-size:12px; color:var(--muted)}
+.group .note em{font-style:normal; color:var(--terra); font-weight:600}
+.cards{
+  display:grid; grid-template-columns:repeat(auto-fill,minmax(302px,1fr));
+  gap:14px; padding-top:16px;
+}
+.card{
+  position:relative; background:var(--card); border:1px solid var(--line);
+  padding:16px 17px 13px; display:flex; flex-direction:column; gap:9px;
+  transition:border-color .15s, box-shadow .15s, transform .15s;
+}
+.card:hover{border-color:var(--ga,var(--teal)); box-shadow:0 3px 0 rgba(43,38,32,.10); transform:translateY(-1px)}
+.card .meta{display:flex; justify-content:space-between; align-items:baseline; gap:8px}
+.card .fn{font-family:var(--mono); font-size:10px; letter-spacing:.18em; color:var(--terra)}
+.card .idx{font-family:var(--mono); font-size:10px; color:var(--gold)}
+.card h4{font-size:18.5px; font-weight:700; line-height:1.4}
+.card h4 a{text-decoration:none}
+.card h4 a::after{content:""; position:absolute; inset:0}  /* stretched link */
+.card .sub{
+  font-size:13px; line-height:1.8; color:var(--muted);
+  display:-webkit-box; -webkit-line-clamp:4; -webkit-box-orient:vertical; overflow:hidden;
+}
+.card .foot{
+  margin-top:auto; padding-top:10px; border-top:1px solid var(--line-soft);
+  display:flex; justify-content:space-between; align-items:center; font-size:12.5px;
+}
+.card .go{color:var(--gd,var(--teal-dk)); font-weight:700}
+.card:hover .go{color:var(--ga,var(--teal))}
+.card .ext{
+  position:relative; z-index:2; text-decoration:none;
+  font-family:var(--mono); font-size:11px; color:var(--muted);
+}
+.card .ext:hover{color:var(--terra)}
+.dl-items{display:flex; flex-wrap:wrap; gap:10px; padding-top:14px}
+.dl-items a{
+  font-family:var(--mono); font-size:11.5px; letter-spacing:.02em;
+  color:var(--gd,var(--teal-dk)); text-decoration:none;
+  border:1px solid var(--line); background:var(--card);
+  padding:7px 12px; border-radius:2px;
+  transition:border-color .15s,color .15s;
+}
+.dl-items a:hover{border-color:var(--ga); color:var(--ga)}
+.card .attach{
+  position:relative; z-index:2; display:flex; gap:12px;
+  font-family:var(--mono); font-size:10.5px; padding-top:2px;
+}
+.attach a{color:var(--teal-dk); text-decoration:none; border-bottom:1px dotted var(--line)}
+.attach a:hover{color:var(--terra); border-bottom-color:var(--terra)}
+.ovfoot{
+  max-width:1060px; margin:44px auto 0; padding-top:12px; border-top:1px solid var(--line);
+  font-family:var(--mono); font-size:10.5px; letter-spacing:.08em; color:var(--muted);
+  display:flex; justify-content:space-between; flex-wrap:wrap; gap:8px;
+}
+
+/* ───────── 工具帧 ───────── */
+.frame{position:absolute; inset:0; background:var(--parchment)}
+.frame iframe{width:100%; height:100%; border:0; display:block; background:var(--parchment)}
+.veil{
+  position:absolute; inset:0; display:flex; flex-direction:column;
+  align-items:center; justify-content:center; gap:14px;
+  background:var(--parchment); z-index:2;
+}
+.veil .vt{font-family:var(--mono); font-size:10px; letter-spacing:.3em; color:var(--terra)}
+.veil .vn{font-size:18px; font-weight:700}
+.veil .bar{width:150px; height:2px; background:var(--line); overflow:hidden}
+.veil .bar i{display:block; width:40%; height:100%; background:var(--teal); animation:sweep 1.1s infinite ease-in-out}
+@keyframes sweep{0%{transform:translateX(-110%)}100%{transform:translateX(390%)}}
+[hidden]{display:none !important}
+
+/* ───────── 响应式 ───────── */
+#backdrop{display:none}
+@media (max-width:880px){
+  #rack{
+    position:fixed; left:0; top:0; bottom:0; transform:translateX(-100%);
+    transition:transform .22s ease; box-shadow:4px 0 18px rgba(43,38,32,.18);
+  }
+  body.rack-open #rack{transform:translateX(0)}
+  #backdrop{
+    display:block; position:fixed; inset:0; background:rgba(43,38,32,.35);
+    opacity:0; pointer-events:none; transition:opacity .2s; z-index:30;
+  }
+  body.rack-open #backdrop{opacity:1; pointer-events:auto}
+  #menuBtn{display:inline-block}
+  #overview{padding:22px 16px 50px}
+  .hero h2{font-size:25px}
+  .crumb .fn{display:none}
+}
+@media (max-width:560px){
+  #topbar{gap:8px; padding:0 10px}
+  #homeBtn,.btxt{display:none}
+}
+@media (prefers-reduced-motion:reduce){
+  *,*::before,*::after{animation:none !important; transition:none !important}
+}
+</style>
+</head>
+<body>
+
+<aside id="rack" aria-label="工具导航">
+  <div class="brand">
+    <div class="eyebrow">CAVNO · INVESTING</div>
+    <h1>投资研究<br>综合工作台</h1>
+    <div class="tagline">十四座仪器 · 三条谱系 · 零构建</div>
+  </div>
+  <nav id="racknav"></nav>
+  <div class="rackfoot">
+    <span>INVESTING / 11</span>
+    <a href="https://github.com/cavno/Investing" target="_blank" rel="noopener">源仓库 ↗</a>
+  </div>
+</aside>
+<div id="backdrop"></div>
+
+<div id="stage">
+  <header id="topbar">
+    <button id="menuBtn" class="tbtn sq" aria-label="打开导航">☰</button>
+    <div class="crumb">
+      <span class="fn" id="crumbFn">OVERVIEW</span>
+      <span class="cur" id="crumbCur">总览</span>
+    </div>
+    <button id="prevBtn" class="tbtn sq toolonly" title="上一台">‹</button>
+    <button id="nextBtn" class="tbtn sq toolonly" title="下一台">›</button>
+    <a id="homeBtn" class="tbtn toolonly" href="#/">总览</a>
+    <a id="extBtn" class="tbtn toolonly" href="#" target="_blank" rel="noopener"><span class="btxt">新窗口打开 </span>↗</a>
+  </header>
+
+  <main id="main">
+    <section id="overview" aria-label="总览">
+      <div class="hero">
+        <div class="eyebrow">CAVNO · INVESTING RESEARCH BENCH</div>
+        <h2>投资研究 · 综合工作台</h2>
+        <div class="rule"></div>
+        <p>十四座工作台聚合于一处：<b>Gamma 敞口</b>读做市商对冲的地形与动力学，<b>期权体系</b>从持仓地形、策略图谱到希腊字母的统一投影，<b>宏观与案例</b>落在信用扩张全景与监管案例拆解。本页仅作聚合与导航，<b>各台内容一字未改</b>；根页 Gamma Profile 的原地址保持不变。</p>
+      </div>
+      <div id="groups"></div>
+      <section class="group dl" style="--ga:#7C8A4D;--gd:#5E6B39;--gw:#ECEEDF">
+        <div class="g-head"><span class="g-mark"></span><h3>资料下载</h3><span class="note">会计口径 · 与仓库 README 同源直链</span></div>
+        <div class="dl-items">
+          <a href="https://github.com/cavno/Investing/raw/main/%E4%BC%9A%E8%AE%A1/DG400.zip">DG400.zip ↓</a>
+          <a href="https://github.com/cavno/Investing/raw/main/%E4%BC%9A%E8%AE%A1/DG400a.zip">DG400a.zip ↓</a>
+          <a href="https://github.com/cavno/Investing/raw/main/%E4%BC%9A%E8%AE%A1/GAAP%20Taxonomy%202024.zip">GAAP Taxonomy 2024.zip ↓</a>
+          <a href="https://github.com/cavno/Investing/raw/main/%E4%BC%9A%E8%AE%A1/US-GAAP-2019.zip">US-GAAP-2019.zip ↓</a>
+        </div>
+      </section>
+      <div class="ovfoot">
+        <span>SINGLE-FILE · ZERO-BUILD · PARCHMENT / TEAL / TERRA</span>
+        <span>cavno.github.io/Investing/hub.html</span>
+      </div>
+    </section>
+  </main>
+</div>
+
+<noscript><div style="padding:24px;font-family:serif">
+  本页导航需要 JavaScript。可直接访问各工作台：
+  <a href="./index.html">GOOGL · Gamma Profile</a> ·
+  <a href="./动态Gamma敞口图/index.html">GOOGL Gamma 敞口 · 动态视图</a> ·
+  <a href="./gamma-atlas/index.html">Gamma 敞口结构图谱</a> ·
+  <a href="./options/index.html">Gamma &amp; Delta Squeeze 动态演示</a> ·
+  <a href="./MaxPain/index.html">期权最大痛点 · Max Pain</a> ·
+  <a href="./options-atlas/index.html">期权策略图谱</a> ·
+  <a href="./options_tension/index.html">期权张力系统</a> ·
+  <a href="./option_greek/index.html">希腊字母统一图谱</a> ·
+  <a href="./longcall/index.html">买入看涨 · 损益解剖</a> ·
+  <a href="./CreditExpansion/index.html">信用扩张场景全景图</a> ·
+  <a href="./jane-street-viz/index.html">Jane Street 策略拆解</a>
+</div></noscript>
+
+<script>
+/* ════════ 数据（卡片文案取自各页面自身的标题与副标题，原文照录或按其自有字句拼合） ════════ */
+const TOOLS = [
+ {slug:"gamma-profile", src:"./gamma-profile/index.html", fn:"SPOTGAMMA 框架", name:"GOOGL · Gamma Profile",
+  sub:"数据基于 2026/05/15 GOOGL Gamma 敞口截图的视觉重构估值，采用 SpotGamma 公开框架的术语与方法论：Call Wall / Put Wall · Gamma Flip (HVL) · Net Gamma Profile by Strike · Vanna / Charm Exposure · Regime。非 SpotGamma 官方产品。"},
+ {slug:"dynamic-gex", src:"./动态Gamma敞口图/index.html", fn:"动态交互图", name:"GOOGL Gamma 敞口 · 动态视图",
+  sub:"2026/05/15 截面：拖动模拟价位，观察做市商对冲行为在「压制波动」与「放大波动」两种模式之间的切换。"},
+ {slug:"gamma-atlas", src:"./gamma-atlas/index.html", fn:"14 种博弈格局", name:"Gamma 敞口结构图谱",
+  sub:"Gamma 敞口不预测涨跌，它揭示的是「庄家被绑在哪里」。这本图谱拆解 14 种典型结构——从火箭点火到塔式雪崩，从零 Gamma 狙击到双墙 Pinning——用图样、机制和触发条件三个维度，让你看清每种结构背后的对冲博弈。"},
+ {slug:"squeeze-demo", src:"./options/index.html", fn:"动态演示", name:"Gamma & Delta Squeeze",
+  sub:"从买入看涨期权、做市商负 Delta 敞口，到 Gamma 飙升与追加对冲的价格螺旋——播放式动画推演，附 Delta 挤压 vs 轧空对比。仅供教育演示，不构成投资建议。"},
+ {slug:"maxpain", src:"./MaxPain/index.html", fn:"持仓地形", name:"期权最大痛点 · Max Pain",
+  sub:"GOOGL 2025-10-17 真实持仓 · 痛点曲线 · 磁吸实验——把一条实时管道铸成一张静态地形图。"},
+ {slug:"options-atlas", src:"./options-atlas/index.html", fn:"65 式策略", name:"期权策略图谱 · Strategy Atlas",
+  sub:"Options Strategy Atlas — a reference for 65 structured plays。六十五个结构化策略的参考图谱。"},
+ {slug:"options-tension", src:"./options_tension/index.html", fn:"张力系统", name:"期权张力系统 · Tension Dynamics",
+  sub:"从二元悖论的视角追踪期权价格因素的相互塑造——确定性的数学框架，与不确定性的本质之间。"},
+ {slug:"greeks", src:"./option_greek/index.html", fn:"统一图谱", name:"希腊字母统一图谱 · Greeks Atlas",
+  sub:"Delta · Gamma · Theta · Vega · IV Skew——同一枚硬币 φ(d₁) 的五个投影。"},
+ {slug:"longcall", src:"./longcall/index.html", fn:"损益解剖", name:"买入看涨 · Long Call Anatomy",
+  sub:"从到期折线到时间价值、真实盈亏平衡与概率分布——一张静态图的四层展开。"},
+ {slug:"credit-expansion", src:"./CreditExpansion/index.html", fn:"明斯基脆弱度地形", name:"信用扩张场景全景图",
+  sub:"家庭 · 民间金融 · 公司 · 银行 · 金融市场 · 国家六个领域，五十二个典型场景。每个场景在抵押品强度 / 杠杆 / 反身性三轴上打分，合成脆弱度坐标，定位它在对冲 → 投机 → 庞氏谱系上的位置。案例集可切换：当代 ↔《金瓶梅》↔《大明王朝 1566》↔ 恒大。"},
+ {slug:"jane-street", src:"./jane-street-viz/index.html", fn:"SEBI 调查可视化", name:"Jane Street 策略拆解",
+  sub:"Jane Street 操纵 BANKNIFTY / NIFTY 指数：策略拆解。基于 SEBI 临时禁令 WTM/AN/MRD/MRD-SEC-3/31516/2025-26（2025-07-03 印度证券交易委员会发布）。"},
+ {slug:"vol-pricing", src:"./期权波动率与定价/index.html", fn:"NATENBERG 第2版", name:"期权波动率与定价 · 核心概念与内在逻辑",
+  sub:"以 Natenberg《期权波动率与定价》第2版为底本的十四命题链逻辑重构：从无套利与期望收益、波动率这个唯一的未知数，到希腊字母、动态对冲、价差与合成套利、BSM 与二项式模型，再到波动率倾斜与「波动率成为资产」。"},
+ {slug:"dynamic-hedging", src:"./动态对冲/index.html", fn:"TALEB 互动导读", name:"动态对冲 · 核心概念与内在逻辑",
+  sub:"依 Taleb《动态对冲：管理普通期权与奇异期权》中译本文字稿整理的互动版：把对冲与风险管理从科学的神坛上降级成一门手艺——一条九环逻辑主线、四十余个互相勾连的概念、二十五条风险管理规则。中心命题：期权复制不是无风险头寸，离散对冲下损益是随机变量。"},
+ {slug:"value-investing", src:"./value_investing/index.html", fn:"GRAHAM → BUFFETT 2E", name:"价值投资 · 从格雷厄姆到巴菲特的头号投资法则",
+  sub:"《价值投资》第2版（Graham→Buffett & Beyond）的逻辑全图：从定义/前提/证据、三来源估值（资产价值·EPV·增长价值）、护城河与特许经营估值，到四个案例算例、研究策略、风险管理与组合构建、十一位投资者画像。"},
+];
+const GROUPS = [
+ {title:"Gamma 敞口", ga:"#3F7E6B", gd:"#2C5A4C", gw:"#E4EFEA",
+  note:'做市商被绑在哪里：静态 Profile → 动态视图 → <em>14 种博弈格局</em> → 挤压动力学', idx:[0,1,2,3]},
+ {title:"期权体系", ga:"#A9853C", gd:"#856727", gw:"#F0E6C9",
+  note:'持仓地形 · 65 式策略 · 张力系统 · 希腊字母统一 · 单腿损益解剖', idx:[4,5,6,7,8,11,12]},
+ {title:"宏观与案例", ga:"#BC4B33", gd:"#9A3A26", gw:"#F3DED5",
+  note:'信用扩张的明斯基地形 × Jane Street 的 SEBI 案例拆解', idx:[9,10,13]}
+];
+
+/* ════════ 渲染：仪器架 + 总览卡片 ════════ */
+const pad = n => String(n+1).padStart(2,"0");
+const racknav = document.getElementById("racknav");
+const groupsEl = document.getElementById("groups");
+const home = document.createElement("a");
+home.className = "navitem home"; home.href = "#/"; home.dataset.slug = "";
+home.innerHTML = `<span class="idx">00</span><span>总览</span>`;
+racknav.appendChild(home);
+GROUPS.forEach(g=>{
+  const vars = `--ga:${g.ga};--gd:${g.gd};--gw:${g.gw}`;
+  const blk = document.createElement("div");
+  blk.className = "g-block"; blk.style.cssText = vars;
+  blk.innerHTML = `<div class="g-head"><span class="g-mark"></span><span class="g-name">${g.title}</span><span class="g-count">${g.idx.length} 台</span></div>`;
+  g.idx.forEach(i=>{
+    const t = TOOLS[i];
+    const a = document.createElement("a");
+    a.className = "navitem"; a.href = "#/"+t.slug; a.dataset.slug = t.slug;
+    a.innerHTML = `<span class="idx">${pad(i)}</span><span>${t.name}</span>`;
+    blk.appendChild(a);
+  });
+  racknav.appendChild(blk);
+
+  const sec = document.createElement("section");
+  sec.className = "group"; sec.style.cssText = vars;
+  sec.innerHTML = `<div class="g-head"><span class="g-mark"></span><h3>${g.title}</h3><span class="note">${g.note}</span></div>`;
+  const grid = document.createElement("div");
+  grid.className = "cards";
+  g.idx.forEach(i=>{
+    const t = TOOLS[i];
+    const card = document.createElement("article");
+    card.className = "card";
+    card.innerHTML =
+      `<div class="meta"><span class="fn">${t.fn}</span><span class="idx">${pad(i)}</span></div>`+
+      `<h4><a href="#/${t.slug}">${t.name}</a></h4>`+
+      `<p class="sub">${t.sub}</p>`+
+      `<div class="foot"><span class="go">进入工作台 →</span><a class="ext" href="${encodeURI(t.src)}" target="_blank" rel="noopener">新窗口 ↗</a></div>`;
+    grid.appendChild(card);
+  });
+  sec.appendChild(grid);
+  groupsEl.appendChild(sec);
+});
+
+/* ════════ 路由：#/slug ⇄ 视图；iframe 懒加载并保活 ════════ */
+const main = document.getElementById("main");
+const overview = document.getElementById("overview");
+const crumbFn = document.getElementById("crumbFn");
+const crumbCur = document.getElementById("crumbCur");
+const extBtn = document.getElementById("extBtn");
+const prevBtn = document.getElementById("prevBtn");
+const nextBtn = document.getElementById("nextBtn");
+const frames = {};
+let current = null;   // slug 或 null(总览)
+
+function ensureFrame(t){
+  if (frames[t.slug]) return frames[t.slug];
+  const wrap = document.createElement("div");
+  wrap.className = "frame"; wrap.hidden = true;
+  const veil = document.createElement("div");
+  veil.className = "veil";
+  veil.innerHTML = `<div class="vt">LOADING</div><div class="vn">${t.name}</div><div class="bar"><i></i></div>`;
+  const ifr = document.createElement("iframe");
+  ifr.src = encodeURI(t.src);
+  ifr.title = t.name;
+  ifr.addEventListener("load", ()=> veil.remove(), {once:true});
+  wrap.appendChild(veil); wrap.appendChild(ifr);
+  main.appendChild(wrap);
+  frames[t.slug] = wrap;
+  return wrap;
+}
+function setNav(slug){
+  document.querySelectorAll(".navitem").forEach(a=>{
+    if (a.dataset.slug === (slug||"")) a.setAttribute("aria-current","page");
+    else a.removeAttribute("aria-current");
+  });
+}
+function show(slug){
+  const t = TOOLS.find(x=>x.slug===slug);
+  Object.values(frames).forEach(f=> f.hidden = true);
+  if (!t){                                    // 总览
+    overview.hidden = false;
+    document.body.classList.remove("in-tool");
+    crumbFn.textContent = "OVERVIEW";
+    crumbCur.textContent = "总览";
+    document.title = "投资研究 · 综合工作台 · CAVNO";
+    setNav(null); current = null;
+    return;
+  }
+  overview.hidden = true;
+  ensureFrame(t).hidden = false;
+  document.body.classList.add("in-tool");
+  crumbFn.textContent = t.fn;
+  crumbCur.textContent = t.name;
+  extBtn.href = encodeURI(t.src);
+  document.title = t.name + " · 投资综合工作台";
+  setNav(slug); current = slug;
+  closeRack();
+}
+function route(){
+  const h = decodeURIComponent(location.hash.replace(/^#\/?/, ""));
+  show(TOOLS.some(t=>t.slug===h) ? h : null);
+}
+function step(d){
+  const i = TOOLS.findIndex(t=>t.slug===current);
+  const n = (i + d + TOOLS.length) % TOOLS.length;
+  location.hash = "#/"+TOOLS[n].slug;
+}
+prevBtn.addEventListener("click", ()=>step(-1));
+nextBtn.addEventListener("click", ()=>step(+1));
+window.addEventListener("hashchange", route);
+
+/* ════════ 移动端仪器架抽屉 ════════ */
+const menuBtn = document.getElementById("menuBtn");
+const backdrop = document.getElementById("backdrop");
+function closeRack(){ document.body.classList.remove("rack-open"); }
+menuBtn.addEventListener("click", ()=> document.body.classList.toggle("rack-open"));
+backdrop.addEventListener("click", closeRack);
+window.addEventListener("keydown", e=>{ if (e.key==="Escape") closeRack(); });
+
+route();
+</script>
+</body>
+</html>

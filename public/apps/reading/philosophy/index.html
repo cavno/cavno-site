@@ -1,0 +1,468 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>哲学制品 · 综合书斋 · CAVNO</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@400;600;700;900&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --parchment:#F3EAD3; --paper:#FBF6E9; --card:#F8F1DF;
+  --teal:#3F7E6B; --teal-dk:#2C5A4C; --teal-wash:#E4EFEA;
+  --terra:#BC4B33; --ink:#2B2620; --muted:#7A7263;
+  --line:#D8CCAE; --line-soft:#E0D2B2; --gold:#C9A869; --faint:#A39781;
+  --rack-w:278px; --bar-h:52px;
+  --serif:"Noto Serif SC","Songti SC",serif;
+  --mono:"JetBrains Mono","SFMono-Regular",Consolas,monospace;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html,body{height:100%}
+body{
+  font-family:var(--serif); color:var(--ink); background:var(--parchment);
+  display:flex; overflow:hidden;
+}
+a{color:inherit}
+:focus-visible{outline:2px solid var(--teal); outline-offset:2px; border-radius:2px}
+
+/* ───────── 仪器架（侧栏） ───────── */
+#rack{
+  width:var(--rack-w); flex:0 0 var(--rack-w); height:100%;
+  background:var(--paper); border-right:1px solid var(--line);
+  display:flex; flex-direction:column; z-index:40;
+}
+.brand{padding:20px 18px 16px; border-bottom:3px double var(--line)}
+.brand .eyebrow{
+  font-family:var(--mono); font-size:10px; letter-spacing:.22em;
+  color:var(--terra); margin-bottom:8px;
+}
+.brand h1{font-size:19px; font-weight:900; line-height:1.35; letter-spacing:.02em}
+.brand .tagline{
+  margin-top:7px; font-size:11px; color:var(--muted); letter-spacing:.05em;
+}
+#racknav{
+  flex:1; overflow-y:auto; padding:6px 0 14px;
+  scrollbar-width:thin; scrollbar-color:var(--line) transparent;
+}
+#racknav::-webkit-scrollbar{width:8px}
+#racknav::-webkit-scrollbar-thumb{background:var(--line); border-radius:4px; border:2px solid var(--paper)}
+#racknav::-webkit-scrollbar-track{background:transparent}
+.g-block{margin-top:14px}
+#racknav .g-head{
+  display:flex; align-items:center; gap:9px;
+  margin:0 14px 5px; padding:10px 3px;
+  border-bottom:1px solid var(--line-soft);
+}
+.g-mark{
+  width:7px; height:7px; flex:0 0 auto;
+  background:var(--ga,var(--teal)); transform:rotate(45deg);
+}
+#racknav .g-name{
+  font-size:15.5px; font-weight:900; letter-spacing:.1em;
+  color:var(--ink); line-height:1.3;
+}
+#racknav .g-count{
+  margin-left:auto; font-family:var(--mono);
+  font-size:10px; letter-spacing:.08em; color:var(--faint);
+}
+.navitem{
+  display:flex; align-items:baseline; gap:10px; width:100%;
+  padding:9px 18px 9px 15px; border:0; border-left:3px solid transparent;
+  background:none; text-align:left; cursor:pointer; text-decoration:none;
+  font-family:var(--serif); font-size:14.5px; font-weight:600; color:var(--ink);
+  line-height:1.5; transition:background .15s,border-color .15s,color .15s;
+}
+.navitem .idx{font-family:var(--mono); font-size:10px; color:var(--faint); flex:0 0 auto; transform:translateY(-1px)}
+.navitem.home{margin:6px 0 2px}
+.navitem:hover{background:var(--gw,var(--teal-wash)); border-left-color:var(--ga,var(--teal))}
+.navitem[aria-current="page"]{
+  background:var(--gd,var(--teal-dk)); border-left-color:var(--ga,var(--teal)); color:var(--paper);
+}
+.navitem[aria-current="page"] .idx{color:var(--parchment); opacity:.8}
+.rackfoot{
+  padding:12px 18px; border-top:1px solid var(--line);
+  font-family:var(--mono); font-size:10px; letter-spacing:.06em; color:var(--muted);
+  display:flex; justify-content:space-between; align-items:center;
+}
+.rackfoot a{text-decoration:none; color:var(--teal-dk)}
+.rackfoot a:hover{color:var(--terra)}
+
+/* ───────── 舞台 ───────── */
+#stage{flex:1; height:100%; display:flex; flex-direction:column; min-width:0}
+#topbar{
+  height:var(--bar-h); flex:0 0 var(--bar-h);
+  display:flex; align-items:center; gap:12px; padding:0 16px;
+  background:var(--parchment); border-bottom:1px solid var(--line);
+}
+#menuBtn{display:none}
+.crumb{min-width:0; flex:1; display:flex; align-items:baseline; gap:10px; overflow:hidden}
+.crumb .fn{
+  font-family:var(--mono); font-size:10px; letter-spacing:.18em;
+  color:var(--terra); white-space:nowrap;
+}
+.crumb .cur{
+  font-size:15px; font-weight:700; white-space:nowrap;
+  overflow:hidden; text-overflow:ellipsis;
+}
+.tbtn{
+  font-family:var(--serif); font-size:12.5px; font-weight:600;
+  color:var(--teal-dk); background:var(--paper);
+  border:1px solid var(--line); padding:6px 11px; cursor:pointer;
+  white-space:nowrap; text-decoration:none; line-height:1; border-radius:2px;
+  transition:border-color .15s,color .15s,background .15s;
+}
+.tbtn:hover{border-color:var(--teal); color:var(--paper); background:var(--teal)}
+.tbtn.sq{padding:6px 9px; font-family:var(--mono); font-size:12px}
+.toolonly{display:none}
+body.in-tool .toolonly{display:inline-block}
+
+#main{flex:1; position:relative; min-height:0; background:var(--parchment)}
+
+/* ───────── 总览 ───────── */
+#overview{position:absolute; inset:0; overflow-y:auto; padding:34px 34px 60px}
+.hero{max-width:1060px; margin:0 auto 8px}
+.hero .eyebrow{
+  font-family:var(--mono); font-size:11px; letter-spacing:.26em; color:var(--terra);
+}
+.hero h2{font-size:33px; font-weight:900; margin:10px 0 12px; letter-spacing:.02em}
+.hero .rule{height:3px; border-top:1px solid var(--ink); border-bottom:1px solid var(--ink); margin:0 0 14px}
+.hero p{font-size:14px; line-height:1.9; color:var(--muted); max-width:760px}
+.hero p b{color:var(--teal-dk); font-weight:700}
+
+.group{max-width:1060px; margin:36px auto 0}
+.group .g-head{display:flex; align-items:center; gap:10px; flex-wrap:wrap; padding-bottom:10px; border-bottom:3px double var(--line)}
+.group h3{font-size:19px; font-weight:900; letter-spacing:.08em}
+.group .note{font-size:12px; color:var(--muted)}
+.group .note em{font-style:normal; color:var(--terra); font-weight:600}
+.cards{
+  display:grid; grid-template-columns:repeat(auto-fill,minmax(302px,1fr));
+  gap:14px; padding-top:16px;
+}
+.card{
+  position:relative; background:var(--card); border:1px solid var(--line);
+  padding:16px 17px 13px; display:flex; flex-direction:column; gap:9px;
+  transition:border-color .15s, box-shadow .15s, transform .15s;
+}
+.card:hover{border-color:var(--ga,var(--teal)); box-shadow:0 3px 0 rgba(43,38,32,.10); transform:translateY(-1px)}
+.card .meta{display:flex; justify-content:space-between; align-items:baseline; gap:8px}
+.card .fn{font-family:var(--mono); font-size:10px; letter-spacing:.18em; color:var(--terra)}
+.card .idx{font-family:var(--mono); font-size:10px; color:var(--gold)}
+.card h4{font-size:18.5px; font-weight:700; line-height:1.4}
+.card h4 a{text-decoration:none}
+.card h4 a::after{content:""; position:absolute; inset:0}  /* stretched link */
+.card .sub{
+  font-size:13px; line-height:1.8; color:var(--muted);
+  display:-webkit-box; -webkit-line-clamp:4; -webkit-box-orient:vertical; overflow:hidden;
+}
+.card .foot{
+  margin-top:auto; padding-top:10px; border-top:1px solid var(--line-soft);
+  display:flex; justify-content:space-between; align-items:center; font-size:12.5px;
+}
+.card .go{color:var(--gd,var(--teal-dk)); font-weight:700}
+.card:hover .go{color:var(--ga,var(--teal))}
+.card .ext{
+  position:relative; z-index:2; text-decoration:none;
+  font-family:var(--mono); font-size:11px; color:var(--muted);
+}
+.card .ext:hover{color:var(--terra)}
+.dl-items{display:flex; flex-wrap:wrap; gap:10px; padding-top:14px}
+.dl-items a{
+  font-family:var(--mono); font-size:11.5px; letter-spacing:.02em;
+  color:var(--gd,var(--teal-dk)); text-decoration:none;
+  border:1px solid var(--line); background:var(--card);
+  padding:7px 12px; border-radius:2px;
+  transition:border-color .15s,color .15s;
+}
+.dl-items a:hover{border-color:var(--ga); color:var(--ga)}
+.card .attach{
+  position:relative; z-index:2; display:flex; gap:12px;
+  font-family:var(--mono); font-size:10.5px; padding-top:2px;
+}
+.attach a{color:var(--teal-dk); text-decoration:none; border-bottom:1px dotted var(--line)}
+.attach a:hover{color:var(--terra); border-bottom-color:var(--terra)}
+.ovfoot{
+  max-width:1060px; margin:44px auto 0; padding-top:12px; border-top:1px solid var(--line);
+  font-family:var(--mono); font-size:10.5px; letter-spacing:.08em; color:var(--muted);
+  display:flex; justify-content:space-between; flex-wrap:wrap; gap:8px;
+}
+
+/* ───────── 工具帧 ───────── */
+.frame{position:absolute; inset:0; background:var(--parchment)}
+.frame iframe{width:100%; height:100%; border:0; display:block; background:var(--parchment)}
+.veil{
+  position:absolute; inset:0; display:flex; flex-direction:column;
+  align-items:center; justify-content:center; gap:14px;
+  background:var(--parchment); z-index:2;
+}
+.veil .vt{font-family:var(--mono); font-size:10px; letter-spacing:.3em; color:var(--terra)}
+.veil .vn{font-size:18px; font-weight:700}
+.veil .bar{width:150px; height:2px; background:var(--line); overflow:hidden}
+.veil .bar i{display:block; width:40%; height:100%; background:var(--teal); animation:sweep 1.1s infinite ease-in-out}
+@keyframes sweep{0%{transform:translateX(-110%)}100%{transform:translateX(390%)}}
+[hidden]{display:none !important}
+
+/* ───────── 响应式 ───────── */
+#backdrop{display:none}
+@media (max-width:880px){
+  #rack{
+    position:fixed; left:0; top:0; bottom:0; transform:translateX(-100%);
+    transition:transform .22s ease; box-shadow:4px 0 18px rgba(43,38,32,.18);
+  }
+  body.rack-open #rack{transform:translateX(0)}
+  #backdrop{
+    display:block; position:fixed; inset:0; background:rgba(43,38,32,.35);
+    opacity:0; pointer-events:none; transition:opacity .2s; z-index:30;
+  }
+  body.rack-open #backdrop{opacity:1; pointer-events:auto}
+  #menuBtn{display:inline-block}
+  #overview{padding:22px 16px 50px}
+  .hero h2{font-size:25px}
+  .crumb .fn{display:none}
+}
+@media (max-width:560px){
+  #topbar{gap:8px; padding:0 10px}
+  #homeBtn,.btxt{display:none}
+}
+@media (prefers-reduced-motion:reduce){
+  *,*::before,*::after{animation:none !important; transition:none !important}
+}
+</style>
+</head>
+<body>
+
+<aside id="rack" aria-label="工具导航">
+  <div class="brand">
+    <div class="eyebrow">CAVNO · PHILOSOPHY</div>
+    <h1>哲学制品<br>综合书斋</h1>
+    <div class="tagline">十六篇 · 五辑 · 零构建</div>
+  </div>
+  <nav id="racknav"></nav>
+  <div class="rackfoot">
+    <span>PHILOSOPHY / 16</span>
+    <a href="https://github.com/cavno/Reading_and_Thinking" target="_blank" rel="noopener">源仓库 ↗</a>
+  </div>
+</aside>
+<div id="backdrop"></div>
+
+<div id="stage">
+  <header id="topbar">
+    <button id="menuBtn" class="tbtn sq" aria-label="打开导航">☰</button>
+    <div class="crumb">
+      <span class="fn" id="crumbFn">OVERVIEW</span>
+      <span class="cur" id="crumbCur">总览</span>
+    </div>
+    <button id="prevBtn" class="tbtn sq toolonly" title="上一台">‹</button>
+    <button id="nextBtn" class="tbtn sq toolonly" title="下一台">›</button>
+    <a id="homeBtn" class="tbtn toolonly" href="#/">总览</a>
+    <a id="extBtn" class="tbtn toolonly" href="#" target="_blank" rel="noopener"><span class="btxt">新窗口打开 </span>↗</a>
+  </header>
+
+  <main id="main">
+    <section id="overview" aria-label="总览">
+      <div class="hero">
+        <div class="eyebrow">CAVNO · PHILOSOPHY ARTIFACTS</div>
+        <h2>哲学制品 · 综合书斋</h2>
+        <div class="rule"></div>
+        <p>十六篇交互制品聚合于一处，仍依《哲学大全》自身的五辑分类：<b>悖论与张力</b> · <b>十六组对立</b> · <b>逻各斯与四律</b> · <b>哲学史的结构</b> · <b>意义与价值</b>。子页面恢复为独立目录（地址与仓库 README 原链接一致），本页仅作聚合导航，<b>各篇内容一字未改</b>；原单卷合订本整卷保留为 quanben.html。</p>
+      </div>
+      <div id="groups"></div>
+      <section class="group dl" style="--ga:#C9A869;--gd:#8F7434;--gw:#F5EDD8">
+        <div class="g-head"><span class="g-mark"></span><h3>单卷合订本</h3><span class="note">十六篇 · 五辑 · 原文未改——离线可携的单文件版（约 5 MB）</span></div>
+        <div class="dl-items">
+          <a href="./quanben.html" target="_blank" rel="noopener">打开《哲学大全》合订本 ↗</a>
+        </div>
+      </section>
+      <div class="ovfoot">
+        <span>SINGLE-FILE · ZERO-BUILD · PARCHMENT / TEAL / TERRA</span>
+        <span>cavno.github.io/Reading_and_Thinking/Philosophy</span>
+      </div>
+    </section>
+  </main>
+</div>
+
+<noscript><div style="padding:24px;font-family:serif">
+  本页导航需要 JavaScript。可直接访问各篇：
+  <a href="./悖论图谱/index.html">悖论图谱</a> ·
+  <a href="./二元悖论的张力/tension-web/index.html">二元悖论的张力</a> ·
+  <a href="./裂缝的两千五百年/index.html">裂缝的两千五百年</a> ·
+  <a href="./greek-philosophy/index.html">古希腊哲学 · 十六组对立</a> ·
+  <a href="./十六组对立形而上学核心问题/index.html">对立 → 形而上学核心问题</a> ·
+  <a href="./十六组对立连锁反应链/index.html">对立 · 连锁反应链</a> ·
+  <a href="./Logos 系统动力学/index.html">Logos 系统动力学</a> ·
+  <a href="./四律逻辑思脉地图/logos-atlas-web/index.html">四律 · 逻辑思脉地图</a> ·
+  <a href="./四律自指悖论受力结构/index.html">四律 × 自指 · 受力结构</a> ·
+  <a href="./逻各斯原本/index.html">逻各斯原本</a> ·
+  <a href="./juzhen/index.html">公理组合矩阵</a> ·
+  <a href="./总弧图支点搬家史/index.html">总弧图 · 支点搬家史</a> ·
+  <a href="./中介之死与五次竞标/index.html">中介之死与五次竞标</a> ·
+  <a href="./西方哲学思想脉络/index.html">哲学思想脉络图</a> ·
+  <a href="./探索生命的意义与价值/index.html">探索生命的意义与价值</a> ·
+  <a href="./quanben.html">哲学大全 · 合订本</a>
+</div></noscript>
+
+<script>
+/* ════════ 数据（十六篇登记表取自《哲学大全》自身的 PAGES 注册数据，desc 原文照录） ════════ */
+const TOOLS = [
+ {slug:"atlas", src:"./悖论图谱/index.html", fn:"An Atlas of Paradoxes", name:"悖论图谱",
+  sub:"96 个系统、842 组张力的全景图谱——张力即演化的动力。"},
+ {slug:"tension", src:"./二元悖论的张力/tension-web/index.html", fn:"本体论 · 认识论 · 方法论", name:"二元悖论的张力",
+  sub:"从二元悖论的张力作为系统动力的视角，观察本体论、认识论、方法论的全部发展史。"},
+ {slug:"crack", src:"./裂缝的两千五百年/index.html", fn:"二元悖论视角下的西方哲学史", name:"裂缝的两千五百年",
+  sub:"以主客二元与悖论为轴的西方哲学史交互地图——裂缝、跳跃与悬置的两千五百年。"},
+ {slug:"greek16", src:"./greek-philosophy/index.html", fn:"16 组对立中的底层原理", name:"古希腊哲学",
+  sub:"以 16 组核心二元对立为骨架重新梳理古希腊哲学史——从泰勒斯到新柏拉图主义，500 年思想的操作系统。"},
+ {slug:"meta16", src:"./十六组对立形而上学核心问题/index.html", fn:"地质层图谱", name:"十六组对立 → 形而上学核心问题",
+  sub:"十六组古希腊核心二元对立，如何构成（而非类比）当代形而上学的核心问题——一张亲子关系图谱。"},
+ {slug:"chain16", src:"./十六组对立连锁反应链/index.html", fn:"缺口 · 填补 · 新缺口", name:"十六组对立 · 连锁反应链",
+  sub:"不画对立本身，画它们之间的驱动力：每一步堵了什么洞、又凿开了什么新洞。"},
+ {slug:"logosdyn", src:"./Logos 系统动力学/index.html", fn:"二元张力驱动的哲学系统演化", name:"Logos 系统动力学",
+  sub:"二元张力＝动力 · 三角＝约束 · 自指回路＝故障源 · 棘轮＝进步。"},
+ {slug:"atlaslogoi", src:"./四律逻辑思脉地图/logos-atlas-web/index.html", fn:"科普勒斯顿全谱系 · Atlas Logoi", name:"四律 · 逻辑思脉地图",
+  sub:"把同一律、矛盾律、排中律、充足理由律当作可装可卸的部件，铺满科普勒斯顿谱系的思脉地图。"},
+ {slug:"fourlaws", src:"./四律自指悖论受力结构/index.html", fn:"拉不平的桌子", name:"四律 × 自指悖论 · 受力结构",
+  sub:"把说谎者句画成一台受力结构：四律是四根梁，自指＋真谓词给它加载，四条出路各锯短一根梁来卸压。"},
+ {slug:"elements", src:"./逻各斯原本/index.html", fn:"公理推演图 · Elements of Logos", name:"逻各斯原本",
+  sub:"欧几里得式的公理推演：四公理、两公设，派生十六组对立——交互式推演路径图。"},
+ {slug:"juzhen", src:"./juzhen/index.html", fn:"Axiom Combinatorics", name:"公理组合矩阵",
+  sub:"把四条逻辑律当作一个矩阵，每条取持守／极致／松动／否弃／限定／悬置／不涉之一——排列组合出哲学倾向。"},
+ {slug:"arc", src:"./总弧图支点搬家史/index.html", fn:"两次自爆 × 四十一组应力位", name:"总弧图 · 支点搬家史",
+  sub:"纵轴＝确定性支点的四个地址；爆点＝两次系统自爆；41 组对立挂在各自应力位。"},
+ {slug:"bidding", src:"./中介之死与五次竞标/index.html", fn:"近代哲学结构图", name:"中介之死与五次竞标",
+  sub:"笛卡尔到康德的标书为节点——近代哲学＝中介（神）之死后，为二分寻找替代焊点的连续竞标。"},
+ {slug:"lineage", src:"./西方哲学思想脉络/index.html", fn:"西方哲学思想脉络", name:"哲学思想脉络图",
+  sub:"西方哲学思想的传承与脉络总览图。"},
+ {slug:"meaning", src:"./探索生命的意义与价值/index.html", fn:"从虚无中寻找希望与力量", name:"探索生命的意义与价值",
+  sub:"穿过资本、政治与城市的迷雾，探索生命意义与价值的交互长卷。"},
+ {slug:"westphil10", src:"./西方哲学史考察十讲/index.html", fn:"考察 · 前五讲", name:"西方哲学史考察 · 前五讲",
+  sub:"《西方哲学史考察十讲》的前五讲——沿哲学史的问题脉络逐讲重构，追踪核心命题的承接与转折。"}
+];
+const GROUPS = [
+ {title:"悖论与张力", ga:"#C0532F", gd:"#96381E", gw:"#F4DED5", note:"悖论图谱、二元悖论的张力、裂缝的两千五百年", idx:[0,1,2]},
+ {title:"十六组对立", ga:"#A8842C", gd:"#7C601F", gw:"#F2E7C8", note:"古希腊哲学 · 十六组对立、对立 → 形而上学核心问题、对立 · 连锁反应链", idx:[3,4,5]},
+ {title:"逻各斯与四律", ga:"#16655C", gd:"#0E463F", gw:"#DEEBE8", note:"Logos 系统动力学、四律 · 逻辑思脉地图、四律 × 自指 · 受力结构、逻各斯原本、公理组合矩阵", idx:[6,7,8,9,10]},
+ {title:"哲学史的结构", ga:"#3F5566", gd:"#2B3D4A", gw:"#E4E9EC", note:"总弧图 · 支点搬家史、中介之死与五次竞标、哲学思想脉络图", idx:[11,12,13,15]},
+ {title:"意义与价值", ga:"#8A4A5E", gd:"#653343", gw:"#EFE0E5", note:"探索生命的意义与价值", idx:[14]}
+];
+/* ════════ 渲染：仪器架 + 总览卡片 ════════ */
+const pad = n => String(n+1).padStart(2,"0");
+const racknav = document.getElementById("racknav");
+const groupsEl = document.getElementById("groups");
+const home = document.createElement("a");
+home.className = "navitem home"; home.href = "#/"; home.dataset.slug = "";
+home.innerHTML = `<span class="idx">00</span><span>总览</span>`;
+racknav.appendChild(home);
+GROUPS.forEach(g=>{
+  const vars = `--ga:${g.ga};--gd:${g.gd};--gw:${g.gw}`;
+  const blk = document.createElement("div");
+  blk.className = "g-block"; blk.style.cssText = vars;
+  blk.innerHTML = `<div class="g-head"><span class="g-mark"></span><span class="g-name">${g.title}</span><span class="g-count">${g.idx.length} 篇</span></div>`;
+  g.idx.forEach(i=>{
+    const t = TOOLS[i];
+    const a = document.createElement("a");
+    a.className = "navitem"; a.href = "#/"+t.slug; a.dataset.slug = t.slug;
+    a.innerHTML = `<span class="idx">${pad(i)}</span><span>${t.name}</span>`;
+    blk.appendChild(a);
+  });
+  racknav.appendChild(blk);
+
+  const sec = document.createElement("section");
+  sec.className = "group"; sec.style.cssText = vars;
+  sec.innerHTML = `<div class="g-head"><span class="g-mark"></span><h3>${g.title}</h3><span class="note">${g.note}</span></div>`;
+  const grid = document.createElement("div");
+  grid.className = "cards";
+  g.idx.forEach(i=>{
+    const t = TOOLS[i];
+    const card = document.createElement("article");
+    card.className = "card";
+    card.innerHTML =
+      `<div class="meta"><span class="fn">${t.fn}</span><span class="idx">${pad(i)}</span></div>`+
+      `<h4><a href="#/${t.slug}">${t.name}</a></h4>`+
+      `<p class="sub">${t.sub}</p>`+
+      `<div class="foot"><span class="go">进入本篇 →</span><a class="ext" href="${encodeURI(t.src)}" target="_blank" rel="noopener">新窗口 ↗</a></div>`;
+    grid.appendChild(card);
+  });
+  sec.appendChild(grid);
+  groupsEl.appendChild(sec);
+});
+
+/* ════════ 路由：#/slug ⇄ 视图；iframe 懒加载并保活 ════════ */
+const main = document.getElementById("main");
+const overview = document.getElementById("overview");
+const crumbFn = document.getElementById("crumbFn");
+const crumbCur = document.getElementById("crumbCur");
+const extBtn = document.getElementById("extBtn");
+const prevBtn = document.getElementById("prevBtn");
+const nextBtn = document.getElementById("nextBtn");
+const frames = {};
+let current = null;   // slug 或 null(总览)
+
+function ensureFrame(t){
+  if (frames[t.slug]) return frames[t.slug];
+  const wrap = document.createElement("div");
+  wrap.className = "frame"; wrap.hidden = true;
+  const veil = document.createElement("div");
+  veil.className = "veil";
+  veil.innerHTML = `<div class="vt">LOADING</div><div class="vn">${t.name}</div><div class="bar"><i></i></div>`;
+  const ifr = document.createElement("iframe");
+  ifr.src = encodeURI(t.src);
+  ifr.title = t.name;
+  ifr.addEventListener("load", ()=> veil.remove(), {once:true});
+  wrap.appendChild(veil); wrap.appendChild(ifr);
+  main.appendChild(wrap);
+  frames[t.slug] = wrap;
+  return wrap;
+}
+function setNav(slug){
+  document.querySelectorAll(".navitem").forEach(a=>{
+    if (a.dataset.slug === (slug||"")) a.setAttribute("aria-current","page");
+    else a.removeAttribute("aria-current");
+  });
+}
+function show(slug){
+  const t = TOOLS.find(x=>x.slug===slug);
+  Object.values(frames).forEach(f=> f.hidden = true);
+  if (!t){                                    // 总览
+    overview.hidden = false;
+    document.body.classList.remove("in-tool");
+    crumbFn.textContent = "OVERVIEW";
+    crumbCur.textContent = "总览";
+    document.title = "哲学制品 · 综合书斋 · CAVNO";
+    setNav(null); current = null;
+    return;
+  }
+  overview.hidden = true;
+  ensureFrame(t).hidden = false;
+  document.body.classList.add("in-tool");
+  crumbFn.textContent = t.fn;
+  crumbCur.textContent = t.name;
+  extBtn.href = encodeURI(t.src);
+  document.title = t.name + " · 哲学综合书斋";
+  setNav(slug); current = slug;
+  closeRack();
+}
+function route(){
+  const h = decodeURIComponent(location.hash.replace(/^#\/?/, ""));
+  show(TOOLS.some(t=>t.slug===h) ? h : null);
+}
+function step(d){
+  const i = TOOLS.findIndex(t=>t.slug===current);
+  const n = (i + d + TOOLS.length) % TOOLS.length;
+  location.hash = "#/"+TOOLS[n].slug;
+}
+prevBtn.addEventListener("click", ()=>step(-1));
+nextBtn.addEventListener("click", ()=>step(+1));
+window.addEventListener("hashchange", route);
+
+/* ════════ 移动端仪器架抽屉 ════════ */
+const menuBtn = document.getElementById("menuBtn");
+const backdrop = document.getElementById("backdrop");
+function closeRack(){ document.body.classList.remove("rack-open"); }
+menuBtn.addEventListener("click", ()=> document.body.classList.toggle("rack-open"));
+backdrop.addEventListener("click", closeRack);
+window.addEventListener("keydown", e=>{ if (e.key==="Escape") closeRack(); });
+
+route();
+</script>
+</body>
+</html>

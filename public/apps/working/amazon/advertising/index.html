@@ -1,0 +1,969 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>广告投放的底层逻辑 · 一个带约束的最优化问题</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@400;500;600;700;900&family=Noto+Sans+SC:wght@400;500;700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --parchment:#F3EAD3;
+  --parchment-2:#EDE1C4;
+  --parchment-3:#E5D6B4;
+  --card:#F8F1DF;
+  --ink:#28241F;
+  --ink-2:#544C40;
+  --ink-3:#7A7060;
+  --teal:#3F7E6B;
+  --teal-d:#2C5A4C;
+  --teal-l:#5E9E8B;
+  --terra:#BC4B33;
+  --terra-d:#9A3A26;
+  --terra-l:#D9836E;
+  --brass:#A9853C;
+  --brass-d:#856727;
+  --line:#D6C6A4;
+  --line-soft:#E0D2B2;
+  --shadow:rgba(40,36,31,.10);
+  --serif:'Noto Serif SC',serif;
+  --sans:'Noto Sans SC',sans-serif;
+  --mono:'JetBrains Mono','Noto Sans Mono',monospace;
+  --wrap:1180px;
+  --col:720px;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{
+  margin:0;background:var(--parchment);color:var(--ink);
+  font-family:var(--serif);font-weight:400;line-height:1.9;
+  font-size:17px;-webkit-font-smoothing:antialiased;
+  background-image:
+    radial-gradient(circle at 12% 8%, rgba(191,75,51,.035), transparent 42%),
+    radial-gradient(circle at 88% 22%, rgba(63,126,107,.045), transparent 46%);
+  background-attachment:fixed;
+}
+::selection{background:rgba(63,126,107,.24)}
+img{max-width:100%}
+
+/* ---------- layout shell ---------- */
+.shell{display:flex;max-width:var(--wrap);margin:0 auto;gap:0}
+.rail{
+  width:288px;flex:0 0 288px;position:sticky;top:0;height:100vh;
+  overflow-y:auto;padding:34px 22px 60px 30px;
+  border-right:1px solid var(--line);
+  scrollbar-width:thin;scrollbar-color:var(--line) transparent;
+}
+.rail::-webkit-scrollbar{width:7px}
+.rail::-webkit-scrollbar-thumb{background:var(--line);border-radius:4px}
+.main{flex:1 1 auto;min-width:0;padding:0 clamp(20px,4vw,64px)}
+
+/* ---------- rail nav ---------- */
+.rail .brand{font-family:var(--sans);font-weight:700;font-size:13px;letter-spacing:.16em;
+  color:var(--teal-d);text-transform:uppercase;margin-bottom:4px}
+.rail .brand-sub{font-family:var(--sans);font-size:11px;color:var(--ink-3);letter-spacing:.04em;margin-bottom:26px;line-height:1.5}
+.toc{list-style:none;margin:0;padding:0;font-family:var(--sans);font-size:13.5px}
+.toc .grp{margin:20px 0 7px;font-weight:700;font-size:11px;letter-spacing:.14em;
+  color:var(--terra-d);text-transform:uppercase;display:flex;align-items:baseline;gap:8px}
+.toc .grp span{color:var(--ink-3);font-weight:500;letter-spacing:0;font-size:11px}
+.toc a{display:block;color:var(--ink-2);text-decoration:none;padding:4px 10px 4px 12px;
+  border-left:2px solid transparent;line-height:1.5;transition:all .18s;border-radius:0 3px 3px 0}
+.toc a:hover{color:var(--teal-d);background:rgba(63,126,107,.07)}
+.toc a.active{color:var(--teal-d);border-left-color:var(--teal);background:rgba(63,126,107,.10);font-weight:500}
+.toc a .n{font-family:var(--mono);font-size:11px;color:var(--brass-d);margin-right:7px}
+
+/* ---------- mobile drawer ---------- */
+.topbar{display:none;position:sticky;top:0;z-index:40;background:rgba(243,234,211,.94);
+  backdrop-filter:blur(8px);border-bottom:1px solid var(--line);padding:12px 18px;
+  align-items:center;justify-content:space-between}
+.topbar .tb-title{font-family:var(--sans);font-weight:700;font-size:13px;letter-spacing:.1em;color:var(--teal-d)}
+.menu-btn{font-family:var(--sans);font-size:13px;font-weight:700;color:var(--teal-d);
+  background:transparent;border:1px solid var(--teal);border-radius:6px;padding:6px 13px;cursor:pointer}
+.scrim{display:none;position:fixed;inset:0;background:rgba(40,36,31,.42);z-index:44}
+
+/* ---------- hero ---------- */
+.hero{padding:82px 0 54px;border-bottom:1px solid var(--line);position:relative}
+.eyebrow{font-family:var(--sans);font-weight:700;font-size:12px;letter-spacing:.22em;
+  text-transform:uppercase;color:var(--terra);margin-bottom:22px;display:flex;align-items:center;gap:12px}
+.eyebrow::before{content:"";width:34px;height:2px;background:var(--terra)}
+.hero h1{font-family:var(--serif);font-weight:900;line-height:1.16;letter-spacing:.01em;
+  font-size:clamp(36px,6vw,62px);margin:0 0 8px;color:var(--ink)}
+.hero h1 em{font-style:normal;color:var(--teal-d);position:relative}
+.hero .lede{font-size:clamp(19px,2.4vw,23px);color:var(--ink-2);font-weight:500;
+  max-width:640px;line-height:1.7;margin:26px 0 0}
+.hero .lede b{color:var(--terra-d);font-weight:700}
+.hero .meta{margin-top:34px;font-family:var(--sans);font-size:12.5px;color:var(--ink-3);
+  display:flex;flex-wrap:wrap;gap:8px 20px;line-height:1.6}
+.hero .meta span{display:inline-flex;align-items:center;gap:7px}
+.hero .meta span::before{content:"";width:5px;height:5px;border-radius:50%;background:var(--teal-l)}
+
+/* ---------- spine (signature) ---------- */
+.spine{margin:50px 0 12px;padding:34px 30px 30px;background:var(--card);
+  border:1px solid var(--line);border-radius:14px;box-shadow:0 10px 34px -22px var(--shadow)}
+.spine .st{font-family:var(--sans);font-weight:700;font-size:12px;letter-spacing:.16em;
+  text-transform:uppercase;color:var(--teal-d);margin-bottom:6px}
+.spine .sd{font-size:15px;color:var(--ink-2);margin-bottom:22px;line-height:1.7}
+.chain{display:flex;flex-wrap:wrap;align-items:stretch;gap:0}
+.node{flex:1 1 130px;min-width:120px;background:var(--parchment);border:1px solid var(--line-soft);
+  border-radius:10px;padding:13px 12px 14px;position:relative;text-align:center}
+.node .nk{font-family:var(--sans);font-size:10.5px;font-weight:700;letter-spacing:.1em;
+  color:var(--brass-d);text-transform:uppercase;margin-bottom:5px}
+.node .nt{font-family:var(--serif);font-weight:700;font-size:15.5px;color:var(--ink);line-height:1.35}
+.node .nf{font-family:var(--mono);font-size:11px;color:var(--teal-d);margin-top:6px;line-height:1.4}
+.arrow{flex:0 0 26px;display:flex;align-items:center;justify-content:center;color:var(--teal-l);font-size:18px;font-weight:700}
+@media(max-width:760px){.arrow{flex-basis:100%;height:22px;transform:rotate(90deg)}}
+
+/* ---------- reading structure ---------- */
+.part-open{padding:70px 0 6px;scroll-margin-top:20px}
+.part-open .pn{font-family:var(--mono);font-size:14px;color:var(--terra);letter-spacing:.1em;margin-bottom:8px}
+.part-open h2{font-family:var(--serif);font-weight:900;font-size:clamp(28px,4vw,40px);
+  margin:0 0 14px;color:var(--teal-d);line-height:1.2}
+.part-open .pd{font-size:17px;color:var(--ink-2);max-width:var(--col);line-height:1.85}
+.part-open .prule{height:3px;width:64px;background:var(--terra);margin:20px 0 0;border-radius:2px}
+
+section.sec{max-width:var(--col);padding:44px 0 8px;scroll-margin-top:16px}
+section.sec .sx{font-family:var(--sans);font-weight:700;font-size:12px;letter-spacing:.14em;
+  text-transform:uppercase;color:var(--brass-d);margin-bottom:9px;display:flex;align-items:center;gap:10px}
+section.sec .sx .num{font-family:var(--mono);color:var(--teal);background:rgba(63,126,107,.10);
+  padding:1px 8px;border-radius:5px;letter-spacing:.05em}
+section.sec h3{font-family:var(--serif);font-weight:700;font-size:clamp(23px,3vw,30px);
+  margin:0 0 18px;color:var(--ink);line-height:1.32;letter-spacing:.005em}
+section.sec p{margin:0 0 18px}
+section.sec p b,section.sec li b{color:var(--teal-d);font-weight:700}
+section.sec em{font-style:normal;color:var(--terra-d);font-weight:600;
+  border-bottom:1.5px solid rgba(191,75,51,.28)}
+.lead{font-size:18.5px;line-height:1.85}
+.lead::first-letter{}
+
+/* term / inline mono */
+.k{font-family:var(--mono);font-size:.86em;background:var(--parchment-2);
+  padding:1px 6px;border-radius:4px;color:var(--teal-d);border:1px solid var(--line-soft)}
+
+/* reliability pills */
+.pill{font-family:var(--sans);font-size:10.5px;font-weight:700;letter-spacing:.05em;
+  padding:2px 8px 2.5px;border-radius:20px;display:inline-flex;align-items:center;gap:5px;
+  vertical-align:middle;white-space:nowrap;line-height:1;position:relative;top:-1px}
+.pill::before{content:"";width:6px;height:6px;border-radius:50%}
+.pill.pri{color:var(--teal-d);background:rgba(63,126,107,.12);border:1px solid rgba(63,126,107,.3)}
+.pill.pri::before{background:var(--teal)}
+.pill.mech{color:var(--brass-d);background:rgba(169,133,60,.13);border:1px solid rgba(169,133,60,.32)}
+.pill.mech::before{background:var(--brass)}
+.pill.emp{color:var(--terra-d);background:rgba(191,75,51,.11);border:1px solid rgba(191,75,51,.3)}
+.pill.emp::before{background:var(--terra)}
+
+/* callouts */
+.callout{margin:22px 0;padding:16px 20px 16px 22px;border-radius:0 10px 10px 0;
+  background:var(--card);border-left:4px solid var(--teal);font-size:15.5px;line-height:1.78}
+.callout .ct{font-family:var(--sans);font-weight:700;font-size:11px;letter-spacing:.13em;
+  text-transform:uppercase;margin-bottom:6px;display:flex;align-items:center;gap:8px}
+.callout p{margin:0 0 10px}.callout p:last-child{margin:0}
+.callout.concl{border-left-color:var(--teal)}
+.callout.concl .ct{color:var(--teal-d)}
+.callout.warn{border-left-color:var(--terra);background:rgba(191,75,51,.055)}
+.callout.warn .ct{color:var(--terra-d)}
+.callout.exp{border-left-color:var(--brass);background:rgba(169,133,60,.07)}
+.callout.exp .ct{color:var(--brass-d)}
+
+/* formula */
+.fx{margin:22px 0;padding:20px 22px;background:#2A2622;border-radius:11px;
+  position:relative;overflow-x:auto;box-shadow:0 8px 26px -18px rgba(40,36,31,.5)}
+.fx .fl{font-family:var(--sans);font-weight:700;font-size:10.5px;letter-spacing:.14em;
+  text-transform:uppercase;color:var(--teal-l);margin-bottom:12px}
+.fx .eq{font-family:var(--mono);font-size:16px;color:#F3EAD3;line-height:2;white-space:nowrap}
+.fx .eq .op{color:var(--terra-l)}
+.fx .eq .hl{color:#8FCBB6;font-weight:700}
+.fx .eq .dim{color:#A79B84}
+.fx .note{font-family:var(--sans);font-size:12px;color:#B8AC93;margin-top:10px;line-height:1.6;white-space:normal}
+.frac{display:inline-flex;flex-direction:column;text-align:center;vertical-align:middle;margin:0 3px}
+.frac .nu{border-bottom:1.5px solid #8FCBB6;padding:0 6px 1px;line-height:1.5}
+.frac .de{padding:1px 6px 0;line-height:1.5}
+
+/* diagram frame */
+.diagram{margin:26px 0;padding:22px;background:var(--card);border:1px solid var(--line);
+  border-radius:13px;box-shadow:0 8px 28px -20px var(--shadow)}
+.diagram .dt{font-family:var(--sans);font-weight:700;font-size:11px;letter-spacing:.13em;
+  text-transform:uppercase;color:var(--teal-d);margin-bottom:14px;text-align:center}
+.diagram svg{display:block;width:100%;height:auto}
+.diagram .dc{font-family:var(--sans);font-size:12px;color:var(--ink-3);text-align:center;
+  margin-top:12px;line-height:1.6}
+
+/* lists */
+.sec ul{margin:0 0 18px;padding:0;list-style:none}
+.sec ul li{position:relative;padding-left:22px;margin-bottom:11px;line-height:1.8}
+.sec ul li::before{content:"";position:absolute;left:2px;top:.82em;width:7px;height:7px;
+  background:var(--teal-l);border-radius:2px;transform:rotate(45deg)}
+.sec ol{margin:0 0 18px;padding-left:0;list-style:none;counter-reset:ol}
+.sec ol li{position:relative;padding-left:34px;margin-bottom:12px;line-height:1.8;counter-increment:ol}
+.sec ol li::before{content:counter(ol);position:absolute;left:0;top:.15em;
+  font-family:var(--mono);font-size:12px;font-weight:700;color:var(--teal-d);
+  background:rgba(63,126,107,.12);width:22px;height:22px;border-radius:6px;
+  display:flex;align-items:center;justify-content:center}
+
+/* divider between parts */
+.pdiv{max-width:var(--col);margin:56px 0 0;border:0;border-top:1px solid var(--line)}
+
+/* coda */
+.coda{padding:64px 0 40px;max-width:var(--col)}
+.coda h2{font-family:var(--serif);font-weight:900;font-size:clamp(26px,3.6vw,36px);color:var(--teal-d);margin:0 0 8px}
+.core-grid{display:grid;grid-template-columns:1fr;gap:14px;margin:28px 0}
+.core-card{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:18px 20px}
+.core-card .cn{font-family:var(--mono);font-size:12px;color:var(--terra);margin-bottom:6px;font-weight:700}
+.core-card h4{font-family:var(--serif);font-weight:700;font-size:18px;margin:0 0 7px;color:var(--ink)}
+.core-card p{margin:0;font-size:15px;color:var(--ink-2);line-height:1.75}
+
+.footer{max-width:var(--col);padding:38px 0 80px;border-top:1px solid var(--line);
+  margin-top:40px;font-family:var(--sans);font-size:13px;color:var(--ink-3);line-height:1.8}
+.footer b{color:var(--ink-2)}
+.legend{display:flex;flex-wrap:wrap;gap:14px;margin:16px 0 22px}
+.legend .li{display:flex;align-items:center;gap:8px;font-family:var(--sans);font-size:12.5px;color:var(--ink-2)}
+
+.progress{position:fixed;top:0;left:0;height:3px;background:var(--terra);z-index:60;width:0;transition:width .1s}
+
+@media(max-width:960px){
+  .rail{display:none}
+  .rail.open{display:block;position:fixed;top:0;left:0;z-index:46;height:100vh;width:300px;
+    background:var(--parchment);box-shadow:8px 0 40px -12px rgba(40,36,31,.4)}
+  .scrim.show{display:block}
+  .topbar{display:flex}
+  .shell{display:block}
+  .main{padding:0 22px}
+  .hero{padding:44px 0 40px}
+  body{font-size:16.5px}
+}
+@media(max-width:520px){
+  .fx{padding:16px 14px}.fx .eq{font-size:14px}
+  .spine{padding:24px 18px}
+}
+@media(prefers-reduced-motion:reduce){
+  html{scroll-behavior:auto}*{transition:none!important}
+}
+</style>
+</head>
+<body>
+<div class="progress" id="prog"></div>
+
+<div class="topbar">
+  <span class="tb-title">广告投放的底层逻辑</span>
+  <button class="menu-btn" id="menuBtn">目录</button>
+</div>
+<div class="scrim" id="scrim"></div>
+
+<div class="shell">
+  <!-- ================= RAIL ================= -->
+  <nav class="rail" id="rail">
+    <div class="brand">广告投放 · 底层逻辑</div>
+    <div class="brand-sub">从视频课程 00–34 讲 + 字幕蒸馏而成的结构化图谱<br>原理 · 机制 · 策略 · 实操</div>
+    <ul class="toc" id="toc">
+      <li class="grp">导览 <span>Map</span></li>
+      <li><a href="#spine"><span class="n">00</span>思维总纲</a></li>
+
+      <li class="grp">第一部 · 原理 <span>Why</span></li>
+      <li><a href="#s11"><span class="n">1.1</span>广告是科学，不是玄学</a></li>
+      <li><a href="#s12"><span class="n">1.2</span>发展史的两条主线</a></li>
+      <li><a href="#s13"><span class="n">1.3</span>财务本质：一种平衡</a></li>
+      <li><a href="#s14"><span class="n">1.4</span>品牌广告 vs 效果广告</a></li>
+      <li><a href="#s15"><span class="n">1.5</span>收费方式的演进</a></li>
+      <li><a href="#s16"><span class="n">1.6</span>营销漏斗</a></li>
+
+      <li class="grp">第二部 · 机制 <span>How</span></li>
+      <li><a href="#s21"><span class="n">2.1</span>ECPM：平台目标函数</a></li>
+      <li><a href="#s22"><span class="n">2.2</span>坑位算法</a></li>
+      <li><a href="#s23"><span class="n">2.3</span>拍卖：GFP→GSP→VCG</a></li>
+      <li><a href="#s24"><span class="n">2.4</span>后台结构 = 商业合同</a></li>
+      <li><a href="#s25"><span class="n">2.5</span>为什么有匹配模式</a></li>
+      <li><a href="#s26"><span class="n">2.6</span>反作弊</a></li>
+      <li><a href="#s27"><span class="n">2.7</span>CTR 预估：随机变量</a></li>
+
+      <li class="grp">第三部 · 策略 <span>Framework</span></li>
+      <li><a href="#s31"><span class="n">3.1</span>带约束的最优化问题</a></li>
+      <li><a href="#s32"><span class="n">3.2</span>目标定义：CPS 为自变量</a></li>
+      <li><a href="#s33"><span class="n">3.3</span>用广告推排名</a></li>
+      <li><a href="#s34"><span class="n">3.4</span>选品为王（可证明）</a></li>
+
+      <li class="grp">第四部 · 实操 <span>Methods</span></li>
+      <li><a href="#s41"><span class="n">4.1</span>广告产品选择</a></li>
+      <li><a href="#s42"><span class="n">4.2</span>广告结构与流量切分</a></li>
+      <li><a href="#s43"><span class="n">4.3</span>找词与词量</a></li>
+      <li><a href="#s44"><span class="n">4.4</span>匹配模式实战</a></li>
+      <li><a href="#s45"><span class="n">4.5</span>预算与 bid</a></li>
+      <li><a href="#s46"><span class="n">4.6</span>Campaign 选项</a></li>
+      <li><a href="#s47"><span class="n">4.7</span>否定词</a></li>
+      <li><a href="#s48"><span class="n">4.8</span>优化：什么 & 多久</a></li>
+      <li><a href="#s49"><span class="n">4.9</span>人辅助机器</a></li>
+      <li><a href="#s410"><span class="n">4.10</span>分时调价</a></li>
+      <li><a href="#s411"><span class="n">4.11</span>分类目？</a></li>
+      <li><a href="#s412"><span class="n">4.12</span>分新品期？</a></li>
+      <li><a href="#s413"><span class="n">4.13</span>KPI 管理</a></li>
+
+      <li class="grp">基石 & 结语 <span>Core</span></li>
+      <li><a href="#sf1"><span class="n">F.1</span>独立同分布 & 大数定律</a></li>
+      <li><a href="#sf2"><span class="n">F.2</span>广告数据避坑</a></li>
+      <li><a href="#coda"><span class="n">★</span>一以贯之的思想</a></li>
+    </ul>
+  </nav>
+
+  <!-- ================= MAIN ================= -->
+  <main class="main">
+
+    <!-- ---------- HERO ---------- -->
+    <header class="hero" id="top">
+      <div class="eyebrow">亚马逊 CPC 广告 · 底层逻辑图谱</div>
+      <h1>广告投放<br>不是玄学，是<em>一个带约束的<br>最优化问题</em></h1>
+      <p class="lede">全部课程可以压成一句话：效果广告的目标函数由<b>平台（ECPM）</b>与<b>卖家（在预算/库存约束下最大化订单）</b>双重定义，在 GSP 拍卖机制的博弈中求解；而它的地基，是<b>财务平衡</b>（资金周转率 ↔ 单次利润率）与<b>统计推断</b>（CTR/CVR 随机变量的机器学习预估）。</p>
+      <div class="meta">
+        <span>作者：十年广告优化师，做过 Google/百度广告与 Anker 市场部，操盘两家上市公司全部站内广告</span>
+        <span>方法：把 34 讲的分散论点，按「原理→机制→策略→实操」重构为一条因果链</span>
+      </div>
+    </header>
+
+    <!-- ---------- SPINE (signature) ---------- -->
+    <div class="spine" id="spine">
+      <div class="st">思维总纲 · The Spine</div>
+      <div class="sd">整门课只有一条主干。从「生意的财务本质」出发，把广告写成一个最优化问题；这个问题的目标函数，在平台一端叫 ECPM，在卖家一端叫「预算约束下的订单最大化」；二者在 GSP 拍卖中对齐，落到一个可计算的出价公式，再展开为全部实操。所有具体方法，都是这条主干的推论。</div>
+      <div class="chain">
+        <div class="node"><div class="nk">起点</div><div class="nt">财务本质</div><div class="nf">周转率↔利润率</div></div>
+        <div class="arrow">→</div>
+        <div class="node"><div class="nk">框架</div><div class="nt">约束优化</div><div class="nf">max 订单 s.t. 预算</div></div>
+        <div class="arrow">→</div>
+        <div class="node"><div class="nk">平台目标</div><div class="nt">ECPM</div><div class="nf">CTR·CVR·Price</div></div>
+        <div class="arrow">→</div>
+        <div class="node"><div class="nk">机制</div><div class="nt">GSP 拍卖</div><div class="nf">truth-telling</div></div>
+        <div class="arrow">→</div>
+        <div class="node"><div class="nk">解</div><div class="nt">出价公式</div><div class="nf">bid=CPS·CVR</div></div>
+        <div class="arrow">→</div>
+        <div class="node"><div class="nk">展开</div><div class="nt">全部实操</div><div class="nf">结构·预算·否词</div></div>
+      </div>
+    </div>
+
+    <div class="callout exp" style="max-width:var(--col)">
+      <div class="ct">◆ 关于可靠性分层</div>
+      <p>本图谱沿用「可靠性分层」标注每条结论的置信度，便于你区分「可推导的原理」与「作者的实战经验」——后者随时间、类目会失效，作者本人也反复声明多为主观意见。</p>
+      <p style="margin-top:12px">
+        <span class="pill pri">原理</span> 可从公理/逻辑推导、可证伪的结论　
+        <span class="pill mech">机制</span> 平台实际运行机制或行业事实　
+        <span class="pill emp">经验</span> 作者主观/实战判断，情境依赖、需存疑
+      </p>
+    </div>
+
+    <!-- ========================================================= -->
+    <!-- PART ONE · 原理 -->
+    <!-- ========================================================= -->
+    <div class="part-open" id="part1">
+      <div class="pn">PART Ⅰ</div>
+      <h2>第一部 · 原理：广告是什么</h2>
+      <p class="pd">在谈任何操作之前，先回答「广告在生意里到底是什么」。这一部确立四个地基：广告是可证伪的科学、它的财务本质是一种平衡、品牌与效果两类广告方向相反、以及一整套判断标准（收费方式与营销漏斗）。</p>
+      <div class="prule"></div>
+    </div>
+
+    <section class="sec" id="s11">
+      <div class="sx"><span class="num">1.1</span>科学的判据</div>
+      <h3>广告是科学，不是玄学</h3>
+      <p class="lead">结论先行：<b>一切不能定量、不能证伪的广告「方法论」，都只能当乐子听。</b>这个判据直接来自逻辑实证主义——凡不能被经验证伪者，非科学而是神学。</p>
+      <p>广告之所以能被证伪，是因为它从<span class="k">展现 → 点击 → 订单 → 花费</span>的全链路都已被数据化。研究「科学的广告」只有一个目的：<em>让成功可以重复</em>。若一次成功无法在理论上被解释、无法被复现，它就不是科学，只是运气。而时间是最贵的成本，学会证伪式的思维，能让你少走很多坑。<span class="pill pri">原理</span></p>
+      <p>计算广告早已是一门成熟学科（刘鹏《计算广告》、多所高校的计算广告学课程），它不是作者的发明——作者只是把学界与工业界的既有结论，搬运到亚马逊场景落地。这也定下了全课的态度：任何说法，最好能援引信息检索与计算广告的已有知识，而非自造名词。</p>
+    </section>
+
+    <section class="sec" id="s12">
+      <div class="sx"><span class="num">1.2</span>历史的两条主线</div>
+      <h3>发展史：可量化 + 成本降低</h3>
+      <p>把广告收入类比「种地」：<b>收入 = 土地面积（流量）× 亩产（单份流量的变现能力）</b>。媒介从口口相传→报纸→电视→互联网→搜索→信息流，始终沿两条主线演进。</p>
+      <ul>
+        <li><b>可量化评估的精度不断提高</b>：报纸只有发行量 → 电视有实时收视率 → 互联网有全链路点击/转化。可量化，是后续一切「优化」的前提。</li>
+        <li><b>投放门槛与单份成本不断降低</b>：从只有头部公司投得起央视黄金档，到小企业主自助投放。门槛降低，土地面积（广告主数量）才能扩张。</li>
+      </ul>
+      <p>互联网广告碾压传统媒介，正因为它<em>同时</em>做到了两件事：扩大土地（农村包围城市，接纳海量小广告主）、提高亩产（全流程定量 → 可优化）。而「全流程可量化」这一点，反过来倒逼了机器学习、AI 与广告优化师这一职业的出现。<span class="pill mech">机制</span></p>
+    </section>
+
+    <section class="sec" id="s13">
+      <div class="sx"><span class="num">1.3</span>财务视角（核心）</div>
+      <h3>财务本质：广告是一种平衡</h3>
+      <p class="lead">不要把广告当成一个新东西——<b>它只是生意的一种手段。</b>而生意的利润，由<b>资金周转率 × 单次周转利润率</b>共同决定。</p>
+      <div class="fx">
+        <div class="fl">生意的两个自变量</div>
+        <div class="eq">利润 <span class="op">≈</span> <span class="hl">资金周转率</span> <span class="op">×</span> <span class="hl">单次周转利润率</span></div>
+        <div class="note">不投广告：单次利润率最高，但周转率最低、销售额低。广告投很多：销售额可以很高，但很可能没有利润。广告的本质，就是在这两者之间做平衡。</div>
+      </div>
+      <p>由此得到全课最重要的统一视角之一——<b>财务等价性</b>：</p>
+      <div class="callout concl">
+        <div class="ct">■ 结论 · 财务等价</div>
+        <p><em>投广告、做 deal、降价，在财务上是等价的</em>——它们都是牺牲单次利润率，换取资金周转率。用「财务」这把统一度量衡去看，各种花样繁多的业务操作就不再迷惑人，你能从生意的角度整体把控。<span class="pill pri">原理</span></p>
+      </div>
+    </section>
+
+    <section class="sec" id="s14">
+      <div class="sx"><span class="num">1.4</span>两类广告</div>
+      <h3>品牌广告 vs 效果广告</h3>
+      <p>两类广告的目标方向<em>正好相反</em>，这是逻辑上的对立，不是程度差异。</p>
+      <ul>
+        <li><b>品牌广告：提升利润率。</b>让你卖得更贵（Anker 充电产品比竞品贵约 20–30%，市占率却很稳定——溢价带来的利润差极大）。见效以年为单位，是战略级决策，难以定量评估（靠百度指数/Google Rank/第三方问卷），门槛与资金要求极高。<span class="pill emp">经验</span></li>
+        <li><b>效果广告：降低利润率。</b>直接达成短期财务目标，可完全定量，预算可以小到每天 20–30 美金。它增加资金周转效率，牺牲单次利润率。</li>
+      </ul>
+      <p>因为二者利润率方向相反，所以<em>逻辑上几乎不可能存在同时兼具两者的广告</em>。凯迪拉克是豪华品牌却常年大幅降价冲量，正是以损伤品牌溢价为代价换取效果——两者在打架。<span class="pill pri">原理</span></p>
+      <div class="callout concl">
+        <div class="ct">■ 结论 · 中小卖家的唯一选择</div>
+        <p>普通中小卖家没有资本、也没有资源整合能力做品牌广告，<b>效果广告几乎是唯一选择</b>。本图谱之后的全部讨论都是效果广告；而 CPS 付费的 deal，是效果广告的终极形态，其他形式只是在逼近它。</p>
+      </div>
+    </section>
+
+    <section class="sec" id="s15">
+      <div class="sx"><span class="num">1.5</span>收费方式演进</div>
+      <h3>一切向钱看：CPT→CPM→CPC→CPS</h3>
+      <p>从收费角度重看广告史，能得到一把判断广告性质的利器：</p>
+      <ul>
+        <li><b>CPT（按时长）</b>：前互联网时代全部如此，几乎都是品牌广告（报纸/电视，位置与时长定价）。</li>
+        <li><b>CPM（按展现）</b>：互联网初期沿用拍卖思路（谷歌 2000 年左右的关键词广告最早用 CPM）。</li>
+        <li><b>CPC（按点击）</b>：搜索时代的革命。它第一次实现了「效果」——能变现的流量变多、单份流量卖得起价（新开垦的土地 + 更高亩产），但代价是平台必须预估 CTR，从而催生机器学习。</li>
+        <li><b>oCPM / CPS</b>：信息流时代（Facebook 率先）按 CPM 付费、按 CPS 优化。CPS 是终极——deal 就是 CPS，是广告的终极形态。</li>
+      </ul>
+      <p>规律：<b>收费方式越往后，越偏效果，平台机器学习压力越大，对广告主越友善</b>（这是平台之间互相内卷给中小卖家的红利）。<span class="pill mech">机制</span></p>
+      <div class="callout exp">
+        <div class="ct">◆ 应用 · 判断广告性质</div>
+        <p>判断某个广告是品牌还是效果，先看它怎么收费：CPS/deal 最优（完全可控），CPC 次之（仍是效果），CPM/CPT 偏品牌。对亚马逊：SP/SBV（CPC）是效果主力，SD/DSP（可 CPM）偏品牌。<span class="pill emp">经验</span></p>
+      </div>
+    </section>
+
+    <section class="sec" id="s16">
+      <div class="sx"><span class="num">1.6</span>营销漏斗</div>
+      <h3>越底层越偏效果</h3>
+      <p><span class="k">Impression → Click →（Communication）→ Conversion</span>，每一层都是一个漏斗。核心结论：<b>营销漏斗越底层越偏效果，越上层越偏品牌</b>（上层负责触达/曝光，下层负责转化）。</p>
+      <div class="diagram">
+        <div class="dt">营销漏斗 · 上层偏品牌 / 下层偏效果</div>
+        <svg viewBox="0 0 640 300" role="img" aria-label="营销漏斗示意">
+          <defs>
+            <linearGradient id="fg" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0" stop-color="#BC4B33"/><stop offset="1" stop-color="#3F7E6B"/>
+            </linearGradient>
+          </defs>
+          <polygon points="70,30 570,30 470,95 170,95" fill="#BC4B33" opacity="0.85"/>
+          <polygon points="170,105 470,105 405,168 235,168" fill="#B0664A" opacity="0.85"/>
+          <polygon points="235,178 405,178 355,238 285,238" fill="#71856B" opacity="0.9"/>
+          <polygon points="285,248 355,248 330,288 310,288" fill="#3F7E6B"/>
+          <text x="320" y="68" text-anchor="middle" fill="#F3EAD3" font-family="Noto Sans SC" font-weight="700" font-size="19">Impression 展现</text>
+          <text x="320" y="142" text-anchor="middle" fill="#F3EAD3" font-family="Noto Sans SC" font-weight="700" font-size="17">Click 点击</text>
+          <text x="320" y="212" text-anchor="middle" fill="#F3EAD3" font-family="Noto Sans SC" font-weight="700" font-size="15">Conversion 转化</text>
+          <text x="320" y="276" text-anchor="middle" fill="#F3EAD3" font-family="Noto Sans SC" font-weight="700" font-size="12">订单</text>
+          <text x="600" y="62" text-anchor="end" fill="#9A3A26" font-family="Noto Sans SC" font-weight="700" font-size="13">偏品牌</text>
+          <text x="600" y="212" text-anchor="end" fill="#2C5A4C" font-family="Noto Sans SC" font-weight="700" font-size="13">偏效果</text>
+          <line x1="596" y1="72" x2="596" y2="200" stroke="#D6C6A4" stroke-width="1.5" stroke-dasharray="3 4"/>
+        </svg>
+        <div class="dc">推论：站内广告比站外广告更偏底层，用亚马逊平台做最终转化时，站内广告优于站外。</div>
+      </div>
+      <p><b>三个「陷阱定义」必须警惕</b>（各平台各异，且电商平台由平台定义、卖家无法自选，除非用 API 自定义）：</p>
+      <ul>
+        <li><b>展现</b>：只要页面加载即计，不需真被看到。亚马逊 SD 的 <span class="k">vCPM</span> 另有要求——50% 以上物料曝光超 1 秒才算有效展现。</li>
+        <li><b>点击</b>：与 UV/session 不同。同一个 session 可多次点击，<em>点击不去重</em>（除非作弊）。</li>
+        <li><b>订单</b>：亚马逊按归因统计（SP 7 天 / 其余 14 天），且默认计入<em>整个店铺所有 SKU</em>，与日常直觉严重不符。<span class="pill mech">机制</span></li>
+      </ul>
+    </section>
+
+    <hr class="pdiv">
+
+    <!-- ========================================================= -->
+    <!-- PART TWO · 机制 -->
+    <!-- ========================================================= -->
+    <div class="part-open" id="part2">
+      <div class="pn">PART Ⅱ</div>
+      <h2>第二部 · 机制：平台如何运转</h2>
+      <p class="pd">从「投放者视角」切换到「开发者视角」——如果我是平台，我会怎么设计规则？这一部拆开平台的目标函数（ECPM）、坑位与排序算法、拍卖机制的三代演进、后台结构的商业合同本质、匹配模式、反作弊，以及 CTR 预估的机器学习内核。核心心态贯穿始终：<b>平台是宇宙的中心，卖家只是其中一个玩家。</b></p>
+      <div class="prule"></div>
+    </div>
+
+    <section class="sec" id="s21">
+      <div class="sx"><span class="num">2.1</span>目标函数</div>
+      <h3>ECPM：平台与卖家的公共目标函数</h3>
+      <p class="lead">做算法，最重要的事永远是<b>定义目标函数</b>——90% 的问题是定义目标，剩下 10% 才是具体算法。对中小卖家，投广告的唯一目标是「给定预算下广告订单最大化」；而平台与卖家的<em>公共</em>目标函数，是 <b>ECPM</b>（预估千次展现收益）。</p>
+      <p>亚马逊的常规收入是佣金。把它的 ECPM 写出来：</p>
+      <div class="fx">
+        <div class="fl">平台的 ECPM（佣金视角）</div>
+        <div class="eq"><span class="hl">ECPM</span> <span class="op">∝</span> 1000 <span class="op">×</span> CTR <span class="op">×</span> CVR <span class="op">×</span> Price <span class="op">×</span> Commission</div>
+        <div class="note">1000 次展现 × 点击率 → 点击量；× 转化率 → 订单量；× 售价 → 销售额；× 佣金率 → 平台佣金收入。</div>
+      </div>
+      <p>在价格、佣金率、展现数给定时（对同类目而言 Commission 是常量），<b>平台要为每一个坑位，找到 CTR × CVR × Price 三者乘积最高的产品</b>，它的佣金才最大化。这就是「抢坑位」背后真正的算法。<span class="pill pri">原理</span></p>
+    </section>
+
+    <section class="sec" id="s22">
+      <div class="sx"><span class="num">2.2</span>坑位算法</div>
+      <h3>平台为流量找产品</h3>
+      <p>关键心态：卖家是菜市场里卖菜的，不是菜市场的管理员。平台制定规则的目标非常清晰——让自己赚更多钱。由此得到几个反直觉但严密的推论：</p>
+      <ul>
+        <li><b>你的产品需要抢坑位吗？</b>若你的 CTR/CVR 并不比竞品强，你占了坑位就会<em>降低</em>平台的预估佣金收入——平台的算法一定会把你淘汰。所以产品开发必须有针对性：针对特定人群做出更高的 CTR/CVR，这才是核心竞争力。</li>
+        <li><b>降价为何有用？</b>价格↓、CTR/CVR↑，ECPM 显著↑。</li>
+        <li><b>投广告为何能推排名？</b>它不是占坑位，而是<em>指导</em>平台——告诉平台「你的产品对哪些词 CTR/CVR 高」，帮平台为流量找到好产品，实现双赢（详见 3.3）。</li>
+      </ul>
+      <div class="callout warn">
+        <div class="ct">▲ 风险提示 · 刷单仅作机制分析</div>
+        <p>刷单「有效」的机制在于它<em>扭曲</em>了平台对产品 CTR/CVR 的预估，本质是用效果广告的成本去实现品牌广告的效果。但这是<b>违反平台规则的黑帽操作，面临封号与法律风险</b>，平台招募了全世界最聪明的人专门反作弊、且清楚谁在作弊（只是选择何时打击）。本图谱只讨论白帽逻辑，不提供任何操作路径。<span class="pill mech">机制</span></p>
+      </div>
+    </section>
+
+    <section class="sec" id="s23">
+      <div class="sx"><span class="num">2.3</span>拍卖机制</div>
+      <h3>GFP → GSP → VCG</h3>
+      <p>所有广告本质都是拍卖。它与传统拍卖唯一的差别：传统是「一物、多人竞拍」，广告是「<b>多物、多人竞拍</b>」（多对多），因此不能简单地价高者得。三代机制：</p>
+      <div class="diagram">
+        <div class="dt">GSP 排序 · 按 ECPM 降序，实际 CPC 由下一名决定</div>
+        <svg viewBox="0 0 640 236" role="img" aria-label="GSP排序与CPC公式">
+          <g font-family="Noto Sans SC">
+            <rect x="30" y="24" width="220" height="46" rx="8" fill="#3F7E6B"/>
+            <text x="140" y="46" text-anchor="middle" fill="#F3EAD3" font-weight="700" font-size="14">坑位 1 · ECPM 最高</text>
+            <text x="140" y="62" text-anchor="middle" fill="#CFE4DB" font-size="11">= CTR₁ × bid₁（最高）</text>
+            <rect x="30" y="86" width="220" height="46" rx="8" fill="#5E9E8B"/>
+            <text x="140" y="108" text-anchor="middle" fill="#F3EAD3" font-weight="700" font-size="14">坑位 2</text>
+            <text x="140" y="124" text-anchor="middle" fill="#EAF3EF" font-size="11">= CTR₂ × bid₂</text>
+            <rect x="30" y="148" width="220" height="46" rx="8" fill="#8FB6AA"/>
+            <text x="140" y="170" text-anchor="middle" fill="#28241F" font-weight="700" font-size="14">坑位 3 …</text>
+            <text x="140" y="186" text-anchor="middle" fill="#28241F" font-size="11">按 ECPM 降序</text>
+            <line x1="270" y1="109" x2="330" y2="109" stroke="#A9853C" stroke-width="2" marker-end="url(#ah)"/>
+            <defs><marker id="ah" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6 Z" fill="#A9853C"/></marker></defs>
+            <rect x="345" y="60" width="270" height="96" rx="10" fill="#2A2622"/>
+            <text x="480" y="86" text-anchor="middle" fill="#8FCBB6" font-family="Noto Sans SC" font-weight="700" font-size="11" letter-spacing="1">你的实际 CPC（第 i 名）</text>
+            <text x="480" y="122" text-anchor="middle" fill="#F3EAD3" font-family="JetBrains Mono" font-size="15">cpcᵢ = (CTRᵢ₊₁ · bidᵢ₊₁) / CTRᵢ</text>
+            <text x="480" y="145" text-anchor="middle" fill="#B8AC93" font-family="Noto Sans SC" font-size="11">= ECPMᵢ₊₁ / CTRᵢ　（bid 只是上限）</text>
+          </g>
+        </svg>
+        <div class="dc">你的 CPC 由「下一名的 ECPM ÷ 你的 CTR」决定，bid 只是上限；下一名的 CTR 只有平台知道，是个盲盒。</div>
+      </div>
+      <ul>
+        <li><b>GFP（出多少收多少）</b>：雅虎的炮灰。因为<em>没有纳什均衡</em>——每一名都能不断降价试探，平台永远收不到钱、搜索质量崩溃（牙膏出价高就能排在自行车前面，相关度归零），技术上被谷歌碾压。</li>
+        <li><b>GSP（次高价）</b>：搜索广告主流。它把拍卖重构成一个优化问题——目标函数 = ECPM，按 ECPM 降序排列。实现局部纳什均衡与 <span class="k">truth-telling</span>（说真话是最优策略）。</li>
+        <li><b>VCG</b>：理论全局最优，多用于信息流（抖音/头条）。谷歌一直用 GSP 未切 VCG——切换风险大，且平台净收入可能反而更低。</li>
+      </ul>
+      <div class="callout concl">
+        <div class="ct">■ 结论 · 全课最关键的落地根</div>
+        <p>GSP 的 truth-telling 属性意味着：<em>你的出价，与竞争对手出什么价毫无关系</em>，只取决于你自己的目标（CPS）与预估转化率。这一举否定了「竞争对手做什么、我做什么」的乱投——你只需对自己的运营目标负责。<span class="pill pri">原理</span></p>
+      </div>
+    </section>
+
+    <section class="sec" id="s24">
+      <div class="sx"><span class="num">2.4</span>后台结构</div>
+      <h3>广告后台 = 一份特殊的商业合同</h3>
+      <p>所有广告后台（百度/谷歌/直通车/亚马逊）结构都长一样：<span class="k">campaign / ad group / keyword</span>。这与平台无关，与「广告是商业合作」的本质有关。广告 = 需求方（卖家/DSP）与供给方（平台/SSP）签的一份特殊合同：标的物明确、金额明确、时间明确。映射关系：</p>
+      <ul>
+        <li><b>campaign = 合同</b>：一个产品对应一个 campaign，因为一个产品才有独立的起止时间与预算。</li>
+        <li><b>ad group = 合同条款</b>：一个 ad group 最多放一个 ASIN。</li>
+        <li><b>keyword / ASIN = 条款细则</b>：一个 ad group 关键词上限 1000——开发者默认「内行会在一个组里放很多词」，否则不会把上限设成 1000。</li>
+      </ul>
+      <p><b>原则</b>：一 SKU → 一 campaign，一 campaign 下少量 ad group，每组只含一个 ASIN。这样才能控制其他变量、让广告可控，并提升大账号的检索效率。<span class="pill mech">机制</span></p>
+    </section>
+
+    <section class="sec" id="s25">
+      <div class="sx"><span class="num">2.5</span>匹配模式的由来</div>
+      <h3>为什么必须有匹配模式</h3>
+      <p>若没有匹配模式，平台与广告主<em>双输</em>：平台方要「卖更多、卖更贵」，但精准匹配下总有流量无人竞拍（亩产↓），且逼广告主穷尽搜索词（体验↓）；广告主方则要投几十上百个词、逐一判断转化率，过于苛刻。所以匹配模式的存在，是为了<b>降低门槛、让多对多的撮合成为可能</b>。</p>
+      <p>三种模式（广泛/词组/精准）中，<b>谷歌比亚马逊更宽松</b>（广泛匹配做语义扩展）。原因在于搜索背景不同：谷歌是搜索引擎，用户意图处于漏斗上层、常是漫游态；亚马逊直接指向购买，精度要求更高。2023 年起，亚马逊的广泛匹配越来越像谷歌（开始做语义扩展）。<span class="pill mech">机制</span> <span class="pill emp">经验</span></p>
+      <p><b>触类旁通</b>：不同平台搜索背景不同，故广告产品设计不同——理解了这一点，你切换到任何新平台都能立刻看懂它的匹配模式为什么这样设计。</p>
+    </section>
+
+    <section class="sec" id="s26">
+      <div class="sx"><span class="num">2.6</span>反作弊</div>
+      <h3>身份识别 + 行为识别</h3>
+      <p>心态：平台是这个商场的上帝（如老师看学生的小动作），能招全世界最聪明的人专做反作弊，卖家与平台<em>不对等</em>。技术分两层：</p>
+      <ul>
+        <li><b>身份识别</b>：登录状态、IP、请求头、硬件……而最关键的是 <span class="k">MAC</span>（网卡物理地址，通过反向代理 Nginx 可识别）。<em>换 IP 无用</em>——网卡难以低成本伪造，普通运营根本伪造不了。</li>
+        <li><b>行为识别</b>：点击热力图、页面停留时间、点击的上下文顺序。机器点击无法伪造出合理的热力图；人工点击次数有限，很快被封 IP、封账号，甚至整段云服务 IP 被封。</li>
+      </ul>
+      <div class="callout concl">
+        <div class="ct">■ 结论 · 换 IP 点对手广告，又坏又蠢</div>
+        <p>坏——损人不利己（同行众多）；蠢——机器点无效、人工点作用极小，投入产出比极低，且违背平台利益必被打击。运行流程：点击发生后约 1 分钟做反作弊判断，故近 2–3 天数据通常不取（点击花费会返还）。<span class="pill mech">机制</span></p>
+      </div>
+    </section>
+
+    <section class="sec" id="s27">
+      <div class="sx"><span class="num">2.7</span>预估的内核</div>
+      <h3>CTR/CVR 是随机变量 → 机器学习</h3>
+      <p class="lead">排序由 ECPM 决定，而 <b>CTR/CVR 是随机变量，不能直接参与运算</b>，必须用机器学习预估成一个标量。这是「大平台为什么需要机器学习」的根本原因。</p>
+      <div class="fx">
+        <div class="fl">工程上的稳健预估 · robust approximation</div>
+        <div class="eq"><span class="hl">CTR̂</span> <span class="op">=</span> E[CTR] <span class="op">−</span> γ <span class="op">·</span> Var[CTR]　<span class="dim">(γ > 0)</span></div>
+        <div class="note">取「期望 − 权重 × 方差」，既要平均转化率高、又要算得尽量准。数据越多，预估越准（大数定律）。</div>
+      </div>
+      <p>CTR 是 <span class="k">(listing, user, context)</span> 三者的函数，因此搜索是<b>千人千面</b>——<em>不存在一个对所有人适用的静态排名</em>。要点：你在后台看到的 CTR/CVR ≠ 平台模型用于计算的 CTR/CVR，后者是模型预估值。<span class="pill pri">原理</span></p>
+      <div class="callout exp">
+        <div class="ct">◆ 为什么改价立即生效</div>
+        <p>平台用<b>在线学习</b>——每几分钟到半小时就更新一次模型权重。价格是权重最高的特征之一，所以你一改价，排名与权重「几乎马上」响应。（对应地，离线学习通常 7–30 天一次，用拟牛顿法等。逻辑回归的完整机制见基石 F.1。）<span class="pill mech">机制</span></p>
+      </div>
+    </section>
+
+    <hr class="pdiv">
+
+    <!-- ========================================================= -->
+    <!-- PART THREE · 策略 -->
+    <!-- ========================================================= -->
+    <div class="part-open" id="part3">
+      <div class="pn">PART Ⅲ</div>
+      <h2>第三部 · 策略：卖家的优化框架</h2>
+      <p class="pd">前两部确立了「广告是什么」与「平台如何运转」。这一部回答「作为卖家，我该用什么框架思考」。四个支柱：把广告写成带约束的最优化问题、以 CPS 为自变量定义目标、用平台视角重新理解「推排名」、以及「选品为王」这一可被数学证明的结论。</p>
+      <div class="prule"></div>
+    </div>
+
+    <section class="sec" id="s31">
+      <div class="sx"><span class="num">3.1</span>方法论骨架</div>
+      <h3>广告投放 = 一个带约束的最优化问题</h3>
+      <p class="lead">一切效果广告投放，本质都是优化问题：<b>在有限资源下实现商业利益最大化。</b>把它写成标准形式：</p>
+      <div class="fx">
+        <div class="fl">效果广告的标准形式</div>
+        <div class="eq"><span class="hl">max</span>　订单<sub class="dim">(指定 SKU)</sub></div>
+        <div class="eq"><span class="op">s.t.</span>　花费 ≤ 预算　；　订单 ≤ 库存　；　CPS ≤ CPS目标</div>
+        <div class="note">很多人「起点」上只有优化目标、没有约束条件——「占坑位」正是这种谬误：没考虑预算有限，也没问「同样预算不占坑位是否有更好方式」。</div>
+      </div>
+      <p><b>方法论</b>：先把业务问题<em>转化</em>为数学问题（抽象掉无关细节，如「一个苹果一个梨 = 两个水果」），再用学界成熟的优化理论求解，最后映射回业务指标。为什么要这样绕——因为数学逻辑严谨、可解；把复杂问题化简为简单问题，简单问题才好解。</p>
+      <p>工作经验/直觉之于此，如围棋定式之于 AI——会被碾压，从业务角度看意义不大。真正做事的是软件，人只做两件事：<em>纠正软件</em>、<em>告诉软件做什么</em>。所以<b>目标比怎么做更重要</b>，且目标最好是定量、可控、有手段可实现的（「排名一定要第一」是愿景不是目标；「提升关键词排名」只能作为手段）。<span class="pill pri">原理</span></p>
+    </section>
+
+    <section class="sec" id="s32">
+      <div class="sx"><span class="num">3.2</span>目标定义</div>
+      <h3>把多目标压成单目标：CPS 是自变量</h3>
+      <p>效果广告有多个目标：报单做 BS、推排名/够流量、CPS 尽量低、不超预算。它们<em>排名分先后</em>——爆单最重要（卖家有机会成本），越技术性的指标越「重要但不要命」。多目标优化的通解是：<b>保留一个主目标，其余全部转化成约束条件。</b></p>
+      <p>切入点在于识别<em>自变量</em>：三个约束里，<b>CPS 是自变量，其余都是因变量</b>。逐步化简：</p>
+      <ol>
+        <li>「最小出单量」可换算成一个「达成它所需的 CPS」（<span class="k">CPS_min-order</span>），于是它与 CPS 目标合并。</li>
+        <li>「不超预算」是次要约束——把它消解的最好办法，是<em>把预算设得极高</em>。因为用软件投放，广告技术水平稳定可控，真实花费由 bid 控制，预算再高也不会超。</li>
+        <li>于是只剩一个约束：调 CPS，使其 ≥ CPS_min-order。问题彻底解决。</li>
+      </ol>
+      <div class="callout concl">
+        <div class="ct">■ 结论 · 反直觉但最优</div>
+        <p><b>预算往高了给，花费用 bid 管，不要用预算控花费。</b>调整的唯一自变量是 CPS 目标（相当于 deal 的折扣深度）。步长建议 30% 以内——bid ±30% 通常对应花费 ±一倍。这套做法之所以过去不可行、现在可行，是因为软件让「广告技术水平」变成了一个稳定常量（生产力变了，生产关系才能变）。<span class="pill pri">原理</span> <span class="pill emp">经验</span></p>
+      </div>
+    </section>
+
+    <section class="sec" id="s33">
+      <div class="sx"><span class="num">3.3</span>推排名的真相</div>
+      <h3>用广告推排名：站在平台角度</h3>
+      <p>「抢坑位」基本全错——它只有优化目标、没有约束，且违背平台利益。把亚马逊理解成平台的<em>地主</em>（收垄断地租）：它把最好的流量（土地）租给最能种田的佃户（ECPM 最高者）。由此：</p>
+      <div class="callout concl">
+        <div class="ct">■ 结论 · 广告不直接影响排名</div>
+        <p>广告并不能直接影响排名，而是<b>影响平台对 CTR/CVR 的预估</b>：通过定向投流量，帮平台快速锁定「你的产品对哪些词 CTR/CVR 高」，<em>降低预估的方差</em>。在给定预算下出更多单 → 意味着这些词点击成本低（竞争少）且转化率高（产品有竞争力）→ 你帮平台为流量找到了好产品 → 平台奖励你更多流量。<span class="pill pri">原理</span></p>
+      </div>
+      <p><b>占坑位的害处</b>：在没有竞争力的词上强占坑位，会降低平台的坑产，平台「不给量」即可惩罚你。一句话——<em>产品为王，广告只能锦上添花，无法雪中送炭。</em></p>
+    </section>
+
+    <section class="sec" id="s34">
+      <div class="sx"><span class="num">3.4</span>可证明的结论</div>
+      <h3>选品为王：期望值只由产品决定</h3>
+      <p>这不是口号，可以被理论证明。假设价格不变、纯白帽、无周期性：</p>
+      <div class="fx">
+        <div class="fl">选品为王的数学骨架</div>
+        <div class="eq">排名 <span class="op">←</span> ECPM <span class="op">←</span> <span class="hl">E[CTR]</span> , <span class="hl">E[CVR]</span>　<span class="dim">（价格不变）</span></div>
+        <div class="eq">E[CTR] <span class="op">=</span> f(listing)　<span class="dim">// 特征工程已排除广告位影响</span></div>
+        <div class="eq">Var[CTR] <span class="op">∝</span> <span class="frac"><span class="nu">1</span><span class="de">n</span></span>　<span class="dim">// 大数定律，n = 点击量</span></div>
+      </div>
+      <p>CTR 是 (listing, user, context) 的函数，其「期望 CTR」经特征工程已排除广告位影响，<em>只与 listing 本身竞争力有关</em>。由大数定律，随运营展开 CTR 收敛于期望；CVR 同理。所以排名的天花板，<b>完全由产品决定</b>——这里的「产品」是广义的：线上文案/图片/QA + 产品的物理属性。</p>
+      <p>运营能改变的<em>只是方差</em>（提升流量 → 降低方差 <span class="k">Var∝1/n</span>），<em>不能改变期望</em>。推论：若产品对某搜索词针对性不强，无论如何表现都不会好，唯一解是<em>开发新产品/新 listing</em>。而老品竞争对手的方差本就很小（卖得久、流量多），你想在其上抢高排名，既难又贵。<span class="pill pri">原理</span></p>
+    </section>
+
+    <hr class="pdiv">
+
+    <!-- ========================================================= -->
+    <!-- PART FOUR · 实操 -->
+    <!-- ========================================================= -->
+    <div class="part-open" id="part4">
+      <div class="pn">PART Ⅳ</div>
+      <h2>第四部 · 实操：具体方法</h2>
+      <p class="pd">前三部的每一条结论，在这里都会变成一个具体动作。这一部覆盖广告产品选择、账号结构与流量切分、找词、匹配模式、预算与出价、campaign 选项、否定词、优化节奏、人机分工，以及类目/新品期/KPI 的差异化处理。作者反复声明：实操部分大量引用前面的结论，且许多是主观实战经验。</p>
+      <div class="prule"></div>
+    </div>
+
+    <section class="sec" id="s41">
+      <div class="sx"><span class="num">4.1</span>产品选择</div>
+      <h3>SP / SD / SB / DSP 到底投哪个</h3>
+      <p>判据看收费方式（第一部结论）。逐个拆解：</p>
+      <ul>
+        <li><b>SP</b>：CPC、原生广告、搜索页 + 详情页，转化率通常最好，是效果广告最重要的单元（广告位最多 + 原生保障转化）。关键词广告转化率通常高于 ASIN 广告。</li>
+        <li><b>SD</b>：CPC 或 vCPM，非原生；vCPM 偏品牌。若投效果，选 CPC + <span class="k">optimize for conversions</span>。注意亚马逊会自动加价，最多 +300%（出 1 块可能变 4 块）。</li>
+        <li><b>SB</b>：CPC，富媒体故兼具品牌属性。headline 竞争激烈、花费大；SBV 点击率远高于 SP、转化率不输甚至略优，缺点是广告位少、需拍视频。</li>
+        <li><b>DSP</b>：CPM、纯站外、营销漏斗最上层。亚马逊 DSP ≠ 传统 DSP（它整合了 DSP+SSP+AD Exchange），偏品牌，中小卖家匹配度低。</li>
+      </ul>
+      <div class="callout exp">
+        <div class="ct">◆ 结论 · 作者主观建议</div>
+        <p>效果需求 → 关注 <b>SP 和 SBV</b>（有视频优先 SBV），预算充足加 headline；品牌需求 → 才看 SD/DSP（CPM）。<span class="pill emp">经验</span> <span class="pill mech">机制</span></p>
+      </div>
+    </section>
+
+    <section class="sec" id="s42">
+      <div class="sx"><span class="num">4.2</span>账号结构</div>
+      <h3>广告结构与「流量切分」</h3>
+      <p>以 SP 为例的完全体：一产品一 campaign；<b>一种匹配模式对应一个 ad group</b>（broad/exact 不混用）；SBV 关键词前加「+」做语义扩展。核心操作是<b>流量切分</b>：</p>
+      <p>同一个词，它的广泛匹配转化率<em>高于</em>其精准匹配（广泛能覆盖「自己 + 有效长尾」）。若把二者放同一组，精准会被广泛覆盖、失去意义。所以正确做法是：广泛组投长尾、精准组投该词本身，并<em>在广泛组里对精准词做「精准否定」</em>，从而实现「对不同搜索词分别出价」。<span class="pill mech">机制</span></p>
+      <p>命名要写全（SKU + ASIN + 创建时间），以提升大账号检索效率与跨部门沟通——它是为了让未来的你「读/改」时爽。理论理想：对「搜索词」而非「关键词」出价；关键词只是妥协，而精准匹配 ≈ 搜索词。<span class="pill pri">原理</span></p>
+    </section>
+
+    <section class="sec" id="s43">
+      <div class="sx"><span class="num">4.3</span>找词</div>
+      <h3>怎么找词 & 投多少个</h3>
+      <p>理论上：关键词越多、若能精确算出各词转化率并用精准匹配，则最优（逼近 deal）。但现实有两个约束：</p>
+      <ul>
+        <li>不可能穷尽所有搜索词（语言在发展）+ 一组 1000 词的上限。</li>
+        <li><b>大数定律</b>——词越多，每词流量越少，越算不准转化率。</li>
+      </ul>
+      <div class="callout concl">
+        <div class="ct">■ 结论 · 词量与筛选</div>
+        <p>新品 <b>30–200 个词</b>（太少则优化上限低，超 200 则边际收益低）。筛选原则：<em>流量 × 相关性都高</em>的词优先（在「流量–相关性」平面上离原点最远者）。找词工具：早期 Google/百度的 keyword combination → ASIN 反查/第三方工具（省钱）或专业广告工具（省时）。<span class="pill pri">原理</span> <span class="pill emp">经验</span></p>
+      </div>
+    </section>
+
+    <section class="sec" id="s44">
+      <div class="sx"><span class="num">4.4</span>匹配模式实战</div>
+      <h3>新品广泛 → 成熟期精准 + 广泛</h3>
+      <p>最佳实践：对产品认识有限的「新品期」（是<em>认识</em>上的新品，不必是时间上的），先用广泛匹配获取流量；数据充足后转精准（软件会提示）。成熟期 = 一个精准组 + 一个广泛组。</p>
+      <p>纪律：精准组的词<em>必须</em>在广泛组里用 <span class="k">negative exact</span> 处理掉；每次优化可能拓词，拓词后须再在广泛组里精准否定新词——这是一个必须养成的好习惯。<span class="pill emp">经验</span></p>
+    </section>
+
+    <section class="sec" id="s45">
+      <div class="sx"><span class="num">4.5</span>预算与出价</div>
+      <h3>预算设高，用 bid 控花费</h3>
+      <p>预算：设高（结论见 3.2），用 bid 控花费。<b>例外</b>——Prime Day / 黑五：预算设极高、CPS 也设很高，但严格不超预算，建议单开 campaign；TOS 抢排名：<em>必须</em>给预算设硬上限（离经叛道的需求必须控成本——广告是 100% 消灭利润的成本）。</p>
+      <p><b>bid 的设置</b>（核心，却因前期铺垫充分而简单）：由 GSP，cpc 上限 = bid，目标 cpc 由 CPS 目标 × CVR 决定。</p>
+      <div class="fx">
+        <div class="fl">出价的闭环</div>
+        <div class="eq"><span class="hl">bid</span>　<span class="op">∝</span>　CPS目标　<span class="op">×</span>　E[CVR]</div>
+        <div class="note">运营提 CPS 目标 → 软件/人预估 CVR → 倒推 bid。逻辑闭环完成。这也是「软件让你填 CPS」的原因：你怎么出价与别人无关（GSP truth-telling）。</div>
+      </div>
+      <p><b>特殊期</b>（旺季/节日）提 bid（转化率更高 + 需加速库存周转）。<b>TOS 操作</b>：单开 campaign、固定竞价、单一广告组、精准匹配、给极高 bid（如 10/20/30 美金）——实际 cpc 不会那么高，因为 bid 只是上限，实际由下一名决定。<span class="pill pri">原理</span></p>
+    </section>
+
+    <section class="sec" id="s46">
+      <div class="sx"><span class="num">4.6</span>Campaign 选项</div>
+      <h3>首页竞价、竞价规则、bid 策略怎么选</h3>
+      <p><b>首页竞价、竞价规则等选项——一个都别选</b>（可控度问题；一个 campaign 只做一个目标，抢排名应单开 campaign 解耦）。至于「转化率高的位置」，若发现首页顶部转化率确实较高（越工具化/越便宜的产品越明显，如充电宝、cable），可酌情在后台手动加首页竞价——但这是「因为转化率高」这个原因，不是为了抢排名。</p>
+      <div class="callout concl">
+        <div class="ct">■ 结论 · bid 策略选「仅降低」</div>
+        <p>卖家与亚马逊广告团队有<em>博弈</em>：平台 KPI 是提升广告花费，卖家要提升 ROI——不应把「提升 bid」的权利交给平台。但「仅降低」应交给亚马逊：平台掌握用户信息（千人千面），能更好预估 CTR/CVR，且有动机（对不匹配用户降价 → 既提升平台 CTR/佣金、又帮卖家省钱 → 三赢）。<b>归根到底</b>：判断对方利益是否与你一致，一致且对方能力强则可让渡，否则寸步不让。<span class="pill pri">原理</span></p>
+      </div>
+    </section>
+
+    <section class="sec" id="s47">
+      <div class="sx"><span class="num">4.7</span>否定词</div>
+      <h3>词组否定 + 精准否定</h3>
+      <p>两种否定，用途完全不同：</p>
+      <ul>
+        <li><b>词组否定</b>——屏蔽不相关流量。如卖移动电站，否定 <span class="k">gas / inverter / quiet generator</span> 等，但<em>保留 generator 做广泛匹配拓词</em>，只否定它的不相关长尾（generator 也能匹配到用电的充电站，只是相关度低 → 转化率低 → 出价低即可，不必整词毙掉）。</li>
+        <li><b>精准否定</b>——做流量切分，对搜索词单独出价（见 4.2）。须把该词的<em>单复数、加介词、变语序</em>三种形式全部加入，因为精准否定不匹配语序与介词。</li>
+      </ul>
+      <p><b>添加位置</b>：理论上 campaign 级更省（作用于两个组），但实战多在 ad group 级——它是基本优化单位、更顺手，且精准组通常不需再否定。</p>
+      <div class="callout exp">
+        <div class="ct">◆ 人机分工的经典案例</div>
+        <p>卖 15.6 寸背包，须否定 16/17/18/19/20 寸（大电脑放不进会退货），但 13/14 寸可保留（小电脑装大包无妨）。<b>机器极难理解这种尺寸语义，人一眼看穿</b>——这正是「人辅助机器」的边界所在。<span class="pill mech">机制</span> <span class="pill emp">经验</span></p>
+      </div>
+    </section>
+
+    <section class="sec" id="s48">
+      <div class="sx"><span class="num">4.8</span>优化</div>
+      <h3>优化什么 & 多久优化一次</h3>
+      <p><b>优化三件事</b>：新增关键词（补长尾，避免只用核心词广泛匹配、低价错失长尾流量）、否定关键词（词组否定屏蔽 + 精准否定切分）、调整出价（据 CVR）。目的：提升流量精度 → 提升 ROI。</p>
+      <p><b>节奏分四态</b>——前三种是「变态」，都不需软件、直接等比例调 bid：</p>
+      <ol>
+        <li>超预算/花不出钱 → 1 天内响应，等比例调整广告主出价（超预算理论上不该出现，把预算设高即可）。</li>
+        <li>特殊事件（节日）→ 天天盯，等比例调。</li>
+        <li>广告目标变化 → 改的是 CPS 目标，对整组所有词等比例调（因 bid 由 CPS×CVR 决定，改 CPS 对所有词都管用）。</li>
+      </ol>
+      <div class="callout concl">
+        <div class="ct">■ 结论 · 常态优化 30–60 天一次</div>
+        <p>第四种是常态（常规优化）：本质是<em>重新校准每个词的 CVR</em>。30–60 天一次即可（最长两个月），<b>仅此一种需要用工具</b>。前提：运营基本面（review/listing）不变；数据必须独立同分布——取就近月份，不跨售价、不跨大促取数（背后原理见基石 F.1）。<span class="pill pri">原理</span> <span class="pill emp">经验</span></p>
+      </div>
+    </section>
+
+    <section class="sec" id="s49">
+      <div class="sx"><span class="num">4.9</span>人机分工</div>
+      <h3>为什么是「人辅助机器」</h3>
+      <p>不是「人用 Excel 分析、去后台调」，而是<b>人辅助机器</b>。三种对接手段，效率递增：</p>
+      <ul>
+        <li><b>后台</b>：门槛最低，无法批量，一次改一个。</li>
+        <li><b>批量操作</b>（2016 年出）：给专业数据分析师，Excel 化，适合代运营。</li>
+        <li><b>API</b>（最进阶）：给 Anker/ERP 公司。横向可拿<em>全部历史</em>数据（不受后台 60 天限制），纵向可拿 1/7/14/30 天 purchase → 自定义归因；需 IT 团队与授权。补充：Amazon Marketing Stream（2022 年）提供按小时汇总数据。</li>
+      </ul>
+      <div class="callout concl">
+        <div class="ct">■ 结论 · 分工的边界</div>
+        <p>一家 100 SKU × 100 词 ≈ 上万词需实时调价，人不可能完成；机械重复且目标明确的事该交机器。<b>人做的是</b>：定目标、处理常识（尺寸否定等机器难及之处）、整合资源、止损决策。机器进化快，人的「鸡毛蒜皮」经验会被逐步替代；唯<em>主观性强、SKU 复杂</em>（服装鞋）处，仍需专业人参与。<span class="pill mech">机制</span> <span class="pill emp">经验</span></p>
+      </div>
+    </section>
+
+    <section class="sec" id="s410">
+      <div class="sx"><span class="num">4.10</span>进阶迷思</div>
+      <h3>分时调价：理论可行，现实困难</h3>
+      <p>技术门槛<em>极低</em>（百度/谷歌十年前就有 ad scheduling）。本质：不同时段转化率不同（这里指<em>平台认为的</em>转化率）。但有两大坑：</p>
+      <ul>
+        <li><b>数据坑</b>：需按小时的点击/订单数据。Marketing Stream 可提供广告数据，但<em>未开放 session 级</em>汇总。</li>
+        <li><b>定义坑</b>：点击受反作弊力度（主观可调）影响，更优替代是 UV；订单有归因期（SP 7 天/其余 14 天）且计入整店——「小时级效果」与「周级归因」时间上对不上，数据又稀薄、不满足大数定律。</li>
+      </ul>
+      <p>故电商分时调价<em>远难于</em>搜索引擎（搜索引擎的订单由广告主自定义）。最优解：亚马逊开放按小时的 session 数据 + 官方分时调价接口。仅超大规模 + 核心产品 + 已用 Marketing Stream 者，理论上可尝试。<span class="pill mech">机制</span> <span class="pill emp">经验</span></p>
+    </section>
+
+    <section class="sec" id="s411">
+      <div class="sx"><span class="num">4.11</span>差异化 · 类目</div>
+      <h3>广告打法分产品类目吗</h3>
+      <p>常规<em>不分</em>类目（一产品一 campaign）。两个特例：</p>
+      <ul>
+        <li><b>多变体</b>：选最主流（流量/转化最高）的变体（3C 多为黑色），备货最多、定更低价、集中推；其余变体<em>沾光</em>走利润（价格弹性：该买的人不在乎那几块钱）。</li>
+        <li><b>服装鞋</b>（多变体 × 多尺寸，复杂度约 10 倍）：把复杂问题化简——起点是看用户搜索词在乎什么。若在乎尺寸，把同尺寸不同款当作一个产品；若在乎款式（常规），把同款不同尺寸当作一个产品。此时违反「一 ASIN 一 campaign」，是因为产品特殊。</li>
+      </ul>
+      <p>贯穿始终的方法论：<em>把一个复杂/不可解的问题，转化成一个简单/可解的问题</em>。<span class="pill emp">经验</span></p>
+    </section>
+
+    <section class="sec" id="s412">
+      <div class="sx"><span class="num">4.12</span>差异化 · 生命周期</div>
+      <h3>广告打法分新品期吗</h3>
+      <p>分。把「新品期」延伸为产品生命周期四阶段，广告目标各不相同：</p>
+      <ul>
+        <li><b>启动期</b>（≈ 新品期）：测款（据经验判断转化率是否达预期——<em>主观性强的产品才需撤款</em>，如服装/调音；硬盘等纯客观产品无撤款问题）+ 充流量（CPS 定高冲量，新品扶持多）。</li>
+        <li><b>成长期</b>：流量涨最快，CPS 高冲量。</li>
+        <li><b>成熟期</b>：挣钱为主，据库存/竞对决定是否投（平衡周转率与利润率）。</li>
+        <li><b>衰落期</b>：通常不投（除非清库存）。</li>
+      </ul>
+      <div class="callout concl">
+        <div class="ct">■ 结论 · 降价 vs 广告 vs deal</div>
+        <p>三者财务等价，而任意单渠道的<em>边际收益递减</em>，故<b>组合使用</b>（降一点 + 广告一点 + deal 一点）ROI 最高。如何组合是一门艺术，需要高端运营——这也是机器目前替代不了人的地方之一。<span class="pill pri">原理</span> <span class="pill emp">经验</span></p>
+      </div>
+    </section>
+
+    <section class="sec" id="s413">
+      <div class="sx"><span class="num">4.13</span>管理</div>
+      <h3>KPI 管理：统一度量衡 + 解耦</h3>
+      <p><b>效果广告不止站内广告</b>——降价/coupon/站内 deal/站外 deal/站内广告，财务上等价，统一用 <span class="k">CPS</span> 这把度量衡：谁 CPS 更低还能出单，就优先把预算分给谁。</p>
+      <p><b>品牌广告与效果广告，在组织、预算、考核上完全解耦</b>（专人专岗、便于追责/复盘，如同代码要解耦）：品牌广告归市场部（对 CEO 汇报，长周期、难定量，靠第三方问卷/指数）；效果广告归 sales 部（月初复盘各渠道的出单量与出单成本）。</p>
+      <div class="callout warn">
+        <div class="ct">▲ 关键 · 剥离考核</div>
+        <p>广告销量与自然销量<em>必须剥离考核</em>——强行在二者间建立因果，只会让你非常焦虑。保守目标（space goal：CPS 低、保利润）vs 进取目标（stretch goal：激进冲量）；备注只能二选一——「优先保 CPS」（控成本，预算可变）或「优先花完预算」（保出单，CPS 可变），两者不可兼得。<span class="pill mech">机制</span> <span class="pill emp">经验</span></p>
+      </div>
+    </section>
+
+    <hr class="pdiv">
+
+    <!-- ========================================================= -->
+    <!-- FOUNDATION -->
+    <!-- ========================================================= -->
+    <div class="part-open" id="foundation">
+      <div class="pn">FOUNDATION</div>
+      <h2>基石 · 横切全课的统计地基</h2>
+      <p class="pd">前面反复出现的「随机变量」「大数定律」「归因」，在这里集中说清。这两节是理解全课的地基——它们既解释了「为什么这样操作」，也划定了「数据什么时候能信」的边界。</p>
+      <div class="prule"></div>
+    </div>
+
+    <section class="sec" id="sf1">
+      <div class="sx"><span class="num">F.1</span>两把钥匙</div>
+      <h3>独立同分布 & 大数定律</h3>
+      <p>贯穿全课的两个概念，缺一不可：</p>
+      <ul>
+        <li><b>独立同分布（i.i.d.）</b>：同一产品在<em>不同坑位/不同搜索词</em>的点击不能直接相除做统计推断（非同分布）；<em>跨售价、跨大促</em>的数据非同分布，必须剔除。所以优化只取「就近、同分布」的月份数据。</li>
+        <li><b>大数定律</b>：i.i.d. 数据足够多时，均值收敛于期望，方差 <span class="k">∝ 1/n</span>。经验阈值：<em>不少于 100 个点击</em>（否则不满足大数定律）。</li>
+      </ul>
+      <div class="diagram">
+        <div class="dt">CTR 预估的两难 · 汇总满足大数定律，分坑位满足同分布</div>
+        <svg viewBox="0 0 640 220" role="img" aria-label="CTR预估两难">
+          <g font-family="Noto Sans SC">
+            <rect x="24" y="30" width="272" height="160" rx="12" fill="#F3EAD3" stroke="#D6C6A4"/>
+            <text x="160" y="58" text-anchor="middle" fill="#9A3A26" font-weight="700" font-size="14">直接汇总所有点击</text>
+            <text x="160" y="88" text-anchor="middle" fill="#28241F" font-size="13">✓ 满足大数定律</text>
+            <text x="160" y="114" text-anchor="middle" fill="#BC4B33" font-weight="700" font-size="13">✗ 不同坑位混在一起</text>
+            <text x="160" y="136" text-anchor="middle" fill="#7A7060" font-size="12">→ 非独立同分布，不可相除</text>
+            <rect x="344" y="30" width="272" height="160" rx="12" fill="#F3EAD3" stroke="#D6C6A4"/>
+            <text x="480" y="58" text-anchor="middle" fill="#9A3A26" font-weight="700" font-size="14">按每个坑位分别算</text>
+            <text x="480" y="88" text-anchor="middle" fill="#28241F" font-size="13">✓ 满足同分布</text>
+            <text x="480" y="114" text-anchor="middle" fill="#BC4B33" font-weight="700" font-size="13">✗ 每个坑位流量太少</text>
+            <text x="480" y="136" text-anchor="middle" fill="#7A7060" font-size="12">→ 不满足大数定律，算不准</text>
+            <text x="320" y="178" text-anchor="middle" fill="#2C5A4C" font-family="Noto Sans SC" font-weight="700" font-size="13">出路：结合 user / context 建模 → 机器学习预估</text>
+          </g>
+        </svg>
+        <div class="dc">既要满足大数定律、又要满足独立同分布，直接用除法走不通——这就是必须用机器学习的根本原因。</div>
+      </div>
+      <p>这套地基解释了：为何近 3 天数据不取（反作弊 + 归因未稳）、为何词太多算不准（每词流量稀薄）、为何降低方差要靠提升流量。CTR 预估用<b>逻辑回归</b>：</p>
+      <div class="fx">
+        <div class="fl">逻辑回归 · CTR 预估的经典模型</div>
+        <div class="eq"><span class="hl">p</span> <span class="op">=</span> <span class="frac"><span class="nu">1</span><span class="de">1 + e<sup>−w·x</sup></span></span>　<span class="dim">// p = 点击概率，x = 特征向量，w = 权重</span></div>
+        <div class="note">二值函数（点/不点）、广义线性、凸函数可解、可解释。特征工程：one-hot、对 review 按用户均值加权等。在线学习（改价立即生效）vs 离线学习（7–30 天）。逻辑回归 + 人工特征工程在 2015 年后被大厂淘汰（换非线性模型 + 自动特征工程），但其思维方法仍可参考。</div>
+      </div>
+      <p><span class="pill pri">原理</span></p>
+    </section>
+
+    <section class="sec" id="sf2">
+      <div class="sx"><span class="num">F.2</span>数据避坑</div>
+      <h3>广告数据解读：归因的三难</h3>
+      <p>广告归因几乎不可能做到完全公正，有三重困难：</p>
+      <ul>
+        <li><b>last-click-counts</b>：只记「最后一脚射门」，过度简化——一个订单可能来自价格、产品特性、品牌、复购……无法公正分配每个因素的贡献。</li>
+        <li><b>归因期多长</b>：SP 7 天 / 其余 14 天 / DSP 14 天，是<em>人为主观决定</em>的，是技术与商业的妥协。30 天归因比 7 天可能多 10–20% 订单。</li>
+        <li><b>间接效果如何统计</b>：打 A 产品的广告却买了店铺 B 产品——多变体下合理，但 Anker 类大店铺极易<em>高估</em>广告效果。</li>
+      </ul>
+      <div class="callout warn">
+        <div class="ct">▲ 结论 · 此订单非彼订单</div>
+        <p>广告订单可能<em>比 dashboard 上该产品的总订单还多</em>（新品期尤其明显）。各平台订单定义「花里胡哨」，算 CPS 前必须搞清楚哪些被高估了。SP 的时效性：点击计在点击当天、订单计在购买当天，故会出现「点击 = 0、订单 = 1」的怪现象——近三天数据要缓取的原因之一，正在于此。<span class="pill mech">机制</span></p>
+      </div>
+    </section>
+
+    <!-- ========================================================= -->
+    <!-- CODA -->
+    <!-- ========================================================= -->
+    <div class="coda" id="coda">
+      <div class="pn" style="font-family:var(--mono);font-size:14px;color:var(--terra);letter-spacing:.1em;margin-bottom:8px">CODA</div>
+      <h2>一以贯之的思想</h2>
+      <p style="font-size:17px;color:var(--ink-2);max-width:var(--col)">34 讲讲了很多，但内核只有五条。真正值得带走的不是某个操作，而是这套可以迁移到任何 CPC/CPS 平台（Google、百度、直通车、巨量）的思维方式——因为它们本质都是生意，而生意的本质是财务。</p>
+      <div class="core-grid">
+        <div class="core-card"><div class="cn">01</div><h4>定量化与可证伪</h4><p>逻辑实证主义的判据：不能定量、不能证伪的说法，当乐子听。能写出算法的前提，是能定量、能证伪。</p></div>
+        <div class="core-card"><div class="cn">02</div><h4>财务的统一视角</h4><p>广告 = 资金周转率 ↔ 单次利润率的平衡。投广告、降价、做 deal，财务上等价——用财务这把度量衡，一切业务不再迷惑人。</p></div>
+        <div class="core-card"><div class="cn">03</div><h4>平台博弈与换位思考</h4><p>平台是上帝。任何操作先问「能否让平台利益最大化」。GSP 的 truth-telling 让你只对自己的目标负责，无需盯着对手。</p></div>
+        <div class="core-card"><div class="cn">04</div><h4>带约束的最优化</h4><p>先把业务问题化为数学问题。目标比方法更重要；多目标 → 压成单目标 + 约束。把复杂问题化简为简单问题，才好解。</p></div>
+        <div class="core-card"><div class="cn">05</div><h4>人机分工</h4><p>机器做机械重复的定量计算，人定目标、处理常识、整合资源、止损。机器进化快，唯主观性强、SKU 复杂处仍需人。</p></div>
+      </div>
+      <div class="callout concl" style="max-width:var(--col)">
+        <div class="ct">■ 迁移</div>
+        <p>这套框架在任何 CPC/CPS 广告平台触类旁通。你看到一个新平台的匹配模式、收费方式、排序规则时，之所以能立刻看懂，是因为你不是在记规则，而是在用「它也是一门生意」的第一性去反推——而这，正是把广告从玄学变成科学的全部意义。</p>
+      </div>
+    </div>
+
+    <div class="footer">
+      <div class="legend">
+        <span class="li"><span class="pill pri">原理</span>可推导·可证伪</span>
+        <span class="li"><span class="pill mech">机制</span>平台事实</span>
+        <span class="li"><span class="pill emp">经验</span>主观·需存疑</span>
+      </div>
+      <p><b>来源</b>：本图谱由「广告投放原理·操作·方法」视频课程（00–34 讲 + 加餐）的画面截图 PPT 与字幕文档蒸馏、重构而成。原课程为亚马逊 CPC 广告的付费课程，作者具十年广告优化师背景。</p>
+      <p><b>说明</b>：文中「刷单/操纵评论」仅作市场机制的分析对象，属违规黑帽操作，面临封号与法律风险，本图谱不提供任何操作路径，全部方法均为白帽效果广告逻辑。凡标注 <b>经验</b> 的结论，随时间与类目会失效，请结合自身数据验证。</p>
+    </div>
+
+  </main>
+</div>
+
+<script>
+(function(){
+  var rail=document.getElementById('rail'),scrim=document.getElementById('scrim'),
+      menuBtn=document.getElementById('menuBtn'),prog=document.getElementById('prog'),
+      links=[].slice.call(document.querySelectorAll('.toc a')),
+      targets=links.map(function(a){return document.getElementById(a.getAttribute('href').slice(1));});
+
+  function openRail(){rail.classList.add('open');scrim.classList.add('show');}
+  function closeRail(){rail.classList.remove('open');scrim.classList.remove('show');}
+  menuBtn.addEventListener('click',openRail);
+  scrim.addEventListener('click',closeRail);
+  links.forEach(function(a){a.addEventListener('click',closeRail);});
+
+  var ticking=false;
+  function onScroll(){
+    if(ticking)return;ticking=true;
+    requestAnimationFrame(function(){
+      var st=window.pageYOffset||document.documentElement.scrollTop,
+          h=document.documentElement.scrollHeight-window.innerHeight;
+      prog.style.width=(h>0?(st/h*100):0)+'%';
+      var cur=-1,mid=window.innerHeight*0.34;
+      for(var i=0;i<targets.length;i++){
+        var t=targets[i];if(!t)continue;
+        var r=t.getBoundingClientRect();
+        if(r.top<=mid)cur=i;
+      }
+      links.forEach(function(a,i){a.classList.toggle('active',i===cur);});
+      // keep active in view within rail
+      if(cur>=0){
+        var al=links[cur],rr=rail.getBoundingClientRect(),ar=al.getBoundingClientRect();
+        if(ar.top<rr.top+40||ar.bottom>rr.bottom-40){
+          al.scrollIntoView({block:'center'});
+        }
+      }
+      ticking=false;
+    });
+  }
+  window.addEventListener('scroll',onScroll,{passive:true});
+  window.addEventListener('resize',onScroll,{passive:true});
+  onScroll();
+})();
+</script>
+</body>
+</html>
