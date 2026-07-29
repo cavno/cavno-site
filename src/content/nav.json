@@ -6,7 +6,7 @@
       "zh": "投资",
       "short": "Investing",
       "desc": "期权结构、估值方法与市场案例的工具与研究。",
-      "planned": false,
+      "planned": true,
       "subsections": [
         {
           "slug": "options",
@@ -32,14 +32,14 @@
       "slug": "reading",
       "en": "Reading & Thinking",
       "zh": "阅读与思考",
-      "short": "Reading",
+      "short": "Reading&Thinking",
       "desc": "全书视察、哲学史讲义、思考图谱与数学基础。",
-      "planned": false,
+      "planned": true,
       "subsections": [
         {
           "slug": "books",
           "en": "Books",
-          "zh": "书籍视察",
+          "zh": "书",
           "desc": "从 EPUB 到单文件全书精读"
         },
         {
@@ -63,7 +63,7 @@
       ]
     },
     {
-      "slug": "life",
+      "slug": "life_skills",
       "en": "Life & Skills",
       "zh": "生活与技能",
       "short": "Life",
