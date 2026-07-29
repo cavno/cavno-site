@@ -11,6 +11,12 @@ const {
   description = '投资、阅读与思考、生活与技能、工作工具——整合于同一域名之下的个人公开工作台。',
 } = Astro.props;
 const year = new Date().getFullYear();
+
+// 当前路径 → 高亮对应的一级板块与二级栏目（全站公共导航的"我在哪"）
+const _p = Astro.url.pathname;
+const norm = _p.endsWith('/') ? _p : _p + '/';
+const isSec = (slug: string) => norm.startsWith(`/${slug}/`);
+const isSub = (slug: string, sub: string) => norm.startsWith(`/${slug}/${sub}/`);
 ---
 <!DOCTYPE html>
 <html lang="zh-CN">
@@ -33,13 +39,13 @@ const year = new Date().getFullYear();
     <nav class="primary" aria-label="主导航">
       {nav.sections.map((s) => (
         <div class="nav-item">
-          <button class="nav-btn" aria-expanded="false">{s.en}
+          <button class:list={['nav-btn', { active: isSec(s.slug) }]} aria-expanded="false" aria-current={isSec(s.slug) ? 'true' : undefined}>{s.en}
             <svg class="chev" viewBox="0 0 12 12" fill="none" aria-hidden="true"><path d="M2 4l4 4 4-4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
           </button>
           <div class="panel">
             {s.planned && <div class="group-label">二级栏目 · 拟设</div>}
             {s.subsections.map((sub) => (
-              <a href={`/${s.slug}/${sub.slug}/`}>
+              <a href={`/${s.slug}/${sub.slug}/`} class:list={{ active: isSub(s.slug, sub.slug) }} aria-current={isSub(s.slug, sub.slug) ? 'page' : undefined}>
                 <div class="p-title">{sub.en}{sub.zh !== sub.en && <small>{sub.zh}</small>}</div>
                 {sub.desc && <div class="p-desc">{sub.desc}</div>}
               </a>
@@ -67,14 +73,14 @@ const year = new Date().getFullYear();
     <button class="drawer-close" id="drawerClose" aria-label="关闭菜单">×</button>
   </div>
   {nav.sections.map((s) => (
-    <div class="acc">
+    <div class:list={['acc', { open: isSec(s.slug) }]}>
       <button class="acc-btn">{s.en}
         <svg class="chev" viewBox="0 0 12 12" fill="none" aria-hidden="true"><path d="M2 4l4 4 4-4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
       </button>
       <div class="acc-body">
         <a href={`/${s.slug}/`}>{s.zh}板块首页</a>
         {s.subsections.map((sub) => (
-          <a href={`/${s.slug}/${sub.slug}/`}>{sub.en}{sub.zh !== sub.en ? ` ${sub.zh}` : ''}</a>
+          <a href={`/${s.slug}/${sub.slug}/`} class:list={{ active: isSub(s.slug, sub.slug) }}>{sub.en}{sub.zh !== sub.en ? ` ${sub.zh}` : ''}</a>
         ))}
       </div>
     </div>

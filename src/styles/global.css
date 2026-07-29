@@ -42,6 +42,7 @@ nav.primary{display:flex;gap:2px}
 .nav-btn:hover{background:#ECE9DF}
 .nav-btn .chev{width:10px;height:10px;transition:transform .2s;flex:none}
 .nav-item.open .nav-btn{background:#ECE9DF}
+.nav-btn.active{background:#ECE9DF;font-weight:600;box-shadow:inset 0 0 0 1px var(--line)}
 .nav-item.open .chev{transform:rotate(180deg)}
 .panel{position:absolute;top:calc(100% + 10px);left:0;min-width:310px;
   background:var(--card);border:1px solid var(--line);border-radius:var(--radius-m);
@@ -63,6 +64,8 @@ nav.primary{display:flex;gap:2px}
 .p-title{font-size:14.5px;font-weight:600}
 .p-title small{font-family:var(--mono);font-weight:400;font-size:10.5px;color:var(--ink-2);margin-left:6px;letter-spacing:.06em}
 .p-desc{font-size:12.5px;color:var(--ink-2);line-height:1.5;margin-top:1px}
+.panel a.active{background:var(--panel)}
+.panel a.active .p-title{color:var(--coral-deep)}
 .panel-home{display:block;margin-top:4px;border-top:1px solid var(--line);
   padding:10px 12px 6px !important;font-size:13px;color:var(--ink-2) !important;border-radius:0 !important}
 .panel-home:hover{color:var(--coral-deep) !important;background:none !important}
@@ -93,6 +96,7 @@ nav.primary{display:flex;gap:2px}
 .acc.open .acc-body{display:block}
 .acc-body a{display:block;padding:9px 0;font-size:15.5px;color:var(--ink-2)}
 .acc-body a:hover{color:var(--coral-deep)}
+.acc-body a.active{color:var(--coral-deep);font-weight:600}
 .drawer .btn{margin-top:24px;justify-content:center;width:100%}
 body.lock{overflow:hidden}
 

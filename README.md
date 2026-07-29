@@ -60,6 +60,18 @@ node scripts/convert.mjs _legacy/Investing                        --section=inve
 
 **TOKEN_MAP 怎么补**：`convert.mjs` 顶部的映射表预填了旧羊皮纸/青绿/赭陶体系的常见值；跑一次 `--dry`，报告会列出"未映射颜色清单"（按出现频次排序），把属于旧设计令牌的补进表里、装饰性杂色留着即可，然后 `--force` 重跑。
 
+## 2.5 公共导航（所有页面）
+
+全站导航是唯一公共外壳，由 `src/layouts/Base.astro` 提供：首页、目录页、重构后的旧页、404 全部套用同一份顶栏（sticky 常驻）+ 移动端抽屉 + 页脚，改一处全站生效。顶栏会按当前 URL 自动高亮所在板块（一级按钮加深、下拉中的当前栏目标橙、抽屉自动展开对应板块），子页面任何深度都能一眼定位并跳回。
+
+兜底通道：个别旧页若暂不重构、以原样 HTML 放进 `public/`，在其 `</body>` 前加一行
+
+```html
+<script src="/shell.js" defer></script>
+```
+
+即得左上角悬浮导航胶囊（首页 + 四大板块，当前板块高亮）。`shell.js` 由 `scripts/gen-shell.mjs` 从 `nav.json` 自动生成（`npm run dev / build` 时自动执行），用 Shadow DOM 渲染，与旧页样式互不污染。
+
 ## 3. 部署到 Cloudflare Pages（免费）
 
 方式 A（推荐，仓库照常放 GitHub）：Cloudflare Dashboard → Workers & Pages → Pages → 连接仓库 → 预设 Astro（构建 `npm run build`，输出 `dist`）。push 即自动部署。
