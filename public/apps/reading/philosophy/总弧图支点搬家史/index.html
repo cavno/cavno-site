@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="zh-CN"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>总弧图 · 支点搬家史 × 两次自爆 × 四十一组应力位</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600&family=GFS+Didot&family=Noto+Serif+SC:wght@400;500;600;700&family=JetBrains+Mono&display=swap" rel="stylesheet">
+<style>
+:root{--parch:#f3ebda;--pl:#faf4e6;--ink:#1c1916;--soft:#3a342c;--fade:#6e6253;--terr:#a73e2c;--terrd:#7e2d1f;--aeg:#1d4e5f;--gold:#b8893a;--pur:#6d4a8f;--grn:#3f7a52;--grey:#8a7f6d;--line:rgba(28,25,22,.12);--ls:rgba(28,25,22,.26);--serif:"Noto Serif SC",Georgia,serif;--disp:"Cormorant Garamond","Noto Serif SC",serif;--greek:"GFS Didot","Noto Serif SC",serif;--mono:"JetBrains Mono",monospace}
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:var(--parch);background-image:radial-gradient(ellipse at top left,rgba(184,137,58,.06),transparent 50%);color:var(--ink);font-family:var(--serif);font-size:16px;line-height:1.7;overflow:hidden}
+.app{height:100vh;display:flex;flex-direction:column}
+header{flex:none;border-bottom:1px solid var(--line);background:rgba(243,235,218,.93);padding:12px 22px 10px}
+.hbar{display:flex;align-items:baseline;gap:13px;flex-wrap:wrap}
+h1{font-family:var(--disp);font-weight:600;font-size:22px;white-space:nowrap}
+.latin{font-family:var(--greek);font-size:11.5px;letter-spacing:.16em;color:var(--terr);text-transform:uppercase}
+.sub{font-size:12.5px;color:var(--fade)}
+.btn{margin-left:auto;font-size:13px;color:var(--soft);background:var(--pl);border:1px solid var(--ls);border-radius:18px;padding:5px 13px;cursor:pointer}
+.btn:hover{border-color:var(--terr);color:var(--terr)}
+.main{flex:1;display:flex;min-height:0}
+.arc{flex:1;overflow-y:auto;padding:18px 26px 80px}
+.panel{width:398px;flex:none;border-left:1px solid var(--line);background:var(--pl);overflow-y:auto;padding:18px 22px 50px}
+.rail{position:relative;max-width:880px;margin:0 auto;padding-left:118px}
+.rail::before{content:'';position:absolute;left:44px;top:0;bottom:0;width:3px;background:linear-gradient(var(--aeg),var(--gold) 30%,var(--terr) 62%,var(--pur))}
+.station{position:relative;margin-bottom:34px;border:1px solid var(--ls);border-radius:16px;background:var(--pl);padding:16px 18px 12px;cursor:pointer}
+.station:hover{border-color:var(--terr)}
+.st-dot{position:absolute;left:-86px;top:14px;width:24px;height:24px;border-radius:50%;border:3px solid var(--parch);box-shadow:0 0 0 2px var(--ls)}
+.st-k{position:absolute;left:-74px;top:44px;transform:translateX(-50%);font-family:var(--greek);font-size:10.5px;letter-spacing:.14em;color:var(--fade);writing-mode:vertical-rl;text-orientation:mixed}
+.st-h{display:flex;align-items:baseline;gap:10px;flex-wrap:wrap}
+.st-name{font-family:var(--disp);font-size:21px;font-weight:600}
+.st-era{font-size:11.5px;color:var(--fade);font-family:var(--mono)}
+.st-line{font-size:12.5px;color:var(--soft);margin:2px 0 10px}
+.grp{margin:8px 0 4px}
+.grp-h{font-family:var(--greek);font-size:10.5px;letter-spacing:.18em;text-transform:uppercase;color:var(--fade);margin-bottom:5px;display:flex;align-items:center;gap:8px}
+.grp-h::after{content:'';flex:1;height:1px;background:var(--line)}
+.grp-h.blast{color:var(--terrd);font-weight:700}
+.chips{display:flex;flex-wrap:wrap;gap:6px}
+.chip{font-size:12.5px;color:var(--soft);background:var(--parch);border:1px solid var(--ls);border-radius:15px;padding:3px 11px;cursor:pointer;transition:all .15s}
+.chip:hover{border-color:var(--terr);color:var(--terr)}
+.chip b{font-family:var(--mono);font-weight:500;font-size:10.5px;margin-right:5px;color:var(--fade)}
+.chip.hot{border-color:var(--terrd);background:rgba(167,62,44,.10);color:var(--terrd);font-weight:600}
+.chip.sel{border-color:var(--terr);border-width:2px;color:var(--terr);font-weight:600}
+.blastband{border:1.5px dashed var(--terrd);background:rgba(167,62,44,.06);border-radius:12px;padding:8px 12px;margin:10px 0;cursor:pointer}
+.blastband:hover{background:rgba(167,62,44,.11)}
+.bb-t{font-weight:700;color:var(--terrd);font-size:13.5px}
+.bb-s{font-size:11.5px;color:var(--soft)}
+.mile{position:absolute;left:-118px;width:64px;text-align:center}
+.mile .m-t{font-size:10px;color:var(--aeg);font-weight:600;line-height:1.3}
+.weld{font-size:12.5px;color:var(--soft);background:rgba(184,137,58,.08);border-left:3px solid var(--gold);border-radius:8px;padding:8px 12px;margin-top:8px}
+.eyebrow{font-family:var(--greek);font-size:11.5px;letter-spacing:.22em;color:var(--terr);text-transform:uppercase;margin-bottom:8px}
+.p-name{font-family:var(--disp);font-size:23px;font-weight:600;line-height:1.22}
+.p-lat{font-family:var(--greek);font-style:italic;font-size:13px;color:var(--fade);margin:3px 0 10px}
+.blk{border-radius:9px;padding:11px 13px;margin-bottom:11px;font-size:13.5px;line-height:1.68;background:rgba(29,78,95,.06);border-left:3px solid var(--aeg)}
+.blk h4{font-family:var(--greek);font-size:10.5px;letter-spacing:.18em;text-transform:uppercase;margin-bottom:5px;color:var(--aeg)}
+.blk.fire{background:rgba(167,62,44,.07);border-left-color:var(--terr)}.blk.fire h4{color:var(--terr)}
+.guide p{font-size:13.5px;line-height:1.74;margin-bottom:10px;color:var(--soft)}
+.guide h3{font-family:var(--disp);font-size:20px;font-weight:600;margin-bottom:10px}
+.guide em{color:var(--terr);font-style:italic}.guide strong{color:var(--ink)}.guide .mini{font-size:12.5px;color:var(--fade)}
+@media(max-width:980px){body{overflow:auto}.app{height:auto}.main{flex-direction:column}.panel{width:100%;border-left:none;border-top:1px solid var(--line)}.rail{padding-left:96px}.mile{display:none}}
+</style></head><body><div class="app">
+<header><div class="hbar"><h1>总弧图 · 支点搬家史</h1><span class="latin">Arcus Magnus · 四站 × 两爆 × 四十一组</span><span class="sub">纵轴＝确定性支点的四个地址；爆点＝两次系统自爆；41 组对立挂在各自应力位</span><button class="btn" id="btnReset">↺ 全览</button></div></header>
+<div class="main"><div class="arc"><div class="rail" id="rail"></div></div><aside class="panel" id="panel"></aside></div></div>
+<script>
+const OPP={
+g1:['神话—理性','Μῦθος·Λόγος','开机：叙事让位于可反驳的命题——解释权第一次换轨。'],
+g2:['自然—约定','Φύσις·Νόμος','追问外溢到人间规范——Logos 无法自限。'],
+g3:['无定—有限','Ἄπειρον·Πέρας','终极性要求本原无界，又须被限定方可认识。'],
+g4:['一—多','Ἕν·Πολλά','终极性要求本原为一；一与多如何兼容成为共用考题。'],
+g5:['真理—意见','Ἐπιστήμη·Δόξα','爆炸的直接后果：感官世界被判为假象。'],
+g6:['思维—存在','Νοεῖν·Εἶναι','公设：可思即可在——给存在上逻辑锁。'],
+g7:['存在—非存在','Ὄν·Μὴ Ὄν','爆点核心：非存在不存在→运动、变化、多皆不可能。'],
+g8:['形式—质料','Μορφή·Ὕλη','缝合件：形式内在于质料，两世界粘回一个。'],
+g9:['潜能—现实','Δύναμις·Ἐνέργεια','定制件：变化=潜在的有→实现的有，直堵爆点。'],
+g10:['个别—共相','Καθ᾽ἕκαστον·Καθόλου','共相在哪？此问将经唯实/唯名传入近代。'],
+g11:['感性—理性','Αἴσθησις·Νοῦς','两世界的认知端：感性够现象，理性够本体。'],
+g12:['现象—本体','Φαινόμενον·Οὐσία','两世界的本体端；近代将改写为权限边界。'],
+g13:['必然—自由','Ἀνάγκη·Προαίρεσις','宇宙论必然压到人身上——决定论下沉为伦理。'],
+g14:['德性—快乐','Ἀρετή·Ἡδονή','"好的存在"降级为"好的生活"。'],
+g15:['灵魂—肉体','Ψυχή·Σῶμα','两世界内化到人自身；将铸成近代心物二元。'],
+g16:['悬置—不动心','Ἐποχή·Ἀταραξία','终点·认命：放弃判断换安宁——真空留给下一任担保人。'],
+m1:['神圣—世俗','Sacrum·Saeculum','神圣收窄成竖线，横向平面让给世俗——断供之问裂成三支。'],
+m2:['超自然—自然','Miraculum·Lex naturae','奇迹被判不合语法；上帝从干预者改聘为立法者。'],
+m3:['目的因—动力因','Telos·Mechanismus','自然被去灵；目的与自由撤入心灵据点。'],
+m4:['物自体—现象','Noumenon·Phaenomenon','三步长成：洛克胚胎→贝休流产→康德接生为权限边界。'],
+m5:['唯实—唯名','Realismus·Nominalismus','中世纪共相之争换法庭续审（G10 的火种）。'],
+m6:['必然—自由','Necessitas·Libertas','贯穿身体的断层；斯宾诺莎焊死：自由=认识必然。'],
+m7:['逻辑必然—经验或然','Necessarium·Contingens','莱布尼茨双轨建制＋PSR 立法——"又必然又扩展"无轨。'],
+m8:['信仰先于理性—怀疑','Fides·Dubium','次序倒转：一切主张先过怀疑的海关。'],
+m9:['阿基米德点—无穷倒退','Punctum·Regressus','PSR 的认识论化身；我思打桩、诚实上帝垫板。'],
+m10:['理性演绎—经验归纳','Deductio·Inductio','两极对称病理：独断（无根基的必然）vs 循环（无必然的根基）。'],
+m11:['天赋·先天—感觉·后天','Innatum·Acquisitum','洛克处决先天之"货"，康德救活先天之"厂"。'],
+m12:['概念范畴—感觉材料','Begriff·Empfindung','形式/质料转世；哥白尼革命：契合被制造，担保人失业。'],
+m13:['因果联结—心理联想','Causalitas·Consuetudo','爆点核心：必然联结从未被给予——科学地基被自家审计抽走。'],
+m14:['观念关系—事实知识','Ideas·Facts','休谟之叉：为康德预制"先天综合如何可能"。'],
+m15:['理性—情感','Ratio·Sentiment','理性是激情之奴——目的立法权之争，洞掉进伦理域。'],
+m16:['心灵—广延','Cogitans·Extensa','三方案（二元/一元/消解）共同暴露："实体"是病灶。'],
+m17:['实体自我—知觉束','Substantia·Fasciculus','审计员把自己审掉；先验统觉的预定席位。'],
+m18:['是—应当','Sein·Sollen','Physis/Nomos 拿到逻辑公证书；价值被迫自立门户。'],
+m19:['义务·德性—快乐·功利','Deon·Utile','伦理四型收束的轴心；康德把必然安放进法则形式。'],
+m20:['认识必然—自我立法','Cognitio·Autonomia','自由两站：斯宾诺莎的和解 vs 康德的立法。'],
+m21:['原子个体—社群','Individuum·Communitas','跪拜者成为新的上帝——解放的账单。'],
+m22:['自然—约定','Physis·Nomos','自然状态被武器化，用以批判现存约定。'],
+m23:['君权神授—社会契约','Ius divinum·Contractus','正当性理由链倒转：权力绕同意转（PSR 政治化）。'],
+m24:['统一—分裂','Unitas·Divisio','三大法则各设法庭；冲撞常态化=现代性的噪音。'],
+m25:['理想—现实','Ideale·Reale','启蒙内部温差；蓝图挟革命而来时的断头台预告。'],
+};
+const ARC=[
+ {id:'s1',dot:'#1d4e5f',name:'第一站 · 世界之内',era:'公元前6—前3世纪 · 希腊',mile:'可思\n（巴门尼德）',
+  line:'支点＝本原（水·无定·数·存在·理念·形式）——宇宙自己的深层构件。失败方式：被逻辑逼出悖谬，"本原的本原"无法收口。',
+  groups:[
+   {h:'门槛 · 开机',ids:['g1','g2']},
+   {h:'本原之墙',ids:['g3','g4']},
+   {h:'★ 爆点一 · 巴门尼德冲击',blast:true,ids:['g6','g7','g5'],hot:'g7',
+    bb:'系统用自身标准审判自身：思想以"可思性"审判存在，而思想自己就在存在之内——自反，然后自爆：运动、变化、多被宣布不可能。'},
+   {h:'缝合搭建 · 柏拉图—亚里士多德',ids:['g11','g12','g10','g8','g9']},
+   {h:'希腊化 · 伦理转向',ids:['g13','g14','g15','g16']},
+  ]},
+ {id:'s2',dot:'#b8893a',name:'第二站 · 世界之上',era:'中世纪 · 总中介',mile:'（托管）',
+  line:'悬置留下的真空由基督教接管：神＝总中介，把全部二分一次性焊死。关键执照：**神是全宇宙唯一持照的自因（causa sui）**——自我奠基在一个点上被特许合法。失败方式：被削剥——剃刀削冗余，科学革命把神从干预者改聘为立法者、逼退到创世那一刻。',
+  groups:[],weld:'火种传递：G10 个别—共相 → 唯实/唯名之争 → M05／M11（天赋—白板）。近代的开端＝这张自因执照被吊销。'},
+ {id:'s3',dot:'#a73e2c',name:'第三站 · 主体之内',era:'17—18世纪 · 近代与启蒙',mile:'可认识\n（康德）',
+  line:'支点从实体改为形式（时空·范畴·先验统觉）：契合被制造，无需担保。第三站自带边界声明：形式只对现象有效——支点落成即公布适用范围。洞沿五域瀑布下泄：本体论→认识论→自我→伦理→政治。',
+  groups:[
+   {h:'本体论域 · 世界先裂',ids:['m1','m2','m3','m4','m5','m6','m7']},
+   {h:'认识论域 · 审计风暴　★ 爆点二 · 休谟冲击',blast:true,ids:['m8','m9','m10','m11','m12','m13','m14','m15'],hot:'m13',
+    bb:'经验论以"观念须有印象"审计观念，而这条标准自己就是个观念——自反，然后自爆：因果与科学地基被自家审计员抽走。康德的回填＝把必然从印象搬进整理印象的语法。'},
+   {h:'自我域 · 审计员被审',ids:['m16','m17']},
+   {h:'伦理域 · 价值自立门户',ids:['m18','m19','m20','m21']},
+   {h:'政治域 · 秩序重建',ids:['m22','m23','m24','m25']},
+  ]},
+ {id:'s4',dot:'#6d4a8f',name:'第四站 · 语言与逻辑（预告）',era:'19世纪末—20世纪',mile:'可说\n（维特根斯坦）',
+  line:'支点搬进语言与逻辑，而这一站连边界声明都能写成定理：哥德尔——一致的系统不能证明自身一致；塔尔斯基——足够丰富的语言不能包含自己的真谓词。两千年的踉跄被定理化：**自我奠基不可能，不是失误，是结构。**',
+  groups:[],weld:'总纲线三块界碑至此立齐：可思（思=在）→可认识（思≠知）→可说（知≠说）——每搬一次家，理性对自身权限的估计收缩一档、精确一档。'},
+];
+function esc(s){return s.replace(/&/g,'&amp;').replace(/</g,'&lt;')}
+function bold(s){return esc(s).replace(/\*\*([^*]+)\*\*/g,'<strong>$1</strong>')}
+function build(){
+ const rail=document.getElementById('rail');let h='';
+ ARC.forEach(st=>{
+  h+=`<div class="station" data-st="${st.id}">`;
+  h+=`<div class="st-dot" style="background:${st.dot}"></div>`;
+  if(st.mile)h+=`<div class="mile" style="top:10px"><div class="m-t">${esc(st.mile).replace(/\n/g,'<br>')}</div></div>`;
+  h+=`<div class="st-h"><span class="st-name">${st.name}</span><span class="st-era">${st.era}</span></div>`;
+  h+=`<div class="st-line">${bold(st.line)}</div>`;
+  st.groups.forEach((g,gi)=>{
+   h+=`<div class="grp"><div class="grp-h ${g.blast?'blast':''}">${esc(g.h)}</div>`;
+   if(g.blast)h+=`<div class="blastband" data-bb="${st.id}-${gi}"><span class="bb-t">☄ 自爆机制</span>　<span class="bb-s">${esc(g.bb)}</span></div>`;
+   h+=`<div class="chips">${g.ids.map(id=>`<span class="chip ${g.hot===id?'hot':''}" data-id="${id}"><b>${id.toUpperCase()}</b>${OPP[id][0]}</span>`).join('')}</div></div>`;
+  });
+  if(st.weld)h+=`<div class="weld">${bold(st.weld)}</div>`;
+  h+=`</div>`;
+ });
+ rail.innerHTML=h;
+ rail.querySelectorAll('.chip').forEach(c=>c.addEventListener('click',e=>{e.stopPropagation();selChip(c.dataset.id)}));
+ rail.querySelectorAll('.station').forEach(s=>s.addEventListener('click',()=>selSt(s.dataset.st)));
+ rail.querySelectorAll('.blastband').forEach(b=>b.addEventListener('click',e=>{e.stopPropagation();}));
+}
+function clearSel(){document.querySelectorAll('.chip').forEach(c=>c.classList.remove('sel'))}
+function selChip(id){clearSel();document.querySelectorAll(`.chip[data-id="${id}"]`).forEach(c=>c.classList.add('sel'));
+ const o=OPP[id],side=id[0]==='g'?'古希腊 · 十六组':'近代与启蒙 · 二十五组';
+ document.getElementById('panel').innerHTML=`<div class="eyebrow">${side} · ${id.toUpperCase()}</div><div class="p-name">${o[0]}</div><div class="p-lat">${o[1]}</div><div class="blk"><h4>应力位 · 它在弧上做什么</h4>${esc(o[2])}</div>`;}
+function selSt(id){clearSel();const st=ARC.find(s=>s.id===id);
+ document.getElementById('panel').innerHTML=`<div class="eyebrow">支点地址 · ${st.era}</div><div class="p-name">${st.name}</div><div class="blk ${id==='s1'||id==='s3'?'fire':''}"><h4>${id==='s2'?'焊接与吊销':(id==='s4'?'定理化':'支点与失败方式')}</h4>${bold(st.line)}</div>${st.weld?`<div class="blk"><h4>传动</h4>${bold(st.weld)}</div>`:''}`;}
+function guide(){document.getElementById('panel').innerHTML=`<div class="guide"><div class="eyebrow">导读 · LECTORI</div><h3>一部搬家史，两次自爆</h3>
+<p><strong>纵轴＝确定性支点的四个地址</strong>：世界之内（本原）→世界之上（神＝唯一持照自因）→主体之内（先验形式）→语言与逻辑（边界定理化，预告）。左侧里程碑是总纲线：<em>可思→可认识→可说</em>。</p>
+<p><strong>两个爆点</strong>（虚线红带）结构完全相同：系统把自己的核心标准应用于自身——自反，然后自爆。巴门尼德冲击炸掉运动与多；休谟冲击炸掉因果与科学地基。每一站的下半段都是对自家爆点的缝合手术。</p>
+<p class="mini"><strong>41 枚应力片</strong>挂在各自的应力位：希腊十六组按五段因果链排列；近代二十五组按五域瀑布排列（本体论→认识论→自我→伦理→政治，洞只朝一个方向流）。红色高亮片＝爆点核心（G07 存在—非存在 / M13 因果—联想）。点任一片看它在弧上的角色；点站带看该站的支点与失败方式。</p>
+<p class="mini" style="border-top:1px solid var(--line);padding-top:9px">总纲：哲学史＝"系统无法为自身奠基"这条结构定理在时间中的展开——四种介质先后应聘那个自我担保的支点，每次都在同一位置失败，又每次都学到更精确的边界：希腊学会悬置，近代学会成年，现代将把边界定理化。</p></div>`}
+build();guide();
+document.getElementById('btnReset').addEventListener('click',()=>{clearSel();guide();document.querySelector('.arc').scrollTo({top:0,behavior:'smooth'})});
+</script></body></html>

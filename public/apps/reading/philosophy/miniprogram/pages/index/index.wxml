@@ -1,0 +1,73 @@
+<!-- 首页：脉络中枢 -->
+<scroll-view scroll-y class="page" enable-flex>
+
+  <!-- ===== Hero ===== -->
+  <view class="hero">
+    <view class="hero-figure">
+      <view class="ring ring-outer"></view>
+      <view class="ring ring-gold"></view>
+      <view class="void-core">
+        <view class="light-center"></view>
+        <view class="void-label">虚无</view>
+        <view class="void-latin">N I H I L</view>
+      </view>
+    </view>
+
+    <view class="hero-eyebrow">从虚无中寻找希望与力量</view>
+    <view class="hero-title">探索生命的<text class="hl">意义</text>与<text class="hl">价值</text></view>
+    <view class="hero-sub">An Inquiry into Meaning &amp; Value</view>
+    <view class="hero-lede">哲学史，就是寻找确定性与克服虚无主义的历史——这是同一件事的<text class="em">一体两面</text>。本文沿"诊断 → 分析 → 救治"的路径，走完一段从虚无走向重建的思想旅程。</view>
+
+    <view class="hero-meta">
+      <text>梅春雷</text>
+      <text class="dot">·</text>
+      <text>2026.01.11</text>
+    </view>
+    <view class="hero-hint">向下滑动 · 进入脉络 ↓</view>
+  </view>
+
+  <!-- ===== 核心命题 ===== -->
+  <view class="thesis">
+    <view class="thesis-mark">❝</view>
+    <view class="thesis-body">寻找确定性（本源、本质、终极因、真理）与克服虚无主义，是哲学的<text class="thesis-hl">一体两面</text>。</view>
+    <view class="thesis-note">古代有大地之稳、血缘之续、宗教之托、形而上学之基，故无虚无之问；现代人正是在这一切被祛魅之后，才直面"无"。</view>
+  </view>
+
+  <!-- ===== 脉络目录 ===== -->
+  <view class="toc-head">
+    <view class="section-label">The Argument · 核心脉络</view>
+    <view class="toc-title">从诊断到救治</view>
+    <view class="toc-desc">六个章节，构成一条完整的诊疗路径。点击任一章进入。</view>
+  </view>
+
+  <view class="toc-list">
+    <view
+      class="toc-item"
+      wx:for="{{toc}}"
+      wx:key="id"
+      data-id="{{item.id}}"
+      bindtap="goDetail"
+      hover-class="card-hover"
+    >
+      <view class="toc-roman">
+        <text class="roman-cn">{{item.roman}}</text>
+        <text class="roman-phase">{{item.phase}}</text>
+      </view>
+      <view class="toc-main">
+        <view class="toc-item-title">{{item.title}}</view>
+        <view class="toc-item-sub">{{item.desc}}</view>
+      </view>
+      <view class="toc-arrow">→</view>
+    </view>
+  </view>
+
+  <!-- ===== 页脚 ===== -->
+  <view class="footer">
+    <view class="footer-line"></view>
+    <view class="footer-quote">"点滴之水，汇聚江海"</view>
+    <view class="footer-cite">哲学家们只是用不同的方式解释世界，而问题在于改变世界。</view>
+    <view class="footer-mark">— 梅春雷《探索生命的意义与价值》—</view>
+  </view>
+
+  <view class="bottom-safe"></view>
+</scroll-view>

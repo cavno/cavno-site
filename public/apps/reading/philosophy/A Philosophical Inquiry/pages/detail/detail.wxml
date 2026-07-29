@@ -1,0 +1,228 @@
+<scroll-view scroll-y class="page" enable-flex wx:if="{{chapter}}">
+
+  <!-- ===== 章节头 ===== -->
+  <view class="chap-head">
+    <view class="chap-roman">{{chapter.roman}}</view>
+    <view class="chap-roman-latin">{{chapter.romanLatin}}</view>
+    <view class="chap-title">{{chapter.title}}</view>
+    <view class="chap-sub">{{chapter.subtitle}}</view>
+    <view class="chap-intro">{{chapter.intro}}</view>
+  </view>
+
+  <view class="body">
+
+    <!-- ========== 前言 ========== -->
+    <block wx:if="{{chapter.layout === 'prologue'}}">
+      <view class="quote-block">
+        <view class="quote-text">{{chapter.quote}}</view>
+      </view>
+      <view class="section-label">The Four Anchors · 古代的四重根基</view>
+      <view class="pillar-list">
+        <view class="pillar" wx:for="{{chapter.pillars}}" wx:key="k">
+          <view class="pillar-k">{{item.k}}</view>
+          <view class="pillar-v">{{item.v}}</view>
+        </view>
+      </view>
+    </block>
+
+    <!-- ========== 第一章：思想家时间轴 ========== -->
+    <block wx:if="{{chapter.layout === 'ch1'}}">
+      <scroll-view scroll-x class="chip-bar" enable-flex>
+        <view
+          class="chip {{index === activeThinker ? 'chip-on' : ''}}"
+          wx:for="{{chapter.thinkers}}"
+          wx:key="name"
+          data-index="{{index}}"
+          bindtap="onThinkerTap"
+          hover-class="card-hover"
+        >
+          <view class="chip-year">{{item.year}}</view>
+          <view class="chip-name">{{item.name}}</view>
+        </view>
+      </scroll-view>
+
+      <view class="thinker-card">
+        <view class="tk-tag">{{chapter.thinkers[activeThinker].tag}}</view>
+        <view class="tk-name">{{chapter.thinkers[activeThinker].name}}</view>
+        <view class="tk-latin">{{chapter.thinkers[activeThinker].latin}}</view>
+        <view class="tk-meta">{{chapter.thinkers[activeThinker].meta}}</view>
+        <view class="tk-headline">{{chapter.thinkers[activeThinker].headline}}</view>
+        <view class="tk-desc">{{chapter.thinkers[activeThinker].desc}}</view>
+        <view class="tk-quote">{{chapter.thinkers[activeThinker].quote}}</view>
+      </view>
+    </block>
+
+    <!-- ========== 第二章：类型 / 表现 标签 ========== -->
+    <block wx:if="{{chapter.layout === 'ch2'}}">
+      <view class="tabs">
+        <view
+          class="tab {{activeTab === 'types' ? 'tab-on' : ''}}"
+          data-tab="types"
+          bindtap="onTabTap"
+          hover-class="card-hover"
+        >五种基本类型</view>
+        <view
+          class="tab {{activeTab === 'manifests' ? 'tab-on' : ''}}"
+          data-tab="manifests"
+          bindtap="onTabTap"
+          hover-class="card-hover"
+        >十种当代表现</view>
+      </view>
+
+      <!-- 类型 -->
+      <view wx:if="{{activeTab === 'types'}}" class="type-list">
+        <view class="type-card" wx:for="{{chapter.types}}" wx:key="n">
+          <view class="type-top">
+            <text class="type-n">{{item.n}}</text>
+            <view class="type-heads">
+              <view class="type-name">{{item.name}}</view>
+              <view class="type-latin">{{item.latin}} Nihilism</view>
+            </view>
+          </view>
+          <view class="type-desc">{{item.desc}}</view>
+        </view>
+      </view>
+
+      <!-- 表现 -->
+      <view wx:if="{{activeTab === 'manifests'}}" class="manifest-list">
+        <view class="manifest" wx:for="{{chapter.manifests}}" wx:key="n">
+          <view class="manifest-n">{{item.n}}</view>
+          <view class="manifest-main">
+            <view class="manifest-title">{{item.title}}</view>
+            <view class="manifest-desc">{{item.desc}}</view>
+          </view>
+        </view>
+      </view>
+    </block>
+
+    <!-- ========== 第三章：社会根源 ========== -->
+    <block wx:if="{{chapter.layout === 'ch3'}}">
+      <view class="root-list">
+        <view class="root-card" wx:for="{{chapter.roots}}" wx:key="title">
+          <view class="root-icon">{{item.icon}}</view>
+          <view class="root-title">{{item.title}}</view>
+          <view class="root-items">
+            <view class="root-item" wx:for="{{item.items}}" wx:for-item="it" wx:key="*this">· {{it}}</view>
+          </view>
+        </view>
+      </view>
+
+      <view class="cage">
+        <view class="cage-bars"></view>
+        <view class="cage-title">{{chapter.ironcageTitle}}</view>
+        <view class="cage-latin">{{chapter.ironcageLatin}}</view>
+        <view class="cage-body">{{chapter.ironcageBody}}</view>
+      </view>
+    </block>
+
+    <!-- ========== 第四章：精神疾病 ========== -->
+    <block wx:if="{{chapter.layout === 'ch4'}}">
+      <view class="section-label">Mechanisms · 致病机制</view>
+      <view class="mech-flow">
+        <block wx:for="{{chapter.mech}}" wx:key="n">
+          <view class="mech-step">
+            <view class="mech-n">{{item.n}}</view>
+            <view class="mech-t">{{item.title}}</view>
+          </view>
+          <view class="mech-arrow" wx:if="{{index < chapter.mech.length - 1}}">↓</view>
+        </block>
+      </view>
+
+      <view class="cycle">
+        <view class="cycle-label">恶性循环 · Vicious Cycle</view>
+        <view class="cycle-text">{{chapter.cycle}}</view>
+      </view>
+
+      <view class="section-label">Clinical Data · 临床数据</view>
+      <view class="stat-row">
+        <view class="stat" wx:for="{{chapter.stats}}" wx:key="label">
+          <view class="stat-num">{{item.num}}<text class="stat-unit">{{item.unit}}</text></view>
+          <view class="stat-label">{{item.label}}</view>
+        </view>
+      </view>
+
+      <view class="note-block">{{chapter.note}}</view>
+    </block>
+
+    <!-- ========== 第五章：出路 ========== -->
+    <block wx:if="{{chapter.layout === 'ch5'}}">
+      <view class="quote-block">
+        <view class="quote-text">{{chapter.pathsIntro}}</view>
+      </view>
+
+      <view class="path-list">
+        <view class="path-card {{item.root ? 'path-root' : ''}}" wx:for="{{chapter.paths}}" wx:key="title">
+          <view class="path-top">
+            <view class="path-roman">{{item.roman}}</view>
+            <view class="path-heads">
+              <view class="path-title">{{item.title}}<text wx:if="{{item.root}}" class="root-badge">根本出路</text></view>
+              <view class="path-latin">{{item.latin}}</view>
+            </view>
+          </view>
+          <view class="path-items">
+            <view class="path-item" wx:for="{{item.items}}" wx:for-item="it" wx:key="*this">— {{it}}</view>
+          </view>
+        </view>
+      </view>
+
+      <view class="section-label">Evolution of the Self · 自我的四阶段</view>
+      <view class="evo-flow">
+        <block wx:for="{{chapter.evolution}}" wx:key="title">
+          <view class="evo-step">
+            <view class="evo-stage">{{item.step}}</view>
+            <view class="evo-title">{{item.title}}</view>
+            <view class="evo-desc">{{item.desc}}</view>
+          </view>
+          <view class="evo-arrow" wx:if="{{index < chapter.evolution.length - 1}}">→</view>
+        </block>
+      </view>
+    </block>
+
+    <!-- ========== 第六章：总结谱系 ========== -->
+    <block wx:if="{{chapter.layout === 'synthesis'}}">
+      <view class="lineage">
+        <block wx:for="{{chapter.lineage}}" wx:key="title">
+          <view class="lin-step">
+            <view class="lin-icon">{{item.icon}}</view>
+            <view class="lin-main">
+              <view class="lin-era">{{item.era}}</view>
+              <view class="lin-title">{{item.title}}</view>
+              <view class="lin-desc">{{item.desc}}</view>
+            </view>
+          </view>
+          <view class="lin-line" wx:if="{{index < chapter.lineage.length - 1}}"></view>
+        </block>
+      </view>
+
+      <view class="coda">
+        <view class="coda-mark">❦</view>
+        <view class="coda-quote">{{chapter.codaQuote}}</view>
+        <view class="coda-cite">{{chapter.codaCite}}</view>
+        <view class="coda-sub">{{chapter.codaSub}}</view>
+      </view>
+    </block>
+
+  </view>
+
+  <!-- ===== 章节间导航 ===== -->
+  <view class="chapter-nav">
+    <view class="nav-cell" wx:if="{{prev}}" data-id="{{prev.id}}" bindtap="goChapter" hover-class="nav-hover">
+      <view class="nav-dir">← 上一章</view>
+      <view class="nav-name">{{prev.title}}</view>
+    </view>
+    <view class="nav-cell nav-empty" wx:else></view>
+
+    <view class="nav-cell nav-toc" bindtap="backToIndex" hover-class="nav-hover">
+      <view class="nav-toc-icon">☰</view>
+      <view class="nav-name">目录</view>
+    </view>
+
+    <view class="nav-cell nav-right" wx:if="{{next}}" data-id="{{next.id}}" bindtap="goChapter" hover-class="nav-hover">
+      <view class="nav-dir">下一章 →</view>
+      <view class="nav-name">{{next.title}}</view>
+    </view>
+    <view class="nav-cell nav-empty" wx:else></view>
+  </view>
+
+  <view class="bottom-safe"></view>
+</scroll-view>

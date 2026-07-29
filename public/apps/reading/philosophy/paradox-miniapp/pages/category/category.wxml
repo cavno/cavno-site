@@ -1,0 +1,21 @@
+<view class="wrap">
+  <view class="head">
+    <view class="head-name">{{cat}}</view>
+    <view class="head-bar" style="background:{{color}}"></view>
+    <view class="head-count">{{total}} 个系统</view>
+  </view>
+
+  <block wx:for="{{groups}}" wx:key="era" wx:for-item="g">
+    <view class="era" wx:if="{{g.era}}">{{g.era}}</view>
+    <view class="sys-row" wx:for="{{g.items}}" wx:key="id" data-id="{{item.id}}" data-pkg="{{item.pkg}}" bindtap="goSys">
+      <view class="sr-name">{{item.name}}</view>
+      <view class="sr-mp" wx:if="{{item.a}}">
+        <text class="pa">{{item.a}}</text>
+        <text class="vs"> ↔ </text>
+        <text class="pb">{{item.b}}</text>
+      </view>
+      <view class="sr-meta">{{item.tn}} 张力 <text class="sr-go">→</text></view>
+    </view>
+  </block>
+  <view class="safe-bottom"></view>
+</view>

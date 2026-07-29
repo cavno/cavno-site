@@ -1,0 +1,391 @@
+.home {
+  overflow: hidden;
+}
+
+.hero {
+  position: relative;
+  min-height: 720rpx;
+  padding-top: 100rpx;
+  overflow: hidden;
+  background: #17362f;
+  color: #fff9ec;
+}
+
+.hero .eyebrow {
+  position: relative;
+  z-index: 2;
+  color: #d9ae75;
+}
+
+.hero .display-title {
+  position: relative;
+  z-index: 2;
+  max-width: 640rpx;
+  margin-top: 32rpx;
+  color: #fff9ec;
+  font-size: 72rpx;
+}
+
+.hero-subtitle {
+  position: relative;
+  z-index: 2;
+  max-width: 610rpx;
+  margin-top: 36rpx;
+  color: rgba(255, 249, 236, 0.72);
+  font-size: 28rpx;
+  line-height: 1.8;
+}
+
+.hero-action {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 340rpx;
+  min-height: 88rpx;
+  margin-top: 48rpx;
+  padding: 0 28rpx;
+  border: 1rpx solid rgba(255, 249, 236, 0.34);
+  border-radius: 999rpx;
+  color: #fff9ec;
+  font-size: 26rpx;
+}
+
+.arrow {
+  font-size: 42rpx;
+  font-weight: 300;
+}
+
+.hero-orbit {
+  position: absolute;
+  border: 1rpx solid rgba(217, 174, 117, 0.18);
+  border-radius: 50%;
+}
+
+.orbit-one {
+  right: -260rpx;
+  bottom: -210rpx;
+  width: 730rpx;
+  height: 730rpx;
+}
+
+.orbit-two {
+  right: -130rpx;
+  bottom: -80rpx;
+  width: 470rpx;
+  height: 470rpx;
+}
+
+.hero-mark {
+  position: absolute;
+  right: 88rpx;
+  bottom: 132rpx;
+  width: 170rpx;
+  height: 170rpx;
+  border: 1rpx solid rgba(255, 249, 236, 0.34);
+  border-radius: 50%;
+}
+
+.mark-dot {
+  position: absolute;
+  top: 72rpx;
+  left: 72rpx;
+  width: 24rpx;
+  height: 24rpx;
+  border-radius: 50%;
+  background: #a64f32;
+}
+
+.mark-line {
+  position: absolute;
+  top: 82rpx;
+  left: -58rpx;
+  width: 286rpx;
+  height: 2rpx;
+  background: rgba(255, 249, 236, 0.32);
+  transform: rotate(-38deg);
+}
+
+.manifesto {
+  padding-top: 62rpx;
+  padding-bottom: 50rpx;
+}
+
+.manifesto-index {
+  color: #a64f32;
+  font-size: 22rpx;
+  font-weight: 700;
+  letter-spacing: 4rpx;
+}
+
+.manifesto-quote {
+  margin-top: 18rpx;
+  color: #17362f;
+  font-family: "STSong", "Songti SC", serif;
+  font-size: 42rpx;
+  font-weight: 700;
+}
+
+.manifesto-copy {
+  margin-top: 22rpx;
+  color: #5f594f;
+  font-size: 27rpx;
+  line-height: 1.9;
+}
+
+.progress-wrap {
+  padding-bottom: 70rpx;
+}
+
+.progress-card {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  min-height: 200rpx;
+  padding: 34rpx 34rpx 48rpx;
+  overflow: hidden;
+}
+
+.progress-label {
+  color: #a64f32;
+  font-size: 22rpx;
+  font-weight: 700;
+  letter-spacing: 3rpx;
+}
+
+.progress-title {
+  max-width: 500rpx;
+  margin-top: 12rpx;
+  color: #17362f;
+  font-family: "STSong", "Songti SC", serif;
+  font-size: 31rpx;
+  font-weight: 700;
+}
+
+.progress-meta {
+  margin-top: 10rpx;
+  color: #81796d;
+  font-size: 23rpx;
+}
+
+.round-go {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 72rpx;
+  height: 72rpx;
+  border-radius: 50%;
+  background: #17362f;
+  color: #fff;
+  font-size: 38rpx;
+}
+
+.progress-track {
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  height: 8rpx;
+  background: rgba(23, 54, 47, 0.08);
+}
+
+.progress-fill {
+  height: 100%;
+  border-radius: 0 999rpx 999rpx 0;
+  background: #a64f32;
+  transition: width 0.3s ease;
+}
+
+.lecture-section {
+  padding-bottom: 78rpx;
+}
+
+.section-top {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  margin-bottom: 34rpx;
+}
+
+.section-count {
+  color: rgba(23, 54, 47, 0.16);
+  font-family: "Times New Roman", serif;
+  font-size: 82rpx;
+  line-height: 1;
+}
+
+.lecture-card {
+  position: relative;
+  display: flex;
+  width: 100%;
+  min-height: 190rpx;
+  margin-bottom: 20rpx;
+  padding: 30rpx 30rpx 28rpx 34rpx;
+  overflow: hidden;
+  border: 1rpx solid rgba(23, 54, 47, 0.1);
+  border-radius: 22rpx;
+  background: #fbf8f1;
+  text-align: left;
+  box-shadow: 0 12rpx 30rpx rgba(42, 35, 26, 0.045);
+}
+
+.lecture-accent {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  width: 8rpx;
+}
+
+.lecture-no {
+  width: 118rpx;
+  padding-top: 4rpx;
+  color: #a64f32;
+  font-size: 23rpx;
+  font-weight: 700;
+}
+
+.lecture-content {
+  flex: 1;
+  min-width: 0;
+}
+
+.lecture-title {
+  color: #17362f;
+  font-family: "STSong", "Songti SC", serif;
+  font-size: 34rpx;
+  font-weight: 700;
+  line-height: 1.35;
+}
+
+.lecture-subtitle {
+  margin-top: 10rpx;
+  color: #5f594f;
+  font-size: 25rpx;
+}
+
+.lecture-meta {
+  display: flex;
+  gap: 10rpx;
+  margin-top: 20rpx;
+  color: #958c7f;
+  font-size: 21rpx;
+}
+
+.lecture-state {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  justify-content: space-between;
+  width: 66rpx;
+  min-height: 128rpx;
+}
+
+.read-tag {
+  color: #477466;
+  font-size: 20rpx;
+}
+
+.fav-dot {
+  color: #a64f32;
+  font-size: 18rpx;
+}
+
+.card-arrow {
+  color: #17362f;
+  font-size: 36rpx;
+}
+
+.threads-section {
+  padding: 68rpx 0 76rpx;
+  background: #1f2b29;
+}
+
+.threads-heading {
+  margin-bottom: 34rpx;
+}
+
+.threads-section .eyebrow {
+  color: #d9ae75;
+}
+
+.light-heading {
+  color: #fff9ec;
+}
+
+.thread-scroll {
+  width: 100%;
+}
+
+.thread-row {
+  display: inline-flex;
+  padding: 0 32rpx;
+}
+
+.thread-card {
+  width: 560rpx;
+  min-height: 390rpx;
+  margin-right: 22rpx;
+  padding: 34rpx;
+  border: 1rpx solid rgba(255, 249, 236, 0.15);
+  border-radius: 22rpx;
+  background: rgba(255, 255, 255, 0.04);
+}
+
+.thread-number {
+  color: #d9ae75;
+  font-family: "Times New Roman", serif;
+  font-size: 50rpx;
+}
+
+.thread-title {
+  margin-top: 18rpx;
+  color: #fff9ec;
+  font-family: "STSong", "Songti SC", serif;
+  font-size: 36rpx;
+  font-weight: 700;
+}
+
+.thread-path {
+  margin-top: 22rpx;
+  color: #d9ae75;
+  font-size: 24rpx;
+  line-height: 1.75;
+}
+
+.thread-insight {
+  margin-top: 28rpx;
+  color: rgba(255, 249, 236, 0.68);
+  font-size: 25rpx;
+  line-height: 1.85;
+}
+
+.about-entry {
+  padding-top: 60rpx;
+  padding-bottom: 30rpx;
+}
+
+.about-button {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  min-height: 148rpx;
+  padding: 28rpx 30rpx;
+  text-align: left;
+}
+
+.about-title {
+  color: #17362f;
+  font-size: 29rpx;
+  font-weight: 700;
+}
+
+.about-copy {
+  max-width: 530rpx;
+  margin-top: 8rpx;
+  color: #81796d;
+  font-size: 23rpx;
+}

@@ -1,0 +1,371 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>四律 × 自指悖论 · 受力结构 — 拉不平的桌子</title>
+<meta name="description" content="把说谎者句画成一台受力结构：同一/矛盾/排中/充足理由是四根梁，自指+真谓词给它加载，四条出路各锯短一根梁来卸压。">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;1,500;1,600&family=GFS+Didot&family=Noto+Serif+SC:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root{
+  --parchment:#f3ebda; --parchment-light:#faf4e6; --parchment-dark:#e8ddc6;
+  --ink:#1c1916; --ink-soft:#3a342c; --ink-fade:#6e6253;
+  --terracotta:#a73e2c; --terracotta-dark:#7e2d1f; --terracotta-soft:#d9a89c;
+  --aegean:#1d4e5f; --aegean-soft:#5a8a96; --gold:#b8893a; --gold-soft:#d4b76a;
+  --purple:#6d4a8f; --green:#3f7a52; --grey:#8a7f6d;
+  --line:rgba(28,25,22,.12); --line-strong:rgba(28,25,22,.26);
+  --serif:"Noto Serif SC","Noto Serif CJK SC",Georgia,serif;
+  --display:"Cormorant Garamond","Noto Serif SC",Georgia,serif;
+  --greek:"GFS Didot","Noto Serif SC",Georgia,serif;
+  --mono:"JetBrains Mono","Courier New",monospace;
+  --id:#1d4e5f; --ct:#6d4a8f; --ex:#3f7a52; --re:#b8893a;
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+html,body{height:100%;}
+body{background:var(--parchment);
+  background-image:radial-gradient(ellipse at top left,rgba(184,137,58,.06),transparent 50%),radial-gradient(ellipse at bottom right,rgba(29,78,95,.05),transparent 50%);
+  color:var(--ink);font-family:var(--serif);font-size:16px;line-height:1.7;-webkit-font-smoothing:antialiased;overflow:hidden;}
+.greek{font-family:var(--greek);}
+.app{position:relative;z-index:1;height:100vh;display:flex;flex-direction:column;}
+header{flex:none;border-bottom:1px solid var(--line);background:rgba(243,235,218,.92);backdrop-filter:blur(8px);padding:13px 24px 11px;}
+.hbar{display:flex;align-items:baseline;gap:14px;flex-wrap:wrap;}
+h1{font-family:var(--display);font-weight:600;font-size:23px;white-space:nowrap;}
+.latin{font-family:var(--greek);font-size:12px;letter-spacing:.18em;color:var(--terracotta);text-transform:uppercase;}
+.sub{font-size:12.5px;color:var(--ink-fade);}
+.tools{margin-left:auto;display:flex;gap:8px;}
+.btn{font-size:13px;color:var(--ink-soft);background:var(--parchment-light);border:1px solid var(--line-strong);border-radius:18px;padding:5px 13px;cursor:pointer;white-space:nowrap;transition:all .2s;}
+.btn:hover{border-color:var(--terracotta);color:var(--terracotta);}
+.btn.on{background:var(--ink);color:var(--parchment-light);border-color:var(--ink);}
+.hint{margin-top:8px;font-size:12px;color:var(--ink-fade);}
+
+.main{flex:1;display:flex;min-height:0;}
+.stagewrap{flex:1;min-width:0;overflow:auto;display:flex;align-items:flex-start;justify-content:center;padding:6px 6px 40px;}
+.stagewrap svg{display:block;}
+.panel{width:396px;flex:none;border-left:1px solid var(--line);background:var(--parchment-light);overflow-y:auto;padding:18px 22px 50px;}
+
+.beam{cursor:pointer;}
+.beam .brect{transition:all .2s;}
+.beam:hover .brect{filter:brightness(1.04);}
+.beam .bname{fill:#fff;font-family:var(--serif);font-weight:700;}
+.beam .bformula{fill:rgba(255,255,255,.82);font-family:var(--mono);}
+.beam .brole{font-family:var(--serif);}
+.beam.cut .brect{opacity:.2;}
+.beam.cut .bname,.beam.cut .bformula{opacity:.35;}
+.beam.dim{opacity:.28;}
+.beam.hot .brect{stroke:#e0b000;stroke-width:3.5;}
+
+.liar{cursor:pointer;}
+.liar rect{fill:var(--ink);transition:all .2s;}
+.liar:hover rect{fill:#2a251f;}
+.liar .lt{fill:var(--parchment-light);font-family:var(--mono);}
+.liar .lt2{fill:var(--gold-soft);font-family:var(--serif);}
+.liar.blown rect{fill:var(--terracotta-dark);}
+
+.load{fill:none;stroke:var(--terracotta);stroke-width:2.4;transition:stroke-opacity .2s;pointer-events:none;}
+.loadhead{fill:var(--terracotta);}
+.load.dimL{stroke-opacity:.12;}
+.loadlab{font-family:var(--serif);fill:var(--terracotta-dark);pointer-events:none;}
+.loadlab .n{font-size:11px;}
+.labbg{fill:var(--parchment);opacity:.85;}
+.stepnum{fill:#fff;font-family:var(--mono);font-weight:700;}
+.stepcirc{fill:var(--terracotta);}
+
+.floor{stroke:var(--ink-fade);stroke-width:2;pointer-events:none;}
+.floorhatch{stroke:var(--ink-fade);stroke-width:1;opacity:.5;pointer-events:none;}
+.tabletop{fill:var(--parchment-dark);stroke:var(--line-strong);stroke-width:1.5;}
+.wobble{fill:var(--terracotta);font-family:var(--display);font-style:italic;pointer-events:none;}
+
+.exits{display:flex;flex-direction:column;gap:0;}
+.sectitle{font-family:var(--greek);font-size:11px;letter-spacing:.2em;color:var(--terracotta);text-transform:uppercase;margin:2px 0 10px;}
+.exit{border:1px solid var(--line-strong);border-radius:10px;padding:11px 13px;margin-bottom:10px;cursor:pointer;transition:all .18s;background:var(--parchment);}
+.exit:hover{border-color:var(--terracotta);}
+.exit.active{border-color:var(--cutc);border-width:2px;background:var(--parchment-light);}
+.exit .eh{display:flex;align-items:baseline;gap:8px;margin-bottom:4px;}
+.exit .ecut{width:11px;height:11px;border-radius:3px;flex:none;}
+.exit .ename{font-weight:700;font-size:14.5px;color:var(--ink);}
+.exit .ekeeps{margin-left:auto;font-size:11px;color:var(--ink-fade);font-family:var(--mono);}
+.exit .edesc{font-size:12px;color:var(--ink-soft);line-height:1.5;}
+.exit .ewho{font-size:11px;color:var(--ink-fade);margin-top:4px;}
+
+.eyebrow{font-family:var(--greek);font-size:11.5px;letter-spacing:.24em;color:var(--terracotta);text-transform:uppercase;margin-bottom:8px;}
+.p-name{font-family:var(--display);font-size:24px;font-weight:600;line-height:1.18;}
+.p-formula{font-family:var(--mono);font-size:13px;color:var(--ink-fade);margin:3px 0 6px;}
+.tagrow{margin:8px 0 12px;}
+.tag{display:inline-block;font-size:11px;color:#fff;border-radius:11px;padding:2px 10px;margin-right:6px;}
+.p-role{font-size:13px;color:var(--ink-soft);font-style:italic;margin-bottom:10px;}
+.blk{border-radius:9px;padding:10px 12px;margin-bottom:10px;font-size:13.5px;line-height:1.66;}
+.blk h4{font-family:var(--greek);font-size:10.5px;letter-spacing:.16em;text-transform:uppercase;margin-bottom:5px;}
+.blk.load{background:rgba(167,62,44,.07);border-left:3px solid var(--terracotta);}
+.blk.load h4{color:var(--terracotta);}
+.blk.cut{background:rgba(63,122,82,.09);border-left:3px solid var(--green);}
+.blk.cut h4{color:var(--green);}
+.blk .n{color:var(--ink-fade);font-style:italic;}
+.note{font-size:13.5px;line-height:1.74;color:var(--ink-soft);}
+.p-label{font-family:var(--greek);font-size:11px;letter-spacing:.2em;color:var(--terracotta);text-transform:uppercase;margin:14px 0 8px;display:flex;align-items:center;gap:9px;}
+.p-label::after{content:'';flex:1;height:1px;background:var(--line);}
+.guide h3{font-family:var(--display);font-size:20px;font-weight:600;margin-bottom:10px;color:var(--ink);}
+.guide p{font-size:13.5px;line-height:1.74;margin-bottom:10px;color:var(--ink-soft);}
+.guide em{color:var(--terracotta);font-style:italic;} .guide strong{color:var(--ink);}
+.guide .mini{font-size:12.5px;color:var(--ink-fade);}
+.godel{background:rgba(29,78,95,.06);border:1px solid rgba(29,78,95,.2);border-radius:10px;padding:12px 14px;margin-top:6px;}
+.godel h4{font-family:var(--greek);font-size:11px;letter-spacing:.16em;color:var(--aegean);text-transform:uppercase;margin-bottom:6px;}
+.godel p{font-size:12.5px;line-height:1.66;color:var(--ink-soft);}
+
+@media(max-width:980px){
+  body{overflow:auto;} .app{height:auto;} .main{flex-direction:column;}
+  .panel{width:100%;border-left:none;border-top:1px solid var(--line);}
+  .stagewrap{overflow:visible;}
+}
+</style>
+</head>
+<body>
+<div class="app">
+  <header>
+    <div class="hbar">
+      <h1>四律 × 自指悖论 · 受力结构</h1>
+      <span class="latin">A Table That Won't Sit Flat</span>
+      <span class="sub">说谎者句＝一台超载的结构；四条律是四根梁；每条出路锯短一根</span>
+      <div class="tools">
+        <button class="btn" id="btnLoad">▶ 加载：看悖论如何形成</button>
+        <button class="btn" id="btnReset">↺ 复位</button>
+      </div>
+    </div>
+    <div class="hint" id="hint">点四根<b>梁</b>看它在哪一步受力；点下方四条<b>出路</b>看它锯掉哪根梁来卸压；点中央的<b>说谎者句</b>看加载全过程。</div>
+  </header>
+
+  <div class="main">
+    <div class="stagewrap"><svg id="stage" xmlns="http://www.w3.org/2000/svg"></svg></div>
+    <aside class="panel" id="panel"></aside>
+  </div>
+</div>
+
+<script>
+/* ================= 数据 ================= */
+const BEAMS = {
+ id:{key:'id', name:'同一律', formula:'A = A', color:'#1d4e5f', role:'让"L"稳定地指同一个句子——自指的地基',
+   tag:'引擎·地基',
+   load:'悖论的第一步就靠它：那个记号"L"必须自始至终指同一个句子。自指＝让 A 出现在 A 自己的定义里，这是把同一律用到临界（阿基里斯咬到自己的尾巴）。它没被违反，反而是被贯彻到极端。',
+   cut:'几乎没有出路选择锯断它——因为一旦"L"中途漂移成别的东西，悖论根本无法成形。同一律是这台机器的地基，不是它的受害者。' },
+ ct:{key:'ct', name:'非矛盾律', formula:'¬(A∧¬A)', color:'#6d4a8f', role:'禁"上溢"：不许既真又假',
+   tag:'受力·上墙',
+   load:'推演逼出 L 真↔L 假，即"L 既真又假"——直接顶在非矛盾律枪口上。它管的是"上溢"：不许一个句子同时拿到真和假两个值。说谎者制造的正是这种上溢的威胁。',
+   cut:'锯掉它＝允许"真矛盾"存在（但用次协调逻辑关掉爆炸原理，使矛盾不蔓延）。于是可以坦然说：L 确实又真又假，世界照常运转。' },
+ ex:{key:'ex', name:'排中律', formula:'A ∨ ¬A', color:'#3f7a52', role:'禁"下溢"：不许既非真也非假',
+   tag:'受力·下墙',
+   load:'正是这条"不许弃权"的规定把说谎者逼进死角——它不许你说"L 既非真也非假"。它管的是"下溢"：堵死了那条本可以躲开矛盾的退路。矛盾律与它一上一下，把 L 夹死。',
+   cut:'锯掉它＝允许"真值空缺"：L 落进一个既非真也非假的空档（真值间隙）。矛盾律因此不再被触发——因为根本没推出"真且假"，只是"无值"。' },
+ re:{key:'re', name:'充足理由律', formula:'PSR', color:'#b8893a', role:'幕后：真值必须有非循环的奠基',
+   tag:'幕后·地基',
+   load:'幕后的梁。"L 是假的"为何出问题？因为它用尚未确定的东西给自己提供理由——真值链原地打转、无处奠基（阿格里帕三难中的"循环"支）。悖论的深层，是 PSR 被自指短路。',
+   cut:'不锯断它，而是"加固"它：分层解法（塔尔斯基/罗素）本质是服从 PSR——任何句子的真值必须由更低一层、已奠定的东西提供理由，禁止自我奠基。代价是放弃"语言谈论自己的真"。' },
+};
+const LOAD_STEPS = [
+ {n:1, beam:'id', from:'liar', to:'id', lab:'自指：让 L 指向 L 自己', side:'left', y:0},
+ {n:2, beam:'re', from:'liar', to:'re', lab:'＋ 真谓词 T-schema（真值可回填）', side:'left', y:1},
+ {n:3, beam:'ct', from:'liar', to:'ct', lab:'推出"L 真且假" → 撞上墙', side:'right', y:0},
+ {n:4, beam:'ex', from:'liar', to:'ex', lab:'不许"非真非假" → 堵死退路', side:'right', y:1},
+];
+const EXITS = [
+ {id:'gap', cut:'ex', name:'真值空缺', keeps:'留同一·留矛盾', color:'#3f7a52',
+   desc:'让 L 落进"既非真也非假"的空档。矛盾律因此不被触发。',
+   who:'克里普克 · 真值间隙论', full:'承认 L 没有真值。既然没推出"真且假"，非矛盾律安然无恙——代价是接受"排中律不普遍成立"，容忍真值的空档。这正是直觉主义式的气质：未被判定者，不强行赋值。' },
+ {id:'glut', cut:'ct', name:'真矛盾', keeps:'留同一·留排中', color:'#6d4a8f',
+   desc:'允许 L 又真又假，但用次协调逻辑关掉"爆炸原理"，使矛盾不蔓延。',
+   who:'普里斯特 · 次协调逻辑', full:'接受 L 确实是一个真矛盾（dialetheia）。关键的技术动作是废掉"从矛盾可推出一切"的爆炸原理，让这个矛盾被隔离、不污染系统其余部分。这是把矛盾律"局部关闭"，而非全盘废除。' },
+ {id:'strata', cut:'re', name:'语言分层', keeps:'留同一·矛盾·排中', color:'#b8893a',
+   desc:'L 根本说不出来——一个语言不能包含自己的真谓词。保全前三律，改表达力。',
+   who:'塔尔斯基 · 罗素类型论', full:'把"真"分层：对象语言的真，只能在更高的元语言里谈。于是"L 是假的"这种自我指涉的真值判断，在语法上就是非法句子——悖论从源头被拆除。三条经典律全保住，代价是承认"语言无法整个地谈论自己的真"。这是 PSR 在句法上的落地：禁止自我奠基。' },
+ {id:'naive', cut:'id', name:'禁自指 / 去公设', keeps:'（削弱表达）', color:'#1d4e5f',
+   desc:'干脆禁止句子指向自身，或拒绝 T-schema。釜底抽薪，但削弱语言的自我表达。',
+   who:'朴素方案', full:'最直接：不让“L”指向 L 自己（锯断自指所依赖的同一律应用），或拒绝“ ‘p’ 为真 ↔ p ”这条真值回填公设。悖论确实消失，但代价极大——语言失去谈论自身、以及自由使用真谓词的能力。很少有人愿意付这个价，这也反证了：前面三条出路才是真正被认真对待的选项。' },
+];
+
+/* ================= 布局 ================= */
+const W=760, H=760;
+const cx=W/2, liarY=250, liarW=260, liarH=76;
+// 四根梁的位置：同一(左上) 排中(右上)... 实际按"上墙/下墙/地基"语义放
+const beamPos = {
+ id:{x:70,  y:150, w:150, h:52},   // 左上·地基(自指)
+ re:{x:540, y:150, w:150, h:52},   // 右上·地基(PSR)
+ ct:{x:70,  y:360, w:150, h:52},   // 左下·上墙(矛盾)
+ ex:{x:540, y:360, w:150, h:52},   // 右下·下墙(排中)
+};
+function beamCenter(k){const b=beamPos[k];return {x:b.x+b.w/2,y:b.y+b.h/2,b};}
+
+function loadPath(k, side){
+  const lc={x:cx, y:liarY+liarH/2};
+  const b=beamCenter(k);
+  const sx = side==='left'? cx-liarW/2 : cx+liarW/2;
+  const ex_ = k==='id'||k==='ct' ? b.b.x+b.b.w : b.b.x;
+  const ey = b.y;
+  const mx=(sx+ex_)/2;
+  return {d:`M${sx},${lc.y} C${mx},${lc.y} ${mx},${ey} ${ex_},${ey}`, ex:ex_, ey, sx, sy:lc.y};
+}
+
+/* ================= 渲染 ================= */
+let cutBeam=null, activeExit=null, hotBeam=null, loadShown=false;
+function stage(){return document.getElementById('stage');}
+
+function build(){
+  const svg=stage();
+  svg.setAttribute('viewBox',`0 0 ${W} ${H}`);svg.setAttribute('width',W);svg.setAttribute('height',H);
+  let defs=`<defs><marker id="lh" markerWidth="9" markerHeight="9" refX="6.5" refY="3" orient="auto"><path d="M0,0 L7,3 L0,6 Z" class="loadhead"/></marker></defs>`;
+
+  // floor + table metaphor (bottom)
+  let floor='';
+  const fy=H-70;
+  floor+=`<line class="floor" x1="40" y1="${fy}" x2="${W-40}" y2="${fy}"/>`;
+  for(let x=50;x<W-40;x+=22) floor+=`<line class="floorhatch" x1="${x}" y1="${fy}" x2="${x-12}" y2="${fy+13}"/>`;
+  floor+=`<text class="wobble" x="${cx}" y="${fy+42}" font-size="16" text-anchor="middle">桌子拉不平——必须锯短一条腿</text>`;
+
+  // load arrows (drawn under beams/liar)
+  let loads='';
+  LOAD_STEPS.forEach(s=>{
+    const p=loadPath(s.beam,s.side);
+    loads+=`<path class="load" data-step="${s.beam}" d="${p.d}" marker-end="url(#lh)" style="stroke-opacity:0"/>`;
+    // label near mid
+    const midx=(p.sx+p.ex)/2, midy=(p.sy+p.ey)/2;
+    const wsize=s.lab.length*11.5+30;
+    const lx = s.side==='left' ? midx-wsize+40 : midx-20;
+    loads+=`<g class="loadlab" data-step="${s.beam}" style="opacity:0">`+
+      `<circle class="stepcirc" cx="${s.side==='left'?p.sx-6:p.sx+6}" cy="${p.sy + (s.y===0?-14:14)}" r="10"/>`+
+      `<text class="stepnum" x="${s.side==='left'?p.sx-6:p.sx+6}" y="${p.sy+(s.y===0?-10:18)}" font-size="12" text-anchor="middle">${s.n}</text>`+
+      `<rect class="labbg" x="${lx-4}" y="${midy-13}" width="${wsize}" height="20" rx="5"/>`+
+      `<text class="n" x="${lx}" y="${midy+2}" font-size="11">${s.lab}</text></g>`;
+  });
+
+  // beams
+  let beams='';
+  Object.keys(BEAMS).forEach(k=>{
+    const b=beamPos[k],B=BEAMS[k];
+    beams+=`<g class="beam" data-beam="${k}" tabindex="0"><title>${B.name}</title>`+
+      `<rect class="brect" x="${b.x}" y="${b.y}" width="${b.w}" height="${b.h}" rx="10" fill="${B.color}"/>`+
+      `<text class="bname" x="${b.x+b.w/2}" y="${b.y+b.h/2-1}" font-size="17" text-anchor="middle">${B.name}</text>`+
+      `<text class="bformula" x="${b.x+b.w/2}" y="${b.y+b.h/2+17}" font-size="11.5" text-anchor="middle">${B.formula}</text>`+
+      `<text class="brole" x="${b.x+b.w/2}" y="${b.y-8}" font-size="10.5" text-anchor="middle" fill="${B.color}">${B.tag}</text>`+
+      `</g>`;
+  });
+
+  // liar (center)
+  const ly=liarY;
+  const liar=`<g class="liar" data-liar="1" tabindex="0"><title>说谎者句</title>`+
+    `<rect x="${cx-liarW/2}" y="${ly}" width="${liarW}" height="${liarH}" rx="12"/>`+
+    `<text class="lt" x="${cx}" y="${ly+30}" font-size="17" text-anchor="middle">L ： 「L 是假的」</text>`+
+    `<text class="lt2" x="${cx}" y="${ly+54}" font-size="12.5" text-anchor="middle">自我指涉 · 说谎者句</text>`+
+    `</g>`;
+
+  // connective lines beam->floor (legs of the table)
+  let legs='';
+  Object.keys(beamPos).forEach(k=>{
+    const b=beamPos[k];
+    legs+=`<line class="floorhatch" x1="${b.x+b.w/2}" y1="${b.y+b.h}" x2="${b.x+b.w/2}" y2="${fy}" data-leg="${k}" style="opacity:.25"/>`;
+  });
+
+  svg.innerHTML=defs+floor+legs+loads+beams+liar;
+  svg.querySelectorAll('.beam').forEach(g=>g.addEventListener('click',()=>selectBeam(g.dataset.beam)));
+  svg.querySelectorAll('.beam').forEach(g=>g.addEventListener('keydown',e=>{if(e.key==='Enter')selectBeam(g.dataset.beam);}));
+  svg.querySelector('.liar').addEventListener('click',showLoad);
+}
+
+/* ============ 交互 ============ */
+function clearStates(){
+  stage().querySelectorAll('.beam').forEach(b=>b.classList.remove('cut','dim','hot'));
+  stage().querySelector('.liar').classList.remove('blown');
+}
+function setLoadVisible(v){
+  loadShown=v;
+  stage().querySelectorAll('.load').forEach(p=>p.style.strokeOpacity=v?'0.9':'0');
+  stage().querySelectorAll('.loadlab').forEach(l=>l.style.opacity=v?'1':'0');
+  stage().querySelector('.liar').classList.toggle('blown',v);
+  document.getElementById('btnLoad').classList.toggle('on',v);
+}
+
+function selectBeam(k){
+  cutBeam=null; activeExit=null; hotBeam=k;
+  clearStates(); setLoadVisible(true);
+  stage().querySelectorAll('.beam').forEach(b=>{ if(b.dataset.beam===k)b.classList.add('hot'); else b.classList.add('dim'); });
+  stage().querySelectorAll('.load').forEach(p=>{ p.classList.toggle('dimL', p.dataset.step!==k); });
+  stage().querySelectorAll('.loadlab').forEach(l=>{ l.style.opacity = l.dataset.step===k?'1':'0.12'; });
+  const B=BEAMS[k];
+  document.getElementById('panel').innerHTML=`
+   <div class="eyebrow">受力的梁 · BEAM</div>
+   <div class="p-name">${B.name}</div>
+   <div class="p-formula">${B.formula}</div>
+   <div class="tagrow"><span class="tag" style="background:${B.color}">${B.tag}</span></div>
+   <div class="p-role">${B.role}</div>
+   <div class="blk load"><h4>加载：悖论如何压上它</h4>${B.load}</div>
+   <div class="blk cut"><h4>卸压：能否锯断它 / 如何加固</h4>${B.cut}</div>
+   <div class="p-label">相关出路</div>
+   ${exitsMini(k)}`;
+  wireExitsMini();
+}
+function exitsMini(cutKey){
+  const e=EXITS.find(x=>x.cut===cutKey);
+  if(!e) return '';
+  return `<div class="exit" data-exit="${e.id}" style="--cutc:${e.color}"><div class="eh"><span class="ecut" style="background:${e.color}"></span><span class="ename">${e.name}</span><span class="ekeeps">${e.keeps}</span></div><div class="edesc">${e.desc}</div><div class="ewho">${e.who}</div></div>`;
+}
+function wireExitsMini(){
+  document.getElementById('panel').querySelectorAll('[data-exit]').forEach(el=>el.addEventListener('click',()=>selectExit(el.dataset.exit)));
+}
+
+function selectExit(id){
+  const e=EXITS.find(x=>x.id===id); if(!e)return;
+  activeExit=id; cutBeam=e.cut; hotBeam=null;
+  clearStates(); setLoadVisible(true);
+  stage().querySelectorAll('.beam').forEach(b=>{ if(b.dataset.beam===e.cut)b.classList.add('cut'); });
+  // the load that pressed the cut beam is relieved -> dim; liar no longer blown
+  stage().querySelector('.liar').classList.remove('blown');
+  stage().querySelectorAll('.load').forEach(p=>{ p.classList.toggle('dimL', p.dataset.step===e.cut); });
+  document.getElementById('panel').innerHTML=`
+   <div class="eyebrow">出路 · 锯短一根梁</div>
+   <div class="p-name">${e.name}</div>
+   <div class="tagrow"><span class="tag" style="background:${e.color}">锯断：${BEAMS[e.cut].name}</span><span class="tag" style="background:var(--ink-fade)">${e.keeps}</span></div>
+   <div class="blk cut"><h4>做法</h4>${e.full}</div>
+   <div class="blk load"><h4>它锯掉的那根梁</h4>${BEAMS[e.cut].name}（${BEAMS[e.cut].formula}）——${BEAMS[e.cut].role}。悖论施加在这根梁上的载荷因此被释放，桌子终于放平。</div>
+   <div class="p-label">代表</div><div class="note">${e.who}</div>
+   ${allExitsList()}`;
+  wireAllExits();
+}
+function allExitsList(){
+  return `<div class="p-label">四条出路 · 各锯一根</div><div class="exits">`+
+    EXITS.map(e=>`<div class="exit ${activeExit===e.id?'active':''}" data-exit="${e.id}" style="--cutc:${e.color}"><div class="eh"><span class="ecut" style="background:${e.color}"></span><span class="ename">${e.name}</span><span class="ekeeps">${e.keeps}</span></div><div class="edesc">锯断 ${BEAMS[e.cut].name} · ${e.who}</div></div>`).join('')+`</div>`;
+}
+function wireAllExits(){
+  document.getElementById('panel').querySelectorAll('[data-exit]').forEach(el=>el.addEventListener('click',()=>selectExit(el.dataset.exit)));
+}
+
+function showLoad(){
+  cutBeam=null; activeExit=null; hotBeam=null;
+  clearStates(); setLoadVisible(true);
+  stage().querySelectorAll('.load').forEach(p=>p.classList.remove('dimL'));
+  stage().querySelectorAll('.loadlab').forEach(l=>l.style.opacity='1');
+  document.getElementById('panel').innerHTML=`
+   <div class="eyebrow">加载路径 · THE LIAR</div>
+   <div class="p-name">L ：「L 是假的」</div>
+   <div class="p-role" style="font-style:normal">四步把载荷压满，桌子开始晃：</div>
+   ${LOAD_STEPS.map(s=>`<div class="blk ${s.beam==='ct'||s.beam==='ex'?'load':'load'}" style="border-left-color:${BEAMS[s.beam].color}"><h4 style="color:${BEAMS[s.beam].color}">第 ${s.n} 步 · 压向${BEAMS[s.beam].name}</h4>${BEAMS[s.beam].load}</div>`).join('')}
+   <div class="godel"><h4>把"真"换成"可证"：哥德尔的转向</h4><p>说谎者用<strong>真</strong>（自我否定→爆炸）。哥德尔句 G＝「G 不可证」把它换成<strong>可证性</strong>——"可证"比"真"多一层：要求一条实际、有穷的理由链（证明）。G 说"我没有这样的理由链"。若系统一致，G 就<em>真</em>（确实无证明），正因如此它<em>不可证</em>。同一台机器不再爆炸，而是吐出：<strong>真理超出证明</strong>。<br>说谎者＝PSR 的短路；哥德尔＝PSR 的诚实边界。</p></div>`;
+}
+
+function guide(){
+  document.getElementById('panel').innerHTML=`<div class="guide">
+   <div class="eyebrow">导读 · LECTORI</div>
+   <h3>拉不平的桌子</h3>
+   <p>自指悖论<strong>不是四律的反例，而是四律的联合极限</strong>。一个能谈论自身的、遵守经典逻辑的、又想拥有自身真理的系统，是一张四条腿拉不平的桌子——你必须锯短一条。</p>
+   <p>中央是<strong>说谎者句</strong> L＝「L 是假的」。四根梁是四条律：<em>同一律</em>（让"L"稳定自指，地基）与<em>充足理由律</em>（真值须有非循环奠基，幕后地基）在上；<em>非矛盾律</em>（禁"上溢"：不许既真又假）与<em>排中律</em>（禁"下溢"：不许非真非假）在下，一上一下把 L 夹死。</p>
+   <p class="mini">· 点<strong>▶ 加载</strong> 或中央句子：看四步如何把载荷压满（自指＋真谓词 → 逼出真且假 → 堵死非真非假）。<br>· 点任一根<strong>梁</strong>：看它在哪步受力、能否被锯断。<br>· 点下方四条<strong>出路</strong>：每条锯短一根梁来卸压——真值空缺（弃排中）／真矛盾（弃矛盾）／语言分层（加固 PSR，保三律）／禁自指（釜底抽薪）。</p>
+   <p class="mini" style="border-top:1px solid var(--line);padding-top:9px">这与"把悖论读成工具的界限、而非世界的结构"是同一立场：说谎者不是世界的裂缝，是<strong>镜子照镜子</strong>时语言必然生出的无穷回廊；哥德尔与塔尔斯基把这句哲学直觉变成了定理。</p>
+   <div class="p-label">四条出路</div>${allExitsList()}
+  </div>`;
+  wireAllExits();
+}
+function reset(){ cutBeam=null;activeExit=null;hotBeam=null; clearStates(); setLoadVisible(false); guide(); }
+
+build(); guide();
+document.getElementById('btnLoad').addEventListener('click',()=>{ if(loadShown && !cutBeam && !hotBeam){ setLoadVisible(false);} else { showLoad(); } });
+document.getElementById('btnReset').addEventListener('click',reset);
+</script>
+</body>
+</html>

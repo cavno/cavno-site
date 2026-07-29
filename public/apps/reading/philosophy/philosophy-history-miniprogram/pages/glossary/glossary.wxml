@@ -1,0 +1,76 @@
+<view class="page-shell glossary-page">
+  <view class="glossary-hero page-pad">
+    <view class="eyebrow">概念谱系</view>
+    <view class="display-title">不是词典，<br />而是概念的迁徙史</view>
+    <view class="rule"></view>
+    <view class="hero-copy">同一个词会穿越不同思想制度：Logos 从宇宙法则成为“道”，Arche 从自然本原成为创世权能，共相之争则一路通向现代个体主义。</view>
+  </view>
+
+  <view class="search-wrap page-pad">
+    <view class="search-box">
+      <text class="search-icon">⌕</text>
+      <input
+        class="search-input"
+        value="{{keyword}}"
+        placeholder="搜索中文、原文或核心问题"
+        placeholder-class="search-placeholder"
+        bindinput="onInput"
+      />
+      <button class="clear-button" wx:if="{{keyword}}" bindtap="clearSearch">清除</button>
+    </view>
+  </view>
+
+  <scroll-view class="category-scroll" scroll-x enhanced show-scrollbar="{{false}}">
+    <view class="category-row">
+      <button
+        wx:for="{{categories}}"
+        wx:key="*this"
+        class="category {{activeCategory == item ? 'category-active' : ''}}"
+        data-category="{{item}}"
+        bindtap="selectCategory"
+      >{{item}}</button>
+    </view>
+  </scroll-view>
+
+  <view class="result-bar page-pad">
+    <text>{{resultCount}} 个概念</text>
+    <text class="result-category">{{activeCategory}}</text>
+  </view>
+
+  <view class="term-list page-pad" wx:if="{{resultCount}}">
+    <view class="term-card paper-card" wx:for="{{filteredTerms}}" wx:key="term">
+      <view class="term-top">
+        <view>
+          <view class="term-category">{{item.category}}</view>
+          <view class="term-name">{{item.term}}</view>
+          <view class="term-original">{{item.original}}</view>
+        </view>
+        <view class="term-index">{{index + 1 < 10 ? "0" + (index + 1) : index + 1}}</view>
+      </view>
+      <view class="term-brief">{{item.brief}}</view>
+      <view class="term-evolution">
+        <view class="evolution-label">概念迁徙</view>
+        <view>{{item.evolution}}</view>
+      </view>
+      <view class="term-footer">
+        <text class="term-footer-label">相关讲次</text>
+        <view class="lecture-links">
+          <button
+            class="lecture-chip"
+            wx:for="{{item.lectureIds}}"
+            wx:key="*this"
+            wx:for-item="lectureId"
+            data-id="{{lectureId}}"
+            bindtap="goLecture"
+          >第{{lectureId}}讲</button>
+        </view>
+      </view>
+    </view>
+  </view>
+
+  <view class="empty page-pad" wx:else>
+    <view class="empty-mark">∅</view>
+    <view class="empty-title">没有找到相关概念</view>
+    <view class="empty-copy">试试“秩序”“灵魂”“Logos”或切换分类。</view>
+  </view>
+</view>

@@ -1,0 +1,143 @@
+<!DOCTYPE html><html lang="zh-CN"><head><meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>示例工业股份 Demo Industrial · 称重机估值报告</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@400;600;700;900&display=swap" rel="stylesheet">
+<style>
+:root{--parchment:#F3EAD3;--card:#F8F1DE;--ink:#2C2620;--ink-soft:#5A4F3F;--teal:#1E6E68;--teal-deep:#14514C;
+--teal-wash:#DCE8E2;--terra:#B5541F;--terra-deep:#8F3E12;--terra-wash:#F0DCC9;--line:#D6C6A2;--line-soft:#E3D7B8;
+--gold:#8A6D1F;--mono:"SFMono-Regular",Consolas,monospace}
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:var(--parchment);color:var(--ink);font-family:"Noto Serif SC",serif;font-size:15px;line-height:1.8;padding:34px clamp(16px,4vw,56px) 70px}
+.wrap{max-width:960px;margin:0 auto}
+h1{font-size:clamp(24px,3.5vw,34px);font-weight:900}
+h1 small{display:block;font-size:13px;color:var(--ink-soft);font-weight:400;margin-top:6px}
+h2{font-size:20px;font-weight:900;color:var(--teal-deep);margin:38px 0 10px;padding-left:12px;border-left:4px solid var(--terra)}
+p{margin:8px 0;text-align:justify}.note{font-size:12.5px;color:var(--ink-soft)}
+.meta{font-size:13px;color:var(--ink-soft);margin:8px 0 14px}
+.banner{padding:16px 20px;border-radius:4px;margin:16px 0;font-size:15px;border:1px solid}
+.banner b{font-size:17px;display:block;margin-bottom:6px}
+.good{background:var(--teal-wash);border-color:#B8D2C8;color:var(--teal-deep)}
+.mid{background:#EFE7CE;border-color:var(--line);color:var(--gold)}
+.bad{background:var(--terra-wash);border-color:#E0BC9C;color:var(--terra-deep)}
+.tough{background:#E9E2D0;border-color:var(--line);color:var(--ink-soft)}
+.strip{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px;margin:14px 0}
+.ro{background:var(--card);border:1px solid var(--line-soft);border-radius:3px;padding:10px 12px;text-align:center}
+.ro .k{font-size:11px;color:var(--ink-soft);display:block}.ro .v{font-family:var(--mono);font-size:18px;font-weight:700;color:var(--teal-deep)}
+.ro .v.bad{color:var(--terra-deep)}
+table{width:100%;border-collapse:collapse;font-size:13px;background:var(--card);border:1px solid var(--line);margin:12px 0}
+th{background:var(--teal-deep);color:#F5EFDD;padding:8px 10px;text-align:left;font-size:12px;white-space:nowrap}
+td{padding:7px 10px;border-top:1px solid var(--line-soft);vertical-align:top}
+td.num,th.num{text-align:right;font-family:var(--mono);font-size:12px;white-space:nowrap}
+tr:nth-child(even) td{background:rgba(255,255,255,.35)}
+tfoot td{border-top:2px solid var(--line);font-weight:700;background:#EBDFC0}
+.badge{display:inline-block;font-size:10px;font-weight:700;padding:1px 7px;border-radius:2px;margin-right:6px;letter-spacing:.08em}
+.bA{background:var(--teal);color:#F5EFDD}.bB{background:var(--gold);color:#F5EFDD}.bC{background:var(--terra);color:#F5EFDD}
+ul.plain{list-style:none;margin:8px 0}
+ul.plain li{padding:5px 0 5px 18px;position:relative;border-bottom:1px dashed var(--line-soft);font-size:13.5px}
+ul.plain li:before{content:"▸";color:var(--terra);position:absolute;left:0}
+.lab{background:var(--card);border:1px solid var(--line);border-radius:4px;padding:18px 20px;margin:18px 0;position:relative}
+.lab:before{content:"交互推演 · 改假设即时重算";position:absolute;top:-9px;left:14px;background:var(--terra);color:#F8F1DE;font-size:10px;letter-spacing:.2em;padding:2px 9px;border-radius:2px;font-weight:700}
+.ctrl{display:grid;grid-template-columns:150px 1fr 84px;gap:10px;align-items:center;margin:8px 0;font-size:13px}
+.ctrl label{color:var(--ink-soft);font-weight:600}.ctrl output{font-family:var(--mono);font-size:12.5px;color:var(--terra-deep);font-weight:700;text-align:right}
+input[type=range]{-webkit-appearance:none;appearance:none;height:4px;background:var(--line);border-radius:2px}
+input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:15px;height:15px;border-radius:50%;background:var(--teal);border:2px solid var(--card);box-shadow:0 0 0 1px var(--teal-deep);cursor:pointer}
+input[type=number]{font-family:var(--mono);font-size:12.5px;padding:5px 7px;width:100%;border:1px solid var(--line);border-radius:2px;background:#FDFAF0}
+.g2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.verdict{font-size:13.5px;margin-top:10px;padding:9px 13px;border-radius:3px;font-weight:600;border:1px solid}
+footer{border-top:3px double var(--line);margin-top:44px;padding-top:16px;font-size:12px;color:var(--ink-soft);line-height:1.9}
+@media(max-width:760px){.g2{grid-template-columns:1fr}.ctrl{grid-template-columns:110px 1fr 66px}}
+</style></head><body><div class="wrap">
+<h1>示例工业股份 Demo Industrial <small>DEMO · 称重机 The Weighing Machine v1.0 · 生成于 2026-07-23 · 数据 2013–2024（12 年）· 单位: 百万USD</small></h1>
+<div class="meta">价格 4.00 × 股本 1,000M = 市值 4,000 ｜ 判定路由: 回报法（特许经营） ｜ 依据《Value Investing, 2e》· 全部中间量见文末内嵌 JSON</div>
+<div class="banner good"><b>买入候选（BUY_CANDIDATE）</b>回报法：现金 8.5% + 有机 2.3% + 主动 2.7% = 13.6%，扣 fade 1.4% 后 12.1%，超资本成本 2.1 pp（恒等式 V/M≈1.36，且真实边际只会更大）。<div style='margin-top:8px;font-size:13px'>· 前提：护城河成立（人工裁定=yes（C档已确认））且半衰期≥50年 —— 两者均为人工判断责任</div></div>
+<div class="strip">
+<div class="ro"><span class="k">EPV 权益</span><span class="v">7,464</span></div>
+<div class="ro"><span class="k">AV 权益（重置）</span><span class="v">6,337</span></div>
+<div class="ro"><span class="k">市值 / min(AV,EPV)</span><span class="v ">63%</span></div>
+<div class="ro"><span class="k">Case 分类</span><span class="v">B</span></div>
+<div class="ro"><span class="k">回报法净回报</span><span class="v ">12.1%</span></div>
+<div class="ro"><span class="k">对照资本成本 R*</span><span class="v">10.0%</span></div>
+</div>
+
+<h2>一、预处理：从报表到模型输入</h2>
+<p class="note">档位标注：<span class="badge bA">A 全自动</span>报表直接推导 <span class="badge bB">B 半自动</span>程序给证据+默认，可被假设文件覆盖 <span class="badge bC">C 纯人工</span>程序只标注不猜测。带 ★ 为本次运行使用了默认值（未被覆盖）。</p>
+<table><thead><tr><th>参数</th><th class="num">取值</th><th>档位/来源</th></tr></thead><tbody><tr><td>周期平均营业利润率（12年）</td><td class='num'>5.2%</td><td><span class="badge bA">A</span>中位 5.4%，趋势 0.02pp/年</td></tr><tr><td>有效税率</td><td class='num'>22.0%</td><td><span class="badge bA">A</span>近3年优先 ★</td></tr><tr><td>资本密度 κ</td><td class='num'>62.0%</td><td><span class="badge bA">A</span>基于 ppe_gross ★</td></tr><tr><td>平均维护性 CapEx / 平均D&A</td><td class='num'>330 / 509</td><td><span class="badge bA">A</span>折旧修正 = 179</td></tr><tr><td>NWC 率 ω</td><td class='num'>11.0%</td><td><span class="badge bA">A</span> ★</td></tr><tr><td>分配比例 C（近5年）</td><td class='num'>53.0%</td><td><span class="badge bA">A</span>分红+净回购 / 净利</td></tr><tr><td>收入 CAGR 5/7/10 年</td><td class='num'>2.0% / 2.3% / 2.6%</td><td><span class="badge bA">A</span>有机增速取保守口径</td></tr><tr><td>有机增速 g_o（生效）</td><td class='num'>2.3%</td><td><span class="badge bB">B</span>默认=min(CAGR7,CAGR10) ★</td></tr><tr><td>价值创造系数 v（生效）</td><td class='num'>0.41</td><td><span class="badge bB">B</span>v_realized=0.41，默认=clamp(v_real,0,1) ★</td></tr><tr><td>资本成本 R*</td><td class='num'>10.0%</td><td><span class="badge bB">B</span>定性区间法 7–14% ★</td></tr><tr><td>fade 半衰期</td><td class='num'>50 年 → 1.4%/年</td><td><span class="badge bC">C</span>书: ≥50年需强证据</td></tr><tr><td>遗留负债 / 客户基础重建</td><td class='num'>0 / 0</td><td><span class="badge bC">C</span>程序不猜测</td></tr></tbody></table>
+
+
+<h2>二、盈利能力价值 EPV（Ch5）</h2>
+<table><thead><tr><th>步骤</th><th class="num">数值</th><th>说明</th></tr></thead><tbody><tr><td>可持续收入（2024）</td><td class='num'>12,760</td><td>当期年报</td></tr><tr><td>× 周期利润率 × (1−税率)</td><td class='num'>523</td><td>5.2% × 78%</td></tr><tr><td>+ 折旧修正（D&A − 维护CapEx）</td><td class='num'>179</td><td>Magna 型修正</td></tr><tr><td>= 盈利能力 EP</td><td class='num'>702</td><td>不含任何增长</td></tr><tr><td>÷ R* = 企业 EPV</td><td class='num'>7,017</td><td>R*=10.0%；±1pp → 权益 8,243 / 6,826</td></tr><tr><td>+ 超额现金 − 债务 − 少数股东</td><td class='num'>1,467 − 1,021 − 0</td><td>经营现金留存 0.5%×收入</td></tr><tr><td>= 权益 EPV</td><td class='num'><b>7,464</b></td><td>对照市值 4,000（54%）</td></tr></tbody></table>
+
+<h2>三、资产价值 AV：重置成本逐行表（Ch4）</h2>
+<table><thead><tr><th>项目</th><th class="num">账面</th><th class="num">重置</th><th>规则</th></tr></thead>
+<tbody><tr><td>现金及等价物</td><td class='num'>1,531</td><td class='num'>1,531</td><td>×1.0</td></tr><tr><td>应收账款</td><td class='num'>1,531</td><td class='num'>1,537</td><td>加回坏账准备 6</td></tr><tr><td>存货</td><td class='num'>1,021</td><td class='num'>1,021</td><td>加回 LIFO 储备 （无）</td></tr><tr><td>PP&E（净）</td><td class='num'>5,359</td><td class='num'>5,359</td><td>系数 1.00 ★（土地/棕地为C档人工）</td></tr><tr><td>商誉</td><td class='num'>383</td><td class='num'>0</td><td>清零（Ch4）</td></tr><tr><td>账面无形资产</td><td class='num'>128</td><td class='num'>0</td><td>清零, 下方重建替代</td></tr><tr><td>无形①产品组合(重建)</td><td class='num'>0</td><td class='num'>664</td><td>5年 × 平均R&D ★</td></tr><tr><td>无形②客户基础(重建)</td><td class='num'>0</td><td class='num'>0</td><td>收入×0% ★(C档: 默认不计)</td></tr><tr><td>无形③员工队伍(重建)</td><td class='num'>0</td><td class='num'>0</td><td>手工项 ★</td></tr><tr><td>无形④组织基础(重建)</td><td class='num'>0</td><td class='num'>1,329</td><td>1.0年 × 平均SG&A ★(书1-3)</td></tr><tr><td>其他资产(残差, 账面)</td><td class='num'>766</td><td class='num'>766</td><td>保守: 照账面</td></tr></tbody>
+<tfoot><tr><td>重置资产合计 − 负债 5,870 = <b>AV 权益</b></td><td class="num"></td><td class="num">6,337</td><td>企业口径 5,827</td></tr></tfoot></table>
+
+<h2>四、Case 分类与特许经营诊断（Ch3 → Ch7）</h2>
+<p><b>EPV企业/AV企业 = 1.2×</b> → <b>Case B</b>：AV≈EPV（±25%）：竞争市场均衡，两估值三角验证，增长不付钱（Ch3）</p>
+<table><thead><tr><th>特许三测（定量后半场）</th><th class="num">数值</th><th class="num">阈值</th><th>结果</th></tr></thead><tbody><tr><td>① 10年 ROIC 均值 − R*</td><td class='num'>2.0%</td><td class='num'>≥ 2pp</td><td>未过</td></tr><tr><td>② ROIC > R* 年份占比</td><td class='num'>90%</td><td class='num'>≥ 70%</td><td>通过</td></tr><tr><td>③ 利润率变异系数 CV</td><td class='num'>0.13</td><td class='num'>< 0.35</td><td>通过</td></tr></tbody></table>
+<p class="note">裁定：人工裁定=yes（C档已确认）。定性前半场（C 档人工）见文末待办清单——书 Ch7：清晰很少始于复杂计算。</p>
+
+<h2>五、回报法工作台（Ch8）——已预填本标的实际参数</h2>
+<div class="lab"><div class="g2"><div>
+<div class="ctrl" style="grid-template-columns:150px 1fr"><label>市值 M（百万）</label><input type="number" id="wM" value="4000" step="10"></div>
+<div class="ctrl" style="grid-template-columns:150px 1fr"><label>可持续盈利 EP</label><input type="number" id="wE" value="702" step="5"></div>
+<div class="ctrl" style="grid-template-columns:150px 1fr"><label>可持续收入</label><input type="number" id="wRev" value="12760" step="10"></div>
+<div class="ctrl"><label>分配比例 C</label><input type="range" id="wC" min="0" max="120" step="1" value="53"><output id="wCo"></output></div>
+<div class="ctrl"><label>有机增速</label><input type="range" id="wGo" min="0" max="16" step="0.25" value="2.31"><output id="wGoo"></output></div>
+</div><div>
+<div class="ctrl"><label>利润率爬升</label><input type="range" id="wGm" min="0" max="2" step="0.25" value="0.00"><output id="wGmo"></output></div>
+<div class="ctrl"><label>NWC 率</label><input type="range" id="wN" min="0" max="35" step="1" value="11"><output id="wNo"></output></div>
+<div class="ctrl"><label>价值创造系数 v</label><input type="range" id="wV" min="0" max="5" step="0.1" value="0.4"><output id="wVo"></output></div>
+<div class="ctrl"><label>资本成本 R*</label><input type="range" id="wR" min="5" max="14" step="0.5" value="10.0"><output id="wRo"></output></div>
+<div class="ctrl"><label>特许半衰期</label><input type="range" id="wH" min="10" max="100" step="5" value="50"><output id="wHo"></output></div>
+</div></div>
+<div class="strip">
+<div class="ro"><span class="k">① 现金回报</span><span class="v" id="oc">—</span></div>
+<div class="ro"><span class="k">② 有机回报</span><span class="v" id="oo">—</span></div>
+<div class="ro"><span class="k">③ 主动回报</span><span class="v" id="oa">—</span></div>
+<div class="ro"><span class="k">合计 r_b</span><span class="v" id="ot">—</span></div>
+<div class="ro"><span class="k">fade</span><span class="v bad" id="of">—</span></div>
+<div class="ro"><span class="k">净回报 / 边际</span><span class="v" id="on">—</span></div>
+<div class="ro"><span class="k">隐含 V/M</span><span class="v" id="ovm">—</span></div>
+</div><div class="verdict mid" id="ov">—</div>
+<p class="note">v_realized（近8年再投资的实现系数，程序证据）= 0.41；恒等式 V/M = R/R*，基准边际为正 ⇒ 真实边际更大（Ch8 附录保守性证明）。</p></div>
+
+<h2>六、风险检查（Ch9/Ch10）</h2>
+<p class='note'>无触发：泡沫旗（P/可持续E=6.2×, P/B=0.8×）、杠杆三坏年（最差覆盖 7.9）、股权融资旗均未触发。</p>
+
+<h2>七、C 档人工待办（结论生效的前提）</h2>
+<ul class="plain"><li>遗留负债核查（养老金缺口/环境/诉讼，当前记 0）</li><li>无形②客户基础重建口径（当前不计）——书给行业参照：服装≈0.65/元销售、代理佣金5–15%</li><li>私有市场价值交叉验证（同类整体交易价）</li><li>管理层四维评估（运营效率为首，Ch9）</li></ul>
+<ul class='plain'><li>v 敏感性：v=0 时边际 -0.6 pp；v=1.6 时 +10.1 pp</li></ul>
+
+<h2>八、数据血缘与质量</h2>
+<table><thead><tr><th>概念</th><th>命中标签</th><th class="num">年份覆盖</th></tr></thead><tbody><tr><td>acquisitions</td><td>manual</td><td class='num'>2013–2024（12）</td></tr><tr><td>allowance</td><td>manual</td><td class='num'>2013–2024（12）</td></tr><tr><td>buybacks</td><td>manual</td><td class='num'>2013–2024（12）</td></tr><tr><td>capex</td><td>manual</td><td class='num'>2013–2024（12）</td></tr><tr><td>cash</td><td>manual</td><td class='num'>2013–2024（12）</td></tr><tr><td>debt_current</td><td>manual</td><td class='num'>2013–2024（12）</td></tr><tr><td>debt_lt</td><td>manual</td><td class='num'>2013–2024（12）</td></tr><tr><td>dividends_paid</td><td>manual</td><td class='num'>2013–2024（12）</td></tr><tr><td>dna</td><td>manual</td><td class='num'>2013–2024（12）</td></tr><tr><td>equity</td><td>manual</td><td class='num'>2013–2024（12）</td></tr><tr><td>goodwill</td><td>manual</td><td class='num'>2013–2024（12）</td></tr><tr><td>intangibles</td><td>manual</td><td class='num'>2013–2024（12）</td></tr><tr><td>interest_expense</td><td>manual</td><td class='num'>2013–2024（12）</td></tr><tr><td>inventory</td><td>manual</td><td class='num'>2013–2024（12）</td></tr><tr><td>net_income</td><td>manual</td><td class='num'>2013–2024（12）</td></tr><tr><td>operating_income</td><td>manual</td><td class='num'>2013–2024（12）</td></tr><tr><td>payables</td><td>manual</td><td class='num'>2013–2024（12）</td></tr><tr><td>ppe_gross</td><td>manual</td><td class='num'>2013–2024（12）</td></tr><tr><td>ppe_net</td><td>manual</td><td class='num'>2013–2024（12）</td></tr><tr><td>pretax_income</td><td>manual</td><td class='num'>2013–2024（12）</td></tr><tr><td>rd</td><td>manual</td><td class='num'>2013–2024（12）</td></tr><tr><td>receivables</td><td>manual</td><td class='num'>2013–2024（12）</td></tr><tr><td>revenue</td><td>manual</td><td class='num'>2013–2024（12）</td></tr><tr><td>sgna</td><td>manual</td><td class='num'>2013–2024（12）</td></tr><tr><td>stock_issued</td><td>manual</td><td class='num'>2013–2024（12）</td></tr><tr><td>tax_expense</td><td>manual</td><td class='num'>2013–2024（12）</td></tr><tr><td>total_assets</td><td>manual</td><td class='num'>2013–2024（12）</td></tr><tr><td>total_liabilities</td><td>manual</td><td class='num'>2013–2024（12）</td></tr></tbody></table>
+<p class='note'>数据质量清单：无异常。</p>
+
+<footer>称重机 weigher.py v1.0 · 依据 Greenwald et al.《Value Investing, 2e》(Wiley 2021) 各章模型 · 单文件零构建报告 · 本工具是研究流程的算术与记账环节，不构成投资建议<br>假设文件生效值: 覆盖项: fade_half_life, franchise, notes</footer>
+</div>
+<script type="application/json" id="resultjson">{"meta": {"name": "示例工业股份 Demo Industrial", "ticker": "DEMO", "currency": "USD", "sic": "3711"}, "market": {"price": 4.0, "shares": 1000000000.0, "cap": 4000000000.0}, "verdict": {"code": "BUY_CANDIDATE", "label": "买入候选", "tone": "good", "route": "RETURN_METHOD", "headline": "回报法：现金 8.5% + 有机 2.3% + 主动 2.7% = 13.6%，扣 fade 1.4% 后 12.1%，超资本成本 2.1 pp（恒等式 V/M≈1.36，且真实边际只会更大）。", "conditions": ["前提：护城河成立（人工裁定=yes（C档已确认））且半衰期≥50年 —— 两者均为人工判断责任"], "todos": ["遗留负债核查（养老金缺口/环境/诉讼，当前记 0）", "无形②客户基础重建口径（当前不计）——书给行业参照：服装≈0.65/元销售、代理佣金5–15%", "私有市场价值交叉验证（同类整体交易价）", "管理层四维评估（运营效率为首，Ch9）"], "sensitivity": ["v 敏感性：v=0 时边际 -0.6 pp；v=1.6 时 +10.1 pp"]}, "assumptions_effective": {"cost_of_capital": 0.1, "fade_half_life": 50, "vcf": null, "organic_growth": null, "margin_uplift": 0.0, "nwc_ratio": null, "capital_intensity": null, "avg_margin": null, "tax_rate": null, "rd_years": 5, "sgna_years": 1.0, "customer_pct_rev": 0.0, "workforce_value": 0, "ppe_factor": 1.0, "legacy_liabilities": 0, "growth_opex_addback": 0, "operating_cash_pct": 0.005, "franchise": "yes", "price": null, "market_cap": null, "notes": "演示: 假定人工已确认护城河、半衰期50年——展示 C 档覆盖的正确用法"}, "EP_eq": 641996062.2116013}</script>
+<script>
+(function(){"use strict";
+var $=function(i){return document.getElementById(i)};
+function pc(x,d){return (x*100).toFixed(d===undefined?1:d)+"%"}
+function calc(){
+ var M=+$("wM").value||1,E=+$("wE").value||0,rev=+$("wRev").value||0,
+ C=+$("wC").value/100,go=+$("wGo").value/100,gm=+$("wGm").value/100,
+ n=+$("wN").value/100,v=+$("wV").value,R=+$("wR").value/100,H=+$("wH").value;
+ $("wCo").textContent=(C*100).toFixed(0)+"%";$("wGoo").textContent=pc(go,2);
+ $("wGmo").textContent=pc(gm,2);$("wNo").textContent=(n*100).toFixed(0)+"%";
+ $("wVo").textContent=v.toFixed(1);$("wRo").textContent=pc(R,1);$("wHo").textContent=H+" 年";
+ var cash=C*E/M,org=go+gm,ret=(1-C)*E,oi=rev*go*n,act=Math.max(0,ret-oi)*v/M,
+ tot=cash+org+act,f=0.72/H,net=tot-f,m=net-R,vm=tot/R;
+ $("oc").textContent=pc(cash);$("oo").textContent=pc(org);$("oa").textContent=pc(act);
+ $("ot").textContent=pc(tot);$("of").textContent="-"+pc(f);
+ $("on").textContent=pc(net)+" / "+(m>=0?"+":"")+pc(m);
+ $("on").className="v"+(m<0?" bad":"");$("ovm").textContent=vm.toFixed(2);
+ $("ovm").className="v"+(vm<1?" bad":"");
+ var o=$("ov");
+ if(m>=0.015){o.className="verdict good";o.textContent="边际 +"+pc(m)+"：达标（前提：护城河与半衰期为人工确认项）。"}
+ else if(m>=0){o.className="verdict mid";o.textContent="边际 "+pc(m)+"：名义达标但盖不住参数误差——观察。"}
+ else{o.className="verdict bad";o.textContent="净回报低于资本成本 "+pc(m)+"：按当前价买入是在送出安全边际。"}}
+["wM","wE","wRev","wC","wGo","wGm","wN","wV","wR","wH"].forEach(function(i){$(i).addEventListener("input",calc)});
+calc();})();
+</script></body></html>

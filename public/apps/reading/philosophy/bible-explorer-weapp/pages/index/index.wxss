@@ -1,0 +1,453 @@
+/* =========================================================
+   Biblical Atlas · 页面样式
+   ========================================================= */
+
+.app {
+  min-height: 100vh;
+  background: var(--bg);
+  color: var(--ink);
+  box-sizing: border-box;
+}
+
+/* ---- 页头 ---- */
+.header {
+  padding: 48rpx 40rpx 28rpx;
+  border-bottom: 1rpx solid var(--rule);
+}
+.header-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+}
+.brand-title {
+  font-size: 56rpx;
+  font-weight: 600;
+  letter-spacing: -1rpx;
+  line-height: 1.15;
+  color: var(--ink);
+}
+.brand-sub {
+  font-size: 28rpx;
+  color: var(--ink-mute);
+  font-style: italic;
+  margin-top: 6rpx;
+  letter-spacing: 1rpx;
+}
+.brand-tagline {
+  margin-top: 24rpx;
+  font-size: 26rpx;
+  color: var(--ink-soft);
+  line-height: 1.6;
+}
+.theme-toggle {
+  width: 72rpx;
+  height: 72rpx;
+  border: 1rpx solid var(--rule);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 36rpx;
+  color: var(--ink-soft);
+  flex-shrink: 0;
+}
+.toggle-hover {
+  background: var(--bg-soft);
+}
+
+/* ---- 标签栏（吸顶） ---- */
+.tabs {
+  position: -webkit-sticky;
+  position: sticky;
+  top: 0;
+  z-index: 20;
+  white-space: nowrap;
+  background: var(--bg);
+  border-bottom: 1rpx solid var(--rule);
+  padding: 0 28rpx;
+}
+.tab {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 12rpx;
+  padding: 26rpx 22rpx 28rpx;
+  border-bottom: 3rpx solid transparent;
+}
+.tab-num {
+  font-size: 24rpx;
+  font-style: italic;
+  color: var(--accent);
+}
+.tab-label {
+  font-size: 30rpx;
+  font-weight: 500;
+  color: var(--ink-mute);
+}
+.tab-active {
+  border-bottom-color: var(--accent);
+}
+.tab-active .tab-label {
+  color: var(--ink);
+}
+
+/* ---- 内容区 ---- */
+.content {
+  padding: 40rpx 40rpx 80rpx;
+}
+
+/* ---- 概览：两约 ---- */
+.testament {
+  background: var(--bg-elev);
+  border: 1rpx solid var(--rule);
+  border-radius: 8rpx;
+  padding: 40rpx 36rpx 32rpx;
+  margin-bottom: 28rpx;
+  position: relative;
+  overflow: hidden;
+}
+.testament::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 36rpx;
+  right: 36rpx;
+  height: 5rpx;
+  background: var(--accent);
+}
+.t-eyebrow {
+  font-size: 24rpx;
+  font-style: italic;
+  color: var(--ink-mute);
+  letter-spacing: 3rpx;
+  text-transform: uppercase;
+}
+.t-title {
+  font-size: 44rpx;
+  font-weight: 600;
+  color: var(--ink);
+  margin-top: 8rpx;
+}
+.t-meta {
+  font-size: 24rpx;
+  color: var(--ink-mute);
+  font-style: italic;
+  margin: 8rpx 0 32rpx;
+}
+.cat {
+  padding-bottom: 32rpx;
+  margin-bottom: 32rpx;
+  border-bottom: 1rpx solid var(--rule-soft);
+}
+.cat:last-child {
+  padding-bottom: 0;
+  margin-bottom: 0;
+  border-bottom: none;
+}
+.cat-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  margin-bottom: 20rpx;
+}
+.cat-name {
+  font-size: 30rpx;
+  font-weight: 600;
+  color: var(--ink);
+}
+.cat-meta {
+  font-size: 22rpx;
+  color: var(--ink-mute);
+  font-style: italic;
+}
+.books {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12rpx;
+}
+.book {
+  font-size: 26rpx;
+  padding: 12rpx 20rpx;
+  background: var(--bg);
+  border: 1rpx solid var(--rule);
+  border-radius: 4rpx;
+  color: var(--ink);
+  letter-spacing: 1rpx;
+}
+.book-hover {
+  background: var(--accent);
+  color: #faf6ee;
+  border-color: var(--accent);
+}
+
+/* ---- 时间线 ---- */
+.timeline {
+  position: relative;
+  padding-left: 44rpx;
+  border-left: 1rpx solid var(--rule);
+  margin-left: 14rpx;
+}
+.era {
+  font-size: 24rpx;
+  font-style: italic;
+  color: var(--accent);
+  letter-spacing: 3rpx;
+  text-transform: uppercase;
+  margin: 44rpx 0 16rpx;
+}
+.era:first-child {
+  margin-top: 0;
+}
+.era-title {
+  display: block;
+  font-size: 28rpx;
+  font-weight: 600;
+  color: var(--ink);
+  font-style: normal;
+  letter-spacing: 0;
+  text-transform: none;
+  margin-top: 4rpx;
+}
+.event {
+  position: relative;
+  padding: 14rpx 0 28rpx;
+}
+.event-dot {
+  position: absolute;
+  left: -50rpx;
+  top: 22rpx;
+  width: 18rpx;
+  height: 18rpx;
+  border-radius: 50%;
+  background: var(--bg);
+  border: 3rpx solid var(--ink-mute);
+  box-sizing: border-box;
+}
+.event-hover .event-dot {
+  background: var(--accent);
+  border-color: var(--accent);
+}
+.event-title {
+  font-size: 32rpx;
+  font-weight: 600;
+  color: var(--ink);
+  margin-bottom: 6rpx;
+}
+.event-brief {
+  font-size: 26rpx;
+  color: var(--ink-soft);
+  line-height: 1.6;
+  margin-bottom: 6rpx;
+}
+.event-ref {
+  font-size: 24rpx;
+  font-style: italic;
+  color: var(--ink-mute);
+}
+
+/* ---- 区块标签 ---- */
+.section {
+  margin-bottom: 44rpx;
+}
+.section-label {
+  font-size: 26rpx;
+  font-style: italic;
+  color: var(--accent);
+  letter-spacing: 3rpx;
+  text-transform: uppercase;
+  padding-bottom: 18rpx;
+  margin-bottom: 28rpx;
+  border-bottom: 1rpx solid var(--rule);
+}
+
+/* ---- 卡片网格（两列） ---- */
+.cards {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+}
+.card {
+  width: 48.5%;
+  background: var(--bg-elev);
+  border: 1rpx solid var(--rule);
+  border-radius: 6rpx;
+  padding: 28rpx 28rpx;
+  margin-bottom: 22rpx;
+  box-sizing: border-box;
+}
+.card-hover {
+  border-color: var(--accent);
+  background: var(--bg-soft);
+}
+.card-title {
+  font-size: 32rpx;
+  font-weight: 600;
+  color: var(--ink);
+  margin-bottom: 6rpx;
+}
+.card-sub {
+  font-size: 24rpx;
+  color: var(--ink-mute);
+  font-style: italic;
+  line-height: 1.5;
+}
+
+/* ---- 主题卡 ---- */
+.theme-card {
+  background: var(--bg-elev);
+  border: 1rpx solid var(--rule);
+  border-radius: 6rpx;
+  padding: 32rpx 36rpx;
+  margin-bottom: 18rpx;
+  position: relative;
+  overflow: hidden;
+}
+.theme-card::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 32rpx;
+  bottom: 32rpx;
+  width: 0;
+  background: var(--accent);
+  transition: width 0.2s ease;
+}
+.theme-card-hover {
+  border-color: var(--accent);
+}
+.theme-card-hover::before {
+  width: 6rpx;
+}
+.theme-name {
+  font-size: 36rpx;
+  font-weight: 600;
+  color: var(--ink);
+  margin-bottom: 6rpx;
+}
+.theme-desc {
+  font-size: 26rpx;
+  color: var(--ink-soft);
+  line-height: 1.65;
+}
+
+/* ---- 页脚 ---- */
+.footer {
+  padding: 36rpx 40rpx 60rpx;
+  border-top: 1rpx solid var(--rule);
+  text-align: center;
+  font-size: 24rpx;
+  color: var(--ink-mute);
+}
+
+/* ---- 抽屉 ---- */
+.drawer {
+  position: fixed;
+  left: 0;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 100;
+  visibility: hidden;
+  transition: visibility 0s linear 0.36s;
+}
+.drawer.open {
+  visibility: visible;
+  transition-delay: 0s;
+}
+.drawer-overlay {
+  position: absolute;
+  left: 0;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(20, 16, 8, 0);
+  transition: background 0.32s ease;
+}
+.drawer.open .drawer-overlay {
+  background: rgba(20, 16, 8, 0.45);
+}
+.drawer-panel {
+  position: absolute;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  width: 86%;
+  max-width: 640rpx;
+  background: var(--bg-elev);
+  border-left: 1rpx solid var(--rule);
+  transform: translateX(100%);
+  transition: transform 0.36s cubic-bezier(0.2, 0.9, 0.3, 1);
+  box-sizing: border-box;
+}
+.drawer.open .drawer-panel {
+  transform: translateX(0);
+}
+.drawer-close {
+  position: absolute;
+  top: 28rpx;
+  right: 28rpx;
+  z-index: 2;
+  width: 64rpx;
+  height: 64rpx;
+  border: 1rpx solid var(--rule);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 28rpx;
+  color: var(--ink-soft);
+  background: var(--bg-elev);
+}
+.close-hover {
+  background: var(--ink);
+  color: var(--bg);
+}
+.drawer-scroll {
+  height: 100%;
+  box-sizing: border-box;
+  padding: 96rpx 48rpx 0;
+}
+.d-eyebrow {
+  font-size: 24rpx;
+  font-style: italic;
+  color: var(--accent);
+  letter-spacing: 3rpx;
+  text-transform: uppercase;
+  margin-bottom: 10rpx;
+}
+.d-title {
+  font-size: 52rpx;
+  font-weight: 600;
+  color: var(--ink);
+  line-height: 1.2;
+}
+.d-sub {
+  font-size: 28rpx;
+  font-style: italic;
+  color: var(--ink-mute);
+  margin-top: 6rpx;
+}
+.d-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 24rpx;
+  padding: 22rpx 0;
+  margin: 28rpx 0;
+  border-top: 1rpx solid var(--rule);
+  border-bottom: 1rpx solid var(--rule);
+}
+.d-meta-item {
+  font-size: 24rpx;
+  color: var(--ink-mute);
+}
+.d-meta-label {
+  color: var(--ink);
+  font-weight: 500;
+  margin-right: 8rpx;
+}
+.d-body {
+  display: block;
+  font-size: 30rpx;
+}
+.drawer-foot-space {
+  height: 64rpx;
+}

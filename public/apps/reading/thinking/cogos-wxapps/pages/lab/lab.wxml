@@ -1,0 +1,222 @@
+<view class="wrap safe">
+
+  <view class="eyebrow">系统论 × 逻辑史 · 一台可亲手运行的演化模型</view>
+  <view class="h1">认知操作系统：逻辑的四次大版本迭代</view>
+  <view class="subt">从封闭到开放，从降熵到代谢悖论 · 每一次相变都由你触发</view>
+
+  <!-- 相位轨道 -->
+  <scroll-view class="chips" scroll-x enhanced show-scrollbar="{{false}}">
+    <view wx:for="{{phm}}" wx:key="k"
+      class="chip {{phase===item.k?'act':''}} {{visited[item.k]?'seen':'lock'}}"
+      data-k="{{item.k}}" bindtap="onPhaseTap">
+      <text class="c1">{{item.no}}</text><text class="c2">{{item.name}}</text>
+    </view>
+  </scroll-view>
+
+  <!-- 舞台 -->
+  <view class="stage {{c.shake?'shake':''}}">
+    <view class="hud mono">{{hud}}</view>
+
+    <!-- 世界层（镜厅时整体缩放） -->
+    <view class="world" style="transform:{{phase==='mirror'?m.scale:'none'}}">
+
+      <!-- 序 -->
+      <block wx:if="{{phase==='void'}}">
+        <view class="driftw" style="left:8%;top:12%">神话</view>
+        <view class="driftw d2" style="left:70%;top:8%">流变</view>
+        <view class="driftw d3" style="left:22%;top:74%">混沌</view>
+        <view class="driftw" style="left:78%;top:66%">经验</view>
+        <view class="driftw d2" style="left:48%;top:84%">天象</view>
+        <view class="driftw d3" style="left:60%;top:30%">命运</view>
+        <view class="cut-ring {{v.cut?'on':''}}"></view>
+        <view wx:if="{{v.inA}}" class="fadein">
+          <view class="cutA">A</view>
+          <view class="cutAs">里 · 可言说</view>
+          <view class="cutNA">¬A</view>
+          <view class="cutNAs">外 · 非自身</view>
+        </view>
+      </block>
+
+      <!-- 1.0 稳态封闭 -->
+      <block wx:if="{{phase==='closed'}}">
+        <view class="c-ring {{c.frozen?'bad':''}} {{c.shatter?'gone':''}}">
+          <view class="c-inner"></view>
+          <view class="c-dot" style="left:50%;top:24%"></view>
+          <view class="c-dot" style="left:66%;top:35%"></view>
+          <view class="c-dot" style="left:66%;top:57%"></view>
+          <view class="c-dot" style="left:50%;top:68%"></view>
+          <view class="c-dot" style="left:34%;top:57%"></view>
+          <view class="c-dot" style="left:34%;top:35%"></view>
+          <view class="c-dot" style="left:50%;top:46%"></view>
+        </view>
+        <view class="c-port {{c.shatter?'gone':''}}"></view>
+        <view class="c-portlbl">输入口</view>
+        <block wx:for="{{c.slots}}" wx:key="index">
+          <view wx:if="{{item.on}}" class="thm pop" style="left:{{item.x}};top:{{item.y}}">定理</view>
+        </block>
+        <view wx:if="{{c.rej>=1}}" class="crack" style="right:9%;top:32%;transform:rotate(28deg)"></view>
+        <view wx:if="{{c.rej>=2}}" class="crack" style="right:7%;top:58%;transform:rotate(-24deg)"></view>
+        <view wx:if="{{c.rej>=3}}" class="crack" style="right:13%;top:45%;transform:rotate(72deg)"></view>
+        <view wx:if="{{c.frozen}}" class="fatal fadein">⚠ 系统卡死 — BOUNDARY_INTEGRITY_FAIL</view>
+        <view class="c-cap">公理格 · 三段论 / 几何公理体系</view>
+      </block>
+
+      <!-- 2.0 辩证引擎 -->
+      <block wx:if="{{phase==='dialectic'}}">
+        <view class="d-flux top pulse">↓ 熵入</view>
+        <view class="d-flux bot pulse">↑ 熵出</view>
+        <view class="d-band">远离平衡态 · 耗散结构</view>
+        <view class="d-trail">
+          <view wx:for="{{d.levels}}" wx:key="index" class="d-lv rise mono">{{item.label}}</view>
+        </view>
+        <view class="d-pair {{d.merge?'merge':''}}">
+          <view class="node teal {{d.anti?'osc':''}}"><text class="n1">正</text><text class="n2 mono">{{d.cur}}</text></view>
+          <view wx:if="{{d.anti}}" class="tension march"></view>
+          <view wx:if="{{d.anti}}" class="node terra osc2"><text class="n1">反</text><text class="n2 mono">{{d.curAnti}}</text></view>
+          <view wx:if="{{d.merge}}" class="node gold syn pop"><text class="n1">合</text></view>
+        </view>
+      </block>
+
+      <!-- 3.0 再进入 -->
+      <block wx:if="{{phase==='reentry'}}">
+        <view class="r-hist mono">Organon → calculemus → Begriffsschrift → Hilbert 1928</view>
+        <view class="r-orb">
+          <view class="r-sat" style="left:22%;top:30%"></view>
+          <view class="r-sat" style="left:64%;top:22%"></view>
+          <view class="r-sat" style="left:70%;top:60%"></view>
+          <view class="r-sat" style="left:36%;top:68%"></view>
+          <view class="r-sat" style="left:50%;top:44%"></view>
+        </view>
+        <view wx:if="{{r.stage>=1}}" class="r-loop fadein">↻ re-entry 再进入</view>
+        <view wx:if="{{r.stage>=2}}" class="r-liar fadein">
+          <text>「本句为假」</text>
+          <view class="r-badge {{r.liarVal?'':'f'}}">{{r.liarVal?'真':'假'}}</view>
+        </view>
+        <view wx:if="{{r.stage>=3}}" class="r-ashby fadein">
+          <view class="r-al">Ashby 必要变异度: 只有变异度能吸收变异度</view>
+          <view class="r-row"><text class="r-rl">V(系统: 有限公理)</text><view class="r-bar t" style="width:{{r.w1}}%"></view></view>
+          <view class="r-row"><text class="r-rl">V(全部真理 ∋ 自身)</text><view class="r-bar r" style="width:{{r.w2}}%"></view><text class="r-gap">← 追不上</text></view>
+        </view>
+        <view class="r-trip">
+          <view wx:for="{{r.trip}}" wx:key="t" class="r-card rise">
+            <text class="rc1">{{item.t}}</text><text class="rc2">{{item.s}}</text>
+          </view>
+        </view>
+      </block>
+
+      <!-- 3.0⁺ 分层塔 -->
+      <block wx:if="{{phase==='tower'}}">
+        <view wx:if="{{t.inf}}" class="tw-inf fadein"><text>∞ 观察者观察观察者的无限塔</text><text class="tw-dots">⋮</text></view>
+        <view class="tw-stack">
+          <view wx:for="{{t.slabs}}" wx:key="i" class="tw-slab rise" style="width:{{item.w}}">
+            <view class="tw-blind"></view>
+            <text class="tw-l mono">L{{item.sub}}</text>
+            <text class="tw-tag">{{item.tag}}</text>
+          </view>
+        </view>
+        <view class="tw-chip" style="bottom:{{56 + t.n*104}}rpx">「本句为假」</view>
+        <view class="tw-note" wx:if="{{t.n>=1}}">盲点: 能用它看，看不见它</view>
+      </block>
+
+      <!-- 4.0 逻辑生态 -->
+      <block wx:if="{{phase==='ecology'}}">
+        <view wx:for="{{ecoB}}" wx:key="n"
+          class="bub {{item.g}} floaty f{{index%3}} {{e.sel===index?'sel':''}} {{e.injected&&index===2?'quar':''}}"
+          style="left:{{item.x}};top:{{item.y}};width:{{item.d}}rpx;height:{{item.d}}rpx"
+          data-i="{{index}}" bindtap="onBubble">
+          <text class="b1">{{item.n}}</text>
+          <text class="b2">{{item.s}}</text>
+          <block wx:if="{{index===3}}">
+            <view class="tdot t" style="opacity:{{0.12+0.0078*e.p}}"></view>
+            <view class="tdot r" style="opacity:{{0.12+0.0078*(100-e.p)}}"></view>
+            <text class="tp mono">p = {{e.pTxt}}</text>
+          </block>
+          <view wx:if="{{e.injected&&index===2}}" class="quar-ring"></view>
+          <text wx:if="{{e.injected&&index===2}}" class="quar-t mono blink">p ∧ ¬p</text>
+        </view>
+        <view wx:if="{{e.foot}}" class="eco-foot fadein mono">
+          <text class="ef-bad">1.0 ✗ 卡死</text><text class="ef-ok">4.0 ✓ 代谢</text>
+        </view>
+      </block>
+
+      <!-- ∞ 镜厅 -->
+      <block wx:if="{{phase==='mirror'}}">
+        <view class="mi-cap">—— 你刚刚运行完的整部逻辑史 ——</view>
+        <view class="mi-row">
+          <view class="mi-item"><view class="mi-ic ring"></view><text>1.0 防火墙</text></view>
+          <text class="mi-arr">→</text>
+          <view class="mi-item"><view class="mi-ic spiral"><text>⊕</text></view><text>2.0 辩证引擎</text></view>
+          <text class="mi-arr">→</text>
+          <view class="mi-item"><view class="mi-ic slabs"><view></view><view></view><view></view></view><text>3.0 分层塔</text></view>
+          <text class="mi-arr">→</text>
+          <view class="mi-item"><view class="mi-ic eco"><view></view><view></view><view></view></view><text>4.0 生态</text></view>
+        </view>
+      </block>
+    </view>
+
+    <!-- 镜厅外框（不随 world 缩放） -->
+    <block wx:if="{{phase==='mirror'}}">
+      <view wx:for="{{m.rings}}" wx:key="index" class="mi-frame fadein" style="left:{{item.ins}};right:{{item.ins}};top:{{item.ins}};bottom:{{item.ins}}">
+        <view class="mi-eye" style="{{item.eyeStyle}}"><view class="mi-pupil"></view></view>
+        <text class="mi-olbl" style="{{item.lblStyle}}">{{item.lbl}}</text>
+        <view wx:if="{{item.blind}}" class="mi-blind"></view>
+      </view>
+      <text wx:if="{{m.rings.length>=1&&m.rings[0].blind}}" class="mi-blbl">盲点: 在「系统 / 环境」这一刀的刀刃上</text>
+      <view wx:if="{{m.final}}" class="mi-more fadein mono">◦ ◦ ◦ …</view>
+    </block>
+
+    <!-- 飞行粒子 -->
+    <view wx:if="{{fly.show}}" class="flychip {{fly.on?'on':''}} {{fly.wob?'wob':''}}"
+      style="left:{{fly.left}};top:{{fly.top}};background:{{fly.color}}"></view>
+  </view>
+
+  <!-- 叙述与动作 -->
+  <view class="narrbox">
+    <rich-text nodes="{{narr}}"></rich-text>
+    <view class="actions">
+      <button wx:for="{{actions}}" wx:key="act" class="btn {{item.kind||''}}" hover-class="btn-hover"
+        disabled="{{item.dis}}" data-act="{{item.act}}" bindtap="onAction">{{item.label}}</button>
+      <view wx:if="{{phase==='ecology'}}" class="truthbox">
+        <text>真值 p</text>
+        <slider class="tslide" min="0" max="100" value="{{e.p}}" activeColor="#1F6E6B"
+          backgroundColor="rgba(52,40,22,.18)" block-size="24" bindchanging="onSlide" bindchange="onSlide"/>
+        <text class="mono tv">{{e.pTxt}}</text>
+      </view>
+    </view>
+  </view>
+
+  <!-- 四律内核 -->
+  <view class="spanel">
+    <view class="sp-h">四律内核监视器</view>
+    <view class="kview">
+      <text>{{kTitle}}</text>
+      <text wx:if="{{kLocal}}" class="kback" bindtap="onKback">返回全局</text>
+    </view>
+    <view wx:for="{{laws}}" wx:key="id" class="law {{item.st}}">
+      <view class="lw"><text class="lname">{{item.name}}</text><text class="lf mono">{{item.f}}</text></view>
+      <text class="lst">{{item.lbl}}</text>
+    </view>
+  </view>
+
+  <!-- 系统仪表 -->
+  <view class="spanel">
+    <view class="sp-h">系统仪表</view>
+    <view class="mrow dark"><text class="ml">闭合度</text><view class="mbar"><view class="mi tcl" style="width:{{meters.closure}}%"></view></view><text class="mv">{{meters.closure}}</text></view>
+    <view class="mrow dark"><text class="ml">张力</text><view class="mbar"><view class="mi ttn" style="width:{{meters.tension}}%"></view></view><text class="mv">{{meters.tension}}</text></view>
+    <view class="mrow dark"><text class="ml">变异度</text><view class="mbar"><view class="mi tvr" style="width:{{meters.variety}}%"></view></view><text class="mv">{{meters.variety}}</text></view>
+    <view class="mrow dark"><text class="ml">熵通量</text><view class="mbar"><view class="mi ten" style="width:{{meters.entropy}}%"></view></view><text class="mv">{{meters.entropy}}</text></view>
+  </view>
+
+  <!-- 运行日志 -->
+  <view class="spanel">
+    <view class="sp-h">运行日志</view>
+    <scroll-view class="syslog mono" scroll-y scroll-into-view="{{logView}}" scroll-with-animation>
+      <view wx:for="{{logs}}" wx:key="id" id="{{item.id}}" class="ln {{item.cls}}">{{item.txt}}</view>
+    </scroll-view>
+  </view>
+
+  <view class="footer">
+    <text class="fl">依据《系统视角》元框架与逻辑史文档重构 · 微信小程序原生实现</text>
+    <text class="fl">安装区分 → 梦想闭合 → 撞上变异度铁律 → 再进入危机 → 层级解悖 → 打开成生态 —— ἐποχή，从终点到引擎舱。</text>
+  </view>
+</view>

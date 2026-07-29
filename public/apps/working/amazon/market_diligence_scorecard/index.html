@@ -1,0 +1,734 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>市场尽调记分卡台 · </title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@400;600;700;900&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.4.1/papaparse.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+<style>
+:root{
+  --parchment:#F3EAD3; --paper:#FBF6E9; --teal:#3F7E6B; --teal-dk:#2C5A4C;
+  --terra:#BC4B33; --ink:#2B2620; --muted:#7A7263; --line:#D8CCAE; --gold:#C9A869;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{background:var(--parchment);color:var(--ink);font-family:'Noto Serif SC','Songti SC','STSong','SimSun',serif;line-height:1.78;font-size:15px}
+.hero{max-width:1180px;margin:0 auto;padding:44px 24px 14px}
+.brandline{letter-spacing:.38em;font-size:11px;color:var(--terra);text-transform:uppercase;font-weight:600}
+h1{font-size:34px;color:var(--teal-dk);font-weight:900;margin:6px 0 4px;letter-spacing:.02em}
+.sub{color:var(--muted);font-size:14px;max-width:920px}
+nav#topnav{position:sticky;top:0;z-index:60;background:rgba(243,234,211,.95);backdrop-filter:blur(5px);border-top:1px solid var(--line);border-bottom:1px solid var(--line);margin-top:16px}
+nav#topnav .wrap{max-width:1180px;margin:0 auto;padding:9px 24px;display:flex;gap:18px;flex-wrap:wrap;align-items:center}
+nav#topnav a{color:var(--teal-dk);text-decoration:none;font-size:13px;font-weight:600}
+nav#topnav a:hover{color:var(--terra)}
+main{max-width:1180px;margin:0 auto;padding:16px 24px 70px}
+section.card{background:var(--paper);border:1px solid var(--line);border-radius:10px;padding:26px 28px 22px;margin:22px 0;box-shadow:0 1px 0 rgba(43,38,32,.06)}
+.klabel{font-size:12px;color:var(--terra);letter-spacing:.18em;font-weight:700;margin-bottom:2px}
+h2{font-size:21px;color:var(--teal-dk);font-weight:700;display:flex;align-items:baseline;gap:10px;margin-bottom:4px;flex-wrap:wrap}
+.mnum{font-size:12px;color:#fff;background:var(--teal);padding:2px 9px;border-radius:4px;letter-spacing:.1em;font-weight:600}
+h3{font-size:15.5px;color:var(--teal-dk);margin:18px 0 6px;font-weight:700}
+.caption{color:var(--muted);font-size:13.5px;margin-bottom:12px;max-width:1000px}
+table.t{width:100%;border-collapse:collapse;font-size:13px;margin:10px 0}
+.t th{background:var(--teal);color:#fff;text-align:left;padding:7px 9px;font-weight:600;white-space:nowrap;font-size:12.5px}
+.t td{border-bottom:1px solid var(--line);padding:6px 9px;vertical-align:top}
+.t tr:nth-child(even) td{background:rgba(63,126,107,.045)}
+.tblwrap{overflow-x:auto}
+.num{text-align:right;font-variant-numeric:tabular-nums;white-space:nowrap}
+.good{color:var(--teal-dk);font-weight:700}
+.bad{color:var(--terra);font-weight:700}
+button,.btn{font-family:inherit;background:var(--teal);color:#fff;border:none;border-radius:6px;padding:7px 16px;font-size:13.5px;cursor:pointer;font-weight:600}
+button:hover{background:var(--teal-dk)}
+button.alt{background:var(--terra)}
+button.ghost{background:transparent;color:var(--teal-dk);border:1px solid var(--teal)}
+.chip{display:inline-block;min-width:86px;text-align:center;padding:3px 12px;border-radius:16px;font-weight:900;font-size:14px;background:var(--line);color:var(--muted)}
+.chip.s-hi{background:var(--teal);color:#fff}
+.chip.s-mid{background:var(--gold);color:#fff}
+.chip.s-lo{background:var(--terra);color:#fff}
+.statrow{display:flex;gap:30px;flex-wrap:wrap;margin:12px 0 4px}
+.stat b{font-size:23px;color:var(--teal-dk);font-weight:900}
+.stat span{font-size:12px;color:var(--muted);display:block;margin-top:-3px}
+.chartbox{position:relative;height:360px;margin:12px 0;background:#fff;border:1px solid var(--line);border-radius:8px;padding:10px}
+textarea{width:100%;font-family:inherit;font-size:13px;border:1px solid var(--line);border-radius:6px;padding:8px;background:#fff;line-height:1.6}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.grid3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px}
+.grid4{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}
+@media(max-width:900px){.grid2,.grid3,.grid4{grid-template-columns:1fr 1fr}}
+@media(max-width:560px){.grid2,.grid3,.grid4{grid-template-columns:1fr}}
+.note{background:rgba(201,168,105,.16);border-left:3px solid var(--gold);padding:10px 14px;font-size:13px;margin:12px 0;border-radius:0 6px 6px 0}
+.warn{background:rgba(188,75,51,.1);border-left:3px solid var(--terra);padding:10px 14px;font-size:13px;margin:12px 0;border-radius:0 6px 6px 0}
+details{margin:12px 0}
+summary{cursor:pointer;color:var(--teal-dk);font-weight:700;font-size:13.5px}
+details .inner{padding:10px 2px 2px}
+.mapper{border:2px solid var(--terra);border-radius:8px;padding:16px;margin:12px 0;background:#fff}
+.mapper h3{margin-top:0;color:var(--terra)}
+.maprow{display:flex;gap:10px;align-items:center;margin:6px 0;font-size:13px;flex-wrap:wrap}
+.maprow label{min-width:110px;font-weight:600}
+.hidden{display:none}
+input[type=number],input[type=text],select{font-family:inherit;font-size:13px;border:1px solid var(--line);border-radius:5px;padding:5px 8px;background:#fff;width:100%}
+input[type=checkbox]{width:auto;transform:scale(1.15);margin-right:6px}
+label.f{font-size:12.5px;color:var(--muted);display:block;margin:8px 0 2px;font-weight:600}
+label.ck{font-size:13px;display:flex;align-items:center;margin:7px 0;cursor:pointer}
+.small{font-size:12px;color:var(--muted)}
+.insight{background:rgba(63,126,107,.07);border:1px solid var(--line);border-radius:8px;padding:12px 16px;font-size:13.5px;margin:10px 0}
+footer{max-width:1180px;margin:0 auto;padding:14px 24px 44px;color:var(--muted);font-size:12px}
+/* 判决卡（签名元素） */
+.verdict-card{border:2.5px solid var(--line);border-radius:12px;padding:26px 30px;margin:16px 0;background:#fff;position:relative;overflow:hidden}
+.verdict-card .vscore{font-size:56px;font-weight:900;line-height:1;color:var(--teal-dk)}
+.verdict-card .vtext{font-size:26px;font-weight:900;margin:4px 0 8px}
+.verdict-card.go{border-color:var(--teal)} .verdict-card.go .vtext{color:var(--teal-dk)}
+.verdict-card.cond{border-color:var(--gold)} .verdict-card.cond .vtext{color:#8a6a2a}
+.verdict-card.off{border-color:var(--terra)} .verdict-card.off .vtext{color:var(--terra)}
+.verdict-card.hold{border-color:var(--muted)} .verdict-card.hold .vtext{color:var(--muted)}
+.stamp{position:absolute;right:26px;top:22px;border:3px double currentColor;border-radius:8px;padding:6px 14px;font-weight:900;font-size:18px;transform:rotate(8deg);letter-spacing:.2em;opacity:.85}
+.go .stamp{color:var(--teal-dk)} .cond .stamp{color:#8a6a2a} .off .stamp{color:var(--terra)} .hold .stamp{color:var(--muted)}
+.vetotag{display:inline-block;background:var(--terra);color:#fff;font-size:12px;font-weight:700;padding:2px 10px;border-radius:4px;margin:2px 6px 2px 0}
+.reason{font-size:13.5px;margin:5px 0;padding-left:14px;position:relative}
+.reason::before{content:'—';position:absolute;left:0;color:var(--terra)}
+.senscell{padding:8px 10px;border-radius:6px;text-align:center;font-size:12.5px;font-weight:600}
+</style>
+</head>
+<body>
+
+<header class="hero">
+  <div class="brandline"> · Market Diligence Scorecard</div>
+  <h1>市场尽调记分卡台</h1>
+  <p class="sub">进入一个品类前的五问尽调：市场多大往哪走（需求）· 钱被谁赚走壁垒多厚（结构）· 一单能赚多少（经济）· 什么没被满足（差异化）· 什么时候进（时机）。数据全部来自平台一手口径：商机探测器、品牌分析 ABA、首页普查、FBA 计算器与广告建议竞价。产出一张带否决线的判决卡。三件套之三：这台管<b>进不进</b>，预测台管<b>备多少</b>，关键词台管<b>怎么打</b>。</p>
+</header>
+
+<nav id="topnav"><div class="wrap">
+  <a href="#s1">① 需求</a><a href="#s2">② 结构</a><a href="#s3">③ 经济</a>
+  <a href="#s4">④ 差异化</a><a href="#s5">⑤ 时机</a><a href="#s6">⑥ 判决</a>
+  <span style="flex:1"></span>
+  <button id="b_demoA" class="ghost">演示A · 成熟拥挤利基</button>
+  <button id="b_demoB" class="ghost">演示B · 早期成长利基</button>
+  <button id="b_calc" class="alt">重算判决</button>
+</div></nav>
+
+<main>
+
+<!-- ============ S1 需求 ============ -->
+<section id="s1" class="card">
+  <div class="klabel">尽调一问 · 市场多大、往哪走</div>
+  <h2><span class="mnum">S1</span> 需求侧 —— 商机探测器手抄区 <span class="chip" id="chip_demand">未计算</span></h2>
+  <p class="caption">路径：卖家平台 → 增长 → 商机探测器 → 用种子词进入<b>利基</b>页。逐项抄录。搜索量同比看两个窗口：90 天增速高于 360 天 = 需求在加速。"售出徽章对账"填搜索结果页前 20 个 ASIN 的"过去一月售出 X+"下限加总，用于和利基月销对口径。</p>
+  <div class="grid4">
+    <div><label class="f">利基名称</label><input type="text" id="i_niche" placeholder="lcd writing tablet"></div>
+    <div><label class="f">利基 360 天销量（件）</label><input type="number" id="i_sales360" placeholder="588000"></div>
+    <div><label class="f">搜索量同比 · 360 天（%）</label><input type="number" id="i_g360" step="0.1" placeholder="7"></div>
+    <div><label class="f">搜索量同比 · 90 天（%）</label><input type="number" id="i_g90" step="0.1" placeholder="4"></div>
+    <div><label class="f">利基平均售价（$）</label><input type="number" id="i_priceavg" step="0.1" placeholder="13.5"></div>
+    <div><label class="f">利基商品数</label><input type="number" id="i_products" placeholder="380"></div>
+    <div><label class="f">新品销量份额（%，近360天发布）</label><input type="number" id="i_newshare" step="0.1" placeholder="6"></div>
+    <div><label class="f">售出徽章对账（前20 ASIN 月销下限合计，件）</label><input type="number" id="i_badge" placeholder="31000"></div>
+    <div><label class="f">我的目标月销（件）</label><input type="number" id="i_target" placeholder="3000"></div>
+  </div>
+  <div id="s1out"></div>
+</section>
+
+<!-- ============ S2 结构 ============ -->
+<section id="s2" class="card">
+  <div class="klabel">尽调二问 · 钱被谁赚走、壁垒多厚</div>
+  <h2><span class="mnum">S2</span> 供给结构 —— ABA 前三份额 + 首页普查 <span class="chip" id="chip_struct">未计算</span></h2>
+  <p class="caption">ABA：品牌分析 → 热门搜索词，按核心词筛选后<b>下载 CSV 直接上传</b>（自动读前三名点击/转化份额），或按格式粘贴。首页普查：搜前 3–5 个核心词，对每个词的第一页数一遍抄成一行。前三点击份额 &gt;70% = 词级寡头；评论中位数是资本壁垒标价，25 分位是你的入场评论目标。</p>
+  <div class="grid2">
+    <div>
+      <h3>ABA 数据</h3>
+      <input type="file" id="f_aba" accept=".csv,.xlsx,.xls" style="font-size:12px">
+      <div class="ok small" id="ok_aba" style="min-height:16px;color:var(--teal-dk);font-weight:700"></div>
+      <label class="f">或粘贴：关键词, SFR, 前三点击份额合计%, 前三转化份额合计%</label>
+      <textarea id="ta_aba" rows="5" placeholder="lcd writing tablet, 8421, 63, 66&#10;writing tablet for kids, 15230, 58, 61"></textarea>
+    </div>
+    <div>
+      <h3>首页普查（每词一行，9 列）</h3>
+      <label class="f">关键词, 广告位数, 品牌数, 评论中位数, 评论25分位, 最低价, 最高价, 视频覆盖%, A+覆盖%</label>
+      <textarea id="ta_census" rows="7" placeholder="lcd writing tablet, 10, 7, 2800, 950, 6.99, 25.99, 70, 85"></textarea>
+      <div style="margin-top:6px"><button id="b_census_tpl" class="ghost">填入模板行</button></div>
+    </div>
+  </div>
+  <div id="mapper" class="mapper hidden"></div>
+  <div id="s2out"></div>
+</section>
+
+<!-- ============ S3 经济 ============ -->
+<section id="s3" class="card">
+  <div class="klabel">尽调三问 · 进去一单能赚多少</div>
+  <h2><span class="mnum">S3</span> 单位经济 —— CAC 平衡测算 <span class="chip" id="chip_econ">未计算</span></h2>
+  <p class="caption">费用项来自 FBA 收入计算器（输竞品 ASIN 试算）；CPC 区间来自广告后台草稿广告的建议竞价（不投放，只读报价）。判生死的除法：CAC = CPC ÷ CVR，对比贡献毛利。玩具无复购，CAC 必须首单回收——红线是毛利的 70% 而非 100%。</p>
+  <div class="grid4">
+    <div><label class="f">计划售价（$）</label><input type="number" id="i_price" step="0.1" placeholder="15.99"></div>
+    <div><label class="f">产品成本 COGS（$）</label><input type="number" id="i_cogs" step="0.1" placeholder="3.2"></div>
+    <div><label class="f">头程运费 / 件（$）</label><input type="number" id="i_freight" step="0.1" placeholder="0.9"></div>
+    <div><label class="f">平台佣金（%）</label><input type="number" id="i_comm" step="0.5" value="15"></div>
+    <div><label class="f">FBA 配送费 / 件（$）</label><input type="number" id="i_fba" step="0.1" placeholder="5.1"></div>
+    <div><label class="f">其他 / 件（包装·退货摊销，$）</label><input type="number" id="i_other" step="0.1" value="0.3"></div>
+    <div><label class="f">建议竞价 · 低（$）</label><input type="number" id="i_cpclo" step="0.05" placeholder="1.05"></div>
+    <div><label class="f">建议竞价 · 高（$）</label><input type="number" id="i_cpchi" step="0.05" placeholder="1.45"></div>
+    <div><label class="f">预期 CVR（%，类目常识 8–12）</label><input type="number" id="i_cvr" step="0.5" value="10"></div>
+  </div>
+  <label class="ck"><input type="checkbox" id="ck_structadv"> 声明结构性 CVR 优势（专利外观 / 独有功能 / 认证壁垒）——该声明同时进入差异化维度，且必须在上架 8 周内被 SQP R2 证实</label>
+  <div id="s3out"></div>
+</section>
+
+<!-- ============ S4 差异化 ============ -->
+<section id="s4" class="card">
+  <div class="klabel">尽调四问 · 什么没被满足</div>
+  <h2><span class="mnum">S4</span> 差异化 —— 评论考古 + 修饰词投票的收敛物 <span class="chip" id="chip_diff">未计算</span></h2>
+  <p class="caption">这一维无法从数字里算出来，只能自证：把差评聚类和修饰词空档收敛成<b>一句能写进标题首屏的主张</b>。写不出这句话 = 调研只发现了改进点，没有进入理由，直接否决。</p>
+  <label class="f">一句话差异化主张</label>
+  <textarea id="ta_claim" rows="2" placeholder="例：唯一带磁吸双面板 + 局部擦除的 10 寸写字板，解决差评榜第一的"误触全清"痛点"></textarea>
+  <div class="grid4" style="margin-top:8px">
+    <div><label class="f">主张强度自评（1–5）</label><input type="number" id="i_rating" min="1" max="5" value="3"></div>
+    <div><label class="ck" style="margin-top:26px"><input type="checkbox" id="ck_arch"> 已完成评论考古（1–3星聚类）</label></div>
+    <div><label class="ck" style="margin-top:26px"><input type="checkbox" id="ck_modgap"> 发现修饰词空档（ABA 词表验证）</label></div>
+    <div><label class="ck" style="margin-top:26px"><input type="checkbox" id="ck_visual"> 差异可被主图视觉传达</label></div>
+  </div>
+  <div id="s4out"></div>
+</section>
+
+<!-- ============ S5 时机 ============ -->
+<section id="s5" class="card">
+  <div class="klabel">尽调五问 · 什么时候进</div>
+  <h2><span class="mnum">S5</span> 时机与准入 —— 季节曲线倒推上架死线 <span class="chip" id="chip_timing">未计算</span></h2>
+  <p class="caption">评论从零爬到首页 25 分位需要 8–12 周转化积累；加上认证与 gating 审核，倒推出上架死线。错过窗口不是杀死项目，是改档期——9 月后进 Q4 品类等于在 Cu 最高的时段做 Co 最高的事。</p>
+  <div class="grid4">
+    <div><label class="f">目标旺季月份（1–12）</label><input type="number" id="i_peak" min="1" max="12" value="12"></div>
+    <div><label class="f">计划上架月份（1–12）</label><input type="number" id="i_launch" min="1" max="12" value="8"></div>
+    <div><label class="f">评论爬坡周数</label><input type="number" id="i_ramp" value="10"></div>
+    <div><label class="f">认证周期周数（玩具 CPC 等）</label><input type="number" id="i_cert" value="4"></div>
+    <div><label class="ck" style="margin-top:26px"><input type="checkbox" id="ck_gated"> 类目 gating（+3 周审核）</label></div>
+    <div><label class="f">旺季仓储限额风险</label><select id="sel_storage"><option value="low">低</option><option value="mid" selected>中</option><option value="high">高</option></select></div>
+  </div>
+  <div id="s5out"></div>
+</section>
+
+<!-- ============ S6 判决 ============ -->
+<section id="s6" class="card">
+  <div class="klabel">合成 · 带否决线的记分卡</div>
+  <h2><span class="mnum">S6</span> 进入判决</h2>
+  <p class="caption">权重：经济 30 · 需求 25 · 结构 20 · 差异化 15 · 时机 10。否决规则：任一硬否决 → 放弃（时机否决 → 推迟）；两项硬否决 → 直接放弃；任一维度 &lt;60 需其余维度均值 ≥75 补偿，否则放弃；总分 ≥75 且无否决 → 进入，60–75 → 有条件进入。</p>
+  <div id="s6verdict"><div class="note">填完五区后点右上角「重算判决」，或先载入演示数据看一张完整判决卡。</div></div>
+  <div class="grid2">
+    <div><div class="chartbox"><canvas id="c_radar"></canvas></div></div>
+    <div id="s6sens"></div>
+  </div>
+  <h3>对比清单（多利基横评）</h3>
+  <div class="maprow"><button id="b_save">存入对比清单</button><button id="b_report" class="ghost">下载本利基判决 CSV</button><button id="b_compare" class="ghost">下载对比清单 CSV</button><span class="small" id="s6msg"></span></div>
+  <div id="s6compare"></div>
+  <details><summary>数据诚实条款（引用前必读）</summary><div class="inner small">
+    商机探测器的利基边界是亚马逊的聚类而非你的产品定义，先做售出徽章对账再引用销量；ABA 份额只覆盖前三名，长尾竞争者不可见；SFR 是排名不是绝对量，只能纵向比较不能换算规模；"售出 X+"是区间下限；一切 BSR 换算销量都是第三方曲线拟合。进场前用 ABA 看全市场，进场后才有 SQP 看"你对市场"——两套情报系统的交接点是上架日。
+  </div></details>
+</section>
+
+</main>
+<footer> Market Diligence Scorecard · 三件套之三（尽调 → 预测 → 关键词） · 单文件零构建 · 数据仅在本地浏览器解析</footer>
+
+<script id="app">
+//__APPJS_START__
+
+/* ============================ 状态 ============================ */
+const S={ abaFile:[], compare:[], charts:{}, last:null };
+
+//<PURE>
+/* ======================== 纯函数：评分引擎（可测） ======================== */
+function normH(h){ return String(h==null?'':h).toLowerCase().replace(/[\s_\-：:()（）#%.,/*–—]/g,''); }
+function num(v){ if(v==null) return 0; const s=String(v).replace(/[^0-9.\-]/g,''); const f=parseFloat(s); return isFinite(f)?f:0; }
+function pct(v){ const f=num(v); return f>1.5? f/100 : f; }
+function avg(a){ return a.length? a.reduce((x,y)=>x+y,0)/a.length : 0; }
+function median(a){ if(!a.length) return null; const s=[...a].sort((x,y)=>x-y); const m=Math.floor(s.length/2); return s.length%2?s[m]:(s[m-1]+s[m])/2; }
+function clamp(v,lo,hi){ return Math.max(lo,Math.min(hi,v)); }
+function ppf(v){ return (v>=0?'+':'')+(v*100).toFixed(1)+'%'; }
+
+/* 一问：需求 d={g360,g90,nicheMonthly,targetMonthly,badgeSum} 比率为小数 */
+function scoreDemand(d){
+  const notes=[]; let veto=false;
+  let growth;
+  if(d.g360>=0.15) growth=90; else if(d.g360>=0.05) growth=76; else if(d.g360>=0) growth=62;
+  else if(d.g360>=-0.10) growth=45; else growth=28;
+  const mom=d.g90-d.g360;
+  if(mom>0.05){ growth=clamp(growth+8,0,100); notes.push('90 天增速高出 360 天 '+ppf(mom)+'：需求在加速'); }
+  else if(mom<-0.05){ growth=clamp(growth-8,0,100); notes.push('90 天增速低于 360 天 '+ppf(mom)+'：需求在减速，警惕见顶'); }
+  let cap=50, ratio=null;
+  if(d.targetMonthly>0 && d.nicheMonthly>0){
+    ratio=d.nicheMonthly/d.targetMonthly;
+    if(ratio>=20)cap=95; else if(ratio>=10)cap=80; else if(ratio>=5)cap=65; else if(ratio>=2)cap=45;
+    else { cap=15; veto=true; notes.push('利基月销仅为目标月销的 '+ratio.toFixed(1)+' 倍：市场装不下目标（硬否决）'); }
+    if(ratio>=2) notes.push('规模比 = 利基月销 ÷ 目标月销 = '+ratio.toFixed(1)+'×，即目标份额 '+((1/ratio)*100).toFixed(1)+'%');
+  } else notes.push('未填目标月销，规模足够性按中性 50 计');
+  if(d.g360<-0.15){ veto=true; notes.push('搜索量 360 天同比 '+ppf(d.g360)+'：深度收缩市场（硬否决）'); }
+  else if(d.g360<0) notes.push('负增长市场：进入逻辑必须是从竞品抢份额而非吃增量，预算强度按抢份额定价');
+  if(d.badgeSum>0 && d.nicheMonthly>0){
+    const r2=d.badgeSum/d.nicheMonthly;
+    if(r2<0.3||r2>1.5) notes.push('口径对账异常：前 20 ASIN 售出徽章合计 = 利基月销的 '+(r2*100).toFixed(0)+'%，量级不符——先怀疑利基边界划错，再引用任何数字');
+    else notes.push('口径对账通过：徽章下限合计 ≈ 利基月销的 '+(r2*100).toFixed(0)+'%');
+  }
+  return { score:Math.round(growth*0.6+cap*0.4), veto, ratio, notes };
+}
+
+/* 二问：结构 aba=[{term,sfr,cs,vs}](cs/vs为前三合计小数) census=[{kw,ads,brands,revMed,revP25,pLo,pHi,vid,aplus}] oe={newShare} */
+function scoreStructure(aba, census, oe){
+  const notes=[]; let veto=false;
+  let sAba=55, csAvg=null;
+  if(aba.length){
+    csAvg=avg(aba.map(r=>r.cs));
+    if(csAvg<=0.35)sAba=90; else if(csAvg<=0.5)sAba=75; else if(csAvg<=0.7)sAba=55; else sAba=30;
+    notes.push('核心词前三点击份额均值 '+(csAvg*100).toFixed(0)+'%'+(csAvg>0.7?'：词级流量寡头锁死':csAvg<=0.35?'：流量分散，新入者有露出空间':''));
+    const quiet=aba.filter(r=>r.vs>r.cs*1.25 && r.vs>0.3);
+    if(quiet.length) notes.push('转化份额显著高于点击份额的词：'+quiet.slice(0,3).map(r=>r.term).join('、')+'——存在闷声吃肉型对手，逐个研究其详情页');
+  } else notes.push('未提供 ABA 数据：流量集中度按中性 55 计');
+  let sRev=55, revMed=null, revP25=null;
+  if(census.length){
+    revMed=median(census.map(r=>r.revMed)); revP25=median(census.map(r=>r.revP25));
+    if(revMed<150)sRev=90; else if(revMed<500)sRev=72; else if(revMed<1500)sRev=52; else sRev=30;
+    notes.push('首页评论中位数 '+Math.round(revMed)+'（资本壁垒标价），入场评论目标（25 分位）≈ '+Math.round(revP25));
+    const ads=avg(census.map(r=>r.ads));
+    if(ads>8){ sRev-=8; notes.push('首页广告位均值 '+ads.toFixed(1)+'：拍卖已拥挤，CPC 报价里含排队费'); }
+    const brands=avg(census.map(r=>r.brands));
+    if(brands<6){ sRev-=8; notes.push('首页品牌数均值 '+brands.toFixed(1)+'：货架被少数品牌占据'); }
+    const arms=avg(census.map(r=>(r.vid+r.aplus)/2));
+    if(arms>0.8) notes.push('视频/A+ 覆盖 '+(arms*100).toFixed(0)+'%：内容军备竞赛已完成，入场内容成本按满配预算');
+  } else notes.push('未提供首页普查：评论壁垒按中性 55 计');
+  let sNew=55;
+  if(oe.newShare!=null && isFinite(oe.newShare)){
+    if(oe.newShare>=0.10)sNew=85; else if(oe.newShare>=0.05)sNew=70; else if(oe.newShare>=0.03)sNew=55;
+    else { sNew=35; notes.push('新品销量份额 '+(oe.newShare*100).toFixed(1)+'%：近一年新进入者几乎没活下来——"别人试过了"的最诚实数据'); }
+  }
+  if(csAvg!=null && csAvg>0.75 && revMed!=null && revMed>1500){
+    veto=true; notes.push('前三点击份额 >75% 且评论中位数 >1500：流量与信任双重锁死（硬否决）');
+  }
+  return { score:Math.round(clamp(sAba,0,100)*0.4+clamp(sRev,0,100)*0.4+clamp(sNew,0,100)*0.2), veto, notes, revP25, csAvg, revMed };
+}
+
+/* 三问：经济 e={price,cogs,freight,commPct,fba,other,cpcLo,cpcHi,cvr,structAdv} 比率为小数 */
+function scoreEconomics(e){
+  const notes=[]; let veto=false;
+  const cm=e.price-e.cogs-e.freight-e.price*e.commPct-e.fba-(e.other||0);
+  const cmPct=e.price>0? cm/e.price : 0;
+  const cpc=(e.cpcLo+e.cpcHi)/2;
+  const cac=e.cvr>0? cpc/e.cvr : Infinity;
+  const ratio=cm>0? cac/cm : Infinity;
+  const beCVR=cm>0? cpc/cm : null;
+  const beCPC=cm*e.cvr;
+  let score;
+  if(cm<=0){ score=5; veto=true; notes.push('贡献毛利为负（'+cm.toFixed(2)+'）：价格结构性亏损，广告为零也亏（硬否决）'); }
+  else{
+    if(ratio<=0.4)score=95; else if(ratio<=0.55)score=82; else if(ratio<=0.7)score=62; else if(ratio<=0.85)score=40; else score=20;
+    if(ratio>0.7){
+      if(e.structAdv){
+        notes.push('CAC/贡献毛利 = '+(ratio*100).toFixed(0)+'%，越过 70% 红线，靠"结构性 CVR 优势"声明续命——该优势必须在上架 8 周内被 SQP R2 证实，否则按退出预案执行');
+        if(ratio>0.9){ veto=true; notes.push('即便有结构性优势，'+(ratio*100).toFixed(0)+'% 也已越过 90% 死线（硬否决）'); }
+      } else { veto=true; notes.push('CAC $'+cac.toFixed(2)+' 吃掉贡献毛利 $'+cm.toFixed(2)+' 的 '+(ratio*100).toFixed(0)+'%，且无结构性优势对冲：给平台打工的跑步机（硬否决）'); }
+    }
+    notes.push('无复购约束下 CAC 必须首单回收：平衡 CVR = '+(beCVR*100).toFixed(1)+'%（低于此值广告必亏），平衡 CPC = $'+beCPC.toFixed(2));
+  }
+  return { score, veto, cm, cmPct, cac, ratio, beCVR, beCPC, cpc, notes };
+}
+
+/* 四问：差异化 d={claim,rating,arch,structAdv,modGap,visual} */
+function scoreDiff(d){
+  const notes=[]; let veto=false;
+  if(!d.claim || !String(d.claim).trim()){
+    veto=true; notes.push('一句话差异化主张为空：调研只发现了改进点，没有进入理由（硬否决）');
+    return { score:10, veto, notes };
+  }
+  let s=d.rating*14;
+  if(d.arch)s+=8; if(d.structAdv)s+=12; if(d.modGap)s+=10; if(d.visual)s+=10;
+  notes.push('主张成立性检验：上架后写进标题首屏，8 周内用 SQP 的 R1（点击份额/曝光份额）验证市场是否买账');
+  if(!d.visual) notes.push('差异无法被主图传达：意味着要靠点进详情页才能讲清楚——CTR 层会先输一程');
+  return { score:clamp(Math.round(s),0,100), veto, notes };
+}
+
+/* 五问：时机 t={peakMonth,launchMonth,rampWeeks,certWeeks,gated,storageRisk} */
+function scoreTiming(t){
+  const notes=[]; let defer=false;
+  const gapMonths=((t.peakMonth-t.launchMonth)%12+12)%12;
+  const availWeeks=gapMonths*4.345;
+  const needWeeks=t.rampWeeks+t.certWeeks+(t.gated?3:0);
+  const slack=availWeeks-needWeeks;
+  let s;
+  if(slack>=6)s=90; else if(slack>=2)s=72; else if(slack>=0)s=55;
+  else if(slack>=-4){ s=30; notes.push('窗口已紧：旺季前评论爬坡不完整，冷启动将撞上旺季 CPC'); }
+  else { s=15; defer=true; notes.push('本季窗口已错过约 '+Math.abs(slack).toFixed(0)+' 周：改档下一季，期间完成认证、内容制作与供应链锁价'); }
+  if(t.storageRisk==='high'){ s-=15; notes.push('旺季仓储限额风险高：备货上限可能不由报童模型决定，而由平台配额决定'); }
+  else if(t.storageRisk==='mid') s-=6;
+  notes.unshift('可用 '+availWeeks.toFixed(0)+' 周 vs 需要 '+needWeeks.toFixed(0)+' 周（爬坡 '+t.rampWeeks+' + 认证 '+t.certWeeks+(t.gated?' + gating 3':'')+'），冗余 '+slack.toFixed(0)+' 周');
+  return { score:clamp(Math.round(s),0,100), veto:false, defer, notes };
+}
+
+/* 合成判决 */
+function verdictOf(D){
+  const W={demand:0.25, struct:0.20, econ:0.30, diff:0.15, timing:0.10};
+  const sc={需求:D.demand.score, 结构:D.struct.score, 经济:D.econ.score, 差异化:D.diff.score, 时机:D.timing.score};
+  const total=Math.round(D.demand.score*W.demand+D.struct.score*W.struct+D.econ.score*W.econ+D.diff.score*W.diff+D.timing.score*W.timing);
+  const vetoes=[['需求',D.demand.veto],['结构',D.struct.veto],['经济',D.econ.veto],['差异化',D.diff.veto]].filter(x=>x[1]).map(x=>x[0]);
+  const reasons=[];
+  let verdict, cls;
+  if(vetoes.length>=2){ verdict='放弃'; cls='off'; reasons.push('两项及以上硬否决（'+vetoes.join('、')+'）：不进入复议'); }
+  else if(vetoes.length===1){ verdict='放弃'; cls='off'; reasons.push('单项硬否决（'+vetoes[0]+'）：除非否决赖以成立的数字被推翻，判决不变'); }
+  else if(D.timing.defer){ verdict='推迟'; cls='hold'; reasons.push('五问逻辑成立、档期不成立：改下一季窗口再执行，本判决其余部分继续有效'); }
+  else{
+    const weak=Object.entries(sc).filter(x=>x[1]<60);
+    if(weak.length){
+      const rest=Object.entries(sc).filter(x=>x[1]>=60).map(x=>x[1]);
+      const restAvg=rest.length?avg(rest):0;
+      if(restAvg>=75){ verdict='有条件进入'; cls='cond';
+        reasons.push('短板：'+weak.map(x=>x[0]+'('+x[1]+')').join('、')+'，由其余维度均值 '+restAvg.toFixed(0)+' 补偿；进入条件 = 修复短板的具体动作写进上架计划'); }
+      else { verdict='放弃'; cls='off';
+        reasons.push('短板 '+weak.map(x=>x[0]).join('、')+' 缺乏补偿（其余维度均值 '+restAvg.toFixed(0)+' < 75）'); }
+    }
+    else if(total>=75){ verdict='进入'; cls='go'; reasons.push('五维全部过线且加权总分 '+total+' ≥ 75'); }
+    else { verdict='有条件进入'; cls='cond'; reasons.push('加权总分 '+total+' 落在 60–75 观察带：小步进入，预设退出线'); }
+    if(total<60 && verdict!=='放弃'){ verdict='放弃'; cls='off'; reasons.push('加权总分 '+total+' < 60'); }
+  }
+  return { total, verdict, cls, vetoes, reasons, sc };
+}
+//</PURE>
+
+/* ======================== 通用工具 ======================== */
+const $=id=>document.getElementById(id);
+function fmt(v,d){ if(v==null||!isFinite(v)) return '—'; return v.toLocaleString('en-US',{maximumFractionDigits:d==null?0:d,minimumFractionDigits:d==null?0:d}); }
+function fp(v,d){ return v==null||!isFinite(v)?'—':(v*100).toFixed(d==null?1:d)+'%'; }
+function money(v){ return v==null||!isFinite(v)?'—':'$'+fmt(v,v>=1000?0:2); }
+function tbl(headers,rows,numCols){
+  numCols=numCols||[];
+  let h='<div class="tblwrap"><table class="t"><thead><tr>'+headers.map((x,i)=>'<th'+(numCols.includes(i)?' class="num"':'')+'>'+x+'</th>').join('')+'</tr></thead><tbody>';
+  rows.forEach(r=>{ h+='<tr>'+r.map((c,i)=>'<td'+(numCols.includes(i)?' class="num"':'')+'>'+c+'</td>').join('')+'</tr>'; });
+  return h+'</tbody></table></div>';
+}
+function drawChart(id,cfg){ if(S.charts[id]){S.charts[id].destroy();} const el=$(id); if(!el) return; S.charts[id]=new Chart(el,cfg); }
+function downloadCSV(name,rows){
+  const csv='\ufeff'+rows.map(r=>r.map(c=>{const s=String(c==null?'':c);return /[",\n]/.test(s)?'"'+s.replace(/"/g,'""')+'"':s;}).join(',')).join('\n');
+  const a=document.createElement('a'); a.href=URL.createObjectURL(new Blob([csv],{type:'text/csv;charset=utf-8'})); a.download=name; a.click();
+  setTimeout(()=>URL.revokeObjectURL(a.href),4000);
+}
+function readFileToRows(file, cb){
+  const ext=file.name.split('.').pop().toLowerCase();
+  if(ext==='csv'||ext==='txt'){
+    Papa.parse(file,{header:true,skipEmptyLines:true,complete:r=>cb(r.data, r.meta.fields||[])});
+  }else{
+    const rd=new FileReader();
+    rd.onload=e=>{
+      const wb=XLSX.read(new Uint8Array(e.target.result),{type:'array'});
+      const ws=wb.Sheets[wb.SheetNames[0]];
+      const aoa=XLSX.utils.sheet_to_json(ws,{header:1,defval:''});
+      if(!aoa.length){cb([],[]);return;}
+      const headers=aoa[0].map(x=>String(x));
+      const rows=aoa.slice(1).filter(r=>r.some(c=>c!=='')).map(r=>{const o={};headers.forEach((h,i)=>o[h]=r[i]);return o;});
+      cb(rows, headers);
+    };
+    rd.readAsArrayBuffer(file);
+  }
+}
+function autoMap(headers, spec){
+  const nh=headers.map(h=>({raw:h, n:normH(h)}));
+  const map={}, missing=[];
+  Object.keys(spec).forEach(k=>{
+    const f=spec[k]; let found=null;
+    for(const c of f.cands){ const cn=normH(c); const ex=nh.find(x=>x.n===cn); if(ex){found=ex.raw;break;} }
+    if(!found){ for(const c of f.cands){ const cn=normH(c);
+      const inc=nh.find(x=>x.n.includes(cn) && !(f.excl||[]).some(e=>x.n.includes(normH(e))));
+      if(inc){found=inc.raw;break;} } }
+    if(found) map[k]=found; else if(!f.optional) missing.push(k);
+  });
+  return {map, missing};
+}
+function showMapper(kind, headers, spec, missing, done){
+  const box=$('mapper'); box.classList.remove('hidden');
+  let h='<h3>列名自动识别失败（'+kind+'），请手动指定 '+missing.length+' 个字段</h3>';
+  missing.forEach(k=>{
+    h+='<div class="maprow"><label>'+spec[k].label+'</label><select data-k="'+k+'">'+
+       '<option value="">— 选择列 —</option>'+headers.map(x=>'<option>'+String(x).replace(/</g,'&lt;')+'</option>').join('')+'</select></div>';
+  });
+  h+='<div class="maprow"><button id="b_mapok">确认映射</button></div>';
+  box.innerHTML=h;
+  $('b_mapok').onclick=()=>{
+    const extra={}; let ok=true;
+    box.querySelectorAll('select').forEach(s=>{ if(!s.value) ok=false; extra[s.dataset.k]=s.value; });
+    if(!ok){ alert('仍有字段未指定'); return; }
+    box.classList.add('hidden'); done(extra);
+  };
+}
+
+/* ======================== ABA / 普查 数据摄入 ======================== */
+const ABA_SPEC={
+  term:{label:'搜索词', cands:['searchterm','搜索词','搜索术语'], excl:['frequency','排名','rank']},
+  sfr:{label:'搜索频率排名', cands:['searchfrequencyrank','搜索频率排名'], excl:[]},
+  cs1:{label:'#1 点击份额', cands:['1clickshare','topclickedproduct1clickshare','商品1点击份额','点击最多的商品1点击份额'], excl:['conversion','转化']},
+  cs2:{label:'#2 点击份额(选填)', cands:['2clickshare','topclickedproduct2clickshare','商品2点击份额'], excl:['conversion','转化'], optional:true},
+  cs3:{label:'#3 点击份额(选填)', cands:['3clickshare','topclickedproduct3clickshare','商品3点击份额'], excl:['conversion','转化'], optional:true},
+  vs1:{label:'#1 转化份额(选填)', cands:['1conversionshare','topclickedproduct1conversionshare','商品1转化份额'], excl:[], optional:true},
+  vs2:{label:'#2 转化份额(选填)', cands:['2conversionshare','商品2转化份额'], excl:[], optional:true},
+  vs3:{label:'#3 转化份额(选填)', cands:['3conversionshare','商品3转化份额'], excl:[], optional:true}
+};
+function handleABA(file){
+  readFileToRows(file,(rows,headers)=>{
+    if(!rows.length){ alert('文件为空或无法解析'); return; }
+    const {map,missing}=autoMap(headers,ABA_SPEC);
+    const finish=fm=>{
+      S.abaFile=rows.map(r=>{
+        const term=String(r[fm.term]==null?'':r[fm.term]).trim().toLowerCase(); if(!term) return null;
+        const cs=pct(r[fm.cs1])+(fm.cs2?pct(r[fm.cs2]):0)+(fm.cs3?pct(r[fm.cs3]):0);
+        const vs=(fm.vs1?pct(r[fm.vs1]):0)+(fm.vs2?pct(r[fm.vs2]):0)+(fm.vs3?pct(r[fm.vs3]):0);
+        return {term, sfr:num(r[fm.sfr]), cs, vs};
+      }).filter(Boolean).sort((a,b)=>a.sfr-b.sfr).slice(0,30);
+      $('ok_aba').textContent='✔ '+file.name+'（读取 '+S.abaFile.length+' 词，按 SFR 升序取前 30）';
+      compute();
+    };
+    if(missing.length) showMapper('ABA 热门搜索词',headers,ABA_SPEC,missing,extra=>finish({...map,...extra}));
+    else finish(map);
+  });
+}
+function parseAbaPaste(){
+  return $('ta_aba').value.split(/\n+/).map(x=>x.trim()).filter(Boolean).map(l=>{
+    const p=l.split(/[,，\t]+/).map(x=>x.trim()); if(p.length<3) return null;
+    return {term:p[0].toLowerCase(), sfr:num(p[1]), cs:pct(p[2]), vs:p.length>3?pct(p[3]):0};
+  }).filter(Boolean);
+}
+function parseCensus(){
+  return $('ta_census').value.split(/\n+/).map(x=>x.trim()).filter(Boolean).map(l=>{
+    const p=l.split(/[,，\t]+/).map(x=>x.trim()); if(p.length<5) return null;
+    return { kw:p[0], ads:num(p[1]), brands:num(p[2]), revMed:num(p[3]), revP25:num(p[4]),
+      pLo:p.length>5?num(p[5]):null, pHi:p.length>6?num(p[6]):null,
+      vid:p.length>7?pct(p[7]):0, aplus:p.length>8?pct(p[8]):0 };
+  }).filter(Boolean);
+}
+
+/* ======================== 读取全部输入 ======================== */
+function readInputs(){
+  const aba=[...S.abaFile, ...parseAbaPaste()];
+  const census=parseCensus();
+  return {
+    niche:($('i_niche').value||'').trim()||'未命名利基',
+    demand:{ g360:num($('i_g360').value)/100, g90:num($('i_g90').value)/100,
+      nicheMonthly:num($('i_sales360').value)/12, targetMonthly:num($('i_target').value),
+      badgeSum:num($('i_badge').value) },
+    oe:{ newShare: $('i_newshare').value===''? null : num($('i_newshare').value)/100,
+      products:num($('i_products').value), priceAvg:num($('i_priceavg').value) },
+    aba, census,
+    econ:{ price:num($('i_price').value), cogs:num($('i_cogs').value), freight:num($('i_freight').value),
+      commPct:num($('i_comm').value)/100, fba:num($('i_fba').value), other:num($('i_other').value),
+      cpcLo:num($('i_cpclo').value), cpcHi:num($('i_cpchi').value), cvr:num($('i_cvr').value)/100,
+      structAdv:$('ck_structadv').checked },
+    diff:{ claim:$('ta_claim').value, rating:clamp(num($('i_rating').value)||3,1,5),
+      arch:$('ck_arch').checked, structAdv:$('ck_structadv').checked,
+      modGap:$('ck_modgap').checked, visual:$('ck_visual').checked },
+    timing:{ peakMonth:clamp(num($('i_peak').value)||12,1,12), launchMonth:clamp(num($('i_launch').value)||1,1,12),
+      rampWeeks:num($('i_ramp').value)||10, certWeeks:num($('i_cert').value)||0,
+      gated:$('ck_gated').checked, storageRisk:$('sel_storage').value }
+  };
+}
+
+/* ======================== 计算与渲染 ======================== */
+function chip(id,score,veto){
+  const el=$(id); if(!el) return;
+  el.textContent=(veto?'否决 · ':'')+score;
+  el.className='chip '+(veto?'s-lo':score>=75?'s-hi':score>=60?'s-mid':'s-lo');
+}
+function notesHtml(notes){ return notes.map(n=>'<div class="reason">'+n+'</div>').join(''); }
+function compute(){
+  const I=readInputs();
+  const D={ demand:scoreDemand(I.demand), struct:scoreStructure(I.aba,I.census,I.oe),
+            econ:scoreEconomics(I.econ), diff:scoreDiff(I.diff), timing:scoreTiming(I.timing) };
+  const V=verdictOf(D);
+  S.last={I,D,V};
+  chip('chip_demand',D.demand.score,D.demand.veto);
+  chip('chip_struct',D.struct.score,D.struct.veto);
+  chip('chip_econ',D.econ.score,D.econ.veto);
+  chip('chip_diff',D.diff.score,D.diff.veto);
+  chip('chip_timing',D.timing.score,D.timing.defer);
+  /* S1 */
+  $('s1out').innerHTML='<div class="insight">'+notesHtml(D.demand.notes)+'</div>';
+  /* S2 */
+  let h2='';
+  if(I.aba.length){
+    const rows=I.aba.slice(0,15).map(r=>{
+      const judge=r.cs>0.7?'<span class="bad">寡头词</span>':r.cs<=0.35?'<span class="good">分散词</span>':'中性';
+      const quiet=r.vs>r.cs*1.25&&r.vs>0.3?' · <span class="bad">闷声吃肉</span>':'';
+      return [r.term, fmt(r.sfr), fp(r.cs,0), r.vs?fp(r.vs,0):'—', judge+quiet];
+    });
+    h2+=tbl(['关键词','SFR','前三点击份额','前三转化份额','判读'],rows,[1,2,3]);
+  }
+  if(I.census.length){
+    const rows=I.census.map(r=>[r.kw,fmt(r.ads),fmt(r.brands),fmt(r.revMed),fmt(r.revP25),
+      r.pLo!=null?money(r.pLo)+'–'+money(r.pHi):'—', fp(r.vid,0), fp(r.aplus,0)]);
+    h2+=tbl(['关键词','广告位','品牌数','评论中位','评论P25','价格带','视频','A+'],rows,[1,2,3,4,6,7]);
+  }
+  h2+='<div class="insight">'+notesHtml(D.struct.notes)+'</div>';
+  $('s2out').innerHTML=h2;
+  /* S3 */
+  const E=D.econ;
+  let h3='<div class="statrow">'+
+    '<div class="stat"><b>'+money(E.cm)+'</b><span>贡献毛利/件（'+fp(E.cmPct,0)+' of 售价）</span></div>'+
+    '<div class="stat"><b>'+money(E.cac)+'</b><span>CAC = CPC('+money(E.cpc)+') ÷ CVR('+fp(I.econ.cvr,1)+')</span></div>'+
+    '<div class="stat"><b class="'+(E.ratio>0.7?'bad':'good')+'">'+fp(E.ratio,0)+'</b><span>CAC ÷ 贡献毛利（红线 70%）</span></div>'+
+    '<div class="stat"><b>'+(E.beCVR!=null?fp(E.beCVR,1):'—')+'</b><span>平衡 CVR（广告不亏的下限）</span></div>'+
+    '<div class="stat"><b>'+money(E.beCPC)+'</b><span>平衡 CPC（当前 CVR 下）</span></div></div>';
+  h3+=sensGrid(I.econ,E);
+  h3+='<div class="insight">'+notesHtml(E.notes)+'</div>';
+  $('s3out').innerHTML=h3;
+  /* S4 / S5 */
+  $('s4out').innerHTML='<div class="insight">'+notesHtml(D.diff.notes)+'</div>';
+  $('s5out').innerHTML='<div class="insight">'+notesHtml(D.timing.notes)+'</div>';
+  /* S6 */
+  renderVerdict();
+}
+function sensGrid(e,E){
+  if(!(e.cpcLo>0&&e.cvr>0&&E.cm>0)) return '';
+  const cpcs=[e.cpcLo,(e.cpcLo+e.cpcHi)/2,e.cpcHi];
+  const cvrs=[e.cvr*0.75,e.cvr,e.cvr*1.25];
+  const cell=(cpc,cvr)=>{
+    const r=(cpc/cvr)/E.cm;
+    const bg=r<=0.55?'rgba(63,126,107,.18)':r<=0.7?'rgba(201,168,105,.28)':r<=0.85?'rgba(188,75,51,.18)':'rgba(188,75,51,.4)';
+    const col=r<=0.55?'#2C5A4C':r<=0.7?'#8a6a2a':'#BC4B33';
+    return '<td><div class="senscell" style="background:'+bg+';color:'+col+'">$'+(cpc/cvr).toFixed(2)+'<br>'+(r*100).toFixed(0)+'%</div></td>';
+  };
+  let h='<h3>CAC 敏感度（CPC × CVR，格内为 CAC 与其占毛利比）</h3><div class="tblwrap"><table class="t"><thead><tr><th></th>'+
+    cvrs.map(c=>'<th class="num">CVR '+fp(c,1)+'</th>').join('')+'</tr></thead><tbody>';
+  const lbl=['低竞价','中位竞价','高竞价'];
+  cpcs.forEach((cpc,i)=>{ h+='<tr><td><b>'+lbl[i]+' $'+cpc.toFixed(2)+'</b></td>'+cvrs.map(cv=>cell(cpc,cv)).join('')+'</tr>'; });
+  return h+'</tbody></table></div>';
+}
+function renderVerdict(){
+  if(!S.last) return;
+  const {I,D,V}=S.last;
+  const stamp={go:'准 入',cond:'附 条 件',off:'驳 回',hold:'缓 议'}[V.cls];
+  let h='<div class="verdict-card '+V.cls+'"><div class="stamp">'+stamp+'</div>'+
+    '<div class="small">'+I.niche+' · '+new Date().toISOString().slice(0,10)+'</div>'+
+    '<div class="vscore">'+V.total+'<span style="font-size:18px;color:var(--muted)"> / 100</span></div>'+
+    '<div class="vtext">'+V.verdict+'</div>';
+  if(V.vetoes.length) h+='<div>'+V.vetoes.map(v=>'<span class="vetotag">硬否决 · '+v+'</span>').join('')+'</div>';
+  h+='<div style="margin-top:8px">'+V.reasons.map(r=>'<div class="reason">'+r+'</div>').join('')+'</div>';
+  h+='<div class="small" style="margin-top:10px">分项：需求 '+V.sc['需求']+' · 结构 '+V.sc['结构']+' · 经济 '+V.sc['经济']+' · 差异化 '+V.sc['差异化']+' · 时机 '+V.sc['时机']+'（权重 25/20/30/15/10）</div></div>';
+  $('s6verdict').innerHTML=h;
+  drawChart('c_radar',{type:'radar',data:{labels:['需求','结构','经济','差异化','时机'],
+    datasets:[{label:I.niche,data:[V.sc['需求'],V.sc['结构'],V.sc['经济'],V.sc['差异化'],V.sc['时机']],
+      backgroundColor:'rgba(63,126,107,.22)',borderColor:'#3F7E6B',pointBackgroundColor:['需求','结构','经济','差异化','时机'].map((k,i)=>[D.demand,D.struct,D.econ,D.diff,D.timing][i].veto?'#BC4B33':'#3F7E6B'),pointRadius:4}]},
+    options:{maintainAspectRatio:false,plugins:{legend:{display:false}},
+      scales:{r:{min:0,max:100,ticks:{stepSize:25},pointLabels:{font:{size:13}}}}}});
+  /* 敏感度已在 S3；S6 右栏放五维解读 */
+  const tips={需求:'低分动作：换更细的利基边界重测，或下调目标月销',结构:'低分动作：避开寡头词、从分散长尾词切入，入场评论目标见 S2',
+    经济:'低分动作：改产品定义降 FBA 分层，或证明结构性 CVR',差异化:'低分动作：回评论考古，主张写不出就不进',时机:'低分动作：改档期，用等待期做认证与内容'};
+  $('s6sens').innerHTML='<div class="insight"><b>低分维度处方</b>'+Object.entries(V.sc).filter(x=>x[1]<60).map(x=>'<div class="reason">'+x[0]+'（'+x[1]+'）：'+tips[x[0]]+'</div>').join('')+
+    (Object.values(V.sc).every(v=>v>=60)?'<div class="reason">五维全部过线——风险不在维度短板，在执行方差。</div>':'')+'</div>';
+  renderCompare();
+}
+
+/* ======================== 对比清单与导出 ======================== */
+function renderCompare(){
+  if(!S.compare.length){ $('s6compare').innerHTML='<p class="small">清单为空——同一份表改参数测不同利基，逐个「存入对比清单」后在此横评。</p>'; return; }
+  const rows=S.compare.map(c=>[c.niche,'<b>'+c.total+'</b>',
+    '<span class="'+({go:'good',cond:'',off:'bad',hold:''})[c.cls]+'">'+c.verdict+'</span>',
+    c.sc['需求'],c.sc['结构'],c.sc['经济'],c.sc['差异化'],c.sc['时机'],
+    fp(c.ratio,0), c.revP25!=null?fmt(c.revP25):'—', c.date]);
+  $('s6compare').innerHTML=tbl(['利基','总分','判决','需求','结构','经济','差异','时机','CAC/毛利','入场评论目标','日期'],rows,[1,3,4,5,6,7,8,9]);
+}
+function saveCompare(){
+  if(!S.last){ $('s6msg').textContent='先重算判决。'; return; }
+  const {I,D,V}=S.last;
+  S.compare=S.compare.filter(c=>c.niche!==I.niche);
+  S.compare.push({niche:I.niche,total:V.total,verdict:V.verdict,cls:V.cls,sc:V.sc,
+    ratio:D.econ.ratio,revP25:D.struct.revP25,date:new Date().toISOString().slice(0,10)});
+  S.compare.sort((a,b)=>b.total-a.total);
+  $('s6msg').textContent='已存入（同名覆盖）。清单仅存于本页会话，导出 CSV 归档。';
+  renderCompare();
+}
+function exportReport(){
+  if(!S.last){ $('s6msg').textContent='先重算判决。'; return; }
+  const {I,D,V}=S.last;
+  const rows=[['字段','值'],['利基',I.niche],['判决',V.verdict],['总分',V.total],
+    ['硬否决',V.vetoes.join('、')||'无'],
+    ['需求分',V.sc['需求']],['结构分',V.sc['结构']],['经济分',V.sc['经济']],['差异化分',V.sc['差异化']],['时机分',V.sc['时机']],
+    ['利基月销(件)',Math.round(I.demand.nicheMonthly)],['目标月销(件)',I.demand.targetMonthly],
+    ['搜索量同比360天',(I.demand.g360*100).toFixed(1)+'%'],['搜索量同比90天',(I.demand.g90*100).toFixed(1)+'%'],
+    ['前三点击份额均值',D.struct.csAvg!=null?(D.struct.csAvg*100).toFixed(0)+'%':''],
+    ['首页评论中位数',D.struct.revMed!=null?Math.round(D.struct.revMed):''],['入场评论目标(P25)',D.struct.revP25!=null?Math.round(D.struct.revP25):''],
+    ['贡献毛利/件',D.econ.cm.toFixed(2)],['CAC',isFinite(D.econ.cac)?D.econ.cac.toFixed(2):''],
+    ['CAC/毛利',isFinite(D.econ.ratio)?(D.econ.ratio*100).toFixed(0)+'%':''],
+    ['平衡CVR',D.econ.beCVR!=null?(D.econ.beCVR*100).toFixed(1)+'%':''],['平衡CPC',D.econ.beCPC?D.econ.beCPC.toFixed(2):''],
+    ['差异化主张',I.diff.claim.trim()],['判决理由',V.reasons.join('；')],['生成日期',new Date().toISOString().slice(0,10)]];
+  D.demand.notes.concat(D.struct.notes,D.econ.notes,D.diff.notes,D.timing.notes).forEach((n,i)=>rows.push(['尽调笔记'+(i+1),n]));
+  downloadCSV('diligence-'+I.niche.replace(/\s+/g,'-')+'-'+new Date().toISOString().slice(0,10)+'.csv',rows);
+  $('s6msg').textContent='判决 CSV 已下载。';
+}
+function exportCompare(){
+  if(!S.compare.length){ $('s6msg').textContent='清单为空。'; return; }
+  const rows=[['利基','总分','判决','需求','结构','经济','差异化','时机','CAC/毛利','入场评论目标','日期']];
+  S.compare.forEach(c=>rows.push([c.niche,c.total,c.verdict,c.sc['需求'],c.sc['结构'],c.sc['经济'],c.sc['差异化'],c.sc['时机'],
+    isFinite(c.ratio)?(c.ratio*100).toFixed(0)+'%':'',c.revP25!=null?Math.round(c.revP25):'',c.date]));
+  downloadCSV('niche-compare-'+new Date().toISOString().slice(0,10)+'.csv',rows);
+  $('s6msg').textContent='对比清单 CSV 已下载。';
+}
+
+/* ======================== 演示数据 ======================== */
+function setV(id,v){ $(id).value=v; }
+function setC(id,v){ $(id).checked=v; }
+function demoA(){
+  setV('i_niche','lcd writing tablet（成熟拥挤）');
+  setV('i_sales360',588000); setV('i_g360',7); setV('i_g90',4); setV('i_priceavg',13.5);
+  setV('i_products',380); setV('i_newshare',6); setV('i_badge',31000); setV('i_target',3000);
+  S.abaFile=[]; $('ok_aba').textContent='';
+  $('ta_aba').value=['lcd writing tablet, 8421, 63, 66','writing tablet for kids, 15230, 58, 61',
+    'doodle board, 21877, 71, 64','drawing tablet for kids, 24102, 55, 63','kids drawing pad, 30455, 66, 60'].join('\n');
+  $('ta_census').value=['lcd writing tablet, 10, 7, 2800, 950, 6.99, 25.99, 70, 85',
+    'writing tablet for kids, 9, 8, 2100, 720, 7.99, 22.99, 65, 80',
+    'doodle board, 11, 6, 3400, 1100, 5.99, 29.99, 75, 90'].join('\n');
+  setV('i_price',15.99); setV('i_cogs',3.2); setV('i_freight',0.9); setV('i_comm',15);
+  setV('i_fba',5.1); setV('i_other',0.3); setV('i_cpclo',1.05); setV('i_cpchi',1.45); setV('i_cvr',10);
+  setC('ck_structadv',false);
+  $('ta_claim').value='更大尺寸 + 更多颜色的常规迭代（与现有头部无本质差异）';
+  setV('i_rating',2); setC('ck_arch',true); setC('ck_modgap',false); setC('ck_visual',false);
+  setV('i_peak',12); setV('i_launch',8); setV('i_ramp',10); setV('i_cert',4);
+  setC('ck_gated',false); $('sel_storage').value='high';
+  compute();
+  $('s6msg').textContent='演示A：一个"看着眼熟"的类目从新入者视角过尽调——注意经济维的硬否决怎么来的。';
+}
+function demoB(){
+  setV('i_niche','montessori travel busy kit（早期成长）');
+  setV('i_sales360',132000); setV('i_g360',28); setV('i_g90',41); setV('i_priceavg',24.9);
+  setV('i_products',85); setV('i_newshare',14); setV('i_badge',6800); setV('i_target',1200);
+  S.abaFile=[]; $('ok_aba').textContent='';
+  $('ta_aba').value=['montessori travel toys, 45210, 31, 36','toddler busy kit, 61022, 35, 41',
+    'travel activities for toddlers, 52840, 29, 30','quiet book alternative, 88410, 38, 47'].join('\n');
+  $('ta_census').value=['montessori travel toys, 6, 10, 210, 90, 14.99, 34.99, 45, 55',
+    'toddler busy kit, 5, 9, 260, 105, 16.99, 32.99, 40, 50',
+    'travel activities for toddlers, 7, 11, 180, 75, 12.99, 29.99, 35, 45'].join('\n');
+  setV('i_price',26.99); setV('i_cogs',5.8); setV('i_freight',1.6); setV('i_comm',15);
+  setV('i_fba',6.4); setV('i_other',0.4); setV('i_cpclo',0.55); setV('i_cpchi',0.85); setV('i_cvr',13);
+  setC('ck_structadv',true);
+  $('ta_claim').value='唯一按 12–36 月龄分阶换件的旅行忙碌板：磁吸模块可单独补购，解决差评榜首"三天玩腻"';
+  setV('i_rating',4); setC('ck_arch',true); setC('ck_modgap',true); setC('ck_visual',true);
+  setV('i_peak',12); setV('i_launch',6); setV('i_ramp',10); setV('i_cert',3);
+  setC('ck_gated',false); $('sel_storage').value='low';
+  compute();
+  $('s6msg').textContent='演示B：同一张记分卡如何放行一个早期利基——对照A看五维分布差在哪。';
+}
+function censusTpl(){
+  $('ta_census').value='核心词1, 广告位数, 品牌数, 评论中位数, 评论25分位, 最低价, 最高价, 视频%, A+%\n'+
+    'lcd writing tablet, 10, 7, 2800, 950, 6.99, 25.99, 70, 85';
+}
+
+/* ======================== 初始化 ======================== */
+function init(){
+  Chart.defaults.font.family="'Noto Serif SC','Songti SC',serif";
+  Chart.defaults.color='#5c5546';
+  Chart.defaults.borderColor='rgba(216,204,174,.55)';
+  $('b_calc').addEventListener('click',compute);
+  $('b_demoA').addEventListener('click',demoA);
+  $('b_demoB').addEventListener('click',demoB);
+  $('f_aba').addEventListener('change',e=>e.target.files[0]&&handleABA(e.target.files[0]));
+  $('b_census_tpl').addEventListener('click',censusTpl);
+  $('b_save').addEventListener('click',saveCompare);
+  $('b_report').addEventListener('click',exportReport);
+  $('b_compare').addEventListener('click',exportCompare);
+  renderCompare();
+}
+if(typeof document!=='undefined'){
+  if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',init); else init();
+}
+//__APPJS_END__
+</script>
+</body>
+</html>

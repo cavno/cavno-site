@@ -1,0 +1,25 @@
+/* 悖论图谱 · 全局样式 —— 手稿风（与「四律」系列一致） */
+page {
+  --parchment: #f3ebda;
+  --paper-warm: #faf5e9;
+  --paper-deep: #ece2cc;
+  --ink: #2c2823;
+  --ink-soft: #4a443a;
+  --ink-mute: #8a7f6a;
+  --line: #e0d5ba;
+  --line-soft: #eae0c8;
+  --terra: #a73e2c;
+  --terra-soft: #d9a89c;
+  --aegean: #1d4e5f;
+  --aegean-soft: #9dbac4;
+  --gold: #b8893a;
+  --gold-deep: #8a6526;
+  --purple: #6d4a8f;
+  --green: #3f7a52;
+  background: var(--parchment);
+  color: var(--ink);
+  font-family: "Noto Serif SC","Source Han Serif SC","Songti SC","STSong",serif;
+  font-size: 30rpx;
+  line-height: 1.85;
+}
+.safe-bottom { height: env(safe-area-inset-bottom); }

@@ -1,0 +1,123 @@
+<view class="page-shell lecture-page" wx:if="{{lecture}}">
+  <view class="lecture-hero page-pad" style="background: {{lecture.color}};">
+    <view class="hero-top">
+      <view>
+        <view class="lecture-number">{{lecture.number}}</view>
+        <view class="lecture-date">{{lecture.date}}</view>
+      </view>
+      <button class="favorite-button {{isFavorite ? 'favorite-active' : ''}}" bindtap="toggleFavorite">
+        {{isFavorite ? "已收藏" : "收藏"}}
+      </button>
+    </view>
+    <view class="lecture-display">{{lecture.title}}</view>
+    <view class="lecture-kicker">{{lecture.shortTitle}}</view>
+    <view class="hero-meta">
+      <text>{{lecture.readTime}}</text>
+      <text>·</text>
+      <text>源讲义 {{lecture.sourceSlides}} 页</text>
+    </view>
+  </view>
+
+  <view class="thesis-wrap page-pad">
+    <view class="thesis-card paper-card">
+      <view class="thesis-label">本讲核心判断</view>
+      <view class="thesis-text">{{lecture.thesis}}</view>
+      <view class="thesis-opening">{{lecture.opening}}</view>
+    </view>
+  </view>
+
+  <view class="question-wrap page-pad">
+    <view class="eyebrow">带着问题阅读</view>
+    <view class="question" wx:for="{{lecture.questions}}" wx:key="*this">
+      <text class="question-no">0{{index + 1}}</text>
+      <text>{{item}}</text>
+    </view>
+  </view>
+
+  <scroll-view class="section-nav" scroll-x enhanced show-scrollbar="{{false}}">
+    <view class="section-nav-row">
+      <button
+        class="section-nav-item"
+        wx:for="{{lecture.sections}}"
+        wx:key="id"
+        data-id="{{item.id}}"
+        bindtap="scrollToSection"
+      >
+        <text class="nav-no">{{item.no}}</text>
+        <text class="nav-title">{{item.title}}</text>
+      </button>
+    </view>
+  </scroll-view>
+
+  <view class="content page-pad">
+    <view
+      class="content-section"
+      wx:for="{{lecture.sections}}"
+      wx:key="id"
+      wx:for-item="section"
+      wx:for-index="sectionIndex"
+      id="{{section.id}}"
+    >
+      <button class="section-header" data-index="{{sectionIndex}}" bindtap="toggleSection">
+        <view class="section-no">{{section.no}}</view>
+        <view class="section-header-main">
+          <view class="content-title">{{section.title}}</view>
+          <view class="content-thesis">{{section.thesis}}</view>
+        </view>
+        <view class="collapse-icon">{{section.expanded ? "−" : "+"}}</view>
+      </button>
+
+      <view class="section-body" wx:if="{{section.expanded}}">
+        <view
+          class="paragraph"
+          wx:for="{{section.paragraphs}}"
+          wx:key="*this"
+          wx:for-item="paragraph"
+        >{{paragraph}}</view>
+
+        <view class="point-box">
+          <view class="point-label">要点</view>
+          <view
+            class="point-row"
+            wx:for="{{section.points}}"
+            wx:key="*this"
+            wx:for-item="point"
+            wx:for-index="pointIndex"
+          >
+            <text class="point-index">{{pointIndex + 1}}</text>
+            <text class="point-text">{{point}}</text>
+          </view>
+        </view>
+
+        <view class="bridge-box">
+          <view class="bridge-label">思想过渡</view>
+          <view>{{section.bridge}}</view>
+        </view>
+      </view>
+    </view>
+  </view>
+
+  <view class="keyword-wrap page-pad">
+    <view class="eyebrow">概念索引</view>
+    <view class="keyword-row">
+      <view class="keyword" wx:for="{{lecture.keywords}}" wx:key="*this">{{item}}</view>
+    </view>
+  </view>
+
+  <view class="summary-wrap page-pad">
+    <view class="summary-card">
+      <view class="summary-label">一句话收束</view>
+      <view class="summary-text">{{lecture.summary}}</view>
+    </view>
+  </view>
+
+  <view class="next-wrap page-pad">
+    <button class="next-button" bindtap="goNext">
+      <view>
+        <view class="next-label">{{nextLecture ? "继续下一讲" : "回到总脉络"}}</view>
+        <view class="next-title">{{nextLecture ? nextLecture.title : "查看八次思想转化"}}</view>
+      </view>
+      <text class="next-arrow">→</text>
+    </button>
+  </view>
+</view>

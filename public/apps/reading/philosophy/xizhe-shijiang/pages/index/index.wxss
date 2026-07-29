@@ -1,0 +1,196 @@
+.hero {
+  padding: 30rpx 8rpx 10rpx;
+}
+.hero-title {
+  display: block;
+  font-size: 56rpx;
+  font-weight: 700;
+  letter-spacing: 4rpx;
+  margin-top: 14rpx;
+  line-height: 1.4;
+}
+.hero-sub {
+  display: block;
+  margin-top: 12rpx;
+  font-size: 27rpx;
+  color: #6f6452;
+  letter-spacing: 2rpx;
+}
+.hero-dates {
+  display: block;
+  margin-top: 8rpx;
+  font-size: 22rpx;
+  color: #8a7a5e;
+  letter-spacing: 4rpx;
+}
+
+/* 主轴 */
+.chain-card { margin-top: 30rpx; }
+.chain-label {
+  display: block;
+  font-size: 22rpx;
+  letter-spacing: 3rpx;
+  color: #8a7a5e;
+  margin-bottom: 18rpx;
+}
+.chain {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+}
+.chain-node {
+  padding: 8rpx 18rpx;
+  border-radius: 999rpx;
+  border: 1rpx solid rgba(28, 25, 22, 0.3);
+  font-size: 25rpx;
+  margin: 6rpx 0;
+  color: #5d5346;
+}
+.chain-node-on {
+  background: #1c1916;
+  border-color: #1c1916;
+  color: #f3ebda;
+}
+.chain-arrow {
+  margin: 0 8rpx;
+  color: #b8893a;
+  font-size: 24rpx;
+}
+.chain-note {
+  display: block;
+  margin-top: 16rpx;
+  font-size: 22rpx;
+  color: #8a7a5e;
+}
+
+/* 思想脉络入口 */
+.thread-entry {
+  margin-top: 30rpx;
+  background: #1c1916;
+  border-radius: 16rpx;
+  padding: 30rpx 30rpx;
+  display: flex;
+  align-items: center;
+}
+.te-left { flex: 1; }
+.te-name {
+  display: block;
+  color: #f3ebda;
+  font-size: 38rpx;
+  font-weight: 700;
+  letter-spacing: 3rpx;
+}
+.te-sub {
+  display: block;
+  margin-top: 10rpx;
+  color: rgba(243, 235, 218, 0.66);
+  font-size: 23rpx;
+  line-height: 1.7;
+}
+.te-go {
+  width: 76rpx;
+  height: 76rpx;
+  border-radius: 50%;
+  background: #b8893a;
+  color: #1c1916;
+  font-size: 32rpx;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-left: 22rpx;
+  flex-shrink: 0;
+}
+
+/* 节标签 */
+.sec-label {
+  display: block;
+  text-align: center;
+  font-size: 26rpx;
+  letter-spacing: 8rpx;
+  color: #5d5346;
+  margin-bottom: 20rpx;
+}
+
+/* 四讲卡 */
+.lec-list {}
+.lec-card {
+  background: #faf5ea;
+  border: 1rpx solid rgba(28, 25, 22, 0.13);
+  border-left: 10rpx solid #a73e2c;
+  border-radius: 14rpx;
+  padding: 26rpx 28rpx;
+  margin-bottom: 22rpx;
+  box-shadow: 0 2rpx 10rpx rgba(28, 25, 22, 0.05);
+}
+.lec-card.ac-terra { border-left-color: #a73e2c; }
+.lec-card.ac-gold { border-left-color: #b8893a; }
+.lec-card.ac-aegean { border-left-color: #1d4e5f; }
+.lec-card.ac-wine { border-left-color: #7e2a38; }
+.lec-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.lec-num {
+  font-size: 23rpx;
+  letter-spacing: 4rpx;
+  color: #8a7a5e;
+}
+.lec-date {
+  font-size: 21rpx;
+  color: #a89878;
+  letter-spacing: 2rpx;
+}
+.lec-title {
+  display: block;
+  font-size: 40rpx;
+  font-weight: 700;
+  margin-top: 10rpx;
+  letter-spacing: 2rpx;
+}
+.lec-sub {
+  display: block;
+  margin-top: 8rpx;
+  font-size: 25rpx;
+  color: #6f6452;
+  line-height: 1.7;
+}
+
+/* 专题卡 */
+.sp-list {}
+.sp-card {
+  background: #faf5ea;
+  border: 1rpx solid rgba(28, 25, 22, 0.13);
+  border-radius: 14rpx;
+  padding: 24rpx 26rpx;
+  margin-bottom: 18rpx;
+  display: flex;
+  align-items: center;
+}
+.sp-dot {
+  width: 18rpx;
+  height: 18rpx;
+  border-radius: 50%;
+  margin-right: 22rpx;
+  flex-shrink: 0;
+}
+.sp-terra { background: #a73e2c; }
+.sp-gold { background: #b8893a; }
+.sp-aegean { background: #1d4e5f; }
+.sp-wine { background: #7e2a38; }
+.sp-ink { background: #1c1916; }
+.sp-body { flex: 1; }
+.sp-name {
+  display: block;
+  font-size: 32rpx;
+  font-weight: 700;
+  letter-spacing: 2rpx;
+}
+.sp-sub {
+  display: block;
+  margin-top: 4rpx;
+  font-size: 22rpx;
+  color: #8a7a5e;
+  line-height: 1.6;
+}

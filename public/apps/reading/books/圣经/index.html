@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>圣经互动浏览器 · Biblical Atlas</title>
+  <meta name="description" content="一个交互式的圣经浏览工具——以五个维度（结构、时间线、故事、人物、主题）系统地呈现旧约与新约 66 卷书的内容与神学意义。">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400&family=Crimson+Pro:ital,wght@0,400;0,500;0,600;1,400&family=Noto+Serif+SC:wght@400;500;600;700&family=Noto+Sans+SC:wght@300;400;500;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <header class="site-header">
+    <div class="header-inner">
+      <div class="brand">
+        <h1 class="brand-title">圣经互动浏览器</h1>
+        <p class="brand-sub">Biblical Atlas · An interactive guide to the Old &amp; New Testaments</p>
+      </div>
+      <button class="theme-toggle" id="themeToggle" aria-label="切换深浅模式">
+        <span class="theme-icon" aria-hidden="true">◐</span>
+      </button>
+    </div>
+    <p class="brand-tagline">从结构、历史、叙事、人物、主题 —— 五个维度系统理解 66 卷正典</p>
+  </header>
+
+  <nav class="tabs" role="tablist" aria-label="主要分类">
+    <button class="tab active" data-tab="overview" role="tab"><span class="tab-num">Ⅰ</span><span class="tab-label">概览</span></button>
+    <button class="tab" data-tab="timeline" role="tab"><span class="tab-num">Ⅱ</span><span class="tab-label">时间线</span></button>
+    <button class="tab" data-tab="stories" role="tab"><span class="tab-num">Ⅲ</span><span class="tab-label">故事</span></button>
+    <button class="tab" data-tab="figures" role="tab"><span class="tab-num">Ⅳ</span><span class="tab-label">人物</span></button>
+    <button class="tab" data-tab="themes" role="tab"><span class="tab-num">Ⅴ</span><span class="tab-label">主题</span></button>
+  </nav>
+
+  <main class="content">
+    <section class="panel active" data-panel="overview" id="panel-overview"></section>
+    <section class="panel" data-panel="timeline" id="panel-timeline"></section>
+    <section class="panel" data-panel="stories" id="panel-stories"></section>
+    <section class="panel" data-panel="figures" id="panel-figures"></section>
+    <section class="panel" data-panel="themes" id="panel-themes"></section>
+  </main>
+
+  <footer class="site-footer">
+    <p>正典依据新教传统的 66 卷 · 内容仅供学习与研究 · <a href="https://github.com/" target="_blank" rel="noopener">查看源码</a></p>
+  </footer>
+
+  <!-- 详情抽屉 -->
+  <aside class="drawer" id="drawer" aria-hidden="true" aria-labelledby="drawerTitle">
+    <div class="drawer-overlay" id="drawerOverlay"></div>
+    <div class="drawer-panel" role="dialog" aria-modal="true">
+      <button class="drawer-close" id="drawerClose" aria-label="关闭详情">✕</button>
+      <div class="drawer-content" id="drawerContent"></div>
+    </div>
+  </aside>
+
+  <script src="data/books.js"></script>
+  <script src="data/timeline.js"></script>
+  <script src="data/stories.js"></script>
+  <script src="data/figures.js"></script>
+  <script src="data/themes.js"></script>
+  <script src="script.js"></script>
+</body>
+</html>

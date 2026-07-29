@@ -1,0 +1,63 @@
+<view class="wrap" wx:if="{{s}}">
+  <view class="hero">
+    <view class="hero-meta">
+      <text class="chip" style="color:{{color}};border-color:{{color}}">{{s.cat}}</text>
+      <text class="era" wx:if="{{s.era}}">{{s.era}}</text>
+    </view>
+    <view class="hero-name">{{s.name}}</view>
+    <view class="hero-tag" wx:if="{{s.tag}}">{{s.tag}}</view>
+  </view>
+
+  <!-- 前置 -->
+  <view class="pre" wx:if="{{s.pre.length}}">
+    <view class="pre-label">前置 · PREFACE</view>
+    <block wx:for="{{preOpen ? s.pre : s.preHead}}" wx:key="index">
+      <view class="b-h" wx:if="{{item.t==='h'}}">{{item.x}}</view>
+      <view class="b-p" wx:else>{{item.x}}</view>
+    </block>
+    <view class="toggle" wx:if="{{preMore}}" bindtap="togglePre">{{preOpen ? '收起 ▴' : '展开全部前置 ▾'}}</view>
+  </view>
+
+  <!-- 母悖论 -->
+  <view class="mp">
+    <view class="mp-label"><text class="mp-en">MOTHER PARADOX</text><text class="mp-cn"> · 母悖论</text></view>
+    <view class="mp-stage">
+      <view class="mp-pole mp-a"><text class="mp-mark">A</text><text class="mp-text">{{s.mpA}}</text></view>
+      <view class="mp-vs">↔</view>
+      <view class="mp-pole mp-b"><text class="mp-mark">B</text><text class="mp-text">{{s.mpB}}</text></view>
+    </view>
+    <block wx:for="{{mpOpen ? s.mpd : s.mpdHead}}" wx:key="index">
+      <view class="b-h" wx:if="{{item.t==='h'}}">{{item.x}}</view>
+      <view class="b-p" wx:else>{{item.x}}</view>
+    </block>
+    <view class="toggle" wx:if="{{mpMore}}" bindtap="toggleMp">{{mpOpen ? '收起 ▴' : '展开全部论述 ▾'}}</view>
+  </view>
+
+  <!-- 具体张力 -->
+  <view class="sec">
+    <text class="sec-cn">具体张力</text>
+    <text class="sec-count">{{cards.length}} 张力</text>
+  </view>
+  <view class="tc" wx:for="{{cards}}" wx:key="i" data-i="{{item.i}}" bindtap="goTension">
+    <view class="tc-num">张力 {{item.n < 10 ? '0' + item.n : item.n}}</view>
+    <block wx:if="{{!item.single}}">
+      <view class="tc-a">{{item.a}}</view>
+      <view class="tc-vs">↔</view>
+      <view class="tc-b">{{item.b}}</view>
+    </block>
+    <view class="tc-single" wx:else>{{item.a}}</view>
+    <view class="tc-sum {{item.ih ? 'tc-sum-h' : ''}}" wx:if="{{item.sum}}">{{item.sum}}</view>
+    <view class="tc-go">展开 →</view>
+  </view>
+
+  <!-- 元结论 -->
+  <view class="meta" wx:if="{{s.meta.length}}">
+    <view class="meta-label">元结论 · META-CONCLUSION</view>
+    <block wx:for="{{metaOpen ? s.meta : s.metaHead}}" wx:key="index">
+      <view class="b-h" wx:if="{{item.t==='h'}}">{{item.x}}</view>
+      <view class="b-p" wx:else>{{item.x}}</view>
+    </block>
+    <view class="toggle" wx:if="{{metaMore}}" bindtap="toggleMeta">{{metaOpen ? '收起 ▴' : '展开全部元结论 ▾'}}</view>
+  </view>
+  <view class="safe-bottom"></view>
+</view>

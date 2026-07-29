@@ -1,0 +1,161 @@
+.about-hero {
+  padding-top: 78rpx;
+  padding-bottom: 58rpx;
+}
+
+.about-hero .display-title {
+  font-size: 57rpx;
+}
+
+.about-lead {
+  color: #625c53;
+  font-size: 27rpx;
+  line-height: 1.9;
+}
+
+.about-content {
+  padding-bottom: 40rpx;
+}
+
+.about-card {
+  padding: 34rpx;
+}
+
+.card-label {
+  color: #a64f32;
+  font-size: 21rpx;
+  font-weight: 700;
+  letter-spacing: 4rpx;
+}
+
+.principle {
+  display: flex;
+  margin-top: 30rpx;
+  padding-top: 26rpx;
+  border-top: 1rpx solid rgba(23, 54, 47, 0.08);
+}
+
+.principle-no {
+  width: 72rpx;
+  flex: none;
+  color: #a64f32;
+  font-family: "Times New Roman", serif;
+  font-size: 25rpx;
+  font-weight: 700;
+}
+
+.principle-title {
+  color: #17362f;
+  font-size: 28rpx;
+  font-weight: 700;
+}
+
+.principle-copy {
+  margin-top: 10rpx;
+  color: #6a6359;
+  font-size: 24rpx;
+  line-height: 1.8;
+}
+
+.source-section {
+  padding-top: 68rpx;
+}
+
+.source-section .section-heading {
+  margin-top: 8rpx;
+  margin-bottom: 28rpx;
+}
+
+.source-card {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  min-height: 126rpx;
+  margin-bottom: 16rpx;
+  padding: 24rpx 26rpx;
+  border: 1rpx solid rgba(23, 54, 47, 0.1);
+  border-radius: 18rpx;
+  background: #fbf8f1;
+  text-align: left;
+}
+
+.source-no {
+  width: 70rpx;
+  flex: none;
+  color: #a64f32;
+  font-family: "Times New Roman", serif;
+  font-size: 27rpx;
+}
+
+.source-main {
+  flex: 1;
+}
+
+.source-title {
+  color: #17362f;
+  font-size: 28rpx;
+  font-weight: 700;
+}
+
+.source-meta {
+  margin-top: 8rpx;
+  color: #8a8277;
+  font-size: 22rpx;
+}
+
+.source-arrow {
+  color: #17362f;
+  font-size: 36rpx;
+}
+
+.usage-card {
+  margin-top: 62rpx;
+  padding: 38rpx 34rpx;
+  border-radius: 24rpx;
+  background: #17362f;
+  color: #fff9ec;
+}
+
+.light-label {
+  color: #d9ae75;
+}
+
+.usage-title {
+  margin-top: 16rpx;
+  font-family: "STSong", "Songti SC", serif;
+  font-size: 36rpx;
+  font-weight: 700;
+}
+
+.usage-copy {
+  margin-top: 18rpx;
+  color: rgba(255, 249, 236, 0.72);
+  font-size: 25rpx;
+  line-height: 1.88;
+}
+
+.credit {
+  padding: 72rpx 10rpx 28rpx;
+  text-align: center;
+}
+
+.credit-line {
+  width: 62rpx;
+  height: 4rpx;
+  margin: 0 auto 22rpx;
+  background: #a64f32;
+}
+
+.credit-title {
+  color: #17362f;
+  font-family: "STSong", "Songti SC", serif;
+  font-size: 31rpx;
+  font-weight: 700;
+}
+
+.credit-copy {
+  margin-top: 12rpx;
+  color: #81796d;
+  font-size: 23rpx;
+  line-height: 1.8;
+}

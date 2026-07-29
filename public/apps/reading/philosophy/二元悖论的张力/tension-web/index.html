@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>二元悖论的张力 · 本体论 · 认识论 · 方法论</title>
+  <meta name="description" content="从二元悖论的张力作为系统动力的视角，观察本体论、认识论、方法论的全部发展史。" />
+
+  <!-- 字体：中文衬线 + 英文古典衬线 + 等宽 -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,400&family=EB+Garamond:ital,wght@0,400;0,500;1,400&family=JetBrains+Mono:wght@300;400;500&family=Noto+Serif+SC:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+  <!-- 顶部画布——背景纹理 -->
+  <div class="grain-overlay" aria-hidden="true"></div>
+
+  <!-- ============================= 顶部题首 ============================= -->
+  <header class="masthead">
+    <div class="masthead-inner">
+      <div class="masthead-meta">
+        <span class="meta-label">An Interactive Atlas / 互动图谱</span>
+        <span class="meta-separator">·</span>
+        <span class="meta-label">Mother-Paradox as System's Motive Force</span>
+      </div>
+
+      <h1 class="masthead-title">
+        <span class="title-cn">二元悖论的张力</span>
+        <span class="title-en">The Tension of Dyadic Paradox</span>
+      </h1>
+
+      <p class="masthead-subtitle">
+        <span class="sub-cn">作为系统的动力 · 观察本体论 · 认识论 · 方法论的全部发展</span>
+        <span class="sub-en">As the Motive Force of the System — Across Ontology, Epistemology, Methodology</span>
+      </p>
+
+      <div class="masthead-thesis">
+        <p>
+          每一分支都从某个<em>母悖论</em>出发——对某种基础的追求，与这种追求根本不可达成的张力。<br>
+          这种张力不是要被消解的失败，而是驱动整个传统前行的内在动力。<br>
+          相同的根本张力以更复杂的形式螺旋复现，每代继承前辈的工作，<em>未济，亨</em>。
+        </p>
+      </div>
+    </div>
+  </header>
+
+  <!-- ============================= 分支选择器 ============================= -->
+  <nav class="branch-nav" role="tablist" aria-label="哲学分支选择">
+    <button class="branch-btn is-active" data-branch="ontology" role="tab" aria-selected="true">
+      <span class="branch-num">壹</span>
+      <span class="branch-cn">本体论</span>
+      <span class="branch-en">Ontology</span>
+      <span class="branch-desc">存在与言说的极限</span>
+    </button>
+    <button class="branch-btn" data-branch="epistemology" role="tab" aria-selected="false">
+      <span class="branch-num">贰</span>
+      <span class="branch-cn">认识论</span>
+      <span class="branch-en">Epistemology</span>
+      <span class="branch-desc">知识与确定性的不可达</span>
+    </button>
+    <button class="branch-btn" data-branch="methodology" role="tab" aria-selected="false">
+      <span class="branch-num">叁</span>
+      <span class="branch-cn">方法论</span>
+      <span class="branch-en">Methodology</span>
+      <span class="branch-desc">严格与创造的张力</span>
+    </button>
+  </nav>
+
+  <!-- ============================= 母悖论展示 ============================= -->
+  <section class="mother-paradox" id="mother-paradox" aria-live="polite">
+    <div class="mp-inner">
+      <div class="mp-label">
+        <span class="mp-label-decoration">◇</span>
+        <span class="mp-label-text">母 悖 论 · Mother-Paradox</span>
+        <span class="mp-label-decoration">◇</span>
+      </div>
+
+      <div class="mp-axis">
+        <div class="mp-pole mp-pole-left">
+          <div class="mp-pole-marker"></div>
+          <div class="mp-pole-text" id="mp-pursuit">追求把握「存在」本身</div>
+        </div>
+
+        <div class="mp-tension-line">
+          <svg viewBox="0 0 400 40" preserveAspectRatio="none" aria-hidden="true">
+            <defs>
+              <linearGradient id="tension-gradient" x1="0%" y1="0%" x2="100%" y2="0%">
+                <stop offset="0%" stop-color="var(--pole-left)" />
+                <stop offset="50%" stop-color="var(--accent-gold)" />
+                <stop offset="100%" stop-color="var(--pole-right)" />
+              </linearGradient>
+            </defs>
+            <line x1="0" y1="20" x2="400" y2="20" stroke="url(#tension-gradient)" stroke-width="1.5" stroke-dasharray="2 3" />
+            <circle cx="200" cy="20" r="4" fill="var(--accent-gold)" />
+            <text x="200" y="35" text-anchor="middle" font-family="JetBrains Mono" font-size="9" fill="var(--accent-gold)" letter-spacing="2">TENSION</text>
+          </svg>
+        </div>
+
+        <div class="mp-pole mp-pole-right">
+          <div class="mp-pole-marker"></div>
+          <div class="mp-pole-text" id="mp-limit">言说「存在」的根本不可能</div>
+        </div>
+      </div>
+
+      <p class="mp-gloss" id="mp-gloss">
+        本体论从一开始就追求把握「存在」本身。每代寻求新方法把握存在，希望最终理解构成现实最根本的。但每次这种把握的尝试都遇到了根本困难——某种意义上是不可能的困难。
+      </p>
+    </div>
+  </section>
+
+  <!-- ============================= 视图切换 ============================= -->
+  <div class="view-controls">
+    <span class="view-controls-label">视图模式</span>
+    <button class="view-btn is-active" data-view="timeline">
+      <span class="view-icon">▭</span> 时间轴 · Timeline
+    </button>
+    <button class="view-btn" data-view="spiral">
+      <span class="view-icon">◯</span> 螺旋复现 · Spiral
+    </button>
+    <button class="view-btn" data-view="compare">
+      <span class="view-icon">⫶</span> 三轴对照 · Compare
+    </button>
+  </div>
+
+  <!-- ============================= 主舞台 ============================= -->
+  <main class="stage">
+    <!-- 时间轴视图 -->
+    <section class="view view-timeline is-active" id="view-timeline" aria-label="时间轴视图">
+      <div class="timeline-spine">
+        <div class="spine-line"></div>
+      </div>
+      <div class="timeline-content" id="timeline-content">
+        <!-- 由 JS 渲染 -->
+      </div>
+    </section>
+
+    <!-- 螺旋视图 -->
+    <section class="view view-spiral" id="view-spiral" aria-label="螺旋复现视图">
+      <div class="spiral-intro">
+        <h2 class="spiral-title">螺旋复现 · 同一张力以更复杂的形式重现</h2>
+        <p class="spiral-blurb">
+          相同的根本张力（<em>一与多</em>、<em>变化与持续</em>、<em>理性与经验</em>、<em>客观与解释</em>、<em>普遍与具体</em>）<br>
+          在不同时代以新的概念、新的语言、新的关切再次出现——每次都被添加更多复杂性，但根本张力持续。<br>
+          点击任一张力节点，查看其在历史中的复现脉络。
+        </p>
+      </div>
+      <div class="spiral-content" id="spiral-content">
+        <!-- 由 JS 渲染 -->
+      </div>
+    </section>
+
+    <!-- 对照视图 -->
+    <section class="view view-compare" id="view-compare" aria-label="三轴对照视图">
+      <div class="compare-intro">
+        <h2 class="compare-title">三轴对照 · 三个分支的同步发展</h2>
+        <p class="compare-blurb">
+          本体论、认识论、方法论虽是不同分支，却在每个时代以相似的张力形式同步展开。<br>
+          它们的根本结构——「追求 ↔ 不可达」——是同构的。
+        </p>
+      </div>
+      <div class="compare-grid" id="compare-content">
+        <!-- 由 JS 渲染 -->
+      </div>
+    </section>
+  </main>
+
+  <!-- ============================= 元洞见 ============================= -->
+  <section class="meta-insights">
+    <div class="mi-inner">
+      <header class="mi-header">
+        <span class="mi-decoration">━━━━━</span>
+        <h2 class="mi-title">五 个 元 洞 见 · Five Meta-Insights</h2>
+        <span class="mi-decoration">━━━━━</span>
+      </header>
+      <div class="mi-grid" id="meta-insights-grid">
+        <!-- 由 JS 渲染 -->
+      </div>
+      <div class="mi-coda">
+        <span class="coda-glyph">未 ☷ 离 / 火 ☲ 在 水 ☵ 上</span>
+        <p class="coda-text">
+          <em>未济，亨。</em>这种反思永远不能完成——因为它必须使用我们正在反思的活动。<br>
+          这种循环不是失败——是其本质条件。
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================= 详情面板 ============================= -->
+  <aside class="detail-panel" id="detail-panel" aria-hidden="true">
+    <button class="detail-close" id="detail-close" aria-label="关闭详情">
+      <span aria-hidden="true">✕</span>
+    </button>
+    <div class="detail-content" id="detail-content">
+      <!-- 由 JS 渲染 -->
+    </div>
+  </aside>
+  <div class="detail-backdrop" id="detail-backdrop" aria-hidden="true"></div>
+
+  <!-- ============================= 页脚 ============================= -->
+  <footer class="page-footer">
+    <div class="footer-inner">
+      <div class="footer-glyph">⌬</div>
+      <p class="footer-text">
+        从最早的希腊询问者，通过 Plato 和 Aristotle 的奠基性综合，通过中世纪综合，<br>
+        通过近代的革命性激进怀疑，通过 Kant 的雄心调和，通过分析与大陆的分裂，<br>
+        通过 20 世纪的多个项目，到当代的多元——<br>
+        <em>这种反思永远是必要的，因为没有它，我们的探究是盲目的。</em>
+      </p>
+      <p class="footer-attribution">
+        从文本底层逻辑生成的互动图谱 · 部署于 GitHub Pages
+      </p>
+    </div>
+  </footer>
+
+  <!-- 脚本 -->
+  <script src="data.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>

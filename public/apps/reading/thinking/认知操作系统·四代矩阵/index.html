@@ -1,0 +1,399 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>认知操作系统 · 四代矩阵 · 二十七系统 × 四版本</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@400;500;600;700;900&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --paper:#F3EAD3; --paper2:#F7F0DF; --card:#FBF6EA; --card2:#FDFAF2;
+  --ink:#2B2A26; --ink2:#6B6A64; --ink3:#988B6E;
+  --teal:#0F6E56; --teal-d:#0A4E3D; --terra:#C05B33; --terra-d:#993C1D; --gold:#B08A2E;
+  --hair:#DDD1B2; --hair2:#EAE0C6;
+  --g1:#5F5E5A; --g1b:#F1EFE8; --g1d:#43423E;
+  --g2:#C05B33; --g2b:#FAECE7; --g2d:#8F3A1C;
+  --g3:#2E6DA4; --g3b:#E6F1FB; --g3d:#17558F;
+  --g4:#4C6B23; --g4b:#EAF3DE; --g4d:#3A5C17;
+  --serif:'Noto Serif SC','Songti SC',serif; --mono:'JetBrains Mono',ui-monospace,monospace;
+}
+*{box-sizing:border-box}
+html,body{margin:0;padding:0;background:var(--paper);color:var(--ink);font-family:var(--serif);
+  -webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility}
+.mono{font-family:var(--mono);font-feature-settings:"tnum"}
+.wrap{max-width:1400px;margin:0 auto;padding:0 20px 70px}
+
+/* ---- head ---- */
+header{padding:42px 0 22px}
+.eyebrow{font-family:var(--mono);font-size:11px;letter-spacing:.26em;color:var(--terra-d);margin-bottom:14px}
+h1{font-size:clamp(28px,4.6vw,44px);font-weight:900;margin:0 0 8px;letter-spacing:.01em;line-height:1.1}
+.sub{font-size:clamp(14px,2vw,17px);color:var(--teal-d);font-weight:600;margin-bottom:18px}
+.judge{max-width:940px;font-size:15px;line-height:1.85;color:var(--ink);
+  background:#EAF2EF;border-left:4px solid var(--terra);border-radius:3px;padding:15px 20px}
+.judge b{color:var(--teal-d)}
+
+/* ---- legend ---- */
+.legend{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:11px;margin:22px 0 6px}
+.lg{background:var(--card);border:1px solid var(--hair);border-top:3px solid var(--c);border-radius:9px;padding:12px 14px}
+.lg .lh{display:flex;align-items:baseline;gap:8px;margin-bottom:5px}
+.lg .lid{font-family:var(--mono);font-size:16px;font-weight:700;color:var(--c)}
+.lg .lnm{font-size:15px;font-weight:700}
+.lg .lvb{font-family:var(--mono);font-size:10.5px;color:var(--cd);border:1px solid var(--c);
+  background:var(--cb);border-radius:20px;padding:1px 8px;margin-left:auto}
+.lg .lg-d{font-size:12.5px;color:var(--ink2);line-height:1.6}
+.lg .lg-f{font-size:11.5px;color:var(--terra-d);margin-top:6px;font-family:var(--mono)}
+.lg .lg-f::before{content:"死法 · "; color:var(--ink3)}
+
+/* ---- controls ---- */
+.ctrl{display:flex;flex-wrap:wrap;gap:7px;align-items:center;margin:24px 0 12px}
+.ctrl .cl{font-family:var(--mono);font-size:11px;color:var(--ink3);margin-right:3px}
+.tog{font-size:13px;padding:5px 13px;border:1px solid var(--hair);border-radius:20px;background:var(--card);
+  cursor:pointer;color:var(--ink2);transition:.14s;user-select:none}
+.tog:hover{border-color:var(--teal);color:var(--ink)}
+.tog.on{background:var(--teal);color:#F6EFDF;border-color:var(--teal)}
+.ctrl .sep{width:1px;height:20px;background:var(--hair);margin:0 6px}
+
+/* ---- matrix ---- */
+.scroll{overflow-x:auto;border:1px solid var(--hair);border-radius:12px;background:var(--card2);
+  box-shadow:0 2px 14px rgba(120,105,70,.07)}
+table{border-collapse:separate;border-spacing:0;width:100%;min-width:1080px}
+thead th{position:sticky;top:0;z-index:6;background:var(--paper2);border-bottom:2px solid var(--hair);
+  padding:11px 12px;text-align:left;vertical-align:bottom}
+thead th.sysh{left:0;z-index:8;min-width:212px;width:212px;border-right:2px solid var(--hair)}
+thead th.gh{cursor:pointer;min-width:216px;transition:.15s}
+thead th.gh:hover{background:#0f6e560f}
+.gh-in{display:flex;align-items:baseline;gap:8px}
+.gh-id{font-family:var(--mono);font-size:16px;font-weight:700;color:var(--c)}
+.gh-nm{font-size:15px;font-weight:700;color:var(--ink)}
+.gh-vb{font-family:var(--mono);font-size:10px;color:var(--cd);background:var(--cb);
+  border:1px solid var(--c);border-radius:20px;padding:1px 7px;margin-left:auto}
+.sysh .t{font-size:13px;font-weight:700;color:var(--teal-d)}
+.sysh .s{font-family:var(--mono);font-size:10px;color:var(--ink3);display:block;margin-top:3px}
+
+tbody td{border-bottom:1px solid var(--hair2);padding:10px 12px;vertical-align:top}
+tbody tr:last-child td{border-bottom:none}
+tbody tr:hover td{background:#0f6e5608}
+td.sys{position:sticky;left:0;z-index:4;background:var(--card);border-right:2px solid var(--hair);
+  min-width:212px;width:212px}
+tbody tr:hover td.sys{background:#F3EDDD}
+.sys .r1{display:flex;align-items:baseline;gap:7px}
+.sys .no{font-family:var(--mono);font-size:12.5px;font-weight:700;color:var(--terra-d)}
+.sys .nm{font-size:15px;font-weight:700;line-height:1.3}
+.sys .px{font-size:11.5px;color:var(--ink2);margin-top:4px;line-height:1.45}
+.sys .bd{display:flex;gap:5px;margin-top:6px;flex-wrap:wrap}
+.bg{font-family:var(--mono);font-size:9.5px;border-radius:4px;padding:1px 6px;white-space:nowrap;
+  border:1px solid var(--hair);color:var(--ink2);background:#00000006}
+.bg.now{font-weight:700}
+.bg.n1{color:var(--g1d);background:var(--g1b);border-color:var(--g1)}
+.bg.n2{color:var(--g2d);background:var(--g2b);border-color:var(--g2)}
+.bg.n3{color:var(--g3d);background:var(--g3b);border-color:var(--g3)}
+.bg.n4{color:var(--g4d);background:var(--g4b);border-color:var(--g4)}
+.bg.nx{color:#3F3785;background:#ECEAF6;border-color:#5B52A8}
+.bg.n0{color:#8A5A0B;background:#F7EDD6;border-color:var(--gold)}
+
+.cell{border-left:3px solid var(--c);padding-left:9px}
+.cell .k{font-size:14.5px;font-weight:700;color:var(--cd);line-height:1.35}
+.cell .g{font-size:12px;color:var(--ink2);line-height:1.6;margin-top:4px}
+.cell.void{border-left-style:dashed;opacity:.72}
+.cell.void .k{color:var(--ink3);font-weight:600}
+.st{display:inline-block;font-family:var(--mono);font-size:9px;padding:0 5px;border-radius:3px;
+  border:1px dashed var(--ink3);color:var(--ink3);margin-left:6px;vertical-align:middle;background:#0000000a}
+
+/* column dim */
+table.focus1 .c2,table.focus1 .c3,table.focus1 .c4,
+table.focus2 .c1,table.focus2 .c3,table.focus2 .c4,
+table.focus3 .c1,table.focus3 .c2,table.focus3 .c4,
+table.focus4 .c1,table.focus4 .c2,table.focus4 .c3{opacity:.24}
+
+/* part divider row */
+tr.part td{background:var(--paper2);border-bottom:1px solid var(--hair);padding:7px 12px;
+  position:sticky;left:0}
+tr.part .pr{font-family:var(--mono);font-size:12px;font-weight:700;color:var(--terra-d);margin-right:9px}
+tr.part .pn{font-size:14px;font-weight:700;color:var(--teal-d)}
+tr.part .ps{font-size:11.5px;color:var(--ink3);margin-left:10px}
+
+footer{max-width:1400px;margin:0 auto;padding:26px 20px 60px;border-top:1px solid var(--hair);
+  font-family:var(--mono);font-size:11.5px;color:var(--ink3);line-height:2}
+footer b{color:var(--ink2)}
+.note{margin-top:14px;font-family:var(--serif);font-size:12.5px;color:var(--ink2);line-height:1.75;max-width:960px}
+.note b{color:var(--terra-d)}
+@media(max-width:720px){ .wrap{padding:0 12px 50px} header{padding:28px 0 16px} }
+</style>
+</head>
+<body>
+<div class="wrap">
+<header>
+  <div class="eyebrow">COGNITIVE OS · GENERATION MATRIX · 27 × 4</div>
+  <h1>四代矩阵</h1>
+  <div class="sub">二十七个系统 × 四个版本 —— 每一格是一个动作，不是一段描述</div>
+  <div class="judge">读法只有一条：格子里写的不是"这个系统那时候是什么样"，是<b>它遇到自己消化不了的输入时做了什么</b>。
+  空格不填补——<b>缺席</b>（该代从未运转）、<b>未遂</b>（点了火又扑灭）、<b>拒</b>（拒绝这一刀）、<b>未竟</b>（建了元层但不独立）
+  都如实标记：一个系统缺哪一代，往往比它有哪一代更能说明它怎么死。</div>
+</header>
+
+<div class="legend" id="legend"></div>
+
+<div class="ctrl" id="ctrl"></div>
+
+<div class="scroll">
+  <table id="mx">
+    <thead><tr id="thr"></tr></thead>
+    <tbody id="tb"></tbody>
+  </table>
+</div>
+
+<div class="note" id="note"></div>
+</div>
+
+<footer>
+  认知操作系统 · 四代矩阵　·　判据：遇到架构消化不了的输入时的处置动作<br/>
+  <b>代际是策略光谱，不是先进／落后排名</b>　·　阶梯是倒的：最宽的底座永远是最老那层<br/>
+  <b>四代可共时</b>：版本是场合的函数，断代前先查共时　·　协议 ≠ 实现　·　代际是关系不是属性<br/>
+  <b>形态可断言，时点须悬置</b>　·　添的是一层而非顶层——绘图者所在的楼层不在图上　·　未济
+</footer>
+
+<script>
+const GENS=[
+ {id:'1.0',nm:'封闭',vb:'拒收',c:'--g1',b:'--g1b',d:'--g1d',
+  gl:'立 A=A，把消化不了的判为噪声、异端、误差。',fail:'脆断，零降级模式'},
+ {id:'2.0',nm:'耗散',vb:'燃烧',c:'--g2',b:'--g2b',d:'--g2d',
+  gl:'把矛盾接上传动轴当燃料，远离平衡态自组织。',fail:'无刹车；引擎审计不了引擎'},
+ {id:'3.0',nm:'分层',vb:'位移',c:'--g3',b:'--g3b',d:'--g3d',
+  gl:'把矛盾搬到另一层级：对象语言／元语言之塔。',fail:'盲点只上移不消除；塔无顶格'},
+ {id:'4.0',nm:'生态',vb:'共存',c:'--g4',b:'--g4b',d:'--g4d',
+  gl:'多方案并存，有效性环境相对；悬置成为引擎舱。',fail:'万能溶剂；层间绝缘失效'}
+];
+
+const PARTS=[
+ {r:'Ⅰ',n:'自然系统',s:'观察者不在场'},
+ {r:'Ⅱ',n:'思想传统',s:'围墙 · 双轨 · 留白 · 拒刀 · 黑箱 · 旗舰'},
+ {r:'Ⅲ',n:'政治与制度',s:'元层设计学'},
+ {r:'Ⅳ',n:'金融系统',s:'为盲点定价的塔'},
+ {r:'Ⅴ',n:'形式与元学科',s:'框架的原产地'},
+ {r:'Ⅵ',n:'文本 · 个体 · 主体',s:'自指弧线的终点'},
+ {r:'Ⅶ',n:'元理论',s:'四代是否穷尽'}
+];
+
+/* k=键动作(高度概括) g=极简注 s=状态标记(空=实际运转) */
+const D=[
+{p:'Ⅰ',no:'01',nm:'物质演化',px:'对称 ↔ 结构',topo:'梯',now:'4.0',c:[
+ {k:'对称锁定',g:'高温相：单一对称群，无结构可言'},
+ {k:'对称破缺',g:'冷却即释放势能，粒子随之分层生成'},
+ {k:'束缚态之塔',g:'夸克→核子→原子→分子，每层新规则'},
+ {k:'元素生态',g:'恒星脆断被改写成分发机制：死即播种'}]},
+{p:'Ⅰ',no:'02',nm:'能量演化',px:'守恒 ↔ 降解',topo:'梯',now:'4.0',c:[
+ {k:'守恒封闭',g:'总量不变：能量版的 A=A'},
+ {k:'恒星引擎',g:'烧引力势维持有序——秩序是熵的涡轮增压'},
+ {k:'能标分层',g:'有效场论：各能标各自洽，互不穿透'},
+ {k:'梯度生态',g:'一切有序结构各烧各的梯度，同一本账'}]},
+{p:'Ⅰ',no:'03',nm:'信息演化',px:'保真 ↔ 变异',topo:'梯',now:'4.0',c:[
+ {k:'保真复制',g:'冗余纠错，变异一律判为噪声'},
+ {k:'误差阈',g:'窄带燃烧：太保真则僵死，太易变则解体'},
+ {k:'编码分层',g:'载体／符号／语义解耦，各层独立演化'},
+ {k:'标尺内生',g:'地图进入疆域：标尺开始由被测物做成'}]},
+{p:'Ⅰ',no:'04',nm:'生命',px:'个体维持 ↔ 谱系演化',topo:'梯',now:'4.0',c:[
+ {k:'膜与稳态',g:'划出内外，扰动被拒收在边界上'},
+ {k:'代谢',g:'烧自由能维持远离平衡——不烧即死'},
+ {k:'死亡上移',g:'个体脆断被架成谱系的演化机制'},
+ {k:'生物圈',g:'阶梯是倒的：最宽底座是最老那层，无进步之箭'}]},
+
+{p:'Ⅱ',no:'05',nm:'基督教',px:'三位一体 / 道成肉身',topo:'梯',now:'4.0',c:[
+ {k:'信经划界',g:'正统立锚，异端即噪声——1.0 永不退场'},
+ {k:'论战熔炉',g:'教义争议当燃料，公会议是锻造车间'},
+ {k:'圣化围堵',g:'迦克墩四否定：一点容纳 p∧¬p，换全域不崩'},
+ {k:'宗派生态',g:'诸传统并存；基要主义＝常驻的回缩模块'}]},
+{p:'Ⅱ',no:'06',nm:'佛教',px:'空性不可说 ∧ 教法必须说',topo:'双轨',now:'双轨',c:[
+ {k:'律藏刚性',g:'制度轨：戒体划界，破戒即摈'},
+ {k:'部派论诤',g:'分裂当燃料，阿毗达磨在争论中增殖'},
+ {k:'二谛',g:'真谛／俗谛分层：不可说与必须说各归其层'},
+ {k:'判教绝缘',g:'教义 4.0 ∥ 制度 1.0，两千年互不转化'}]},
+{p:'Ⅱ',no:'07',nm:'儒家',px:'内圣 ↔ 外王',topo:'梯',now:'4.0',c:[
+ {k:'名教划界',g:'正名、礼制、华夷之辨＝边界协议'},
+ {k:'义理论战',g:'汉宋之争、理学建构：烧的是解释权'},
+ {k:'心性—事功',g:'内圣外王两层；天理／人欲设为元层'},
+ {k:'留白立基',g:'地基故意悬空故能容纳；借法家之刀回填'}]},
+{p:'Ⅱ',no:'08',nm:'道家',px:'道可道，非常道',topo:'序',now:'序',c:[
+ {k:'拒立同一',g:'名可名非常名——拒绝那第一刀本身',s:'拒'},
+ {k:'不设引擎',g:'无为：不装传动轴，不烧矛盾',s:'缺席'},
+ {k:'自陈极限',g:'首句即元语言声明，但不建塔',s:'未竟'},
+ {k:'被收编',g:'制度化为道教；在诸家生态中充当减压阀'}]},
+{p:'Ⅱ',no:'09',nm:'法家',px:'循名责实',topo:'梯',now:'1.0',c:[
+ {k:'刚性为德',g:'全谱唯一自觉的 1.0：把刚性当优点设计'},
+ {k:'变异即乱',g:'无耗散设计，任何变异一律压制',s:'缺席'},
+ {k:'法明术暗',g:'元层做成秘密＝不可审计的单点'},
+ {k:'借件寄生',g:'秦十五年脆断后，以儒表法里寄生新宿主'}]},
+{p:'Ⅱ',no:'10',nm:'西方哲学',px:'系统能否为自身奠基',topo:'梯',now:'4.0',c:[
+ {k:'第一原理',g:'从公理演绎全体：亚里士多德—斯宾诺莎'},
+ {k:'辩证引擎',g:'黑格尔把矛盾律改装成发动机，妄称绝对知识'},
+ {k:'语言批判',g:'康德划界→维特根斯坦／塔尔斯基元语言'},
+ {k:'后分析生态',g:'唯一走完四代的旗舰；风险：万能溶剂'}]},
+
+{p:'Ⅲ',no:'11',nm:'中国历代王朝',px:'一统 ↔ 有效',topo:'环',now:'1.0',c:[
+ {k:'主权同一',g:'家天下＋天命锚定，异姓即篡'},
+ {k:'变法排异',g:'王安石：引擎装在 1.0 母体上，反应即党争',s:'未遂'},
+ {k:'御史科举',g:'自我监督尝试，但元层仍在皇权之内',s:'未竟'},
+ {k:'循环非梯',g:'脆断被制度化（天命—革命），换两千年稳定',s:'缺席'}]},
+{p:'Ⅲ',no:'12',nm:'美国政治文明',px:'多数意志 ↔ 少数权利',topo:'梯',now:'4.0',c:[
+ {k:'成文立宪',g:'建国即划界，主权从人身归于文本'},
+ {k:'党争—内战',g:'冲突当燃料，但装在宪法框内燃烧'},
+ {k:'分权互盯',g:'野心对抗野心＝制度化二阶观察；违宪审查'},
+ {k:'多元共和',g:'照图纸盖的 3.0；减震器被算法接成共振腔'}]},
+{p:'Ⅲ',no:'13',nm:'新中国政权',px:'集中 ↔ 活力',topo:'梯',now:'4.0',c:[
+ {k:'单位—计划',g:'全能体制，边界刚性，越界即拒收'},
+ {k:'运动态',g:'《矛盾论》把辩证引擎写进章程，持续运动'},
+ {k:'自我革命',g:'元层安放在系统内部：自己监督自己'},
+ {k:'双轨变异',g:'特区试点＋追认式立法；悬置被国策化'}]},
+
+{p:'Ⅳ',no:'14',nm:'现代金融体系',px:'谁给保险人保险',topo:'梯',now:'4.0',c:[
+ {k:'硬锚',g:'金本位：兑换承诺即 A=A，破锚即脆断'},
+ {k:'信用扩张',g:'杠杆烧信心；Minsky 时刻＝无刹车实录'},
+ {k:'央行元层',g:'最后贷款人＋风险分层定价，为盲点建塔'},
+ {k:'影子生态',g:'多层市场并存；塔顶盲点免税，元层已下场做市'}]},
+{p:'Ⅳ',no:'15',nm:'比特币',px:'货币性 ↔ 储值性',topo:'梯',now:'4.0',c:[
+ {k:'2100万硬顶',g:'出厂即刚性：代码就是法律'},
+ {k:'分叉战争',g:'烧共识；分叉＝减数分裂而非死亡'},
+ {k:'二层网络',g:'把吞吐矛盾位移到 Layer2，主链不动'},
+ {k:'被追认',g:'倒着出生：自 4.0 叛逃回 1.0，又被 4.0 收编'}]},
+{p:'Ⅳ',no:'16',nm:'金融微观市场',px:'Grossman–Stiglitz',topo:'共时',now:'共时',c:[
+ {k:'撮合协议',g:'挂单簿规则刚性，越界即拒单'},
+ {k:'做市耗散',g:'烧价差与波动——流动性本身是耗散结构'},
+ {k:'延迟分层',g:'真值按延迟分层；价差＝原子级盲点税'},
+ {k:'策略生态',g:'四代共存于同一秒：版本是场合的函数'}]},
+{p:'Ⅳ',no:'17',nm:'期权系统',px:'Q ≠ P',topo:'梯',now:'4.0',c:[
+ {k:'无套利',g:'平价关系刚性约束，违则被套利抹平'},
+ {k:'波动率交易',g:'把不确定性本身做成标的来烧'},
+ {k:'双测度',g:'定价测度／现实测度分层；希腊字母＝元语言'},
+ {k:'元语言反噬',g:'导数决定原函数；整座塔建在唯一不可导的点上'}]},
+
+{p:'Ⅴ',no:'18',nm:'数学思想',px:'有限的证明 ↔ 无穷的真理',topo:'梯',now:'4.0',c:[
+ {k:'公理演绎',g:'欧几里得：五条种子长出全部真理'},
+ {k:'微积分',g:'dx＝零∧非零，烧两百年：有效性压倒一致性'},
+ {k:'严格化',g:'ε-δ 把无穷小位移进量词；元数学建塔'},
+ {k:'独立性生态',g:'强制法：CH 真值随模型而异，公理成为选项'}]},
+{p:'Ⅴ',no:'19',nm:'逻辑学',px:'逻辑既是工具又是对象',topo:'梯',now:'4.0',c:[
+ {k:'Organon',g:'三段论闭合；康德 1787 宣布它已完备'},
+ {k:'布尔代数',g:'异类引擎：烧的是学科墙，不是矛盾'},
+ {k:'元逻辑',g:'哥德尔／塔尔斯基：对象语言与元语言分层'},
+ {k:'非经典生态',g:'直觉／模态／弗协调并存；说谎者是周期彗星'}]},
+{p:'Ⅴ',no:'20',nm:'经济学',px:'外生之梦 ↔ 内生之实',topo:'梯',now:'4.0',c:[
+ {k:'一般均衡',g:'公理化闭合，理性人＝经济学的 A=A'},
+ {k:'内生不稳',g:'危机当燃料；马克思—Minsky 一线迟到入场'},
+ {k:'微观基础',g:'宏观求微观奠基；理性预期充当元层'},
+ {k:'多范式生态',g:'行为／实验／制度并存；证伪被建成诺贝尔奖'}]},
+{p:'Ⅴ',no:'21',nm:'管理学',px:'可控制 ↔ 有创造性',topo:'梯',now:'4.0',c:[
+ {k:'泰勒制',g:'把人标定为可测量零件，偏差即浪费'},
+ {k:'破坏性创新',g:'把颠覆当燃料；控制—创造轴上百年钟摆'},
+ {k:'战略—执行',g:'治理层／运营层分离，KPI 是元语言'},
+ {k:'方法论时尚',g:'敏捷／OKR 多轨并存＝关于组织的时尚工业'}]},
+{p:'Ⅴ',no:'22',nm:'科学',px:'有限观测 ↔ 普遍定律',topo:'梯',now:'4.0',c:[
+ {k:'牛顿式封闭',g:'定律普适；开尔文 1900：只剩两朵乌云'},
+ {k:'范式革命',g:'反常积累到临界即引爆，烧掉整套世界图景'},
+ {k:'元方法论',g:'把"如何杀死我"写进定义：证伪与研究纲领'},
+ {k:'学科生态',g:'对应原理是唯一装对方向的棘轮；单数"科学"是幸存家谱'}]},
+
+{p:'Ⅵ',no:'23',nm:'Matrix 系统',px:'完美控制 ↔ 必然的余数',topo:'梯',now:'4.0',c:[
+ {k:'天堂版',g:'被拒收的输入竟是"无矛盾"：人类不接受完美'},
+ {k:'锡安循环',g:'反抗被设计成排放阀，六次重启烧掉异见'},
+ {k:'建筑师',g:'元层会自白：系统亲口讲解自身架构'},
+ {k:'共存协议',g:'让 Smith 覆写自己＝圣化围堵；机器—人类停战'}]},
+{p:'Ⅵ',no:'24',nm:'基督教神学思想史',px:'神恩独作 ↔ 神人合作',topo:'梯',now:'4.0',c:[
+ {k:'教父定案',g:'奥古斯丁—佩拉纠之争划下正统边界'},
+ {k:'宗教改革',g:'唯独恩典当燃料，引爆全欧洲'},
+ {k:'教义学分层',g:'圣经／传统／理性三源；诠释学作元层'},
+ {k:'诸传统并存',g:'唯一有正史打底的案：回缩是生命之泉，非病理'}]},
+{p:'Ⅵ',no:'25',nm:'个体与社会',px:'个体构成社会 ∧ 社会构成个体',topo:'镜厅',now:'4.0',c:[
+ {k:'方法论个体',g:'社会＝个体之和，整体被判为幻觉'},
+ {k:'阶级—冲突',g:'矛盾即历史动力，社会靠烧张力前进'},
+ {k:'结构—能动',g:'结构化理论：两层互为条件，谁都不是地基'},
+ {k:'互构镜厅',g:'双向再进入；框架是当事人，不是法庭'}]},
+{p:'Ⅵ',no:'26',nm:'意识',px:'主体 ↔ 客体',topo:'镜厅',now:'∞',c:[
+ {k:'心物二元',g:'笛卡尔式划界：两种实体，互不还原'},
+ {k:'强涌现',g:'复杂度当燃料——伪装成 4.0 的 2.0'},
+ {k:'解释层级',g:'神经／计算／现象分层；鸿沟＝最大一笔层间悬账'},
+ {k:'理论生态',g:'IIT／全局工作空间／生成主义并存，判据仍从缺'}]},
+
+{p:'Ⅶ',no:'27',nm:'四代框架自身',px:'分类表自身处于哪一代',topo:'元',now:'元',c:[
+ {k:'若宣称穷尽',g:'即成 1.0：封顶仪式一响，脆断在望',s:'元'},
+ {k:'若吞噬反例',g:'即成 2.0：靠扩容自保，引擎审计不了引擎',s:'元'},
+ {k:'实为分层命名',g:'把"策略"架成元层：四代＝单轴策略光谱',s:'元'},
+ {k:'磨刀石',g:'唯一诚实归宿：工具不是钥匙；第 97 号判词从缺',s:'元'}]}
+];
+
+/* ---------- render ---------- */
+const NOWCLS={'1.0':'n1','2.0':'n2','3.0':'n3','4.0':'n4','∞':'nx','序':'n0','元':'nx','双轨':'n2','共时':'n3'};
+
+document.getElementById('legend').innerHTML=GENS.map(g=>
+ `<div class="lg" style="--c:var(${g.c});--cb:var(${g.b});--cd:var(${g.d})">
+    <div class="lh"><span class="lid">${g.id}</span><span class="lnm">${g.nm}</span><span class="lvb">${g.vb}</span></div>
+    <div class="lg-d">${g.gl}</div><div class="lg-f">${g.fail}</div></div>`).join('');
+
+document.getElementById('thr').innerHTML=
+ `<th class="sysh"><span class="t">系统 · 母悖论</span><span class="s">27 案 · 七编</span></th>`+
+ GENS.map((g,i)=>`<th class="gh c${i+1}" data-col="${i+1}" style="--c:var(${g.c});--cb:var(${g.b});--cd:var(${g.d})">
+   <div class="gh-in"><span class="gh-id">${g.id}</span><span class="gh-nm">${g.nm}</span><span class="gh-vb">${g.vb}</span></div></th>`).join('');
+
+function rows(filter){
+  let h='',cur='';
+  D.forEach(r=>{
+    if(filter!=='all'&&r.p!==filter) return;
+    if(r.p!==cur){
+      cur=r.p; const p=PARTS.find(x=>x.r===cur);
+      h+=`<tr class="part"><td colspan="5"><span class="pr">${p.r}</span><span class="pn">${p.n}</span><span class="ps">${p.s}</span></td></tr>`;
+    }
+    h+=`<tr><td class="sys"><div class="r1"><span class="no">${r.no}</span><span class="nm">${r.nm}</span></div>
+      <div class="px">${r.px}</div>
+      <div class="bd"><span class="bg">拓扑 ${r.topo}</span><span class="bg now ${NOWCLS[r.now]||''}">当前 ${r.now}</span></div></td>`;
+    r.c.forEach((c,i)=>{
+      const g=GENS[i];
+      h+=`<td class="c${i+1}"><div class="cell${c.s?' void':''}" style="--c:var(${g.c});--cd:var(${g.d})">
+        <div class="k">${c.k}${c.s?`<span class="st">${c.s}</span>`:''}</div>
+        <div class="g">${c.g}</div></div></td>`;
+    });
+    h+='</tr>';
+  });
+  return h;
+}
+
+let curPart='all', curCol=0;
+const tb=document.getElementById('tb'), mx=document.getElementById('mx');
+function draw(){ tb.innerHTML=rows(curPart); }
+
+const ctrl=document.getElementById('ctrl');
+ctrl.innerHTML=`<span class="cl">编</span><span class="tog on" data-p="all">全部</span>`+
+ PARTS.map(p=>`<span class="tog" data-p="${p.r}">${p.r} ${p.n}</span>`).join('')+
+ `<span class="sep"></span><span class="cl">聚焦列</span>`+
+ GENS.map((g,i)=>`<span class="tog" data-c="${i+1}">${g.id} ${g.nm}</span>`).join('')+
+ `<span class="tog" data-c="0">复位</span>`;
+
+ctrl.addEventListener('click',e=>{
+  const t=e.target.closest('.tog'); if(!t) return;
+  if(t.dataset.p!=null){
+    curPart=t.dataset.p;
+    ctrl.querySelectorAll('[data-p]').forEach(x=>x.classList.toggle('on',x===t));
+    draw();
+  }else if(t.dataset.c!=null){
+    const c=+t.dataset.c; curCol=(curCol===c)?0:c;
+    ctrl.querySelectorAll('[data-c]').forEach(x=>x.classList.toggle('on',curCol!==0&&+x.dataset.c===curCol));
+    mx.className=curCol?('focus'+curCol):'';
+  }
+});
+document.getElementById('thr').addEventListener('click',e=>{
+  const th=e.target.closest('.gh'); if(!th) return;
+  const c=+th.dataset.col; curCol=(curCol===c)?0:c;
+  mx.className=curCol?('focus'+curCol):'';
+  ctrl.querySelectorAll('[data-c]').forEach(x=>x.classList.toggle('on',curCol!==0&&+x.dataset.c===curCol));
+});
+
+document.getElementById('note').innerHTML=
+ `<b>空格的读法。</b>法家缺 2.0（变异即乱，故无降级模式，秦十五年脆断）；王朝的 2.0 是未遂（王安石把引擎装在 1.0 母体上，排异成党争）、4.0 缺席（循环拓扑不是梯上一格，是另一种形状）；
+  道家在 1.0 处是"拒"——它不占代际，站的是序位，拒绝的是那第一刀本身。
+  <b>三个不走梯的行。</b>佛教是双轨（教义 4.0 ∥ 制度 1.0，两千年互不转化，证伪了"一系统一代际"）；
+  金融微观是共时（四代同秒运转，代际从历史阶段退化为运行模式——这是账上最重的一笔）；
+  意识与个体—社会是镜厅（观察者入画，零余量）。第 27 行是把透镜转向透镜自己：四格全是假设语气，因为给它下判词需要一个它拿不到的元语言。`;
+
+draw();
+</script>
+</body>
+</html>

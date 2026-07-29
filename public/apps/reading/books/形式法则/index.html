@@ -1,0 +1,1035 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>形式法则 · Laws of Form — 知识制品</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@400;600;700;900&display=swap');
+
+:root{
+  --parchment:#F3EAD3;
+  --parchment-deep:#ECE1C4;
+  --card:#FAF4E6;
+  --card-deep:#F6EEDB;
+  --ink:#2C2117;
+  --ink-soft:#6B5B47;
+  --teal:#1F6F66;
+  --teal-deep:#14524C;
+  --teal-mist:rgba(31,111,102,.10);
+  --terracotta:#B85C38;
+  --terracotta-mist:rgba(184,92,56,.10);
+  --line:#D9C9A4;
+  --line-soft:#E5D8B8;
+  --serif:'Noto Serif SC','Source Han Serif SC','Songti SC',STSong,'SimSun',serif;
+  --mono:ui-monospace,SFMono-Regular,Menlo,Consolas,'Liberation Mono',monospace;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}*{animation-duration:.001s!important;transition-duration:.001s!important}}
+body{
+  background:var(--parchment);
+  background-image:radial-gradient(ellipse at 50% -10%,rgba(255,252,240,.65),transparent 55%),
+                   repeating-linear-gradient(0deg,rgba(120,95,60,.022) 0 2px,transparent 2px 5px);
+  color:var(--ink);
+  font-family:var(--serif);
+  font-size:16.5px;line-height:1.85;
+  -webkit-font-smoothing:antialiased;
+}
+.wrap{max-width:1100px;margin:0 auto;padding:0 24px}
+a{color:var(--teal);text-decoration:none;border-bottom:1px solid rgba(31,111,102,.35)}
+a:hover{color:var(--teal-deep);border-bottom-color:var(--teal-deep)}
+::selection{background:var(--teal);color:#FDF9EE}
+button{font-family:var(--serif)}
+:focus-visible{outline:2.5px solid var(--terracotta);outline-offset:2px;border-radius:3px}
+
+/* ---------- LoF cross notation ---------- */
+.lofline{display:block;text-align:center;margin:.9em 0;font-size:1.12em;letter-spacing:.02em}
+.lof{white-space:nowrap}
+.cx{
+  display:inline-block;vertical-align:middle;
+  border-top:1.6px solid var(--ink);border-right:1.6px solid var(--ink);
+  padding:.26em .4em .1em .3em;margin:.12em .1em .12em .1em;
+  min-width:.55em;min-height:.72em;line-height:1.1;
+}
+.lv{font-style:italic;padding:0 .1em;letter-spacing:.03em}
+.lblank{display:inline-block;min-width:1.1em;border-bottom:1px dotted var(--line);vertical-align:middle;height:1em}
+.cx.hl,.lv.hl{color:var(--terracotta);background:var(--terracotta-mist);border-radius:2px}
+.cx.hl{border-color:var(--terracotta)}
+.eqs{margin:0 .45em;color:var(--ink-soft)}
+
+/* ---------- top nav ---------- */
+.topnav{position:sticky;top:0;z-index:60;background:rgba(243,234,211,.92);backdrop-filter:blur(6px);border-bottom:1px solid var(--line)}
+.topnav .wrap{display:flex;align-items:center;gap:6px;flex-wrap:wrap;padding-top:9px;padding-bottom:9px}
+.brand{font-weight:900;font-size:15px;letter-spacing:.14em;color:var(--teal-deep);margin-right:auto;border:none}
+.brand .bmk{display:inline-block;border-top:2px solid var(--terracotta);border-right:2px solid var(--terracotta);width:.62em;height:.62em;margin-right:.5em;vertical-align:-2px}
+.topnav a.nl{border:none;font-size:13.5px;padding:4px 11px;border-radius:999px;color:var(--ink-soft);letter-spacing:.06em}
+.topnav a.nl:hover{color:var(--teal-deep);background:var(--teal-mist)}
+.topnav a.nl.act{background:var(--teal);color:#FDF9EE}
+
+/* ---------- hero ---------- */
+.hero{padding:84px 0 60px;border-bottom:1px solid var(--line)}
+.hero .wrap{display:grid;grid-template-columns:1.45fr 1fr;gap:44px;align-items:center}
+.series{font-size:12px;letter-spacing:.42em;color:var(--terracotta);margin-bottom:20px}
+h1.title{font-weight:900;font-size:56px;line-height:1.14;letter-spacing:.06em}
+.title-en{font-size:19px;letter-spacing:.34em;color:var(--ink-soft);margin-top:10px;font-weight:600}
+.byline{margin-top:22px;color:var(--ink-soft);font-size:15px;line-height:2}
+.byline b{color:var(--ink);font-weight:700}
+.epigraph{margin-top:26px;padding:14px 18px;border-left:3px solid var(--teal);background:var(--card);font-size:15px;color:var(--ink-soft)}
+.epigraph .zh{font-size:17px;color:var(--ink);letter-spacing:.14em}
+.hero-mark{text-align:center}
+.bigcross{
+  display:inline-block;width:190px;height:130px;
+  border-top:5px solid var(--ink);border-right:5px solid var(--ink);
+  animation:severe 3.2s ease-out both;
+}
+@keyframes severe{
+  0%{clip-path:inset(0 100% 0 0);opacity:0}
+  45%{clip-path:inset(0 0 0 0);opacity:1}
+  100%{clip-path:inset(0 0 0 0);opacity:1}
+}
+.bigcap{margin-top:18px;font-size:14.5px;color:var(--ink-soft);letter-spacing:.1em}
+.bigcap b{color:var(--terracotta);letter-spacing:.22em}
+
+/* ---------- sections ---------- */
+.sec{padding:72px 0 60px;border-bottom:1px solid var(--line)}
+.eyebrow{font-size:12.5px;letter-spacing:.4em;color:var(--terracotta);margin-bottom:12px}
+h2.st{font-weight:900;font-size:33px;letter-spacing:.1em;margin-bottom:8px}
+.sten{font-size:13px;letter-spacing:.3em;color:var(--ink-soft);margin-bottom:26px}
+.lede{max-width:62em;color:var(--ink);margin-bottom:14px}
+.mut{color:var(--ink-soft)}
+.small{font-size:13.5px}
+.kbdnote{font-size:13px;color:var(--ink-soft);background:var(--card);border:1px solid var(--line-soft);border-radius:6px;padding:8px 12px;display:inline-block;margin-top:10px}
+code.tt{font-family:var(--mono);font-size:.92em;background:var(--card-deep);border:1px solid var(--line-soft);border-radius:4px;padding:1px 6px}
+
+/* ---------- ring ---------- */
+.ringbox{display:grid;grid-template-columns:1fr 1fr;gap:34px;align-items:center;margin-top:26px}
+#ringsvg{width:100%;height:auto;display:block}
+.ringnotes p{margin-bottom:12px}
+.ringnotes .tag{color:var(--teal-deep);font-weight:700}
+
+/* ---------- concept map ---------- */
+.maphelp{font-size:13.5px;color:var(--ink-soft);margin-bottom:18px}
+.mapouter{position:relative;background:var(--card);border:1px solid var(--line);border-radius:10px;padding:26px 18px 20px;overflow-x:auto}
+#mapinner{position:relative;min-width:960px}
+#maplines{position:absolute;inset:0;width:100%;height:100%;pointer-events:none;z-index:0}
+.tier{position:relative;z-index:1;display:flex;align-items:flex-start;gap:10px;margin-bottom:26px}
+.tier:last-child{margin-bottom:2px}
+.tlabel{flex:0 0 96px;padding-top:7px;text-align:right;padding-right:14px;border-right:2px solid var(--line);color:var(--terracotta);font-size:12.5px;letter-spacing:.24em;font-weight:700}
+.tlabel .ten{display:block;letter-spacing:.12em;color:var(--ink-soft);font-weight:400;font-size:10.5px;margin-top:2px}
+.tnodes{display:flex;flex-wrap:wrap;gap:9px 10px;padding-left:6px}
+.node{
+  background:#FBF6E9;border:1.4px solid var(--line);border-radius:999px;
+  padding:5px 14px;font-size:14px;cursor:pointer;color:var(--ink);
+  letter-spacing:.04em;transition:border-color .15s,background .15s,color .15s;
+}
+.node:hover{border-color:var(--teal)}
+.node.sel{background:var(--teal);border-color:var(--teal);color:#FDF9EE;font-weight:700}
+.node.anc{border-color:var(--terracotta);background:var(--terracotta-mist)}
+.node.dim{opacity:.38}
+.cdetail{margin-top:20px;background:var(--card);border:1px solid var(--line);border-left:4px solid var(--teal);border-radius:8px;padding:20px 24px;min-height:112px}
+.cdetail h3{font-size:20px;font-weight:900;letter-spacing:.06em}
+.cdetail .cen{color:var(--terracotta);font-size:13px;letter-spacing:.14em;margin:2px 0 10px}
+.cdetail .csrc{margin-top:10px;font-size:13px;color:var(--ink-soft)}
+.cdetail .cfrom{margin-top:6px;font-size:13px;color:var(--teal-deep)}
+
+/* ---------- chain ---------- */
+.chwrap{margin-top:8px;position:relative;padding-left:34px}
+.chwrap:before{content:'';position:absolute;left:11px;top:8px;bottom:8px;width:2px;background:var(--line)}
+details.ch{background:var(--card);border:1px solid var(--line);border-radius:8px;margin-bottom:14px;position:relative}
+details.ch:before{content:'';position:absolute;left:-29px;top:24px;width:12px;height:9px;border-top:2.4px solid var(--teal);border-right:2.4px solid var(--teal);background:var(--parchment)}
+details.ch[open]:before{border-color:var(--terracotta)}
+details.ch summary{list-style:none;cursor:pointer;padding:16px 20px;display:grid;grid-template-columns:58px 1fr;gap:14px;align-items:baseline}
+details.ch summary::-webkit-details-marker{display:none}
+.chno{font-weight:900;color:var(--terracotta);font-size:21px;letter-spacing:.06em}
+.chtt{font-weight:900;font-size:18.5px;letter-spacing:.05em}
+.chen{font-size:12px;letter-spacing:.2em;color:var(--ink-soft);margin-left:10px;font-weight:400}
+.chline{font-size:14px;color:var(--ink-soft);margin-top:3px}
+.chbody{padding:2px 22px 20px 92px;border-top:1px dashed var(--line-soft)}
+.chbody p{margin:12px 0}
+.chout{font-size:14px;background:var(--card-deep);border:1px solid var(--line-soft);border-radius:6px;padding:10px 14px;margin-top:12px}
+.chout b{color:var(--teal-deep)}
+.chq{margin-top:12px;padding-left:14px;border-left:3px solid var(--terracotta);color:var(--ink-soft);font-size:14.5px}
+.chctl{margin-bottom:16px}
+.btn{cursor:pointer;border:1.4px solid var(--teal);background:transparent;color:var(--teal-deep);border-radius:999px;padding:6px 18px;font-size:14px;letter-spacing:.08em;transition:background .15s,color .15s}
+.btn:hover{background:var(--teal-mist)}
+.btn.pri{background:var(--teal);color:#FDF9EE}
+.btn.pri:hover{background:var(--teal-deep);border-color:var(--teal-deep)}
+.btn.terra{border-color:var(--terracotta);color:var(--terracotta)}
+.btn.terra:hover{background:var(--terracotta-mist)}
+.btn.mini{padding:3px 12px;font-size:12.5px}
+
+/* ledger */
+.ledger{margin-top:34px}
+.ledger h3{font-size:19px;font-weight:900;letter-spacing:.08em;margin-bottom:6px}
+.ledger .sub{font-size:13px;color:var(--ink-soft);margin-bottom:14px}
+table.ledg{width:100%;border-collapse:collapse;background:var(--card);border:1px solid var(--line);font-size:14.5px}
+table.ledg th{background:var(--card-deep);text-align:left;padding:9px 14px;letter-spacing:.1em;color:var(--teal-deep);border-bottom:1px solid var(--line);font-size:13px}
+table.ledg td{padding:10px 14px;border-bottom:1px solid var(--line-soft);vertical-align:top}
+table.ledg tr:last-child td{border-bottom:none}
+table.ledg td.deb{color:var(--terracotta);font-weight:700;white-space:nowrap}
+table.ledg td.cred{color:var(--teal-deep);font-weight:700;white-space:nowrap}
+
+/* ---------- calculator ---------- */
+.calcgrid{display:grid;grid-template-columns:1fr;gap:18px}
+.panel{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:22px 24px}
+.panel h3{font-size:19px;font-weight:900;letter-spacing:.08em;margin-bottom:4px}
+.panel .ph{font-size:13px;color:var(--ink-soft);margin-bottom:14px}
+.inrow{display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin-bottom:10px}
+.lofin{flex:1 1 320px;font-family:var(--mono);font-size:16px;padding:9px 14px;border:1.6px solid var(--line);border-radius:7px;background:#FDF9EC;color:var(--ink);letter-spacing:.06em}
+.lofin:focus{border-color:var(--teal);outline:none}
+.lofin.err{border-color:var(--terracotta)}
+.errmsg{color:var(--terracotta);font-size:13.5px;min-height:1.4em;margin-bottom:4px}
+.presets{display:flex;flex-wrap:wrap;gap:7px;margin:8px 0 4px}
+.chip{cursor:pointer;font-size:12.5px;border:1px solid var(--line);background:#FBF6E9;border-radius:999px;padding:3px 11px;color:var(--ink-soft);letter-spacing:.04em}
+.chip:hover{border-color:var(--teal);color:var(--teal-deep)}
+.chip.on{background:var(--teal);border-color:var(--teal);color:#FDF9EE}
+.chip.mchip{font-weight:700}
+.chip.mchip.mm{background:var(--ink);color:#FDF9EE;border-color:var(--ink)}
+.rendered{margin:14px 0 4px;padding:14px 16px;background:#FDF9EC;border:1px dashed var(--line);border-radius:8px;font-size:1.18em;overflow-x:auto}
+.vbadge{display:inline-block;border-radius:999px;padding:3px 15px;font-size:13.5px;font-weight:700;letter-spacing:.1em;margin-left:6px}
+.vbadge.int{background:var(--teal);color:#FDF9EE}
+.vbadge.dis{background:var(--terracotta);color:#FDF9EE}
+.vbadge.con{border:1.6px solid var(--ink-soft);color:var(--ink-soft)}
+.steps{margin-top:14px}
+.frame{display:grid;grid-template-columns:1fr 200px;gap:16px;align-items:center;padding:9px 6px;border-bottom:1px dotted var(--line-soft);overflow-x:auto}
+.frame:last-child{border-bottom:none}
+.fex{font-size:1.14em;white-space:nowrap}
+.frule{font-size:13px;color:var(--ink-soft);text-align:right}
+.frule b{color:var(--terracotta);letter-spacing:.06em}
+.frule .fen{display:block;font-size:11px;letter-spacing:.12em;color:var(--ink-soft)}
+.ttwrap{margin-top:16px;overflow-x:auto}
+table.tt{border-collapse:collapse;font-size:14px;background:#FDF9EC;border:1px solid var(--line)}
+table.tt th{background:var(--card-deep);padding:6px 14px;border:1px solid var(--line-soft);font-weight:700;letter-spacing:.08em;color:var(--teal-deep)}
+table.tt td{padding:5px 14px;border:1px solid var(--line-soft);text-align:center}
+.mk{display:inline-block;width:.72em;height:.55em;border-top:1.7px solid var(--ink);border-right:1.7px solid var(--ink);vertical-align:middle}
+.nk{color:#B4A585;letter-spacing:.1em}
+td.diffc{background:var(--terracotta-mist)}
+.verdict{margin-top:12px;font-size:15.5px}
+.verdict b.eq{color:var(--teal-deep)}
+.verdict b.neq{color:var(--terracotta)}
+.subnote{font-size:12.5px;color:var(--ink-soft);margin-top:10px}
+
+/* ---------- lab ---------- */
+.labgrid{display:grid;grid-template-columns:1fr 1fr;gap:18px;margin-top:22px}
+.lab3{grid-column:1/-1}
+.lamp{display:inline-block;width:14px;height:14px;border-radius:50%;border:1.6px solid var(--ink-soft);vertical-align:-2px;margin:0 6px 0 2px;background:transparent}
+.lamp.on{background:var(--terracotta);border-color:var(--terracotta);box-shadow:0 0 6px rgba(184,92,56,.55)}
+.wavelab{font-size:12.5px;letter-spacing:.14em;color:var(--ink-soft);width:66px;display:inline-block}
+.waverow{display:flex;align-items:flex-end;gap:0;margin:7px 0;height:30px}
+.wc{width:11px;height:100%;position:relative;flex:0 0 11px}
+.wc:before{content:'';position:absolute;left:0;right:0;height:2.2px;background:var(--teal)}
+.wc.hi:before{top:0}
+.wc.lo:before{bottom:0}
+.wc.hi.edge:after,.wc.lo.edge:after{content:'';position:absolute;left:0;top:0;bottom:0;width:2.2px;background:var(--teal)}
+.wc.tc:before{background:var(--terracotta)}
+.wc.tc.edge:after{background:var(--terracotta)}
+.labeq{margin:8px 0 12px}
+
+/* ---------- theses ---------- */
+.thgrid{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:10px}
+.thcard{background:var(--card);border:1px solid var(--line);border-top:4px solid var(--teal);border-radius:8px;padding:20px 22px}
+.thcard:nth-child(even){border-top-color:var(--terracotta)}
+.thcard h3{font-size:17.5px;font-weight:900;letter-spacing:.05em;margin-bottom:3px}
+.thcard .then{font-size:11.5px;letter-spacing:.18em;color:var(--ink-soft);margin-bottom:10px}
+.thcard p{font-size:14.5px;color:var(--ink)}
+.thcard .thsrc{margin-top:10px;font-size:12.5px;color:var(--ink-soft)}
+
+/* ---------- history ---------- */
+.tl{margin-top:14px;position:relative;padding-left:120px}
+.tl:before{content:'';position:absolute;left:96px;top:6px;bottom:6px;width:2px;background:var(--line)}
+.tlrow{position:relative;margin-bottom:20px}
+.tlrow:before{content:'';position:absolute;left:-29.5px;top:9px;width:11px;height:11px;border-radius:50%;background:var(--parchment);border:2.4px solid var(--teal)}
+.tlrow.key:before{border-color:var(--terracotta);background:var(--terracotta)}
+.tlyear{position:absolute;left:-120px;top:2px;width:82px;text-align:right;font-weight:900;color:var(--teal-deep);font-size:14.5px;letter-spacing:.04em}
+.tlrow.key .tlyear{color:var(--terracotta)}
+.tltext{font-size:14.8px}
+.tltext b{font-weight:700}
+.histcols{display:grid;grid-template-columns:1.5fr 1fr;gap:34px;margin-top:10px}
+.cosbox{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:22px 24px;align-self:start;position:sticky;top:76px}
+.cosbox h3{font-weight:900;font-size:18px;letter-spacing:.1em;margin-bottom:12px}
+.cosbox ol{padding-left:22px;font-size:14.5px}
+.cosbox li{margin-bottom:7px}
+.cosbox li::marker{color:var(--terracotta);font-weight:700}
+
+/* ---------- index of forms ---------- */
+.ixgroup{margin-top:30px}
+.ixgroup h3{font-size:18.5px;font-weight:900;letter-spacing:.14em;color:var(--teal-deep);border-bottom:2px solid var(--line);padding-bottom:7px;margin-bottom:14px}
+.ixgroup h3 span{font-size:11.5px;letter-spacing:.24em;color:var(--ink-soft);font-weight:400;margin-left:12px}
+.ixrow{display:grid;grid-template-columns:132px 1fr;gap:16px;padding:9px 4px;border-bottom:1px dotted var(--line-soft);align-items:baseline}
+.ixrow:last-child{border-bottom:none}
+.ixid{font-weight:900;color:var(--terracotta);letter-spacing:.04em;font-size:15px}
+.ixid .ixen{display:block;font-weight:400;font-size:11px;letter-spacing:.14em;color:var(--ink-soft)}
+.ixbody{font-size:15px}
+.ixbody .ixf{margin-top:4px;font-size:1.06em}
+.ixdir{font-size:12.5px;color:var(--ink-soft);letter-spacing:.06em;margin-left:12px}
+
+/* ---------- footer ---------- */
+footer{padding:56px 0 70px;color:var(--ink-soft);font-size:13.5px}
+footer .fmk{display:inline-block;border-top:2.4px solid var(--terracotta);border-right:2.4px solid var(--terracotta);width:.7em;height:.6em;margin-right:.5em;vertical-align:-2px}
+footer p{margin-bottom:8px;max-width:62em}
+
+@media (max-width:880px){
+  .hero .wrap{grid-template-columns:1fr;gap:26px}
+  h1.title{font-size:42px}
+  .hero-mark{order:-1;text-align:left}
+  .bigcross{width:130px;height:88px}
+  .ringbox,.thgrid,.labgrid,.histcols{grid-template-columns:1fr}
+  .cosbox{position:static}
+  .chbody{padding-left:22px}
+  .frame{grid-template-columns:1fr}
+  .frule{text-align:left}
+  .tl{padding-left:88px}
+  .tl:before{left:66px}
+  .tlyear{left:-88px;width:56px;font-size:12.5px}
+  .ixrow{grid-template-columns:1fr;gap:4px}
+}
+</style>
+</head>
+<body>
+<nav class="topnav" aria-label="页内导航"><div class="wrap">
+  <a class="brand" href="#top"><span class="bmk" aria-hidden="true"></span>形式法则 · LAWS OF FORM</a>
+  <a class="nl" href="#overview">总纲</a>
+  <a class="nl" href="#map">概念图谱</a>
+  <a class="nl" href="#chain">推演链</a>
+  <a class="nl" href="#calc">演算器</a>
+  <a class="nl" href="#lab">二度实验台</a>
+  <a class="nl" href="#theses">判断</a>
+  <a class="nl" href="#history">历史</a>
+  <a class="nl" href="#index">索引</a>
+</div></nav>
+
+<header class="hero" id="top"><div class="wrap">
+  <div>
+    <div class="series">逻辑演化实验室 · 书籍知识制品</div>
+    <h1 class="title">形式法则</h1>
+    <div class="title-en">LAWS OF FORM</div>
+    <div class="byline"><b>G. Spencer-Brown</b>（乔治·斯宾塞-布朗）著 · 1969<br>
+    依据第五英文版（Bohmeier Verlag，2008，246 页）全文重构 · 含五版序、导言、正文十二章、注释与附录 1–9</div>
+    <div class="epigraph">
+      <div class="zh">「無名天地之始」</div>
+      卷首影印十二世纪福建刻本《道德真经》首章书影——「未标记态」与「无名」互为题辞。全书正文首句：我们取<b>区分</b>之观念与<b>指示</b>之观念为给定，并且取「不作区分即无法指示」为给定。
+    </div>
+  </div>
+  <div class="hero-mark">
+    <span class="bigcross" aria-hidden="true"></span>
+    <div class="bigcap"><b>DRAW A DISTINCTION</b><br>画出一个区分 —— 全书唯一的建构指令</div>
+  </div>
+</div></header>
+
+<section class="sec" id="overview"><div class="wrap">
+  <div class="eyebrow">〇一 · 总纲</div>
+  <h2 class="st">一条判断统摄全书</h2>
+  <div class="sten">A UNIVERSE COMES INTO BEING WHEN A SPACE IS SEVERED</div>
+  <p class="lede">「<b>一个宇宙在空间被切开或分离之际出现</b>。」生物体的皮肤切出内与外，平面上的圆周亦然。追踪我们如何表示这一切分行为，即可重构语言、数学、物理、生物科学底层的基本形式，并看到经验中熟悉的法则如何从<b>最初的切分行为</b>（the original act of severance）不可避免地涌出。数学文本通常从故事的中间讲起，此书自称从<b>最开端</b>讲起。</p>
+  <p class="lede">由此得出全书最锋利的立场：<b>逻辑不是数学的地基，而是数学的一种外围应用</b>。布尔把他的代数造出来去迁就逻辑，而逻辑只是该代数的一种可能解释、绝非它的算术；《数学原理》「错误地立基于逻辑」，本书为纠正它而写。正文因此不走公设进路而走<b>发生进路</b>：每一个概念都须先被「唤入存在」（called into being）方许使用——出场次序本身就是论证。</p>
+  <div class="ringbox">
+    <svg id="ringsvg" viewBox="0 0 560 560" role="img" aria-label="宇宙发生回环：从虚空到观察者再回到第一区分"></svg>
+    <div class="ringnotes">
+      <p><span class="tag">宇宙发生回环。</span>全书叙述一部形式创世记：虚空 → 区分之欲 → 第一区分 → 名与令 → 初级算术 → 初级代数 → 再入 → 时间 → 物质前身 → 观察者——而观察者认出自己就是第一区分，<b>回环闭合</b>。终章脚注给出词源判词：universe = <i>unus</i>（一）+ <i>vertere</i>（转），任一宇宙即「转出一个」之所见，即任一第一区分的显现。</p>
+      <p>导言称第十一章已是「从原初形式起算的第四次出离（从虚空起算的第五次）」；出离至此涌现的潜在形式已多到一本书无法尽述，故全书以第五典章允许的方式悬置于三个词——<b>and so on</b>（如此等等）。</p>
+      <p class="mut small">书内记号说明：原书「十字」（cross，⌐ 形）在本制品中以真形 CSS 绘制；文本输入处以括号 <code class="tt">( )</code> 转写——<code class="tt">( )( )</code> 即两个并置的十字，<code class="tt">(( ))</code> 即嵌套，空白即未标记态。</p>
+    </div>
+  </div>
+</div></section>
+
+<section class="sec" id="map"><div class="wrap">
+  <div class="eyebrow">〇二 · 概念图谱</div>
+  <h2 class="st">按「被唤入存在的次序」排布的概念系谱</h2>
+  <div class="sten">CONCEPTS IN THE ORDER OF THEIR CALLING INTO BEING</div>
+  <p class="maphelp">九层四十四个概念。点击任一节点：<span style="color:var(--teal-deep);font-weight:700">青色</span>为当前概念，<span style="color:var(--terracotta);font-weight:700">赭色</span>为其全部发生学祖先（它由谁唤出）；连线即「唤出」关系。再点一次或点空白处复位。</p>
+  <div class="mapouter"><div id="mapinner">
+    <svg id="maplines" aria-hidden="true"></svg>
+    <div id="maptiers"></div>
+  </div></div>
+  <div class="cdetail" id="cdetail">
+    <h3>请选择一个概念</h3>
+    <div class="cen">CLICK A NODE</div>
+    <p class="mut">此处将显示：定义（依书中原初表述）、英文原名、出处章节，与它的发生学来源。</p>
+  </div>
+</div></section>
+<section class="sec" id="chain"><div class="wrap">
+  <div class="eyebrow">〇三 · 十二章推演链</div>
+  <h2 class="st">从虚空到观察者的因果全程</h2>
+  <div class="sten">THE DEDUCTIVE CHAIN, CHAPTER BY CHAPTER</div>
+  <p class="lede">此书的因果结构是严格的<b>债务经济</b>：每一步先「预支」一个未获辩护的原则，随后必须偿还；每一次偿还都把系统推向下一层级。以下逐章展开——每章给出「为何必然」、本章唤出之物，与一句关键原文（中译）。</p>
+  <div class="chctl">
+    <button class="btn mini" id="openall" type="button">全部展开</button>
+    <button class="btn mini terra" id="closeall" type="button">全部收起</button>
+  </div>
+  <div class="chwrap">
+
+  <details class="ch" open>
+    <summary><span class="chno">一</span><span><span class="chtt">形式<span class="chen">THE FORM</span></span><div class="chline">起点削减到不能再削减：两个给定观念，一条定义，两条公理。</div></span></summary>
+    <div class="chbody">
+      <p>全书只取<b>区分</b>（distinction）与<b>指示</b>（indication）为给定，外加一条不可分离性：不作区分即无法指示——于是「取区分之形式为形式（the form）」。定义仅一条：「<b>区分即完美的涵纳</b>」（Distinction is perfect continence）：以两侧分明的边界安排出一种状态，使一侧的点不穿越边界便不能到达另一侧（作者 2000 年自注：continence 取「容纳」古义）。区分必有<b>动机</b>（motive），动机必源于两侧内容<b>价值</b>（value）之差；有价值即可<b>命名</b>。「名之被召唤」与「越界之意图」皆可与「内容之价值」同一——两条同一各自结晶为一条公理。</p>
+      <div class="chout"><b>唤出：</b>公理一·召唤律（law of calling）——再次召唤之值即召唤之值，「再召唤即召唤」；公理二·穿越律（law of crossing）——再次穿越之值非穿越之值，「再穿越即非穿越」。</div>
+      <div class="chq">「数学是关于我们对所定义之物之所知的科学。它没有任何意见或信念的位置。」（正文前题辞）</div>
+    </div>
+  </details>
+
+  <details class="ch">
+    <summary><span class="chno">二</span><span><span class="chtt">从形式中取出的形式<span class="chen">FORMS TAKEN OUT OF THE FORM</span></span><div class="chline">唯一的建构令；记号身兼名与令；两条原始方程恰好为二。</div></span></summary>
+    <div class="chbody">
+      <p>全书第一道也是唯一一道建构指令：「<b>画出一个区分</b>」。由此唤出第一区分、被剖开（severed / cloven）的空间及其两侧、<b>标记</b>（mark）、已标记态 / 未标记态、标记之<b>记号</b>（token）与名为<b>十字</b>（cross）的算符。记号身兼二职：既是已标记态之<b>名</b>，又是「穿越第一区分之边界」的<b>指令</b>——名与令在此<b>简并 / 凝缩</b>为一符，注释明言：「正是这种凝缩赋予符号以力量。」两条公理写入记号即得仅有的两条<b>原始方程</b>；十字之间只许一种关系——<b>涵纳</b>；简单表达式恰有两个：一个空十字与一片空白。</p>
+      <div class="chout"><b>唤出：</b>凝缩（condensation）<span class="lof" data-lof="()()"></span><span class="eqs">=</span><span class="lof" data-lof="()"></span> ；消却（cancellation）<span class="lof" data-lof="(())"></span><span class="eqs">=</span><span class="lblank"></span> ；深度、遍布空间、未写出的十字（作者后注：它只是把整式收进一个括号的装置）。</div>
+      <div class="chq">注释：数学的原初语言是<b>指令</b>（injunction）而非描述——如菜谱之于蛋糕味道、乐谱之于作曲家的体验；对《逻辑哲学论》第 7 命题的回应是：维特根斯坦只考虑了描述性言说，而作曲家与数学家虽（描述地说）一无所说，却不必因此沉默。</div>
+    </div>
+  </details>
+
+  <details class="ch">
+    <summary><span class="chno">三</span><span><span class="chtt">计算之构想<span class="chen">THE CONCEPTION OF CALCULATION</span></span><div class="chline">典章是「允许」而非「建构」；化简假设是一笔明写的预支。</div></span></summary>
+    <div class="chbody">
+      <p>前五条<b>典章</b>（canons）被唤出：①意图约定——「凡未被允许者即被禁止」；②指涉收缩——指令可收缩到仍可被遵行的任何程度；③代换约定；④<b>化简假设</b>——设一排列之值即其可化归到的简单表达式之值；⑤指涉扩张——任何指涉形式可无限分裂（由此凝缩 / 确认合称「数」之步，消却 / 补偿合称「序」之步）。第四典章当场立债：有些排列可能有多条化简路径、有些可能化不动，故日后必须证明<b>任何排列皆可化简、且一切路径同归一果</b>。以两原始方程为初始式（initials），得指示演算（calculus of indications）；仅由其直接后承生成者为<b>初级算术</b>。</p>
+      <div class="chout"><b>唤出：</b>典章一至五；步（step）与方向；演算（calculus）、初始式、初级算术（primary arithmetic）。</div>
+    </div>
+  </details>
+
+  <details class="ch">
+    <summary><span class="chno">四</span><span><span class="chtt">初级算术<span class="chen">THE PRIMARY ARITHMETIC</span></span><div class="chline">九条定理三类分工：偿债（T1–T4）、备件（T5–T7）、开门（T8–T9）。</div></span></summary>
+    <div class="chbody">
+      <p><b>表征定理</b> T1–T4 偿还第三章之债：T1（形式）给出化简程序并证明任何有限十字排列皆可化归——其证明默认书写于<b>平面</b>，注释点破这是一个隐蔽约定：写在环面上 T1 即不成立，「数学的进步正在于把隐蔽约定变为显明约定」；T2（内容）：空间遍布一个空十字则其值为已标记态；T3（一致）：化简唯一——以 m / n 逐层标注的程序证得，第六典章（支配规则）随之成立；T4（区别）：自不同简单表达式出发之值恒不相混——演算被证明<b>一致</b>。<b>程序定理</b> T5–T7 中，T5 即 x = x：作者自注「以往作者只能把它当公理；我是第一个从自己的公理把它<b>证明</b>出来的作者」。<b>联结定理</b> T8、T9 被明言为「进入新演算的大门」。</p>
+      <div class="chout"><b>唤出：</b>初始式 I1「数」 <span class="lof" data-lof="()()"></span><span class="eqs">=</span><span class="lof" data-lof="()"></span> 、I2「序」 <span class="lof" data-lof="(())"></span><span class="eqs">=</span><span class="lblank"></span> ；T8 恒变 <span class="lof" data-lof="((p)p)"></span><span class="eqs">=</span><span class="lblank"></span> ；T9 变异 <span class="lof" data-lof="((pr)(qr))"></span><span class="eqs">=</span><span class="lof" data-lof="((p)(q))r"></span> ；支配值 m / 隐性值 n。</div>
+    </div>
+  </details>
+
+  <details class="ch">
+    <summary><span class="chno">五</span><span><span class="chtt">从演算中取出的演算<span class="chen">A CALCULUS TAKEN OUT OF THE CALCULUS</span></span><div class="chline">变量不是被引入的，而是从常量中长出的。</div></span></summary>
+    <div class="chbody">
+      <p>初级算术里只有一种带单一性质的常量（十字），于是「考虑该性质之在场与否<b>无关紧要</b>」即产生<b>变量</b>——作者认为这印证了维特根斯坦：命题演算中的变量代表的不是命题而只是命题的<b>真值</b>。以 T8、T9 脱离语境为初始式，得<b>初级代数</b>（primary algebra）：J1 位置（position）、J2 转置（transposition）。配两条通则——R1 代换（substitution）与 R2 置换（replacement）；作者自注：这是两条普适代数规则第一次被正确陈述，「唯一尝试过陈述它们的另一位作者是塔斯基，而他弄错了」。</p>
+      <div class="chout"><b>唤出：</b>变量 a, b, …；J1 <span class="lof" data-lof="((p)p)"></span><span class="eqs">=</span><span class="lblank"></span> ；J2 <span class="lof" data-lof="((pr)(qr))"></span><span class="eqs">=</span><span class="lof" data-lof="((p)(q))r"></span> ；R1 / R2；索引法（C、I、J、R、T、E）。</div>
+    </div>
+  </details>
+
+  <details class="ch">
+    <summary><span class="chno">六</span><span><span class="chtt">初级代数<span class="chen">THE PRIMARY ALGEBRA</span></span><div class="chline">九条后承；一个微型哥德尔事件：「零步亦步」。</div></span></summary>
+    <div class="chbody">
+      <p>由 J1、J2 演证出九条<b>后承</b>（consequences）C1–C9（C1 的六步美证出自作者学生 Utting，1966）。章末藏一个微型哥德尔式事件：若允许「对步骤本身再取步骤」，所得演算<b>不一致</b>——化解之道是规定「包括零步在内的任何步数皆算一步」，与「步骤本不意在穿越边界」的本性相合。注释给出深刻判断：<b>代数中的操作数只是被猜想在场或缺席的操作符</b>——把 ∨、∧ 外推到零变元，( )<sub>∨</sub> 与 ( )<sub>∧</sub> 即两枚「基本粒子」，0、1、T、F 皆可废除；并留一条脚注：此代数应称 brownian 而非 boolean，因布尔及此前一切代数都受「次序相关」与「二元辖域」两重残障所困。</p>
+      <div class="chout"><b>唤出：</b>C1 映照、C2 生成、C3 整并、C4 掩蔽、C5 迭代、C6 延展、C7 梯列、C8 修正转置、C9 交叉转置（全形见「形式索引」，可在演算器中逐条验证）；三类表达式：恒标（integral）/ 恒空（disintegral）/ 随值（consequential）。</div>
+    </div>
+  </details>
+
+  <details class="ch">
+    <summary><span class="chno">七</span><span><span class="chtt">二阶定理<span class="chen">THEOREMS OF THE SECOND ORDER</span></span><div class="chline">纯代数定理：任何表达式都有极简规范形。</div></span></summary>
+    <div class="chbody">
+      <p>T10–T13 将 J2、C8、C9、C2 的辖域推广到任意划分与任意深度；T14（关于常量的规范）：任何表达式等价于<b>深度不超过 2</b> 者；T15（关于变量的规范）：任何表达式等价于<b>任一给定变量出现不超过 2 次</b>者。这两条规范形是第九章完备性证明的机械基础。</p>
+      <div class="chout"><b>唤出：</b>T10–T15。注释顺带说明：「常量」无限定时指操作符（十字）而非空白——演算里本有两个常量：一个标记，一个虚空。</div>
+    </div>
+  </details>
+
+  <details class="ch">
+    <summary><span class="chno">八</span><span><span class="chtt">两秩再合<span class="chen">RE-UNITING THE TWO ORDERS</span></span><div class="chline">演证在演算之内，证明在演算之外——这对区分被推至根处。</div></span></summary>
+    <div class="chbody">
+      <p>引入内容（content）/ 像（image）/ 映照（reflexion）三联与<b>指示空间</b>；第七典章（相关性原则）解释未写出的十字与隐性值为何无须书写。核心论断：<b>后承</b>之可接受，因为规则是我们定的，只需示其循规而行；<b>定理</b>之可接受，因为其所述<b>显明</b>——「若有人不接受一个证明，我们只能另试一个」。把证明程序法典化只给证明以融贯而非证据：「定理之被逻辑与计算证明，不多于十四行诗之被文法与修辞写成。」T16 桥定理（若两表达式在一个变量的每一取值下等价则等价）以透明 / 不透明的第八典章（传导原则）证得——作者自注：此前无人能证，只好当公理用。</p>
+      <div class="chout"><b>唤出：</b>典章七、八；T16 桥（the bridge）；「演证 : 证明 = 初始式 : 公理」的关系式。</div>
+    </div>
+  </details>
+
+  <details class="ch">
+    <summary><span class="chno">九</span><span><span class="chtt">完备性<span class="chen">COMPLETENESS</span></span><div class="chline">代数向算术清账：凡可证之方程形式皆可演证。</div></span></summary>
+    <div class="chbody">
+      <p>T17：<b>初级代数完备</b>——凡可作为关于初级算术的定理被证明的方程形式，皆可在初级代数中被演证。证明对变量数归纳：借 T14 / T15 的规范形把 n 变量情形化归到 n−1；基例显示算术初始式本身可在代数中演证（C3 取 a = <span class="lof" data-lof="()"></span> 得 I1；C1 取 a 为空得 I2）。注释重估哥德尔：完备性从不属于演算整体，只属于「一种表述对另一种表述的表征」；哥德尔定理非绝望之由而是<b>庆典</b>——它印证算术是比代数更丰饶的土地。脚注更尖锐：「哥德尔自己也弄混了他证明的东西……<b>一切真语句皆可证明，只是在某些代数中有些不可演证</b>。」</p>
+    </div>
+  </details>
+
+  <details class="ch">
+    <summary><span class="chno">十</span><span><span class="chtt">独立性<span class="chen">INDEPENDENCE</span></span><div class="chline">罕见的直接证明；独立性证明即不完备性证明。</div></span></summary>
+    <div class="chbody">
+      <p>T18：J1 与 J2 互不可推。直接论证：仅有 J1 时，可置入或取出的只能是 <span class="lof" data-lof="((p)p)"></span> 之形，而 J2 搬运的 r 不必是此形；仅有 J2 时，无法消去任何相异变量，而 J1 恰能消去。注释：独立性的证明惯例是间接的，而两条初始式的体系总有直接证明可用；且「独立性证明可恰当地视为缺失该初始式之演算的<b>不完备性证明</b>」。</p>
+    </div>
+  </details>
+
+  <details class="ch">
+    <summary><span class="chno">十一</span><span><span class="chtt">二度方程<span class="chen">EQUATIONS OF THE SECOND DEGREE</span></span><div class="chline">松开有限性——再入、虚态，与时间的发生。全书转折。</div></span></summary>
+    <div class="chbody">
+      <p>先提取第九典章（演证止于有限步）作为<b>离境护照</b>，随后故意违约：对 <span class="lof" data-lof="((a)b)"></span> 反复施 C5 / C1 / J2 / C4，生成无限梯列。关键一步：<b>每个偶数深度处被十字罩住的部分与整个表达式全同</b>——表达式<b>再入</b>（re-enter）自身内部空间，记 E1: f = <span class="lof" data-lof="((fa)b)"></span> 。逐案检值发现 a、b 皆未标记时方程有<b>两个实解</b>：表征定理失效，不定性入场。定义<b>度</b>（degree）：相异稳定状态之数目（振荡态亦算稳定）。极限情形分岔：E2: f = <span class="lof" data-lof="((f))"></span> 有两实根、无矛盾；E3: f = <span class="lof" data-lof="(f)"></span> 被两个既有状态双双拒斥——「若想假装 E3 有解，就必须允许它拥有一个表示<b>虚态</b>的解」。随即是全书最著名的转进：「由于我们不愿离开形式，所设想的状态<b>不在空间中而在时间中</b>（人可以进入时间状态而不离开其已寄身的空间状态）。」以「地道」贯穿十字使区分自毁，值以有限速度传播，遂得方波<b>振荡</b>；给传播以速度必须同时给以方向，<b>速度</b>由是发生。E3 即振荡函数——其值「在空间中不定故对形式而言为虚，在时间中却为实」；E1 即记忆函数——a、b 皆归未标记后，f 记得二者中谁最后呈过已标记态；再造一个「不但记忆而且<b>计数</b>」的调制函数 E4（实值需八个标识符，引入虚分量减至六个；「虚值即在把记忆拨到位后自行关断的值」）。</p>
+      <div class="chout"><b>注释交代的因果另一半：</b>偶次再入的方程「evenly informed」——既是书面之<b>潜转</b>（sub-version，下翻），又是所表达者之<b>内构</b>（in-formation，于内成形）：自含其形，并记得经历。把驻波式表达式射过其自身表征空间，在定点即观测到频率正比于速度的振荡——「物质粒子波动性质的一个惊人前身。」工程史：两条调制方程 1961 年与胞弟 D. J. Spencer-Brown 为专用计算机电路开发，后为英国铁路采用——史上第一台纯以「逻辑」计数的装置，也是虚布尔值第一次用于开关电路（英国专利 1006018 / 1006019，1965）。</div>
+      <div class="chq">Coda：「我们自始至终商讨的只是<b>一个构造</b>（第 3 页所命令者）——第一区分——的形式；整份陈述只是它在我们加诸自身的各种心境之光下如何显现的记录。」书不能无限，故以三个词收笔——<b>and so on</b>。</div>
+    </div>
+  </details>
+
+  <details class="ch">
+    <summary><span class="chno">十二</span><span><span class="chtt">再入形式<span class="chen">RE-ENTRY INTO THE FORM</span></span><div class="chline">四个圆圈实验逼出观察者；首尾因果闭合。</div></span></summary>
+    <div class="chbody">
+      <p>「形式之构想在于<b>区分之欲</b>。此欲既允，我们即无法逃离形式，尽管可以随意地看它。」四个圆圈实验（等号读作「<b>混同于</b>」is confused with）不借任何定律、初始式、定理、后承，徒手重演凝缩与消却。每个区分之两侧有<b>双重指涉</b>：显指涉指向其值，<b>隐指涉指向一位外部观察者</b>——「外侧即区分被设想为从之观看的那一侧。」第四实验逼出：圆周对外部空间之值即标记之值——「<b>一位观察者，既然他区分了他所占据的空间，他也就是一个标记。</b>」终章末句：第一区分、标记与观察者「不仅可以互换，而且<b>在形式中同一</b>」。</p>
+      <div class="chout"><b>注释补足必然性：</b>把 <span class="lof" data-lof="(a(b)(c))"></span> 写上地球表面——外括号沿赤道、b 括号沿澳大利亚海岸线、c 括号沿新西兰南岛海岸线——则同一铭文从伦敦、开普敦、墨尔本、基督城看去是四个<b>互不等价</b>的表达式。平面书写之所以无歧义，只因我们默认站在最外括号之外；故「要使表达式有意义，必须为它添上一个指示观察者受邀立足之处的指示子」。第四章埋下的「平面假设」这条隐蔽约定，至此显明为<b>观察者假设</b>。</div>
+    </div>
+  </details>
+
+  </div>
+
+  <div class="ledger">
+    <h3>债务台账 <span class="ixdir">THE LEDGER OF DEFERRED JUSTIFICATION</span></h3>
+    <div class="sub">注释（第三章）：「我们为何不在给出一条约定时立刻为它辩护？答案是：在熟悉一条深层原则如何运作之前，为它辩护（虽然有效）将是无意义的。」</div>
+    <table class="ledg">
+      <tr><th>预支（何处立债）</th><th>偿还（何处清账）</th><th>说明</th></tr>
+      <tr><td class="deb">化简假设 · 第三章第四典章</td><td class="cred">T3 一致 + T4 区别 · 第四章</td><td>化简唯一且两值不混——「表征定理」使假设成为定理。</td></tr>
+      <tr><td class="deb">x = x · 他人的公理</td><td class="cred">T5 同一 · 第四章</td><td>「我是第一个从自己的公理把它证明出来的作者。」</td></tr>
+      <tr><td class="deb">J1 / J2 · 取自 T8 / T9</td><td class="cred">T17 完备性 · 第九章</td><td>代数向算术清账：凡可证之方程形式皆可演证。</td></tr>
+      <tr><td class="deb">T16 桥 · 先用后证</td><td class="cred">第八章传导原则</td><td>注释：延迟辩护的显例——「先熟悉其运作，再为其辩护。」</td></tr>
+      <tr><td class="deb">平面书写 · 第四章隐蔽约定</td><td class="cred">观察者位置 · 第十二章注</td><td>地球书写实验把「隐蔽的面」显明为「隐含的观察者」。</td></tr>
+      <tr><td class="deb">无限步 · 第十一章违约</td><td class="cred">第九典章 + 支配规则为路标；以「时间 / 虚态」支付</td><td>「远足至无穷剥夺了我们对身处形式何处的完全知识。」</td></tr>
+    </table>
+  </div>
+</div></section>
+<section class="sec" id="calc"><div class="wrap">
+  <div class="eyebrow">〇四 · ( ) 记号演算器</div>
+  <h2 class="st">指示演算 · 求值 / 化简 / 等式验证</h2>
+  <div class="sten">AN EVALUATOR FOR THE CALCULUS OF INDICATIONS</div>
+  <p class="lede">输入用括号转写：<code class="tt">( )</code> 为一个十字，并置即同空共处，<code class="tt">a–z</code> 为变量，空白即未标记态。显示用真形十字。算术化简严格执行 T1 的「最深空间程序」——每步只用凝缩（I1「数」）或消却（I2「序」）；含变量时依第五章之法：变量按 m ← <code class="tt">( )</code>、n ← 空白代换后交给算术，并给出全取值表与三分类（第六章 / 附录二）。引擎已对 C1–C9、J1、J2 全真值表等价及五百例随机算术化简作过校验。</p>
+
+  <div class="calcgrid">
+    <div class="panel">
+      <h3>求值与逐步化简</h3>
+      <div class="ph">EVALUATE &amp; SIMPLIFY, STEP BY STEP</div>
+      <div class="inrow"><input class="lofin" id="inA" type="text" spellcheck="false" autocomplete="off" value="((a)b)a" aria-label="表达式输入"><button class="btn pri" id="goA" type="button">求值</button></div>
+      <div class="errmsg" id="errA"></div>
+      <div class="presets" id="presetA"></div>
+      <div id="outA"></div>
+    </div>
+
+    <div class="panel">
+      <h3>等式验证</h3>
+      <div class="ph">VERIFY AN EQUATION OVER ALL CASES —— 逐条检验 J1、J2 与 C1–C9</div>
+      <div class="inrow">
+        <input class="lofin" id="inL" type="text" spellcheck="false" autocomplete="off" value="((pr)(qr))" aria-label="左式">
+        <span class="eqs" style="font-size:20px">=</span>
+        <input class="lofin" id="inR" type="text" spellcheck="false" autocomplete="off" value="((p)(q))r" aria-label="右式">
+        <button class="btn pri" id="goE" type="button">验证</button>
+      </div>
+      <div class="errmsg" id="errE"></div>
+      <div class="presets" id="presetE"></div>
+      <div id="outE"></div>
+    </div>
+  </div>
+
+  <div id="lab" style="padding-top:34px">
+    <div class="eyebrow" style="margin-top:10px">〇五 · 二度方程实验台</div>
+    <h2 class="st" style="font-size:27px">再入 · 振荡 · 记忆 · 计数</h2>
+    <div class="sten">RE-ENTRY IN TIME: OSCILLATOR, MEMORY, MODULATOR</div>
+    <p class="lede mut">第十一章的三件造物，在时间中运行。青色为未标记 / 已标记方波，赭色为 f 的输出。</p>
+    <div class="labgrid">
+      <div class="panel">
+        <h3>振荡函数 · E3</h3>
+        <div class="ph">OSCILLATOR — 奇次再入，无实解</div>
+        <div class="labeq lofline">f <span class="eqs">=</span> <span class="lof" data-lof="(f)"></span></div>
+        <p class="small mut">两个既有状态双双拒斥其解：设 f 已标记则 f 未标记，反之亦然。解「不在空间中而在时间中」——虚于形式、实于时间。</p>
+        <div class="inrow" style="margin-top:10px"><button class="btn mini pri" id="oscRun" type="button">启动</button><button class="btn mini" id="oscClr" type="button">清零</button><span class="small mut">f：<span class="lamp" id="oscLamp"></span></span></div>
+        <div class="waverow" id="oscWave" aria-label="振荡波形"></div>
+      </div>
+      <div class="panel">
+        <h3>记忆函数 · E1</h3>
+        <div class="ph">MEMORY — a 置位，b 复位</div>
+        <div class="labeq lofline">f <span class="eqs">=</span> <span class="lof" data-lof="((fa)b)"></span></div>
+        <p class="small mut">a、b 皆归未标记后，f 记得二者中谁<b>最后</b>呈过已标记态——书中所述的双稳记忆（E2: f = <span class="lof" data-lof="((f))"></span> 为其偶次极限，两实根）。</p>
+        <div class="inrow" style="margin-top:10px">
+          <button class="btn mini terra" id="pulseA" type="button">脉冲 a（置位）</button>
+          <button class="btn mini" id="pulseB" type="button">脉冲 b（复位）</button>
+          <span class="small mut">f：<span class="lamp" id="memLamp"></span></span>
+        </div>
+        <div><span class="wavelab">a</span></div><div class="waverow" id="memWaveA"></div>
+        <div><span class="wavelab">b</span></div><div class="waverow" id="memWaveB"></div>
+        <div><span class="wavelab">f</span></div><div class="waverow" id="memWaveF"></div>
+      </div>
+      <div class="panel lab3">
+        <h3>调制（计数）函数 · E4</h3>
+        <div class="ph">MODULATOR / REDUCTOR — 频率减半：纯「逻辑」计数之始（1961，与 D. J. Spencer-Brown；英国铁路电路；实值八标识符，虚值六标识符）</div>
+        <p class="small mut">「计数可被描画为记忆之反：记忆函数对相同信号记住相同回应，计数函数每次记它不同。」以 a 为时钟，f 输出半频方波——书中图示之行为仿真。</p>
+        <div class="inrow" style="margin-top:6px"><button class="btn mini pri" id="modRun" type="button">启动时钟 a</button><button class="btn mini" id="modClr" type="button">清零</button></div>
+        <div><span class="wavelab">a</span></div><div class="waverow" id="modWaveA"></div>
+        <div><span class="wavelab">f</span></div><div class="waverow" id="modWaveF"></div>
+      </div>
+    </div>
+  </div>
+</div></section>
+
+<section class="sec" id="theses"><div class="wrap">
+  <div class="eyebrow">〇六 · 判断与论证</div>
+  <h2 class="st">书中自持的八条立场</h2>
+  <div class="sten">THE BOOK'S OWN THESES, WITH ITS OWN ARGUMENTS</div>
+  <div class="thgrid">
+    <div class="thcard"><h3>数学的语言是指令，不是描述</h3><div class="then">INJUNCTION, NOT DESCRIPTION</div>
+      <p>如菜谱之于蛋糕味道、乐谱之于作曲家的体验：不可描述者可以<b>被做出来</b>。对《逻辑哲学论》第 7 命题的回应——维特根斯坦只考虑了描述性言说；作曲家与数学家虽（描述地说）一无所说，却「不必因此沉默」。</p><div class="thsrc">第二章注</div></div>
+    <div class="thcard"><h3>逻辑是数学的应用，不是它的地基</h3><div class="then">LOGIC : MATHEMATICS = APPLIED : PURE</div>
+      <p>布尔把代数造出来迁就逻辑，逻辑只是解释而非算术；《数学原理》「错误地立基于逻辑」。「定理之被逻辑与计算证明，不多于十四行诗之被文法与修辞写成」——法典化只给证明以融贯，不给证据。</p><div class="thsrc">导言 · 第八/十一章注 · 五版序</div></div>
+    <div class="thcard"><h3>类型论不必要：允许第四类语句——虚</h3><div class="then">TRUE · FALSE · MEANINGLESS · IMAGINARY</div>
+      <p>「此语句为假」不比 x = −1/x 更恶劣：数学的解决不是禁令而是<b>扩类</b>（引入 i）。第十一章对布尔代数如法炮制；1967 年罗素承认类型论「不是理论而是权宜补丁」。奇次再入根为虚，偶次再入有两实根——被类型论抛弃的结构在方程论中复权。</p><div class="thsrc">美国版序（1972）· 第十一章</div></div>
+    <div class="thcard"><h3>哥德尔当被庆祝，且需重述</h3><div class="then">GÖDEL RESTATED VIA PROOF / DEMONSTRATION</div>
+      <p>完备性从不属于演算整体，只属于「一种表述对另一种表述的表征」；哥德尔印证算术比代数更丰饶。脚注：「一切真语句皆可证明，只是在某些代数中有些不可<b>演证</b>。」既然虚布尔值确能推出实而确定的答案，必有完全可判定、却为一次推理所不及的命题——四色与哥德巴赫即其候选。</p><div class="thsrc">第九/十一章注 · 导言 · 附录 5–9</div></div>
+    <div class="thcard"><h3>存在是外围的，且（形式意义上）败坏</h3><div class="then">EXISTENCE IS PERIPHERAL — EX·STARE</div>
+      <p>价值秩序是逐级放弃：「弃存在而就真，弃真而就指示，弃指示而就形式，弃形式而就<b>虚空</b>。」当今科学之弱在以存在为中心，当今逻辑之弱在以真为中心；全书通篇不需要「真」这个概念。附录二兑现之：存在推理仅当可视为全称推理时才有效——一条规则接管三段论全部繁规。</p><div class="thsrc">第十一章注 · 附录二</div></div>
+    <div class="thcard"><h3>观察者不可还原</h3><div class="then">THE OBSERVER IS A MARK</div>
+      <p>把表达式写上地球表面，同一铭文四城四读——平面书写无歧义只因默认站在最外括号之外。「一位观察者，既然他区分了他所占据的空间，他也就是一个标记」；第一区分、标记与观察者在形式中<b>同一</b>。</p><div class="thsrc">第十二章及其注</div></div>
+    <div class="thcard"><h3>认识即回忆</h3><div class="then">UNDERSTANDING IS REMEMBERING</div>
+      <p>「对一个宇宙的理解不来自发现它当下的样子，而来自记起我们当初做了什么把它带来。」定理是「疑时所需、信时可弃」的配角；这场旅程「在其预想中并非必要，而其形式进程一经启程即不可免」。十岁会乘除的孩子早已知道素数无穷——只是无人示以欧氏之证，他至死不知道自己知道。</p><div class="thsrc">第十二章注 · 导言</div></div>
+    <div class="thcard"><h3>世界为看见自身而构造</h3><div class="then">CONSTRUCTED SO AS TO SEE ITSELF</div>
+      <p>物理学家由他所描述的粒子构成。为了看，世界必须先切出能看与被看；「它将永远部分地躲开自身」。「就其自身信息而言，宇宙必须<b>膨胀</b>，以逃离我们——我们即是它——试图借以捕捉它的望远镜」；为何不更对称？——即使以所知最对称的方式开始，它也会<b>自行</b>失衡。</p><div class="thsrc">第十二章注 · 美国版序</div></div>
+  </div>
+</div></section>
+
+<section class="sec" id="history"><div class="wrap">
+  <div class="eyebrow">〇七 · 历史发生</div>
+  <h2 class="st">成书史与宇宙发生</h2>
+  <div class="sten">TWO GENEALOGIES: OF THE BOOK, AND OF A UNIVERSE</div>
+  <div class="histcols">
+    <div class="tl">
+      <div class="tlrow key"><div class="tlyear">1959 末</div><div class="tltext"><b>探索开始。</b>原序交代发生学关键：技术「最初不是为逻辑问题、而是为回应某些未解的<b>工程</b>问题而发展的」（Simon-MEL 配电工程公司总经理 I. V. Idelson 给了最初推动）。</div></div>
+      <div class="tlrow"><div class="tlyear">1960–61</div><div class="tltext">写出附录四的自然数代数——「发现形式数学的本性之后不久」；半数元素是数的<b>补</b>（not-numbers），首次以数之补入算。</div></div>
+      <div class="tlrow key"><div class="tlyear">1961</div><div class="tltext">与胞弟 D. J. Spencer-Brown 为专用计算机电路开发两条调制方程——史上第一台<b>纯以「逻辑」计数</b>的装置（只用开关、无人工延时），也是<b>虚布尔值第一次用于开关电路</b>；后为英国铁路采用。</div></div>
+      <div class="tlrow"><div class="tlyear">1962–65</div><div class="tltext">兄弟二人的未刊工作提示：四色定理与哥德巴赫猜想在一次布尔方程内不可判定、在高次内可判定。</div></div>
+      <div class="tlrow"><div class="tlyear">1963</div><div class="tltext">应 H. G. Frost 之邀在伦敦大学开「逻辑之数学」讲席，后移哥登广场计算机科学研究所——注释与附录由讲席滋长；学生 Dawes（1965）与 Utting（1966）先后给出 C1 的演证。</div></div>
+      <div class="tlrow key"><div class="tlyear">1965·4</div><div class="tltext">93 岁的罗素邀作者赴 Plas Penrhyn 作一周晨昏两讲的私教（附录三）。周五僵局中罗素喝问「你怎么处理命题函数？」——「Bertie，我不处理。」——「为什么？」——「因为我数学不够好。」态度骤变，当场背书：「你造出了一种新演算，兼具巨大威力……」随后是威士忌、拉丁文演说与八英尺旋转书塔把罗素埋进书堆的名场面。同年获英国专利 1006018 / 1006019。</div></div>
+      <div class="tlrow"><div class="tlyear">1967</div><div class="tltext">携「类型论不必要」之证再访罗素获首肯——「不是理论而是权宜补丁」。导言署 1967 年 8 月伦敦。</div></div>
+      <div class="tlrow"><div class="tlyear">1968·8</div><div class="tltext">原序署里士满。致谢 J. C. P. Miller 通读校样；十年成书 = 四年写作 + 六年出版斡旋（含与罗素孙女合谋的「拧胳膊与勒索」）；六家出版社拒稿，Stanley Unwin 在罗素施压下接受。</div></div>
+      <div class="tlrow key"><div class="tlyear">1969·4·17</div><div class="tltext"><b>出版即脱销。</b>Whole Earth Catalog 一单订走首印之半，书店未及上架即告罄，紧急重印。</div></div>
+      <div class="tlrow"><div class="tlyear">1972</div><div class="tltext">濯足节于剑桥作美国版序：类型论之解、四类语句、虚值与物质 / 时间、宇宙的自发失衡。</div></div>
+      <div class="tlrow"><div class="tlyear">1970s</div><div class="tltext">任马里兰大学正教授；与 D. H. Lehmer、J. C. P. Miller 交游而入解析数论。</div></div>
+      <div class="tlrow"><div class="tlyear">1979</div><div class="tltext">写成四色定理证明初稿（附录五：铸形、构形、奇偶通行、幂等叠置公理）；对 Appel–Haken 计算机证明的长期激烈批判亦植根于此。</div></div>
+      <div class="tlrow"><div class="tlyear">1996–99</div><div class="tltext">1996 作附录四 / 五引言；1998 发表附录六（最简四色证明，直接调用第十一章的再入链）；1999 德文二版增附录七「素数极限定理」，并造 elemental 一词命名「同立同废」的二度定理族。</div></div>
+      <div class="tlrow key"><div class="tlyear">2007–08</div><div class="tltext">五版序署 2007·6·23 凌晨一点：经门生 James Flagg 提示「附录七、八已在实质上证明黎曼假设」而补附录九（经 Denjoy 等价式；μ(n) 继起律；素数和定理）——书中以第一人称坚决主张这些成立。结语致谢排版者 Thomas Wolf 与算至 10¹² 的海法 Chen Kupperman。全书散布 1997–2008 自注层（continence 正名、「第一个证明 x = x 者」、对塔斯基与哥德尔的判语、brownian 正名、留给读者的冗余引线习题），使文本自身成为跨四十年的<b>再入结构</b>。</div></div>
+    </div>
+    <div class="cosbox">
+      <h3>宇宙发生 · 书内创世记</h3>
+      <ol>
+        <li><b>虚空</b>——未标记态的原乡</li>
+        <li><b>区分之欲</b>（the desire to distinguish）</li>
+        <li><b>第一区分</b>——空间被剖开，两态成立</li>
+        <li><b>名与令</b>——指示；两律固化为「时间戏台上的恒星」</li>
+        <li><b>初级算术</b>——有限形式的世界</li>
+        <li><b>初级代数</b>——形式之<b>像</b>的世界</li>
+        <li><b>再入</b>——松开有限性；不定性与虚态</li>
+        <li><b>时间</b>——为容纳自指而生</li>
+        <li><b>物质前身</b>——振荡、记忆、计数；驻波即波动性之先驱</li>
+        <li><b>观察者</b>——世界切出能看与被看；认出自己即第一区分，<b>回环闭合</b></li>
+      </ol>
+      <p class="small mut" style="margin-top:12px">「我们其实一直知道两条公理相互允洽，只是在论证的某一阶段巧妙地对自己隐瞒了这一点，以便踏上一场重新发现之旅。」（第十二章注）</p>
+    </div>
+  </div>
+</div></section>
+
+<section class="sec" id="index"><div class="wrap">
+  <div class="eyebrow">〇八 · 形式索引</div>
+  <h2 class="st">全书形式清单</h2>
+  <div class="sten">INDEX OF FORMS — 1 定义 · 2 公理 · 9 典章 · 2+2 初始式 · 18 定理 · 2 规则 · 9 后承</div>
+
+  <div class="ixgroup"><h3>定义与公理 <span>DEFINITION &amp; AXIOMS</span></h3>
+    <div class="ixrow"><div class="ixid">定义<span class="ixen">DEFINITION</span></div><div class="ixbody">区分即完美的涵纳。Distinction is perfect continence.</div></div>
+    <div class="ixrow"><div class="ixid">公理一<span class="ixen">LAW OF CALLING</span></div><div class="ixbody">再次召唤之值即召唤之值——再召唤即召唤。</div></div>
+    <div class="ixrow"><div class="ixid">公理二<span class="ixen">LAW OF CROSSING</span></div><div class="ixbody">再次穿越之值非穿越之值——再穿越即非穿越。</div></div>
+  </div>
+
+  <div class="ixgroup"><h3>九条典章 <span>CANONS</span></h3>
+    <div class="ixrow"><div class="ixid">典章一<span class="ixen">CONVENTION OF INTENTION</span></div><div class="ixbody">意图约定：凡未被允许者即被禁止。</div></div>
+    <div class="ixrow"><div class="ixid">典章二<span class="ixen">CONTRACTION OF REFERENCE</span></div><div class="ixbody">指涉收缩：指令可收缩到仍可被遵行的任何程度。</div></div>
+    <div class="ixrow"><div class="ixid">典章三<span class="ixen">CONVENTION OF SUBSTITUTION</span></div><div class="ixbody">代换约定：任何表达式中，任一排列可换为等价排列。</div></div>
+    <div class="ixrow"><div class="ixid">典章四<span class="ixen">HYPOTHESIS OF SIMPLIFICATION</span></div><div class="ixbody">化简假设：设排列之值为其经步骤可化归到的简单表达式之值。</div></div>
+    <div class="ixrow"><div class="ixid">典章五<span class="ixen">EXPANSION OF REFERENCE</span></div><div class="ixbody">指涉扩张：任何指涉形式可无限分裂（凝缩/确认＝「数」；消却/补偿＝「序」）。</div></div>
+    <div class="ixrow"><div class="ixid">典章六<span class="ixen">RULE OF DOMINANCE</span></div><div class="ixbody">支配规则：空间现支配值 m 则整式为已标记态，否则为未标记态（隐性值 n）。</div></div>
+    <div class="ixrow"><div class="ixid">典章七<span class="ixen">PRINCIPLE OF RELEVANCE</span></div><div class="ixbody">相关性原则：凡一切指示共有之性质无须指示（脚注：亦不可能被指示——「我们无法对一切说出任何东西」）。</div></div>
+    <div class="ixrow"><div class="ixid">典章八<span class="ixen">PRINCIPLE OF TRANSMISSION</span></div><div class="ixbody">传导原则：对一变量之振荡，其外部空间非透明即不透明。</div></div>
+    <div class="ixrow"><div class="ixid">典章九<span class="ixen">RULE OF DEMONSTRATION</span></div><div class="ixbody">演证规则：一次演证止于有限步。</div></div>
+  </div>
+
+  <div class="ixgroup"><h3>初始式 <span>INITIALS</span></h3>
+    <div class="ixrow"><div class="ixid">I1 数<span class="ixen">NUMBER</span></div><div class="ixbody"><span class="ixf"><span class="lof" data-lof="()()"></span><span class="eqs">=</span><span class="lof" data-lof="()"></span></span><span class="ixdir">凝缩 condense ⇌ 确认 confirm</span></div></div>
+    <div class="ixrow"><div class="ixid">I2 序<span class="ixen">ORDER</span></div><div class="ixbody"><span class="ixf"><span class="lof" data-lof="(())"></span><span class="eqs">=</span><span class="lblank"></span></span><span class="ixdir">消却 cancel ⇌ 补偿 compensate</span></div></div>
+    <div class="ixrow"><div class="ixid">J1 位置<span class="ixen">POSITION</span></div><div class="ixbody"><span class="ixf"><span class="lof" data-lof="((p)p)"></span><span class="eqs">=</span><span class="lblank"></span></span><span class="ixdir">取出 take out ⇌ 放入 put in</span></div></div>
+    <div class="ixrow"><div class="ixid">J2 转置<span class="ixen">TRANSPOSITION</span></div><div class="ixbody"><span class="ixf"><span class="lof" data-lof="((pr)(qr))"></span><span class="eqs">=</span><span class="lof" data-lof="((p)(q))r"></span></span><span class="ixdir">收拢 collect ⇌ 铺开 distribute</span></div></div>
+  </div>
+
+  <div class="ixgroup"><h3>十八条定理 <span>THEOREMS</span></h3>
+    <div class="ixrow"><div class="ixid">T1–T4<span class="ixen">REPRESENTATIVE</span></div><div class="ixbody">表征定理：T1 形式（任何有限十字排列皆可化归）；T2 内容（空间遍布空十字则值为已标记态）；T3 一致（化简唯一）；T4 区别（异源之值不混）。合而为表征之完备与一致。</div></div>
+    <div class="ixrow"><div class="ixid">T5–T7<span class="ixen">PROCEDURAL</span></div><div class="ixbody">程序定理：T5 同一（x = x，被证明而非假设）；T6 值（同值可同一化）；T7 后承（同于一者互同）。</div></div>
+    <div class="ixrow"><div class="ixid">T8–T9<span class="ixen">CONNECTIVE</span></div><div class="ixbody">联结定理：T8 恒变 <span class="lof" data-lof="((p)p)"></span><span class="eqs">=</span><span class="lblank"></span>；T9 变异 <span class="lof" data-lof="((pr)(qr))"></span><span class="eqs">=</span><span class="lof" data-lof="((p)(q))r"></span>——「进入新演算的大门」。</div></div>
+    <div class="ixrow"><div class="ixid">T10–T15<span class="ixen">ALGEBRAIC</span></div><div class="ixbody">代数定理：T10–T12 辖域推广；T13 生成推广；T14 规范·常量（深度 ≤ 2）；T15 规范·变量（任一变量 ≤ 2 次）。</div></div>
+    <div class="ixrow"><div class="ixid">T16–T17<span class="ixen">MIXED</span></div><div class="ixbody">混合定理：T16 桥（一变量各取值下等价则等价）；T17 完备性（初级代数完备）。</div></div>
+    <div class="ixrow"><div class="ixid">T18<span class="ixen">ALGEBRAIC</span></div><div class="ixbody">独立性：初级代数的两条初始式互相独立（直接证明）。</div></div>
+  </div>
+
+  <div class="ixgroup"><h3>两条规则 <span>RULES</span></h3>
+    <div class="ixrow"><div class="ixid">R1 代换<span class="ixen">SUBSTITUTION</span></div><div class="ixbody">若 e = f，以 f 代 g 中 e 之任一出现得 h，则 g = h。</div></div>
+    <div class="ixrow"><div class="ixid">R2 置换<span class="ixen">REPLACEMENT</span></div><div class="ixbody">若 e = f，将其中某一独立变量 v 的<b>每一</b>记号皆换为表达式 w（w 不必与 v 等价、不必独立或可变），e 变 j、f 变 k，则 j = k。</div></div>
+  </div>
+
+  <div class="ixgroup"><h3>九条后承 <span>CONSEQUENCES</span></h3>
+    <div class="ixrow"><div class="ixid">C1 映照<span class="ixen">REFLEXION</span></div><div class="ixbody"><span class="ixf"><span class="lof" data-lof="((a))"></span><span class="eqs">=</span><span class="lof" data-lof="a"></span></span><span class="ixdir">映照 reflect ⇌ reflect</span></div></div>
+    <div class="ixrow"><div class="ixid">C2 生成<span class="ixen">GENERATION</span></div><div class="ixbody"><span class="ixf"><span class="lof" data-lof="(ab)b"></span><span class="eqs">=</span><span class="lof" data-lof="(a)b"></span></span><span class="ixdir">退生 degenerate ⇌ 再生 regenerate（工程别名：revert / breed；普罗克洛之「回返 / 出行」）</span></div></div>
+    <div class="ixrow"><div class="ixid">C3 整并<span class="ixen">INTEGRATION</span></div><div class="ixbody"><span class="ixf"><span class="lof" data-lof="()a"></span><span class="eqs">=</span><span class="lof" data-lof="()"></span></span><span class="ixdir">归约 reduce ⇌ 增广 augment</span></div></div>
+    <div class="ixrow"><div class="ixid">C4 掩蔽<span class="ixen">OCCULTATION</span></div><div class="ixbody"><span class="ixf"><span class="lof" data-lof="((a)b)a"></span><span class="eqs">=</span><span class="lof" data-lof="a"></span></span><span class="ixdir">隐没 conceal ⇌ 显露 reveal（怀特海谓「吸收」，此处正名：是<b>掩</b>非<b>吞</b>）</span></div></div>
+    <div class="ixrow"><div class="ixid">C5 迭代<span class="ixen">ITERATION</span></div><div class="ixbody"><span class="ixf"><span class="lof" data-lof="aa"></span><span class="eqs">=</span><span class="lof" data-lof="a"></span></span><span class="ixdir">迭代 iterate ⇌ 复迭 reiterate</span></div></div>
+    <div class="ixrow"><div class="ixid">C6 延展<span class="ixen">EXTENSION</span></div><div class="ixbody"><span class="ixf"><span class="lof" data-lof="((a)(b))((a)b)"></span><span class="eqs">=</span><span class="lof" data-lof="a"></span></span><span class="ixdir">收缩 contract ⇌ 展开 expand</span></div></div>
+    <div class="ixrow"><div class="ixid">C7 梯列<span class="ixen">ECHELON</span></div><div class="ixbody"><span class="ixf"><span class="lof" data-lof="(((a)b)c)"></span><span class="eqs">=</span><span class="lof" data-lof="(ac)((b)c)"></span></span><span class="ixdir">拆梯 break ⇌ 成梯 make</span></div></div>
+    <div class="ixrow"><div class="ixid">C8 修正转置<span class="ixen">MODIFIED TRANSPOSITION</span></div><div class="ixbody"><span class="ixf"><span class="lof" data-lof="((a)(br)(cr))"></span><span class="eqs">=</span><span class="lof" data-lof="((a)(b)(c))((a)(r))"></span></span><span class="ixdir">收拢 collect ⇌ 铺开 distribute</span></div></div>
+    <div class="ixrow"><div class="ixid">C9 交叉转置<span class="ixen">CROSSTRANSPOSITION</span></div><div class="ixbody"><span class="ixf"><span class="lof" data-lof="(((b)(r))((a)(r))((x)r)((y)r))"></span><span class="eqs">=</span><span class="lof" data-lof="((r)ab)(rxy)"></span></span><span class="ixdir">crosstranspose：收拢 ⇌ 铺开</span></div></div>
+  </div>
+
+  <div class="ixgroup"><h3>附录一览 <span>APPENDICES OF THE FIFTH EDITION</span></h3>
+    <div class="ixrow"><div class="ixid">附录 1–2</div><div class="ixbody">谢弗公设之证明（史上首次；并示其「二元辖域 + 次序相关」双重残障）；演算之逻辑解释——记 a⊃b 为 <span class="lof" data-lof="(a)b"></span>，恒标/恒空/随值 ↔ 重言/矛盾/偶然；《数学原理》98–126 页可无损重写为一个 <span class="lof" data-lof="()"></span>，「数学噪音」降低四万倍以上；解释性定理二：存在推理仅当可视为全称推理时有效。</div></div>
+    <div class="ixrow"><div class="ixid">附录 3–5</div><div class="ixbody">罗素与《形式法则》（回忆录）；自然数的一种代数（ock 与数之补；「我对数学的基本贡献是发现了造出数与更简元素的<b>基本粒子</b>」）；四色定理二证（1979：铸形 cast、构形 formation、幂等叠置公理、奇偶通行 parity-pass）。</div></div>
+    <div class="ixrow"><div class="ixid">附录 6–9</div><div class="ixbody">最简四色证明（1998，直接调用第十一章再入链）；素数极限定理（1999）；平方数之间必有素数（二度「elemental」论证——「最终定案的不是论证之'逻辑'，而是算术之昭然行为」）；经 Denjoy 等价式的黎曼假设证明主张（μ(n) 继起律、LSB 级联、素数和定理）。</div></div>
+  </div>
+</div></section>
+
+<footer><div class="wrap">
+  <p><span class="fmk" aria-hidden="true"></span><b style="color:var(--ink)">制品说明</b>　依据所附第五英文版 PDF（Bohmeier Verlag，2008；Paper Capture OCR 文字层 + PyMuPDF 补齐再排版页面）全文通读后重构；演算引擎在嵌入前经 Node 全量校验（C1–C9、J1/J2 全真值表等价；五百例随机算术化简与直接求值一致；代换路径与求值一致）。</p>
+  <p><b style="color:var(--ink)">转写约定</b>　原书十字记号 ⌐ 于展示处以真形绘制（上横 + 右竖），于输入处以 <code class="tt">( )</code> 转写；空白即未标记态。「度」（degree）依书中定义为相异稳定状态之数目，非多项式之「次」。</p>
+  <p><b style="color:var(--ink)">设计系统</b>　羊皮纸 #F3EAD3 · 青 #1F6F66 · 赭 #B85C38 · Noto Serif SC · 单文件零构建。逻辑演化实验室 · 书籍知识制品。</p>
+</div></footer>
+<script>
+/* ================= 引擎（嵌入前已经 Node 全量校验） ================= */
+let UID=0;
+function parse(src){let i=0;function space(){const items=[];while(i<src.length){const c=src[i];
+  if(c==='('){i++;const kids=space();if(src[i]!==')')throw{msg:'缺少右括号',pos:i};i++;items.push({t:'x',k:kids,id:++UID});}
+  else if(c===')')break;
+  else if(/[a-zA-Z]/.test(c)){items.push({t:'v',n:c.toLowerCase(),id:++UID});i++;}
+  else if(/\s/.test(c))i++;
+  else throw{msg:'无法识别的字符「'+c+'」',pos:i};}
+  return items;}
+  const r=space();if(i<src.length)throw{msg:'多余的右括号',pos:i};return r;}
+function varsOf(items,set){set=set||new Set();for(const it of items){if(it.t==='v')set.add(it.n);else varsOf(it.k,set);}return[...set].sort();}
+function evalSpace(items,env){let v=false;for(const it of items){if(it.t==='v'){if(env[it.n])v=true;}else{if(!evalSpace(it.k,env))v=true;}}return v;}
+function cloneT(items){return items.map(it=>it.t==='v'?{t:'v',n:it.n,id:it.id}:{t:'x',k:cloneT(it.k),id:it.id});}
+function substitute(items,env){const out=[];for(const it of items){if(it.t==='v'){if(env[it.n])out.push({t:'x',k:[],id:++UID});}else out.push({t:'x',k:substitute(it.k,env),id:it.id});}return out;}
+function depthOf(items){let d=0;for(const it of items)if(it.t==='x')d=Math.max(d,1+depthOf(it.k));return d;}
+function stepOnce(root){const d0=depthOf(root);
+  if(d0===0)return null;
+  if(d0===1&&root.length===1)return null;
+  let path=[],cur=root;
+  while(depthOf(cur)>0){const target=depthOf(cur);const c=cur.find(it=>it.t==='x'&&1+depthOf(it.k)===target);path.push({cross:c,space:cur});cur=c.k;}
+  const last=path[path.length-1],cd=last.cross,P=last.space;
+  const sib=P.find(it=>it!==cd&&it.t==='x'&&it.k.length===0);
+  if(sib){const hl=[cd.id,sib.id];P.splice(P.indexOf(cd),1);return{rule:'condense',hl};}
+  if(P.length===1){
+    if(path.length>=2){const cp=path[path.length-2].cross,PP=path[path.length-2].space;const hl=[cp.id,cd.id];PP.splice(PP.indexOf(cp),1);return{rule:'cancel',hl};}
+    return null;}
+  return null;}
+function simplify(rootIn){const root=cloneT(rootIn);const frames=[{tree:cloneT(root),rule:null,hl:[]}];let guard=4000;
+  while(guard-->0){const before=cloneT(root);const st=stepOnce(root);if(!st)break;
+    frames[frames.length-1]={tree:before,rule:null,hl:st.hl};
+    frames.push({tree:cloneT(root),rule:st.rule,hl:[]});}
+  return{frames,val:depthOf(root)>0};}
+
+/* ================= 渲染 ================= */
+function esc(s){return s.replace(/[&<>]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;'}[c]));}
+function renderItems(items,hl,top){
+  if(!items.length)return top?'<span class="lblank" title="未标记态（空白）"></span>':'';
+  return items.map(it=>{
+    const h=hl&&hl.has(it.id)?' hl':'';
+    if(it.t==='v')return '<span class="lv'+h+'">'+esc(it.n)+'</span>';
+    return '<span class="cx'+h+'">'+renderItems(it.k,hl,false)+'</span>';
+  }).join('');}
+function renderStr(src){try{return renderItems(parse(src),null,true);}catch(e){return '<span style="color:var(--terracotta)">?</span>';}}
+document.querySelectorAll('.lof[data-lof]').forEach(el=>{el.innerHTML=renderStr(el.getAttribute('data-lof'));});
+
+const RULE_LABEL={
+  condense:{zh:'凝缩',en:'CONDENSATION · I1 数',},
+  cancel:{zh:'消却',en:'CANCELLATION · I2 序'},
+  subst:{zh:'代换',en:'SUBSTITUTION · m←( )，n←空白'}
+};
+function framesHTML(frames,extraFirst){
+  let rows='';
+  const seq=extraFirst?[extraFirst,...frames]:frames;
+  for(let k=0;k<seq.length;k++){
+    const f=seq[k];
+    const hl=new Set(f.hl||[]);
+    const next=seq[k+1];
+    let rule='';
+    if(next&&next.rule){const R=RULE_LABEL[next.rule];rule='<b>↓ '+R.zh+'</b><span class="fen">'+R.en+'</span>';}
+    else if(k<seq.length-1&&seq[k+1]&&!seq[k+1].rule&&seq[k+1].isSub){rule='';}
+    if(f.isSub){const R=RULE_LABEL.subst;rule='<b>↓ '+R.zh+'</b><span class="fen">'+R.en+'</span>';}
+    rows+='<div class="frame"><div class="fex">'+renderItems(f.tree,hl,true)+'</div><div class="frule">'+rule+'</div></div>';
+  }
+  return '<div class="steps">'+rows+'</div>';
+}
+function valBadge(v){return v?'<span class="vbadge int">已标记态 MARKED</span>':'<span class="vbadge con" style="border-style:dashed">未标记态 UNMARKED</span>';}
+function clsBadge(c){
+  if(c==='integral')return '<span class="vbadge int">恒标式 INTEGRAL · 重言</span>';
+  if(c==='disintegral')return '<span class="vbadge dis">恒空式 DISINTEGRAL · 矛盾</span>';
+  return '<span class="vbadge con">随值式 CONSEQUENTIAL · 偶然</span>';}
+
+/* ================= 求值面板 ================= */
+const inA=document.getElementById('inA'),errA=document.getElementById('errA'),outA=document.getElementById('outA');
+let envA={};
+const PRESETS_A=[
+  ['算术示例','((()())((())))'],
+  ['C4 掩蔽','((a)b)a'],
+  ['J2 左式','((pr)(qr))'],
+  ['附录二·例1 重言','((q)r)(pq)rp'],
+  ['矛盾 a∧¬a','((a)((a)))'],
+  ['偶然 a⊃b','(a)b'],
+  ['C9 左式','(((b)(r))((a)(r))((x)r)((y)r))']
+];
+const presetA=document.getElementById('presetA');
+PRESETS_A.forEach(([name,src])=>{const b=document.createElement('button');b.type='button';b.className='chip';b.textContent=name;b.onclick=()=>{inA.value=src;envA={};runA();};presetA.appendChild(b);});
+function runA(){
+  errA.textContent='';inA.classList.remove('err');
+  let tree;try{tree=parse(inA.value);}catch(e){inA.classList.add('err');errA.textContent=e.msg+(e.pos!=null?'（第 '+(e.pos+1)+' 字符处）':'');outA.innerHTML='';return;}
+  const vs=varsOf(tree);
+  if(vs.length>12){errA.textContent='变量过多（>12），请精简。';outA.innerHTML='';return;}
+  let html='<div class="rendered">'+renderItems(tree,null,true)+'</div>';
+  if(vs.length===0){
+    const{frames,val}=simplify(tree);
+    html+='<div class="subnote">纯算术：执行 T1 最深空间程序，共 '+(frames.length-1)+' 步。</div>';
+    html+=framesHTML(frames);
+    html+='<div class="verdict">值 '+valBadge(val)+'</div>';
+  }else{
+    vs.forEach(v=>{if(!(v in envA))envA[v]=false;});
+    Object.keys(envA).forEach(k=>{if(!vs.includes(k))delete envA[k];});
+    let allT=true,allF=true;const rows=[];
+    for(let m=0;m<(1<<vs.length);m++){const env={};vs.forEach((v,i)=>env[v]=!!(m&(1<<i)));const val=evalSpace(tree,env);if(val)allF=false;else allT=false;rows.push({env,val});}
+    const cls=allT?'integral':allF?'disintegral':'consequential';
+    html+='<div class="verdict">三分类（第六章 / 附录二）：'+clsBadge(cls)+'</div>';
+    html+='<div class="subnote">为各变量指定取值（点击切换；m = <span class="mk"></span> 已标记，n = 未标记），下方给出该取值下的代换与算术化简：</div>';
+    html+='<div class="presets">'+vs.map(v=>'<button type="button" class="chip mchip'+(envA[v]?' mm':'')+'" data-v="'+v+'">'+v+' ← '+(envA[v]?'m':'n')+'</button>').join('')+'</div>';
+    const sub=substitute(cloneT(tree),envA);
+    const{frames,val}=simplify(sub);
+    const first={tree:cloneT(tree),hl:[],isSub:true};
+    html+=framesHTML(frames,first);
+    html+='<div class="verdict">此取值下的值 '+valBadge(val)+'</div>';
+    if(vs.length<=6){
+      html+='<div class="ttwrap"><table class="tt"><tr>'+vs.map(v=>'<th>'+v+'</th>').join('')+'<th>值</th></tr>';
+      rows.forEach(r=>{
+        const cur=vs.every(v=>r.env[v]===!!envA[v]);
+        html+='<tr'+(cur?' style="background:var(--teal-mist)"':'')+' class="ttr" data-env="'+vs.map(v=>r.env[v]?1:0).join('')+'">'
+          +vs.map(v=>'<td>'+(r.env[v]?'<span class="mk"></span>':'<span class="nk">·</span>')+'</td>').join('')
+          +'<td>'+(r.val?'<span class="mk"></span>':'<span class="nk">·</span>')+'</td></tr>';
+      });
+      html+='</table><div class="subnote">共 '+rows.length+' 种取值；点击任一行可切换到该取值。</div></div>';
+    }else{
+      html+='<div class="subnote">变量较多（'+vs.length+'），全表 '+rows.length+' 行不再展示；分类已遍历全部取值。</div>';
+    }
+  }
+  outA.innerHTML=html;
+  outA.querySelectorAll('.chip.mchip').forEach(b=>{b.onclick=()=>{const v=b.getAttribute('data-v');envA[v]=!envA[v];runA();};});
+  outA.querySelectorAll('tr.ttr').forEach(tr=>{tr.style.cursor='pointer';tr.onclick=()=>{const bits=tr.getAttribute('data-env');const vs2=varsOf(parse(inA.value));vs2.forEach((v,i)=>envA[v]=bits[i]==='1');runA();};});
+}
+document.getElementById('goA').onclick=runA;
+inA.addEventListener('keydown',e=>{if(e.key==='Enter')runA();});
+
+/* ================= 等式验证面板 ================= */
+const inL=document.getElementById('inL'),inR=document.getElementById('inR'),errE=document.getElementById('errE'),outE=document.getElementById('outE');
+const PRESETS_E=[
+  ['J1','((p)p)',''],['J2','((pr)(qr))','((p)(q))r'],
+  ['C1','((a))','a'],['C2','(ab)b','(a)b'],['C3','()a','()'],
+  ['C4','((a)b)a','a'],['C5','aa','a'],['C6','((a)(b))((a)b)','a'],
+  ['C7','(((a)b)c)','(ac)((b)c)'],['C8','((a)(br)(cr))','((a)(b)(c))((a)(r))'],
+  ['C9','(((b)(r))((a)(r))((x)r)((y)r))','((r)ab)(rxy)'],
+  ['反例','(a)b','(b)a']
+];
+const presetE=document.getElementById('presetE');
+PRESETS_E.forEach(([name,l,r])=>{const b=document.createElement('button');b.type='button';b.className='chip';b.textContent=name;b.onclick=()=>{inL.value=l;inR.value=r;runE();};presetE.appendChild(b);});
+function runE(){
+  errE.textContent='';inL.classList.remove('err');inR.classList.remove('err');
+  let tl,tr;
+  try{tl=parse(inL.value);}catch(e){inL.classList.add('err');errE.textContent='左式：'+e.msg;outE.innerHTML='';return;}
+  try{tr=parse(inR.value);}catch(e){inR.classList.add('err');errE.textContent='右式：'+e.msg;outE.innerHTML='';return;}
+  const vs=[...new Set([...varsOf(tl),...varsOf(tr)])].sort();
+  if(vs.length>12){errE.textContent='变量过多（>12）。';outE.innerHTML='';return;}
+  let bad=null;
+  for(let m=0;m<(1<<vs.length);m++){const env={};vs.forEach((v,i)=>env[v]=!!(m&(1<<i)));
+    if(evalSpace(tl,env)!==evalSpace(tr,env)){bad={env};break;}}
+  let html='<div class="rendered">'+renderItems(tl,null,true)+'<span class="eqs" style="font-size:1.1em">'+(bad?'≠':'=')+'</span>'+renderItems(tr,null,true)+'</div>';
+  if(!bad){
+    html+='<div class="verdict"><b class="eq">等价。</b>已检验全部 '+(1<<vs.length)+' 种取值'+(vs.length?'（变量 '+vs.join(', ')+'）':'（无变量）')+'——依 T17，凡真之方程形式必可在代数中演证。</div>';
+  }else{
+    const l=evalSpace(tl,bad.env),r=evalSpace(tr,bad.env);
+    html+='<div class="verdict"><b class="neq">不等价。</b>反例取值：'
+      +vs.map(v=>v+' ← '+(bad.env[v]?'m':'n')).join('，')
+      +'；此时左式为'+(l?'已标记':'未标记')+'、右式为'+(r?'已标记':'未标记')+'。</div>';
+  }
+  outE.innerHTML=html;
+}
+document.getElementById('goE').onclick=runE;
+[inL,inR].forEach(el=>el.addEventListener('keydown',e=>{if(e.key==='Enter')runE();}));
+
+/* ================= 二度实验台 ================= */
+const REDUCE=matchMedia('(prefers-reduced-motion: reduce)').matches;
+function pushWave(box,val,terra,cap){
+  const prev=box.lastElementChild;const changed=prev&&((prev.classList.contains('hi'))!==val);
+  const c=document.createElement('div');c.className='wc '+(val?'hi':'lo')+(terra?' tc':'')+(changed?' edge':'');
+  box.appendChild(c);while(box.children.length>(cap||46))box.removeChild(box.firstChild);}
+/* E3 振荡 */
+let oscOn=false,oscF=false,oscT=null;
+const oscWave=document.getElementById('oscWave'),oscLamp=document.getElementById('oscLamp');
+document.getElementById('oscRun').onclick=function(){oscOn=!oscOn;this.textContent=oscOn?'暂停':'启动';
+  if(oscOn&&!oscT){oscT=setInterval(()=>{if(!oscOn)return;oscF=!oscF;pushWave(oscWave,oscF,true);oscLamp.classList.toggle('on',oscF);},REDUCE?900:520);}};
+document.getElementById('oscClr').onclick=()=>{oscWave.innerHTML='';oscF=false;oscLamp.classList.remove('on');};
+/* E1 记忆 */
+let memA=0,memB=0,memF=false,memT=null;
+const wa=document.getElementById('memWaveA'),wb=document.getElementById('memWaveB'),wf=document.getElementById('memWaveF'),memLamp=document.getElementById('memLamp');
+function memTick(){const a=memA>0,b=memB>0;if(memA>0)memA--;if(memB>0)memB--;
+  memF=(memF||a)&&!b;
+  pushWave(wa,a,false);pushWave(wb,b,false);pushWave(wf,memF,true);
+  memLamp.classList.toggle('on',memF);}
+function memEnsure(){if(!memT)memT=setInterval(memTick,REDUCE?900:520);}
+document.getElementById('pulseA').onclick=()=>{memEnsure();memA=2;};
+document.getElementById('pulseB').onclick=()=>{memEnsure();memB=2;};
+/* E4 调制 */
+let modOn=false,modA=false,modF=false,modT=null;
+const ma=document.getElementById('modWaveA'),mf=document.getElementById('modWaveF');
+document.getElementById('modRun').onclick=function(){modOn=!modOn;this.textContent=modOn?'暂停时钟 a':'启动时钟 a';
+  if(modOn&&!modT){modT=setInterval(()=>{if(!modOn)return;const prev=modA;modA=!modA;if(!prev&&modA)modF=!modF;
+    pushWave(ma,modA,false);pushWave(mf,modF,true);},REDUCE?900:520);}};
+document.getElementById('modClr').onclick=()=>{ma.innerHTML='';mf.innerHTML='';modA=false;modF=false;};
+
+/* ================= 概念图谱 ================= */
+const TIERS=[
+  {zh:'虚空',en:'VOID'},{zh:'元始',en:'GIVENS'},{zh:'公理',en:'AXIOMS'},{zh:'建构',en:'CONSTRUCTION'},
+  {zh:'约法',en:'CANONS'},{zh:'算术',en:'ARITHMETIC'},{zh:'代数',en:'ALGEBRA'},{zh:'二度',en:'DEGREE 2'},{zh:'回环',en:'RE-ENTRY'}
+];
+const CONCEPTS=[
+{id:'void',zh:'虚空',en:'the void',tier:0,from:[],src:'导言 · 第十一章注',def:'未标记态的原乡；一切形式由此出离（第十一章为「从虚空起算的第五次出离」）。价值秩序的终点：弃存在而就真，弃真而就指示，弃指示而就形式，弃形式而就虚空。'},
+{id:'distinction',zh:'区分',en:'distinction',tier:1,from:['void'],src:'第一章',def:'两个给定观念之一。定义：「区分即完美的涵纳」（perfect continence）——以两侧分明的边界安排出一种状态，使一侧的点不穿越边界便不能到达另一侧。'},
+{id:'indication',zh:'指示',en:'indication',tier:1,from:['distinction'],src:'第一章',def:'另一给定观念；与区分不可分离——不作区分即无法指示。'},
+{id:'motive',zh:'动机 · 价值',en:'motive · value',tier:1,from:['distinction'],src:'第一章',def:'无动机则无区分；无价值之差则无动机。内容既有价值即可命名——「名之被召唤」与「越界之意图」皆可与内容之价值同一。'},
+{id:'form',zh:'形式',en:'the form',tier:1,from:['distinction'],src:'第一 · 二章',def:'取区分之形式为形式：被任一区分剖开的空间连同其全部内容。第一区分之形式即「形式」。'},
+{id:'calling',zh:'召唤律',en:'law of calling',tier:2,from:['motive'],src:'公理一',def:'再次召唤之值即召唤之值——对任何名，再召唤即召唤。'},
+{id:'crossing',zh:'穿越律',en:'law of crossing',tier:2,from:['motive'],src:'公理二',def:'再次穿越之值非穿越之值——对任何边界，再穿越即非穿越。'},
+{id:'firstdist',zh:'第一区分',en:'first distinction',tier:3,from:['form'],src:'第二章',def:'全书唯一建构令「画出一个区分」的产物；空间被剖开（severed / cloven）为两侧。'},
+{id:'mark',zh:'标记 · 记号 · 十字',en:'mark · token · cross',tier:3,from:['firstdist'],src:'第二章',def:'记号身兼名与令：既指示已标记态，又是穿越边界之指令——两义凝缩于一符，「正是这种凝缩赋予符号以力量」。十字之间只许一种关系：涵纳。'},
+{id:'states',zh:'已标记态 / 未标记态',en:'marked / unmarked state',tier:3,from:['firstdist'],src:'第二章',def:'第一区分所区分之两态；空白即未标记态。'},
+{id:'expr',zh:'表达式 · 值 · 等价',en:'expression · value',tier:3,from:['mark'],src:'第二章',def:'意在指示的排列称表达式；其所指示之态为其值；同值者等价，以 = 相连。'},
+{id:'cond',zh:'凝缩',en:'condensation',tier:3,from:['calling','mark'],src:'第二章 · I1',def:'( )( ) = ( )。公理一的记号形式；扩张指涉后与「确认」合称「数」之步。'},
+{id:'canc',zh:'消却',en:'cancellation',tier:3,from:['crossing','mark'],src:'第二章 · I2',def:'(( )) = 空白。公理二的记号形式；与「补偿」合称「序」之步。'},
+{id:'simple',zh:'简单表达式',en:'simple expression',tier:3,from:['cond','canc'],src:'第二章',def:'恰有两个：一个空十字，与一片空白。任何其余表达式的价值都要向这两者化归。'},
+{id:'depth',zh:'深度 · 遍布空间',en:'depth · pervasive space',tier:3,from:['expr'],src:'第二章',def:'到达一空间所需的穿越数为深度；整式为「未写出的十字」所包裹（作者后注：它只是把整式收进一个括号的装置）。'},
+{id:'canons',zh:'九条典章',en:'the nine canons',tier:4,from:['simple'],src:'第三 · 八 · 十一章',def:'「允许」而非「建构」的常令：意图约定 / 指涉收缩 / 代换约定 / 化简假设 / 指涉扩张 / 支配规则 / 相关性原则 / 传导原则 / 演证规则。'},
+{id:'hyp',zh:'化简假设',en:'hypothesis of simplification',tier:4,from:['canons'],src:'第三章 · 典章四',def:'设排列之值为其可化归到的简单表达式之值——一笔明写的预支，须由 T3 / T4 偿还。'},
+{id:'dominance',zh:'支配规则',en:'rule of dominance',tier:4,from:['canons'],src:'第四章 · 典章六',def:'空间现支配值 m 则整式为已标记态，否则为未标记态（隐性值 n）。逻辑解释下即「并置为或、十字为非」。'},
+{id:'calcind',zh:'指示演算',en:'calculus of indications',tier:5,from:['cond','canc'],src:'第三章',def:'以两条原始方程为初始式（initials）所确定的演算。'},
+{id:'arith',zh:'初级算术',en:'primary arithmetic',tier:5,from:['calcind'],src:'第三 · 四章',def:'仅由初始式直接后承生成的演算；I1「数」、I2「序」。「布尔设计代数以迁就逻辑——逻辑只是解释，绝非它的算术。」'},
+{id:'rep',zh:'表征定理 T1–T4',en:'theorems of representation',tier:5,from:['arith','hyp'],src:'第四章',def:'偿债：任何有限排列可化归（T1）、遍布空十字则已标记（T2）、化简唯一（T3）、异源之值不混（T4）——演算被证明一致。T1 默认平面书写：一条待显明的隐蔽约定。'},
+{id:'proc',zh:'程序定理 T5–T7',en:'procedural theorems',tier:5,from:['rep'],src:'第四章',def:'T5 即 x = x：「以往作者只能把它当公理；我是第一个从自己的公理把它证明出来的作者。」'},
+{id:'conn',zh:'联结定理 T8–T9',en:'theorems of connexion',tier:5,from:['proc'],src:'第四章',def:'T8 恒变、T9 变异——「进入新演算的大门」，将脱境为 J1、J2。'},
+{id:'fourfold',zh:'定理/后承 · 证明/演证',en:'theorem · consequence / proof · demonstration',tier:5,from:['arith'],src:'导言 · 第八章',def:'演证在演算之内循规而行；证明在演算之外诉诸显明。混用即通行文献虚假困难之源；「演证 : 证明 = 初始式 : 公理」。'},
+{id:'variable',zh:'变量',en:'variable',tier:6,from:['conn'],src:'第五章 · 导言',def:'从「操作常量在场与否无关紧要」中长出；印证维特根斯坦：命题演算的变量代表的只是真值。'},
+{id:'algebra',zh:'初级代数',en:'primary algebra',tier:6,from:['variable','conn'],src:'第五章',def:'算术之像。初始式 J1 位置 ((p)p)=空白、J2 转置 ((pr)(qr))=((p)(q))r。作者后注：应称 brownian 而非 boolean。'},
+{id:'rules',zh:'R1 代换 · R2 置换',en:'substitution · replacement',tier:6,from:['algebra'],src:'第五章',def:'两条普适代数规则「第一次被正确陈述——唯一尝试过的另一位作者是塔斯基，而他弄错了」。'},
+{id:'cons',zh:'九后承 C1–C9',en:'consequences',tier:6,from:['algebra','rules'],src:'第六章',def:'映照 · 生成 · 整并 · 掩蔽 · 迭代 · 延展 · 梯列 · 修正转置 · 交叉转置。「零步亦步」：若对步骤再取步骤，演算不一致。'},
+{id:'classes',zh:'恒标 / 恒空 / 随值',en:'integral · disintegral · consequential',tier:6,from:['dominance','algebra'],src:'第六章 · 附录二',def:'三类表达式，逻辑解释下 ↔ 重言 / 矛盾 / 偶然——分类可由操演直接判得，真值表与文恩图皆成冗余。'},
+{id:'canonical',zh:'规范形 T14–T15',en:'canonical forms',tier:6,from:['cons'],src:'第七章',def:'任何表达式等价于深度 ≤ 2、且任一变量出现 ≤ 2 次者——完备性证明的机械基础。'},
+{id:'bridge',zh:'桥定理 T16',en:'the bridge',tier:6,from:['canonical'],src:'第八章',def:'一变量各取值下等价则等价；以透明 / 不透明之传导原则证得。「此前无人能证，只好当公理用。」'},
+{id:'complete',zh:'完备性 T17',en:'completeness',tier:6,from:['bridge'],src:'第九章',def:'凡关于算术可证的方程形式皆可在代数中演证。完备性只属于「一种表述对另一种表述的表征」；哥德尔当被庆祝并重述：一切真语句皆可证明，只是在某些代数中不可演证。'},
+{id:'indep',zh:'独立性 T18',en:'independence',tier:6,from:['algebra'],src:'第十章',def:'J1、J2 互不可推（直接证明）；独立性证明即缺失该初始式之演算的不完备性证明。'},
+{id:'reentry',zh:'再入',en:'re-entry',tier:7,from:['cons'],src:'第十一章',def:'解除有限步之约后，((a)b) 生成无限梯列；偶数深度处的被罩部分与整式全同——表达式再入自身内部空间：E1 f = ((fa)b)。'},
+{id:'degree',zh:'度',en:'degree',tier:7,from:['reentry'],src:'第十一章',def:'相异稳定状态之数目（振荡态亦算稳定）。a、b 皆未标记时 E1 有两个实解——表征定理失效，不定性入场。'},
+{id:'imaginary',zh:'虚态',en:'imaginary state',tier:7,from:['degree'],src:'第十一章 · 美国版序',def:'E3 f = (f) 为两个实态双双拒斥——如 x = −1/x 之于实数。解决不是禁令而是扩类：允许第四类语句「虚」，类型论由此不必要。'},
+{id:'time',zh:'时间',en:'time',tier:7,from:['imaginary'],src:'第十一章',def:'「由于我们不愿离开形式，所设想的状态不在空间中而在时间中。」值以有限速度传播；给速度必给方向——速度由是发生。'},
+{id:'osc',zh:'振荡函数 E3',en:'oscillator',tier:7,from:['time'],src:'第十一章',def:'方波。其值在空间中不定故对形式为虚，在时间中为实，并可对自身而言重归空间之实。'},
+{id:'mem',zh:'记忆函数 E1',en:'memory',tier:7,from:['reentry','time'],src:'第十一章',def:'a 置位、b 复位；皆归未标记后记得谁最后已标记。E2 f = ((f)) 为偶次极限：两实根之双稳。'},
+{id:'mod',zh:'调制函数 E4',en:'modulator / reductor',tier:7,from:['mem'],src:'第十一章及注',def:'不但记忆而且计数：频率减半。1961 与 D. J. Spencer-Brown 造于电路，英国铁路采用——纯「逻辑」计数与虚布尔值入路之始。'},
+{id:'inform',zh:'潜转 · 内构',en:'subversion · in-formation',tier:7,from:['reentry'],src:'第十一章注',def:'偶次再入的方程「evenly informed」：书面之下翻，亦是于内成形——自含其形并记得经历；驻波式表达式即物质波动性之前身。'},
+{id:'indspace',zh:'指示空间 · 观察者位置',en:'indicative space',tier:8,from:['depth','inform'],src:'第八 · 十二章注',def:'值向 s₀ 而言。地球书写实验：同一铭文四城四读——平面书写无歧义只因默认站在最外括号之外；表达式须添上观察者立足之指示子。'},
+{id:'observer',zh:'观察者',en:'the observer',tier:8,from:['indspace'],src:'第十二章',def:'区分的隐指涉：「外侧即区分被设想为从之观看的那一侧。」「一位观察者，既然他区分了他所占据的空间，他也就是一个标记。」'},
+{id:'identity',zh:'三位同一',en:'the identity',tier:8,from:['observer','firstdist'],src:'第十二章末句',def:'第一区分、标记与观察者不仅可以互换，而且在形式中同一。universe = unus + vertere：任一宇宙即「转出一个」之所见。'}
+];
+const tiersBox=document.getElementById('maptiers'),svgL=document.getElementById('maplines');
+TIERS.forEach((t,ti)=>{
+  const row=document.createElement('div');row.className='tier';
+  row.innerHTML='<div class="tlabel">'+t.zh+'<span class="ten">'+t.en+'</span></div>';
+  const nb=document.createElement('div');nb.className='tnodes';
+  CONCEPTS.filter(c=>c.tier===ti).forEach(c=>{
+    const b=document.createElement('button');b.type='button';b.className='node';b.id='nd-'+c.id;b.textContent=c.zh;
+    b.onclick=(e)=>{e.stopPropagation();selectConcept(c.id);};
+    nb.appendChild(b);});
+  row.appendChild(nb);tiersBox.appendChild(row);});
+const CMAP={};CONCEPTS.forEach(c=>CMAP[c.id]=c);
+let edges=[];
+function drawLines(){
+  const inner=document.getElementById('mapinner');
+  const W=inner.scrollWidth,H=inner.scrollHeight;
+  svgL.setAttribute('width',W);svgL.setAttribute('height',H);svgL.setAttribute('viewBox','0 0 '+W+' '+H);
+  svgL.innerHTML='';edges=[];
+  const ir=inner.getBoundingClientRect();
+  CONCEPTS.forEach(c=>{c.from.forEach(p=>{
+    const a=document.getElementById('nd-'+p),b=document.getElementById('nd-'+c.id);if(!a||!b)return;
+    const ra=a.getBoundingClientRect(),rb=b.getBoundingClientRect();
+    const x1=ra.left-ir.left+ra.width/2,y1=ra.top-ir.top+ra.height,
+          x2=rb.left-ir.left+rb.width/2,y2=rb.top-ir.top;
+    const path=document.createElementNS('http://www.w3.org/2000/svg','path');
+    const dy=Math.max(18,(y2-y1)/2);
+    path.setAttribute('d','M'+x1+' '+y1+' C '+x1+' '+(y1+dy)+', '+x2+' '+(y2-dy)+', '+x2+' '+y2);
+    path.setAttribute('fill','none');path.setAttribute('stroke','#1F6F66');path.setAttribute('stroke-opacity','.22');path.setAttribute('stroke-width','1.3');
+    svgL.appendChild(path);edges.push({path,to:c.id,from:p});
+  });});
+  if(selId)applySel();
+}
+let selId=null;
+function ancestorsOf(id,set){set=set||new Set();CMAP[id].from.forEach(p=>{if(!set.has(p)){set.add(p);ancestorsOf(p,set);}});return set;}
+function applySel(){
+  const anc=selId?ancestorsOf(selId):new Set();
+  CONCEPTS.forEach(c=>{const el=document.getElementById('nd-'+c.id);
+    el.classList.toggle('sel',c.id===selId);
+    el.classList.toggle('anc',anc.has(c.id)&&c.id!==selId);
+    el.classList.toggle('dim',!!selId&&c.id!==selId&&!anc.has(c.id));});
+  const closure=new Set(anc);if(selId)closure.add(selId);
+  edges.forEach(e=>{const on=selId&&closure.has(e.to)&&closure.has(e.from);
+    e.path.setAttribute('stroke',on?'#B85C38':'#1F6F66');
+    e.path.setAttribute('stroke-opacity',selId?(on?'.9':'.08'):'.22');
+    e.path.setAttribute('stroke-width',on?'1.9':'1.3');});
+}
+const cdetail=document.getElementById('cdetail');
+function selectConcept(id){
+  if(selId===id){selId=null;applySel();return;}
+  selId=id;applySel();
+  const c=CMAP[id];
+  const fr=c.from.length?c.from.map(p=>CMAP[p].zh).join('，'):'——（元始）';
+  cdetail.innerHTML='<h3>'+c.zh+'</h3><div class="cen">'+esc(c.en).toUpperCase()+'</div><p>'+c.def+'</p>'
+    +'<div class="csrc">出处：'+c.src+'</div><div class="cfrom">由谁唤出：'+fr+'</div>';
+}
+document.querySelector('.mapouter').addEventListener('click',()=>{selId=null;applySel();});
+let rsT=null;window.addEventListener('resize',()=>{clearTimeout(rsT);rsT=setTimeout(drawLines,180);});
+requestAnimationFrame(()=>requestAnimationFrame(drawLines));
+if(document.fonts&&document.fonts.ready)document.fonts.ready.then(()=>drawLines());
+
+/* ================= 宇宙发生回环 ================= */
+(function(){
+  const svg=document.getElementById('ringsvg');if(!svg)return;
+  const NS='http://www.w3.org/2000/svg';
+  const cx=280,cy=280,R=196,RL=242;
+  const st=['虚空','区分之欲','第一区分','名与令','初级算术','初级代数','再入','时间','物质前身','观察者'];
+  function pt(angDeg,r){const a=(angDeg-90)*Math.PI/180;return[cx+r*Math.cos(a),cy+r*Math.sin(a)];}
+  const defs=document.createElementNS(NS,'defs');
+  defs.innerHTML='<marker id="arw" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" fill="#1F6F66"/></marker>';
+  svg.appendChild(defs);
+  for(let i=0;i<10;i++){
+    const a1=i*36+9,a2=(i+1)*36-9;
+    const[p1x,p1y]=pt(a1,R),[p2x,p2y]=pt(a2,R);
+    const arc=document.createElementNS(NS,'path');
+    arc.setAttribute('d','M'+p1x+' '+p1y+' A '+R+' '+R+' 0 0 1 '+p2x+' '+p2y);
+    arc.setAttribute('fill','none');arc.setAttribute('stroke','#1F6F66');arc.setAttribute('stroke-width','1.7');arc.setAttribute('stroke-opacity','.55');arc.setAttribute('marker-end','url(#arw)');
+    svg.appendChild(arc);}
+  st.forEach((name,i)=>{
+    const ang=i*36;const[dx,dy]=pt(ang,R);
+    const key=(i===0||i===9);
+    const dot=document.createElementNS(NS,'circle');
+    dot.setAttribute('cx',dx);dot.setAttribute('cy',dy);dot.setAttribute('r',key?7:5.4);
+    dot.setAttribute('fill',key?'#B85C38':'#F3EAD3');dot.setAttribute('stroke',key?'#B85C38':'#1F6F66');dot.setAttribute('stroke-width','2.2');
+    svg.appendChild(dot);
+    const[tx,ty]=pt(ang,RL);
+    const t=document.createElementNS(NS,'text');
+    t.setAttribute('x',tx);t.setAttribute('y',ty+5);
+    t.setAttribute('text-anchor',Math.abs(tx-cx)<40?'middle':(tx>cx?'start':'end'));
+    t.setAttribute('font-size','15.5');t.setAttribute('font-weight',key?'900':'600');
+    t.setAttribute('fill',key?'#B85C38':'#2C2117');t.setAttribute('letter-spacing','1');
+    t.textContent=name;svg.appendChild(t);});
+  const g=document.createElementNS(NS,'g');
+  g.innerHTML='<path d="M'+(cx-34)+' '+(cy-24)+' H '+(cx+34)+' V '+(cy+14)+'" fill="none" stroke="#2C2117" stroke-width="3.4"/>'
+    +'<text x="'+cx+'" y="'+(cy+46)+'" text-anchor="middle" font-size="14" fill="#6B5B47" letter-spacing="3">画出一个区分</text>'
+    +'<text x="'+cx+'" y="'+(cy+66)+'" text-anchor="middle" font-size="10" fill="#6B5B47" letter-spacing="2">DRAW A DISTINCTION</text>';
+  svg.appendChild(g);
+})();
+
+/* ================= 杂项 ================= */
+document.getElementById('openall').onclick=()=>document.querySelectorAll('details.ch').forEach(d=>d.open=true);
+document.getElementById('closeall').onclick=()=>document.querySelectorAll('details.ch').forEach(d=>d.open=false);
+const navLinks=[...document.querySelectorAll('.topnav a.nl')];
+const secIds=navLinks.map(a=>a.getAttribute('href').slice(1));
+const io=new IntersectionObserver(es=>{
+  es.forEach(e=>{if(e.isIntersecting){navLinks.forEach(a=>a.classList.toggle('act',a.getAttribute('href')==='#'+e.target.id));}});
+},{rootMargin:'-38% 0px -55% 0px'});
+secIds.forEach(id=>{const el=document.getElementById(id);if(el)io.observe(el);});
+runA();runE();
+</script>
+</body>
+</html>

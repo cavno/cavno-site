@@ -1,0 +1,2104 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>探索生命的意义与价值 · 从虚无中寻找希望与力量</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@300;400;500;600;700;900&family=Noto+Sans+SC:wght@300;400;500;700&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,700;1,400&family=JetBrains+Mono:wght@300;400&display=swap" rel="stylesheet">
+<style>
+:root {
+  --ink: #14110f;
+  --ink-soft: #2a2520;
+  --paper: #f4ede0;
+  --paper-warm: #ebe1cc;
+  --paper-deep: #d9cdb3;
+  --gold: #b88746;
+  --gold-bright: #d4a574;
+  --gold-deep: #8b5e2b;
+  --crimson: #6b2b2b;
+  --moss: #4a5c3a;
+  --slate: #6a6358;
+  --line: rgba(20, 17, 15, 0.15);
+  --line-strong: rgba(20, 17, 15, 0.35);
+  --shadow: 0 1px 0 rgba(20, 17, 15, 0.05), 0 30px 60px -30px rgba(20, 17, 15, 0.4);
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+html { scroll-behavior: smooth; }
+
+body {
+  font-family: 'Noto Serif SC', 'Songti SC', 'STSong', serif;
+  font-weight: 400;
+  background: var(--paper);
+  color: var(--ink);
+  line-height: 1.75;
+  letter-spacing: 0.02em;
+  overflow-x: hidden;
+  background-image:
+    radial-gradient(circle at 15% 20%, rgba(184, 135, 70, 0.06) 0%, transparent 40%),
+    radial-gradient(circle at 85% 80%, rgba(107, 43, 43, 0.04) 0%, transparent 40%);
+  background-attachment: fixed;
+}
+
+/* Subtle paper grain */
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.4'/%3E%3C/svg%3E");
+  opacity: 0.07;
+  z-index: 1;
+  mix-blend-mode: multiply;
+}
+
+main, header, nav, .toc, .modal { position: relative; z-index: 2; }
+
+/* ============ TOP BAR ============ */
+.topbar {
+  position: fixed;
+  top: 0; left: 0; right: 0;
+  z-index: 100;
+  background: rgba(244, 237, 224, 0.92);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border-bottom: 1px solid var(--line);
+  padding: 14px 32px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-family: 'Noto Sans SC', sans-serif;
+  font-size: 13px;
+  letter-spacing: 0.1em;
+}
+.topbar .brand {
+  font-family: 'Cormorant Garamond', serif;
+  font-style: italic;
+  font-size: 17px;
+  letter-spacing: 0.05em;
+  color: var(--ink);
+}
+.topbar .brand span { color: var(--gold-deep); font-weight: 600; }
+.topbar nav { display: flex; gap: 22px; }
+.topbar nav a {
+  color: var(--ink-soft);
+  text-decoration: none;
+  position: relative;
+  padding: 4px 0;
+  cursor: pointer;
+  transition: color 0.3s;
+}
+.topbar nav a:hover { color: var(--gold-deep); }
+.topbar nav a.active {
+  color: var(--gold-deep);
+  font-weight: 500;
+}
+.topbar nav a.active::after {
+  content: "";
+  position: absolute;
+  left: 0; right: 0; bottom: -2px;
+  height: 1px;
+  background: var(--gold);
+}
+
+/* ============ HERO ============ */
+.hero {
+  min-height: 100vh;
+  padding: 100px 8vw 60px;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 60px;
+  align-items: center;
+  position: relative;
+}
+
+.hero-text .eyebrow {
+  font-family: 'Cormorant Garamond', serif;
+  font-style: italic;
+  font-size: 18px;
+  color: var(--gold-deep);
+  letter-spacing: 0.15em;
+  margin-bottom: 24px;
+}
+.hero-text .eyebrow::before {
+  content: "❦  ";
+  color: var(--gold);
+}
+
+.hero-text h1 {
+  font-family: 'Noto Serif SC', serif;
+  font-weight: 900;
+  font-size: clamp(38px, 5.5vw, 78px);
+  line-height: 1.05;
+  letter-spacing: 0;
+  color: var(--ink);
+  margin-bottom: 28px;
+}
+.hero-text h1 .accent {
+  color: var(--crimson);
+  font-style: italic;
+  font-family: 'Noto Serif SC', serif;
+}
+.hero-text h1 .small {
+  display: block;
+  font-size: 0.4em;
+  font-weight: 400;
+  margin-top: 18px;
+  color: var(--slate);
+  letter-spacing: 0.08em;
+  font-family: 'Cormorant Garamond', serif;
+  font-style: italic;
+}
+
+.hero-text .lede {
+  font-size: 17px;
+  color: var(--ink-soft);
+  line-height: 1.85;
+  margin: 32px 0;
+  max-width: 540px;
+  border-left: 2px solid var(--gold);
+  padding-left: 22px;
+}
+
+.hero-meta {
+  display: flex;
+  gap: 32px;
+  font-family: 'Noto Sans SC', sans-serif;
+  font-size: 12px;
+  letter-spacing: 0.18em;
+  color: var(--slate);
+  margin-top: 40px;
+}
+.hero-meta div span {
+  display: block;
+  color: var(--ink);
+  font-size: 14px;
+  font-weight: 500;
+  margin-top: 4px;
+  letter-spacing: 0.05em;
+}
+
+/* Hero figure - the central diagram */
+.hero-figure {
+  position: relative;
+  aspect-ratio: 1 / 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.hero-figure svg {
+  width: 100%;
+  height: 100%;
+  max-width: 560px;
+}
+
+/* ============ THE CORE THESIS ============ */
+.thesis {
+  padding: 100px 8vw;
+  background: var(--ink);
+  color: var(--paper);
+  position: relative;
+  overflow: hidden;
+}
+.thesis::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-image:
+    radial-gradient(circle at 30% 30%, rgba(212, 165, 116, 0.08) 0%, transparent 50%),
+    radial-gradient(circle at 70% 70%, rgba(107, 43, 43, 0.1) 0%, transparent 50%);
+  pointer-events: none;
+}
+
+.thesis-inner {
+  max-width: 1100px;
+  margin: 0 auto;
+  position: relative;
+  z-index: 2;
+}
+
+.section-label {
+  font-family: 'Cormorant Garamond', serif;
+  font-style: italic;
+  letter-spacing: 0.3em;
+  color: var(--gold-bright);
+  font-size: 13px;
+  text-transform: uppercase;
+  margin-bottom: 20px;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+.section-label::before {
+  content: "";
+  width: 30px;
+  height: 1px;
+  background: var(--gold);
+}
+
+.thesis h2 {
+  font-family: 'Noto Serif SC', serif;
+  font-weight: 700;
+  font-size: clamp(28px, 3.5vw, 46px);
+  line-height: 1.3;
+  margin-bottom: 50px;
+  max-width: 900px;
+}
+
+.thesis-quote {
+  font-family: 'Noto Serif SC', serif;
+  font-size: 22px;
+  font-weight: 300;
+  line-height: 1.9;
+  font-style: italic;
+  color: var(--paper-warm);
+  border-left: 1px solid var(--gold);
+  padding-left: 32px;
+  max-width: 800px;
+  margin-bottom: 40px;
+}
+.thesis-quote::before {
+  content: "「";
+  color: var(--gold);
+  font-size: 32px;
+  margin-right: 4px;
+}
+.thesis-quote::after {
+  content: "」";
+  color: var(--gold);
+  font-size: 32px;
+  margin-left: 4px;
+}
+
+.thesis-author {
+  font-family: 'Cormorant Garamond', serif;
+  font-style: italic;
+  color: var(--gold-bright);
+  letter-spacing: 0.1em;
+  font-size: 15px;
+  margin-left: 32px;
+}
+
+/* ============ JOURNEY MAP ============ */
+.journey {
+  padding: 100px 6vw 80px;
+}
+.journey-header {
+  max-width: 1200px;
+  margin: 0 auto 60px;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 60px;
+  align-items: end;
+}
+.journey-header h2 {
+  font-family: 'Noto Serif SC', serif;
+  font-weight: 700;
+  font-size: clamp(32px, 4vw, 52px);
+  line-height: 1.15;
+  color: var(--ink);
+}
+.journey-header h2 em {
+  font-family: 'Cormorant Garamond', serif;
+  font-style: italic;
+  color: var(--gold-deep);
+  font-weight: 500;
+}
+.journey-header p {
+  color: var(--ink-soft);
+  font-size: 16px;
+  line-height: 1.85;
+}
+
+.journey-map {
+  max-width: 1300px;
+  margin: 0 auto;
+  position: relative;
+}
+
+.flow-grid {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 0;
+  position: relative;
+}
+
+.flow-grid::before {
+  content: "";
+  position: absolute;
+  top: 60px;
+  left: 7%;
+  right: 7%;
+  height: 1px;
+  background: linear-gradient(to right, transparent, var(--gold), var(--crimson), var(--moss), transparent);
+}
+
+.flow-step {
+  text-align: center;
+  position: relative;
+  cursor: pointer;
+  padding: 0 8px;
+  transition: transform 0.3s;
+}
+.flow-step:hover { transform: translateY(-4px); }
+
+.flow-step .num {
+  width: 60px;
+  height: 60px;
+  margin: 0 auto 18px;
+  background: var(--paper);
+  border: 1.5px solid var(--line-strong);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: 'Cormorant Garamond', serif;
+  font-style: italic;
+  font-size: 24px;
+  color: var(--ink);
+  position: relative;
+  z-index: 2;
+  transition: all 0.3s;
+}
+.flow-step:hover .num,
+.flow-step.active .num {
+  background: var(--ink);
+  color: var(--gold-bright);
+  border-color: var(--gold);
+  transform: scale(1.1);
+}
+
+.flow-step .stage {
+  font-family: 'Cormorant Garamond', serif;
+  font-style: italic;
+  font-size: 11px;
+  letter-spacing: 0.2em;
+  color: var(--gold-deep);
+  text-transform: uppercase;
+  margin-bottom: 8px;
+}
+
+.flow-step .title {
+  font-family: 'Noto Serif SC', serif;
+  font-weight: 600;
+  font-size: 16px;
+  color: var(--ink);
+  margin-bottom: 6px;
+  line-height: 1.3;
+}
+
+.flow-step .desc {
+  font-size: 12px;
+  color: var(--slate);
+  line-height: 1.5;
+  letter-spacing: 0;
+}
+
+/* ============ CHAPTERS ============ */
+.chapter {
+  padding: 100px 6vw;
+  border-top: 1px solid var(--line);
+  position: relative;
+}
+
+.chapter-inner {
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.chapter-head {
+  display: grid;
+  grid-template-columns: 200px 1fr;
+  gap: 60px;
+  margin-bottom: 70px;
+  align-items: start;
+}
+
+.chapter-num {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 130px;
+  font-weight: 300;
+  font-style: italic;
+  color: var(--gold);
+  line-height: 1;
+  letter-spacing: -0.05em;
+  position: relative;
+}
+.chapter-num span {
+  display: block;
+  font-size: 13px;
+  font-style: normal;
+  letter-spacing: 0.3em;
+  color: var(--gold-deep);
+  text-transform: uppercase;
+  margin-top: 10px;
+  font-family: 'Cormorant Garamond', serif;
+}
+
+.chapter-head h2 {
+  font-family: 'Noto Serif SC', serif;
+  font-weight: 700;
+  font-size: clamp(32px, 4vw, 48px);
+  line-height: 1.2;
+  margin-bottom: 24px;
+  color: var(--ink);
+}
+.chapter-head .sub {
+  font-family: 'Cormorant Garamond', serif;
+  font-style: italic;
+  font-size: 19px;
+  color: var(--gold-deep);
+  margin-bottom: 22px;
+  letter-spacing: 0.04em;
+}
+.chapter-head .intro {
+  font-size: 16px;
+  color: var(--ink-soft);
+  line-height: 1.9;
+  max-width: 760px;
+}
+
+.crumbs {
+  position: absolute;
+  top: 30px;
+  right: 6vw;
+  font-family: 'Cormorant Garamond', serif;
+  font-style: italic;
+  font-size: 13px;
+  color: var(--slate);
+  letter-spacing: 0.1em;
+}
+.crumbs a {
+  color: var(--gold-deep);
+  text-decoration: none;
+  border-bottom: 1px solid transparent;
+  transition: border-color 0.3s;
+}
+.crumbs a:hover { border-bottom-color: var(--gold); }
+
+/* ============ THINKERS TIMELINE (Chapter 1) ============ */
+.thinkers-timeline {
+  margin-top: 40px;
+  position: relative;
+}
+.timeline-line {
+  position: relative;
+  height: 2px;
+  background: linear-gradient(to right, var(--paper-deep), var(--gold), var(--paper-deep));
+  margin: 80px 0 0;
+}
+.thinker-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 0;
+  margin-top: -80px;
+}
+.thinker {
+  text-align: center;
+  cursor: pointer;
+  padding: 16px 8px;
+  transition: all 0.3s;
+}
+.thinker .year {
+  font-family: 'Cormorant Garamond', serif;
+  font-style: italic;
+  font-size: 14px;
+  color: var(--gold-deep);
+  letter-spacing: 0.1em;
+}
+.thinker .dot {
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  background: var(--paper);
+  border: 2px solid var(--gold);
+  margin: 12px auto;
+  transition: all 0.3s;
+}
+.thinker:hover .dot,
+.thinker.active .dot {
+  background: var(--ink);
+  transform: scale(1.4);
+  box-shadow: 0 0 0 6px rgba(184, 135, 70, 0.15);
+}
+.thinker .name {
+  font-family: 'Noto Serif SC', serif;
+  font-weight: 600;
+  font-size: 16px;
+  color: var(--ink);
+  margin-bottom: 6px;
+}
+.thinker .label {
+  font-size: 12px;
+  color: var(--slate);
+  line-height: 1.45;
+}
+
+.thinker-detail {
+  margin-top: 50px;
+  padding: 50px;
+  background: linear-gradient(135deg, rgba(184, 135, 70, 0.05), transparent);
+  border: 1px solid var(--line);
+  border-left: 3px solid var(--gold);
+  min-height: 280px;
+  display: grid;
+  grid-template-columns: 1fr 2fr;
+  gap: 50px;
+}
+.thinker-detail .who {
+  border-right: 1px solid var(--line);
+  padding-right: 40px;
+}
+.thinker-detail .who h3 {
+  font-family: 'Noto Serif SC', serif;
+  font-size: 32px;
+  font-weight: 700;
+  color: var(--ink);
+  margin-bottom: 8px;
+}
+.thinker-detail .who .latin {
+  font-family: 'Cormorant Garamond', serif;
+  font-style: italic;
+  font-size: 18px;
+  color: var(--gold-deep);
+  margin-bottom: 18px;
+}
+.thinker-detail .who .meta {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 12px;
+  color: var(--slate);
+  letter-spacing: 0.05em;
+}
+.thinker-detail .what h4 {
+  font-family: 'Cormorant Garamond', serif;
+  font-style: italic;
+  font-size: 14px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--gold-deep);
+  margin-bottom: 14px;
+}
+.thinker-detail .what .core-idea {
+  font-family: 'Noto Serif SC', serif;
+  font-size: 22px;
+  font-weight: 500;
+  line-height: 1.5;
+  color: var(--ink);
+  margin-bottom: 20px;
+  font-style: italic;
+}
+.thinker-detail .what .desc {
+  font-size: 15px;
+  line-height: 1.85;
+  color: var(--ink-soft);
+}
+.thinker-detail .what .quote {
+  margin-top: 22px;
+  padding: 16px 20px;
+  background: rgba(20, 17, 15, 0.04);
+  border-left: 2px solid var(--crimson);
+  font-style: italic;
+  font-size: 14px;
+  color: var(--ink-soft);
+  line-height: 1.7;
+}
+
+/* ============ TYPES & MANIFESTATIONS (Chapter 2) ============ */
+.tabs {
+  display: flex;
+  gap: 4px;
+  margin-bottom: 32px;
+  border-bottom: 1px solid var(--line);
+}
+.tab {
+  padding: 16px 28px;
+  font-family: 'Noto Sans SC', sans-serif;
+  font-size: 14px;
+  letter-spacing: 0.1em;
+  color: var(--slate);
+  cursor: pointer;
+  border-bottom: 2px solid transparent;
+  transition: all 0.3s;
+  background: none;
+  border-top: none;
+  border-left: none;
+  border-right: none;
+}
+.tab:hover { color: var(--ink); }
+.tab.active {
+  color: var(--ink);
+  border-bottom-color: var(--gold);
+  font-weight: 500;
+}
+
+.types-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 24px;
+}
+.type-card {
+  padding: 32px;
+  background: var(--paper-warm);
+  border: 1px solid var(--line);
+  position: relative;
+  transition: all 0.4s ease;
+  cursor: pointer;
+  overflow: hidden;
+}
+.type-card::before {
+  content: "";
+  position: absolute;
+  top: 0; left: 0;
+  width: 100%; height: 3px;
+  background: var(--gold);
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 0.5s ease;
+}
+.type-card:hover {
+  background: var(--paper-deep);
+  transform: translateY(-3px);
+  box-shadow: var(--shadow);
+}
+.type-card:hover::before { transform: scaleX(1); }
+
+.type-card .num {
+  font-family: 'Cormorant Garamond', serif;
+  font-style: italic;
+  font-size: 60px;
+  color: var(--gold);
+  line-height: 1;
+  position: absolute;
+  top: 20px;
+  right: 24px;
+  opacity: 0.4;
+}
+.type-card h3 {
+  font-family: 'Noto Serif SC', serif;
+  font-weight: 600;
+  font-size: 19px;
+  margin-bottom: 4px;
+  color: var(--ink);
+}
+.type-card .latin {
+  font-family: 'Cormorant Garamond', serif;
+  font-style: italic;
+  font-size: 14px;
+  color: var(--gold-deep);
+  margin-bottom: 16px;
+  letter-spacing: 0.05em;
+}
+.type-card p {
+  font-size: 14px;
+  line-height: 1.75;
+  color: var(--ink-soft);
+}
+
+.tab-panel { display: none; }
+.tab-panel.active { display: block; animation: fadeIn 0.5s ease; }
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.manifest-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 0;
+  border-top: 1px solid var(--line);
+  border-left: 1px solid var(--line);
+}
+.manifest-item {
+  padding: 32px 28px;
+  border-right: 1px solid var(--line);
+  border-bottom: 1px solid var(--line);
+  display: flex;
+  gap: 22px;
+  background: var(--paper);
+  transition: background 0.3s;
+}
+.manifest-item:hover { background: var(--paper-warm); }
+.manifest-item .num {
+  font-family: 'Cormorant Garamond', serif;
+  font-style: italic;
+  font-size: 38px;
+  color: var(--gold);
+  line-height: 1;
+  flex-shrink: 0;
+  width: 50px;
+}
+.manifest-item h4 {
+  font-family: 'Noto Serif SC', serif;
+  font-weight: 600;
+  font-size: 17px;
+  color: var(--ink);
+  margin-bottom: 8px;
+}
+.manifest-item p {
+  font-size: 14px;
+  color: var(--ink-soft);
+  line-height: 1.7;
+}
+
+/* ============ SOCIAL ROOTS (Chapter 3) ============ */
+.roots-diagram {
+  position: relative;
+  margin: 50px 0;
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr 1fr;
+  gap: 24px;
+}
+
+.root-card {
+  background: var(--paper-warm);
+  border: 1px solid var(--line);
+  padding: 30px 26px;
+  cursor: pointer;
+  transition: all 0.3s;
+  position: relative;
+}
+.root-card:hover {
+  background: var(--ink);
+  color: var(--paper);
+  transform: translateY(-4px);
+}
+.root-card:hover h3 { color: var(--gold-bright); }
+.root-card:hover .icon { color: var(--gold-bright); }
+.root-card:hover .root-list li { color: var(--paper-warm); }
+
+.root-card .icon {
+  font-family: 'Cormorant Garamond', serif;
+  font-style: italic;
+  font-size: 40px;
+  color: var(--gold-deep);
+  margin-bottom: 14px;
+  line-height: 1;
+  transition: color 0.3s;
+}
+.root-card h3 {
+  font-family: 'Noto Serif SC', serif;
+  font-weight: 600;
+  font-size: 19px;
+  margin-bottom: 16px;
+  color: var(--ink);
+  transition: color 0.3s;
+}
+.root-list { list-style: none; }
+.root-list li {
+  font-size: 13px;
+  color: var(--slate);
+  line-height: 1.6;
+  padding: 6px 0;
+  border-bottom: 1px dashed var(--line);
+  transition: color 0.3s;
+}
+.root-list li:last-child { border-bottom: none; }
+.root-list li::before {
+  content: "—";
+  margin-right: 8px;
+  color: var(--gold);
+}
+
+.iron-cage {
+  margin-top: 60px;
+  padding: 50px 60px;
+  background: var(--ink);
+  color: var(--paper);
+  position: relative;
+  overflow: hidden;
+}
+.iron-cage::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-image:
+    repeating-linear-gradient(45deg, transparent, transparent 30px, rgba(184, 135, 70, 0.04) 30px, rgba(184, 135, 70, 0.04) 31px),
+    repeating-linear-gradient(-45deg, transparent, transparent 30px, rgba(184, 135, 70, 0.04) 30px, rgba(184, 135, 70, 0.04) 31px);
+  pointer-events: none;
+}
+.iron-cage-inner { position: relative; z-index: 2; }
+.iron-cage h3 {
+  font-family: 'Noto Serif SC', serif;
+  font-size: 28px;
+  font-weight: 700;
+  margin-bottom: 8px;
+  color: var(--paper);
+}
+.iron-cage .latin {
+  font-family: 'Cormorant Garamond', serif;
+  font-style: italic;
+  color: var(--gold-bright);
+  letter-spacing: 0.15em;
+  margin-bottom: 24px;
+  font-size: 16px;
+}
+.iron-cage p {
+  font-size: 16px;
+  line-height: 1.85;
+  color: var(--paper-warm);
+  max-width: 800px;
+}
+
+/* ============ MENTAL HEALTH (Chapter 4) ============ */
+.mech-flow {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 0;
+  margin: 40px 0;
+  align-items: stretch;
+}
+.mech-step {
+  padding: 32px 24px;
+  background: var(--paper-warm);
+  border: 1px solid var(--line);
+  position: relative;
+  text-align: center;
+}
+.mech-step:not(:last-child)::after {
+  content: "→";
+  position: absolute;
+  right: -14px;
+  top: 50%;
+  transform: translateY(-50%);
+  background: var(--paper);
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--gold);
+  font-size: 18px;
+  z-index: 2;
+  border: 1px solid var(--gold);
+}
+.mech-step .stage-num {
+  font-family: 'Cormorant Garamond', serif;
+  font-style: italic;
+  font-size: 14px;
+  color: var(--gold-deep);
+  letter-spacing: 0.2em;
+  margin-bottom: 10px;
+}
+.mech-step h4 {
+  font-family: 'Noto Serif SC', serif;
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--ink);
+  line-height: 1.4;
+}
+
+.cycle-warning {
+  padding: 36px 40px;
+  margin-top: 30px;
+  background: rgba(107, 43, 43, 0.06);
+  border: 1px solid rgba(107, 43, 43, 0.2);
+  border-left: 3px solid var(--crimson);
+}
+.cycle-warning .label {
+  font-family: 'Cormorant Garamond', serif;
+  font-style: italic;
+  letter-spacing: 0.2em;
+  color: var(--crimson);
+  font-size: 13px;
+  text-transform: uppercase;
+  margin-bottom: 10px;
+}
+.cycle-warning p {
+  font-family: 'Noto Serif SC', serif;
+  font-size: 18px;
+  color: var(--ink);
+  line-height: 1.7;
+}
+
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 30px;
+  margin-top: 50px;
+}
+.stat {
+  text-align: center;
+  padding: 30px 20px;
+}
+.stat .num {
+  font-family: 'Cormorant Garamond', serif;
+  font-weight: 300;
+  font-size: 72px;
+  color: var(--crimson);
+  line-height: 1;
+  margin-bottom: 12px;
+}
+.stat .num span { font-size: 32px; color: var(--gold-deep); }
+.stat .label {
+  font-size: 13px;
+  color: var(--slate);
+  letter-spacing: 0.05em;
+  line-height: 1.6;
+}
+
+/* ============ PATHS OUT (Chapter 5) ============ */
+.paths-intro {
+  padding: 36px 40px;
+  background: linear-gradient(135deg, rgba(74, 92, 58, 0.08), transparent);
+  border-left: 3px solid var(--moss);
+  margin-bottom: 50px;
+}
+.paths-intro p {
+  font-family: 'Noto Serif SC', serif;
+  font-size: 19px;
+  font-style: italic;
+  line-height: 1.7;
+  color: var(--ink);
+}
+
+.paths-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1.3fr;
+  gap: 0;
+}
+.path-col {
+  padding: 40px 36px;
+  border: 1px solid var(--line);
+  margin-left: -1px;
+  background: var(--paper);
+  position: relative;
+  transition: all 0.4s;
+}
+.path-col:hover { background: var(--paper-warm); }
+.path-col:last-child {
+  background: var(--ink);
+  color: var(--paper);
+}
+.path-col:last-child:hover { background: #1d1814; }
+
+.path-col .roman {
+  font-family: 'Cormorant Garamond', serif;
+  font-style: italic;
+  font-size: 32px;
+  color: var(--gold);
+  margin-bottom: 16px;
+  line-height: 1;
+}
+.path-col h3 {
+  font-family: 'Noto Serif SC', serif;
+  font-weight: 700;
+  font-size: 24px;
+  margin-bottom: 8px;
+  color: var(--ink);
+}
+.path-col:last-child h3 { color: var(--paper); }
+.path-col:last-child .roman { color: var(--gold-bright); }
+
+.path-col .latin {
+  font-family: 'Cormorant Garamond', serif;
+  font-style: italic;
+  font-size: 15px;
+  color: var(--gold-deep);
+  margin-bottom: 26px;
+  letter-spacing: 0.05em;
+}
+.path-col:last-child .latin { color: var(--gold-bright); }
+
+.path-col ul { list-style: none; }
+.path-col ul li {
+  font-size: 14px;
+  line-height: 1.65;
+  padding: 12px 0;
+  color: var(--ink-soft);
+  border-bottom: 1px dashed var(--line);
+  position: relative;
+  padding-left: 22px;
+}
+.path-col:last-child ul li {
+  color: var(--paper-warm);
+  border-bottom-color: rgba(244, 237, 224, 0.15);
+}
+.path-col ul li::before {
+  content: "◆";
+  color: var(--gold);
+  font-size: 8px;
+  position: absolute;
+  left: 0;
+  top: 16px;
+}
+.path-col .root-tag {
+  position: absolute;
+  top: -1px;
+  right: -1px;
+  padding: 6px 14px;
+  background: var(--crimson);
+  color: var(--paper);
+  font-family: 'Cormorant Garamond', serif;
+  font-style: italic;
+  font-size: 12px;
+  letter-spacing: 0.1em;
+}
+
+/* Self-reconstruction visualization */
+.self-evolution {
+  margin: 70px 0 40px;
+}
+.self-evolution h3 {
+  font-family: 'Noto Serif SC', serif;
+  font-weight: 600;
+  font-size: 22px;
+  margin-bottom: 8px;
+  color: var(--ink);
+}
+.self-evolution .sub {
+  font-family: 'Cormorant Garamond', serif;
+  font-style: italic;
+  color: var(--gold-deep);
+  margin-bottom: 32px;
+  letter-spacing: 0.05em;
+}
+
+.evolution-flow {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 0;
+  position: relative;
+}
+.evo-stage {
+  padding: 28px 24px;
+  background: var(--paper-warm);
+  border: 1px solid var(--line);
+  margin-left: -1px;
+  text-align: center;
+  position: relative;
+  cursor: pointer;
+  transition: all 0.3s;
+}
+.evo-stage:nth-child(1) { background: rgba(184, 135, 70, 0.1); }
+.evo-stage:nth-child(2) { background: rgba(212, 165, 116, 0.18); }
+.evo-stage:nth-child(3) { background: rgba(107, 43, 43, 0.08); }
+.evo-stage:nth-child(4) { background: rgba(74, 92, 58, 0.12); }
+.evo-stage:hover {
+  transform: translateY(-3px);
+  box-shadow: var(--shadow);
+}
+.evo-stage .step {
+  font-family: 'Cormorant Garamond', serif;
+  font-style: italic;
+  font-size: 14px;
+  color: var(--gold-deep);
+  margin-bottom: 8px;
+}
+.evo-stage h4 {
+  font-family: 'Noto Serif SC', serif;
+  font-weight: 600;
+  font-size: 22px;
+  color: var(--ink);
+  margin-bottom: 10px;
+}
+.evo-stage p {
+  font-size: 13px;
+  color: var(--ink-soft);
+  line-height: 1.6;
+}
+
+/* ============ FINAL SYNTHESIS (Chapter 6) ============ */
+.synthesis {
+  background: var(--ink);
+  color: var(--paper);
+  padding: 100px 6vw;
+  position: relative;
+  overflow: hidden;
+}
+.synthesis::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-image:
+    radial-gradient(circle at 20% 50%, rgba(212, 165, 116, 0.1) 0%, transparent 40%),
+    radial-gradient(circle at 80% 30%, rgba(107, 43, 43, 0.08) 0%, transparent 40%);
+}
+
+.synthesis-inner {
+  max-width: 1200px;
+  margin: 0 auto;
+  position: relative;
+  z-index: 2;
+}
+
+.synthesis h2 {
+  font-family: 'Noto Serif SC', serif;
+  font-weight: 700;
+  font-size: clamp(34px, 4.5vw, 54px);
+  line-height: 1.2;
+  margin-bottom: 16px;
+}
+.synthesis .sub {
+  font-family: 'Cormorant Garamond', serif;
+  font-style: italic;
+  font-size: 22px;
+  color: var(--gold-bright);
+  margin-bottom: 60px;
+  letter-spacing: 0.05em;
+}
+
+.lineage {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 0;
+  margin: 60px 0;
+}
+.lineage-step {
+  text-align: center;
+  padding: 0 20px;
+  border-right: 1px solid rgba(212, 165, 116, 0.2);
+  position: relative;
+}
+.lineage-step:last-child { border-right: none; }
+
+.lineage-step .icon-circle {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  border: 1px solid var(--gold);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 24px;
+  font-family: 'Cormorant Garamond', serif;
+  font-style: italic;
+  font-size: 32px;
+  color: var(--gold-bright);
+  background: rgba(212, 165, 116, 0.08);
+  transition: all 0.4s;
+}
+.lineage-step:hover .icon-circle {
+  background: var(--gold);
+  color: var(--ink);
+  transform: scale(1.1);
+}
+
+.lineage-step h4 {
+  font-family: 'Noto Serif SC', serif;
+  font-size: 17px;
+  font-weight: 600;
+  margin-bottom: 8px;
+  color: var(--paper);
+}
+.lineage-step .era {
+  font-family: 'Cormorant Garamond', serif;
+  font-style: italic;
+  font-size: 13px;
+  color: var(--gold-bright);
+  letter-spacing: 0.1em;
+  margin-bottom: 14px;
+}
+.lineage-step p {
+  font-size: 13px;
+  color: var(--paper-warm);
+  line-height: 1.7;
+  opacity: 0.85;
+}
+
+.coda {
+  margin-top: 80px;
+  padding: 60px;
+  border: 1px solid var(--gold);
+  background: rgba(212, 165, 116, 0.04);
+  text-align: center;
+}
+.coda blockquote {
+  font-family: 'Noto Serif SC', serif;
+  font-size: 26px;
+  font-weight: 300;
+  font-style: italic;
+  line-height: 1.6;
+  color: var(--paper);
+  max-width: 800px;
+  margin: 0 auto 24px;
+}
+.coda blockquote::before {
+  content: "❝";
+  font-size: 60px;
+  color: var(--gold);
+  display: block;
+  line-height: 0.5;
+  margin-bottom: 24px;
+}
+.coda cite {
+  font-family: 'Cormorant Garamond', serif;
+  font-style: italic;
+  color: var(--gold-bright);
+  letter-spacing: 0.15em;
+  font-size: 14px;
+}
+
+/* ============ FOOTER ============ */
+footer {
+  padding: 50px 6vw;
+  background: #0a0907;
+  color: var(--paper-warm);
+  text-align: center;
+  font-family: 'Cormorant Garamond', serif;
+  font-style: italic;
+  font-size: 14px;
+  letter-spacing: 0.15em;
+}
+footer .source {
+  margin-top: 12px;
+  color: var(--slate);
+  font-size: 12px;
+}
+
+/* ============ MODAL ============ */
+.modal {
+  position: fixed;
+  inset: 0;
+  background: rgba(20, 17, 15, 0.85);
+  backdrop-filter: blur(8px);
+  z-index: 1000;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  padding: 40px;
+  opacity: 0;
+  transition: opacity 0.3s;
+}
+.modal.show { display: flex; opacity: 1; }
+
+.modal-content {
+  background: var(--paper);
+  max-width: 720px;
+  width: 100%;
+  max-height: 85vh;
+  overflow-y: auto;
+  padding: 50px;
+  position: relative;
+  border-top: 4px solid var(--gold);
+}
+.modal-close {
+  position: absolute;
+  top: 18px;
+  right: 24px;
+  background: none;
+  border: none;
+  font-size: 28px;
+  cursor: pointer;
+  color: var(--slate);
+  line-height: 1;
+}
+.modal-content h3 {
+  font-family: 'Noto Serif SC', serif;
+  font-weight: 700;
+  font-size: 28px;
+  margin-bottom: 20px;
+  color: var(--ink);
+  padding-right: 40px;
+}
+.modal-content .modal-content-body {
+  font-size: 15px;
+  line-height: 1.85;
+  color: var(--ink-soft);
+}
+.modal-content .modal-content-body p { margin-bottom: 14px; }
+.modal-content .modal-content-body strong { color: var(--ink); font-weight: 600; }
+
+/* ============ RESPONSIVE ============ */
+@media (max-width: 980px) {
+  .hero { grid-template-columns: 1fr; padding: 90px 6vw 40px; }
+  .hero-figure { max-width: 480px; margin: 0 auto; }
+  .journey-header { grid-template-columns: 1fr; gap: 24px; }
+  .flow-grid { grid-template-columns: repeat(2, 1fr); gap: 24px; }
+  .flow-grid::before { display: none; }
+  .chapter-head { grid-template-columns: 1fr; gap: 24px; }
+  .chapter-num { font-size: 80px; }
+  .roots-diagram { grid-template-columns: 1fr 1fr; }
+  .mech-flow { grid-template-columns: 1fr 1fr; }
+  .mech-step:nth-child(2)::after { display: none; }
+  .paths-grid { grid-template-columns: 1fr; }
+  .path-col { margin-left: 0; }
+  .lineage { grid-template-columns: 1fr 1fr; gap: 24px; }
+  .lineage-step { border: 1px solid rgba(212, 165, 116, 0.2); padding: 24px; }
+  .evolution-flow { grid-template-columns: 1fr 1fr; }
+  .stats-grid { grid-template-columns: 1fr; }
+  .topbar nav { display: none; }
+  .thinker-detail { grid-template-columns: 1fr; }
+  .thinker-detail .who { border-right: none; border-bottom: 1px solid var(--line); padding-bottom: 24px; padding-right: 0; }
+  .manifest-grid { grid-template-columns: 1fr; }
+  .crumbs { display: none; }
+}
+</style>
+</head>
+<body>
+
+<!-- TOP BAR -->
+<div class="topbar">
+  <div class="brand">探索 · <span>De Nihilo</span></div>
+  <nav id="topnav">
+    <a data-target="hero">序</a>
+    <a data-target="journey">脉络</a>
+    <a data-target="ch1">思想批判</a>
+    <a data-target="ch2">类型表现</a>
+    <a data-target="ch3">社会根源</a>
+    <a data-target="ch4">精神疾病</a>
+    <a data-target="ch5">克服出路</a>
+    <a data-target="synthesis">总结</a>
+  </nav>
+</div>
+
+<!-- HERO -->
+<section class="hero" id="hero">
+  <div class="hero-text">
+    <div class="eyebrow">A Philosophical Inquiry · 2026</div>
+    <h1>探索生命的<span class="accent">意义</span>与价值
+      <span class="small">— 从虚无中寻找希望与力量 —</span>
+    </h1>
+    <p class="lede">
+      哲学就是哲学史，哲学史就是寻找确定性与克服虚无主义的历史。这两件事，是哲学的一体两面。
+      本书从思想谱系出发，经由类型分析、社会批判、临床观察，最终落在<strong style="color:var(--crimson)">克服之道</strong>——以社会改造为根本出路。
+    </p>
+    <div class="hero-meta">
+      <div>AUTHOR <span>梅春雷</span></div>
+      <div>YEAR <span>2026.01.11</span></div>
+      <div>STRUCTURE <span>六章 · 三十六幅</span></div>
+    </div>
+  </div>
+
+  <div class="hero-figure">
+    <!-- Central diagram: from void to meaning -->
+    <svg viewBox="0 0 560 560" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <radialGradient id="voidGrad" cx="50%" cy="50%" r="50%">
+          <stop offset="0%" stop-color="#14110f" stop-opacity="1"/>
+          <stop offset="60%" stop-color="#14110f" stop-opacity="0.85"/>
+          <stop offset="100%" stop-color="#14110f" stop-opacity="0"/>
+        </radialGradient>
+        <radialGradient id="lightGrad" cx="50%" cy="50%" r="50%">
+          <stop offset="0%" stop-color="#d4a574" stop-opacity="0.9"/>
+          <stop offset="100%" stop-color="#b88746" stop-opacity="0"/>
+        </radialGradient>
+      </defs>
+
+      <!-- outer ring with text -->
+      <circle cx="280" cy="280" r="250" fill="none" stroke="#14110f" stroke-width="0.5" stroke-dasharray="2 4" opacity="0.4"/>
+      <circle cx="280" cy="280" r="220" fill="none" stroke="#b88746" stroke-width="0.5" opacity="0.6"/>
+
+      <!-- Void at center -->
+      <circle cx="280" cy="280" r="120" fill="url(#voidGrad)"/>
+      <circle cx="280" cy="280" r="120" fill="none" stroke="#b88746" stroke-width="1" opacity="0.4"/>
+
+      <!-- Light rising -->
+      <circle cx="280" cy="280" r="60" fill="url(#lightGrad)"/>
+
+      <!-- Center labels -->
+      <text x="280" y="270" text-anchor="middle" fill="#f4ede0" font-family="Noto Serif SC, serif" font-size="22" font-weight="600">虚无</text>
+      <text x="280" y="298" text-anchor="middle" fill="#d4a574" font-family="Cormorant Garamond, serif" font-style="italic" font-size="14" letter-spacing="2">N I H I L</text>
+
+      <!-- 6 nodes around -->
+      <g font-family="Noto Serif SC, serif" font-size="13" font-weight="500">
+        <!-- top -->
+        <line x1="280" y1="160" x2="280" y2="100" stroke="#b88746" stroke-width="0.8" opacity="0.5"/>
+        <circle cx="280" cy="80" r="28" fill="#f4ede0" stroke="#b88746" stroke-width="1.2"/>
+        <text x="280" y="78" text-anchor="middle" fill="#14110f" font-family="Cormorant Garamond, serif" font-style="italic" font-size="11">I</text>
+        <text x="280" y="92" text-anchor="middle" fill="#8b5e2b" font-size="11">思想</text>
+
+        <!-- top right -->
+        <line x1="380" y1="218" x2="425" y2="180" stroke="#b88746" stroke-width="0.8" opacity="0.5"/>
+        <circle cx="445" cy="160" r="28" fill="#f4ede0" stroke="#b88746" stroke-width="1.2"/>
+        <text x="445" y="158" text-anchor="middle" fill="#14110f" font-family="Cormorant Garamond, serif" font-style="italic" font-size="11">II</text>
+        <text x="445" y="172" text-anchor="middle" fill="#8b5e2b" font-size="11">表现</text>
+
+        <!-- bottom right -->
+        <line x1="380" y1="342" x2="425" y2="380" stroke="#b88746" stroke-width="0.8" opacity="0.5"/>
+        <circle cx="445" cy="400" r="28" fill="#f4ede0" stroke="#b88746" stroke-width="1.2"/>
+        <text x="445" y="398" text-anchor="middle" fill="#14110f" font-family="Cormorant Garamond, serif" font-style="italic" font-size="11">III</text>
+        <text x="445" y="412" text-anchor="middle" fill="#8b5e2b" font-size="11">社会</text>
+
+        <!-- bottom -->
+        <line x1="280" y1="400" x2="280" y2="460" stroke="#b88746" stroke-width="0.8" opacity="0.5"/>
+        <circle cx="280" cy="480" r="28" fill="#f4ede0" stroke="#b88746" stroke-width="1.2"/>
+        <text x="280" y="478" text-anchor="middle" fill="#14110f" font-family="Cormorant Garamond, serif" font-style="italic" font-size="11">IV</text>
+        <text x="280" y="492" text-anchor="middle" fill="#8b5e2b" font-size="11">疾病</text>
+
+        <!-- bottom left -->
+        <line x1="180" y1="342" x2="135" y2="380" stroke="#6b2b2b" stroke-width="1.2"/>
+        <circle cx="115" cy="400" r="34" fill="#6b2b2b" stroke="#d4a574" stroke-width="1.5"/>
+        <text x="115" y="398" text-anchor="middle" fill="#d4a574" font-family="Cormorant Garamond, serif" font-style="italic" font-size="13">V</text>
+        <text x="115" y="414" text-anchor="middle" fill="#f4ede0" font-size="11" font-weight="600">出路</text>
+
+        <!-- top left -->
+        <line x1="180" y1="218" x2="135" y2="180" stroke="#b88746" stroke-width="0.8" opacity="0.5"/>
+        <circle cx="115" cy="160" r="28" fill="#f4ede0" stroke="#b88746" stroke-width="1.2"/>
+        <text x="115" y="158" text-anchor="middle" fill="#14110f" font-family="Cormorant Garamond, serif" font-style="italic" font-size="11">序</text>
+        <text x="115" y="172" text-anchor="middle" fill="#8b5e2b" font-size="11">前言</text>
+      </g>
+
+      <!-- Latin scrolling text along the outer arc -->
+      <path id="textPath" d="M 280,40 a 240,240 0 1,1 -1,0" fill="none"/>
+      <text font-family="Cormorant Garamond, serif" font-style="italic" font-size="11" fill="#8b5e2b" letter-spacing="4">
+        <textPath href="#textPath" startOffset="0">DE  NIHILO  ·  AD  SENSUM  ·  PER  SOCIETATEM  ·  AD  VITAM  ·  </textPath>
+      </text>
+    </svg>
+  </div>
+</section>
+
+<!-- THESIS / 前言 -->
+<section class="thesis" id="thesis">
+  <div class="thesis-inner">
+    <div class="section-label">PROLOGUE · 前 言</div>
+    <h2>哲学的一体两面：<br>寻找确定性 ⟷ 克服虚无主义</h2>
+    <div class="thesis-quote">
+      古代之所以未突出虚无主义问题，因为传统生活、宗教、形而上学占主导地位——大地稳定可靠，血缘绵延不绝，宗教提供终极价值，形而上学保有第一因。
+      而现代人，正是在这一切被祛魅、被怀疑、被解构之后，才直面"无"。
+    </div>
+    <div class="thesis-author">— 本书核心命题</div>
+  </div>
+</section>
+
+<!-- JOURNEY MAP -->
+<section class="journey" id="journey">
+  <div class="journey-header">
+    <h2>核心 <em>脉络</em><br>从诊断到救治</h2>
+    <p>整本书沿着一条清晰的诊疗路径展开：先建立病史（思想谱系），再观察症状（类型表现），追溯病因（社会根源），评估后果（精神疾病），最终给出处方（克服出路）。每一步都可点击进入。</p>
+  </div>
+
+  <div class="journey-map">
+    <div class="flow-grid" id="flowGrid">
+      <div class="flow-step" data-target="thesis">
+        <div class="num">序</div>
+        <div class="stage">PROLOGUE</div>
+        <div class="title">前言</div>
+        <div class="desc">为什么是虚无</div>
+      </div>
+      <div class="flow-step" data-target="ch1">
+        <div class="num">壹</div>
+        <div class="stage">DIAGNOSIS</div>
+        <div class="title">思想批判</div>
+        <div class="desc">谱系 · 病史</div>
+      </div>
+      <div class="flow-step" data-target="ch2">
+        <div class="num">贰</div>
+        <div class="stage">SYMPTOMS</div>
+        <div class="title">类型表现</div>
+        <div class="desc">五型 · 十相</div>
+      </div>
+      <div class="flow-step" data-target="ch3">
+        <div class="num">叁</div>
+        <div class="stage">ETIOLOGY</div>
+        <div class="title">社会根源</div>
+        <div class="desc">资本 · 政治 · 城</div>
+      </div>
+      <div class="flow-step" data-target="ch4">
+        <div class="num">肆</div>
+        <div class="stage">PATHOLOGY</div>
+        <div class="title">精神疾病</div>
+        <div class="desc">焦虑 · 抑郁</div>
+      </div>
+      <div class="flow-step" data-target="ch5">
+        <div class="num">伍</div>
+        <div class="stage">REMEDY</div>
+        <div class="title">克服出路</div>
+        <div class="desc">自我 · 文化 · 社会</div>
+      </div>
+      <div class="flow-step" data-target="synthesis">
+        <div class="num">陆</div>
+        <div class="stage">SYNTHESIS</div>
+        <div class="title">总结</div>
+        <div class="desc">命运 · 理性 · 社会</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CHAPTER 1: 思想批判 -->
+<section class="chapter" id="ch1">
+  <div class="crumbs"><a data-target="journey">← 返回脉络</a></div>
+  <div class="chapter-inner">
+    <div class="chapter-head">
+      <div class="chapter-num">I<span>CAPUT PRIMUM</span></div>
+      <div>
+        <h2>第一章 · 虚无主义批判谱系</h2>
+        <div class="sub">A Genealogy of Nihilism · 思想批判</div>
+        <p class="intro">
+          虚无主义（Nihilism）源于拉丁语"nihil"，意为"无"。从怀疑论、相对论、不可知论、唯名论一路演进，雅各比首次将其作为概念提出（1799），尼采使其成为哲学核心，海德格尔将之诊断为"存在的遗忘"。下方时间线追溯关键思想家——<strong>点击任一姓名查看其诊断</strong>。
+        </p>
+      </div>
+    </div>
+
+    <div class="thinkers-timeline">
+      <div class="timeline-line"></div>
+      <div class="thinker-list" id="thinkerList">
+        <div class="thinker active" data-id="jacobi">
+          <div class="year">1799</div>
+          <div class="dot"></div>
+          <div class="name">雅各比</div>
+          <div class="label">Jacobi · 提出概念</div>
+        </div>
+        <div class="thinker" data-id="schopen">
+          <div class="year">1819</div>
+          <div class="dot"></div>
+          <div class="name">叔本华</div>
+          <div class="label">意志的虚无</div>
+        </div>
+        <div class="thinker" data-id="dosto">
+          <div class="year">1872</div>
+          <div class="dot"></div>
+          <div class="name">陀思妥耶夫斯基</div>
+          <div class="label">无神则一切可为</div>
+        </div>
+        <div class="thinker" data-id="nietzsche">
+          <div class="year">1882</div>
+          <div class="dot"></div>
+          <div class="name">尼采</div>
+          <div class="label">上帝死了</div>
+        </div>
+        <div class="thinker" data-id="weber">
+          <div class="year">1917</div>
+          <div class="dot"></div>
+          <div class="name">韦伯</div>
+          <div class="label">祛魅 · 铁笼</div>
+        </div>
+        <div class="thinker" data-id="heidegger">
+          <div class="year">1927</div>
+          <div class="dot"></div>
+          <div class="name">海德格尔</div>
+          <div class="label">存在的遗忘</div>
+        </div>
+        <div class="thinker" data-id="modern">
+          <div class="year">20C</div>
+          <div class="dot"></div>
+          <div class="name">19-20世纪谱系</div>
+          <div class="label">从马克思到齐泽克</div>
+        </div>
+      </div>
+
+      <div class="thinker-detail" id="thinkerDetail">
+        <!-- populated by JS -->
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CHAPTER 2: 类型与表现 -->
+<section class="chapter" id="ch2">
+  <div class="crumbs"><a data-target="journey">← 返回脉络</a></div>
+  <div class="chapter-inner">
+    <div class="chapter-head">
+      <div class="chapter-num">II<span>CAPUT SECUNDUM</span></div>
+      <div>
+        <h2>第二章 · 虚无主义的类型与表现</h2>
+        <div class="sub">Typology & Phenomenology · 症状学</div>
+        <p class="intro">
+          当代哲学将虚无主义划分为五种基本类型，覆盖认识、道德、存在、宇宙与政治。在此理论分类之外，它在当下生活中以十种具体形态显现——从价值相对化、犬儒主义，到娱乐至死、关系破裂。<strong>切换标签查看两个层面</strong>。
+        </p>
+      </div>
+    </div>
+
+    <div class="tabs">
+      <button class="tab active" data-tab="types">五种基本类型 / Typology</button>
+      <button class="tab" data-tab="manifests">十种当代表现 / Manifestations</button>
+    </div>
+
+    <div class="tab-panel active" id="types">
+      <div class="types-grid">
+        <div class="type-card">
+          <div class="num">01</div>
+          <h3>认识论虚无主义</h3>
+          <div class="latin">Epistemological Nihilism</div>
+          <p>质疑人类获取"客观知识"的可能性，认为一切认知（科学、逻辑、理性）都是主观建构或语言游戏。真理是相对于特定个体或群体而存在的——尼采是其典型代表。</p>
+        </div>
+        <div class="type-card">
+          <div class="num">02</div>
+          <h3>道德虚无主义</h3>
+          <div class="latin">Moral Nihilism</div>
+          <p>否认存在客观的道德价值或善恶标准。道德规范并非源于绝对真理或神圣法则，而是由文化、习俗、权力或个体偏好任意建构。可分为超道德主义、道德主观主义和唯我论。</p>
+        </div>
+        <div class="type-card">
+          <div class="num">03</div>
+          <h3>存在论虚无主义</h3>
+          <div class="latin">Existential Nihilism</div>
+          <p>聚焦"人生意义的缺失"，认为宇宙本身无目的、无意图，人类的存在是偶然的"荒诞"。若传统宗教、家庭、社会赋予的意义被证伪，个体陷入无意义感。代表人物：叔本华、托尔斯泰、加缪。</p>
+        </div>
+        <div class="type-card">
+          <div class="num">04</div>
+          <h3>宇宙论虚无主义</h3>
+          <div class="latin">Cosmic Nihilism</div>
+          <p>断言宇宙是无意义的，绝对意义上否定任何可理解或可知的结构，或相对意义上否认人所渴求的价值意义与存在意义。代表人物：叔本华、尼采、罗素。</p>
+        </div>
+        <div class="type-card">
+          <div class="num">05</div>
+          <h3>政治与历史虚无主义</h3>
+          <div class="latin">Political & Historical Nihilism</div>
+          <p>否定社会历史或政治价值，否定某一国家/民族的历史叙事，或认为所有政治制度本质上无优劣，仅为权力博弈的工具。常被用于意识形态批判。</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="tab-panel" id="manifests">
+      <div class="manifest-grid">
+        <div class="manifest-item"><div class="num">i</div><div><h4>价值相对主义与道德冷漠</h4><p>"什么都行、什么都不信、什么都不在乎"。对公共事务、环境危机、社会正义缺乏参与感和责任感。</p></div></div>
+        <div class="manifest-item"><div class="num">ii</div><div><h4>极端怀疑主义</h4><p>从怀疑一切滑向否定一切。为阴谋论、网络暴力、民粹主义、反智倾向、极端行为提供心理土壤。</p></div></div>
+        <div class="manifest-item"><div class="num">iii</div><div><h4>技术与资本的合谋</h4><p>人的价值被简化为数据、流量、消费力、生产力。消费主义成为虚无主义的温床，制造虚假需求填补精神空虚。</p></div></div>
+        <div class="manifest-item"><div class="num">iv</div><div><h4>政治与文化虚无</h4><p>对国家、民族、进步等宏大叙事持嘲讽态度。社会共识难以形成，公共讨论碎片化，文化沦为娱乐消费品。</p></div></div>
+        <div class="manifest-item"><div class="num">v</div><div><h4>历史虚无主义</h4><p>质疑历史客观性，认为历史只是不同叙事之间的竞争，对民族传统、英雄人物的否定或戏谑化。</p></div></div>
+        <div class="manifest-item"><div class="num">vi</div><div><h4>当代犬儒主义</h4><p>看透一切的讽刺与冷漠。情感上冷漠、疏离、缺乏信任，常以讽刺消解严肃。愤世嫉俗，不相信改变的可能。</p></div></div>
+        <div class="manifest-item"><div class="num">vii</div><div><h4>功利主义与有用崇拜</h4><p>"唯金钱论""唯成功论"。当成功成为唯一标准，"意义""幸福""内在价值"被边缘化，人被工具化，精神贫瘠。</p></div></div>
+        <div class="manifest-item"><div class="num">viii</div><div><h4>文化工业与娱乐至死</h4><p>深度思考、严肃艺术被边缘化。沉浸短视频、快餐文化、虚拟社交，看似充实，实则更孤独、焦虑、空虚。</p></div></div>
+        <div class="manifest-item"><div class="num">ix</div><div><h4>关系破裂 · 个体原子化</h4><p>社会成为内卷的拼搏战场。失去稳定联结的同时也失去道德口碑，造成社会信任危机。</p></div></div>
+        <div class="manifest-item"><div class="num">x</div><div><h4>生命意义虚无 · 心理危机</h4><p>"成就焦虑、意义缺失、自我怀疑"的群体心理——躺平、摆烂、佛系。存在性抑郁加剧。</p></div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CHAPTER 3: 社会根源 -->
+<section class="chapter" id="ch3">
+  <div class="crumbs"><a data-target="journey">← 返回脉络</a></div>
+  <div class="chapter-inner">
+    <div class="chapter-head">
+      <div class="chapter-num">III<span>CAPUT TERTIUM</span></div>
+      <div>
+        <h2>第三章 · 虚无主义的社会根源</h2>
+        <div class="sub">Social Critique · 病因学</div>
+        <p class="intro">
+          作者的关键转折：虚无主义不是个人想不开，而是<strong>由现代社会结构、文化氛围与权力关系共同制造的精神状态</strong>。四大根源彼此交织——工业资本将人异化为劳动力，代议民主使人退出公共生活，城市化打破共同体，个体被消费与算法奴役。
+        </p>
+      </div>
+    </div>
+
+    <div class="roots-diagram">
+      <div class="root-card">
+        <div class="icon">i</div>
+        <h3>工业革命与资本主义</h3>
+        <ul class="root-list">
+          <li>劳动异化</li>
+          <li>共同体瓦解</li>
+          <li>市场逻辑统摄一切</li>
+          <li>价值还原为交换价值</li>
+          <li>商品拜物教</li>
+        </ul>
+      </div>
+      <div class="root-card">
+        <div class="icon">ii</div>
+        <h3>政治结构</h3>
+        <ul class="root-list">
+          <li>代议制的旁观化</li>
+          <li>政治冷漠</li>
+          <li>民粹主义兴起</li>
+          <li>科层化与去政治化</li>
+          <li>治理与合法性危机</li>
+        </ul>
+      </div>
+      <div class="root-card">
+        <div class="icon">iii</div>
+        <h3>城市化与社会变迁</h3>
+        <ul class="root-list">
+          <li>"无根"状态</li>
+          <li>关系商品化</li>
+          <li>三座大山：房·教·医</li>
+          <li>阶层固化</li>
+          <li>权力-资本-技术合谋</li>
+        </ul>
+      </div>
+      <div class="root-card">
+        <div class="icon">iv</div>
+        <h3>个体生存层面</h3>
+        <ul class="root-list">
+          <li>消费奴役</li>
+          <li>关系工具化</li>
+          <li>内卷·996·KPI</li>
+          <li>算法与数字垄断</li>
+          <li>"末人"文明</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="iron-cage">
+      <div class="iron-cage-inner">
+        <h3>韦伯的铁笼 · 工具理性的胜利</h3>
+        <div class="latin">— Stahlhartes Gehäuse · The Iron Cage of Rationality —</div>
+        <p>
+          人被视作"劳动力""消费者""生产单元"；时间被换算成金钱，生命被衡量为效率。个体的价值不再取决于其作为人的尊严、自由与内在价值，而是其能创造多少经济价值、消费力、产出水平。最终，人被困在韦伯所说的<strong style="color:var(--gold-bright)">"铁笼"</strong>中——一个由理性、科层制、市场逻辑主宰，但缺少意义与自由的牢笼。
+        </p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CHAPTER 4: 精神疾病 -->
+<section class="chapter" id="ch4">
+  <div class="crumbs"><a data-target="journey">← 返回脉络</a></div>
+  <div class="chapter-inner">
+    <div class="chapter-head">
+      <div class="chapter-num">IV<span>CAPUT QUARTUM</span></div>
+      <div>
+        <h2>第四章 · 虚无主义与精神疾病</h2>
+        <div class="sub">The Pathology of Meaninglessness · 临床观察</div>
+        <p class="intro">
+          虚无主义思维并非中性的哲学姿态——它通过六个机制与抑郁、焦虑、自杀意念发生临床关联。两者还构成<strong>恶性循环</strong>：虚无加剧症状，症状强化虚无。下方流程展示其展开过程。
+        </p>
+      </div>
+    </div>
+
+    <div class="mech-flow">
+      <div class="mech-step">
+        <div class="stage-num">MECH · 1</div>
+        <h4>意义系统的崩塌</h4>
+      </div>
+      <div class="mech-step">
+        <div class="stage-num">MECH · 2</div>
+        <h4>认知扭曲的强化</h4>
+      </div>
+      <div class="mech-step">
+        <div class="stage-num">MECH · 3</div>
+        <h4>神经生物学受损</h4>
+      </div>
+      <div class="mech-step">
+        <div class="stage-num">MECH · 4</div>
+        <h4>防御机制失效</h4>
+      </div>
+    </div>
+
+    <div class="cycle-warning">
+      <div class="label">VICIOUS CYCLE · 恶性循环</div>
+      <p>虚无主义思维 → 抑郁情绪 → 认知功能受损 → 更深的虚无感</p>
+    </div>
+
+    <div class="stats-grid">
+      <div class="stat">
+        <div class="num">10<span>%</span></div>
+        <div class="label">全球成年人精神疾病估算<br/>(WHO)</div>
+      </div>
+      <div class="stat">
+        <div class="num">6.8<span>%</span></div>
+        <div class="label">中国精神疾病率<br/>柳叶刀-区域健康，2024</div>
+      </div>
+      <div class="stat">
+        <div class="num">+</div>
+        <div class="label">PGD程度与虚无主义信念正相关<br/>显著降低心理健康 (2025)</div>
+      </div>
+    </div>
+
+    <div class="paths-intro" style="margin-top:60px; border-left-color:var(--crimson);">
+      <p><strong>关键诊断：</strong>克服虚无主义不能仅靠个人心理调适或哲学思辨，而必须从改造塑造人的社会环境入手。心理治疗只能自救，社会改造却可以造福亿万人——这一判断直接通往第五章。</p>
+    </div>
+  </div>
+</section>
+
+<!-- CHAPTER 5: 出路 -->
+<section class="chapter" id="ch5">
+  <div class="crumbs"><a data-target="journey">← 返回脉络</a></div>
+  <div class="chapter-inner">
+    <div class="chapter-head">
+      <div class="chapter-num">V<span>CAPUT QUINTUM</span></div>
+      <div>
+        <h2>第五章 · 克服虚无主义的出路</h2>
+        <div class="sub">Three Paths Out · 三层处方</div>
+        <p class="intro">
+          虚无主义并非终点，而可能是一次重新发问、重新创造与重新生活的契机。
+          作者提出三层并行的出路：<strong>自我重构、文化改造、社会改造</strong>。前两者可以自救，<strong style="color:var(--crimson)">唯有社会改造是根本出路</strong>——这也是全书的最终主张。
+        </p>
+      </div>
+    </div>
+
+    <div class="paths-intro">
+      <p>虚无主义是一种清醒剂，它逼迫我们反思习以为常的信念。如果能正视虚无，不逃避、不沉溺，而以此为契机深度思考并重建价值，就能获得精神成长与文化创新的动力——在"空无"中寻找"有"，在"怀疑"中建立"信念"，在"解构"之后走向"重构"。</p>
+    </div>
+
+    <div class="paths-grid">
+      <div class="path-col">
+        <div class="roman">I</div>
+        <h3>自我重构</h3>
+        <div class="latin">Reconstruction of the Self</div>
+        <ul>
+          <li>放弃绝对真理，拥抱常识与共识</li>
+          <li>接纳生命的有限性</li>
+          <li>视角性真理观</li>
+          <li>回归自然与真实生活</li>
+          <li>构建多维社会关系</li>
+          <li>承担伦理-政治责任</li>
+          <li>尊重肉体，热爱生活</li>
+        </ul>
+      </div>
+      <div class="path-col">
+        <div class="roman">II</div>
+        <h3>文化改造</h3>
+        <div class="latin">Cultural Transformation</div>
+        <ul>
+          <li>突破哲学三角：世界·意识·语言</li>
+          <li>从唯我论走向经验世界</li>
+          <li>进入伦理-政治生活</li>
+          <li>重视肉身，尊重情感</li>
+          <li>批判符号暴力与逻辑垄断</li>
+          <li>升级身心-世界的解释范式</li>
+          <li>关系本体论的兴起</li>
+        </ul>
+      </div>
+      <div class="path-col">
+        <div class="root-tag">根本出路</div>
+        <div class="roman">III</div>
+        <h3>社会改造</h3>
+        <div class="latin">Social Reform · The Root Solution</div>
+        <ul>
+          <li>政治体制与法律制度的变革</li>
+          <li>促进市场经济转型，鼓励高质量创新</li>
+          <li>鼓励社区自治，发展民间互助</li>
+          <li>改进教育制度</li>
+          <li>培育公共理性与对话文化</li>
+          <li>形成对资本-技术的制衡机制</li>
+          <li>构建多元价值评价体系</li>
+          <li>保障基本权利与尊严</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="self-evolution">
+      <h3>自我演化的四个阶段</h3>
+      <div class="sub">Four Stages of the Self · 建构 → 膨胀 → 解构 → 重构</div>
+      <div class="evolution-flow">
+        <div class="evo-stage">
+          <div class="step">STAGE I</div>
+          <h4>建构</h4>
+          <p>在传统、宗教、家庭中获得初始的自我</p>
+        </div>
+        <div class="evo-stage">
+          <div class="step">STAGE II</div>
+          <h4>膨胀</h4>
+          <p>启蒙之后，自我替代上帝，成为最后的法官</p>
+        </div>
+        <div class="evo-stage">
+          <div class="step">STAGE III</div>
+          <h4>解构</h4>
+          <p>意识、主体、人均被祛魅，"人死了"</p>
+        </div>
+        <div class="evo-stage">
+          <div class="step">STAGE IV</div>
+          <h4>重构</h4>
+          <p>自我是社会的结果——通过参与社会改造来实现自我</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CHAPTER 6 / SYNTHESIS -->
+<section class="synthesis" id="synthesis">
+  <div class="synthesis-inner">
+    <div class="section-label" style="color:var(--gold-bright);">SYNTHESIS · 视觉化总结</div>
+    <h2>从命运到社会改造</h2>
+    <div class="sub">A Lineage of Meaning-Making · 人类寻找意义的五个阶段</div>
+
+    <div class="lineage">
+      <div class="lineage-step">
+        <div class="icon-circle">μ</div>
+        <h4>追问命运</h4>
+        <div class="era">MYTH</div>
+        <p>Me · Maat · Moira<br>神话中不可捉摸的命运</p>
+      </div>
+      <div class="lineage-step">
+        <div class="icon-circle">λ</div>
+        <h4>柏拉图主义</h4>
+        <div class="era">REASON</div>
+        <p>理念、本质、形而上学的世界——以理性把握真实</p>
+      </div>
+      <div class="lineage-step">
+        <div class="icon-circle">✝</div>
+        <h4>基督教精神</h4>
+        <div class="era">FAITH</div>
+        <p>救赎、恩典、彼岸天国、上帝的依托</p>
+      </div>
+      <div class="lineage-step">
+        <div class="icon-circle">I</div>
+        <h4>自我的演化</h4>
+        <div class="era">SELF</div>
+        <p>建构 → 膨胀 → 解构 → 重构 自我替代上帝又被解构</p>
+      </div>
+      <div class="lineage-step">
+        <div class="icon-circle">∞</div>
+        <h4>社会变革</h4>
+        <div class="era">PRAXIS</div>
+        <p>投身世界，热爱生活，参与伦理-政治-文化的改造升级</p>
+      </div>
+    </div>
+
+    <div class="coda">
+      <blockquote>
+        哲学家们只是用不同的方式解释世界，<br>而问题在于改变世界。
+      </blockquote>
+      <cite>— KARL MARX · 第十一条提纲 —</cite>
+      <div style="margin-top:30px; font-family:'Noto Serif SC',serif; font-size:18px; color:var(--paper-warm); font-style:italic;">
+        "点滴之水，汇聚江海"
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div>探索生命的意义与价值 · 从虚无中寻找希望与力量</div>
+  <div class="source">基于梅春雷《探索生命的意义与价值》(2026.01.11) · 视频号：老K的呐喊</div>
+</footer>
+
+<!-- MODAL -->
+<div class="modal" id="modal">
+  <div class="modal-content">
+    <button class="modal-close" id="modalClose">×</button>
+    <div id="modalBody"></div>
+  </div>
+</div>
+
+<script>
+// ============ THINKER DATA ============
+const thinkers = {
+  jacobi: {
+    name: '雅各比',
+    latin: 'Friedrich Heinrich Jacobi · 1743-1819',
+    meta: '1799 · 致费希特的信',
+    headline: '首次提出"虚无主义"概念',
+    desc: '雅各比批判德国观念论：费希特的"绝对自我"哲学否定了独立于意识的客观实在，使外部世界沦为思维的附属品。这种哲学体系必然导向"虚无"——它否定了任何超越主观意识的真实存在，包括上帝、自然与他者。雅各比同时批判斯宾诺莎的因果决定论：当一切都被还原为冰冷的因果链条时，真、善、美、爱失去其超越性根基。',
+    quote: '"亲爱的费希特，若我向您坦承，我将这种观念论斥为虚无主义……它是一切哲学的毁灭者，将万物消解为纯粹思维形式。"'
+  },
+  schopen: {
+    name: '叔本华',
+    latin: 'Arthur Schopenhauer · 1788-1860',
+    meta: '《作为意志和表象的世界》',
+    headline: '指出意志的虚无本质',
+    desc: '叔本华揭示了世界本质上是盲目意志的表象——意志不断追求满足，却永无餍足，因此痛苦是生命的常态，幸福只是痛苦的暂时缺席。这一悲观主义的存在论为后续的虚无主义思想提供了重要前提。',
+    quote: '"人生在欲望与无聊之间摇摆——欲望未满足时痛苦，欲望满足后无聊。"'
+  },
+  dosto: {
+    name: '陀思妥耶夫斯基',
+    latin: 'Fyodor Dostoevsky · 1821-1881',
+    meta: '《群魔》(1872) · 《卡拉马佐夫兄弟》(1880)',
+    headline: '若上帝不存在，是否一切皆许可？',
+    desc: '通过《群魔》中基里洛夫的自杀论辩，揭示虚无主义者将自由意志推向极端后的毁灭性。在《卡拉马佐夫兄弟》中，伊凡的质疑——"若上帝存在，为何容许苦难？"——探讨信仰崩塌后的伦理真空。陀氏揭示了理性与信仰的深刻冲突。',
+    quote: '"如上帝不存在，那么一切皆许可？" / "无人对苦难负责，这让我不能心安。"'
+  },
+  nietzsche: {
+    name: '尼采',
+    latin: 'Friedrich Nietzsche · 1844-1900',
+    meta: '《快乐的科学》《查拉图斯特拉如是说》',
+    headline: '上帝死了 · 重估一切价值',
+    desc: '尼采诊断了西方文明的根本危机：最高价值的贬黜。柏拉图主义构造了"理念世界"，基督教提供了"彼岸天国"，但当这些信仰崩溃，便导致虚无主义。尼采区分消极虚无主义（绝望、冷漠）与积极虚无主义（重估价值、创造新价值），并以酒神精神、权力意志、超人、永恒轮回作为出路。',
+    quote: '"如其所是地存在的世界，他断定它不应当存在；对于如其应当是地存在的世界，他断定它并不实存。"'
+  },
+  weber: {
+    name: '马克斯·韦伯',
+    latin: 'Max Weber · 1864-1920',
+    meta: '《学术作为一种志业》',
+    headline: '世界的祛魅 · 工具理性的铁笼',
+    desc: '韦伯指出现代世界因失去神圣根基，人们不再能依靠统一的宇宙秩序。取而代之的是"诸神之争"——各种不可通约的价值在争夺人心。工具理性扩张：以最有效、最经济的方式达成目标，而不考虑目标本身的价值。一切都被量化，人被嵌入无法逃脱的系统规则。',
+    quote: '"我们这个时代，因世界失去了神圣的根基，人们不再能依靠一个统一的宇宙秩序来安排生活。取而代之的是各种不可通约的诸神在争夺人心。"'
+  },
+  heidegger: {
+    name: '海德格尔',
+    latin: 'Martin Heidegger · 1889-1976',
+    meta: '《存在与时间》',
+    headline: '虚无主义即存在的遗忘',
+    desc: '海德格尔将西方哲学史看作虚无主义逐步展开的历史——从柏拉图理念论到基督教神学，再到笛卡尔的主体性哲学、启蒙运动理性，直至尼采的"上帝已死"，都是存在被技术化、工具化、对象化的过程。人类只关注"存在者"，遗忘了"存在"本身。出路：诗意地栖居、思的任务与返回开端。',
+    quote: '"语言是存在的家。" / "诗意地栖居，思的任务，返回开端，重新唤醒人对存在的本真体验。"'
+  },
+  modern: {
+    name: '19-20世纪相关谱系',
+    latin: 'The Modern Genealogy',
+    meta: '从马克思到齐泽克',
+    headline: '虚无主义的多重面相',
+    desc: '马克思：资本逻辑将一切价值还原为交换价值，资本主义就是虚无主义。 / 舍勒：价值秩序颠倒。 / 萨特：自由就是虚无。 / 梅洛-庞蒂：身体的遗忘。 / 列维纳斯：同一性暴力，他者的排斥。 / 福柯："人死了"。 / 鲍德里亚：虚拟世界比真实更真实。 / 查尔斯·泰勒：意义真空。 / 齐泽克：宏大叙事背后的空洞。',
+    quote: '虚无主义的根源总结：宇宙的冷漠、家园的丧失、价值秩序颠倒、存在的遗忘、文化异化、自我解构、存在的焦虑。'
+  }
+};
+
+// ============ RENDER THINKER DETAIL ============
+function renderThinker(id) {
+  const t = thinkers[id];
+  if (!t) return;
+  document.getElementById('thinkerDetail').innerHTML = `
+    <div class="who">
+      <h3>${t.name}</h3>
+      <div class="latin">${t.latin}</div>
+      <div class="meta">${t.meta}</div>
+    </div>
+    <div class="what">
+      <h4>CORE DIAGNOSIS</h4>
+      <div class="core-idea">${t.headline}</div>
+      <div class="desc">${t.desc}</div>
+      <div class="quote">${t.quote}</div>
+    </div>
+  `;
+  // Update active state
+  document.querySelectorAll('.thinker').forEach(el => el.classList.remove('active'));
+  document.querySelector(`.thinker[data-id="${id}"]`).classList.add('active');
+}
+
+document.querySelectorAll('.thinker').forEach(el => {
+  el.addEventListener('click', () => renderThinker(el.dataset.id));
+});
+renderThinker('jacobi');
+
+// ============ TABS ============
+document.querySelectorAll('.tab').forEach(btn => {
+  btn.addEventListener('click', () => {
+    const tab = btn.dataset.tab;
+    document.querySelectorAll('.tab').forEach(b => b.classList.remove('active'));
+    document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+    btn.classList.add('active');
+    document.getElementById(tab).classList.add('active');
+  });
+});
+
+// ============ NAVIGATION ============
+function scrollToTarget(id) {
+  const el = document.getElementById(id);
+  if (el) {
+    const offset = 80;
+    const top = el.getBoundingClientRect().top + window.pageYOffset - offset;
+    window.scrollTo({ top, behavior: 'smooth' });
+  }
+}
+
+document.querySelectorAll('[data-target]').forEach(el => {
+  el.addEventListener('click', e => {
+    e.preventDefault();
+    scrollToTarget(el.dataset.target);
+  });
+});
+
+// ============ ACTIVE NAV TRACKING ============
+const sections = ['hero', 'journey', 'ch1', 'ch2', 'ch3', 'ch4', 'ch5', 'synthesis'];
+const navLinks = document.querySelectorAll('#topnav a');
+
+function updateActiveNav() {
+  const scrollY = window.pageYOffset + 120;
+  let current = sections[0];
+  for (const id of sections) {
+    const el = document.getElementById(id);
+    if (el && el.offsetTop <= scrollY) {
+      current = id;
+    }
+  }
+  navLinks.forEach(link => {
+    link.classList.toggle('active', link.dataset.target === current);
+  });
+}
+
+window.addEventListener('scroll', updateActiveNav, { passive: true });
+updateActiveNav();
+
+// ============ MODAL ============
+const modal = document.getElementById('modal');
+document.getElementById('modalClose').addEventListener('click', () => modal.classList.remove('show'));
+modal.addEventListener('click', e => { if (e.target === modal) modal.classList.remove('show'); });
+
+// Allow Esc to close
+document.addEventListener('keydown', e => {
+  if (e.key === 'Escape') modal.classList.remove('show');
+});
+
+// Number key shortcuts to navigate (1-7)
+document.addEventListener('keydown', e => {
+  const map = { '0': 'hero', '1': 'ch1', '2': 'ch2', '3': 'ch3', '4': 'ch4', '5': 'ch5', '6': 'synthesis' };
+  if (map[e.key]) scrollToTarget(map[e.key]);
+});
+</script>
+
+</body>
+</html>

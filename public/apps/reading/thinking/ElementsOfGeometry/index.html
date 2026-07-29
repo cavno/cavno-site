@@ -1,0 +1,1119 @@
+<!DOCTYPE html>
+<html lang="zh-Hans">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>公理化演绎 · 《几何原本》的整体思维方式</title>
+<meta name="description" content="以可交互的方式呈现欧几里得《几何原本》的公理化演绎方法:从极少数公理逐级推出全书 465 条命题,直观展示确定性如何传递。">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@300;400;500;600;700;900&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --parchment:#F3EAD3;
+    --parchment-2:#ECDFC1;
+    --parchment-3:#E4D4B0;
+    --card:#F7F0DD;
+    --ink:#2B2620;
+    --ink-soft:#5C5446;
+    --muted:#857a64;
+    --teal:#3F7E6B;
+    --teal-deep:#2C5A4B;
+    --teal-faint:rgba(63,126,107,.16);
+    --terra:#BC4B33;
+    --terra-deep:#97361F;
+    --amber:#C8892C;
+    --amber-soft:#E6BD72;
+    --line:rgba(63,126,107,.22);
+    --line-strong:rgba(63,126,107,.4);
+    --serif:"Noto Serif SC","Songti SC","STSong","SimSun",Georgia,"Times New Roman",serif;
+    --shadow:0 1px 0 rgba(43,38,32,.04), 0 12px 30px -18px rgba(44,90,75,.45);
+  }
+  *{box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  @media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
+  body{
+    margin:0;
+    font-family:var(--serif);
+    color:var(--ink);
+    background:var(--parchment);
+    background-image:
+      radial-gradient(circle at 18% 12%, rgba(63,126,107,.05), transparent 42%),
+      radial-gradient(circle at 84% 78%, rgba(188,75,51,.045), transparent 46%);
+    line-height:1.78;
+    font-weight:400;
+    -webkit-font-smoothing:antialiased;
+    text-rendering:optimizeLegibility;
+  }
+  ::selection{background:rgba(63,126,107,.22)}
+  a{color:var(--teal-deep);text-decoration:none}
+  a:hover{text-decoration:underline}
+
+  /* ---------- layout ---------- */
+  .wrap{max-width:1080px;margin:0 auto;padding:0 26px}
+  .section{padding:84px 0 56px}
+  .section--tight{padding:60px 0 40px}
+
+  .eyebrow{
+    font-size:.74rem;letter-spacing:.34em;text-transform:uppercase;
+    color:var(--teal);font-weight:600;margin:0 0 18px;
+    display:flex;align-items:center;gap:14px;
+  }
+  .eyebrow::before{content:"";width:30px;height:1px;background:var(--teal);opacity:.6;display:inline-block}
+  .eyebrow .gk{letter-spacing:.18em;font-weight:500;color:var(--ink-soft);text-transform:none}
+
+  h1,h2,h3{font-weight:700;line-height:1.18;letter-spacing:-.01em;color:var(--ink)}
+  h2.sec-title{font-size:clamp(1.55rem,3.4vw,2.35rem);margin:0 0 8px}
+  .sec-sub{font-size:1.02rem;color:var(--ink-soft);max-width:62ch;margin:10px 0 0;font-weight:400}
+  p{margin:0 0 18px}
+  .lead{font-size:clamp(1.05rem,1.7vw,1.22rem);color:var(--ink-soft)}
+  .num-em{color:var(--terra-deep);font-weight:700;font-variant-numeric:tabular-nums}
+  .gk{font-style:italic;color:var(--ink-soft)}
+  mark{background:linear-gradient(transparent 58%, var(--amber-soft) 58%);color:inherit;padding:0 1px}
+
+  /* ---------- nav ---------- */
+  nav{
+    position:sticky;top:0;z-index:50;
+    background:rgba(243,234,211,.82);
+    backdrop-filter:blur(10px);
+    border-bottom:1px solid var(--line);
+  }
+  .nav-in{max-width:1080px;margin:0 auto;padding:13px 26px;display:flex;align-items:center;justify-content:space-between;gap:18px}
+  .brand{display:flex;align-items:baseline;gap:11px;font-weight:700;letter-spacing:-.01em}
+  .brand .sigil{
+    font-weight:900;color:var(--teal-deep);font-size:1.15rem;
+    border:1.5px solid var(--teal-deep);border-radius:50%;width:30px;height:30px;
+    display:inline-flex;align-items:center;justify-content:center;flex:none;line-height:1;
+  }
+  .brand small{color:var(--muted);font-weight:400;font-size:.82rem;letter-spacing:.02em}
+  .nav-links{display:flex;gap:4px;flex-wrap:wrap}
+  .nav-links a{
+    font-size:.84rem;color:var(--ink-soft);padding:6px 11px;border-radius:7px;
+    font-weight:500;transition:background .15s,color .15s;
+  }
+  .nav-links a:hover{background:var(--teal-faint);color:var(--teal-deep);text-decoration:none}
+  @media (max-width:720px){.nav-links{display:none}}
+
+  /* ---------- hero ---------- */
+  .hero{padding:96px 0 64px;position:relative;overflow:hidden}
+  .hero h1{font-size:clamp(2.3rem,6.6vw,4.6rem);margin:0 0 26px;letter-spacing:-.022em}
+  .hero h1 .q{color:var(--teal-deep)}
+  .hero h1 .s{display:block;font-weight:400;font-size:.42em;color:var(--ink-soft);letter-spacing:.02em;margin-top:14px}
+  .thesis{max-width:60ch;font-size:clamp(1.06rem,1.9vw,1.3rem);color:var(--ink-soft)}
+  .thesis b{color:var(--ink);font-weight:600}
+  .hero-figure{margin:46px 0 6px;border-top:1px solid var(--line);padding-top:30px}
+  .hero-stat-row{display:flex;flex-wrap:wrap;gap:30px 52px;align-items:flex-end}
+  .hstat{display:flex;flex-direction:column;gap:2px}
+  .hstat .n{font-size:clamp(2rem,4.5vw,3rem);font-weight:900;color:var(--teal-deep);line-height:1;font-variant-numeric:tabular-nums}
+  .hstat .l{font-size:.86rem;color:var(--muted);letter-spacing:.04em}
+  .hstat .l b{color:var(--ink-soft);font-weight:600}
+  .hstat.arrow{font-size:1.8rem;color:var(--amber);align-self:center;padding-bottom:6px}
+  .scrollcue{margin-top:40px;font-size:.82rem;color:var(--muted);letter-spacing:.16em;text-transform:uppercase;display:inline-flex;align-items:center;gap:10px}
+  .scrollcue .dot{width:7px;height:7px;border-radius:50%;background:var(--amber);animation:pulse 2.4s ease-in-out infinite}
+  @keyframes pulse{0%,100%{opacity:.4;transform:scale(1)}50%{opacity:1;transform:scale(1.5)}}
+  @media (prefers-reduced-motion:reduce){.scrollcue .dot{animation:none}}
+
+  /* ---------- reveal ---------- */
+  .reveal{opacity:0;transform:translateY(22px);transition:opacity .7s ease,transform .7s ease}
+  .reveal.in{opacity:1;transform:none}
+  @media (prefers-reduced-motion:reduce){.reveal{opacity:1;transform:none;transition:none}}
+
+  /* ---------- foundations ---------- */
+  .found-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:20px;margin-top:34px}
+  @media (max-width:840px){.found-grid{grid-template-columns:1fr}}
+  .found-col{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:22px 22px 8px;box-shadow:var(--shadow);position:relative}
+  .found-col .tag{font-size:.72rem;letter-spacing:.16em;text-transform:uppercase;font-weight:600;color:var(--teal);display:flex;gap:9px;align-items:center}
+  .found-col .gk{font-size:.78rem;letter-spacing:.06em}
+  .found-col h3{font-size:1.18rem;margin:7px 0 4px}
+  .found-col .role{font-size:.9rem;color:var(--ink-soft);margin:0 0 14px;min-height:3.6em}
+  .found-col.terra{border-top:3px solid var(--terra)}
+  .found-col.teal{border-top:3px solid var(--teal)}
+  .found-col.amber{border-top:3px solid var(--amber)}
+  .axlist{list-style:none;margin:0;padding:0 0 14px}
+  .axlist li{display:flex;gap:11px;padding:9px 0;border-top:1px dashed var(--line);font-size:.92rem;line-height:1.55}
+  .axlist li:first-child{border-top:none}
+  .axlist .k{flex:none;width:30px;height:30px;border-radius:7px;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:.8rem;color:#fff}
+  .axlist.post .k{background:var(--teal-deep)}
+  .axlist.cn .k{background:var(--teal);border-radius:50%}
+  .axlist.def .k{background:transparent;color:var(--teal-deep);border:1.6px solid var(--teal-deep)}
+  .found-note{font-size:.9rem;color:var(--ink-soft);background:rgba(63,126,107,.07);border-left:3px solid var(--teal);padding:14px 18px;border-radius:0 10px 10px 0;margin-top:26px}
+  .found-note b{color:var(--teal-deep)}
+
+  /* ---------- deductive web ---------- */
+  .web-panel{background:var(--card);border:1px solid var(--line);border-radius:16px;box-shadow:var(--shadow);overflow:hidden;margin-top:30px}
+  .web-controls{display:flex;flex-wrap:wrap;gap:10px;padding:18px 20px;border-bottom:1px solid var(--line);align-items:center;background:linear-gradient(var(--parchment-2),var(--card))}
+  .web-controls .ctl-label{font-size:.8rem;color:var(--muted);letter-spacing:.08em;margin-right:4px;text-transform:uppercase;font-weight:600}
+  .chip{
+    font-family:var(--serif);font-size:.86rem;font-weight:500;
+    border:1px solid var(--line-strong);background:var(--parchment);color:var(--ink-soft);
+    padding:7px 13px;border-radius:20px;cursor:pointer;transition:all .15s;line-height:1;
+  }
+  .chip:hover{border-color:var(--teal);color:var(--teal-deep);background:#fff}
+  .chip:focus-visible{outline:2px solid var(--teal);outline-offset:2px}
+  .chip.active{background:var(--teal-deep);color:#fff;border-color:var(--teal-deep)}
+  .chip.p47{border-color:var(--amber)}
+  .chip.p47.active{background:var(--amber);border-color:var(--amber);color:#3a2c10}
+  .chip.reset{margin-left:auto;border-style:dashed}
+
+  .web-body{display:grid;grid-template-columns:1fr 320px}
+  @media (max-width:920px){.web-body{grid-template-columns:1fr}}
+  .web-svg-wrap{overflow-x:auto;padding:8px 4px;background:
+    repeating-linear-gradient(0deg,transparent,transparent 38px,rgba(63,126,107,.025) 38px,rgba(63,126,107,.025) 39px)}
+  svg.web{display:block;width:100%;min-width:760px;height:auto;font-family:var(--serif)}
+  .edge{fill:none;stroke:var(--teal);stroke-width:1;opacity:.13;transition:opacity .25s,stroke .25s,stroke-width .25s}
+  .edge.cone{opacity:.85;stroke:var(--teal-deep);stroke-width:1.8}
+  .edge.dim{opacity:.04}
+  .node{cursor:pointer}
+  .node circle,.node rect{transition:fill .2s,stroke .2s,opacity .2s}
+  .node .nlabel{font-size:12px;font-weight:600;fill:var(--ink);text-anchor:middle;dominant-baseline:central;pointer-events:none;transition:fill .2s}
+  .node.prop circle{fill:var(--card);stroke:var(--teal);stroke-width:1.6}
+  .node.found rect,.node.found circle{fill:var(--teal-deep);stroke:none}
+  .node.found.cn circle{fill:var(--teal)}
+  .node.found.def circle{fill:var(--card);stroke:var(--teal-deep);stroke-width:1.8}
+  .node.found.def .nlabel{fill:var(--teal-deep)}
+  .node.found .nlabel{fill:#fff;font-size:10px}
+  .node.found.def .nlabel{fill:var(--teal-deep)}
+  .node:hover circle,.node:hover rect{filter:brightness(.97)}
+  .node:focus-visible{outline:none}
+  .node:focus-visible circle,.node:focus-visible rect{stroke:var(--amber);stroke-width:2.6}
+  /* states */
+  .node.dim{opacity:.22}
+  .node.cone.prop circle{fill:var(--teal);stroke:var(--teal-deep)}
+  .node.cone.prop .nlabel{fill:#fff}
+  .node.cone.found rect,.node.cone.found circle{fill:var(--teal-deep)}
+  .node.cone.found.def circle{fill:var(--amber-soft);stroke:var(--teal-deep)}
+  .node.selected.prop circle{fill:var(--amber);stroke:var(--terra-deep);stroke-width:2.4;r:20}
+  .node.selected.prop .nlabel{fill:#3a2c10}
+  .node.hl.prop circle{fill:var(--terra);stroke:var(--terra-deep)}
+  .node.hl.prop .nlabel{fill:#fff}
+  .node.hl2.prop circle{fill:var(--amber);stroke:var(--amber)}
+  .node.hl2.prop .nlabel{fill:#3a2c10}
+  .band-label{font-size:11px;fill:var(--muted);letter-spacing:.12em;font-weight:600}
+
+  .web-detail{border-left:1px solid var(--line);padding:22px;background:var(--parchment-2);min-height:300px}
+  @media (max-width:920px){.web-detail{border-left:none;border-top:1px solid var(--line)}}
+  .web-detail .dt-id{font-size:1.7rem;font-weight:900;color:var(--teal-deep);line-height:1}
+  .web-detail .dt-kind{font-size:.76rem;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);font-weight:600;margin-top:4px}
+  .web-detail .dt-text{font-size:1.02rem;color:var(--ink);margin:14px 0 16px;line-height:1.6}
+  .web-detail .dt-section{font-size:.74rem;letter-spacing:.1em;text-transform:uppercase;color:var(--teal);font-weight:600;margin:18px 0 8px}
+  .dep-chips{display:flex;flex-wrap:wrap;gap:6px}
+  .dep-chips button{font-family:var(--serif);font-size:.8rem;border:1px solid var(--line-strong);background:var(--parchment);color:var(--ink-soft);border-radius:6px;padding:4px 9px;cursor:pointer;transition:all .15s;font-weight:600}
+  .dep-chips button:hover{border-color:var(--teal);color:var(--teal-deep)}
+  .dep-chips button.f{border-style:dashed;color:var(--teal-deep)}
+  .dt-cone{font-size:.9rem;color:var(--ink-soft);margin-top:18px;padding-top:14px;border-top:1px dashed var(--line);line-height:1.6}
+  .dt-cone b{color:var(--terra-deep);font-variant-numeric:tabular-nums;font-size:1.05rem}
+  .mtag{display:inline-block;font-size:.72rem;font-weight:600;padding:2px 8px;border-radius:11px;margin:0 5px 5px 0;letter-spacing:.02em}
+  .mtag.r{background:rgba(188,75,51,.13);color:var(--terra-deep)}
+  .mtag.s{background:rgba(200,137,44,.16);color:#8a5d12}
+  .mtag.c{background:rgba(63,126,107,.13);color:var(--teal-deep)}
+  .mtag.p{background:var(--teal-deep);color:#fff}
+  .dt-empty{color:var(--muted);font-size:.96rem;line-height:1.7}
+
+  .legend{display:flex;flex-wrap:wrap;gap:16px 22px;padding:14px 20px;border-top:1px solid var(--line);font-size:.82rem;color:var(--ink-soft);background:var(--parchment-2)}
+  .legend span{display:inline-flex;align-items:center;gap:7px}
+  .lg-sq{width:14px;height:14px;background:var(--teal-deep);border-radius:3px;flex:none}
+  .lg-ci{width:14px;height:14px;background:var(--teal);border-radius:50%;flex:none}
+  .lg-de{width:14px;height:14px;background:var(--card);border:1.6px solid var(--teal-deep);border-radius:50%;flex:none}
+  .lg-pr{width:15px;height:15px;background:var(--card);border:1.6px solid var(--teal);border-radius:50%;flex:none}
+  .lg-co{width:15px;height:15px;background:var(--teal);border:1.6px solid var(--teal-deep);border-radius:50%;flex:none}
+
+  /* ---------- six-part stepper ---------- */
+  .six{display:grid;grid-template-columns:1fr 1fr;gap:28px;margin-top:32px;align-items:start}
+  @media (max-width:860px){.six{grid-template-columns:1fr}}
+  .six-steps{display:flex;flex-direction:column;gap:0}
+  .step-row{display:flex;gap:15px;padding:15px 16px;border-radius:11px;cursor:pointer;transition:background .2s;border:1px solid transparent}
+  .step-row:hover{background:var(--card)}
+  .step-row.active{background:var(--card);border-color:var(--line)}
+  .step-row.done .sn{background:var(--teal);color:#fff;border-color:var(--teal)}
+  .step-row.active .sn{background:var(--amber);color:#3a2c10;border-color:var(--amber)}
+  .sn{flex:none;width:34px;height:34px;border-radius:50%;border:1.6px solid var(--line-strong);display:flex;align-items:center;justify-content:center;font-weight:700;color:var(--ink-soft);transition:all .2s}
+  .step-body .gk{display:block;font-size:.82rem;letter-spacing:.04em;margin-bottom:1px}
+  .step-body .zh{font-weight:700;font-size:1.04rem}
+  .step-body .desc{font-size:.92rem;color:var(--ink-soft);margin-top:5px;line-height:1.6}
+  .step-body .desc.hide{display:none}
+  .six-figure{position:sticky;top:80px;background:var(--card);border:1px solid var(--line);border-radius:14px;padding:20px;box-shadow:var(--shadow)}
+  .six-figure svg{display:block;width:100%;height:auto;font-family:var(--serif)}
+  .cstep-cap{font-size:.86rem;color:var(--ink-soft);text-align:center;margin-top:10px;min-height:2.6em;line-height:1.5}
+  .cstep-cap b{color:var(--teal-deep)}
+  .step-nav{display:flex;gap:10px;justify-content:center;margin-top:8px}
+  .step-nav button{font-family:var(--serif);font-size:.88rem;font-weight:600;border:1px solid var(--line-strong);background:var(--parchment);color:var(--teal-deep);border-radius:8px;padding:7px 18px;cursor:pointer;transition:all .15s}
+  .step-nav button:hover:not(:disabled){background:var(--teal-deep);color:#fff;border-color:var(--teal-deep)}
+  .step-nav button:disabled{opacity:.4;cursor:default}
+  .qef-badge{font-size:.78rem;font-weight:700;fill:var(--terra-deep)}
+  /* construction svg parts */
+  .cpart{opacity:0;transition:opacity .5s}
+  .cpart.show{opacity:1}
+  @media (prefers-reduced-motion:reduce){.cpart{transition:none}}
+  .c-circle{fill:rgba(63,126,107,.05);stroke:var(--teal);stroke-width:1.4}
+  .c-line{stroke:var(--ink);stroke-width:2;fill:none}
+  .c-line.amber{stroke:var(--amber);stroke-width:2.6}
+  .c-goal{stroke:var(--line-strong);stroke-width:1.4;stroke-dasharray:5 5;fill:none}
+  .c-pt{fill:var(--terra-deep)}
+  .c-lbl{font-size:15px;font-weight:700;fill:var(--ink)}
+  .c-fill{fill:rgba(200,137,44,.2);stroke:var(--terra-deep);stroke-width:2}
+
+  /* ---------- methods ---------- */
+  .methods-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:20px;margin-top:30px}
+  @media (max-width:760px){.methods-grid{grid-template-columns:1fr}}
+  .mcard{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:24px;box-shadow:var(--shadow)}
+  .mcard.wide{grid-column:1 / -1}
+  .mcard .mk-gk{font-size:.8rem;letter-spacing:.04em;color:var(--teal);font-weight:600}
+  .mcard h3{font-size:1.2rem;margin:4px 0 12px}
+  .mcard p{font-size:.96rem;color:var(--ink-soft);margin:0 0 12px}
+  .mcard p:last-child{margin-bottom:0}
+  .mcard .eg{font-size:.9rem;background:rgba(63,126,107,.06);border-radius:9px;padding:12px 15px;color:var(--ink);border-left:3px solid var(--teal)}
+  .mcard.r .eg{border-left-color:var(--terra)}
+  .mcard.s .eg{border-left-color:var(--amber)}
+
+  /* LEM toggle */
+  .lem-box{display:flex;align-items:center;gap:16px;flex-wrap:wrap;background:var(--parchment-2);border:1px solid var(--line);border-radius:12px;padding:16px 20px;margin:20px 0 24px}
+  .lem-box .q{font-weight:600;color:var(--ink)}
+  .switch{position:relative;display:inline-flex;align-items:center;gap:10px;cursor:pointer;user-select:none}
+  .switch input{position:absolute;opacity:0;width:0;height:0}
+  .track{width:50px;height:28px;background:var(--teal);border-radius:20px;position:relative;transition:background .2s;flex:none}
+  .track::after{content:"";position:absolute;width:22px;height:22px;background:#fff;border-radius:50%;top:3px;left:3px;transition:left .22s}
+  .switch input:checked + .track{background:var(--terra)}
+  .switch input:checked + .track::after{left:25px}
+  .switch input:focus-visible + .track{outline:2px solid var(--amber);outline-offset:2px}
+  .switch .state{font-weight:700;font-size:.92rem;min-width:8.5em}
+  .switch .state.on{color:var(--teal-deep)}
+  .switch .state.off{color:var(--terra-deep)}
+  .two-forms{display:grid;grid-template-columns:1fr 1fr;gap:18px}
+  @media (max-width:680px){.two-forms{grid-template-columns:1fr}}
+  .form-card{border:1px solid var(--line);border-radius:12px;padding:20px;background:var(--card);transition:opacity .3s,filter .3s}
+  .form-card .fc-h{font-weight:700;font-size:1.02rem;margin-bottom:4px}
+  .form-card .logic{font-family:var(--serif);font-size:1.02rem;color:var(--teal-deep);background:var(--parchment-2);padding:8px 12px;border-radius:7px;margin:10px 0;text-align:center;letter-spacing:.02em}
+  .form-card .fc-note{font-size:.9rem;color:var(--ink-soft)}
+  .form-card .status{font-size:.8rem;font-weight:700;letter-spacing:.06em;margin-top:12px;padding:5px 10px;border-radius:14px;display:inline-block}
+  .status.alive{background:rgba(63,126,107,.15);color:var(--teal-deep)}
+  .status.dead{background:rgba(188,75,51,.15);color:var(--terra-deep)}
+  .form-card.killed{opacity:.5;filter:grayscale(.5)}
+  .form-card.killed .logic{text-decoration:line-through;text-decoration-color:var(--terra)}
+
+  /* ---------- 13 books map ---------- */
+  .books-legend{display:flex;flex-wrap:wrap;gap:18px;margin:26px 0 22px;font-size:.88rem}
+  .books-legend span{display:inline-flex;align-items:center;gap:8px;color:var(--ink-soft)}
+  .zdot{width:14px;height:14px;border-radius:4px;flex:none}
+  .zdot.geo{background:var(--teal)}
+  .zdot.mag{background:var(--amber)}
+  .zdot.arith{background:var(--terra)}
+  .books-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(232px,1fr));gap:16px}
+  .book{border-radius:13px;padding:18px 18px 16px;background:var(--card);border:1px solid var(--line);position:relative;overflow:hidden;box-shadow:var(--shadow)}
+  .book::before{content:"";position:absolute;left:0;top:0;bottom:0;width:5px}
+  .book.geo::before{background:var(--teal)}
+  .book.mag::before{background:var(--amber)}
+  .book.arith::before{background:var(--terra)}
+  .book .bk-no{font-size:.78rem;letter-spacing:.14em;font-weight:700;color:var(--muted)}
+  .book .bk-no .roman{color:var(--ink);font-size:1.05rem;margin-right:6px}
+  .book h4{font-size:1.06rem;margin:5px 0 8px;font-weight:700}
+  .book .bk-count{font-size:.82rem;color:var(--ink-soft);margin-bottom:9px;font-variant-numeric:tabular-nums}
+  .book .bk-count b{color:var(--teal-deep);font-size:1.15rem;font-weight:800}
+  .book .bk-key{font-size:.88rem;color:var(--ink-soft);line-height:1.55}
+  .book .bk-zone{position:absolute;top:14px;right:14px;font-size:.66rem;font-weight:700;letter-spacing:.06em;padding:2px 7px;border-radius:9px}
+  .book.geo .bk-zone{background:rgba(63,126,107,.13);color:var(--teal-deep)}
+  .book.mag .bk-zone{background:rgba(200,137,44,.16);color:#8a5d12}
+  .book.arith .bk-zone{background:rgba(188,75,51,.14);color:var(--terra-deep)}
+  .line-banner{margin-top:30px;background:linear-gradient(95deg,rgba(63,126,107,.08),rgba(188,75,51,.08));border:1px solid var(--line);border-radius:14px;padding:24px 26px}
+  .line-banner h3{font-size:1.15rem;margin:0 0 10px;display:flex;align-items:center;gap:10px}
+  .line-banner h3::before{content:"⟷";color:var(--amber);font-size:1.3rem}
+  .line-banner p{font-size:.97rem;color:var(--ink-soft);margin:0 0 12px}
+  .line-banner p:last-child{margin-bottom:0}
+  .line-banner b{color:var(--ink)}
+
+  /* ---------- boundaries ---------- */
+  .bound-list{margin-top:30px;display:flex;flex-direction:column;gap:0}
+  .bound{display:grid;grid-template-columns:46px 1fr;gap:20px;padding:26px 0;border-top:1px solid var(--line)}
+  .bound:first-child{border-top:none}
+  .bound .bn{font-size:1.5rem;font-weight:900;color:var(--teal);font-variant-numeric:tabular-nums;line-height:1.1}
+  .bound h3{font-size:1.16rem;margin:0 0 9px}
+  .bound p{font-size:.98rem;color:var(--ink-soft);margin:0 0 12px}
+  .bound p:last-child{margin-bottom:0}
+  .bound b{color:var(--ink)}
+  .triptych{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin:18px 0 6px}
+  @media (max-width:620px){.triptych{grid-template-columns:1fr}}
+  .tri{background:var(--card);border:1px solid var(--line);border-radius:11px;padding:14px;text-align:center}
+  .tri svg{width:100%;height:auto;display:block}
+  .tri .tt{font-weight:700;font-size:.96rem;margin-top:8px}
+  .tri .td{font-size:.82rem;color:var(--ink-soft);margin-top:3px}
+  .hilbert-groups{display:flex;flex-wrap:wrap;gap:9px;margin-top:6px}
+  .hg{font-size:.84rem;font-weight:600;background:var(--parchment-2);border:1px solid var(--line);border-radius:8px;padding:6px 12px;color:var(--teal-deep)}
+
+  /* ---------- coda + footer ---------- */
+  .coda{background:var(--teal-deep);color:var(--parchment);border-radius:18px;padding:48px 44px;margin:40px 0 0;position:relative;overflow:hidden}
+  .coda::before{content:"ΣΤΟΙΧΕΙΑ";position:absolute;right:-10px;bottom:-30px;font-size:8rem;font-weight:900;color:rgba(243,234,211,.06);letter-spacing:-.02em;pointer-events:none}
+  .coda h2{color:#fff;font-size:clamp(1.4rem,3vw,2rem);margin:0 0 18px;position:relative}
+  .coda p{color:rgba(243,234,211,.86);font-size:1.05rem;max-width:64ch;position:relative;margin:0 0 16px}
+  .coda p:last-child{margin-bottom:0}
+  .coda b{color:var(--amber-soft)}
+  footer{padding:46px 0 60px;border-top:1px solid var(--line);margin-top:64px;font-size:.86rem;color:var(--muted)}
+  footer .col{display:flex;flex-wrap:wrap;justify-content:space-between;gap:18px}
+  footer b{color:var(--ink-soft)}
+  .src-note{margin-top:14px;font-size:.8rem;line-height:1.6;max-width:70ch}
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="nav-in">
+    <div class="brand"><span class="sigil">Σ</span><span>公理化演绎<small>《几何原本》</small></span></div>
+    <div class="nav-links">
+      <a href="#found">地基</a>
+      <a href="#web">演绎之网</a>
+      <a href="#six">六段式</a>
+      <a href="#methods">论证方法</a>
+      <a href="#books">全书</a>
+      <a href="#bounds">边界</a>
+    </div>
+  </div>
+</nav>
+
+<header class="hero">
+  <div class="wrap">
+    <p class="eyebrow"><span class="gk">ΣΤΟΙΧΕΙΑ · Eukleídēs</span> · 公元前 300 年 · 亚历山大里亚</p>
+    <h1>把一门学问,<br>压缩成<span class="q">几条不证自明的开端</span><span class="s">——《几何原本》留给后世的,不是定理,而是一套制造确定性的方法</span></h1>
+    <p class="thesis">它的核心主张一句话可概括:把庞大的知识压缩为<b>极少数不再证明的开端</b>(ἀρχαί),再用保真的推理把其余一切逐级推出,使整座建筑的可靠性<b>等于地基的可靠性</b>。下面这张网,就是确定性如何传递的实物。</p>
+
+    <div class="hero-figure">
+      <div class="hero-stat-row">
+        <div class="hstat"><span class="n">5</span><span class="l"><b>公设</b> aitēmata</span></div>
+        <div class="hstat"><span class="n">5</span><span class="l"><b>公理</b> koinai ennoiai</span></div>
+        <div class="hstat"><span class="n">23</span><span class="l"><b>定义</b>(卷一)</span></div>
+        <div class="hstat arrow">⟶</div>
+        <div class="hstat"><span class="n">465</span><span class="l"><b>命题</b> · 13 卷</span></div>
+      </div>
+      <span class="scrollcue"><span class="dot"></span>向下,看它如何展开</span>
+    </div>
+  </div>
+</header>
+
+<!-- ===================== 地基 ===================== -->
+<section class="section reveal" id="found">
+  <div class="wrap">
+    <p class="eyebrow">第一层 · <span class="gk">archaí</span></p>
+    <h2 class="sec-title">地基:三类性质不同的开端</h2>
+    <p class="sec-sub">欧氏在第一卷开篇铺设三种起点。它们分工明确,且承载着亚里士多德《后分析篇》关于"论证科学"的理论——关键区分在于:<b>公理是跨学科的逻辑/量的真理,公设是几何专属的存在性主张。</b></p>
+
+    <div class="found-grid">
+      <div class="found-col amber">
+        <div class="tag">定义 · <span class="gk">horoi</span> · 共 23 条</div>
+        <h3>规定术语的意义</h3>
+        <p class="role">"点是没有部分的东西""线是没有宽度的长度"。多半是直观提示而非严格定义——它们并不直接参与推理,真正干活的是后两类。下面列出在证明中被实际引用的几条。</p>
+        <ul class="axlist def">
+          <li><span class="k">D10</span><span>直角与垂线:相邻角彼此相等时,各为直角。</span></li>
+          <li><span class="k">D15</span><span>圆:到圆心距离相等的点的轨迹。第一个命题的引擎。</span></li>
+          <li><span class="k">D22</span><span>正方形:四边相等、四角为直角。</span></li>
+          <li><span class="k">D23</span><span>平行线:同平面内向两端无限延长而永不相交的直线。</span></li>
+        </ul>
+      </div>
+
+      <div class="found-col teal">
+        <div class="tag">公设 · <span class="gk">aitēmata</span> · 5 条</div>
+        <h3>几何专属的作图许可</h3>
+        <p class="role">本质是"你被允许执行某种操作"的授权。藏在前三条里的深层立场:<mark>存在即可作</mark>——一个对象之所以"存在",是因为能被构造出来。</p>
+        <ul class="axlist post">
+          <li><span class="k">P1</span><span>任两点之间可作一条直线。</span></li>
+          <li><span class="k">P2</span><span>一条有限直线可沿其方向任意延长。</span></li>
+          <li><span class="k">P3</span><span>以任意点为心、任意距离为半径可作一圆。</span></li>
+          <li><span class="k">P4</span><span>凡直角都彼此相等。</span></li>
+          <li><span class="k">P5</span><span>平行公设:同旁内角之和小于两直角时,两线必在该侧相交。</span></li>
+        </ul>
+      </div>
+
+      <div class="found-col terra">
+        <div class="tag">公理 · <span class="gk">koinai ennoiai</span> · 5 条</div>
+        <h3>超越几何的逻辑/量原则</h3>
+        <p class="role">对一切"量"都成立的共同观念,诸学科共享。把逻辑律与领域设定分置两层,是一个反对跨层混淆的元决策。</p>
+        <ul class="axlist cn">
+          <li><span class="k">C1</span><span>等于同量的量,彼此相等。</span></li>
+          <li><span class="k">C2</span><span>等量加等量,其和相等。</span></li>
+          <li><span class="k">C3</span><span>等量减等量,其差相等。</span></li>
+          <li><span class="k">C4</span><span>彼此重合的量,彼此相等。<b>(叠合法所依)</b></span></li>
+          <li><span class="k">C5</span><span>整体大于部分。</span></li>
+        </ul>
+      </div>
+    </div>
+
+    <p class="found-note">公设与公理的区分常被忽略,却是关键。它对应亚里士多德把"本有原理"(某科学专属)与"共同公理"(诸科学共享)分开的做法。<b>P4、P5 是几何里的存在/相等设定,C1–C5 是对一切量都成立的逻辑真理。</b>把"逻辑律"与"领域设定"分层,在欧氏这里已是结构性的——这正是你处理公理组合时关心的那种层级区分的源头。</p>
+  </div>
+</section>
+
+<!-- ===================== 演绎之网 ===================== -->
+<section class="section reveal" id="web">
+  <div class="wrap">
+    <p class="eyebrow">第二层 · <span class="gk">apodeixis</span> · 核心</p>
+    <h2 class="sec-title">演绎之网:确定性如何逐级传递</h2>
+    <p class="sec-sub">这是卷一全部 48 条命题的逻辑依赖图。每条证明只引用<b>更早的</b>命题与公理——所有连线都指向编号更小处,这本身就证明了演绎次序的良基性。<b>点击任一命题</b>,看它如何把确定性一路追溯回那极少数公理。</p>
+
+    <div class="web-panel">
+      <div class="web-controls" role="group" aria-label="依赖图预设">
+        <span class="ctl-label">看点</span>
+        <button class="chip p47" data-preset="p47">勾股定理 I.47 的依赖锥</button>
+        <button class="chip" data-preset="reductio">所有归谬法证明</button>
+        <button class="chip" data-preset="superposition">所有叠合法证明</button>
+        <button class="chip" data-preset="post5">暗藏第五公设的命题</button>
+        <button class="chip reset" data-preset="reset">重置</button>
+      </div>
+      <div class="web-body">
+        <div class="web-svg-wrap">
+          <svg class="web" id="webSvg" viewBox="0 0 920 560" role="img" aria-label="《几何原本》卷一命题逻辑依赖图">
+            <g id="edgeLayer"></g>
+            <g id="nodeLayer"></g>
+            <text class="band-label" x="20" y="30">开端 · 公设 / 公理 / 定义</text>
+            <text class="band-label" x="20" y="150">命题 I.1 — I.48 · 按原书次序</text>
+          </svg>
+        </div>
+        <aside class="web-detail" id="webDetail" aria-live="polite">
+          <p class="dt-empty">悬停可见命题全名,点击则点亮它完整的逻辑依赖——直到落回公设、公理与定义。<br><br>不妨先点右上角的<b>勾股定理 I.47</b>:你会看到它表面只用 5 条在先命题,实则其依赖锥几乎覆盖了大半个卷一,并<b>悄悄经由 I.29 触及第五公设</b>。</p>
+        </aside>
+      </div>
+      <div class="legend">
+        <span><i class="lg-sq"></i>公设 P1–P5</span>
+        <span><i class="lg-ci"></i>公理 C1–C5</span>
+        <span><i class="lg-de"></i>定义 D10/15/22/23</span>
+        <span><i class="lg-pr"></i>命题</span>
+        <span><i class="lg-co"></i>被点亮的依赖锥</span>
+      </div>
+    </div>
+    <p class="src-note">依赖结构依据希思(T. L. Heath)英译本的标准证明重建;各版本译注在个别"公理/定义"的具体引用上偶有出入,但命题之间的依赖边是稳定且公认的。</p>
+  </div>
+</section>
+
+<!-- ===================== 六段式 ===================== -->
+<section class="section reveal" id="six">
+  <div class="wrap">
+    <p class="eyebrow">第三层 · 命题的标准形态</p>
+    <h2 class="sec-title">六段式:如何用"这一个"图,证明"所有"情形</h2>
+    <p class="sec-sub">普罗克洛斯分析出欧氏完整命题的六段结构。这个"一般 → 特殊 → 再回到一般"的回环,正是现代自然演绎中<b>全称引入</b>(∀-introduction)的祖先。下面以第一个命题 <b>I.1(作等边三角形)</b> 逐段拆解——点击任一段,右侧的作图随之生长。</p>
+
+    <div class="six">
+      <div class="six-steps" id="sixSteps"></div>
+      <div>
+        <div class="six-figure">
+          <svg id="constructSvg" viewBox="0 0 520 400" role="img" aria-label="I.1 等边三角形作图">
+            <!-- goal -->
+            <g class="cpart" data-min="3">
+              <path class="c-goal" d="M185 235 L260 105 L335 235"/>
+            </g>
+            <!-- circles -->
+            <g class="cpart" data-min="4">
+              <circle class="c-circle" cx="185" cy="235" r="150"/>
+              <circle class="c-circle" cx="335" cy="235" r="150"/>
+            </g>
+            <!-- base line + C point segments -->
+            <g class="cpart show" data-min="1" id="cbase">
+              <line class="c-line" x1="185" y1="235" x2="335" y2="235"/>
+              <circle class="c-pt" cx="185" cy="235" r="4.5"/>
+              <circle class="c-pt" cx="335" cy="235" r="4.5"/>
+              <text class="c-lbl" x="170" y="258">A</text>
+              <text class="c-lbl" x="340" y="258">B</text>
+            </g>
+            <g class="cpart" data-min="4" id="ctri">
+              <line class="c-line" id="lineCA" x1="185" y1="235" x2="260" y2="105"/>
+              <line class="c-line" id="lineCB" x1="335" y1="235" x2="260" y2="105"/>
+              <circle class="c-pt" cx="260" cy="105" r="4.5"/>
+              <text class="c-lbl" x="252" y="96">C</text>
+            </g>
+            <!-- final fill -->
+            <g class="cpart" data-min="6">
+              <path class="c-fill" d="M185 235 L260 105 L335 235 Z"/>
+              <text class="qef-badge" x="380" y="60">Q.E.F.</text>
+              <text class="qef-badge" x="356" y="80" style="font-size:11px;font-weight:500;fill:var(--muted)">所要作者已作</text>
+            </g>
+          </svg>
+          <p class="cstep-cap" id="cstepCap">在给定线段 AB 上,作一个等边三角形。</p>
+          <div class="step-nav">
+            <button id="stepPrev">← 上一段</button>
+            <button id="stepNext">下一段 →</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== 论证方法 ===================== -->
+<section class="section reveal" id="methods">
+  <div class="wrap">
+    <p class="eyebrow">第四层 · 论证方法思维</p>
+    <h2 class="sec-title">六种制造确定性的手法</h2>
+    <p class="sec-sub">《原本》整体以<b>综合法</b>呈现:从公理与已证命题前推至结论。但真正值得细究的,是其余几种方法所暴露的隐藏前提与逻辑分裂。</p>
+
+    <div class="methods-grid">
+      <div class="mcard">
+        <div class="mk-gk">synthesis · 主干</div>
+        <h3>综合法 / 直接证明</h3>
+        <p>由原理与原因走向结果,沿保真推理一步步前推。上面那张演绎之网,整体就是综合形态——它呈现的是"发现的产物",而非发现的过程。</p>
+        <div class="eg">与之配对的<b>分析法</b>(analysis)被《原本》刻意隐去:假设所求已达成,反向追溯到某个已知者,再把这条路倒过来走成正式证明。笛卡尔等人后来批评欧氏"隐藏了发现的方法"——典型的"辩护语境"压过"发现语境"。</div>
+      </div>
+
+      <div class="mcard s">
+        <div class="mk-gk">epharmozein · 偷溜进来的假设</div>
+        <h3>叠合法 / 重合法</h3>
+        <p>I.4(边角边)靠把一个三角形"搬"到另一个上、论证二者重合来证明,依据 C4。但<b>"刚体运动保持图形不变"并不在任何公设之列</b>——这是个偷偷溜进来的假设。</p>
+        <p>欧氏自己似乎也不安,全书仅在 I.4、I.8 等极少数处使用。希尔伯特后来索性把"合同"直接立为公理,正是为了绕开这个漏洞。<span class="mtag s">在网中查看:点"所有叠合法证明"</span></p>
+      </div>
+
+      <div class="mcard wide r">
+        <div class="mk-gk">apagōgē eis to adunaton · reductio ad absurdum</div>
+        <h3>归谬法,其实是两种东西</h3>
+        <p>你点名的方法,也最值得细究。它的逻辑根基是<b>矛盾律</b>与<b>排中律</b>的合用。但对"把四律当作可选配置"的框架而言,这里有一个极重要的分裂——拨动下面的开关,看哪种归谬法在拒斥排中律的直觉主义逻辑下还能存活。</p>
+
+        <div class="lem-box">
+          <span class="q">逻辑配置:排中律 (P ∨ ¬P)</span>
+          <label class="switch">
+            <input type="checkbox" id="lemToggle" checked aria-label="切换排中律开关">
+            <span class="track"></span>
+            <span class="state on" id="lemState">已启用 · 经典逻辑</span>
+          </label>
+        </div>
+
+        <div class="two-forms">
+          <div class="form-card" id="formNeg">
+            <div class="fc-h">其一 · 证明否定命题</div>
+            <div class="logic">假设 P ⟹ 推出矛盾 ⟹ 得 ¬P</div>
+            <p class="fc-note">这恰好就是"否定"的定义本身。欧氏最著名的反证——<b>√2 与边不可公度</b>(假设可公度即比为最简整数比,推出某数既奇又偶)——证的正是一个否定命题。</p>
+            <span class="status alive" id="statNeg">直觉主义下:成立 ✓</span>
+          </div>
+          <div class="form-card" id="formPos">
+            <div class="fc-h">其二 · 证明肯定命题(经双重否定)</div>
+            <div class="logic">假设 ¬P ⟹ 推出矛盾 ⟹ ¬¬P ⟹ P</div>
+            <p class="fc-note">最后一步"双重否定消去"<b>才需要排中律</b>。有趣的是,素数无穷(IX.20)欧氏的原始表述其实是<b>构造性的</b>(给定任一有限素数表,造出表外的素因子),并非真正的反证。</p>
+            <span class="status alive" id="statPos">直觉主义下:成立 ✓</span>
+          </div>
+        </div>
+        <p style="margin-top:18px;font-size:.94rem;color:var(--ink-soft)">这正是检验某证明"真正依赖"哪条逻辑律的试金石:挂在欧氏名下的"反证法典范",大多落在排中律不介入的安全一侧。<span class="mtag r">在网中查看:点"所有归谬法证明"</span></p>
+      </div>
+
+      <div class="mcard">
+        <div class="mk-gk">method of exhaustion · 卷十二</div>
+        <h3>穷竭法 = 双重归谬</h3>
+        <p>用于圆、锥、球等曲线图形的面积体积(源自欧多克索斯)。要证 A=B,它证明"假设 A&gt;B 导致矛盾"且"假设 A&lt;B 也导致矛盾",故 A=B。</p>
+        <p>它在<b>不引入实无穷、不使用无穷小</b>的前提下达到积分的严格性——一种刻意"对完成的无限保持悬置"的姿态,只承诺"任意接近"而拒绝谈"无限小"。</p>
+      </div>
+
+      <div class="mcard">
+        <div class="mk-gk">theory of proportion · 卷五</div>
+        <h3>比例论:戴德金分割的先声</h3>
+        <p>著名的定义 V.5 是处理不可公度量的关键:a:b :: c:d,当且仅当对<b>一切</b>整数 m、n,ma 与 nb 的大小关系总与 mc 与 nd 的一致。</p>
+        <p>它对"所有整数倍"作了全称量化,是一个无穷的但严格的判据,几乎预演了戴德金分割——让几何在没有实数概念的情况下严格驾驭无理比例。</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== 全书 13 卷 ===================== -->
+<section class="section reveal" id="books">
+  <div class="wrap">
+    <p class="eyebrow">第五层 · 整合全书</p>
+    <h2 class="sec-title">十三卷的版图,与一条不完备性的分界线</h2>
+    <p class="sec-sub">同一部书横跨了哥德尔分界线:它的<b>几何部分</b>(可解释于实数域,塔斯基证明其完备且可判定)与它的<b>算术部分</b>(形式化为皮亚诺算术,哥德尔不完备立刻适用)享有截然不同的形式命运。你落在哪一侧,完全取决于那套公理配置的表达力。</p>
+
+    <div class="books-legend">
+      <span><i class="zdot geo"></i>几何 · 塔斯基侧(可判定、完备)</span>
+      <span><i class="zdot mag"></i>量与无理 · 桥梁</span>
+      <span><i class="zdot arith"></i>算术 · 哥德尔侧(不可判定、不完备)</span>
+    </div>
+
+    <div class="books-grid" id="booksGrid"></div>
+
+    <div class="line-banner">
+      <h3>为什么几何能逃出哥德尔的手心?</h3>
+      <p>直觉上你会以为"欧氏几何一旦形式化就难逃不完备"。<b>恰恰相反。</b>塔斯基(1948/51)证明:实闭域 (ℝ, +, ×, &lt;) 的一阶理论<b>完备且可判定</b>,而初等欧氏几何可解释于其中,因此同样完备、可判定——存在算法对任一几何命题判定真假。</p>
+      <p>关键在于:在 (ℝ, +, ·, &lt;) 的一阶语言里<b>无法定义出整数集 ℤ</b>,因而无法在其中编码算术;而够不着算术,就够不着哥德尔不完备的强度门槛。可一旦进入卷七至卷九(欧几里得算法、素数、完全数)那就是<b>算术</b>,踏入皮亚诺算术的领地,不完备性即刻生效。</p>
+      <p>把几何与算术不加区分地都说成"数学的严格演绎"、以为它们享有同等的形式命运,正是一处典型的<b>跨层混淆</b>;而欧氏的文本,恰好把这条分界线具体地摆在了同一部著作的不同卷册之间。</p>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== 边界 ===================== -->
+<section class="section reveal" id="bounds">
+  <div class="wrap">
+    <p class="eyebrow">第六层 · 隐藏前提与边界</p>
+    <h2 class="sec-title">通向现代逻辑的接口</h2>
+    <p class="sec-sub">把《原本》当作"严格性的历史范本"是对的,但要看清它的边界,才能理解它在现代逻辑版图上的位置——它所<b>追求</b>的严格与它实际<b>达到</b>的严格之间,始终有一道由隐藏前提织成的缝。</p>
+
+    <div class="bound-list">
+      <div class="bound">
+        <div class="bn">01</div>
+        <div>
+          <h3>自明性的崩塌:公设作为可替换的配置</h3>
+          <p>公设本应自明,但<b>第五公设</b>两千年来始终被觉得"不够明显"。无数人试图从其余公理推出它,全部失败。直到高斯(未刊)、波尔约、罗巴切夫斯基把它替换掉,得到融贯的双曲几何;黎曼给出椭圆/一般情形;<b>贝尔特拉米(1868)构造出模型,严格证明了第五公设独立于其余公理。</b></p>
+          <p>这意味着欧氏几何只是诸多融贯配置中的一个。把第五公设视为可替换的配置项、整座几何随之分叉——这是"公理作为可选配置"最干净的历史实例,其独立性证明的逻辑形态,与集合论里连续统假设(CH)的独立性证明同构。</p>
+          <div class="triptych">
+            <div class="tri">
+              <svg viewBox="0 0 160 110"><line x1="15" y1="78" x2="145" y2="78" stroke="#2B2620" stroke-width="2.4"/><line x1="15" y1="44" x2="145" y2="44" stroke="#3F7E6B" stroke-width="2.4"/><circle cx="80" cy="22" r="4" fill="#97361F"/><line x1="50" y1="22" x2="110" y2="22" stroke="#857a64" stroke-width="1.6" stroke-dasharray="4 3"/></svg>
+              <div class="tt">欧氏</div><div class="td">恰好一条平行线</div>
+            </div>
+            <div class="tri">
+              <svg viewBox="0 0 160 110"><line x1="15" y1="80" x2="145" y2="80" stroke="#2B2620" stroke-width="2.4"/><circle cx="80" cy="26" r="4" fill="#97361F"/><path d="M20 58 Q80 26 140 58" stroke="#3F7E6B" stroke-width="2" fill="none"/><path d="M22 44 Q80 26 138 44" stroke="#3F7E6B" stroke-width="2" fill="none"/><path d="M28 34 Q80 26 132 34" stroke="#3F7E6B" stroke-width="2" fill="none"/></svg>
+              <div class="tt">双曲</div><div class="td">无穷多条平行线</div>
+            </div>
+            <div class="tri">
+              <svg viewBox="0 0 160 110"><circle cx="80" cy="58" r="42" stroke="#3F7E6B" stroke-width="2" fill="none"/><path d="M80 16 A42 42 0 0 1 80 100" stroke="#2B2620" stroke-width="2.4" fill="none"/><path d="M80 16 A30 42 0 0 0 80 100" stroke="#2B2620" stroke-width="2.4" fill="none"/><circle cx="80" cy="16" r="3.6" fill="#97361F"/><circle cx="80" cy="100" r="3.6" fill="#97361F"/></svg>
+              <div class="tt">椭圆</div><div class="td">一条平行线也没有</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="bound">
+        <div class="bn">02</div>
+        <div>
+          <h3>严格性的缺口,与希尔伯特的形式化补全</h3>
+          <p>以现代标准看,欧氏有系统性漏洞:他从未公理化<b>"介于之间"(betweenness)与顺序关系</b>,却频繁从图上径直读出;两条线"相交于一点"的存在常被默认;还有上面那个叠合法。这些大多是<b>连续性与顺序</b>的隐藏假设——帕施公理(1882,一条进入三角形的直线必从另一边穿出)正是补上欧氏默用的顺序事实。</p>
+          <p>希尔伯特《几何基础》(1899)用约二十条公理、分五组重建欧氏几何,封死全部缺口,把"直观—公理"系统升级为"形式—公理"系统。这个升级很关键,因为<b>哥德尔定理只在形式系统上咬人。</b></p>
+          <div class="hilbert-groups">
+            <span class="hg">I. 关联</span><span class="hg">II. 顺序</span><span class="hg">III. 合同</span><span class="hg">IV. 平行</span><span class="hg">V. 连续</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="bound">
+        <div class="bn">03</div>
+        <div>
+          <h3>图的认识论:精确属性 vs. 共精确属性</h3>
+          <p>欧氏推理本质是图示的——图不只是插画,而是承载推理负载(你"读出"点的次序、线的相交)。曼德斯(Manders)的分析区分了图能合法贡献什么:<b>共精确属性</b>(拓扑/关联性的,如这点在那区域内、两线相交,在扰动下稳定,可合法地从图读出)与<b>精确属性</b>(度量性的,如这角等于那角,微小扰动即被破坏,不能从图读出、必须证明)。</p>
+          <p>欧氏的隐患恰恰来自:把某些<b>应当证明</b>的东西,当成了可以从图<b>直接读出</b>的。</p>
+        </div>
+      </div>
+
+      <div class="bound">
+        <div class="bn">04</div>
+        <div>
+          <h3>哥德尔 / 塔斯基的回马枪</h3>
+          <p>《原本》正好骑在不完备性的分界线上——这一点在上一节的版图里已经具体化。它的几何部分(形式化于 ℝ 之上)是<b>可判定、完备</b>的;它的算术部分(形式化为 PA)是<b>不完备</b>的。几何那套"驯顺"(o-minimal、可判定),算术那套"狂野"(不可判定、不完备)。</p>
+          <p>这恰好把整套思维方式的教益收束成一句:<b>形式系统能走多远,取决于它的表达力——表达力越强,越逃不过自我指涉的反噬。</b></p>
+        </div>
+      </div>
+    </div>
+
+    <div class="coda">
+      <h2>整体思维方式,一句话收束</h2>
+      <p>《原本》是一种<b>用极少数被授权的开端、经保真演绎、把确定性逐级传递并封闭起来</b>的认识论工程。这种姿态后来扩散成西方理性思维的母版——斯宾诺莎《伦理学》"依几何方式"、牛顿《原理》的几何骨架,皆出于此。</p>
+      <p>它的伟大,在于示范了"严格<b>可达</b>";它的教益,则在于:正是后人去拆解、形式化、并替换这些隐藏前提的努力,才催生了非欧几何、希尔伯特形式化,以及哥德尔/塔斯基对"形式系统能走多远"的<b>边界勘定</b>。</p>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <div class="col">
+      <span><b>公理化演绎 · 《几何原本》的整体思维方式</b> · 一个可交互的阅读</span>
+      <span>Σ ΣΤΟΙΧΕΙΑ</span>
+    </div>
+    <p class="src-note">内容依据 Euclid《Elements》(T. L. Heath 英译本)及标准数学史/逻辑学文献;卷一依赖图为基于希思版证明结构的逻辑重建,个别"公理/定义"引用在不同版本间偶有出入。非欧几何独立性(Beltrami 1868)、希尔伯特《几何基础》(1899)、塔斯基实闭域可判定性(1948/51)、哥德尔不完备性等均为已确立的结论。本页为纯静态站点,可直接部署于 GitHub Pages。</p>
+  </div>
+</footer>
+
+<script>
+/* ============================================================
+   DATA — 卷一 命题依赖结构(基于 Heath 版证明)
+   id: 命题用纯数字字符串;开端用 P(公设)/C(公理)/D(定义)
+   ============================================================ */
+const FOUND = {
+  P1:{label:"P1",kind:"公设 · Postulate",text:"任两点之间可作一条直线。"},
+  P2:{label:"P2",kind:"公设 · Postulate",text:"一条有限直线可沿其方向任意延长。"},
+  P3:{label:"P3",kind:"公设 · Postulate",text:"以任意点为心、任意距离为半径可作一圆。"},
+  P4:{label:"P4",kind:"公设 · Postulate",text:"凡直角都彼此相等。"},
+  P5:{label:"P5",kind:"公设 · Postulate · 第五公设",text:"平行公设:同旁内角之和小于两直角时,两线必在该侧相交。"},
+  C1:{label:"C1",kind:"公理 · Common Notion",text:"等于同量的量,彼此相等。"},
+  C2:{label:"C2",kind:"公理 · Common Notion",text:"等量加等量,其和相等。"},
+  C3:{label:"C3",kind:"公理 · Common Notion",text:"等量减等量,其差相等。"},
+  C4:{label:"C4",kind:"公理 · Common Notion · 叠合所依",text:"彼此重合的量,彼此相等。"},
+  C5:{label:"C5",kind:"公理 · Common Notion",text:"整体大于部分。"},
+  D10:{label:"D10",kind:"定义 · Definition",text:"直角与垂线:相邻角彼此相等时各为直角。"},
+  D15:{label:"D15",kind:"定义 · Definition",text:"圆:到圆心距离相等的点的轨迹。"},
+  D22:{label:"D22",kind:"定义 · Definition",text:"正方形:四边相等、四角为直角。"},
+  D23:{label:"D23",kind:"定义 · Definition",text:"平行线:同平面内永不相交的直线。"}
+};
+// 开端在依赖图中映射到内部 id(C→common notion, 用 K 前缀避免与列显示混淆并非必要,这里直接用 P/C/D)
+const PROPS = {
+ 1:{t:"在给定线段上作等边三角形。",d:["P1","P3","C1","D15"],m:["c"]},
+ 2:{t:"过一点作一线段等于给定线段。",d:["1","P1","P2","P3"],m:["c"]},
+ 3:{t:"在较大线段上截取等于较小线段的部分。",d:["2","P3"]},
+ 4:{t:"边角边(SAS):两边及夹角对应相等,则三角形全等。",d:["P1","C4"],m:["s"]},
+ 5:{t:"等腰三角形两底角相等(驴桥定理)。",d:["3","4"]},
+ 6:{t:"若三角形两角相等,则其对边相等(I.5 之逆)。",d:["4"],m:["r"]},
+ 7:{t:"在线段同侧不能作两个对应边相等的三角形。",d:["5"],m:["r"]},
+ 8:{t:"边边边(SSS):三边对应相等,则三角形全等。",d:["7","C4"],m:["s"]},
+ 9:{t:"二等分一个角。",d:["1","3","8"],m:["c"]},
+ 10:{t:"二等分一条线段。",d:["1","4","9"],m:["c"]},
+ 11:{t:"过线上一点作垂线。",d:["1","3","8","D10"],m:["c"]},
+ 12:{t:"过线外一点作垂线。",d:["8","10","D10","D15"],m:["c"]},
+ 13:{t:"直线上的邻角之和等于两直角。",d:["11","D10","C2"]},
+ 14:{t:"邻角之和为两直角则两线共线(I.13 之逆)。",d:["13","P4"],m:["r"]},
+ 15:{t:"对顶角相等。",d:["13"]},
+ 16:{t:"三角形的外角大于任一不相邻内角。",d:["3","4","10","15"]},
+ 17:{t:"三角形任两内角之和小于两直角。",d:["13","16"]},
+ 18:{t:"三角形大边对大角。",d:["3","5","16"]},
+ 19:{t:"三角形大角对大边(I.18 之逆)。",d:["5","18"],m:["r"]},
+ 20:{t:"三角形两边之和大于第三边(三角不等式)。",d:["3","5","19"]},
+ 21:{t:"三角形内一点到两顶点之和小于两边之和。",d:["16","20"]},
+ 22:{t:"用三条给定线段作三角形。",d:["3","D15"],m:["c"]},
+ 23:{t:"在给定线上作一角等于给定角。",d:["8","22"],m:["c"]},
+ 24:{t:"两边对应等而夹角较大者,第三边较大。",d:["4","5","19","23"]},
+ 25:{t:"两边对应等而第三边较大者,其夹角较大(I.24 之逆)。",d:["4","24"],m:["r"]},
+ 26:{t:"角边角 / 角角边(ASA / AAS)全等。",d:["4","16"],m:["r"]},
+ 27:{t:"内错角相等则两直线平行。",d:["16","D23"],m:["r"]},
+ 28:{t:"同位角相等或同旁内角互补则两直线平行。",d:["13","15","27"]},
+ 29:{t:"两平行线被截:内错角相等(首次使用第五公设)。",d:["13","15","P5"],m:["p"]},
+ 30:{t:"平行于同一直线的两直线互相平行。",d:["29"]},
+ 31:{t:"过定点作已知直线的平行线。",d:["23","27"],m:["c"]},
+ 32:{t:"三角形内角和等于两直角;外角等于两内角之和。",d:["13","29","31"]},
+ 33:{t:"连接两等且平行线段端点所得线段,亦等且平行。",d:["4","27","29"]},
+ 34:{t:"平行四边形对边、对角相等,对角线二等分之。",d:["4","26","29"]},
+ 35:{t:"同底、在同一对平行线间的平行四边形面积相等。",d:["4","29","34"]},
+ 36:{t:"等底、在同一对平行线间的平行四边形面积相等。",d:["33","34","35"]},
+ 37:{t:"同底、在同一对平行线间的三角形面积相等。",d:["31","34","35"]},
+ 38:{t:"等底、在同一对平行线间的三角形面积相等。",d:["31","34","36"]},
+ 39:{t:"面积相等且同底同侧的三角形,在同一对平行线间。",d:["31","37"],m:["r"]},
+ 40:{t:"面积相等且等底同侧的三角形,在同一对平行线间。",d:["31","38"],m:["r"]},
+ 41:{t:"平行四边形为同底等高三角形的两倍。",d:["34","37"]},
+ 42:{t:"作平行四边形,使其面积等于给定三角形且具给定角。",d:["10","23","31","38","41"],m:["c"]},
+ 43:{t:"平行四边形对角线两侧的补形面积相等。",d:["34"]},
+ 44:{t:"在给定线段上贴合一个面积等于给定三角形的平行四边形。",d:["15","29","31","42","43","P5"],m:["c","p"]},
+ 45:{t:"作平行四边形,使其面积等于给定的直线形。",d:["14","29","30","33","34","42","44"],m:["c"]},
+ 46:{t:"在给定线段上作正方形。",d:["3","11","29","31","34","D22"],m:["c"]},
+ 47:{t:"直角三角形斜边上的正方形,等于两直角边上正方形之和(勾股定理)。",d:["4","14","31","41","46","C2","D22"]},
+ 48:{t:"若一边上正方形等于另两边上正方形之和,则该角为直角(勾股逆定理)。",d:["3","8","11","47"]}
+};
+const METHOD_LABEL = {c:"作图题 ▷",s:"叠合法 ≅",r:"归谬法 ¬",p:"用第五公设"};
+const METHOD_CLASS = {c:"c",s:"s",r:"r",p:"p"};
+
+/* ---------- geometry / layout ---------- */
+const VW=920, foundY=70, propRowStart=190, propRowGap=62, propCols=8;
+const foundIds = Object.keys(FOUND);
+const pos = {}; // id -> {x,y,type}
+
+foundIds.forEach((id,i)=>{
+  pos[id]={x:(VW/(foundIds.length+1))*(i+1), y:foundY, type:"found", group:id[0]};
+});
+for(let n=1;n<=48;n++){
+  const col=(n-1)%propCols, row=Math.floor((n-1)/propCols);
+  const x=(VW/(propCols+1))*(col+1);
+  const y=propRowStart+row*propRowGap;
+  pos[String(n)]={x,y,type:"prop"};
+}
+
+/* ---------- build edges + nodes ---------- */
+const edgeLayer=document.getElementById("edgeLayer");
+const nodeLayer=document.getElementById("nodeLayer");
+const edgeEls=[]; // {from,to,el}
+const nodeEls={}; // id -> g element
+
+function edgePath(a,b){
+  const mx=(a.x+b.x)/2, my=(a.y+b.y)/2;
+  // slight perpendicular lift for readability
+  const dx=b.x-a.x, dy=b.y-a.y, len=Math.hypot(dx,dy)||1;
+  const off=Math.min(28,len*0.12);
+  const cx=mx + (-dy/len)*off, cy=my + (dx/len)*off;
+  return `M${a.x.toFixed(1)} ${a.y.toFixed(1)} Q${cx.toFixed(1)} ${cy.toFixed(1)} ${b.x.toFixed(1)} ${b.y.toFixed(1)}`;
+}
+// edges: from prop -> each dependency
+for(let n=1;n<=48;n++){
+  const id=String(n);
+  (PROPS[n].d||[]).forEach(dep=>{
+    if(!pos[dep])return;
+    const p=document.createElementNS("http://www.w3.org/2000/svg","path");
+    p.setAttribute("class","edge");
+    p.setAttribute("d",edgePath(pos[id],pos[dep]));
+    edgeLayer.appendChild(p);
+    edgeEls.push({from:id,to:dep,el:p});
+  });
+}
+// nodes
+function makeNode(id){
+  const p=pos[id];
+  const g=document.createElementNS("http://www.w3.org/2000/svg","g");
+  let cls="node "+p.type;
+  if(p.type==="found"){
+    if(p.group==="C")cls+=" cn";
+    else if(p.group==="D")cls+=" def";
+  }
+  g.setAttribute("class",cls);
+  g.setAttribute("tabindex","0");
+  g.setAttribute("role","button");
+  const info = p.type==="found"?FOUND[id]:{label:"I."+id, kind:"命题 · Proposition", text:PROPS[id].t};
+  g.setAttribute("aria-label", (p.type==="found"?info.label:("命题 I."+id))+": "+info.text);
+
+  if(p.type==="found" && p.group==="P"){
+    const r=document.createElementNS("http://www.w3.org/2000/svg","rect");
+    r.setAttribute("x",p.x-13);r.setAttribute("y",p.y-13);r.setAttribute("width",26);r.setAttribute("height",26);r.setAttribute("rx",5);
+    g.appendChild(r);
+  }else{
+    const c=document.createElementNS("http://www.w3.org/2000/svg","circle");
+    c.setAttribute("cx",p.x);c.setAttribute("cy",p.y);
+    c.setAttribute("r", p.type==="found"?13:17);
+    g.appendChild(c);
+  }
+  const t=document.createElementNS("http://www.w3.org/2000/svg","text");
+  t.setAttribute("class","nlabel");t.setAttribute("x",p.x);t.setAttribute("y",p.y);
+  t.textContent = p.type==="found"? FOUND[id].label : id;
+  g.appendChild(t);
+
+  g.addEventListener("click",()=>selectNode(id));
+  g.addEventListener("keydown",e=>{if(e.key==="Enter"||e.key===" "){e.preventDefault();selectNode(id);}});
+  g.addEventListener("mouseenter",()=>{ if(!selected) showHover(id); });
+  g.addEventListener("mouseleave",()=>{ if(!selected) clearDetailToEmpty(); });
+  nodeLayer.appendChild(g);
+  nodeEls[id]=g;
+}
+foundIds.forEach(makeNode);
+for(let n=1;n<=48;n++)makeNode(String(n));
+
+/* ---------- transitive cone ---------- */
+function cone(id){
+  const seen=new Set();
+  (function dfs(x){
+    const deps = pos[x] && pos[x].type==="prop" ? (PROPS[Number(x)].d||[]) : [];
+    deps.forEach(dep=>{ if(!seen.has(dep)){ seen.add(dep); dfs(dep);} });
+  })(id);
+  return seen; // does not include id itself
+}
+function coneContains(id, target){
+  return cone(id).has(target);
+}
+
+/* ---------- state mgmt ---------- */
+let selected=null;
+function clearStates(){
+  Object.values(nodeEls).forEach(g=>g.classList.remove("dim","cone","selected","hl","hl2"));
+  edgeEls.forEach(e=>e.el.classList.remove("cone","dim"));
+}
+function setActiveChip(preset){
+  document.querySelectorAll(".chip").forEach(c=>c.classList.toggle("active", c.dataset.preset===preset && preset!=="reset"));
+}
+
+function detailHTML(id){
+  const isF = pos[id].type==="found";
+  const info = isF?FOUND[id]:{label:"I."+id, kind:"命题 · Proposition", text:PROPS[id].t};
+  let h = `<div class="dt-id">${info.label}</div><div class="dt-kind">${info.kind}</div>`;
+  h += `<div class="dt-text">${info.text}</div>`;
+  if(!isF){
+    const m=PROPS[id].m||[];
+    if(m.length){
+      h+=`<div class="dt-section">论证手法</div><div>`;
+      m.forEach(x=>h+=`<span class="mtag ${METHOD_CLASS[x]}">${METHOD_LABEL[x]}</span>`);
+      h+=`</div>`;
+    }
+    const deps=PROPS[id].d||[];
+    if(deps.length){
+      h+=`<div class="dt-section">直接引用</div><div class="dep-chips">`;
+      deps.forEach(dep=>{
+        const f = pos[dep].type==="found";
+        const lbl = f?FOUND[dep].label:("I."+dep);
+        h+=`<button data-go="${dep}" class="${f?'f':''}">${lbl}</button>`;
+      });
+      h+=`</div>`;
+      // cone stats
+      const cn=cone(id);
+      let nProp=0,nFound=0;
+      cn.forEach(x=>{ if(pos[x].type==="prop")nProp++; else nFound++; });
+      const hasP5 = cn.has("P5");
+      h+=`<div class="dt-cone">完整逻辑依赖锥:<b>${nProp}</b> 条在先命题 + <b>${nFound}</b> 个公设/公理/定义。`;
+      if(hasP5) h+=`<br><span style="color:var(--terra-deep);font-weight:600">⚠ 此命题暗中依赖第五公设 P5</span>(经由 I.29 传入)。`;
+      h+=`</div>`;
+    }else{
+      h+=`<div class="dt-cone">这是接近地基的命题,其证明几乎直接落在公设、公理与定义之上。</div>`;
+    }
+  }else{
+    h+=`<div class="dt-cone">这是一个<b>开端</b>(archē)——它不被证明,而是被授权。整张网的可靠性,最终都回溯到这样的几个起点。</div>`;
+  }
+  return h;
+}
+
+function bindDepChips(){
+  document.querySelectorAll("#webDetail [data-go]").forEach(b=>{
+    b.addEventListener("click",()=>selectNode(b.dataset.go));
+  });
+}
+
+function selectNode(id){
+  selected=id;
+  clearStates();
+  setActiveChip(null);
+  const keep=new Set([id]);
+  cone(id).forEach(x=>keep.add(x));
+  // dim others
+  Object.keys(nodeEls).forEach(k=>{
+    if(!keep.has(k)) nodeEls[k].classList.add("dim");
+    else if(k===id) nodeEls[k].classList.add("selected");
+    else nodeEls[k].classList.add("cone");
+  });
+  // edges inside cone
+  edgeEls.forEach(e=>{
+    if(keep.has(e.from)&&keep.has(e.to)) e.el.classList.add("cone");
+    else e.el.classList.add("dim");
+  });
+  document.getElementById("webDetail").innerHTML=detailHTML(id);
+  bindDepChips();
+}
+function showHover(id){
+  document.getElementById("webDetail").innerHTML=detailHTML(id);
+  bindDepChips();
+}
+const EMPTY = document.getElementById("webDetail").innerHTML;
+function clearDetailToEmpty(){ document.getElementById("webDetail").innerHTML=EMPTY; }
+
+/* ---------- presets ---------- */
+function highlightSet(ids, cls){
+  selected=null;
+  clearStates();
+  const set=new Set(ids);
+  Object.keys(nodeEls).forEach(k=>{
+    if(set.has(k)) nodeEls[k].classList.add(cls);
+    else nodeEls[k].classList.add("dim");
+  });
+}
+document.querySelectorAll(".chip").forEach(chip=>{
+  chip.addEventListener("click",()=>{
+    const p=chip.dataset.preset;
+    setActiveChip(p);
+    if(p==="reset"){ selected=null; clearStates(); clearDetailToEmpty(); return; }
+    if(p==="p47"){ selectNode("47"); setActiveChip("p47"); return; }
+    if(p==="reductio"){
+      const ids=Object.keys(PROPS).filter(n=>(PROPS[n].m||[]).includes("r"));
+      highlightSet(ids,"hl");
+      document.getElementById("webDetail").innerHTML=`<div class="dt-id">归谬法</div><div class="dt-kind">reductio ad absurdum</div><div class="dt-text">卷一中以反证(假设否定、导出矛盾)为关键步骤的命题,共 ${ids.length} 条:${ids.map(x=>"I."+x).join("、")}。</div><div class="dt-cone">注意:它们多数证的是<b>否定型</b>命题(如 I.7、I.27),在拒斥排中律的直觉主义逻辑下依然成立。</div>`;
+      return;
+    }
+    if(p==="superposition"){
+      const ids=Object.keys(PROPS).filter(n=>(PROPS[n].m||[]).includes("s"));
+      highlightSet(ids,"hl2");
+      document.getElementById("webDetail").innerHTML=`<div class="dt-id">叠合法</div><div class="dt-kind">epharmozein · 依据公理 C4</div><div class="dt-text">靠"把图形搬上去、论证重合"来证明的命题:${ids.map(x=>"I."+x).join("、")}。</div><div class="dt-cone">"刚体运动保持图形不变"并未被任何公设授权——这是个隐藏假设。希尔伯特后来把"合同"直接立为公理以绕开它。这两条恰是 SAS 与 SSS,几乎全部全等理论的根。</div>`;
+      return;
+    }
+    if(p==="post5"){
+      const ids=Object.keys(PROPS).filter(n=>{ const c=cone(String(n)); return c.has("P5"); });
+      // also include direct users explicitly
+      highlightSet([...ids,"P5"],"hl");
+      // re-color P5 distinctly
+      nodeEls["P5"].classList.remove("hl","dim");
+      nodeEls["P5"].classList.add("selected");
+      document.getElementById("webDetail").innerHTML=`<div class="dt-id">第五公设的射程</div><div class="dt-kind">Postulate 5 · the parallel postulate</div><div class="dt-text">依赖锥中含有 P5 的命题,共 <b>${ids.length}</b> 条。第五公设在 I.29 首次进入,此后向下游层层渗透。</div><div class="dt-cone"><b>勾股定理 I.47 也在其中</b>——它表面与平行毫无关系,却经由 I.46→I.29 暗中依赖 P5。这正是为什么勾股定理在非欧几何里会失效:抽掉 P5,它的证明链就断了。</div>`;
+      return;
+    }
+  });
+});
+
+/* ============================================================
+   六段式 stepper (I.1)
+   ============================================================ */
+const SIX = [
+  {gk:"πρότασις · protasis", zh:"命题陈述", desc:"以一般措辞陈述待证之事:在一条给定的有限直线上,作一个等边三角形。——此时尚无任何具体图形。", cap:"<b>命题陈述</b>:在给定线段上作一等边三角形。(一般陈述)"},
+  {gk:"ἔκθεσις · ekthesis", zh:"设定", desc:"引入带字母标记的特定图形:设 AB 为那条给定的有限直线。——一般命题在此落地为“这一个”。", cap:"<b>设定</b>:设 AB 为给定的那条线段。(引入特定图形)"},
+  {gk:"διορισμός · diorismos", zh:"指明", desc:"就这个特定图形重述目标:于是,所要做的,就是在线段 AB 上作一个等边三角形。", cap:"<b>指明</b>:所要做的,是在 AB 上作等边三角形。(虚线即目标)"},
+  {gk:"κατασκευή · kataskeuē", zh:"作图", desc:"添加机械准备:以 A 为心、AB 为半径作圆(P3);以 B 为心、BA 为半径作圆(P3);两圆交于 C,连 CA、CB(P1)。", cap:"<b>作图</b>:作两圆交于 C,连 CA、CB。(全程仅用公设 P1、P3)"},
+  {gk:"ἀπόδειξις · apodeixis", zh:"证明", desc:"真正的演绎:AC=AB(同圆半径),BC=BA(同圆半径);故 CA=CB(C1,二者皆等于 AB);因此 AB、BC、CA 三边皆相等。", cap:"<b>证明</b>:AC=AB、BC=BA,故由 C1 得三边皆等。(高亮三边)"},
+  {gk:"συμπέρασμα · sumperasma", zh:"结论", desc:"回到一般陈述并宣告完成:所以 △ABC 是等边三角形,且已作于 AB 之上——此即所要作者(Q.E.F.)。全程未用 AB 的任何特殊性质,故结论可普遍化。", cap:"<b>结论</b>:△ABC 即所求,Q.E.F.。证明只对一个图作,却对一切成立。"}
+];
+let curStep=0;
+const sixSteps=document.getElementById("sixSteps");
+SIX.forEach((s,i)=>{
+  const row=document.createElement("div");
+  row.className="step-row";
+  row.innerHTML=`<div class="sn">${i+1}</div><div class="step-body"><span class="gk">${s.gk}</span><span class="zh">${s.zh}</span><div class="desc hide">${s.desc}</div></div>`;
+  row.addEventListener("click",()=>setStep(i));
+  sixSteps.appendChild(row);
+});
+const constructParts=[...document.querySelectorAll("#constructSvg .cpart")];
+const lineCA=document.getElementById("lineCA"), lineCB=document.getElementById("lineCB");
+function setStep(i){
+  curStep=Math.max(0,Math.min(SIX.length-1,i));
+  // step rows
+  [...sixSteps.children].forEach((row,idx)=>{
+    row.classList.toggle("active",idx===curStep);
+    row.classList.toggle("done",idx<curStep);
+    row.querySelector(".desc").classList.toggle("hide",idx!==curStep);
+  });
+  // reveal construction cumulatively
+  constructParts.forEach(g=>{
+    const min=Number(g.dataset.min);
+    g.classList.toggle("show", curStep+1>=min);
+  });
+  // amber highlight of triangle sides at step 5 (apodeixis, index 4)
+  const amber = curStep>=4 && curStep<5; // only apodeixis
+  if(lineCA&&lineCB){
+    lineCA.classList.toggle("amber",curStep===4);
+    lineCB.classList.toggle("amber",curStep===4);
+  }
+  document.getElementById("cstepCap").innerHTML=SIX[curStep].cap;
+  document.getElementById("stepPrev").disabled=(curStep===0);
+  document.getElementById("stepNext").disabled=(curStep===SIX.length-1);
+}
+document.getElementById("stepPrev").addEventListener("click",()=>setStep(curStep-1));
+document.getElementById("stepNext").addEventListener("click",()=>setStep(curStep+1));
+setStep(0);
+
+/* ============================================================
+   LEM toggle
+   ============================================================ */
+const lemToggle=document.getElementById("lemToggle");
+const lemState=document.getElementById("lemState");
+const formPos=document.getElementById("formPos");
+const statPos=document.getElementById("statPos");
+const statNeg=document.getElementById("statNeg");
+function applyLEM(){
+  const on=lemToggle.checked;
+  if(on){
+    lemState.textContent="已启用 · 经典逻辑";
+    lemState.className="state on";
+    formPos.classList.remove("killed");
+    statPos.textContent="经典逻辑下:成立 ✓";statPos.className="status alive";
+    statNeg.textContent="始终成立 ✓";statNeg.className="status alive";
+  }else{
+    lemState.textContent="已关闭 · 直觉主义";
+    lemState.className="state off";
+    formPos.classList.add("killed");
+    statPos.textContent="无双重否定消去:失效 ✗";statPos.className="status dead";
+    statNeg.textContent="不依赖排中律:依然成立 ✓";statNeg.className="status alive";
+  }
+}
+lemToggle.addEventListener("change",applyLEM);
+applyLEM();
+
+/* ============================================================
+   13 卷 books map
+   ============================================================ */
+const BOOKS=[
+ {r:"I",zone:"geo",zlab:"几何",t:"平面几何基础",n:48,defs:"23 定义 · 5 公设 · 5 公理",key:"全等(SAS/SSS/ASA)、平行、面积。以 I.47 勾股定理收束。"},
+ {r:"II",zone:"geo",zlab:"几何",t:"几何代数",n:14,key:"以矩形面积表达代数恒等式;含余弦定理的几何雏形。"},
+ {r:"III",zone:"geo",zlab:"几何",t:"圆",n:37,key:"切线、圆周角、相交弦与圆幂。"},
+ {r:"IV",zone:"geo",zlab:"几何",t:"圆的内接与外切",n:16,key:"正多边形作图,直到正十五边形。"},
+ {r:"V",zone:"mag",zlab:"量",t:"比例论(欧多克索斯)",n:25,key:"定义 V.5 比例相等判据——戴德金分割的先声,驾驭无理比例。"},
+ {r:"VI",zone:"geo",zlab:"几何",t:"相似形",n:33,key:"相似三角形、几何中项、面积比。"},
+ {r:"VII",zone:"arith",zlab:"算术",t:"数论基础",n:39,key:"欧几里得算法(辗转相除)、互素、比例数。← 踏入算术。"},
+ {r:"VIII",zone:"arith",zlab:"算术",t:"连比例中的数",n:27,key:"等比数列、平方数与立方数。"},
+ {r:"IX",zone:"arith",zlab:"算术",t:"数论(续)",n:36,key:"IX.20 素数无穷;IX.36 偶完全数与梅森素数。"},
+ {r:"X",zone:"mag",zlab:"无理",t:"不可公度量",n:115,key:"全书最长一卷。无理量的精细分类;X.1 是穷竭法的引理。"},
+ {r:"XI",zone:"geo",zlab:"几何",t:"立体几何基础",n:39,key:"直线与平面的关系、平行六面体。"},
+ {r:"XII",zone:"geo",zlab:"几何",t:"穷竭法",n:18,key:"圆面积比、锥=⅓柱、球体积。双重归谬的极限严格性。"},
+ {r:"XIII",zone:"geo",zlab:"几何",t:"正多面体",n:18,key:"五种柏拉图立体的作图,与“恰好五种”的宏大收尾。"}
+];
+const bg=document.getElementById("booksGrid");
+BOOKS.forEach(b=>{
+  const el=document.createElement("div");
+  el.className="book "+b.zone;
+  el.innerHTML=`<span class="bk-zone">${b.zlab}</span>
+    <div class="bk-no"><span class="roman">卷 ${b.r}</span></div>
+    <h4>${b.t}</h4>
+    <div class="bk-count"><b>${b.n}</b> 命题${b.defs?" · "+b.defs:""}</div>
+    <div class="bk-key">${b.key}</div>`;
+  bg.appendChild(el);
+});
+
+/* ============================================================
+   scroll reveal
+   ============================================================ */
+const reduce=window.matchMedia("(prefers-reduced-motion:reduce)").matches;
+if(!reduce && "IntersectionObserver" in window){
+  const io=new IntersectionObserver((es)=>{
+    es.forEach(e=>{ if(e.isIntersecting){ e.target.classList.add("in"); io.unobserve(e.target);} });
+  },{threshold:.08});
+  document.querySelectorAll(".reveal").forEach(s=>io.observe(s));
+}else{
+  document.querySelectorAll(".reveal").forEach(s=>s.classList.add("in"));
+}
+</script>
+</body>
+</html>

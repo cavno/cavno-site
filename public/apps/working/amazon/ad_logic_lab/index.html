@@ -1,0 +1,892 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>广告投放逻辑实验台 · Ad Logic Lab</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@400;600;700;900&family=Noto+Sans+SC:wght@400;500;700&family=JetBrains+Mono:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --parch:#F3EAD3; --paper:#FBF6E9; --paper2:#F7F0DD;
+  --ink:#2B2620; --muted:#6E6353; --line:#DCCFAF; --line2:#CBBB93;
+  --teal:#3F7E6B; --teal-dk:#2E5F50; --teal-bg:#E4EDE7;
+  --terra:#BC4B33; --terra-bg:#F3E0D8;
+  --brass:#C8893B; --brass-bg:#F0E4CB;
+  --slate:#23302B; --slate-ink:#E9E2CF;
+  --serif:'Noto Serif SC',serif; --sans:'Noto Sans SC',sans-serif; --mono:'JetBrains Mono',monospace;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth;scroll-padding-top:96px}
+body{background:var(--parch);color:var(--ink);font-family:var(--serif);font-size:16px;line-height:1.85}
+@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto} *{animation:none!important;transition:none!important}}
+
+/* ===== hero ===== */
+.hero{max-width:1080px;margin:0 auto;padding:56px 28px 8px}
+.brandline{font-family:var(--sans);font-size:12.5px;letter-spacing:.22em;color:var(--terra);font-weight:700;text-transform:uppercase}
+.brandline::before{content:"";display:inline-block;width:34px;height:2px;background:var(--terra);vertical-align:middle;margin-right:12px}
+.hero h1{font-size:clamp(30px,5vw,46px);font-weight:900;line-height:1.25;margin:14px 0 10px}
+.hero h1 em{font-style:normal;color:var(--teal)}
+.hero .sub{color:var(--muted);max-width:760px;font-size:15.5px}
+.hero .sub b{color:var(--ink)}
+
+/* ===== pipeline (signature) ===== */
+.pipewrap{max-width:1080px;margin:26px auto 0;padding:0 28px}
+.pipe{background:var(--slate);border-radius:14px;padding:18px 18px 14px;color:var(--slate-ink);overflow-x:auto}
+.pipe .plabel{font-family:var(--sans);font-size:11px;letter-spacing:.2em;color:#9DB4A9;margin-bottom:10px}
+.pnodes{display:flex;align-items:stretch;gap:0;min-width:840px}
+.pnode{flex:1;text-align:center;padding:6px 4px;position:relative;text-decoration:none;color:inherit;border-radius:8px}
+.pnode:hover{background:rgba(255,255,255,.06)}
+.pnode+.pnode::before{content:"→";position:absolute;left:-7px;top:50%;transform:translateY(-50%);color:#7E9488;font-family:var(--mono);font-size:13px}
+.pnode .pt{font-family:var(--sans);font-size:12.5px;font-weight:700;letter-spacing:.05em}
+.pnode .pm{font-family:var(--mono);font-size:10px;color:#8FA69B;letter-spacing:.08em}
+.pnode .pv{font-family:var(--mono);font-size:13px;color:#EFD9A7;margin-top:2px;min-height:20px;font-weight:600}
+.pnode .pv.neg{color:#E8A08F}
+.pv.flash{animation:pf .7s ease}
+@keyframes pf{0%{background:rgba(200,137,59,.45);border-radius:6px}100%{background:transparent}}
+
+/* ===== topnav ===== */
+#topnav{position:sticky;top:0;z-index:60;background:rgba(243,234,211,.94);backdrop-filter:blur(6px);border-bottom:1px solid var(--line);margin-top:26px}
+#topnav .wrap{max-width:1080px;margin:0 auto;padding:0 20px;display:flex;gap:2px;overflow-x:auto;-webkit-overflow-scrolling:touch}
+#topnav a{font-family:var(--sans);font-size:13px;font-weight:500;color:var(--muted);text-decoration:none;padding:12px 12px;white-space:nowrap;border-bottom:2px solid transparent}
+#topnav a:hover{color:var(--ink)}
+#topnav a.on{color:var(--teal-dk);border-bottom-color:var(--teal);font-weight:700}
+
+/* ===== cards ===== */
+main{max-width:1080px;margin:0 auto;padding:10px 28px 40px}
+.card{background:var(--paper);border:1px solid var(--line);border-radius:16px;padding:30px 32px 30px;margin:28px 0;box-shadow:0 1px 0 rgba(43,38,32,.04)}
+.klabel{font-family:var(--sans);font-size:11.5px;letter-spacing:.22em;color:var(--terra);font-weight:700}
+.card h2{font-size:25px;font-weight:900;margin:8px 0 4px;display:flex;align-items:baseline;gap:12px;flex-wrap:wrap}
+.mnum{font-family:var(--mono);font-size:15px;color:var(--paper);background:var(--teal);border-radius:7px;padding:2px 9px;font-weight:700;letter-spacing:.04em}
+.refchip{font-family:var(--mono);font-size:11px;color:var(--muted);border:1px solid var(--line2);border-radius:999px;padding:2px 10px;font-weight:400}
+.flow{font-family:var(--sans);font-size:12px;color:var(--muted);margin:2px 0 12px}
+.flow b{color:var(--teal-dk);font-weight:700}
+.caption{color:var(--muted);font-size:14.5px;margin-bottom:16px;max-width:820px}
+.caption b{color:var(--ink)}
+
+/* pills (reliability) */
+.pill{display:inline-block;font-family:var(--sans);font-size:11px;font-weight:700;border-radius:999px;padding:1px 9px;vertical-align:1px;margin-left:6px}
+.pill.pr{background:var(--teal-bg);color:var(--teal-dk);border:1px solid #BCD3C8}
+.pill.pm2{background:var(--brass-bg);color:#8A5B1E;border:1px solid #DDC392}
+.pill.pe{background:var(--terra-bg);color:#93361F;border:1px solid #E2B3A2}
+
+/* inputs */
+.grid{display:grid;gap:14px}
+.g4{grid-template-columns:repeat(4,1fr)} .g3{grid-template-columns:repeat(3,1fr)} .g2{grid-template-columns:repeat(2,1fr)}
+@media(max-width:860px){.g4{grid-template-columns:repeat(2,1fr)}.g3{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:560px){.g4,.g3,.g2{grid-template-columns:1fr}}
+.f{display:block;font-family:var(--sans);font-size:12.5px;color:var(--muted);font-weight:500;margin-bottom:5px}
+.f .u{color:var(--line2)}
+input[type=number],input[type=text],textarea,select{width:100%;background:#FFFDF6;border:1px solid var(--line2);border-radius:9px;padding:9px 11px;font-family:var(--mono);font-size:14.5px;color:var(--ink);outline:none}
+textarea{font-size:13.5px;line-height:1.7;resize:vertical}
+input:focus,textarea:focus,select:focus{border-color:var(--teal);box-shadow:0 0 0 3px rgba(63,126,107,.14)}
+input[type=range]{width:100%;accent-color:var(--teal)}
+.btn{font-family:var(--sans);font-size:13.5px;font-weight:700;border:none;border-radius:9px;padding:10px 18px;cursor:pointer;background:var(--teal);color:#fff}
+.btn:hover{background:var(--teal-dk)}
+.btn.alt{background:transparent;color:var(--teal-dk);border:1.5px solid var(--teal)}
+.btn.alt:hover{background:var(--teal-bg)}
+.btn.warn{background:var(--terra)} .btn.warn:hover{background:#9E3C27}
+.btn.ghost{background:transparent;border:1.5px solid var(--line2);color:var(--muted)}
+.btn.ghost:hover{border-color:var(--muted);color:var(--ink)}
+.btnrow{display:flex;gap:10px;flex-wrap:wrap;margin:14px 0 4px}
+.btn:focus-visible,input:focus-visible,a:focus-visible,select:focus-visible{outline:2px solid var(--terra);outline-offset:2px}
+
+/* stat strip */
+.stats{display:grid;grid-template-columns:repeat(5,1fr);gap:10px;margin-top:18px}
+@media(max-width:860px){.stats{grid-template-columns:repeat(2,1fr)}}
+.stat{background:var(--paper2);border:1px solid var(--line);border-radius:11px;padding:12px 14px}
+.stat .sl{font-family:var(--sans);font-size:11.5px;color:var(--muted);font-weight:500}
+.stat .sv{font-family:var(--mono);font-size:20px;font-weight:700;color:var(--teal-dk);margin-top:2px}
+.stat .sv.bad{color:var(--terra)}
+.stat .sn{font-family:var(--sans);font-size:11px;color:var(--muted)}
+
+/* verdict / callouts */
+.verdict{border-left:4px solid var(--teal);background:var(--teal-bg);border-radius:0 11px 11px 0;padding:13px 16px;margin:14px 0;font-size:14.5px}
+.verdict.bad{border-left-color:var(--terra);background:var(--terra-bg)}
+.verdict.mid{border-left-color:var(--brass);background:var(--brass-bg)}
+.verdict h4{font-family:var(--sans);font-size:13px;font-weight:700;margin-bottom:3px}
+.verdict.bad h4{color:#93361F}.verdict h4{color:var(--teal-dk)}.verdict.mid h4{color:#8A5B1E}
+.fx{background:var(--slate);color:var(--slate-ink);border-radius:11px;padding:14px 18px;font-family:var(--mono);font-size:14px;margin:14px 0;overflow-x:auto}
+.fx .fc{color:#9DB4A9;font-size:12px}
+.fx b{color:#EFD9A7;font-weight:600}
+.note{font-family:var(--sans);font-size:12.5px;color:var(--muted);margin-top:10px}
+.note b{color:var(--ink)}
+
+/* tables */
+table{width:100%;border-collapse:collapse;font-size:13.5px;margin:12px 0}
+th{font-family:var(--sans);font-size:12px;color:var(--muted);font-weight:700;text-align:left;padding:7px 10px;border-bottom:2px solid var(--line2)}
+td{padding:8px 10px;border-bottom:1px solid var(--line);font-family:var(--mono);font-size:13px}
+td.t{font-family:var(--serif);font-size:14px}
+tr.me td{background:var(--teal-bg);font-weight:700}
+tr.win td:first-child{border-left:3px solid var(--brass)}
+.tag{display:inline-block;font-family:var(--sans);font-size:11px;font-weight:700;border-radius:6px;padding:1px 8px}
+.tag.keep{background:var(--teal-bg);color:var(--teal-dk)}
+.tag.phr{background:var(--brass-bg);color:#8A5B1E}
+.tag.exa{background:var(--terra-bg);color:#93361F}
+
+/* misc */
+.split{display:grid;grid-template-columns:1fr 1fr;gap:22px}
+@media(max-width:860px){.split{grid-template-columns:1fr}}
+.hr{border:none;border-top:1px dashed var(--line2);margin:22px 0}
+h3.sub{font-size:17px;font-weight:700;margin:20px 0 8px}
+h3.sub .k{font-family:var(--mono);font-size:12px;color:var(--brass);margin-right:8px;font-weight:700}
+.svgbox{background:#FFFDF6;border:1px solid var(--line);border-radius:11px;padding:10px;margin:12px 0;overflow-x:auto}
+.tabs{display:flex;gap:6px;margin:12px 0 0;flex-wrap:wrap}
+.tab{font-family:var(--sans);font-size:13px;font-weight:700;padding:7px 14px;border-radius:9px 9px 0 0;border:1px solid var(--line2);border-bottom:none;background:var(--paper2);color:var(--muted);cursor:pointer}
+.tab.on{background:#FFFDF6;color:var(--teal-dk);border-color:var(--teal)}
+.tabpane{border:1px solid var(--teal);border-radius:0 11px 11px 11px;background:#FFFDF6;padding:16px 18px}
+footer{max-width:1080px;margin:10px auto 60px;padding:0 28px;font-family:var(--sans);font-size:12.5px;color:var(--muted);line-height:2}
+footer b{color:var(--ink)}
+.quiz-item{border:1px solid var(--line);border-radius:11px;padding:14px 16px;margin:10px 0;background:#FFFDF6}
+.quiz-item .qterm{font-family:var(--mono);font-size:15px;font-weight:700}
+.quiz-item .qs{font-family:var(--sans);font-size:12px;color:var(--muted)}
+.qops{display:flex;gap:8px;margin-top:9px;flex-wrap:wrap}
+.qop{font-family:var(--sans);font-size:12.5px;font-weight:700;border:1.5px solid var(--line2);background:var(--paper2);color:var(--muted);border-radius:999px;padding:5px 14px;cursor:pointer}
+.qop.sel{border-color:var(--teal);color:var(--teal-dk);background:var(--teal-bg)}
+.qop.right{border-color:var(--teal);background:var(--teal);color:#fff}
+.qop.wrong{border-color:var(--terra);background:var(--terra);color:#fff}
+.qexp{font-size:13.5px;color:var(--muted);margin-top:9px;border-top:1px dashed var(--line2);padding-top:8px;display:none}
+.qexp.show{display:block}
+.mono{font-family:var(--mono)}
+</style>
+</head>
+<body>
+
+<header class="hero">
+  <div class="brandline">Ad Logic Lab</div>
+  <h1>广告投放<em>逻辑实验台</em></h1>
+  <p class="sub">把《广告投放底层逻辑图谱》从「可读」变成「可操作」：<b>一条因果管线</b>贯穿八个模块——在 M0 填入你的产品参数，毛利、目标 CPS、bid 会自动流向下游的拍卖模拟、结构规划与优化诊断。全部计算在浏览器本地完成，数据不离开这台电脑。</p>
+</header>
+
+<div class="pipewrap">
+  <div class="pipe">
+    <div class="plabel">因果管线 · 参数在此实时流动（改动 M0 立即传导）</div>
+    <div class="pnodes">
+      <a class="pnode" href="#m0"><div class="pm">M0</div><div class="pt">参数</div><div class="pv" id="pv0">—</div></a>
+      <a class="pnode" href="#m1"><div class="pm">M1</div><div class="pt">财务</div><div class="pv" id="pv1">—</div></a>
+      <a class="pnode" href="#m2"><div class="pm">M2</div><div class="pt">目标·出价</div><div class="pv" id="pv2">—</div></a>
+      <a class="pnode" href="#m3"><div class="pm">M3</div><div class="pt">GSP 拍卖</div><div class="pv" id="pv3">—</div></a>
+      <a class="pnode" href="#m4"><div class="pm">M4</div><div class="pt">结构</div><div class="pv" id="pv4">—</div></a>
+      <a class="pnode" href="#m5"><div class="pm">M5</div><div class="pt">否定</div><div class="pv" id="pv5">—</div></a>
+      <a class="pnode" href="#m6"><div class="pm">M6</div><div class="pt">统计</div><div class="pv" id="pv6">—</div></a>
+      <a class="pnode" href="#m7"><div class="pm">M7</div><div class="pt">优化</div><div class="pv" id="pv7">—</div></a>
+    </div>
+  </div>
+</div>
+
+<nav id="topnav"><div class="wrap">
+  <a href="#m0">M0 参数台</a><a href="#m1">M1 财务平衡</a><a href="#m2">M2 目标出价</a><a href="#m3">M3 竞价场</a><a href="#m4">M4 结构规划</a><a href="#m5">M5 否定训练</a><a href="#m6">M6 统计沙盘</a><a href="#m7">M7 优化诊断</a>
+</div></nav>
+
+<main>
+
+<!-- ================= M0 ================= -->
+<section id="m0" class="card">
+  <div class="klabel">全局状态 · 一切下游计算的源头</div>
+  <h2><span class="mnum">M0</span> 产品参数台 <span class="refchip">图谱 §1.3 · §2.1</span></h2>
+  <div class="flow">下游 → <b>M1 财务</b> · <b>M2 出价</b> · <b>M3 拍卖</b> · <b>M7 诊断</b></div>
+  <p class="caption">课程的第一性是财务：<b>利润 ≈ 资金周转率 × 单次周转利润率</b>。所以实验台的起点不是关键词，而是你这件产品的单位经济。填入六个数（或先载入演示参数熟悉读法），下面每个模块都会即时重算。</p>
+  <div class="grid g4">
+    <div><label class="f" for="inP">售价 P <span class="u">USD</span></label><input type="number" id="inP" step="0.01" min="0" value="19.99"></div>
+    <div><label class="f" for="inC">到手成本（采购+头程）<span class="u">USD</span></label><input type="number" id="inC" step="0.01" min="0" value="4.70"></div>
+    <div><label class="f" for="inF">FBA 配送费 <span class="u">USD</span></label><input type="number" id="inF" step="0.01" min="0" value="5.20"></div>
+    <div><label class="f" for="inCom">平台佣金率 <span class="u">%</span></label><input type="number" id="inCom" step="0.5" min="0" max="45" value="15"></div>
+    <div><label class="f" for="inPi">目标单件净利 π <span class="u">USD</span></label><input type="number" id="inPi" step="0.05" min="0" value="1.50"></div>
+    <div><label class="f" for="inCvr">预估转化率 E[CVR] <span class="u">%</span></label><input type="number" id="inCvr" step="0.1" min="0.1" max="80" value="10"></div>
+  </div>
+  <div class="btnrow">
+    <button class="btn alt" id="bDemo">载入演示参数（LCD 写字板）</button>
+    <button class="btn ghost" id="bClear">清空</button>
+  </div>
+  <div class="stats">
+    <div class="stat"><div class="sl">毛利（付佣金与 FBA 后）</div><div class="sv" id="stGross">—</div><div class="sn">= P − 佣金 − FBA − 成本</div></div>
+    <div class="stat"><div class="sl">盈亏平衡 CPS</div><div class="sv" id="stBE">—</div><div class="sn">CPS 花到这里，单件利润归零</div></div>
+    <div class="stat"><div class="sl">目标 CPS</div><div class="sv" id="stTgt">—</div><div class="sn">= 毛利 − 目标净利 π</div></div>
+    <div class="stat"><div class="sl">盈亏平衡 ACOS</div><div class="sv" id="stBEA">—</div><div class="sn">= 盈亏平衡 CPS ÷ P</div></div>
+    <div class="stat"><div class="sl">目标 ACOS</div><div class="sv" id="stTgtA">—</div><div class="sn">= 目标 CPS ÷ P</div></div>
+  </div>
+  <div id="m0warn"></div>
+  <p class="note"><b>为什么自变量是 CPS 而不是 ACOS：</b>课程把多目标压成单目标后，唯一要调的旋钮就是 CPS 目标（相当于 deal 的折扣深度）；ACOS 只是它除以售价的另一种写法。<span class="pill pr">原理</span></p>
+</section>
+
+<!-- ================= M1 ================= -->
+<section id="m1" class="card">
+  <div class="klabel">第一性 · 生意的两个自变量</div>
+  <h2><span class="mnum">M1</span> 财务平衡台 <span class="refchip">图谱 §1.3 · §4.12–4.13</span></h2>
+  <div class="flow">上游 ← <b>M0 参数</b>　　下游 → <b>M2 目标 CPS</b></div>
+  <p class="caption">先看清一件事：你的售价被拆成了什么。然后做两个实验——① <b>财务等价性</b>：同一笔让利，走降价、走广告、走 deal，单件利润完全一样；② <b>周转率 × 利润率</b>：利润是乘积，不投广告拿最高单件利润、最低周转，不一定是最优点。</p>
+
+  <h3 class="sub"><span class="k">A</span>售价瀑布 · 你的 $<span id="wfP" class="mono">—</span> 去了哪里</h3>
+  <div class="svgbox"><svg id="wf" viewBox="0 0 860 190" width="100%" role="img" aria-label="售价拆分瀑布图"></svg></div>
+
+  <h3 class="sub"><span class="k">B</span>财务等价性 · 拖动让利额度，看三条路的单件利润</h3>
+  <label class="f">每件让利 x = <b class="mono" id="eqXv">2.00</b> USD（上限为毛利）</label>
+  <input type="range" id="eqX" min="0" max="10" step="0.05" value="2">
+  <table>
+    <thead><tr><th>路径</th><th>动作</th><th>单件到手利润</th><th>性质</th></tr></thead>
+    <tbody>
+      <tr><td class="t">① 降价</td><td>售价改为 <span id="eqP1">—</span></td><td id="eqR1">—</td><td class="t" style="font-size:12.5px;color:var(--muted)">还会抬高 CTR/CVR → ECPM<span class="pill pr">原理</span></td></tr>
+      <tr><td class="t">② 投广告</td><td>把 CPS 花到 <span id="eqP2">—</span></td><td id="eqR2">—</td><td class="t" style="font-size:12.5px;color:var(--muted)">买定向流量，可完全定量</td></tr>
+      <tr><td class="t">③ 做 deal</td><td>折扣让 <span id="eqP3">—</span></td><td id="eqR3">—</td><td class="t" style="font-size:12.5px;color:var(--muted)">按成交付费，效果广告的终极形态</td></tr>
+    </tbody>
+  </table>
+  <div class="verdict"><h4>结论 · 财务等价</h4>放弃同样 x 的单件利润，三条路的到手利润<b>恒等</b>。微妙处在佣金联动：降价与 deal 按折后价收佣金，所以同等利润牺牲下它们的表观让利可以更深（x ÷ (1−佣金率)，表内已重算）。任何单一渠道<b>边际收益递减</b>，所以「降一点 + 广告一点 + deal 一点」的组合 ROI 最高，怎么配是艺术。<span class="pill pr">原理</span><span class="pill pe">经验</span></div>
+
+  <h3 class="sub"><span class="k">C</span>周转 × 利润率 · 三档情景，自己填销量假设</h3>
+  <p class="caption" style="margin-bottom:8px">工具不替你编需求弹性——月销量是<b>你的假设</b>，改成你类目的真实感受。利润 = 月销量 ×（毛利 − CPS）。</p>
+  <table id="scT">
+    <thead><tr><th>情景</th><th>CPS 投入 (USD)</th><th>假设月销量 (件)</th><th>单件利润</th><th>月利润</th><th></th></tr></thead>
+    <tbody>
+      <tr><td class="t">不投广告</td><td><input type="number" class="scC" value="0" step="0.1" min="0" style="width:90px"></td><td><input type="number" class="scQ" value="120" step="10" min="0" style="width:90px"></td><td class="scU">—</td><td class="scM">—</td><td class="scB" style="width:26%"></td></tr>
+      <tr><td class="t">适度投放</td><td><input type="number" class="scC" value="3" step="0.1" min="0" style="width:90px"></td><td><input type="number" class="scQ" value="420" step="10" min="0" style="width:90px"></td><td class="scU">—</td><td class="scM">—</td><td class="scB"></td></tr>
+      <tr><td class="t">激进冲量</td><td><input type="number" class="scC" value="6.5" step="0.1" min="0" style="width:90px"></td><td><input type="number" class="scQ" value="900" step="10" min="0" style="width:90px"></td><td class="scU">—</td><td class="scM">—</td><td class="scB"></td></tr>
+    </tbody>
+  </table>
+  <div id="scVerdict"></div>
+</section>
+
+<!-- ================= M2 ================= -->
+<section id="m2" class="card">
+  <div class="klabel">出价的闭环 · 全课最核心的一个乘法</div>
+  <h2><span class="mnum">M2</span> 目标与出价台 <span class="refchip">图谱 §3.2 · §4.5–4.6</span></h2>
+  <div class="flow">上游 ← <b>M0 目标 CPS · E[CVR]</b>　　下游 → <b>M3 竞价场的默认 bid</b> · <b>M7 诊断</b></div>
+  <p class="caption">闭环只有一句话：运营提 <b>CPS 目标</b> → 预估 <b>CVR</b> → 倒推 <b>bid = CPS × CVR</b>。GSP 的 truth-telling 保证你怎么出价与对手无关——这就是投放软件让你填 CPS 而不是填 bid 的原因。</p>
+
+  <div class="grid g3">
+    <div><label class="f" for="bidCps">CPS 目标 <span class="u">USD（默认取 M0 目标 CPS）</span></label><input type="number" id="bidCps" step="0.05" min="0" value="0"></div>
+    <div><label class="f" for="bidCvr">E[CVR] <span class="u">%</span></label><input type="number" id="bidCvr" step="0.1" min="0.1" value="10"></div>
+    <div><label class="f">推荐 bid</label><div class="stat" style="padding:8px 14px"><div class="sv" id="bidOut">—</div><div class="sn">cpc 上限 = bid；实际 cpc 由下一名决定</div></div></div>
+  </div>
+  <div class="fx">bid = CPS<sub>目标</sub> × E[CVR] <span class="fc">// 每次点击的期望价值：CVR 概率成交一单，一单最多值 CPS</span><br>区间（CVR ±30% 的不确定性）：<b id="bidBand">—</b></div>
+
+  <h3 class="sub"><span class="k">A</span>调价步长护栏 · 每次 ≤30%</h3>
+  <div class="grid g3">
+    <div><label class="f" for="stepCur">当前 bid <span class="u">USD</span></label><input type="number" id="stepCur" step="0.01" min="0" value="0.60"></div>
+    <div><label class="f" for="stepNew">拟调整到 <span class="u">USD</span></label><input type="number" id="stepNew" step="0.01" min="0" value="0.90"></div>
+    <div><label class="f">判定</label><div id="stepOut" class="verdict" style="margin:0">—</div></div>
+  </div>
+  <p class="note">bid ±30% 通常对应花费 ±一倍——步子迈大，花费会跳变，数据分布也断了（i.i.d. 被破坏，见 M6）。<span class="pill pe">经验</span></p>
+
+  <h3 class="sub"><span class="k">B</span>花费该用什么控 · 自查</h3>
+  <div class="grid g2">
+    <div>
+      <label class="f">你现在的做法</label>
+      <select id="ctlSel">
+        <option value="bid">预算设高，用 bid 控花费</option>
+        <option value="budget">用每日预算卡住花费</option>
+        <option value="tos">在抢 TOS / 硬冲排名</option>
+        <option value="pd">Prime Day / 黑五大促期</option>
+      </select>
+    </div>
+    <div><label class="f">课程判定</label><div id="ctlOut" class="verdict" style="margin:0">—</div></div>
+  </div>
+
+  <h3 class="sub"><span class="k">C</span>Campaign 选项体检</h3>
+  <div class="grid g3">
+    <div><label class="f">首页/坑位竞价加成</label><select id="opPlace"><option value="off">全部 0%，不加</option><option value="cv">加了——因为该位置实测转化率高</option><option value="rank">加了——为了抢排名</option></select></div>
+    <div><label class="f">竞价策略</label><select id="opStrat"><option value="down">仅降低（dynamic down-only）</option><option value="updown">提高和降低</option><option value="fixed">固定竞价</option></select></div>
+    <div><label class="f">体检结果</label><div id="opOut" class="verdict" style="margin:0">—</div></div>
+  </div>
+  <p class="note"><b>让渡的原则：</b>判断对方利益是否与你一致。「降 bid」平台与你三赢（不匹配的用户少花你的钱），可以让渡；「提 bid」的权利寸步不让——平台的 KPI 是让你多花钱。<span class="pill pr">原理</span>　固定竞价只用于单开的抢排名 campaign。</p>
+</section>
+
+<!-- ================= M3 ================= -->
+<section id="m3" class="card">
+  <div class="klabel">机制内核 · 亲手掷一次拍卖</div>
+  <h2><span class="mnum">M3</span> GSP 竞价场 <span class="refchip">图谱 §2.1–2.3</span></h2>
+  <div class="flow">上游 ← <b>M2 推荐 bid</b>（可改）　　产出 → <b>truth-telling 的手感</b></div>
+  <p class="caption">六个玩家竞五个坑位，按 <b>ECPM = CTR × bid</b> 降序排坑，你的实际 cpc = <b>下一名的 ECPM ÷ 你的 CTR</b>，bid 只是上限。做三个实验，亲手验证「你的最优出价与对手无关」。</p>
+
+  <div class="grid g3">
+    <div><label class="f" for="myCtr">我的 CTR <span class="u">%</span></label><input type="number" id="myCtr" step="0.05" min="0.05" value="0.40"></div>
+    <div><label class="f" for="myBid">我的 bid <span class="u">USD（默认取 M2）</span></label><input type="number" id="myBid" step="0.01" min="0.02" value="0.60"></div>
+    <div><label class="f">我的每单广告成本（若成交，= cpc ÷ CVR）</label><div class="stat" style="padding:8px 14px"><div class="sv" id="myCpsNow">—</div><div class="sn">对照 M0 目标 CPS：<span id="myCpsRef">—</span></div></div></div>
+  </div>
+  <div class="btnrow">
+    <button class="btn" id="bRoll">重掷对手</button>
+    <button class="btn alt" id="bUp">实验① 我加价 20%</button>
+    <button class="btn alt" id="bAll">实验② 对手全体 +30%</button>
+    <button class="btn ghost" id="bReset3">还原实验</button>
+  </div>
+  <div id="aucT"></div>
+  <div id="aucV"></div>
+  <p class="note"><b>口径说明：</b>竞价排序用的 ECPM = CTR × bid（CPC 拍卖的运营化表达）；平台佣金视角的 ECPM = CTR × CVR × Price × 佣金率。当你的 bid 按 CPS×CVR 出，两个口径自然对齐。<span class="pill pm2">机制</span>　对手的 CTR 只有平台知道，实战中你的 cpc 是个盲盒——这里把盒子打开只是为了看清结构。</p>
+</section>
+
+<!-- ================= M4 ================= -->
+<section id="m4" class="card">
+  <div class="klabel">流量切分 · 对不同搜索词分别出价</div>
+  <h2><span class="mnum">M4</span> 结构规划器 <span class="refchip">图谱 §4.2–4.4</span></h2>
+  <div class="flow">上游 ← 你的词表　　产出 → <b>campaign 结构 + 广泛组的精准否定清单</b></div>
+  <p class="caption">同一个词，广泛匹配的转化率高于精准匹配（广泛覆盖「本词 + 有效长尾」）。要对词单独出价，必须切分：<b>精准组投该词本身，广泛组投长尾，并在广泛组里精准否定已毕业的词</b>。把词贴进来，工具生成结构与否定清单。</p>
+  <div class="split">
+    <div>
+      <label class="f" for="kwBroad">广泛组种子词（一行一个）</label>
+      <textarea id="kwBroad" rows="8" placeholder="lcd writing tablet&#10;drawing pad for kids&#10;..."></textarea>
+    </div>
+    <div>
+      <label class="f" for="kwExact">已毕业到精准组的词（一行一个）</label>
+      <textarea id="kwExact" rows="8" placeholder="lcd writing tablet&#10;doodle board"></textarea>
+    </div>
+  </div>
+  <div class="btnrow">
+    <button class="btn" id="bBuild">生成结构与否定清单</button>
+    <button class="btn alt" id="bKwDemo">载入演示词表（写字板）</button>
+    <button class="btn ghost" id="bCopyNeg" style="display:none">复制否定清单</button>
+  </div>
+  <div id="kwOut"></div>
+</section>
+
+<!-- ================= M5 ================= -->
+<section id="m5" class="card">
+  <div class="klabel">人辅助机器 · 机器难及的常识判断</div>
+  <h2><span class="mnum">M5</span> 否定词训练场 <span class="refchip">图谱 §4.7</span></h2>
+  <div class="flow">规则 ← <b>词组否定屏蔽不相关 · 精准否定做切分</b>　　产出 → 判断手感</div>
+  <p class="caption">两种否定用途完全不同：<b>词组否定</b>屏蔽不相关流量；<b>精准否定</b>配合 M4 做切分。九道题来自课程原案例（15.6 寸背包、移动电站）加你自己的类目，对每个搜索词选一个动作，判分后看逐题解释。</p>
+  <div id="quiz"></div>
+  <div class="btnrow">
+    <button class="btn" id="bGrade">判分</button>
+    <button class="btn ghost" id="bRedo">重做</button>
+    <span class="stat" style="padding:8px 16px;display:none" id="scoreBox"><span class="sv" id="scoreV">—</span></span>
+  </div>
+  <div class="verdict mid" style="margin-top:16px"><h4>精准否定的纪律</h4>精准否定不匹配语序与介词——加词时必须把<b>单复数、加介词、变语序</b>三种形式全部加入，否则切分漏气。这类尺寸语义（15.6 寸背包否定 17 寸、保留 13 寸）机器极难理解，<b>正是人辅助机器的边界所在</b>。<span class="pill pm2">机制</span><span class="pill pe">经验</span></div>
+</section>
+
+<!-- ================= M6 ================= -->
+<section id="m6" class="card">
+  <div class="klabel">统计地基 · 数据什么时候能信</div>
+  <h2><span class="mnum">M6</span> 大数定律沙盘 <span class="refchip">图谱 §F.1 · §3.4</span></h2>
+  <div class="flow">规则 ← <b>Var ∝ 1/n · 经验阈值 n ≥ 100</b>　　下游 → <b>M7 的数据准入判定</b></div>
+  <p class="caption">CVR 是随机变量，不是一个数。设定「真实 CVR」，然后一批一批地掷点击——看你的估计值怎样在 ±2σ 的喇叭口里晃、又怎样随 n 收敛。<b>100 次点击之前，你看到的都是噪声。</b></p>
+
+  <div class="grid g3">
+    <div><label class="f">真实 CVR = <b class="mono" id="tcvrV">10.0</b>%（上帝视角，实战不可见）</label><input type="range" id="tcvr" min="1" max="30" step="0.5" value="10"></div>
+    <div><label class="f">当前样本</label><div class="stat" style="padding:8px 14px"><div class="sv" id="llnN">n = 0</div><div class="sn" id="llnEst">估计 — · 区间 —</div></div></div>
+    <div><label class="f">判定</label><div id="llnV" class="verdict mid" style="margin:0">还没有数据。</div></div>
+  </div>
+  <div class="btnrow">
+    <button class="btn" id="bC20">模拟 +20 次点击</button>
+    <button class="btn" id="bC100">+100 次</button>
+    <button class="btn ghost" id="bCReset">重置沙盘</button>
+  </div>
+  <div class="svgbox"><svg id="lln" viewBox="0 0 860 240" width="100%" role="img" aria-label="CVR估计收敛图"></svg></div>
+
+  <h3 class="sub"><span class="k">A</span>两个词，谁更好 · 小样本的陷阱</h3>
+  <p class="caption" style="margin-bottom:8px">词 A：30 次点击 4 单（13.3%）；词 B：30 次点击 2 单（6.7%）。直觉说 A 碾压 B——统计怎么说？</p>
+  <div class="btnrow">
+    <button class="btn alt" id="bAB">再各买 170 次点击（模拟）</button>
+    <button class="btn ghost" id="bABr">重置对比</button>
+  </div>
+  <div id="abOut"></div>
+
+  <h3 class="sub"><span class="k">B</span>i.i.d. 准入自查 · 优化取数前必过</h3>
+  <div class="grid g3">
+    <label class="f" style="display:flex;gap:8px;align-items:center;font-size:13px"><input type="checkbox" id="ck1" style="width:auto"> 窗口内没改过售价</label>
+    <label class="f" style="display:flex;gap:8px;align-items:center;font-size:13px"><input type="checkbox" id="ck2" style="width:auto"> 没跨大促（PD/黑五）</label>
+    <label class="f" style="display:flex;gap:8px;align-items:center;font-size:13px"><input type="checkbox" id="ck3" style="width:auto"> 已剔除近 3 天数据</label>
+  </div>
+  <div id="iidOut"></div>
+</section>
+
+<!-- ================= M7 ================= -->
+<section id="m7" class="card">
+  <div class="klabel">收口 · 四态节奏 + 归因避坑</div>
+  <h2><span class="mnum">M7</span> 优化诊断台 <span class="refchip">图谱 §4.8 · §F.2 · §3.3–3.4</span></h2>
+  <div class="flow">上游 ← <b>M0 目标/盈亏平衡 CPS · M6 数据准入</b>　　产出 → <b>该做什么、别做什么</b></div>
+  <p class="caption">把一个词（或一个组）的近况填进来，诊断引擎按课程的优先级出结论：先查数据能不能信（归因、i.i.d.、大数定律），再分「变态 / 常态」定节奏，最后才给出按 CVR 校准的新 bid——并用 ±30% 护栏夹住。</p>
+
+  <div class="grid g4">
+    <div><label class="f" for="dgClicks">点击数</label><input type="number" id="dgClicks" min="0" step="1" value="160"></div>
+    <div><label class="f" for="dgOrders">广告订单</label><input type="number" id="dgOrders" min="0" step="1" value="12"></div>
+    <div><label class="f" for="dgSpend">广告花费 <span class="u">USD</span></label><input type="number" id="dgSpend" min="0" step="0.1" value="78"></div>
+    <div><label class="f" for="dgBid">该词当前 bid <span class="u">USD</span></label><input type="number" id="dgBid" min="0" step="0.01" value="0.60"></div>
+    <div><label class="f" for="dgDays">距上次常规优化 <span class="u">天</span></label><input type="number" id="dgDays" min="0" step="1" value="35"></div>
+    <div><label class="f" for="dgWin">数据窗口跨度 <span class="u">天</span></label><input type="number" id="dgWin" min="1" step="1" value="30"></div>
+  </div>
+  <div class="grid g3" style="margin-top:10px">
+    <label class="f" style="display:flex;gap:8px;align-items:center;font-size:13px"><input type="checkbox" id="dg3d" style="width:auto"> 窗口含最近 3 天</label>
+    <label class="f" style="display:flex;gap:8px;align-items:center;font-size:13px"><input type="checkbox" id="dgPrice" style="width:auto"> 窗口内改过价 / 跨大促</label>
+    <label class="f" style="display:flex;gap:8px;align-items:center;font-size:13px"><input type="checkbox" id="dgBudget" style="width:auto"> 正在超预算 / 花不出钱</label>
+  </div>
+  <div class="grid g3" style="margin-top:2px">
+    <label class="f" style="display:flex;gap:8px;align-items:center;font-size:13px"><input type="checkbox" id="dgHoliday" style="width:auto"> 处于节日 / 特殊事件期</label>
+    <label class="f" style="display:flex;gap:8px;align-items:center;font-size:13px"><input type="checkbox" id="dgGoal" style="width:auto"> 广告目标（CPS 目标）刚变更</label>
+    <span></span>
+  </div>
+  <div class="btnrow"><button class="btn" id="bDiag">开始诊断</button></div>
+  <div id="dgOut"></div>
+
+  <h3 class="sub"><span class="k">附</span>归因速查 · 此订单非彼订单</h3>
+  <table>
+    <thead><tr><th>产品</th><th>归因期</th><th>要点</th></tr></thead>
+    <tbody>
+      <tr><td>SP</td><td>7 天</td><td class="t">点击计在点击当天、订单计在购买当天 → 会出现「点击 0、订单 1」</td></tr>
+      <tr><td>SB / SD</td><td>14 天</td><td class="t">默认计入整店所有 SKU 的成交</td></tr>
+      <tr><td>DSP</td><td>14 天</td><td class="t">30 天口径比 7 天可能多 10–20% 订单——对比数据先对齐归因期</td></tr>
+    </tbody>
+  </table>
+  <div class="verdict bad"><h4>三个提醒</h4>① 广告订单可能比该产品 dashboard 总订单还多（新品期尤甚），算 CPS 前先搞清订单定义；② last-click 归因天然不公正，别在广告销量与自然销量之间强建因果——两者必须剥离考核；③ KPI 备注只能二选一：「优先保 CPS」或「优先花完预算」。<span class="pill pm2">机制</span></div>
+</section>
+
+</main>
+
+<footer>
+  <b>方法链</b>：M0 参数 → M1 财务（§1.3）→ M2 出价闭环（§3.2/§4.5）→ M3 GSP（§2.3）→ M4 切分（§4.2）→ M5 否定（§4.7）→ M6 统计（§F.1）→ M7 诊断（§4.8/§F.2）。每个模块右上角的 § 号对应《广告投放底层逻辑图谱》章节，互为读本与操作台。<br>
+  <b>可靠性分层</b>：<span class="pill pr">原理</span> 可推导、可证伪　<span class="pill pm2">机制</span> 平台事实　<span class="pill pe">经验</span> 作者主观实战判断，随时间与类目失效，请用自己的数据验证。<br>
+  <b>声明</b>：全部方法均为白帽效果广告逻辑；模拟器中的对手与点击由本地随机数生成，仅用于理解机制，不代表真实市场。所有输入均在浏览器本地计算，不上传。
+</footer>
+
+<script>
+(function(){
+"use strict";
+var $=function(id){return document.getElementById(id);};
+var fm=function(x,d){if(!isFinite(x))return "—";return "$"+x.toFixed(d==null?2:d);};
+var fp=function(x,d){if(!isFinite(x))return "—";return (x*100).toFixed(d==null?1:d)+"%";};
+var num=function(id){var v=parseFloat($(id).value);return isFinite(v)?v:0;};
+var S={P:0,C:0,F:0,com:0,pi:0,cvr:0,gross:0,be:0,tgt:0,bid:0};
+
+/* ---------- pipeline ---------- */
+function setPV(id,txt,neg){var el=$(id);if(el.textContent===txt)return;el.textContent=txt;el.classList.toggle("neg",!!neg);el.classList.remove("flash");void el.offsetWidth;el.classList.add("flash");}
+
+/* ---------- M0 ---------- */
+function recompute(){
+  S.P=num("inP");S.C=num("inC");S.F=num("inF");S.com=num("inCom")/100;S.pi=num("inPi");S.cvr=num("inCvr")/100;
+  S.gross=S.P-S.P*S.com-S.F-S.C;
+  S.be=S.gross; S.tgt=Math.max(0,S.gross-S.pi);
+  var ok=S.P>0;
+  $("stGross").textContent=ok?fm(S.gross):"—";$("stGross").classList.toggle("bad",S.gross<=0);
+  $("stBE").textContent=ok?fm(Math.max(0,S.be)):"—";
+  $("stTgt").textContent=ok?fm(S.tgt):"—";
+  $("stBEA").textContent=ok&&S.P>0?fp(Math.max(0,S.be)/S.P):"—";
+  $("stTgtA").textContent=ok&&S.P>0?fp(S.tgt/S.P):"—";
+  $("m0warn").innerHTML = (ok&&S.gross<=0)?'<div class="verdict bad"><h4>毛利已为负</h4>付完佣金、FBA 与成本后单件已亏 '+fm(-S.gross)+'。广告是 100% 消灭利润的成本——毛利为负时任何 CPS 都在放大亏损，先回到产品与定价。</div>':"";
+  setPV("pv0",ok?("P "+fm(S.P)):"—");
+  setPV("pv1",ok?("毛利 "+fm(S.gross)):"—",S.gross<=0);
+  // prefill M2 unless user edited
+  if(!$("bidCps").dataset.dirty){$("bidCps").value=S.tgt.toFixed(2);}
+  if(!$("bidCvr").dataset.dirty){$("bidCvr").value=(S.cvr*100).toFixed(1);}
+  m2();
+  m1();
+  scenarios();
+  eq();
+}
+["inP","inC","inF","inCom","inPi","inCvr"].forEach(function(id){$(id).addEventListener("input",recompute);});
+$("bDemo").addEventListener("click",function(){
+  $("inP").value=19.99;$("inC").value=4.70;$("inF").value=5.20;$("inCom").value=15;$("inPi").value=1.50;$("inCvr").value=10;
+  ["bidCps","bidCvr","myBid"].forEach(function(i){delete $(i).dataset.dirty;});
+  recompute();roll();
+});
+$("bClear").addEventListener("click",function(){
+  ["inP","inC","inF","inPi"].forEach(function(i){$(i).value=0;});$("inCom").value=15;$("inCvr").value=10;
+  recompute();
+});
+
+/* ---------- M1 waterfall ---------- */
+function m1(){
+  $("wfP").textContent=S.P.toFixed(2);
+  var svg=$("wf");var P=S.P||1;
+  var items=[
+    {l:"售价",v:S.P,type:"base"},
+    {l:"佣金 "+(S.com*100).toFixed(0)+"%",v:S.P*S.com,type:"cut"},
+    {l:"FBA",v:S.F,type:"cut"},
+    {l:"到手成本",v:S.C,type:"cut"},
+    {l:"毛利",v:S.gross,type:"res"}
+  ];
+  var W=860,H=190,pad=34,bw=110,gap=(W-2*pad-5*bw)/4;
+  var maxv=Math.max(S.P,0.01);var sc=function(v){return (H-56)*(v/maxv);};
+  var run=S.P,s="";
+  s+='<line x1="0" y1="'+(H-30)+'" x2="'+W+'" y2="'+(H-30)+'" stroke="#CBBB93" stroke-width="1"/>';
+  items.forEach(function(it,i){
+    var x=pad+i*(bw+gap),h,y,fill;
+    if(it.type==="base"){h=sc(it.v);y=H-30-h;fill="#3F7E6B";}
+    else if(it.type==="cut"){h=sc(it.v);y=H-30-sc(run);fill=(i===1?"#C8893B":i===2?"#B77B33":"#BC4B33");run-=it.v;}
+    else{h=sc(Math.max(0,it.v));y=H-30-h;fill=it.v>=0?"#2E5F50":"#BC4B33";if(it.v<0){h=sc(-it.v);y=H-30;}}
+    s+='<rect x="'+x+'" y="'+y.toFixed(1)+'" width="'+bw+'" height="'+Math.max(2,h).toFixed(1)+'" rx="5" fill="'+fill+'" opacity="'+(it.type==="cut"?0.85:1)+'"/>';
+    s+='<text x="'+(x+bw/2)+'" y="'+(H-12)+'" text-anchor="middle" font-family="Noto Sans SC" font-size="12" fill="#6E6353">'+it.l+'</text>';
+    s+='<text x="'+(x+bw/2)+'" y="'+(y-6>12?y-6:y+14)+'" text-anchor="middle" font-family="JetBrains Mono" font-size="12.5" font-weight="700" fill="#2B2620">'+(it.type==="cut"?"−":"")+it.v.toFixed(2)+'</text>';
+    if(it.type==="cut"&&i<4){var x2=x+bw+gap;s+='<line x1="'+(x+bw)+'" y1="'+(H-30-sc(run)).toFixed(1)+'" x2="'+x2+'" y2="'+(H-30-sc(run)).toFixed(1)+'" stroke="#8C7F6A" stroke-dasharray="3 3"/>';}
+  });
+  svg.innerHTML=s;
+}
+
+/* ---------- M1 equivalence ---------- */
+function eq(){
+  var sl=$("eqX");sl.max=Math.max(0.05,S.gross).toFixed(2);
+  if(parseFloat(sl.value)>parseFloat(sl.max))sl.value=sl.max;
+  var x=parseFloat(sl.value)||0;$("eqXv").textContent=x.toFixed(2);
+  var denom=1-S.com, cutFace=denom>0? x/denom : x;
+  $("eqP1").textContent=fm(Math.max(0,S.P-cutFace))+"（降 "+fm(cutFace)+"）";
+  $("eqP2").textContent=fm(x);
+  $("eqP3").textContent=fm(cutFace)+"／件";
+  var prof=S.gross-x;
+  ["eqR1","eqR2","eqR3"].forEach(function(id){$(id).textContent=fm(prof);$(id).style.color=prof<0?"#BC4B33":"#2E5F50";$(id).style.fontWeight="700";});
+}
+$("eqX").addEventListener("input",eq);
+
+/* ---------- M1 scenarios ---------- */
+function scenarios(){
+  var rows=document.querySelectorAll("#scT tbody tr");var best=-1,bestV=-Infinity,anyNeg=false;
+  rows.forEach(function(r,i){
+    var cps=parseFloat(r.querySelector(".scC").value)||0;
+    var q=parseFloat(r.querySelector(".scQ").value)||0;
+    var u=S.gross-cps,m=u*q;
+    r.querySelector(".scU").textContent=fm(u);r.querySelector(".scU").style.color=u<0?"#BC4B33":"";
+    r.querySelector(".scM").textContent=fm(m,0);
+    r.dataset.m=m;if(u<0)anyNeg=true;
+    if(m>bestV){bestV=m;best=i;}
+  });
+  var maxm=Math.max.apply(null,Array.prototype.map.call(rows,function(r){return Math.max(0,parseFloat(r.dataset.m)||0);}))||1;
+  rows.forEach(function(r,i){
+    var m=Math.max(0,parseFloat(r.dataset.m)||0);
+    r.querySelector(".scB").innerHTML='<div style="height:12px;border-radius:6px;background:'+(i===best?"#3F7E6B":"#CBBB93")+';width:'+(m/maxm*100).toFixed(1)+'%"></div>';
+    r.classList.toggle("win",i===best);
+  });
+  var names=["不投广告","适度投放","激进冲量"];
+  $("scVerdict").innerHTML='<div class="verdict'+(anyNeg?" mid":"")+'"><h4>读法</h4>按你的销量假设，月利润最高的是「'+names[best]+'」（'+fm(bestV,0)+'）。'+(anyNeg?'注意有情景单件利润为负——那是在用真金白银买周转，只有<b>启动期冲量 / 清库存</b>这类生命周期理由才成立（§4.12）。':'最优点通常在中间：利润是「周转 × 利润率」的乘积，两个极端都不是答案。')+'<span class="pill pr">原理</span></div>';
+}
+document.querySelectorAll("#scT input").forEach(function(el){el.addEventListener("input",scenarios);});
+
+/* ---------- M2 ---------- */
+function m2(){
+  var cps=num("bidCps"),cvr=num("bidCvr")/100;
+  var bid=cps*cvr;S.bid=bid;
+  $("bidOut").textContent=fm(bid);
+  $("bidBand").textContent=fm(cps*cvr*0.7)+" – "+fm(cps*cvr*1.3);
+  setPV("pv2","bid "+fm(bid),bid<=0);
+  if(!$("myBid").dataset.dirty){$("myBid").value=Math.max(0.02,bid).toFixed(2);render3();}
+  step();
+}
+["bidCps","bidCvr"].forEach(function(id){$(id).addEventListener("input",function(){$(id).dataset.dirty=1;m2();});});
+function step(){
+  var c=num("stepCur"),n=num("stepNew");
+  var el=$("stepOut");
+  if(c<=0){el.className="verdict mid";el.innerHTML="填入当前 bid。";return;}
+  var pct=(n-c)/c*100;
+  if(Math.abs(pct)<=30){el.className="verdict";el.innerHTML="<h4>可以</h4>变动 "+pct.toFixed(0)+"%，在 ±30% 护栏内。";}
+  else{var cap=c*(pct>0?1.3:0.7);el.className="verdict bad";el.innerHTML="<h4>步子太大</h4>变动 "+pct.toFixed(0)+"%。bid ±30% ≈ 花费 ±一倍，一次到位会让花费跳变、数据断层。本次先到 "+fm(cap)+"，下个周期再走剩下的。";}
+}
+["stepCur","stepNew"].forEach(function(id){$(id).addEventListener("input",step);});
+function ctl(){
+  var v=$("ctlSel").value,el=$("ctlOut");
+  var map={
+    bid:['','<h4>正确</h4>预算是约束不是旋钮。把它设高消解掉，唯一自变量是 CPS 目标（→ bid）。<span class="pill pr">原理</span>'],
+    budget:['bad','<h4>反了</h4>预算撞线 = bid 偏高的症状。用预算卡花费会把每天的数据在撞线时刻截断（分布被切，非 i.i.d.），且真撞线说明该降 bid。改法：预算抬高，1 天内等比例降全组 bid。'],
+    tos:['mid','<h4>例外 · 必须硬上限</h4>抢 TOS 是离经叛道的需求：单开 campaign、固定竞价、精准匹配、极高 bid（实际 cpc 由下一名决定），但<b>预算必须设硬上限</b>——广告是 100% 消灭利润的成本。'],
+    pd:['mid','<h4>例外 · 大促期</h4>Prime Day / 黑五：预算设极高、CPS 目标也提高（转化率更高 + 加速周转），严格不超预算，建议单开 campaign 与日常解耦。']
+  };
+  el.className="verdict "+map[v][0];el.innerHTML=map[v][1];
+}
+$("ctlSel").addEventListener("change",ctl);
+function ops(){
+  var p=$("opPlace").value,s=$("opStrat").value,el=$("opOut");
+  var bad=[],mid=[];
+  if(p==="rank")bad.push("坑位加成是为了抢排名——抢排名应单开 campaign 解耦，一个 campaign 只做一个目标");
+  if(p==="cv")mid.push("因「实测转化率高」加首页竞价可以接受（工具化/低价产品常见），动机必须是转化率而非排名");
+  if(s==="updown")bad.push("「提高和降低」把提 bid 的权利交给了平台——平台 KPI 是让你多花钱，寸步不让");
+  if(s==="fixed")mid.push("固定竞价只应出现在单开的抢排名 campaign 里，常规 campaign 不用");
+  if(!bad.length&&!mid.length){el.className="verdict";el.innerHTML="<h4>干净</h4>加成全 0 + 仅降低：把「降价」让渡给掌握用户信息的平台（三赢），其余权利留在自己手里。<span class='pill pr'>原理</span>";}
+  else{el.className="verdict "+(bad.length?"bad":"mid");el.innerHTML="<h4>"+(bad.length?"有问题":"注意")+"</h4>"+bad.concat(mid).join("；")+"。";}
+}
+$("opPlace").addEventListener("change",ops);$("opStrat").addEventListener("change",ops);
+
+/* ---------- M3 auction ---------- */
+var A={comps:[],snap:null};
+function rnd(a,b){return a+Math.random()*(b-a);}
+function roll(){
+  var base=Math.max(0.05,num("myBid"));
+  A.comps=[];
+  for(var i=0;i<5;i++)A.comps.push({name:"对手 "+"ABCDE"[i],ctr:rnd(0.15,0.70),bid:Math.max(0.10,base*rnd(0.50,1.35))});
+  A.snap=null;$("aucV").innerHTML="";
+  render3();
+}
+function render3(){
+  var me={name:"你",ctr:Math.max(0.01,num("myCtr")),bid:Math.max(0.01,num("myBid")),me:true};
+  var ps=[me].concat(A.comps.map(function(c){return{name:c.name,ctr:c.ctr,bid:c.bid};}));
+  ps.forEach(function(p){p.ecpm=p.ctr*p.bid*10;}); // CTR% × bid × 1000/100
+  ps.sort(function(a,b){return b.ecpm-a.ecpm;});
+  var FLOOR=0.10;
+  ps.forEach(function(p,i){
+    if(i<5){var nxt=ps[i+1];p.cpc=Math.min(p.bid,Math.max(FLOOR,nxt?nxt.ecpm/(p.ctr*10):FLOOR));p.slot=i+1;}
+    else{p.cpc=null;p.slot=null;}
+  });
+  var h='<table><thead><tr><th>坑位</th><th>玩家</th><th>CTR</th><th>bid</th><th>ECPM=CTR×bid×10</th><th>实际 cpc</th></tr></thead><tbody>';
+  ps.forEach(function(p){
+    h+='<tr'+(p.me?' class="me"':'')+'><td>'+(p.slot?("#"+p.slot):"落选")+'</td><td class="t">'+p.name+'</td><td>'+p.ctr.toFixed(2)+'%</td><td>'+fm(p.bid)+'</td><td>'+p.ecpm.toFixed(2)+'</td><td>'+(p.cpc!=null?fm(p.cpc):"—")+'</td></tr>';
+  });
+  h+='</tbody></table><p class="note">底价 $0.10（简化假设）；cpc = 下一名 ECPM ÷ 你的 CTR，且 ≤ 你的 bid。</p>';
+  $("aucT").innerHTML=h;
+  var meRow=ps.filter(function(p){return p.me;})[0];
+  var cps=meRow.cpc!=null&&S.cvr>0?meRow.cpc/S.cvr:NaN;
+  $("myCpsNow").textContent=meRow.cpc!=null?fm(cps):"未上坑";
+  $("myCpsNow").classList.toggle("bad",isFinite(cps)&&cps>S.tgt+1e-9);
+  $("myCpsRef").textContent=fm(S.tgt);
+  setPV("pv3",meRow.cpc!=null?("cpc "+fm(meRow.cpc)):"落选",meRow.cpc==null);
+  return meRow;
+}
+$("bRoll").addEventListener("click",roll);
+["myCtr","myBid"].forEach(function(id){$(id).addEventListener("input",function(){if(id==="myBid")$(id).dataset.dirty=1;render3();});});
+function snapMe(){var m=render3();return{slot:m.slot,cpc:m.cpc,bid:m.bid};}
+$("bUp").addEventListener("click",function(){
+  var before=snapMe();A.snap=A.snap||{myBid:num("myBid"),comps:A.comps.map(function(c){return{name:c.name,ctr:c.ctr,bid:c.bid};})};
+  $("myBid").value=(num("myBid")*1.2).toFixed(2);$("myBid").dataset.dirty=1;
+  var after=snapMe();
+  var opt=S.bid;
+  $("aucV").innerHTML='<div class="verdict '+(num("myBid")>opt*1.001?"bad":"mid")+'"><h4>实验① · 加价 20% 的代价</h4>坑位 '+(before.slot?("#"+before.slot):"落选")+' → '+(after.slot?("#"+after.slot):"落选")+'，cpc '+(before.cpc!=null?fm(before.cpc):"—")+' → '+(after.cpc!=null?fm(after.cpc):"—")+'。你多付的部分完全由「下一名的 ECPM」决定，与你的意愿无关。你的价值上限 bid* = CPS×CVR = <b>'+fm(opt)+'</b>'+(num("myBid")>opt*1.001?'——现在 bid 已越过它：每一次成交都在为超出部分买单，冲上去的量是亏损换的。':'，尚在价值线内。')+'</div>';
+});
+$("bAll").addEventListener("click",function(){
+  var before=snapMe();A.snap=A.snap||{myBid:num("myBid"),comps:A.comps.map(function(c){return{name:c.name,ctr:c.ctr,bid:c.bid};})};
+  A.comps.forEach(function(c){c.bid*=1.3;});
+  var after=snapMe();
+  $("aucV").innerHTML='<div class="verdict"><h4>实验② · 对手全体 +30%，你该改出价吗</h4>坑位 '+(before.slot?("#"+before.slot):"落选")+' → '+(after.slot?("#"+after.slot):"落选")+'，cpc '+(before.cpc!=null?fm(before.cpc):"—")+' → '+(after.cpc!=null?fm(after.cpc):"—")+'。对手改变的只是你「排第几、付多少」；你的最优出价仍是 <b>bid* = CPS×CVR = '+fm(S.bid)+'</b>，一分未变——低于价值的坑照拿，高于价值的坑让给别人亏。这就是 GSP truth-telling：只对自己的目标负责，无需盯着对手。<span class="pill pr">原理</span></div>';
+});
+$("bReset3").addEventListener("click",function(){
+  if(A.snap){$("myBid").value=A.snap.myBid.toFixed(2);A.comps=A.snap.comps.map(function(c){return{name:c.name,ctr:c.ctr,bid:c.bid};});A.snap=null;}
+  $("aucV").innerHTML="";render3();
+});
+
+/* ---------- M4 structure ---------- */
+function lines(id){return $(id).value.split(/\n+/).map(function(s){return s.trim().toLowerCase().replace(/\s+/g," ");}).filter(Boolean).filter(function(v,i,a){return a.indexOf(v)===i;});}
+function plur(w){
+  var out=[w];
+  var last=w.split(" ").pop();
+  if(/s$/.test(last)){out.push(w.replace(/s$/,""));}
+  else if(/(ch|sh|x|z|o)$/.test(last)){out.push(w+"es");}
+  else if(/[^aeiou]y$/.test(last)){out.push(w.replace(/y$/,"ies"));}
+  else{out.push(w+"s");}
+  return out;
+}
+$("bKwDemo").addEventListener("click",function(){
+  $("kwBroad").value=["lcd writing tablet","drawing pad for kids","doodle board","kids drawing tablet","toddler drawing pad","writing tablet for kids","erasable drawing board","travel toys for kids","road trip essentials kids","drawing toys for girls"].join("\n");
+  $("kwExact").value=["lcd writing tablet","doodle board"].join("\n");
+});
+$("bBuild").addEventListener("click",build4);
+var negList=[];
+function build4(){
+  var broad=lines("kwBroad"),exact=lines("kwExact");
+  var total=broad.concat(exact).filter(function(v,i,a){return a.indexOf(v)===i;}).length;
+  if(!total){$("kwOut").innerHTML='<div class="verdict mid"><h4>词表为空</h4>贴入词，或点「载入演示词表」。</div>';$("bCopyNeg").style.display="none";return;}
+  negList=[];
+  exact.forEach(function(w){plur(w).forEach(function(v){if(negList.indexOf(v)<0)negList.push(v);});});
+  var cnt='<div class="verdict '+(total<30?"mid":(total>200?"mid":""))+'"><h4>词量体检</h4>当前共 '+total+' 个词（广泛 '+broad.length+' + 精准 '+exact.length+'）。'+(total<30?'低于 30——优化上限会被词量卡住，用 ASIN 反查 / 工具补到 30–200。':(total>200?'超过 200——边际收益递减，且词越多每词流量越薄、CVR 越算不准（M6）。砍到 200 以内。':'落在 30–200 的推荐区间内。'))+'<span class="pill pr">原理</span><span class="pill pe">经验</span></div>';
+  var tree='<h3 class="sub"><span class="k">→</span>生成的结构（一产品一 campaign）</h3>'
+   +'<div class="svgbox" style="font-family:var(--mono);font-size:13px;line-height:2;padding:16px 20px">'
+   +'<b style="color:var(--teal-dk)">Campaign</b>　<span style="color:var(--muted)">命名写全：SKU + ASIN + 创建日期（为了未来的你能读能改）</span><br>'
+   +'├─ <b style="color:var(--teal-dk)">Ad Group · 精准</b>　bid ≈ '+fm(S.bid)+'（M2 闭环）<br>'
+   +exact.map(function(w){return '│　　· <span class="tag exa" style="font-family:var(--mono)">'+w+'</span>';}).join("<br>")+(exact.length?"<br>":"")
+   +'└─ <b style="color:var(--teal-dk)">Ad Group · 广泛</b>　投长尾，起步 bid 可略低<br>'
+   +broad.map(function(w){return '　　　· '+w;}).join("<br>")
+   +'<br>　　　<b style="color:#93361F">negative exact ↓（把已毕业词从广泛组里切走）</b><br>'
+   +(negList.length?negList.map(function(w){return '　　　⊘ '+w;}).join("<br>"):'　　　（精准组为空——没有需要切分的词）')
+   +'</div>'
+   +'<div class="verdict mid"><h4>纪律 · 每次拓词后重跑一遍</h4>否定清单已自动补<b>单复数</b>；<b>加介词、变语序</b>的变体（如 "board for doodle"、"tablet for writing"）机器猜不全，人工补齐。每次优化把新毕业的词加进精准组后，必须回广泛组补否定——不补，切分就漏气。<span class="pill pe">经验</span></div>';
+  $("kwOut").innerHTML=cnt+tree;
+  $("bCopyNeg").style.display=negList.length?"":"none";
+  setPV("pv4",total+" 词");
+}
+$("bCopyNeg").addEventListener("click",function(){
+  var t=negList.join("\n");
+  var done=function(){$("bCopyNeg").textContent="已复制 ✓";setTimeout(function(){$("bCopyNeg").textContent="复制否定清单";},1500);};
+  if(navigator.clipboard&&navigator.clipboard.writeText){navigator.clipboard.writeText(t).then(done,function(){fallback();});}else fallback();
+  function fallback(){var ta=document.createElement("textarea");ta.value=t;document.body.appendChild(ta);ta.select();try{document.execCommand("copy");done();}catch(e){}document.body.removeChild(ta);}
+});
+
+/* ---------- M5 quiz ---------- */
+var QUIZ=[
+ {ctx:"你卖 15.6 寸笔记本背包",term:"17 inch laptop backpack",ans:"phr",exp:"17 寸电脑放不进 15.6 寸的包，成交即退货。词组否定「17 inch」，把这条尺寸线整体拦掉。"},
+ {ctx:"你卖 15.6 寸笔记本背包",term:"13 inch laptop backpack",ans:"keep",exp:"小电脑装大包无妨——这是有效流量。16–20 寸才要否；13/14 寸保留。机器看不懂这种尺寸语义，这正是人该出手的地方。"},
+ {ctx:"你卖 15.6 寸笔记本背包",term:"laptop backpack 20 inch",ans:"phr",exp:"同一条规则换了语序：20 寸装不下。词组否定对语序不敏感，否掉「20 inch」即可覆盖。"},
+ {ctx:"你卖 15.6 寸笔记本背包",term:"laptop backpack for men",ans:"keep",exp:"人群修饰词，与产品完全相关，保留。相关但转化率一般的词，用低 bid 处理，不用否定。"},
+ {ctx:"你卖移动电站（电池储能）",term:"gas generator",ans:"phr",exp:"烧油的发电机，与电池储能完全不相关。词组否定「gas」。"},
+ {ctx:"你卖移动电站（电池储能）",term:"quiet generator",ans:"phr",exp:"「安静的发电机」是油机用户的诉求（油机才吵）——不相关，词组否定。"},
+ {ctx:"你卖移动电站（电池储能）",term:"generator",ans:"keep",exp:"课程的关键细节：generator 能匹配到用电的储能需求，只是相关度低。保留它做广泛拓词，出低价即可，不必整词毙掉——否了它，长尾一起没了。"},
+ {ctx:"你卖移动电站（电池储能）",term:"solar generator",ans:"keep",exp:"这就是你的产品在美国市场的常用叫法，核心词，保留且重点投。"},
+ {ctx:"你卖儿童 LCD 写字板，「doodle board」已毕业进精准组",term:"广泛组里现在该对 doodle board 做什么？",ans:"exa",exp:"精准否定——流量切分的收尾动作：精准组对该词单独出价，广泛组必须用 negative exact 把它切走，并补上 doodle boards 等单复数、介词、语序变体。"}
+];
+var LAB={keep:"保留",phr:"词组否定",exa:"精准否定"};
+function renderQuiz(){
+  var h="";QUIZ.forEach(function(q,i){
+    h+='<div class="quiz-item" data-i="'+i+'"><div class="qs">'+q.ctx+'</div><div class="qterm">'+q.term+'</div><div class="qops">'
+    +["keep","phr","exa"].map(function(k){return '<button class="qop" data-k="'+k+'">'+LAB[k]+'</button>';}).join("")
+    +'</div><div class="qexp">'+q.exp+'</div></div>';
+  });
+  $("quiz").innerHTML=h;$("scoreBox").style.display="none";
+  document.querySelectorAll("#quiz .qop").forEach(function(b){
+    b.addEventListener("click",function(){
+      var box=b.closest(".quiz-item");
+      box.querySelectorAll(".qop").forEach(function(o){o.classList.remove("sel");});
+      b.classList.add("sel");box.dataset.pick=b.dataset.k;
+    });
+  });
+}
+$("bGrade").addEventListener("click",function(){
+  var sc=0;
+  document.querySelectorAll("#quiz .quiz-item").forEach(function(box){
+    var i=+box.dataset.i,pick=box.dataset.pick;
+    box.querySelectorAll(".qop").forEach(function(o){
+      o.classList.remove("right","wrong");
+      if(o.dataset.k===QUIZ[i].ans)o.classList.add("right");
+      else if(o.dataset.k===pick)o.classList.add("wrong");
+    });
+    box.querySelector(".qexp").classList.add("show");
+    if(pick===QUIZ[i].ans)sc++;
+  });
+  $("scoreBox").style.display="";$("scoreV").textContent=sc+" / "+QUIZ.length;
+  setPV("pv5",sc+"/"+QUIZ.length,sc<QUIZ.length*0.6);
+});
+$("bRedo").addEventListener("click",function(){renderQuiz();setPV("pv5","—");});
+
+/* ---------- M6 LLN ---------- */
+var L={n:0,k:0,pts:[]};
+function simClicks(m){
+  var p=parseFloat($("tcvr").value)/100;
+  for(var i=0;i<m;i++){L.n++;if(Math.random()<p)L.k++;L.pts.push({n:L.n,est:L.k/L.n});}
+  drawL();
+}
+function drawL(){
+  var p=parseFloat($("tcvr").value)/100;$("tcvrV").textContent=(p*100).toFixed(1);
+  var svg=$("lln"),W=860,H=240,padL=46,padB=28,padT=14,padR=14;
+  var maxN=Math.max(120,Math.ceil(L.n*1.08));
+  var tops=L.pts.map(function(q){var e=Math.max(q.est,0.5/q.n);return e+2*Math.sqrt(e*(1-e)/q.n);});
+  var maxY=Math.min(1,Math.max(p*2.2,0.22,tops.length?Math.max.apply(null,tops)*1.05:0));
+  var X=function(n){return padL+(W-padL-padR)*(n/maxN);};
+  var Y=function(v){return padT+(H-padT-padB)*(1-v/maxY);};
+  var s="";
+  // axes
+  s+='<line x1="'+padL+'" y1="'+(H-padB)+'" x2="'+(W-padR)+'" y2="'+(H-padB)+'" stroke="#CBBB93"/>';
+  s+='<line x1="'+padL+'" y1="'+padT+'" x2="'+padL+'" y2="'+(H-padB)+'" stroke="#CBBB93"/>';
+  for(var g=0;g<=4;g++){var yv=maxY*g/4;s+='<text x="'+(padL-6)+'" y="'+(Y(yv)+4)+'" text-anchor="end" font-family="JetBrains Mono" font-size="10.5" fill="#6E6353">'+(yv*100).toFixed(0)+'%</text><line x1="'+padL+'" y1="'+Y(yv)+'" x2="'+(W-padR)+'" y2="'+Y(yv)+'" stroke="#E7DCC0" stroke-dasharray="2 4"/>';}
+  [0,0.25,0.5,0.75,1].forEach(function(f){var n=Math.round(maxN*f);s+='<text x="'+X(n)+'" y="'+(H-8)+'" text-anchor="middle" font-family="JetBrains Mono" font-size="10.5" fill="#6E6353">'+n+'</text>';});
+  // n=100 marker
+  if(maxN>=100){s+='<line x1="'+X(100)+'" y1="'+padT+'" x2="'+X(100)+'" y2="'+(H-padB)+'" stroke="#BC4B33" stroke-width="1.5" stroke-dasharray="5 4"/><text x="'+(X(100)+5)+'" y="'+(padT+12)+'" font-family="Noto Sans SC" font-size="11" fill="#BC4B33">n = 100 经验阈值</text>';}
+  // true line
+  s+='<line x1="'+padL+'" y1="'+Y(p)+'" x2="'+(W-padR)+'" y2="'+Y(p)+'" stroke="#C8893B" stroke-width="1.5" stroke-dasharray="7 4"/><text x="'+(W-padR-4)+'" y="'+(Y(p)-6)+'" text-anchor="end" font-family="Noto Sans SC" font-size="11" fill="#8A5B1E">真实 CVR</text>';
+  if(L.pts.length){
+    var up=[],dn=[];
+    L.pts.forEach(function(q){var e=Math.max(q.est,0.5/q.n);var se=Math.sqrt(e*(1-e)/q.n);up.push(X(q.n)+","+Y(Math.min(maxY,e+2*se)));dn.unshift(X(q.n)+","+Y(Math.max(0,e-2*se)));});
+    s+='<polygon points="'+up.join(" ")+" "+dn.join(" ")+'" fill="#3F7E6B" opacity="0.14"/>';
+    s+='<polyline points="'+L.pts.map(function(q){return X(q.n)+","+Y(q.est);}).join(" ")+'" fill="none" stroke="#2E5F50" stroke-width="2"/>';
+    var last=L.pts[L.pts.length-1];
+    s+='<circle cx="'+X(last.n)+'" cy="'+Y(last.est)+'" r="4" fill="#2E5F50"/>';
+  }
+  svg.innerHTML=s;
+  // readout
+  if(L.n>0){
+    var est=L.k/L.n,e2=Math.max(est,0.5/L.n),se=Math.sqrt(e2*(1-e2)/L.n);
+    $("llnN").textContent="n = "+L.n;
+    $("llnEst").textContent="估计 "+(est*100).toFixed(1)+"% · ±2σ 区间 "+Math.max(0,(est-2*se)*100).toFixed(1)+"–"+((est+2*se)*100).toFixed(1)+"%";
+    var v=$("llnV");
+    if(L.n<100){v.className="verdict mid";v.innerHTML="<h4>n = "+L.n+" &lt; 100</h4>不满足大数定律的经验阈值。区间宽 ±"+(2*se*100).toFixed(1)+" 个百分点——现在看到的高低都是噪声，<b>别据此调 bid</b>。";}
+    else{v.className="verdict";v.innerHTML="<h4>n = "+L.n+" ≥ 100</h4>区间收窄到 ±"+(2*se*100).toFixed(1)+"pp。若窗口同时通过 i.i.d. 自查（下方 B），这份 CVR 可以进 M7 做常规校准。";}
+    setPV("pv6","n="+L.n,L.n<100);
+  }else{$("llnN").textContent="n = 0";$("llnEst").textContent="估计 — · 区间 —";var v0=$("llnV");v0.className="verdict mid";v0.innerHTML="还没有数据。";setPV("pv6","—");}
+}
+$("bC20").addEventListener("click",function(){simClicks(20);});
+$("bC100").addEventListener("click",function(){simClicks(100);});
+$("bCReset").addEventListener("click",function(){L={n:0,k:0,pts:[]};drawL();});
+$("tcvr").addEventListener("input",drawL);
+
+/* ---------- M6 A/B ---------- */
+var AB={a:{n:30,k:4,p:0.13},b:{n:30,k:2,p:0.06}};
+function abRender(){
+  var a=AB.a,b=AB.b;
+  var pa=a.k/a.n,pb=b.k/b.n;
+  var sea=Math.sqrt(Math.max(pa,0.5/a.n)*(1-Math.max(pa,0.5/a.n))/a.n),seb=Math.sqrt(Math.max(pb,0.5/b.n)*(1-Math.max(pb,0.5/b.n))/b.n);
+  var pool=(a.k+b.k)/(a.n+b.n);
+  var z=(pa-pb)/Math.sqrt(pool*(1-pool)*(1/a.n+1/b.n));
+  var sig=Math.abs(z)>=1.96;
+  var row=function(nm,x,se){return '<tr><td class="t">'+nm+'</td><td>'+x.n+'</td><td>'+x.k+'</td><td>'+((x.k/x.n)*100).toFixed(1)+'%</td><td>'+Math.max(0,((x.k/x.n)-1.96*se)*100).toFixed(1)+'–'+(((x.k/x.n)+1.96*se)*100).toFixed(1)+'%</td></tr>';};
+  $("abOut").innerHTML='<table><thead><tr><th>词</th><th>点击</th><th>订单</th><th>CVR</th><th>95% 置信区间</th></tr></thead><tbody>'+row("A",a,sea)+row("B",b,seb)+'</tbody></table>'
+  +'<div class="verdict '+(sig?"":"mid")+'"><h4>'+(sig?"现在可以区分了":"区分不出")+'</h4>双比例 z = '+z.toFixed(2)+(sig?' ≥ 1.96：A 显著优于 B，按各自实测 CVR 分别校准 bid（bid = CPS × CVR，A 出得起更高的价）。':' &lt; 1.96：两个区间大幅重叠，"13.3% vs 6.7%" 的差距完全可能是运气。此时把 A 的 bid 提上去、把 B 砍掉，都是在对噪声下注——正确动作是继续买数据，或按同一 bid 处理。')+'<span class="pill pr">原理</span></div>';
+}
+$("bAB").addEventListener("click",function(){
+  [["a",AB.a],["b",AB.b]].forEach(function(t){var x=t[1];for(var i=0;i<170;i++){x.n++;if(Math.random()<x.p)x.k++;}});
+  abRender();
+});
+$("bABr").addEventListener("click",function(){AB={a:{n:30,k:4,p:0.13},b:{n:30,k:2,p:0.06}};abRender();});
+
+/* ---------- M6 iid ---------- */
+function iid(){
+  var miss=[];
+  if(!$("ck1").checked)miss.push("窗口内改过售价（跨价数据非同分布）");
+  if(!$("ck2").checked)miss.push("跨了大促（大促期分布完全不同）");
+  if(!$("ck3").checked)miss.push("含近 3 天（反作弊回扣 + 归因未稳，SP 会出现「点击 0 订单 1」）");
+  $("iidOut").innerHTML=miss.length?'<div class="verdict bad"><h4>数据不可用于常规优化</h4>'+miss.join("；")+'。剔除相应区段或换窗口再取。</div>':'<div class="verdict"><h4>通过</h4>窗口内同价、无大促、已剔近 3 天——满足 i.i.d.，取「就近的这一个月」即可，不必贪多。</div>';
+}
+["ck1","ck2","ck3"].forEach(function(id){$(id).addEventListener("change",iid);});
+
+/* ---------- M7 diagnosis ---------- */
+$("bDiag").addEventListener("click",function(){
+  var clicks=num("dgClicks"),orders=num("dgOrders"),spend=num("dgSpend"),cur=num("dgBid"),days=num("dgDays"),win=num("dgWin");
+  var out=[],pvTxt="",pvNeg=false;
+  var card=function(cls,title,body){out.push('<div class="verdict '+cls+'"><h4>'+title+'</h4>'+body+'</div>');};
+
+  /* 数据准入 */
+  var tainted=false;
+  if($("dg3d").checked){card("bad","① 数据准入 · 含近 3 天","反作弊会回扣点击、SP 订单按购买日归因（点击计在点击日）——近 3 天的 CVR/CPS 系统性失真。剔除后重取，再回来诊断。");tainted=true;}
+  if($("dgPrice").checked){card("bad","① 数据准入 · 非 i.i.d.","窗口内改过价或跨了大促——不同售价/大促下的点击不是同一个分布，不能混在一起相除。只保留同价、非大促的连续区段。<span class='pill pr'>原理</span>");
+    $("dgOut").innerHTML=out.join("");setPV("pv7","数据不可用",true);return;}
+
+  /* 变态三种 */
+  var abnormal=false;
+  if($("dgBudget").checked){abnormal=true;card("mid","② 变态 · 超预算 / 花不出钱","1 天内响应：对全组 bid <b>等比例</b>调整（不需要工具）。超预算本不该出现——预算设高、用 bid 控花费；花不出钱则等比例上调（单次 ≤30%）。");}
+  if($("dgHoliday").checked){abnormal=true;card("mid","② 变态 · 节日 / 特殊事件","天天盯，等比例调。旺季可以提 bid：转化率更高 + 需要加速库存周转；大促建议单开 campaign 与日常解耦。");}
+  if($("dgGoal").checked){abnormal=true;card("mid","② 变态 · 目标变更","只改 CPS 目标即可：bid = CPS × CVR，改 CPS 会对整组所有词等比例传导，无需逐词动手。");}
+
+  /* 常态 */
+  if(win>60)card("mid","窗口提示","窗口 "+win+" 天 &gt; 60 天，容易跨到不同分布的月份。常规优化取就近 30–45 天即可。");
+  if(clicks<100){
+    var body="点击 n = "+clicks+" &lt; 100，不满足大数定律——现在算出的 CVR 是噪声，<b>不要按它调 bid</b>。";
+    if(orders===0&&clicks>0){
+      var ub=Math.min(1,3/clicks);
+      body+="<br>零订单的补充判断（3/n 法则）：CVR 的 95% 置信上界 ≈ "+(ub*100).toFixed(1)+"%。即使按这个上界，你能出的价也只有 目标CPS × "+(ub*100).toFixed(1)+"% = "+fm(S.tgt*ub)+(cur>S.tgt*ub?"，已低于当前 bid "+fm(cur)+" → <b>降 bid（≤30% 一步）或直接否定该词</b>":"，暂可继续观察")+"。";
+    }else{body+=" 继续积累数据；着急就提流量（降方差唯一的路是加 n），别提刀。";}
+    card(clicks<100&&orders===0&&clicks>=60?"bad":"mid","③ 常态前置 · 大数定律",body);
+    finishTxt("样本不足");
+    return;
+  }
+  if(!abnormal&&days<30){card("mid","③ 常态 · 节奏","距上次常规优化 "+days+" 天 &lt; 30。常规优化的本质是重新校准每个词的 CVR，30–60 天一次即可（最长两个月）——高频折腾只是在对噪声做出反应。");finishTxt("等到 30 天");return;}
+
+  var cvr=orders/clicks, cps=orders>0?spend/orders:Infinity;
+  var stat="实测 CVR = "+(cvr*100).toFixed(1)+"%（"+orders+" 单 / "+clicks+" 击）· 实测 CPS = "+(orders>0?fm(cps):"∞")+" · 目标 CPS = "+fm(S.tgt)+" · 盈亏平衡 = "+fm(S.be)+"。";
+  if(orders>0&&cps<=S.tgt)card("","④ 财务判定 · 达标",stat+" 每单还剩 "+fm(S.gross-cps)+" 净利，达成目标。可以考虑小步提 CPS 目标换量（步长 ≤30%）。");
+  else if(orders>0&&cps<=S.be)card("mid","④ 财务判定 · 吃利润但未亏",stat+" 落在目标与盈亏平衡之间：每单仍剩 "+fm(S.gross-cps)+"，但低于目标净利 "+fm(S.pi)+"。按下面的新 bid 校准，把 CPS 拉回目标。");
+  else card("bad","④ 财务判定 · 每单在亏",stat+" 超过盈亏平衡——每单亏 "+fm(cps-S.be)+"。除非处于启动期冲量 / 清库存（§4.12 的生命周期理由），否则必须降。");
+
+  var ideal=S.tgt*cvr;
+  var lo=cur*0.7,hi=cur*1.3,nb=Math.min(hi,Math.max(lo,ideal)),clamped=(ideal<lo-1e-9||ideal>hi+1e-9);
+  card("","⑤ 动作 · 按 CVR 校准 bid","理论 bid = 目标CPS × 实测CVR = "+fm(S.tgt)+" × "+(cvr*100).toFixed(1)+"% = <b>"+fm(ideal)+"</b>。当前 "+fm(cur)+"，"+(clamped?("一步到位超出 ±30% 护栏，本次先调到 <b>"+fm(nb)+"</b>（"+((nb-cur)/cur*100).toFixed(0)+"%），下个周期再走剩下的。"):("直接调到 <b>"+fm(nb)+"</b>（"+((nb-cur)/cur*100).toFixed(0)+"%），在护栏内。"))+"<br>同一轮里把三件事做完：<b>拓词</b>（搜索词报告收长尾进精准/广泛）→ <b>否定</b>（词组屏蔽不相关 + 新毕业词回广泛组精准否定）→ <b>调价</b>（本条）。");
+
+  if(clicks>=150&&S.cvr>0&&cvr<S.cvr*0.6){
+    card("bad","⑥ 产品警报 · 广告救不了它","点击已经充足（n="+clicks+"）而 CVR 持续只有预期的 "+((cvr/S.cvr)*100).toFixed(0)+"%——排名与转化的<b>期望</b>由 listing 决定，运营只能降方差、改不了期望（§3.4，可证明）。别再加价买流量：去改主图 / 价格 / 评价，或者承认这个词与产品不匹配，换词、换品。");
+  }
+  finishTxt(orders>0&&cps>S.be?"每单亏 "+fm(cps-S.be):"新 bid "+fm(nb));
+
+  function finishTxt(t){$("dgOut").innerHTML=out.join("");pvTxt=t;pvNeg=/亏|不可用|不足/.test(t);setPV("pv7",pvTxt,pvNeg);}
+});
+
+/* ---------- topnav scrollspy ---------- */
+var navLinks=[].slice.call(document.querySelectorAll("#topnav a"));
+var navTargets=navLinks.map(function(a){return document.getElementById(a.getAttribute("href").slice(1));});
+var tick=false;
+window.addEventListener("scroll",function(){
+  if(tick)return;tick=true;
+  requestAnimationFrame(function(){
+    var mid=window.innerHeight*0.35,cur=-1;
+    for(var i=0;i<navTargets.length;i++){if(navTargets[i].getBoundingClientRect().top<=mid)cur=i;}
+    navLinks.forEach(function(a,i){a.classList.toggle("on",i===cur);});
+    tick=false;
+  });
+},{passive:true});
+
+/* ---------- init ---------- */
+recompute();
+ctl();ops();
+roll();
+renderQuiz();
+drawL();
+abRender();
+iid();
+})();
+</script>
+</body>
+</html>

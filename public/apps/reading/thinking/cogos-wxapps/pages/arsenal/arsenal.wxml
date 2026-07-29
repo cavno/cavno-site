@@ -1,0 +1,49 @@
+<view class="wrap safe">
+  <view class="sechead"><text class="idx">三</text><text class="t">概念武器库</text><text class="en">ARSENAL</text></view>
+  <view class="seclead">实验室里每一个相变背后的系统论硬核概念。点击卡片展开深注与判词。</view>
+
+  <view wx:for="{{arsenal}}" wx:key="n" class="card acard {{item.open?'open':''}}"
+    data-i="{{index}}" bindtap="onCard">
+    <view class="an">{{item.n}}</view>
+    <view class="ae">{{item.en}}</view>
+    <view class="ab">{{item.by}}</view>
+    <text class="apos">出场: {{item.pos}}</text>
+    <view class="adef">{{item.def}}</view>
+    <view class="adeep" wx:if="{{item.open}}">{{item.deep}}</view>
+    <view class="more">{{item.open?'▾ 收起':'▸ 点击展开深注与判词'}}</view>
+  </view>
+
+  <view class="sechead"><text class="idx">四</text><text class="t">核心洞察</text><text class="en">INSIGHTS</text></view>
+  <view class="seclead">为什么这个方法能推导几乎一切。</view>
+  <view wx:for="{{insights}}" wx:key="index" class="card ins">
+    <text class="no">{{nos[index]}}</text>
+    <view class="it">{{item[0]}}</view>
+    <view class="id">{{item[1]}}</view>
+  </view>
+
+  <view class="sechead"><text class="idx">五</text><text class="t">两笔结算</text><text class="en">SETTLEMENT</text></view>
+  <view class="seclead">系统论在这两点上不只是描述工具，而是立场的盟友——而且是比维特根斯坦<text class="b">更具操作性</text>的盟友。</view>
+
+  <view class="card setcard">
+    <text class="big">壹</text>
+    <view class="sh">坐实语言极限 / 哥德尔式立场</view>
+    <view class="sp">不完备、盲点、悖论，被系统论严格锁在<text class="bt">观察系统这一侧</text>——它们是「观察的形式」的属性，不是「被观察的存在」的结构。von Foerster 与 Luhmann 反复强调：悖论在区分的运作里，不在世界里。</view>
+    <view class="pj">悖论暴露的是工具的极限，不是存在的结构。维特根斯坦—哥德尔—塔尔斯基一系，在此获得系统论的工程学背书。</view>
+  </view>
+  <view class="card setcard">
+    <text class="big">贰</text>
+    <view class="sh">去本体论化的黑格尔</view>
+    <view class="sp">黑格尔把再进入、矛盾、否定之否定<text class="bt">放进了存在本身</text>。Luhmann 把那台辩证引擎原封保留，却只让它在观察 / 沟通系统的操作里运转，坚决拒绝将其升格为存在的结构。</view>
+    <view class="pj">承认辩证法的机制，否认辩证法的本体论：矛盾驱动的是系统，永远不是自在之物。引擎从「存在的发动机舱」被拆下，装回了它本该待的地方——观察者的工作台。</view>
+  </view>
+
+  <view class="coda">
+    <view class="ch">诚实的残余</view>
+    <view class="cp">系统论自己也跑不出它所描述的那条律。「用系统论观察逻辑系统」这个动作本身，就是又一次再进入——它必须用「系统 / 环境」这个区分来看一切，而它看不见自己正站在这个区分上。它的盲点，就在它划下那一刀的刀刃上。地图终究画进了它自己要描绘的疆域。它没有比它所分析的对象站得更高——它只是把那座无穷塔又往上添了一层，并且诚实地知道：自己添的是一层，而非顶层。</view>
+  </view>
+
+  <view class="footer">
+    <text class="fl">安装区分 → 梦想闭合 → 撞上变异度铁律 → 再进入危机 → 层级解悖 → 打开成生态</text>
+    <text class="fl">ἐποχή，从终点到引擎舱。</text>
+  </view>
+</view>

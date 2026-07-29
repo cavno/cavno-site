@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html lang="zh-CN"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Logos 系统动力学 · 二元张力驱动的哲学系统演化</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600&family=GFS+Didot&family=Noto+Serif+SC:wght@400;500;600;700&family=JetBrains+Mono&display=swap" rel="stylesheet">
+<style>
+:root{--parch:#f3ebda;--pl:#faf4e6;--ink:#1c1916;--soft:#3a342c;--fade:#6e6253;--terr:#a73e2c;--terrd:#7e2d1f;--aeg:#1d4e5f;--gold:#b8893a;--pur:#6d4a8f;--grn:#3f7a52;--grey:#8a7f6d;--line:rgba(28,25,22,.12);--ls:rgba(28,25,22,.26);--serif:"Noto Serif SC",Georgia,serif;--disp:"Cormorant Garamond","Noto Serif SC",serif;--greek:"GFS Didot","Noto Serif SC",serif;--mono:"JetBrains Mono",monospace}
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:var(--parch);background-image:radial-gradient(ellipse at top left,rgba(184,137,58,.06),transparent 50%);color:var(--ink);font-family:var(--serif);font-size:15px;line-height:1.65;overflow:hidden}
+.app{height:100vh;display:flex;flex-direction:column}
+header{flex:none;border-bottom:1px solid var(--line);background:rgba(243,235,218,.95);padding:10px 20px 8px}
+.hbar{display:flex;align-items:baseline;gap:12px;flex-wrap:wrap}
+h1{font-family:var(--disp);font-weight:600;font-size:21px;white-space:nowrap}
+.latin{font-family:var(--greek);font-size:11px;letter-spacing:.16em;color:var(--terr);text-transform:uppercase}
+.sub{font-size:12px;color:var(--fade)}
+.ctrl{margin-left:auto;display:flex;gap:7px;align-items:center}
+.btn{font-size:12.5px;color:var(--soft);background:var(--pl);border:1px solid var(--ls);border-radius:16px;padding:4px 13px;cursor:pointer;white-space:nowrap}
+.btn:hover{border-color:var(--terr);color:var(--terr)}.btn.on{background:var(--ink);color:var(--pl)}
+.timeline{display:flex;gap:3px;margin-top:8px;overflow-x:auto;padding-bottom:2px}
+.tk{flex:none;font-size:10.5px;font-family:var(--mono);color:var(--fade);border:1px solid var(--line);border-radius:10px;padding:2px 8px;cursor:pointer;background:var(--pl);white-space:nowrap}
+.tk:hover{border-color:var(--terr);color:var(--terr)}
+.tk.cur{background:var(--ink);color:var(--pl);border-color:var(--ink)}
+.tk.blast{border-color:var(--terrd);color:var(--terrd);font-weight:700}
+.tk.blast.cur{background:var(--terrd);color:#fff}
+.main{flex:1;display:flex;min-height:0}
+.center{flex:1;display:flex;flex-direction:column;min-width:0}
+.diagram{flex:1;min-height:0;overflow:auto;padding:4px 8px}
+.diagram svg{display:block;margin:0 auto;max-width:100%}
+.chartwrap{flex:none;height:148px;border-top:1px solid var(--line);background:var(--pl);padding:4px 10px 2px}
+.panel{width:392px;flex:none;border-left:1px solid var(--line);background:var(--pl);overflow-y:auto;padding:14px 18px 40px}
+.eyebrow{font-family:var(--greek);font-size:11px;letter-spacing:.2em;color:var(--terr);text-transform:uppercase;margin-bottom:6px}
+.p-name{font-family:var(--disp);font-size:21px;font-weight:600;line-height:1.2}
+.p-era{font-size:11.5px;color:var(--fade);font-family:var(--mono);margin:2px 0 10px}
+.blk{border-radius:9px;padding:10px 12px;margin-bottom:10px;font-size:13px;line-height:1.66;background:rgba(29,78,95,.06);border-left:3px solid var(--aeg)}
+.blk h4{font-family:var(--greek);font-size:10px;letter-spacing:.16em;text-transform:uppercase;margin-bottom:4px;color:var(--aeg)}
+.blk.fire{background:rgba(167,62,44,.07);border-left-color:var(--terr)}.blk.fire h4{color:var(--terr)}
+.blk.act{background:rgba(63,122,82,.08);border-left-color:var(--grn)}.blk.act h4{color:var(--grn)}
+.chips{display:flex;flex-wrap:wrap;gap:5px;margin-top:4px}
+.chip{font-size:11.5px;color:var(--soft);background:var(--parch);border:1px solid var(--ls);border-radius:13px;padding:2px 10px}
+.chip.hot{border-color:var(--terrd);color:var(--terrd);font-weight:600}
+.dstat{display:flex;gap:8px;margin-bottom:10px}
+.stat{flex:1;background:var(--parch);border:1px solid var(--line);border-radius:9px;padding:6px 9px}
+.stat .k{font-size:10px;color:var(--fade);letter-spacing:.06em}
+.stat .v{font-family:var(--mono);font-size:17px;font-weight:600}
+.guide p{font-size:13px;line-height:1.7;margin-bottom:9px;color:var(--soft)}
+.guide h3{font-family:var(--disp);font-size:19px;font-weight:600;margin-bottom:8px}
+.guide em{color:var(--terr);font-style:italic}.guide strong{color:var(--ink)}.guide .mini{font-size:12px;color:var(--fade)}
+/* svg diagram */
+.sd-lab{font-family:var(--greek);letter-spacing:.14em;text-transform:uppercase;fill:var(--fade)}
+.sd-t{font-family:var(--serif);fill:var(--ink)}
+.el{cursor:pointer}
+.el:hover .elbox{stroke:var(--terr);stroke-width:2}
+.elbox{fill:var(--pl);stroke:var(--ls);stroke-width:1.4;transition:all .25s}
+.flow{fill:none;stroke:var(--grey);stroke-width:1.6}
+.floop{fill:none;stroke-width:2}
+.selfloop{stroke:var(--terrd);stroke-dasharray:5 4;transition:all .3s}
+.selfloop.armed{stroke-width:3.2;filter:drop-shadow(0 0 3px rgba(167,62,44,.7))}
+@keyframes blastflash{0%,100%{opacity:.25}50%{opacity:1}}
+.blasting{animation:blastflash .5s 3}
+.tanksh{transition:height .5s,y .5s}
+.bndry{fill:none;stroke:var(--aeg);stroke-width:2;stroke-dasharray:9 6;transition:all .6s}
+.corner{transition:opacity .4s}
+.corner.off{opacity:.18}
+</style></head><body><div class="app">
+<header>
+ <div class="hbar"><h1>Logos 系统动力学</h1><span class="latin">System Dynamics of Logos</span><span class="sub">二元张力＝动力 · 三角＝约束 · 自指回路＝故障源 · 棘轮＝进步</span>
+ <div class="ctrl"><button class="btn" id="bPrev">‹ 上一步</button><button class="btn" id="bPlay">▶ 演化</button><button class="btn" id="bNext">下一步 ›</button><button class="btn" id="bReset">↺ 复位</button></div></div>
+ <div class="timeline" id="tl"></div>
+</header>
+<div class="main">
+ <div class="center">
+  <div class="diagram"><svg id="sd" xmlns="http://www.w3.org/2000/svg"></svg></div>
+  <div class="chartwrap"><svg id="ch" width="100%" height="140" xmlns="http://www.w3.org/2000/svg"></svg></div>
+ </div>
+ <aside class="panel" id="panel"></aside>
+</div></div>
+<script>
+/* ============ 事件驱动的系统动力学模型 ============ */
+/* stocks: C 确定性储备 / T 二元张力 / K 边界知识(棘轮,只增) ; anchor 支点 ; tri 三角保留角 ; bshrink 边界档位 0-3 */
+const EV=[
+{y:"前600",name:"开机：米利都",st:1,anchor:"本原(世界之内)",tri:"ABC",bs:0,C:55,T:12,K:0,ops:["神话—理性","自然—约定"],loop:"R1",
+ what:"解释权换轨：叙事让位于可反驳命题。增强回路 R1 启动——追问产生对立，对立产生更多追问。",
+ sys:"系统上线：支点第一站选址「世界之内」；审计引擎(给出理由)与承诺三角 A/B/C 同时签约。"},
+{y:"前540",name:"本原之墙",st:1,anchor:"本原(世界之内)",tri:"ABC",bs:0,C:58,T:24,K:2,ops:["无定—有限","一—多"],loop:"R1",
+ what:"终极性追问分析地蕴含两墙：本原须无界又须为一。张力存量开始累积——这是燃料，不是故障。",
+ sys:"R1 正反馈运转中：每答一问生两问；对立应力登记簿开页。"},
+{y:"前515",name:"公设上膛：巴门尼德",st:1,anchor:"本原(世界之内)",tri:"ABC",bs:0,C:72,T:38,K:3,ops:["思维—存在","真理—意见"],loop:"R1",
+ what:"「可思即可在」把必然性(A)拉满——确定性储备冲高；但审计引擎的炮口已对准支点自身：自指回路上膛。",
+ sys:"危险状态：A 角满载 + 自指回路 armed。独断的稳定正在孕育不稳定(明斯基前夜·第一次)。"},
+{y:"前490",name:"★ 爆点一：巴门尼德冲击",st:1,anchor:"本原(已炸)",tri:"AC",bs:0,C:15,T:78,K:14,ops:["存在—非存在"],loop:"SELF",blast:true,
+ what:"审计标准应用于标准自身：思想以可思性审判存在，而思想在存在之内——自反，自爆。运动、变化、多被宣布不可能；确定性储备崩落。",
+ sys:"故障机理＝自指回路闭合。棘轮 +14：「世界之内的支点会在自我担保处炸毁」写入边界知识——此后永不清零。"},
+{y:"前380",name:"缝合Ⅰ：柏拉图两世界",st:1,anchor:"理念(世界之内·上层)",tri:"ABC",bs:0,C:46,T:60,K:16,ops:["现象—本体","感性—理性"],loop:"B1",
+ what:"调节回路 B1 启动：张力过载→部署缝合策略(空间切割：变与不变各居一界)→张力回落。代价：世界被切成两半。",
+ sys:"策略库 S3 雏形(域切割)。张力未清零——鸿沟本身成为新应力点(个别—共相待爆)。"},
+{y:"前340",name:"缝合Ⅱ：亚里士多德机件",st:1,anchor:"形式(内在于世界)",tri:"ABC",bs:0,C:62,T:46,K:22,ops:["形式—质料","潜能—现实","个别—共相"],loop:"B1",
+ what:"定制件入库：潜能/现实专堵「变化不可能」；同时 Γ 卷立法——矛盾律不可证明但反驳者开口即自缚：可行域形状被明文守卫。",
+ sys:"棘轮 +6：边界的第一次明文立法。系统进入希腊行程的最高稳态。"},
+{y:"前300",name:"战场转移：希腊化",st:1,anchor:"内心城堡",tri:"ABC",bs:0,C:50,T:52,K:24,ops:["必然—自由","德性—快乐","灵魂—肉体"],loop:"R1",
+ what:"城邦解体砍掉宇宙论预算：张力沿瀑布下泄——同批对立以伦理形态复现。确定性工程收缩为内心工程。",
+ sys:"洞的迁移定律首次完整显形：理论受挫，追问下移一级。"},
+{y:"前270",name:"停机让位：皮浪悬置",st:1,anchor:"（空缺）",tri:"B",bs:1,C:22,T:30,K:32,ops:["悬置—不动心"],loop:"HALT",
+ what:"阿格里帕三难开出不可行性证书：理由链无法收口。系统选择停机——不锯任何梁，离开桌子。张力以放弃判断的方式泄压。",
+ sys:"棘轮 +8：三难清单入库。但停机＝让位：确定性岗位空缺，真空必然被接管。边界收缩第一档：思≠全能。"},
+{y:"400",name:"第二站上岗：神(总中介)",st:2,anchor:"神(世界之上·唯一自因)",tri:"AC",bs:1,C:88,T:18,K:34,ops:["无限—有限","神圣—世俗"],loop:"B2",
+ what:"确定性断供由教会接管：S1 特许豁免——审计(B)在一点封顶，自我奠基在神处独家合法。全部二分被一次性焊死，张力被强担保压至低位。",
+ sys:"高储备低张力的建制稳态。代价挂账：B 角被外包，豁免点将是下一代第一个攻击目标。"},
+{y:"1270",name:"经院盛期：区分术",st:2,anchor:"神(双重权威)",tri:"AC",bs:1,C:82,T:30,K:44,ops:["唯实—唯名","个别—共相(续审)"],loop:"B1",
+ what:"镣铐内雕花：类比学说、指代理论、insolubilia 建档——说谎者研究在此存档。调和术把「X与Y如何同真」磨到极限。",
+ sys:"棘轮 +10：语义警觉(分层意识)提前入库——塔尔斯基的预演。"},
+{y:"1320",name:"内部拆解：奥卡姆",st:2,anchor:"神(意志优先)",tri:"AC",bs:1,C:64,T:44,K:48,ops:["必然—偶然"],loop:"R1",
+ what:"意志主义掏空必然(神本可另立一切)，剃刀削尽共相——世界变得彻底偶然，而彻底偶然的世界只能靠观察认识。",
+ sys:"中世纪自己播下近代的种子：担保建制被内部削剥，储备下行。"},
+{y:"1610",name:"执照吊销：科学革命",st:2,anchor:"神(名存实亡)",tri:"AC",bs:1,C:30,T:66,K:52,ops:["超自然—自然","目的因—动力因"],loop:"R1",
+ what:"新供给商(实验数学法团)上市：奇迹判为不合语法，神从干预者改聘为立法者再逼退到创世。自因执照作废。",
+ sys:"被总中介焊死的全部二分同时重新开裂，且多裂出自我、政治两域——张力回涌。"},
+{y:"1641",name:"第三站打桩：我思",st:3,anchor:"主体(我思＋请神垫板)",tri:"AB",bs:1,C:55,T:58,K:56,ops:["怀疑—确定","心灵—广延"],loop:"B1",
+ what:"良性自指打桩：怀疑行为自证怀疑者——支点是行为不是教条。但契合仍靠「诚实的上帝」后门担保；心物裂缝铸成本体。",
+ sys:"支点第三站选址「主体之内」；旧担保人以认识论顾问身份返聘——账未结清。"},
+{y:"1714",name:"独断稳态：PSR 立法",st:3,anchor:"主体(理性演绎)",tri:"AC",bs:1,C:70,T:64,K:58,ops:["逻辑必然—经验或然","必然—自由"],loop:"R1",
+ what:"莱布尼茨把充足理由律抬为最高公理，前定和谐让神升格为程序员；沃尔夫教科书化。表面稳定，审计缺口在扩大。",
+ sys:"明斯基前夜·第二次：独断的稳定正在孕育休谟的挤兑——自指回路再度上膛。"},
+{y:"1739",name:"★ 爆点二：休谟冲击",st:3,anchor:"主体(已炸)",tri:"B",bs:1,C:14,T:88,K:74,ops:["因果—习惯","观念关系—事实","是—应当","实体自我—知觉束"],loop:"SELF",blast:true,
+ what:"经验论以「观念须有印象」审计观念，而这条标准自己就是观念——自反，自爆。因果、归纳、自我、价值地基四连崩；审计员把自己审掉。",
+ sys:"与爆点一同一逻辑事件。棘轮 +16：休谟之叉、是应当铡刀、知觉束——全部入库为永久边界知识。"},
+{y:"1781",name:"缝合Ⅲ：康德形式之桥",st:3,anchor:"先验形式(范畴·统觉)",tri:"AB",bs:2,C:74,T:40,K:88,ops:["现象—物自体","接受性—自发性","理论—实践理性"],loop:"B1",
+ what:"支点换型：从实体改为形式——契合被制造，担保人正式退休。S3 域限制：必然只在现象界成立；C 角被自愿弃掉，且弃得明码标价。",
+ sys:"系统史上第一次：支点在落成典礼上公布自己的适用范围。边界收缩第二档：可思≠可认识。棘轮 +14。"},
+{y:"1784",name:"成年礼：启蒙收口",st:3,anchor:"先验形式(自我立法)",tri:"AB",bs:2,C:72,T:34,K:90,ops:["未成年—成年","君权神授—契约"],loop:"B1",
+ what:"认识论革命外推为社会建制：三大法则各自成年(科学/契约/自律)。成年＝自我立法＋自知界限——去掉后半句即自我封神。",
+ sys:"与皮浪停机对照：同为边界意识，悬置是让位(留下真空)，成年是立法(留下权限规范)——所以近代终点直接成为现代起点。"},
+{y:"1931",name:"第四站：边界定理化",st:4,anchor:"语言与逻辑(形式系统)",tri:"AB",bs:3,C:68,T:28,K:100,ops:["可说—不可说","可证—真"],loop:"THEOREM",
+ what:"哥德尔：一致系统不能自证一致；塔尔斯基：语言不能自含真谓词。两千年搜索日志被压缩成一行证明——自我奠基不可能，是结构不是失误。",
+ sys:"棘轮触顶：边界本身成为定理。系统进入有界稳态——不再寻找总支点，改为输出可行解＋不可达域证明。边界收缩第三档：可知≠可说。"},
+];
+const OPS={};
+/* ============ 布局与渲染 ============ */
+const W=760,H=560;
+let cur=0,timer=null;
+function el(id){return document.getElementById(id)}
+function buildTL(){el("tl").innerHTML=EV.map((e,i)=>`<span class="tk ${e.blast?"blast":""}" data-i="${i}">${e.y}·${e.name.replace(/^★ /,"")}</span>`).join("");
+ el("tl").querySelectorAll(".tk").forEach(t=>t.addEventListener("click",()=>go(+t.dataset.i)));}
+function diagram(){
+ const e=EV[cur];
+ const triOn=c=>e.tri.includes(c);
+ const bshift=e.bs*26; /* boundary shrink px per档 */
+ const Cv=e.C,Tv=e.T,Kv=e.K;
+ const tank=(x,y,w,h,val,col,lab,id)=>{
+  const fh=h*val/100;
+  return `<g class="el" data-el="${id}"><rect class="elbox" x="${x}" y="${y}" width="${w}" height="${h}" rx="8"/>
+  <rect class="tanksh" x="${x+3}" y="${y+h-3-fh}" width="${w-6}" height="${fh}" rx="5" fill="${col}" opacity=".75"/>
+  <text class="sd-t" x="${x+w/2}" y="${y-8}" font-size="12" text-anchor="middle" font-weight="600">${lab}</text>
+  <text class="sd-t" x="${x+w/2}" y="${y+h/2+4}" font-size="15" text-anchor="middle" font-weight="700" font-family="var(--mono)">${val}</text></g>`};
+ let s="";
+ /* 环境 */
+ s+=`<text class="sd-lab" x="${W/2}" y="22" font-size="11" text-anchor="middle">环境 · 世界自身 / 物自体 / 不可说者</text>`;
+ /* 系统边界（随档位收缩） */
+ s+=`<rect class="bndry" x="${34+bshift}" y="${40+bshift*0.5}" width="${W-68-bshift*2}" height="${H-90-bshift}" rx="20"/>`;
+ s+=`<text class="sd-lab" x="${44+bshift}" y="${58+bshift*0.5}" font-size="10.5">系统边界 · ${["思＝在(可思即实在)","思≠全能(悬置后)","可思≠可认识(批判后)","可知≠可说(定理化)"][e.bs]}</text>`;
+ /* 支点 anchor */
+ const ax=W/2-105,ay=92;
+ s+=`<g class="el ${e.blast?"blasting":""}" data-el="anchor"><rect class="elbox" x="${ax}" y="${ay}" width="210" height="56" rx="12" ${e.blast?'stroke="#7e2d1f" stroke-width="2.5"':""}/>
+ <text class="sd-lab" x="${W/2}" y="${ay+18}" font-size="10" text-anchor="middle">支点 · 担保人（第${["一","一","一","一","一","一","一","一","一","二","二","二","二","三","三","三","三","三","四"][cur]||"—"}站）</text>
+ <text class="sd-t" x="${W/2}" y="${ay+41}" font-size="15.5" text-anchor="middle" font-weight="700">${e.anchor}</text></g>`;
+ /* 审计引擎 */
+ const qx=100,qy=205;
+ s+=`<g class="el" data-el="audit"><rect class="elbox" x="${qx}" y="${qy}" width="150" height="52" rx="10"/>
+ <text class="sd-t" x="${qx+75}" y="${qy+22}" font-size="13.5" text-anchor="middle" font-weight="600">审计引擎</text>
+ <text class="sd-t" x="${qx+75}" y="${qy+40}" font-size="11" text-anchor="middle" fill="var(--fade)">给出理由 · PSR / 诘问</text></g>`;
+ /* 对立登记簿 */
+ const rx=W-260,ry=205;
+ s+=`<g class="el" data-el="reg"><rect class="elbox" x="${rx}" y="${ry}" width="160" height="52" rx="10"/>
+ <text class="sd-t" x="${rx+80}" y="${ry+22}" font-size="13.5" text-anchor="middle" font-weight="600">对立应力登记簿</text>
+ <text class="sd-t" x="${rx+80}" y="${ry+40}" font-size="11" text-anchor="middle" fill="var(--fade)">41 组 · 二元张力源</text></g>`;
+ /* 策略库 */
+ const sx=W/2-80,sy=300;
+ s+=`<g class="el" data-el="strat"><rect class="elbox" x="${sx}" y="${sy}" width="160" height="50" rx="10"/>
+ <text class="sd-t" x="${sx+80}" y="${sy+21}" font-size="13.5" text-anchor="middle" font-weight="600">缝合策略库 S1–S6</text>
+ <text class="sd-t" x="${sx+80}" y="${sy+38}" font-size="10.5" text-anchor="middle" fill="var(--fade)">豁免·外包·限域·降格·解散·本体化</text></g>`;
+ /* 三角约束 */
+ const tx=112,ty=372;
+ s+=`<g class="el" data-el="tri"><polygon points="${tx},${ty+64} ${tx+124},${ty+64} ${tx+62},${ty}" fill="none" stroke="var(--ls)" stroke-width="1.6"/>
+ <text class="sd-lab" x="${tx+62}" y="${ty+92}" font-size="10" text-anchor="middle">约束 · 不可能三角(弃一角方可运行)</text>
+ <g class="corner ${triOn("A")?"":"off"}"><circle cx="${tx+62}" cy="${ty}" r="13" fill="var(--aeg)"/><text x="${tx+62}" y="${ty+4.5}" font-size="12" text-anchor="middle" fill="#fff" font-weight="700">A</text></g>
+ <g class="corner ${triOn("B")?"":"off"}"><circle cx="${tx}" cy="${ty+64}" r="13" fill="var(--gold)"/><text x="${tx}" y="${ty+68.5}" font-size="12" text-anchor="middle" fill="#fff" font-weight="700">B</text></g>
+ <g class="corner ${triOn("C")?"":"off"}"><circle cx="${tx+124}" cy="${ty+64}" r="13" fill="var(--pur)"/><text x="${tx+124}" y="${ty+68.5}" font-size="12" text-anchor="middle" fill="#fff" font-weight="700">C</text></g></g>`;
+ /* 存量：张力 / 棘轮 / 确定性 */
+ s+=tank(W-236,352,62,110,Tv,"#a73e2c","张力 T","T");
+ s+=tank(W-152,352,62,110,Kv,"#3f7a52","棘轮 K","K");
+ s+=tank(W-320,352,62,110,Cv,"#1d4e5f","储备 C","Cs");
+ /* 流与回路 */
+ s+=`<defs><marker id="ar" markerWidth="9" markerHeight="9" refX="6.5" refY="3" orient="auto"><path d="M0,0 L7,3 L0,6 Z" fill="var(--grey)"/></marker>
+ <marker id="arR" markerWidth="9" markerHeight="9" refX="6.5" refY="3" orient="auto"><path d="M0,0 L7,3 L0,6 Z" fill="#7e2d1f"/></marker></defs>`;
+ s+=`<path class="flow" d="M${qx+150},${qy+26} C${W/2-60},${qy+26} ${W/2-40},150 ${ax+40},148" marker-end="url(#ar)"/>`;/* audit->anchor 正常审计 */
+ s+=`<path class="flow" d="M${ax+210},148 C${rx-30},150 ${rx-10},${qy+10} ${rx+6},${qy+16}" marker-end="url(#ar)"/>`;/* anchor缺口->登记簿 */
+ s+=`<path class="flow" d="M${rx+70},${qy+52} C${rx+40},300 ${sx+170},${sy+10} ${sx+160},${sy+18}" marker-end="url(#ar)"/>`;/* 登记簿->策略 */
+ s+=`<path class="flow" d="M${sx},${sy+25} C${qx+120},${sy+20} ${qx+90},${qy+70} ${qx+80},${qy+54}" marker-end="url(#ar)"/>`;/* 策略->审计(再检) */
+ /* 自指回路（审计→支点自身） */
+ s+=`<path class="floop selfloop ${["前515","1714"].includes(e.y)||e.blast?"armed":""}" d="M${qx+40},${qy} C60,120 ${ax-70},${ay+10} ${ax+4},${ay+22}" marker-end="url(#arR)"/>`;
+ s+=`<text x="72" y="150" font-size="10.5" fill="#7e2d1f" font-family="var(--serif)">自指回路：审计标准审计自身${e.blast?"（闭合！）":""}</text>`;
+ /* 回路标签 */
+ s+=`<text x="${W/2}" y="278" font-size="10.5" fill="var(--fade)" text-anchor="middle">R1 增强回路：追问→对立→更多追问　｜　B1 调节回路：张力→缝合→泄压(留残差)</text>`;
+ el("sd").setAttribute("viewBox","0 0 "+W+" "+H);el("sd").setAttribute("height",H);el("sd").innerHTML=s;
+ el("sd").querySelectorAll(".el").forEach(g=>g.addEventListener("click",ev=>{ev.stopPropagation();explain(g.dataset.el)}));
+}
+function chart(){
+ const cw=el("ch").clientWidth||900,chh=140,pad=34;
+ const xs=i=>pad+i*(cw-pad-14)/(EV.length-1), ys=v=>12+(100-v)*(chh-34)/100;
+ const line=(key,col)=>{let d="";EV.forEach((e,i)=>{d+=(i?"L":"M")+xs(i)+","+ys(e[key])});return `<path d="${d}" fill="none" stroke="${col}" stroke-width="2" opacity=".85"/>`};
+ let s=`<text x="${pad}" y="11" font-size="10" fill="var(--fade)" font-family="var(--serif)">发展轨迹 · 存量曲线</text>`;
+ s+=line("C","#1d4e5f")+line("T","#a73e2c")+line("K","#3f7a52");
+ EV.forEach((e,i)=>{ if(e.blast) s+=`<line x1="${xs(i)}" y1="12" x2="${xs(i)}" y2="${chh-22}" stroke="#7e2d1f" stroke-dasharray="3 3" opacity=".6"/><text x="${xs(i)}" y="${chh-10}" font-size="9.5" fill="#7e2d1f" text-anchor="middle">爆点</text>`;});
+ s+=`<line x1="${xs(cur)}" y1="12" x2="${xs(cur)}" y2="${chh-22}" stroke="#1c1916" stroke-width="1.6"/>`;
+ s+=`<circle cx="${xs(cur)}" cy="${ys(EV[cur].C)}" r="3.5" fill="#1d4e5f"/><circle cx="${xs(cur)}" cy="${ys(EV[cur].T)}" r="3.5" fill="#a73e2c"/><circle cx="${xs(cur)}" cy="${ys(EV[cur].K)}" r="3.5" fill="#3f7a52"/>`;
+ s+=`<g font-size="10" font-family="var(--serif)"><rect x="${cw-208}" y="6" width="200" height="16" fill="var(--pl)" opacity=".8"/><text x="${cw-200}" y="18" fill="#1d4e5f">■ 确定性C</text><text x="${cw-134}" y="18" fill="#a73e2c">■ 张力T</text><text x="${cw-76}" y="18" fill="#3f7a52">■ 棘轮K</text></g>`;
+ el("ch").innerHTML=s;
+}
+function panelEvent(){
+ const e=EV[cur];
+ el("panel").innerHTML=`<div class="eyebrow">第 ${cur+1} / ${EV.length} 步 · 第${["","一","二","三","四"][e.st]}站</div>
+ <div class="p-name">${e.name}</div><div class="p-era">${e.y} ｜ 支点：${e.anchor} ｜ 三角保留：${e.tri.split("").join("·")}</div>
+ <div class="dstat"><div class="stat"><div class="k">确定性 C</div><div class="v" style="color:#1d4e5f">${e.C}</div></div>
+ <div class="stat"><div class="k">张力 T</div><div class="v" style="color:#a73e2c">${e.T}</div></div>
+ <div class="stat"><div class="k">棘轮 K</div><div class="v" style="color:#3f7a52">${e.K}</div></div></div>
+ <div class="blk ${e.blast?"fire":"act"}"><h4>${e.blast?"☄ 自爆机理":"本步动作"}</h4>${e.what}</div>
+ <div class="blk"><h4>系统读数</h4>${e.sys}</div>
+ <div class="eyebrow" style="margin-top:10px">本步激活的对立</div>
+ <div class="chips">${e.ops.map(o=>`<span class="chip ${e.blast?"hot":""}">${o}</span>`).join("")}</div>`;
+}
+const EXPL={
+ anchor:["要素 · 支点/担保人","系统的核心元件：为一切信念供给最终理由的终点。它历经四站搬迁——本原(世界之内)→神(世界之上)→先验形式(主体之内)→形式系统(语言之内)。每站的失败方式不同，失败位置相同：自我担保处。当前状态见图中标签。"],
+ audit:["要素 · 审计引擎","系统的动力兼故障源：苏格拉底诘问与充足理由律的合体——任何主张须给出理由。对外审计产生知识；对支点自身审计(红色虚线闭合)即触发自爆。它不可拆除：拆了它系统退回神话。"],
+ reg:["要素 · 对立应力登记簿","41 组二元对立＝系统的张力源与燃料舱。每组对立记录一处「奠基失败的应力点」；张力驱动追问(R1)，追问逼出缝合(B1)。对立不是故障清单，是动力清单——无张力则系统停转。"],
+ strat:["要素 · 缝合策略库","六格策略空间：S1特许豁免(神=自因) / S2分层外包(类型论·元语言) / S3域限制(康德) / S4降格(可错论) / S5治疗解散(维特根斯坦) / S6矛盾本体化(黑格尔)。历史按让步幅度递增的顺序取用；到二十世纪已穷举，再无第七格。"],
+ tri:["约束 · 不可能三角","A 普遍必然性 / B 彻底可审计性 / C 自我完备性——两两可得，三者不可兼(阿格里帕三难即其证明)。系统必须弃一角方可运行：中世纪外包B，独断论弃B，怀疑论弃A，康德自愿弃C。图中变灰的角＝当前被弃之角。"],
+ T:["存量 · 二元张力 T","未解对立的累积应力。它是**动力**：T 升高驱动追问与创新；T 过载触发缝合或自爆。注意两次爆点前 T 都在高位而 C 也在高位——独断的稳定孕育不稳定(明斯基结构)。"],
+ K:["存量 · 边界知识 K(棘轮)","关于「什么不可能」的知识存量——只增不减：三难清单、Γ卷立法、休谟之叉、康德边界声明、哥德尔定理逐次入库。它是系统真正的进步栏：答案栏两千年空转，约束栏单调爬升，1931 年触顶＝边界本身定理化。"],
+ Cs:["存量 · 确定性储备 C","当前支点的担保能力/合法性。两次崩落(爆点)、一次高位建制(神)、一次有界回升(康德)。终态不是满格而是**有界稳态**：不再追求无限兜底，改为可行解＋不可达域证明。"],
+};
+function explain(k){const x=EXPL[k];if(!x)return;
+ el("panel").innerHTML=`<div class="eyebrow">系统件解剖</div><div class="p-name" style="font-size:19px">${x[0]}</div>
+ <div class="blk" style="margin-top:10px"><h4>机理</h4>${x[1]}</div>
+ <div class="blk act"><h4>返回</h4>点时间轴任一事件或「上一步/下一步」继续演化；▶ 演化 自动播放全程。</div>`;}
+function go(i){cur=Math.max(0,Math.min(EV.length-1,i));
+ document.querySelectorAll(".tk").forEach((t,j)=>t.classList.toggle("cur",j===cur));
+ diagram();chart();panelEvent();
+ const tk=document.querySelector(".tk.cur");if(tk)tk.scrollIntoView({inline:"center",behavior:"smooth",block:"nearest"});}
+function play(){if(timer){stop();return}el("bPlay").classList.add("on");el("bPlay").textContent="⏸ 暂停";
+ timer=setInterval(()=>{if(cur>=EV.length-1){stop();return}go(cur+1)},2100);}
+function stop(){if(timer){clearInterval(timer);timer=null}el("bPlay").classList.remove("on");el("bPlay").textContent="▶ 演化";}
+function guide(){el("panel").innerHTML=`<div class="guide"><div class="eyebrow">导读 · LECTORI</div><h3>把 Logos 当一台系统动力学机器</h3>
+<p><strong>要素</strong>：支点(担保人)、审计引擎(PSR/诘问)、对立应力登记簿(41 组＝张力源)、缝合策略库(S1–S6)。<strong>约束</strong>：不可能三角 A/B/C——弃一角方可运行，变灰的角＝当前被弃。<strong>边界</strong>：蓝色虚线框，随三块界碑(可思→可认识→可说)逐档收缩——收缩是校准不是败退。</p>
+<p><strong>动力与故障</strong>：R1 增强回路(追问→对立→更多追问)供给燃料；B1 调节回路(张力→缝合→泄压)维持运转；<em>红色虚线自指回路</em>(审计标准审计自身)是唯一致命故障——两次闭合＝两次爆点(巴门尼德/休谟)，图中支点会闪烁。</p>
+<p><strong>轨迹</strong>(底部曲线)：确定性 C 两崩一建制一有界回升；张力 T 是锯齿(燃料而非病)；<em>棘轮 K 只增不减</em>——系统的真实进步不在答案栏，在约束栏，1931 年触顶＝边界定理化。</p>
+<p class="mini">操作：▶ 演化＝自动播放 18 步；点时间轴任意事件跳转；<strong>点图中任一系统件</strong>(支点/审计引擎/登记簿/策略库/三角/三个储罐)看它的机理解剖。注意两处「明斯基前夜」：爆点前 C 与 T 同时高位——独断的稳定孕育不稳定。</p></div>`;}
+buildTL();go(0);guide();
+el("bPlay").addEventListener("click",play);
+el("bPrev").addEventListener("click",()=>{stop();go(cur-1)});
+el("bNext").addEventListener("click",()=>{stop();go(cur+1)});
+el("bReset").addEventListener("click",()=>{stop();go(0);guide()});
+window.addEventListener("resize",chart);
+</script></body></html>

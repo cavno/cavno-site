@@ -1,0 +1,974 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>月销预测台 · KOKODI</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@400;600;700;900&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.4.1/papaparse.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+<style>
+:root{
+  --parchment:#F3EAD3; --paper:#FBF6E9; --teal:#3F7E6B; --teal-dk:#2C5A4C;
+  --terra:#BC4B33; --ink:#2B2620; --muted:#7A7263; --line:#D8CCAE; --gold:#C9A869;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{background:var(--parchment);color:var(--ink);font-family:'Noto Serif SC','Songti SC','STSong','SimSun',serif;line-height:1.78;font-size:15px}
+.hero{max-width:1180px;margin:0 auto;padding:44px 24px 14px}
+.brandline{letter-spacing:.38em;font-size:11px;color:var(--terra);text-transform:uppercase;font-weight:600}
+h1{font-size:34px;color:var(--teal-dk);font-weight:900;margin:6px 0 4px;letter-spacing:.02em}
+.sub{color:var(--muted);font-size:14px;max-width:900px}
+nav#topnav{position:sticky;top:0;z-index:60;background:rgba(243,234,211,.95);backdrop-filter:blur(5px);border-top:1px solid var(--line);border-bottom:1px solid var(--line);margin-top:16px}
+nav#topnav .wrap{max-width:1180px;margin:0 auto;padding:9px 24px;display:flex;gap:18px;flex-wrap:wrap}
+nav#topnav a{color:var(--teal-dk);text-decoration:none;font-size:13px;font-weight:600}
+nav#topnav a:hover{color:var(--terra)}
+main{max-width:1180px;margin:0 auto;padding:16px 24px 70px}
+section.card{background:var(--paper);border:1px solid var(--line);border-radius:10px;padding:26px 28px 22px;margin:22px 0;box-shadow:0 1px 0 rgba(43,38,32,.06)}
+.klabel{font-size:12px;color:var(--terra);letter-spacing:.18em;font-weight:700;margin-bottom:2px}
+h2{font-size:21px;color:var(--teal-dk);font-weight:700;display:flex;align-items:baseline;gap:10px;margin-bottom:4px;flex-wrap:wrap}
+.mnum{font-size:12px;color:#fff;background:var(--teal);padding:2px 9px;border-radius:4px;letter-spacing:.1em;font-weight:600}
+h3{font-size:15.5px;color:var(--teal-dk);margin:18px 0 6px;font-weight:700}
+.caption{color:var(--muted);font-size:13.5px;margin-bottom:12px;max-width:1000px}
+table.t{width:100%;border-collapse:collapse;font-size:13px;margin:10px 0}
+.t th{background:var(--teal);color:#fff;text-align:left;padding:7px 9px;font-weight:600;white-space:nowrap;font-size:12.5px}
+.t td{border-bottom:1px solid var(--line);padding:6px 9px;vertical-align:top}
+.t tr:nth-child(even) td{background:rgba(63,126,107,.045)}
+.tblwrap{overflow-x:auto}
+.num{text-align:right;font-variant-numeric:tabular-nums;white-space:nowrap}
+.good{color:var(--teal-dk);font-weight:700}
+.bad{color:var(--terra);font-weight:700}
+.dock{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px;margin:12px 0 6px}
+.tile{border:1.5px dashed var(--teal);border-radius:8px;padding:14px 14px 12px;background:rgba(63,126,107,.05)}
+.tile h3{font-size:14px;margin:0 0 2px}
+.tile p{font-size:12px;color:var(--muted);margin:2px 0 8px;line-height:1.5}
+.tile input[type=file]{font-size:12px;width:100%}
+.tile .ok{font-size:12px;color:var(--teal-dk);font-weight:700;margin-top:6px;min-height:18px}
+button,.btn{font-family:inherit;background:var(--teal);color:#fff;border:none;border-radius:6px;padding:7px 16px;font-size:13.5px;cursor:pointer;font-weight:600}
+button:hover{background:var(--teal-dk)}
+button.alt{background:var(--terra)}
+button.ghost{background:transparent;color:var(--teal-dk);border:1px solid var(--teal)}
+.badge{display:inline-block;padding:4px 15px;border-radius:20px;font-weight:700;font-size:13px;margin-right:8px}
+.badge.on{background:var(--teal);color:#fff}
+.badge.off{background:var(--terra);color:#fff}
+.badge.na{background:var(--line);color:var(--muted)}
+.statrow{display:flex;gap:30px;flex-wrap:wrap;margin:12px 0 4px}
+.stat b{font-size:23px;color:var(--teal-dk);font-weight:900}
+.stat span{font-size:12px;color:var(--muted);display:block;margin-top:-3px}
+.locked-wait{border:1px dashed var(--line);border-radius:8px;padding:20px;color:var(--muted);font-size:13.5px;text-align:center;margin:8px 0}
+.chartbox{position:relative;height:380px;margin:12px 0;background:#fff;border:1px solid var(--line);border-radius:8px;padding:10px}
+.chartbox.short{height:300px}
+.chartbox.tall{height:440px}
+textarea{width:100%;font-family:inherit;font-size:13px;border:1px solid var(--line);border-radius:6px;padding:8px;background:#fff;line-height:1.6}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.grid3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px}
+@media(max-width:840px){.grid2,.grid3{grid-template-columns:1fr}}
+.note{background:rgba(201,168,105,.16);border-left:3px solid var(--gold);padding:10px 14px;font-size:13px;margin:12px 0;border-radius:0 6px 6px 0}
+.warn{background:rgba(188,75,51,.1);border-left:3px solid var(--terra);padding:10px 14px;font-size:13px;margin:12px 0;border-radius:0 6px 6px 0}
+details{margin:12px 0}
+summary{cursor:pointer;color:var(--teal-dk);font-weight:700;font-size:13.5px}
+details .inner{padding:10px 2px 2px}
+.mapper{border:2px solid var(--terra);border-radius:8px;padding:16px;margin:12px 0;background:#fff}
+.mapper h3{margin-top:0;color:var(--terra)}
+.maprow{display:flex;gap:10px;align-items:center;margin:6px 0;font-size:13px;flex-wrap:wrap}
+.maprow label{min-width:110px;font-weight:600}
+.hidden{display:none}
+input[type=number],input[type=text],input[type=month],select{font-family:inherit;font-size:13px;border:1px solid var(--line);border-radius:5px;padding:5px 8px;background:#fff}
+label.f{font-size:12.5px;color:var(--muted);display:block;margin:8px 0 2px;font-weight:600}
+.small{font-size:12px;color:var(--muted)}
+.insight{background:rgba(63,126,107,.07);border:1px solid var(--line);border-radius:8px;padding:12px 16px;font-size:13.5px;margin:10px 0}
+footer{max-width:1180px;margin:0 auto;padding:14px 24px 44px;color:var(--muted);font-size:12px}
+.plan input{width:110px}
+.kcard{border:1px solid var(--line);border-radius:8px;padding:12px 16px;background:#fff}
+.kcard b{font-size:20px;color:var(--teal-dk)}
+.kcard span{font-size:12px;color:var(--muted);display:block}
+</style>
+</head>
+<body>
+
+<header class="hero">
+  <div class="brandline">KOKODI · Forecast Workbench</div>
+  <h1>月销预测台</h1>
+  <p class="sub">三腿三角互证：时序腿（自身历史季节）× 漏斗腿（会话 × CVR，广告预算内嵌）× 自下而上腿（SQP 市场量 × 份额 × 校准系数）。滚动回测按 WAPE 倒数加权合成，误差带直接驱动报童备货。与「关键词结构分析台」配成一对：那边管动作，这边管数量。</p>
+</header>
+
+<nav id="topnav"><div class="wrap">
+  <a href="#f0">F0 数据台</a><a href="#f1">F1 月度装配</a><a href="#f2">F2 腿A 时序</a>
+  <a href="#f3">F3 腿B 漏斗</a><a href="#f4">F4 腿C 自下而上</a><a href="#f5">F5 回测与合成</a>
+  <a href="#f6">F6 备货</a><a href="#fx">导出</a>
+</div></nav>
+
+<main>
+
+<!-- ============ F0 ============ -->
+<section id="f0" class="card">
+  <div class="klabel">数据管线 · 三条腿共用一个装配层</div>
+  <h2><span class="mnum">F0</span> 数据台</h2>
+  <p class="caption">业务报告须是<b>按日期</b>的"详情页销售与流量"（每行一天）；SQP 用<b>月</b>报告范围逐月下载、一次多选上传；花费序列沿用关键词台的粘贴格式并可选追加第 5 列广告点击量。日期解析默认美国格式（月/日/年）。所有解析在本地浏览器完成。</p>
+  <div class="dock">
+    <div class="tile"><h3>① 业务报告 · 日粒度</h3><p>数据报告 → 业务报告 → 详情页销售与流量（按日期），拉 18–24 个月，可多文件续传</p><input type="file" id="f_br" accept=".csv,.xlsx,.xls" multiple><div class="ok" id="ok_br"></div></div>
+    <div class="tile"><h3>② SQP · 月度 × N 个月</h3><p>品牌分析 → 搜索查询效果 → ASIN/品牌视图 → 范围"月"，逐月下载后一次全选</p><input type="file" id="f_sqp" accept=".csv,.xlsx,.xls" multiple><div class="ok" id="ok_sqp"></div></div>
+    <div class="tile"><h3>③ 演示数据</h3><p>24 个月玩具类目仿真（含 Q4 跳升、断货、Prime Day），先练读法</p><button id="b_demo" class="alt">载入演示数据</button><div class="ok" id="ok_demo"></div></div>
+  </div>
+  <div id="sqp_assign"></div>
+  <div id="mapper" class="mapper hidden"></div>
+  <div class="grid3">
+    <div><label class="f">花费序列（月份, 总销售额, 广告销售额, 广告花费[, 广告点击]）</label><textarea id="ta_spend" rows="6" placeholder="2026-01, 47800, 16100, 5900, 6941&#10;2026-02, 45100, 14800, 5300, 6235"></textarea></div>
+    <div><label class="f">断货区间（每行一段：2025-11-04 ~ 2025-11-08）</label><textarea id="ta_oos" rows="6" placeholder="2025-11-04 ~ 2025-11-08"></textarea></div>
+    <div><label class="f">促销日（Prime Day / BD / 秒杀，剥离出基线）</label><textarea id="ta_promo" rows="6" placeholder="2025-07-08 ~ 2025-07-09"></textarea></div>
+  </div>
+  <div class="maprow" style="margin-top:10px"><button id="b_build">装配 / 重算</button><span class="small">改动任何粘贴框后点此重跑全管线</span></div>
+  <div id="health"></div>
+</section>
+
+<!-- ============ F1 ============ -->
+<section id="f1" class="card">
+  <div class="klabel">装配层 · 一切预测的地基</div>
+  <h2><span class="mnum">F1</span> 月度装配 —— 断货回填 · 促销剥离 · 三源对齐</h2>
+  <p class="caption">基线需求 = 实际销量 + 断货回填 − 促销增量。回填规则：断货日销量 = 当日会话 × 前 30 天正常 CVR（无会话则用前 7 天日均）。促销增量 = 促销日实际 − 前 14 天非促销日均。三条腿全部在<b>基线需求</b>上建模，促销以显式增量在合成层加回。</p>
+  <div id="f1body"><div class="locked-wait">等待业务报告日销数据</div></div>
+</section>
+
+<!-- ============ F2 ============ -->
+<section id="f2" class="card">
+  <div class="klabel">腿 A · 自身历史时序（主轴）</div>
+  <h2><span class="mnum">F2</span> 季节分解 + 趋势外推，且必须打败朴素基准</h2>
+  <p class="caption">≥24 个月：乘法季节分解（中心移动平均）× 对数趋势；13–23 个月：季节朴素 × 近 3 月同比；&lt;13 个月：仅趋势（可粘贴外部季节指数救急）。FVA 纪律内置：回测区会同时报"季节朴素基准"的 WAPE，腿 A 打不过基准就该用基准。</p>
+  <div id="f2body"><div class="locked-wait">等待月度装配完成</div></div>
+  <details><summary>外部季节指数（历史 &lt; 13 个月时启用；来自商机探测器利基搜索量曲线，12 个数、均值≈1，1 月起）</summary><div class="inner">
+    <textarea id="ta_extidx" rows="2" placeholder="0.85, 0.80, 0.90, 0.95, 1.00, 1.00, 1.05, 1.00, 0.95, 1.15, 1.90, 2.60"></textarea>
+  </div></details>
+</section>
+
+<!-- ============ F3 ============ -->
+<section id="f3" class="card">
+  <div class="klabel">腿 B · 漏斗驱动（广告预算内嵌）</div>
+  <h2><span class="mnum">F3</span> 月销 = (有机会话外推 + 计划花费 ÷ CPC) × 收缩 CVR</h2>
+  <p class="caption">有机会话 = 业务报告会话 − 广告点击（近似），走季节外推；付费会话由 F5 计划表里的花费方案除以近 3 月 CPC 得出——这是"预算改一个数、销量跟着动"的那条腿。花费序列若缺第 5 列广告点击，花费杠杆自动停用、退化为总会话外推。</p>
+  <div id="f3body"><div class="locked-wait">等待月度装配 + 花费序列</div></div>
+</section>
+
+<!-- ============ F4 ============ -->
+<section id="f4" class="card">
+  <div class="klabel">腿 C · 自下而上（SQP 市场结构）</div>
+  <h2><span class="mnum">F4</span> 市场购买量 × 我的份额 × 校准系数 k</h2>
+  <p class="caption">市场购买量走同比（不足 13 个月退化为动量）；份额取近 3 月加权收缩均值，计划动作用 F5 的"份额调整 pp"显式表达；k = 业务报告总件数 ÷ SQP 搜索归因件数，吸收关联流量/复购/外部流量的覆盖缺口，取近 3 月均值。k 的波动本身就是这条腿的体检指标。</p>
+  <div id="f4body"><div class="locked-wait">等待 SQP 月度文件（≥4 个月）</div></div>
+</section>
+
+<!-- ============ F5 ============ -->
+<section id="f5" class="card">
+  <div class="klabel">合成层 · 滚动回测定权重</div>
+  <h2><span class="mnum">F5</span> 回测 · 加权合成 · 误差带 · 情景</h2>
+  <p class="caption">对最近 6–8 个月做滚动起点回测：每条腿只用截点前的数据预测下一个月，按 WAPE 倒数定权重（不足 3 个回测点的腿不参与合成、仅作参考）。合成残差的分位数直接给出 P10/P90 误差带。计划表里改花费或促销增量后点"重算预测"。</p>
+  <div id="f5plan"></div>
+  <div id="f5body"><div class="locked-wait">等待至少一条腿就绪 + 回测样本 ≥ 3 个月</div></div>
+</section>
+
+<!-- ============ F6 ============ -->
+<section id="f6" class="card">
+  <div class="klabel">终点 · 报童问题</div>
+  <h2><span class="mnum">F6</span> 备货 —— 误差不是废料，是安全库存的输入</h2>
+  <p class="caption">最优服务水平 = Cu ÷ (Cu + Co)；z = Φ⁻¹(服务水平)；安全库存 = z × σ月 × √补货周期；再订货点 = 补货周期需求 + 安全库存。Cu（缺一件的代价）= 毛利 + 断货杀排名的隐性损失；Co（多一件的代价）= 仓储资金占用 + 季后清货折价。旺季 Cu 远大于 Co，服务水平右移是理性而非贪婪。</p>
+  <div class="grid3">
+    <div class="kcard"><label class="f">毛利 / 件（$）</label><input type="number" id="i_gm" value="5.5" step="0.5" style="width:100%">
+      <label class="f">断货隐性损失 / 件（$，排名资产）</label><input type="number" id="i_hid" value="2.8" step="0.5" style="width:100%"></div>
+    <div class="kcard"><label class="f">过剩成本 / 件（$，仓储+资金+清货折价）</label><input type="number" id="i_co" value="3.0" step="0.5" style="width:100%">
+      <label class="f">补货周期（月，含生产+海运+入仓）</label><input type="number" id="i_lead" value="1.5" step="0.1" style="width:100%"></div>
+    <div class="kcard"><label class="f">现有 + 在途库存（件，选填）</label><input type="number" id="i_onhand" value="" placeholder="0" style="width:100%">
+      <div style="margin-top:12px"><button id="b_stock">计算备货</button> <button id="b_peak" class="ghost">旺季预设</button> <button id="b_off" class="ghost">淡季预设</button></div></div>
+  </div>
+  <div id="f6body"></div>
+</section>
+
+<!-- ============ 导出 ============ -->
+<section id="fx" class="card">
+  <div class="klabel">归档 · 预测偏差是要记账的</div>
+  <h2><span class="mnum">出</span> 导出</h2>
+  <p class="caption">每月 1 号跑完合成后导出预测 CSV 归档；下月回填实际值，偏差序列就是权重与误差带的原料——预测系统的复利来自记账，不来自模型。</p>
+  <div class="maprow">
+    <button id="b_fc_csv">下载预测结果 CSV</button>
+    <button id="b_month_csv" class="ghost">下载月度装配 CSV</button>
+  </div>
+  <div id="fx_msg" class="small" style="margin-top:6px"></div>
+</section>
+
+</main>
+<footer>KOKODI Forecast Workbench · 与 keyword-structure-lab 配对使用 · 单文件零构建 · 数据仅在本地浏览器解析</footer>
+
+<script id="app">
+//__APPJS_START__
+
+/* ============================ 状态 ============================ */
+const S = {
+  daily:[],            // [{d:'YYYY-MM-DD', units, sessions, sales}]
+  sqpFiles:[],         // [{name, ym, mktP, myP, queries:[{q,purT,purB}]}]
+  spend:new Map(),     // ym -> {total, adSales, adSpend, adClicks}
+  M:[],                // 月度装配 [{ym, units, refill, promoInc, unitsModel, sessions, sales, spend, adClicks, cpc, mktP, myP, share, k}]
+  extIdx:null, seasonIdx:null,
+  bt:null, weights:null, fc:null, sigma:null, quants:null,
+  charts:{}, demo:false, brMap:null
+};
+
+//<PURE>
+/* ======================== 纯函数（可测） ======================== */
+function normH(h){ return String(h==null?'':h).toLowerCase().replace(/[\s_\-：:()（）#%.,/*–—]/g,''); }
+function num(v){ if(v==null) return 0; const s=String(v).replace(/[^0-9.\-]/g,''); const f=parseFloat(s); return isFinite(f)?f:0; }
+function avg(a){ return a.length? a.reduce((x,y)=>x+y,0)/a.length : 0; }
+function wmean(vals,ws){ let n=0,d=0; for(let i=0;i<vals.length;i++){n+=vals[i]*ws[i];d+=ws[i];} return d?n/d:0; }
+function ymAdd(ym,k){ const p=ym.split('-').map(Number); const t=p[0]*12+(p[1]-1)+k; return Math.floor(t/12)+'-'+String(t%12+1).padStart(2,'0'); }
+function ymIdx(ym){ const p=ym.split('-').map(Number); return p[0]*12+p[1]-1; }
+function monthNum(ym){ return Number(ym.split('-')[1]); }
+function parseDateFlexible(s){
+  s=String(s==null?'':s).trim().replace(/年|月/g,'-').replace(/日/g,'').replace(/\./g,'/');
+  let m=s.match(/^(\d{4})[-\/](\d{1,2})[-\/](\d{1,2})/);
+  if(m) return m[1]+'-'+String(+m[2]).padStart(2,'0')+'-'+String(+m[3]).padStart(2,'0');
+  m=s.match(/^(\d{1,2})[-\/](\d{1,2})[-\/](\d{2,4})/);
+  if(m){ let y=+m[3]; if(y<100) y+=2000; return y+'-'+String(+m[1]).padStart(2,'0')+'-'+String(+m[2]).padStart(2,'0'); }
+  const d=new Date(s);
+  if(!isNaN(d)) return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0');
+  return null;
+}
+/* Acklam 逆正态 CDF */
+function probit(p){
+  if(p<=0) return -8; if(p>=1) return 8;
+  const a=[-39.69683028665376,220.9460984245205,-275.9285104469687,138.357751867269,-30.66479806614716,2.506628277459239];
+  const b=[-54.47609879822406,161.5858368580409,-155.6989798598866,66.80131188771972,-13.28068155288572];
+  const c=[-0.007784894002430293,-0.3223964580411365,-2.400758277161838,-2.549732539343734,4.374664141464968,2.938163982698783];
+  const d=[0.007784695709041462,0.3224671290700398,2.445134137142996,3.754408661907416];
+  const pl=0.02425; let q,r;
+  if(p<pl){ q=Math.sqrt(-2*Math.log(p)); return (((((c[0]*q+c[1])*q+c[2])*q+c[3])*q+c[4])*q+c[5])/((((d[0]*q+d[1])*q+d[2])*q+d[3])*q+1); }
+  if(p>1-pl){ q=Math.sqrt(-2*Math.log(1-p)); return -(((((c[0]*q+c[1])*q+c[2])*q+c[3])*q+c[4])*q+c[5])/((((d[0]*q+d[1])*q+d[2])*q+d[3])*q+1); }
+  q=p-0.5; r=q*q;
+  return (((((a[0]*r+a[1])*r+a[2])*r+a[3])*r+a[4])*r+a[5])*q/(((((b[0]*r+b[1])*r+b[2])*r+b[3])*r+b[4])*r+1);
+}
+function olsLogTrend(vals){
+  const y=vals.map(v=>Math.log(Math.max(1e-9,v)));
+  const n=y.length, xm=(n-1)/2, y0=avg(y);
+  let nu=0,de=0; for(let i=0;i<n;i++){nu+=(i-xm)*(y[i]-y0);de+=(i-xm)*(i-xm);}
+  let b=de?nu/de:0; b=Math.max(-0.15,Math.min(0.15,b));
+  return {a:y0-b*xm, b};
+}
+function seasonalIndices(x, mons){
+  const n=x.length, ma=[];
+  for(let t=0;t<n;t++){
+    if(t<6||t>n-7){ma.push(null);continue;}
+    let s=0.5*x[t-6]+0.5*x[t+6]; for(let j=-5;j<=5;j++) s+=x[t+j];
+    ma.push(s/12);
+  }
+  const acc=Array.from({length:12},()=>[]);
+  for(let t=0;t<n;t++) if(ma[t]&&ma[t]>0&&x[t]>0) acc[mons[t]-1].push(x[t]/ma[t]);
+  let idx=acc.map(a=>a.length?avg(a):1);
+  const mean=avg(idx); return idx.map(v=>v/(mean||1));
+}
+function contiguous(pts){ for(let i=1;i<pts.length;i++) if(ymIdx(pts[i].ym)-ymIdx(pts[i-1].ym)!==1) return false; return true; }
+function yoyGrowth(map,lastYm,k){
+  const gs=[];
+  for(let j=0;j<k;j++){ const m=ymAdd(lastYm,-j), p=ymAdd(m,-12);
+    if(map.has(m)&&map.has(p)&&map.get(p)>0) gs.push(map.get(m)/map.get(p)); }
+  if(!gs.length) return 1;
+  return Math.max(0.5,Math.min(2.2,avg(gs)));
+}
+/* 共用季节外推引擎：pts=[{ym,v}] 升序，hYm 目标月 */
+function genericSeasonal(pts, hYm, extIdx){
+  const n=pts.length; if(n<3) return null;
+  const last=pts[n-1].ym, H=ymIdx(hYm)-ymIdx(last); if(H<1) return null;
+  const map=new Map(pts.map(p=>[p.ym,p.v]));
+  if(n>=24 && contiguous(pts)){
+    const x=pts.map(p=>p.v), mons=pts.map(p=>monthNum(p.ym));
+    const idx=seasonalIndices(x,mons);
+    const des=x.map((v,i)=>v/(idx[mons[i]-1]||1));
+    const k=Math.min(9,n), tr=olsLogTrend(des.slice(n-k));
+    const f=Math.exp(tr.a+tr.b*(k-1+H))*(idx[monthNum(hYm)-1]||1);
+    return {val:f, method:'乘法季节分解×对数趋势', idx};
+  }
+  if(n>=13){
+    const base=map.get(ymAdd(hYm,-12));
+    if(base!=null && base>0){ const g=yoyGrowth(map,last,3);
+      return {val:base*g, method:'季节朴素×近3月同比('+((g-1)*100).toFixed(1)+'%)'}; }
+  }
+  const k=Math.min(6,n), tr=olsLogTrend(pts.slice(n-k).map(p=>p.v));
+  let f=Math.exp(tr.a+tr.b*(k-1+H)), method='对数趋势（历史<13月）', warn=true;
+  if(extIdx && extIdx.length===12){
+    f*= (extIdx[monthNum(hYm)-1]||1)/(extIdx[monthNum(last)-1]||1);
+    method='对数趋势×外部季节指数'; warn=false;
+  }
+  return {val:f, method, warn};
+}
+function wape(pairs){ let e=0,a=0; pairs.forEach(p=>{e+=Math.abs(p.pred-p.act);a+=p.act;}); return a>0? e/a : null; }
+function quantile(arr,q){ if(!arr.length) return 0; const s=[...arr].sort((a,b)=>a-b); const i=(s.length-1)*q, lo=Math.floor(i); return s[lo]+(s[Math.min(s.length-1,lo+1)]-s[lo])*(i-lo); }
+//</PURE>
+
+/* ======================== 通用工具 ======================== */
+const $=id=>document.getElementById(id);
+function fmt(v,d){ if(v==null||!isFinite(v)) return '—'; return v.toLocaleString('en-US',{maximumFractionDigits:d==null?0:d,minimumFractionDigits:d==null?0:d}); }
+function fp(v,d){ return v==null||!isFinite(v)?'—':(v*100).toFixed(d==null?1:d)+'%'; }
+function money(v){ return v==null||!isFinite(v)?'—':'$'+fmt(v,v>=1000?0:2); }
+function tbl(headers,rows,numCols){
+  numCols=numCols||[];
+  let h='<div class="tblwrap"><table class="t"><thead><tr>'+headers.map((x,i)=>'<th'+(numCols.includes(i)?' class="num"':'')+'>'+x+'</th>').join('')+'</tr></thead><tbody>';
+  rows.forEach(r=>{ h+='<tr>'+r.map((c,i)=>'<td'+(numCols.includes(i)?' class="num"':'')+'>'+c+'</td>').join('')+'</tr>'; });
+  return h+'</tbody></table></div>';
+}
+function drawChart(id,cfg){ if(S.charts[id]){S.charts[id].destroy();} const el=$(id); if(!el) return; S.charts[id]=new Chart(el,cfg); }
+function downloadCSV(name,rows){
+  const csv='\ufeff'+rows.map(r=>r.map(c=>{const s=String(c==null?'':c);return /[",\n]/.test(s)?'"'+s.replace(/"/g,'""')+'"':s;}).join(',')).join('\n');
+  const a=document.createElement('a'); a.href=URL.createObjectURL(new Blob([csv],{type:'text/csv;charset=utf-8'})); a.download=name; a.click();
+  setTimeout(()=>URL.revokeObjectURL(a.href),4000);
+}
+function readFileToRows(file, cb){
+  const ext=file.name.split('.').pop().toLowerCase();
+  if(ext==='csv'||ext==='txt'){
+    Papa.parse(file,{header:true,skipEmptyLines:true,complete:r=>cb(r.data, r.meta.fields||[])});
+  }else{
+    const rd=new FileReader();
+    rd.onload=e=>{
+      const wb=XLSX.read(new Uint8Array(e.target.result),{type:'array'});
+      const ws=wb.Sheets[wb.SheetNames[0]];
+      const aoa=XLSX.utils.sheet_to_json(ws,{header:1,defval:''});
+      if(!aoa.length){cb([],[]);return;}
+      const headers=aoa[0].map(x=>String(x));
+      const rows=aoa.slice(1).filter(r=>r.some(c=>c!=='')).map(r=>{const o={};headers.forEach((h,i)=>o[h]=r[i]);return o;});
+      cb(rows, headers);
+    };
+    rd.readAsArrayBuffer(file);
+  }
+}
+function autoMap(headers, spec){
+  const nh=headers.map(h=>({raw:h, n:normH(h)}));
+  const map={}, missing=[];
+  Object.keys(spec).forEach(k=>{
+    const f=spec[k]; let found=null;
+    for(const c of f.cands){ const cn=normH(c); const ex=nh.find(x=>x.n===cn); if(ex){found=ex.raw;break;} }
+    if(!found){ for(const c of f.cands){ const cn=normH(c);
+      const inc=nh.find(x=>x.n.includes(cn) && !(f.excl||[]).some(e=>x.n.includes(normH(e))));
+      if(inc){found=inc.raw;break;} } }
+    if(found) map[k]=found; else if(!f.optional) missing.push(k);
+  });
+  return {map, missing};
+}
+function showMapper(kind, headers, spec, missing, done){
+  const box=$('mapper'); box.classList.remove('hidden');
+  let h='<h3>列名自动识别失败（'+kind+'），请手动指定 '+missing.length+' 个字段</h3>';
+  missing.forEach(k=>{
+    h+='<div class="maprow"><label>'+spec[k].label+'</label><select data-k="'+k+'">'+
+       '<option value="">— 选择列 —</option>'+headers.map(x=>'<option>'+String(x).replace(/</g,'&lt;')+'</option>').join('')+'</select></div>';
+  });
+  h+='<div class="maprow"><button id="b_mapok">确认映射</button></div>';
+  box.innerHTML=h;
+  $('b_mapok').onclick=()=>{
+    const extra={}; let ok=true;
+    box.querySelectorAll('select').forEach(s=>{ if(!s.value) ok=false; extra[s.dataset.k]=s.value; });
+    if(!ok){ alert('仍有字段未指定'); return; }
+    box.classList.add('hidden'); done(extra);
+  };
+}
+
+/* ======================== 数据摄入 ======================== */
+const BR_SPEC={
+  date:{label:'日期', cands:['date','日期'], excl:[]},
+  units:{label:'已订购商品数量', cands:['unitsordered','已订购商品数量','订购数量'], excl:['b2b','percentage','百分比']},
+  sessions:{label:'会话/买家访问次数', cands:['sessionstotal','sessions','买家访问次数总计','买家访问次数','会话次数总计','会话次数'], excl:['percentage','百分比','mobile','browser','移动','浏览器','b2b']},
+  sales:{label:'已订购商品销售额(选填)', cands:['orderedproductsales','已订购商品销售额'], excl:['b2b'], optional:true}
+};
+const SQP_SPEC={
+  q:{label:'搜索查询', cands:['searchquery','搜索查询'], excl:['score','volume','得分','量']},
+  purT:{label:'购买·市场总数', cands:['purchasestotalcount','购买量总数','购买总数'], excl:[]},
+  purB:{label:'购买·我方数', cands:['purchasesbrandcount','purchasesasincount','购买量品牌数量','购买量asin数量'], excl:['share','份额']}
+};
+function handleBR(files){
+  let pending=files.length; const all=[];
+  [...files].forEach(f=>{
+    readFileToRows(f,(rows,headers)=>{
+      const {map,missing}=autoMap(headers,BR_SPEC);
+      const finish=fm=>{
+        rows.forEach(r=>{
+          const d=parseDateFlexible(r[fm.date]); if(!d) return;
+          all.push({d, units:num(r[fm.units]), sessions:num(r[fm.sessions]), sales:fm.sales?num(r[fm.sales]):0});
+        });
+        if(--pending===0){
+          const byD=new Map();
+          all.forEach(x=>{ const o=byD.get(x.d)||{d:x.d,units:0,sessions:0,sales:0};
+            o.units+=x.units;o.sessions+=x.sessions;o.sales+=x.sales; byD.set(x.d,o); });
+          S.daily=[...byD.values()].sort((a,b)=>a.d<b.d?-1:1);
+          S.demo=false;
+          $('ok_br').textContent='✔ '+files.length+' 个文件，'+S.daily.length+' 天（'+(S.daily[0]?S.daily[0].d:'')+' → '+(S.daily.length?S.daily[S.daily.length-1].d:'')+'）';
+          buildAll();
+        }
+      };
+      if(missing.length) showMapper('业务报告 '+f.name,headers,BR_SPEC,missing,extra=>finish({...map,...extra}));
+      else finish(map);
+    });
+  });
+}
+function handleSQPFiles(files){
+  let pending=files.length; const parsed=[];
+  [...files].forEach(f=>{
+    readFileToRows(f,(rows,headers)=>{
+      const {map,missing}=autoMap(headers,SQP_SPEC);
+      const finish=fm=>{
+        let mktP=0,myP=0; const qs=[];
+        rows.forEach(r=>{ const q=String(r[fm.q]==null?'':r[fm.q]).trim().toLowerCase(); if(!q) return;
+          const t=num(r[fm.purT]), b=num(r[fm.purB]); mktP+=t; myP+=b; qs.push({q,purT:t,purB:b}); });
+        qs.sort((a,b)=>b.purT-a.purT);
+        const g=f.name.match(/(20\d{2})[-_\.]?(0[1-9]|1[0-2])/);
+        parsed.push({name:f.name, ym:g?g[1]+'-'+g[2]:'', mktP, myP, queries:qs.slice(0,12)});
+        if(--pending===0){
+          const seen=new Set(S.sqpFiles.map(x=>x.name));
+          parsed.forEach(p=>{ if(!seen.has(p.name)) S.sqpFiles.push(p); });
+          S.demo=false; renderSqpAssign();
+        }
+      };
+      if(missing.length) showMapper('SQP '+f.name,headers,SQP_SPEC,missing,extra=>finish({...map,...extra}));
+      else finish(map);
+    });
+  });
+}
+function renderSqpAssign(){
+  const box=$('sqp_assign');
+  if(!S.sqpFiles.length){ box.innerHTML=''; return; }
+  let h='<h3>SQP 文件月份指认（文件名带 YYYY-MM 会自动猜）</h3>';
+  S.sqpFiles.forEach((f,i)=>{
+    h+='<div class="maprow"><label style="min-width:280px;font-weight:400">'+f.name+'（市场购买 '+fmt(f.mktP)+' · 我方 '+fmt(f.myP)+'）</label>'+
+       '<input type="month" data-i="'+i+'" value="'+f.ym+'"> <button class="ghost" data-del="'+i+'">删</button></div>';
+  });
+  h+='<div class="maprow"><button id="b_sqpok">确认月份并重算</button></div>';
+  box.innerHTML=h;
+  box.querySelectorAll('input[type=month]').forEach(inp=>inp.onchange=()=>{S.sqpFiles[+inp.dataset.i].ym=inp.value;});
+  box.querySelectorAll('button[data-del]').forEach(b=>b.onclick=()=>{S.sqpFiles.splice(+b.dataset.del,1);renderSqpAssign();});
+  const ok=$('b_sqpok'); if(ok) ok.onclick=()=>{ if(S.sqpFiles.some(f=>!f.ym)){alert('仍有文件未指认月份');return;} $('ok_sqp').textContent='✔ '+S.sqpFiles.length+' 个月度文件'; buildAll(); };
+}
+function parseSpend(){
+  S.spend=new Map();
+  $('ta_spend').value.split(/\n+/).map(x=>x.trim()).filter(Boolean).forEach(l=>{
+    const p=l.split(/[,，\t]+/).map(x=>x.trim()); if(p.length<4) return;
+    let ym=p[0].replace(/[\/年]/g,'-').replace(/月/,'');
+    const mm=ym.match(/^(\d{4})-(\d{1,2})/); if(!mm) return;
+    ym=mm[1]+'-'+String(+mm[2]).padStart(2,'0');
+    S.spend.set(ym,{total:num(p[1]), adSales:num(p[2]), adSpend:num(p[3]), adClicks:p.length>4?num(p[4]):null});
+  });
+}
+function parseRanges(txt){
+  const set=new Set();
+  String(txt||'').split(/\n+/).map(x=>x.trim()).filter(Boolean).forEach(l=>{
+    const parts=l.split(/~|—|至/).map(x=>parseDateFlexible(x)).filter(Boolean);
+    if(!parts.length) return;
+    const a=parts[0], b=parts[1]||parts[0];
+    let d=new Date(a+'T00:00:00Z');
+    const end=new Date(b+'T00:00:00Z');
+    while(d<=end){ set.add(d.toISOString().slice(0,10)); d=new Date(d.getTime()+86400000); }
+  });
+  return set;
+}
+function parseExtIdx(){
+  const v=$('ta_extidx').value.trim(); if(!v){S.extIdx=null;return;}
+  const a=v.split(/[,，\s]+/).map(num).filter(x=>x>0);
+  S.extIdx = a.length===12 ? a : null;
+}
+
+/* ======================== 月度装配 ======================== */
+function assembleMonthly(){
+  parseSpend(); parseExtIdx();
+  const oos=parseRanges($('ta_oos').value), promo=parseRanges($('ta_promo').value);
+  const D=S.daily; const byYm=new Map();
+  /* 逐日：回填 + 促销剥离 */
+  for(let i=0;i<D.length;i++){
+    const day=D[i]; const ym=day.d.slice(0,7);
+    const o=byYm.get(ym)||{ym,units:0,refill:0,promoInc:0,sessions:0,sales:0,days:0};
+    o.days++; o.sessions+=day.sessions; o.sales+=day.sales;
+    const isOos=oos.has(day.d), isPromo=promo.has(day.d);
+    /* 前向窗口统计（跳过 OOS/促销日） */
+    let cvrN=0,cvrD=0,u7=[],base14=[];
+    for(let j=i-1;j>=0&&(cvrD<1||u7.length<7||base14.length<14);j--){
+      const p=D[j]; const bad=oos.has(p.d)||promo.has(p.d);
+      if(!bad){
+        if(i-j<=30){cvrN+=p.units;cvrD+=p.sessions;}
+        if(u7.length<7)u7.push(p.units);
+        if(base14.length<14)base14.push(p.units);
+      }
+      if(i-j>40&&base14.length>=10) break;
+    }
+    const cvr30=cvrD>0?cvrN/cvrD:0;
+    if(isOos){
+      const est=day.sessions>0&&cvr30>0? day.sessions*cvr30 : avg(u7);
+      const add=Math.max(0, est-day.units);
+      o.units+=day.units; o.refill+=add;
+    } else if(isPromo){
+      const base=base14.length?avg(base14):day.units;
+      const inc=Math.max(0, day.units-base);
+      o.units+=day.units; o.promoInc+=inc;
+    } else o.units+=day.units;
+    byYm.set(ym,o);
+  }
+  let M=[...byYm.values()].sort((a,b)=>a.ym<b.ym?-1:1);
+  const dropped=M.filter(m=>m.days<26).length;
+  M=M.filter(m=>m.days>=26);
+  /* 三源对齐 */
+  const sqpBy=new Map(); S.sqpFiles.forEach(f=>{ if(f.ym) sqpBy.set(f.ym,f); });
+  M.forEach(m=>{
+    m.unitsModel=Math.max(0, m.units+m.refill-m.promoInc);
+    const sp=S.spend.get(m.ym);
+    m.spend=sp?sp.adSpend:null; m.adSales=sp?sp.adSales:null; m.adClicks=sp?sp.adClicks:null;
+    m.cpc=(sp&&sp.adClicks>0)? sp.adSpend/sp.adClicks : null;
+    const q=sqpBy.get(m.ym);
+    m.mktP=q?q.mktP:null; m.myP=q?q.myP:null;
+    m.share=(q&&q.mktP>0)? q.myP/q.mktP : null;
+    m.k=(q&&q.myP>0)? m.unitsModel/q.myP : null;
+  });
+  S.M=M; S.dropped=dropped;
+  /* 全局季节指数（供弹性/展示） */
+  const pts=M.filter(m=>m.unitsModel>0).map(m=>({ym:m.ym,v:m.unitsModel}));
+  S.seasonIdx=(pts.length>=24&&contiguous(pts))? seasonalIndices(pts.map(p=>p.v),pts.map(p=>monthNum(p.ym))) : null;
+}
+function renderF1(){
+  if(!S.M.length){ $('f1body').innerHTML='<div class="locked-wait">等待业务报告日销数据</div>'; $('health').innerHTML=''; return; }
+  const M=S.M;
+  const refillT=M.reduce((s,m)=>s+m.refill,0), promoT=M.reduce((s,m)=>s+m.promoInc,0);
+  const sqpN=M.filter(m=>m.mktP!=null).length, spN=M.filter(m=>m.spend!=null).length;
+  $('health').innerHTML='<div class="statrow">'+
+    '<div class="stat"><b>'+M.length+'</b><span>完整月（剔除 '+S.dropped+' 个不满 26 天的月）</span></div>'+
+    '<div class="stat"><b>'+fmt(refillT)+'</b><span>断货回填件数（合计）</span></div>'+
+    '<div class="stat"><b>'+fmt(promoT)+'</b><span>促销剥离件数（合计）</span></div>'+
+    '<div class="stat"><b>'+spN+'</b><span>花费序列覆盖月数</span></div>'+
+    '<div class="stat"><b>'+sqpN+'</b><span>SQP 覆盖月数</span></div>'+
+    (S.demo?'<div class="stat"><b style="color:var(--terra)">演示</b><span>仿真数据模式</span></div>':'')+
+  '</div>';
+  let h='<div class="chartbox"><canvas id="c_assemble"></canvas></div>';
+  const rows=M.map(m=>[m.ym,fmt(m.units),fmt(m.refill),fmt(m.promoInc),'<b>'+fmt(m.unitsModel)+'</b>',fmt(m.sessions),
+    fp(m.sessions>0?m.unitsModel/m.sessions:null,1), m.spend!=null?money(m.spend):'—', m.cpc!=null?'$'+m.cpc.toFixed(2):'—',
+    m.mktP!=null?fmt(m.mktP):'—', m.share!=null?fp(m.share,2):'—', m.k!=null?m.k.toFixed(2):'—']);
+  h+=tbl(['月份','实际件数','断货回填','促销剥离','基线需求','会话','CVR','广告花费','CPC','SQP市场购买','我的份额','k 系数'],rows,[1,2,3,4,5,6,7,8,9,10,11]);
+  $('f1body').innerHTML=h;
+  drawChart('c_assemble',{type:'bar',data:{labels:M.map(m=>m.ym),datasets:[
+    {label:'基线需求',data:M.map(m=>m.unitsModel),backgroundColor:'#3F7E6B',stack:'s',borderRadius:2},
+    {label:'促销增量',data:M.map(m=>m.promoInc),backgroundColor:'#C9A869',stack:'s',borderRadius:2},
+    {label:'断货回填(含于基线)',data:M.map(m=>m.refill),backgroundColor:'rgba(188,75,51,.55)',stack:'r',borderRadius:2,hidden:true},
+    {label:'会话',data:M.map(m=>m.sessions),type:'line',borderColor:'#BC4B33',pointRadius:2,yAxisID:'y2',tension:.2}]},
+    options:{maintainAspectRatio:false,plugins:{legend:{position:'bottom'}},
+      scales:{x:{stacked:true},y:{stacked:true,title:{display:true,text:'件'}},y2:{position:'right',grid:{display:false},title:{display:true,text:'会话'}}}}});
+}
+
+/* ======================== 三条腿（均只吃截点前数据） ======================== */
+function fcLegA(M, hYm){
+  const pts=M.filter(m=>m.unitsModel>0).map(m=>({ym:m.ym,v:m.unitsModel}));
+  if(pts.length<6) return null;
+  return genericSeasonal(pts,hYm,S.extIdx);
+}
+function fcBenchmark(M, hYm){
+  const pts=M.filter(m=>m.unitsModel>0).map(m=>({ym:m.ym,v:m.unitsModel}));
+  if(pts.length<13) return null;
+  const map=new Map(pts.map(p=>[p.ym,p.v]));
+  const base=map.get(ymAdd(hYm,-12)); if(base==null||base<=0) return null;
+  return {val: base*yoyGrowth(map,pts[pts.length-1].ym,3), method:'季节朴素基准'};
+}
+function fcLegB(M, hYm, spendPlan){
+  const W=M.filter(m=>m.sessions>0&&m.unitsModel>0);
+  if(W.length<4) return null;
+  /* CVR：近3月加权 + 同月季节因子 */
+  const cw=[0.2,0.3,0.5];
+  const c3=W.slice(-3).map(m=>m.unitsModel/m.sessions);
+  let cvr=wmean(c3,cw.slice(-c3.length));
+  const cmap=new Map(W.map(m=>[m.ym,m.unitsModel/m.sessions]));
+  const cPrev=cmap.get(ymAdd(hYm,-12));
+  if(W.length>=13&&cPrev){ const cAvg=avg([...cmap.values()].slice(-12));
+    if(cAvg>0) cvr*=Math.max(0.7,Math.min(1.4,cPrev/cAvg)); }
+  const clickMs=W.filter(m=>m.adClicks!=null&&m.adClicks>0);
+  if(clickMs.length>=4 && spendPlan!=null){
+    const org=clickMs.map(m=>({ym:m.ym, v:Math.max(m.sessions*0.2, m.sessions-m.adClicks)}));
+    const of=genericSeasonal(org,hYm,S.extIdx); if(!of) return null;
+    const cp3=clickMs.slice(-3).map(m=>m.spend/m.adClicks);
+    const cpc=Math.max(0.05, avg(cp3));
+    const sess=of.val + spendPlan/cpc;
+    return {val:sess*cvr, cvr, cpc, organic:of.val, lever:true};
+  }
+  const sf=genericSeasonal(W.map(m=>({ym:m.ym,v:m.sessions})),hYm,S.extIdx);
+  if(!sf) return null;
+  return {val:sf.val*cvr, cvr, lever:false};
+}
+function fcLegC(M, hYm, ppAdj){
+  const Q=M.filter(m=>m.mktP>0&&m.myP>0&&m.k>0);
+  if(Q.length<4) return null;
+  const mmap=new Map(Q.map(m=>[m.ym,m.mktP]));
+  const last=Q[Q.length-1].ym;
+  let mkt; const base=mmap.get(ymAdd(hYm,-12));
+  if(base!=null&&base>0){ mkt=base*yoyGrowth(mmap,last,3); }
+  else{
+    const l3=Q.slice(-3).map(m=>m.mktP), p3=Q.slice(-6,-3).map(m=>m.mktP);
+    const mom=p3.length? Math.max(-0.3,Math.min(0.3, avg(l3)/Math.max(1e-9,avg(p3))-1)) : 0;
+    mkt=avg(l3)*(1+mom);
+  }
+  const s3=Q.slice(-3).map(m=>m.share);
+  let share=wmean(s3,[0.2,0.3,0.5].slice(-s3.length)) + (ppAdj||0)/100;
+  share=Math.max(0.0005,Math.min(0.9,share));
+  const k=Math.max(0.8,Math.min(4, avg(Q.slice(-3).map(m=>m.k))));
+  return {val:mkt*share*k, mkt, share, k};
+}
+function elasticity(M){
+  const pts=M.filter(m=>m.spend>0&&m.unitsModel>0);
+  if(pts.length<8) return null;
+  const xs=pts.map(m=>Math.log(m.spend));
+  const ys=pts.map(m=>Math.log(S.seasonIdx? m.unitsModel/(S.seasonIdx[monthNum(m.ym)-1]||1) : m.unitsModel));
+  const n=xs.length,xm=avg(xs),y0=avg(ys);
+  let nu=0,de=0; for(let i=0;i<n;i++){nu+=(xs[i]-xm)*(ys[i]-y0);de+=(xs[i]-xm)*(xs[i]-xm);}
+  const b=de?nu/de:0, a=y0-b*xm;
+  let sr=0,ss=0; for(let i=0;i<n;i++){const f=a+b*xs[i];sr+=(ys[i]-f)*(ys[i]-f);ss+=(ys[i]-y0)*(ys[i]-y0);}
+  return {b, r2:ss?1-sr/ss:0, n, deseason:!!S.seasonIdx};
+}
+
+/* ======================== F2 / F3 / F4 渲染 ======================== */
+function renderF2(){
+  const M=S.M; if(!M.length){return;}
+  const hYm=ymAdd(M[M.length-1].ym,1);
+  const a=fcLegA(M,hYm);
+  if(!a){ $('f2body').innerHTML='<div class="locked-wait">基线需求月数不足 6，腿 A 未就绪</div>'; return; }
+  let h='<div class="statrow"><div class="stat"><b>'+fmt(a.val)+'</b><span>'+hYm+' 预测件数 · '+a.method+'</span></div></div>';
+  if(a.warn) h+='<div class="warn">历史不足 13 个月，季节形状不可识别——玩具类目 Q4 会被严重低估。要么粘贴外部季节指数，要么把腿 A 的权重当参考。</div>';
+  if(a.idx){
+    h+='<div class="chartbox short"><canvas id="c_idx"></canvas></div>';
+    $('f2body').innerHTML=h;
+    drawChart('c_idx',{type:'bar',data:{labels:['1月','2月','3月','4月','5月','6月','7月','8月','9月','10月','11月','12月'],
+      datasets:[{data:a.idx,backgroundColor:a.idx.map(v=>v>=1.3?'#BC4B33':v>=1?'#3F7E6B':'#C9A869'),borderRadius:3}]},
+      options:{maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{callbacks:{label:c=>'季节指数 '+c.parsed.y.toFixed(2)}}},
+        scales:{y:{title:{display:true,text:'季节指数（均值=1）'}}}}});
+  } else $('f2body').innerHTML=h;
+}
+function renderF3(){
+  const M=S.M; if(!M.length) return;
+  const hYm=ymAdd(M[M.length-1].ym,1);
+  const lastSpend=[...M].reverse().find(m=>m.spend!=null);
+  const b=fcLegB(M,hYm,lastSpend?lastSpend.spend:null);
+  if(!b){ $('f3body').innerHTML='<div class="locked-wait">会话月数不足 4，腿 B 未就绪</div>'; return; }
+  let h='<div class="statrow">'+
+    '<div class="stat"><b>'+fmt(b.val)+'</b><span>'+hYm+' 预测件数（花费=近月 '+(lastSpend?money(lastSpend.spend):'—')+'）</span></div>'+
+    '<div class="stat"><b>'+fp(b.cvr,2)+'</b><span>采用 CVR（近3月加权×同月因子）</span></div>'+
+    (b.lever?'<div class="stat"><b>$'+b.cpc.toFixed(2)+'</b><span>采用 CPC · 有机会话外推 '+fmt(b.organic)+'</span></div>'
+            :'<div class="stat"><b style="color:var(--terra)">停用</b><span>花费杠杆（缺广告点击列）</span></div>')+'</div>';
+  const W=M.filter(m=>m.sessions>0);
+  h+='<div class="chartbox"><canvas id="c_funnel"></canvas></div>';
+  const el=elasticity(M);
+  if(el) h+='<div class="insight"><b>花费弹性参考</b>：ln-ln 回归 b = '+el.b.toFixed(2)+'（R²='+el.r2.toFixed(2)+'，n='+el.n+(el.deseason?'，已去季节':'，<b>未去季节</b>')+'）。解读：花费 +10% ≈ 销量 +'+(el.b*10).toFixed(1)+'%。诚实警告：旺季自然加投导致花费与季节共线，回归倾向<b>高估</b>弹性；要干净数字，按增量性协议在淡季隔周 ±30% 花费做四轮实验。</div>';
+  $('f3body').innerHTML=h;
+  drawChart('c_funnel',{type:'bar',data:{labels:W.map(m=>m.ym),datasets:[
+    {label:'有机会话(≈会话−广告点击)',data:W.map(m=>m.adClicks!=null?Math.max(0,m.sessions-m.adClicks):null),backgroundColor:'#3F7E6B',stack:'s'},
+    {label:'广告点击',data:W.map(m=>m.adClicks),backgroundColor:'#C9A869',stack:'s'},
+    {label:'总会话(无点击列月份)',data:W.map(m=>m.adClicks==null?m.sessions:null),backgroundColor:'rgba(63,126,107,.35)',stack:'s'},
+    {label:'CVR %',data:W.map(m=>m.unitsModel>0&&m.sessions>0?m.unitsModel/m.sessions*100:null),type:'line',borderColor:'#BC4B33',pointRadius:2,yAxisID:'y2',tension:.2}]},
+    options:{maintainAspectRatio:false,plugins:{legend:{position:'bottom'}},
+      scales:{x:{stacked:true},y:{stacked:true,title:{display:true,text:'会话'}},y2:{position:'right',grid:{display:false},title:{display:true,text:'CVR %'}}}}});
+}
+function renderF4(){
+  const M=S.M; if(!M.length) return;
+  const Q=M.filter(m=>m.mktP!=null);
+  if(Q.length<4){ $('f4body').innerHTML='<div class="locked-wait">SQP 月度文件不足 4 个月（当前 '+Q.length+'），腿 C 未就绪</div>'; return; }
+  const hYm=ymAdd(M[M.length-1].ym,1);
+  const c=fcLegC(M,hYm,0);
+  let h='<div class="statrow">'+
+    '<div class="stat"><b>'+fmt(c.val)+'</b><span>'+hYm+' 预测件数</span></div>'+
+    '<div class="stat"><b>'+fmt(c.mkt)+'</b><span>市场购买量预测</span></div>'+
+    '<div class="stat"><b>'+fp(c.share,2)+'</b><span>份额（近3月收缩均值）</span></div>'+
+    '<div class="stat"><b>'+c.k.toFixed(2)+'</b><span>校准系数 k（搜索外流量倍数）</span></div></div>';
+  const ks=Q.map(m=>m.k).filter(v=>v>0);
+  if(ks.length>=4){ const kcv=Math.sqrt(ks.map(v=>(v-avg(ks))*(v-avg(ks))).reduce((a,b)=>a+b,0)/ks.length)/avg(ks);
+    if(kcv>0.25) h+='<div class="warn">k 系数月际波动 CV='+fp(kcv,0)+'，偏大——说明搜索外流量（关联位/复购/外部）占比不稳，这条腿的置信度打折，回测权重会自动体现。</div>'; }
+  h+='<div class="chartbox"><canvas id="c_sqp"></canvas></div>';
+  const lastQ=[...S.sqpFiles].filter(f=>f.ym).sort((a,b)=>a.ym<b.ym?-1:1).pop();
+  if(lastQ&&lastQ.queries.length){
+    const prevQ=S.sqpFiles.find(f=>f.ym===ymAdd(lastQ.ym,-12));
+    const rows=lastQ.queries.slice(0,8).map(q=>{
+      const pv=prevQ?prevQ.queries.find(x=>x.q===q.q):null;
+      const yoy=pv&&pv.purT>0? q.purT/pv.purT-1 : null;
+      return [q.q,fmt(q.purT), yoy==null?'—':'<span class="'+(yoy>=0?'good':'bad')+'">'+(yoy>=0?'+':'')+fp(yoy,0)+'</span>', fp(q.purT>0?q.purB/q.purT:null,2)];
+    });
+    h+='<h3>头部查询诊断（最新月 '+lastQ.ym+'，市场购买量前 8）</h3>'+tbl(['查询','市场购买量','同比','我的购买份额'],rows,[1,2,3]);
+  }
+  $('f4body').innerHTML=h;
+  drawChart('c_sqp',{type:'bar',data:{labels:Q.map(m=>m.ym),datasets:[
+    {label:'SQP 市场购买量',data:Q.map(m=>m.mktP),backgroundColor:'#3F7E6B',borderRadius:2},
+    {label:'我的份额 %',data:Q.map(m=>m.share*100),type:'line',borderColor:'#BC4B33',pointRadius:3,yAxisID:'y2',tension:.2},
+    {label:'k 系数',data:Q.map(m=>m.k),type:'line',borderColor:'#C9A869',borderDash:[5,4],pointRadius:2,yAxisID:'y3',tension:.2}]},
+    options:{maintainAspectRatio:false,plugins:{legend:{position:'bottom'}},
+      scales:{y:{title:{display:true,text:'市场购买量'}},y2:{position:'right',grid:{display:false},title:{display:true,text:'份额 %'}},y3:{position:'right',display:false,min:0,max:5}}}});
+}
+
+/* ======================== 回测 + 合成（F5） ======================== */
+function runBacktest(){
+  const M=S.M; S.bt=null; S.weights=null; S.sigma=null; S.quants=null;
+  if(M.length<8) return;
+  const cand=[]; for(let i=6;i<M.length;i++) if(M[i].unitsModel>0) cand.push(i);
+  const origins=cand.slice(-8);
+  const res={A:[],B:[],C:[],BM:[]}, byOrigin=[];
+  origins.forEach(i=>{
+    const hist=M.slice(0,i), t=M[i], row={ym:t.ym, act:t.unitsModel, preds:{}};
+    const a=fcLegA(hist,t.ym); if(a){res.A.push({ym:t.ym,act:t.unitsModel,pred:a.val});row.preds.A=a.val;}
+    const bm=fcBenchmark(hist,t.ym); if(bm)res.BM.push({ym:t.ym,act:t.unitsModel,pred:bm.val});
+    const b=fcLegB(hist,t.ym, t.spend!=null?t.spend:null); if(b){res.B.push({ym:t.ym,act:t.unitsModel,pred:b.val});row.preds.B=b.val;}
+    const c=fcLegC(hist,t.ym,0); if(c){res.C.push({ym:t.ym,act:t.unitsModel,pred:c.val});row.preds.C=c.val;}
+    byOrigin.push(row);
+  });
+  const wapes={A:res.A.length>=3?wape(res.A):null, B:res.B.length>=3?wape(res.B):null, C:res.C.length>=3?wape(res.C):null, BM:res.BM.length>=3?wape(res.BM):null};
+  const active=['A','B','C'].filter(k=>wapes[k]!=null&&wapes[k]>0);
+  const wsum=active.reduce((s,k)=>s+1/wapes[k],0);
+  const weights={}; active.forEach(k=>weights[k]=(1/wapes[k])/wsum);
+  /* 合成回测残差 */
+  const errsPct=[], fit=new Map();
+  byOrigin.forEach(r=>{
+    const av=active.filter(k=>r.preds[k]!=null);
+    if(!av.length) return;
+    const ws=av.reduce((s,k)=>s+weights[k],0);
+    const comp=av.reduce((s,k)=>s+r.preds[k]*weights[k],0)/ws;
+    fit.set(r.ym,comp);
+    if(r.act>0) errsPct.push(comp/r.act-1);
+  });
+  S.bt={res,wapes,byOrigin,fit,counts:{A:res.A.length,B:res.B.length,C:res.C.length,BM:res.BM.length}};
+  S.weights=active.length?weights:null;
+  if(errsPct.length>=3){
+    const m=avg(errsPct);
+    S.sigma=Math.sqrt(errsPct.map(e=>(e-m)*(e-m)).reduce((a,b)=>a+b,0)/(errsPct.length-1));
+    S.quants=errsPct.length>=6? {lo:quantile(errsPct,0.1), hi:quantile(errsPct,0.9)} : {lo:-1.2816*S.sigma+m, hi:1.2816*S.sigma+m};
+    S.biasMean=m;
+  }
+}
+function renderPlan(){
+  const M=S.M; if(!M.length){$('f5plan').innerHTML='';return;}
+  const last=M[M.length-1].ym;
+  const H=Math.max(1,Math.min(6,num(($('i_horizon')||{}).value)||3));
+  const old={}; document.querySelectorAll('#plantable input').forEach(inp=>old[inp.dataset.ym+':'+inp.dataset.f]=inp.value);
+  const lastSpend=[...M].reverse().find(m=>m.spend!=null);
+  let h='<h3>预测计划（腿 B 吃"计划花费"，促销增量在合成后显式加回）</h3>'+
+    '<div class="maprow"><label>预测期数</label><input type="number" id="i_horizon" min="1" max="6" value="'+H+'" style="width:70px">'+
+    '<label>腿 C 份额调整</label><input type="number" id="i_sharepp" step="0.1" value="'+(old['g:pp']!=null?old['g:pp']:($('i_sharepp')?$('i_sharepp').value:0)||0)+'" style="width:80px"> pp'+
+    '<button id="b_replan">重算预测</button></div>';
+  h+='<div class="tblwrap plan"><table class="t" id="plantable"><thead><tr><th>月份</th><th class="num">计划广告花费 $</th><th class="num">计划促销增量 件</th></tr></thead><tbody>';
+  for(let hh=1;hh<=H;hh++){
+    const ym=ymAdd(last,hh);
+    const sp=old[ym+':sp']!=null?old[ym+':sp']:(lastSpend?Math.round(lastSpend.spend):5000);
+    const pr=old[ym+':pr']!=null?old[ym+':pr']:0;
+    h+='<tr><td>'+ym+'</td><td class="num"><input type="number" data-ym="'+ym+'" data-f="sp" value="'+sp+'"></td>'+
+       '<td class="num"><input type="number" data-ym="'+ym+'" data-f="pr" value="'+pr+'"></td></tr>';
+  }
+  h+='</tbody></table></div>';
+  $('f5plan').innerHTML=h;
+  $('i_horizon').onchange=renderPlan;
+  $('b_replan').onclick=()=>{computeForecast();renderF5();renderF6();};
+}
+function readPlan(){
+  const plan=[];
+  document.querySelectorAll('#plantable tbody tr').forEach(tr=>{
+    const ym=tr.querySelector('input[data-f=sp]').dataset.ym;
+    plan.push({ym, spend:num(tr.querySelector('input[data-f=sp]').value), promo:num(tr.querySelector('input[data-f=pr]').value)});
+  });
+  return plan;
+}
+function computeForecast(){
+  const M=S.M; S.fc=null; if(!M.length||!S.weights) return;
+  const pp=num(($('i_sharepp')||{value:0}).value);
+  const plan=readPlan(); if(!plan.length) return;
+  const W=S.weights, ks=Object.keys(W);
+  S.fc=plan.map(p=>{
+    const parts={};
+    const a=fcLegA(M,p.ym); if(a&&W.A!=null)parts.A=a.val;
+    const b=fcLegB(M,p.ym,p.spend); if(b&&W.B!=null)parts.B=b.val;
+    const c=fcLegC(M,p.ym,pp); if(c&&W.C!=null)parts.C=c.val;
+    const av=ks.filter(k=>parts[k]!=null);
+    if(!av.length) return {...p, comp:null, parts};
+    const ws=av.reduce((s,k)=>s+W[k],0);
+    const base=av.reduce((s,k)=>s+parts[k]*W[k],0)/ws;
+    const comp=base+p.promo;
+    const lo=S.quants? Math.max(0, base*(1+S.quants.lo)+p.promo) : null;
+    const hi=S.quants? base*(1+S.quants.hi)+p.promo : null;
+    return {...p, parts, base, comp, lo, hi};
+  });
+}
+function renderF5(){
+  const M=S.M;
+  if(!S.bt||!S.weights){ $('f5body').innerHTML='<div class="locked-wait">回测样本不足（需要 ≥8 个完整月且至少一条腿有 ≥3 个回测点）</div>'; return; }
+  const w=S.weights, wp=S.bt.wapes, ct=S.bt.counts;
+  const names={A:'腿A 时序',B:'腿B 漏斗',C:'腿C 自下而上',BM:'季节朴素基准'};
+  const rows=['A','B','C','BM'].map(k=>[names[k], ct[k]||0, wp[k]!=null?fp(wp[k],1):'—（点数<3）',
+    k==='BM'?'<span class="small">FVA 参照</span>':(w[k]!=null?'<b>'+fp(w[k],0)+'</b>':'不参与合成')]);
+  let h='<h3>滚动回测（最近 '+S.bt.byOrigin.length+' 个起点，一步向前）</h3>'+tbl(['腿','回测点数','WAPE','合成权重'],rows,[1,2,3]);
+  const bestLeg=Math.min(...['A','B','C'].map(k=>wp[k]!=null?wp[k]:9));
+  if(wp.BM!=null && bestLeg>wp.BM) h+='<div class="warn"><b>FVA 警报</b>：三条腿的最优 WAPE（'+fp(bestLeg,1)+'）没有打败季节朴素基准（'+fp(wp.BM,1)+'）。模型没有增加价值——本月按"去年同月 × 近3月同比"报数，并检查装配层是不是有脏数据。</div>';
+  if(S.biasMean!=null && Math.abs(S.biasMean)>0.05) h+='<div class="note">合成预测存在系统性偏差 '+(S.biasMean>0?'+':'')+fp(S.biasMean,1)+'（正=偏乐观）。误差带已按经验分位数自动吸收，但建议排查：偏乐观常见于份额外推过激或促销增量重复计算。</div>';
+  h+='<div class="chartbox tall"><canvas id="c_main"></canvas></div>';
+  if(S.fc){
+    const fr=S.fc.map(f=>[f.ym, f.parts.A!=null?fmt(f.parts.A):'—', f.parts.B!=null?fmt(f.parts.B):'—', f.parts.C!=null?fmt(f.parts.C):'—',
+      fmt(f.promo), f.comp!=null?'<b>'+fmt(f.comp)+'</b>':'—', f.lo!=null?fmt(f.lo):'—', f.hi!=null?fmt(f.hi):'—', money(f.spend)]);
+    h+='<h3>未来 '+S.fc.length+' 个月合成预测</h3>'+tbl(['月份','腿A','腿B','腿C','促销增量','合成 P50','P10','P90','计划花费'],fr,[1,2,3,4,5,6,7,8]);
+    const f1=S.fc[0];
+    if(f1&&f1.parts.B!=null&&S.weights.B!=null){
+      const b7=fcLegB(M,f1.ym,f1.spend*0.7), b13=fcLegB(M,f1.ym,f1.spend*1.3);
+      if(b7&&b13){
+        const others=Object.keys(S.weights).filter(k=>k!=='B'&&f1.parts[k]!=null);
+        const mix=bv=>{const av=['B',...others];const ws=av.reduce((s,k)=>s+S.weights[k],0);
+          return (S.weights.B*bv+others.reduce((s,k)=>s+S.weights[k]*f1.parts[k],0))/ws+f1.promo;};
+        h+='<div class="insight"><b>花费敏感度（'+f1.ym+'）</b>：花费 ×0.7 → 合成 '+fmt(mix(b7.val))+' 件；×1.0 → '+fmt(f1.comp)+' 件；×1.3 → '+fmt(mix(b13.val))+' 件。预算会议直接用这三个数谈。</div>';
+      }
+    }
+  }
+  $('f5body').innerHTML=h;
+  /* 主图 */
+  const histY=M.map(m=>m.ym);
+  const fcY=S.fc?S.fc.map(f=>f.ym):[];
+  const labels=[...histY,...fcY];
+  const at=labels.map(ym=>{const m=M.find(x=>x.ym===ym);return m?m.unitsModel:null;});
+  const fit=labels.map(ym=>S.bt.fit.has(ym)?S.bt.fit.get(ym):null);
+  const fc=labels.map(ym=>{const f=S.fc?S.fc.find(x=>x.ym===ym):null;return f&&f.comp!=null?f.comp:null;});
+  const lo=labels.map(ym=>{const f=S.fc?S.fc.find(x=>x.ym===ym):null;return f&&f.lo!=null?f.lo:null;});
+  const hi=labels.map(ym=>{const f=S.fc?S.fc.find(x=>x.ym===ym):null;return f&&f.hi!=null?f.hi:null;});
+  /* 衔接：预测线从最后一个实际点起笔 */
+  const li=histY.length-1;
+  if(fc.some(v=>v!=null)){ fc[li]=at[li]; lo[li]=at[li]; hi[li]=at[li]; }
+  drawChart('c_main',{type:'line',data:{labels,datasets:[
+    {label:'P10–P90 误差带',data:hi,borderColor:'rgba(0,0,0,0)',backgroundColor:'rgba(201,168,105,.28)',pointRadius:0,fill:'+1',tension:.2,order:3},
+    {label:'_lo',data:lo,borderColor:'rgba(0,0,0,0)',pointRadius:0,fill:false,tension:.2,order:3},
+    {label:'基线需求（实际+回填−促销）',data:at,borderColor:'#2C5A4C',backgroundColor:'#2C5A4C',pointRadius:2.5,tension:.15,order:1},
+    {label:'回测拟合（仅用截点前数据）',data:fit,borderColor:'#C9A869',borderDash:[6,4],pointRadius:3,pointStyle:'triangle',tension:.15,order:2},
+    {label:'合成预测',data:fc,borderColor:'#BC4B33',backgroundColor:'#BC4B33',borderWidth:2.5,pointRadius:4,tension:.15,order:0}]},
+    options:{maintainAspectRatio:false,plugins:{legend:{position:'bottom',labels:{filter:i=>i.text!=='_lo'}}},
+      scales:{y:{title:{display:true,text:'件 / 月'},beginAtZero:true}}}});
+}
+
+/* ======================== F6 备货 ======================== */
+function renderF6(){
+  if(!S.fc||!S.fc.length||S.fc[0].comp==null||!S.sigma){ $('f6body').innerHTML='<div class="locked-wait">先完成 F5 合成预测</div>'; return; }
+  const gm=num($('i_gm').value), hid=num($('i_hid').value), co=Math.max(0.1,num($('i_co').value));
+  const L=Math.max(0.2,num($('i_lead').value)), onhand=num($('i_onhand').value);
+  const Cu=gm+hid, CR=Cu/(Cu+co), z=probit(CR);
+  /* 补货周期内需求：逐月累加（不足则重复末月） */
+  let dL=0, mAvg=0; const nFull=Math.floor(L), frac=L-nFull;
+  for(let i=0;i<nFull;i++){ const f=S.fc[Math.min(i,S.fc.length-1)]; dL+=f.comp; }
+  if(frac>0){ const f=S.fc[Math.min(nFull,S.fc.length-1)]; dL+=f.comp*frac; }
+  mAvg=dL/L;
+  const sigL=S.sigma*mAvg*Math.sqrt(L);
+  const ss=Math.max(0,z*sigL), rop=dL+ss;
+  const order=onhand>0? Math.max(0,rop-onhand) : null;
+  let h='<div class="statrow">'+
+    '<div class="stat"><b>'+fp(CR,1)+'</b><span>最优服务水平 Cu/(Cu+Co) = '+Cu.toFixed(1)+'/('+Cu.toFixed(1)+'+'+co.toFixed(1)+')</span></div>'+
+    '<div class="stat"><b>'+z.toFixed(2)+'</b><span>z = Φ⁻¹(服务水平)</span></div>'+
+    '<div class="stat"><b>'+fmt(dL)+'</b><span>补货周期需求（'+L+' 个月）</span></div>'+
+    '<div class="stat"><b>'+fmt(ss)+'</b><span>安全库存 = z × σ月('+fp(S.sigma,1)+') × 月均 × √L</span></div>'+
+    '<div class="stat"><b>'+fmt(rop)+'</b><span>再订货点（周期需求 + 安全库存）</span></div>'+
+    (order!=null?'<div class="stat"><b class="'+(order>0?'bad':'good')+'">'+fmt(order)+'</b><span>建议下单量（再订货点 − 现有在途 '+fmt(onhand)+'）</span></div>':'')+
+  '</div>';
+  h+='<div class="insight">这就是不对称赔付的定价：缺货是卖出了一个凸性空头（Cu='+money(Cu)+'/件，含排名资产折损），安全库存是买回这份保护的权利金（Co='+money(co)+'/件·周期）。Q4 前 Cu 抬升，服务水平理应右移——用"旺季预设"一键切换，别用淡季的 z 值备 11 月的货。</div>';
+  $('f6body').innerHTML=h;
+}
+
+/* ======================== 导出 ======================== */
+function exportForecast(){
+  if(!S.fc){ $('fx_msg').textContent='先完成 F5 合成预测。'; return; }
+  const rows=[['月份','腿A','腿B','腿C','促销增量','合成P50','P10','P90','计划花费','权重A','权重B','权重C','σ月','生成日期']];
+  const w=S.weights||{};
+  S.fc.forEach(f=>rows.push([f.ym, f.parts.A!=null?Math.round(f.parts.A):'', f.parts.B!=null?Math.round(f.parts.B):'', f.parts.C!=null?Math.round(f.parts.C):'',
+    f.promo, f.comp!=null?Math.round(f.comp):'', f.lo!=null?Math.round(f.lo):'', f.hi!=null?Math.round(f.hi):'', f.spend,
+    w.A!=null?w.A.toFixed(3):'', w.B!=null?w.B.toFixed(3):'', w.C!=null?w.C.toFixed(3):'', S.sigma!=null?S.sigma.toFixed(4):'', new Date().toISOString().slice(0,10)]));
+  downloadCSV('forecast-'+new Date().toISOString().slice(0,10)+'.csv',rows);
+  $('fx_msg').textContent='预测已导出——下月回填实际值，偏差记账。';
+}
+function exportMonthly(){
+  if(!S.M.length){ $('fx_msg').textContent='先完成月度装配。'; return; }
+  const rows=[['月份','实际件数','断货回填','促销剥离','基线需求','会话','CVR','销售额','广告花费','广告点击','CPC','SQP市场购买','SQP我方购买','份额','k']];
+  S.M.forEach(m=>rows.push([m.ym,m.units,Math.round(m.refill),Math.round(m.promoInc),Math.round(m.unitsModel),m.sessions,
+    m.sessions>0?(m.unitsModel/m.sessions*100).toFixed(2)+'%':'',m.sales?m.sales.toFixed(2):'',m.spend!=null?m.spend:'',m.adClicks!=null?m.adClicks:'',
+    m.cpc!=null?m.cpc.toFixed(2):'',m.mktP!=null?m.mktP:'',m.myP!=null?m.myP:'',m.share!=null?(m.share*100).toFixed(2)+'%':'',m.k!=null?m.k.toFixed(2):'']));
+  downloadCSV('monthly-assembly-'+new Date().toISOString().slice(0,10)+'.csv',rows);
+  $('fx_msg').textContent='月度装配已导出。';
+}
+
+/* ======================== 演示数据（24 个月玩具类目仿真） ======================== */
+function rngf(seed){ let s=seed>>>0; return ()=>{ s=(s*1664525+1013904223)>>>0; return s/4294967296; }; }
+const MMULT=[0.85,0.80,0.90,0.95,1.00,1.00,1.05,1.00,0.95,1.15,1.90,2.60];
+function loadDemo(){
+  S.demo=true; S.daily=[]; S.sqpFiles=[];
+  const r=rngf(20260702);
+  const start=new Date(Date.UTC(2024,6,1)), end=new Date(Date.UTC(2026,5,30));
+  const oosSet=new Set(['2025-11-04','2025-11-05','2025-11-06','2025-11-07','2025-11-08']);
+  const promoDays=new Set(['2024-07-16','2024-07-17','2025-07-08','2025-07-09']);
+  let monthCount=0;
+  for(let d=new Date(start); d<=end; d=new Date(d.getTime()+86400000)){
+    const ds=d.toISOString().slice(0,10);
+    const mi=d.getUTCMonth(); const dow=d.getUTCDay();
+    const monthsFromStart=(d.getUTCFullYear()-2024)*12+mi-6;
+    let base=27*Math.pow(1.016,monthsFromStart)*MMULT[mi];
+    if(dow===0||dow===6) base*=1.18;
+    base*=(0.88+0.24*r());
+    let cvr=0.092*(mi>=9?1.14:1)*(0.92+0.16*r());
+    let units=Math.round(base), sessions=Math.round(units/cvr);
+    if(promoDays.has(ds)){ units=Math.round(units*2.8); sessions=Math.round(sessions*2.1); }
+    if(oosSet.has(ds)){ units=Math.round(units*0.15); sessions=Math.round(sessions*0.4); }
+    S.daily.push({d:ds, units, sessions, sales:+(units*13.9).toFixed(2)});
+  }
+  /* 花费序列 24 个月（含点击列） */
+  const spendLines=[];
+  for(let t=0;t<24;t++){
+    const ym=ymAdd('2024-07',t); const mi=monthNum(ym)-1;
+    const monthUnits=S.daily.filter(x=>x.d.slice(0,7)===ym).reduce((s,x)=>s+x.units,0);
+    const total=Math.round(monthUnits*13.9);
+    const spend=Math.round(4900*Math.pow(MMULT[mi],0.7)*Math.pow(1.012,t)*(0.95+0.1*r()));
+    const cpc=0.85+(mi>=9?0.12:0)+0.06*r();
+    const clicks=Math.round(spend/cpc);
+    const adSales=Math.round(spend/ (0.33+0.03*r()));
+    spendLines.push(ym+', '+total+', '+adSales+', '+spend+', '+clicks);
+  }
+  $('ta_spend').value=spendLines.join('\n');
+  $('ta_oos').value='2025-11-04 ~ 2025-11-08';
+  $('ta_promo').value='2024-07-16 ~ 2024-07-17\n2025-07-08 ~ 2025-07-09';
+  /* SQP 13 个月（2025-06 → 2026-06） */
+  const QN=['lcd writing tablet','writing tablet for kids','doodle board','drawing tablet for kids','gifts for 3 year old girl','magnetic drawing board','toddler travel toys','stocking stuffers for kids'];
+  const QW=[0.30,0.17,0.13,0.11,0.10,0.08,0.07,0.04];
+  for(let t=0;t<13;t++){
+    const ym=ymAdd('2025-06',t); const mi=monthNum(ym)-1;
+    const monthUnitsModel=S.daily.filter(x=>x.d.slice(0,7)===ym&&!oosSet.has(x.d)&&!promoDays.has(x.d)).reduce((s,x)=>s+x.units,0)
+      + (ym==='2025-11'? 460:0);
+    const k=1.52+0.14*r();
+    const myP=Math.round(monthUnitsModel/k);
+    const share=0.034+0.012*(t/12)+0.002*(r()-0.5);
+    const mktP=Math.round(myP/share);
+    const queries=QN.map((q,j)=>{
+      const w=QW[j]*(q.includes('gift')||q.includes('stocking')? (mi>=9?2.1:0.55):1);
+      const purT=Math.round(mktP*w*(0.9+0.2*r()));
+      return {q, purT, purB:Math.round(purT*share*(0.7+0.6*r()))};
+    }).sort((a,b)=>b.purT-a.purT);
+    S.sqpFiles.push({name:'demo-sqp-'+ym+'.csv', ym, mktP, myP, queries});
+  }
+  $('ok_br').textContent='✔ 演示日销 '+S.daily.length+' 天';
+  $('ok_sqp').textContent='✔ 演示 SQP 13 个月';
+  $('ok_demo').textContent='✔ 已载入';
+  renderSqpAssign();
+  buildAll();
+}
+
+/* ======================== 总装 ======================== */
+function buildAll(){
+  if(!S.daily.length){ return; }
+  assembleMonthly();
+  renderF1(); renderF2(); renderF3(); renderF4();
+  runBacktest();
+  renderPlan();
+  computeForecast();
+  renderF5(); renderF6();
+}
+function init(){
+  Chart.defaults.font.family="'Noto Serif SC','Songti SC',serif";
+  Chart.defaults.color='#5c5546';
+  Chart.defaults.borderColor='rgba(216,204,174,.55)';
+  $('f_br').addEventListener('change',e=>e.target.files.length&&handleBR(e.target.files));
+  $('f_sqp').addEventListener('change',e=>e.target.files.length&&handleSQPFiles(e.target.files));
+  $('b_demo').addEventListener('click',loadDemo);
+  $('b_build').addEventListener('click',buildAll);
+  $('b_stock').addEventListener('click',renderF6);
+  $('b_peak').addEventListener('click',()=>{$('i_hid').value=4.5;$('i_co').value=2.2;renderF6();});
+  $('b_off').addEventListener('click',()=>{$('i_hid').value=1.5;$('i_co').value=3.8;renderF6();});
+  $('b_fc_csv').addEventListener('click',exportForecast);
+  $('b_month_csv').addEventListener('click',exportMonthly);
+}
+if(typeof document!=='undefined'){
+  if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',init); else init();
+}
+//__APPJS_END__
+</script>
+</body>
+</html>

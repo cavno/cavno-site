@@ -1,0 +1,1033 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>T-bill 当保证金 · 滚动卖 Put — Schwab 与 IBKR 对照拆解</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@300;400;500;600;700;900&display=swap" rel="stylesheet">
+<style>
+:root{
+  --parchment:#F3EAD3;
+  --parchment-deep:#EADFC4;
+  --parchment-shade:#E2D4B4;
+  --card:#F8F2E3;
+  --ink:#2A251E;
+  --ink-soft:#5C5245;
+  --ink-faint:#8B7F6D;
+  --teal:#1F5D5A;
+  --teal-light:#3D8B85;
+  --teal-wash:rgba(31,93,90,.09);
+  --terracotta:#B5502F;
+  --terracotta-light:#D4744F;
+  --terracotta-wash:rgba(181,80,47,.09);
+  --gold:#A8894C;
+  --rule:#D3C2A2;
+  --rule-soft:#E0D2B6;
+  --serif:'Noto Serif SC','Source Han Serif SC','Songti SC','SimSun',serif;
+  --mono:ui-monospace,'SF Mono','JetBrains Mono','Cascadia Mono',Menlo,Consolas,monospace;
+  --maxw:1080px;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth;scroll-padding-top:72px}
+@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}*{animation-duration:.001ms!important;transition-duration:.001ms!important}}
+body{
+  margin:0;background:var(--parchment);color:var(--ink);
+  font-family:var(--serif);font-weight:400;line-height:1.75;
+  -webkit-font-smoothing:antialiased;
+  background-image:radial-gradient(rgba(168,137,76,.055) 1px,transparent 1px);
+  background-size:22px 22px;
+}
+.wrap{max-width:var(--maxw);margin:0 auto;padding:0 24px}
+.num{font-family:var(--mono);font-variant-numeric:tabular-nums;letter-spacing:-.02em}
+
+/* ── nav ── */
+.topbar{position:sticky;top:0;z-index:60;background:rgba(243,234,211,.94);backdrop-filter:blur(10px);border-bottom:1px solid var(--rule)}
+.topbar .wrap{display:flex;align-items:center;gap:20px;height:56px;overflow-x:auto;scrollbar-width:none}
+.topbar .wrap::-webkit-scrollbar{display:none}
+.brandmark{font-weight:700;font-size:14px;letter-spacing:.06em;white-space:nowrap;color:var(--teal);border-right:1px solid var(--rule);padding-right:20px}
+.topbar a{color:var(--ink-soft);text-decoration:none;font-size:13.5px;white-space:nowrap;padding:4px 0;border-bottom:2px solid transparent}
+.topbar a:hover,.topbar a:focus-visible{color:var(--terracotta);border-bottom-color:var(--terracotta)}
+
+/* ── hero ── */
+.hero{padding:76px 0 52px;border-bottom:2px solid var(--ink)}
+.eyebrow{font-family:var(--mono);font-size:11.5px;letter-spacing:.22em;text-transform:uppercase;color:var(--gold);margin-bottom:18px}
+h1{font-size:clamp(30px,5.4vw,50px);line-height:1.22;font-weight:900;margin:0 0 8px;letter-spacing:-.015em}
+h1 .thin{font-weight:300;color:var(--ink-soft)}
+.dek{font-size:17px;color:var(--ink-soft);max-width:62ch;margin:20px 0 0}
+.stamp{display:inline-flex;gap:14px;flex-wrap:wrap;margin-top:26px;font-family:var(--mono);font-size:11.5px;color:var(--ink-faint)}
+.stamp span{border:1px solid var(--rule);padding:3px 9px;border-radius:2px;background:var(--card)}
+
+/* ── sections ── */
+section{padding:66px 0;border-bottom:1px solid var(--rule)}
+.sec-head{display:flex;align-items:baseline;gap:14px;margin-bottom:8px}
+.sec-idx{font-family:var(--mono);font-size:12px;color:var(--terracotta);font-weight:700;letter-spacing:.1em}
+h2{font-size:clamp(21px,3.1vw,29px);font-weight:700;margin:0;letter-spacing:-.01em}
+.sec-sub{color:var(--ink-soft);font-size:15.5px;margin:10px 0 34px;max-width:66ch}
+h3{font-size:17px;font-weight:700;margin:0 0 14px}
+
+/* ── conclusion cards ── */
+.verdicts{display:grid;grid-template-columns:repeat(auto-fit,minmax(268px,1fr));gap:16px}
+.verdict{background:var(--card);border:1px solid var(--rule);border-top:3px solid var(--teal);padding:22px 20px;border-radius:2px}
+.verdict.warn{border-top-color:var(--terracotta)}
+.verdict.gold{border-top-color:var(--gold)}
+.verdict .tag{font-family:var(--mono);font-size:10.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--ink-faint);margin-bottom:9px}
+.verdict .big{font-size:26px;font-weight:900;line-height:1.2;margin-bottom:9px;color:var(--teal)}
+.verdict.warn .big{color:var(--terracotta)}
+.verdict.gold .big{color:var(--gold)}
+.verdict p{margin:0;font-size:14px;color:var(--ink-soft);line-height:1.68}
+
+/* ── SIGNATURE: rate ladder ── */
+.ladder-shell{display:grid;grid-template-columns:minmax(0,1fr) 306px;gap:34px;align-items:start}
+.ladder{position:relative;background:var(--card);border:1px solid var(--rule);border-radius:2px;padding:26px 22px 22px}
+.ladder-axis{position:absolute;left:0;right:0;top:0;bottom:0;pointer-events:none}
+.rung{position:relative;display:flex;align-items:center;gap:14px;padding:8px 0;cursor:pointer;border:none;background:none;width:100%;text-align:left;font-family:var(--serif);color:inherit}
+.rung:hover .rung-bar,.rung:focus-visible .rung-bar{filter:saturate(1.5)}
+.rung:focus-visible{outline:2px solid var(--terracotta);outline-offset:3px}
+.rung.on .rung-label{font-weight:700}
+.rung-val{font-family:var(--mono);font-size:14px;font-weight:700;width:62px;flex:none;text-align:right;font-variant-numeric:tabular-nums}
+.rung-track{flex:1;height:19px;background:var(--parchment-shade);border-radius:1px;position:relative;overflow:hidden}
+.rung-bar{height:100%;border-radius:1px;transition:width .5s cubic-bezier(.2,.8,.3,1),filter .2s}
+.rung-label{font-size:13.5px;width:170px;flex:none;color:var(--ink-soft)}
+.rung.pay .rung-val{color:var(--terracotta)}
+.rung.earn .rung-val{color:var(--teal)}
+.ladder-div{display:flex;align-items:center;gap:10px;margin:14px 0;font-family:var(--mono);font-size:10.5px;letter-spacing:.16em;text-transform:uppercase;color:var(--ink-faint)}
+.ladder-div::after{content:"";flex:1;height:1px;background:var(--rule)}
+.carry-box{background:var(--terracotta-wash);border:1px dashed var(--terracotta);padding:14px 16px;border-radius:2px;margin:16px 0 4px}
+.carry-box .cb-t{font-family:var(--mono);font-size:10.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--terracotta);margin-bottom:6px}
+.carry-box .cb-v{font-family:var(--mono);font-size:22px;font-weight:700;color:var(--terracotta)}
+.carry-box .cb-n{font-size:13px;color:var(--ink-soft);margin-top:4px}
+.rung-detail{background:var(--card);border:1px solid var(--rule);border-left:3px solid var(--gold);padding:20px;border-radius:2px;position:sticky;top:76px}
+.rung-detail .rd-name{font-size:18px;font-weight:700;margin-bottom:2px}
+.rung-detail .rd-rate{font-family:var(--mono);font-size:30px;font-weight:900;color:var(--gold);line-height:1.1;margin:6px 0 12px}
+.rung-detail .rd-body{font-size:14px;color:var(--ink-soft);line-height:1.7}
+.rung-detail .rd-src{font-family:var(--mono);font-size:11px;color:var(--ink-faint);margin-top:12px;padding-top:10px;border-top:1px dotted var(--rule)}
+
+/* ── flow steps ── */
+.flow{display:grid;gap:10px}
+.step{background:var(--card);border:1px solid var(--rule);border-radius:2px;overflow:hidden}
+.step-btn{width:100%;display:flex;align-items:center;gap:16px;padding:15px 18px;background:none;border:none;cursor:pointer;text-align:left;font-family:var(--serif);color:inherit}
+.step-btn:focus-visible{outline:2px solid var(--teal);outline-offset:-2px}
+.step-n{font-family:var(--mono);font-size:12px;font-weight:700;color:var(--parchment);background:var(--teal);width:24px;height:24px;flex:none;display:grid;place-items:center;border-radius:2px}
+.step-t{font-size:16px;font-weight:700;flex:1}
+.step-s{font-size:13.5px;color:var(--ink-faint);flex:none}
+.step-caret{font-family:var(--mono);color:var(--ink-faint);transition:transform .25s;flex:none}
+.step.open .step-caret{transform:rotate(90deg)}
+.step-body{max-height:0;overflow:hidden;transition:max-height .35s ease}
+.step.open .step-body{max-height:640px}
+.step-inner{padding:0 18px 18px 58px;font-size:14.5px;color:var(--ink-soft);line-height:1.78}
+.step-inner .flag{display:inline-block;font-family:var(--mono);font-size:10.5px;letter-spacing:.1em;padding:2px 7px;border-radius:2px;margin-right:8px;vertical-align:1px}
+.flag.t{background:var(--teal-wash);color:var(--teal);border:1px solid var(--teal-light)}
+.flag.s{background:var(--terracotta-wash);color:var(--terracotta);border:1px solid var(--terracotta-light)}
+
+/* ── collateral bars ── */
+.coll{display:grid;gap:9px}
+.coll-row{display:grid;grid-template-columns:158px 1fr 116px;gap:14px;align-items:center}
+.coll-name{font-size:14px;font-weight:500}
+.coll-name em{font-style:normal;display:block;font-size:11.5px;color:var(--ink-faint);font-family:var(--mono)}
+.coll-track{height:26px;background:var(--parchment-shade);border-radius:1px;position:relative;overflow:hidden}
+.coll-fill{height:100%;display:flex;align-items:center;justify-content:flex-end;padding-right:9px;font-family:var(--mono);font-size:12px;font-weight:700;color:#F8F2E3;transition:width .8s cubic-bezier(.2,.8,.3,1)}
+.coll-note{font-size:12px;color:var(--ink-faint);line-height:1.45}
+
+/* ── table ── */
+.tbl-tools{display:flex;gap:9px;margin-bottom:16px;flex-wrap:wrap}
+.chip{font-family:var(--mono);font-size:12px;padding:5px 13px;border:1px solid var(--rule);background:var(--card);border-radius:2px;cursor:pointer;color:var(--ink-soft)}
+.chip[aria-pressed="true"]{background:var(--ink);color:var(--parchment);border-color:var(--ink)}
+.chip:focus-visible{outline:2px solid var(--terracotta);outline-offset:2px}
+.tblwrap{overflow-x:auto;border:1px solid var(--rule);border-radius:2px;background:var(--card)}
+table{width:100%;border-collapse:collapse;font-size:14px;min-width:640px}
+th,td{padding:13px 16px;text-align:left;border-bottom:1px solid var(--rule-soft);vertical-align:top}
+thead th{background:var(--parchment-deep);font-size:12px;letter-spacing:.06em;font-weight:700;position:sticky;top:0;border-bottom:2px solid var(--ink)}
+thead th:nth-child(2){color:var(--teal)}
+thead th:nth-child(3){color:var(--terracotta)}
+tbody tr:last-child td{border-bottom:none}
+tbody tr.hi{background:rgba(168,137,76,.09)}
+td:first-child{font-weight:600;width:24%}
+.win{font-family:var(--mono);font-size:10px;letter-spacing:.1em;padding:1px 6px;border-radius:2px;margin-left:7px;vertical-align:2px;background:var(--teal);color:var(--parchment)}
+.win.s{background:var(--terracotta)}
+.win.tie{background:var(--ink-faint)}
+
+/* ── calculator ── */
+.calc{display:grid;grid-template-columns:322px minmax(0,1fr);gap:30px;align-items:start}
+.panel{background:var(--card);border:1px solid var(--rule);border-radius:2px;padding:22px}
+.panel.sticky{position:sticky;top:76px}
+.fld{margin-bottom:19px}
+.fld:last-child{margin-bottom:0}
+.fld label{display:flex;justify-content:space-between;align-items:baseline;font-size:13.5px;margin-bottom:7px;gap:10px}
+.fld .lv{font-family:var(--mono);font-size:14px;font-weight:700;color:var(--teal)}
+input[type=range]{width:100%;-webkit-appearance:none;appearance:none;height:3px;background:var(--rule);border-radius:2px;outline:none}
+input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:17px;height:17px;background:var(--teal);border-radius:50%;cursor:pointer;border:2px solid var(--card);box-shadow:0 0 0 1px var(--teal)}
+input[type=range]::-moz-range-thumb{width:15px;height:15px;background:var(--teal);border-radius:50%;cursor:pointer;border:2px solid var(--card)}
+input[type=range]:focus-visible{outline:2px solid var(--terracotta);outline-offset:5px}
+.seg{display:flex;border:1px solid var(--rule);border-radius:2px;overflow:hidden}
+.seg button{flex:1;padding:8px 6px;background:var(--parchment-deep);border:none;cursor:pointer;font-family:var(--serif);font-size:13px;color:var(--ink-soft)}
+.seg button[aria-pressed="true"]{background:var(--ink);color:var(--parchment);font-weight:600}
+.seg button:focus-visible{outline:2px solid var(--terracotta);outline-offset:-2px}
+.hint{font-size:12px;color:var(--ink-faint);margin-top:7px;line-height:1.55}
+
+.bkr-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:18px}
+.bkr{border:1px solid var(--rule);border-radius:2px;background:var(--card);overflow:hidden}
+.bkr-h{padding:11px 16px;font-weight:700;font-size:14.5px;color:var(--parchment);display:flex;justify-content:space-between;align-items:center}
+.bkr.ib .bkr-h{background:var(--teal)}
+.bkr.sw .bkr-h{background:var(--terracotta)}
+.bkr-h .hr{font-family:var(--mono);font-size:11px;font-weight:400;opacity:.85}
+.bkr-b{padding:16px}
+.opt{padding:12px 0;border-bottom:1px dotted var(--rule)}
+.opt:last-child{border-bottom:none}
+.opt-t{font-size:12.5px;color:var(--ink-faint);font-family:var(--mono);letter-spacing:.06em;margin-bottom:5px}
+.opt-v{font-family:var(--mono);font-size:23px;font-weight:900;line-height:1.15}
+.bkr.ib .opt-v{color:var(--teal)}
+.bkr.sw .opt-v{color:var(--terracotta)}
+.opt-s{font-size:12.5px;color:var(--ink-faint);margin-top:3px;font-family:var(--mono)}
+.opt-s2{font-family:var(--mono);font-size:15px;font-weight:700;color:var(--ink-soft);margin-top:2px}
+.delta{margin-top:11px;padding:10px 12px;border-radius:2px;font-size:13px;background:var(--parchment-deep);border-left:3px solid var(--gold)}
+.delta b{font-family:var(--mono);font-size:15px}
+
+.breakdown{background:var(--card);border:1px solid var(--rule);border-radius:2px;padding:18px}
+.bd-row{display:flex;justify-content:space-between;align-items:baseline;padding:8px 0;border-bottom:1px dotted var(--rule);font-size:13.5px;gap:12px}
+.bd-row:last-child{border-bottom:none;border-top:2px solid var(--ink);margin-top:5px;padding-top:11px;font-weight:700;font-size:15px}
+.bd-row .v{font-family:var(--mono);font-weight:700;white-space:nowrap}
+.pos{color:var(--teal)} .neg{color:var(--terracotta)}
+
+/* ── readout ── */
+.readout{background:var(--parchment-deep);border:1px solid var(--rule);border-left:3px solid var(--gold);border-radius:2px;padding:20px;margin-top:16px}
+.ro{display:flex;gap:15px;align-items:flex-start;padding:13px 0;border-bottom:1px dotted var(--rule);font-size:14px;color:var(--ink-soft);line-height:1.75}
+.ro:last-child{border-bottom:none;padding-bottom:0}
+.ro:first-of-type{padding-top:0}
+.ro-n{font-family:var(--mono);font-size:12px;font-weight:700;color:var(--parchment);background:var(--gold);width:26px;height:26px;flex:none;display:grid;place-items:center;border-radius:2px}
+.ro b{color:var(--ink)}
+.ro-t{display:block;margin-top:7px;font-size:13px;color:var(--terracotta);border-left:2px solid var(--terracotta-light);padding-left:11px}
+
+/* ── stress test ── */
+.stress{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:18px}
+.gauge{border:1px solid var(--rule);background:var(--card);border-radius:2px;padding:18px}
+.gauge-h{font-weight:700;font-size:14.5px;margin-bottom:12px;display:flex;justify-content:space-between;align-items:center}
+.gauge.ib .gauge-h{color:var(--teal)} .gauge.sw .gauge-h{color:var(--terracotta)}
+.meter{height:32px;background:var(--parchment-shade);border-radius:1px;position:relative;overflow:hidden;margin-bottom:10px}
+.meter-fill{height:100%;transition:width .4s ease,background .4s}
+.meter-zero{position:absolute;left:0;top:0;bottom:0;width:2px;background:var(--ink)}
+.status{font-family:var(--mono);font-size:12px;padding:7px 11px;border-radius:2px;display:inline-block;font-weight:700;letter-spacing:.05em}
+.status.ok{background:var(--teal-wash);color:var(--teal);border:1px solid var(--teal-light)}
+.status.warnst{background:rgba(168,137,76,.16);color:#7d6428;border:1px solid var(--gold)}
+.status.bad{background:var(--terracotta-wash);color:var(--terracotta);border:1px solid var(--terracotta-light)}
+.gauge dl{margin:12px 0 0;font-size:13px;display:grid;grid-template-columns:auto 1fr;gap:5px 12px}
+.gauge dt{color:var(--ink-faint)} .gauge dd{margin:0;font-family:var(--mono);text-align:right;font-weight:600}
+
+/* ── decision tree ── */
+.tree{display:grid;grid-template-columns:repeat(auto-fit,minmax(232px,1fr));gap:14px}
+.node{background:var(--card);border:1px solid var(--rule);border-radius:2px;padding:18px;position:relative}
+.node .nq{font-family:var(--mono);font-size:10.5px;letter-spacing:.13em;text-transform:uppercase;color:var(--gold);margin-bottom:8px}
+.node h4{margin:0 0 8px;font-size:15.5px;font-weight:700}
+.node p{margin:0;font-size:13.5px;color:var(--ink-soft);line-height:1.7}
+.node.act{border-left:3px solid var(--teal)}
+.node.avoid{border-left:3px solid var(--terracotta)}
+
+/* ── risk / checklist ── */
+.risks{display:grid;grid-template-columns:repeat(auto-fit,minmax(268px,1fr));gap:14px}
+.risk{background:var(--card);border:1px solid var(--rule);border-radius:2px;padding:18px;border-top:2px solid var(--terracotta)}
+.risk h4{margin:0 0 8px;font-size:15px;font-weight:700;color:var(--terracotta)}
+.risk p{margin:0;font-size:13.5px;color:var(--ink-soft);line-height:1.7}
+
+.check{display:grid;gap:2px;counter-reset:ck}
+.ck{display:flex;gap:13px;align-items:flex-start;padding:13px 15px;background:var(--card);border:1px solid var(--rule);border-radius:2px;cursor:pointer;transition:opacity .2s}
+.ck input{margin:5px 0 0;accent-color:var(--teal);width:15px;height:15px;flex:none;cursor:pointer}
+.ck-t{font-size:14.5px;line-height:1.65}
+.ck-t em{font-style:normal;display:block;font-size:12.5px;color:var(--ink-faint);font-family:var(--mono);margin-top:3px}
+.ck.done{opacity:.44}
+.ck.done .ck-t{text-decoration:line-through}
+
+/* ── caveats ── */
+.caveat{background:var(--parchment-deep);border:1px solid var(--rule);border-left:3px solid var(--ink);padding:20px 22px;border-radius:2px}
+.caveat ul{margin:0;padding-left:19px;font-size:13.5px;color:var(--ink-soft);line-height:1.82}
+.caveat li{margin-bottom:8px}
+.caveat li:last-child{margin-bottom:0}
+.conflict{background:rgba(181,80,47,.07);border:1px dashed var(--terracotta);padding:13px 15px;border-radius:2px;font-size:13.5px;color:var(--ink-soft);margin-top:16px}
+.conflict b{color:var(--terracotta)}
+
+footer{padding:40px 0 56px;font-family:var(--mono);font-size:11.5px;color:var(--ink-faint);line-height:1.9}
+
+@media (max-width:920px){
+  .ladder-shell{grid-template-columns:1fr}
+  .rung-detail{position:static}
+  .calc{grid-template-columns:1fr}
+  .panel.sticky{position:static}
+}
+@media (max-width:640px){
+  section{padding:46px 0}
+  .bkr-grid,.stress{grid-template-columns:1fr}
+  .rung-label{width:auto;font-size:12px}
+  .rung-track{display:none}
+  .coll-row{grid-template-columns:1fr;gap:5px}
+  .coll-note{grid-column:1}
+}
+</style>
+</head>
+<body>
+
+<nav class="topbar">
+  <div class="wrap">
+    <span class="brandmark">T-BILL × SHORT PUT</span>
+    <a href="#verdict">结论</a>
+    <a href="#ladder">利率阶梯</a>
+    <a href="#flow">五步机制</a>
+    <a href="#collateral">抵押资格</a>
+    <a href="#table">逐项对比</a>
+    <a href="#calc">收益计算器</a>
+    <a href="#stress">压力测试</a>
+    <a href="#assign">接货决策</a>
+    <a href="#ops">实操清单</a>
+  </div>
+</nav>
+
+<header class="hero">
+  <div class="wrap">
+    <div class="eyebrow">保证金抵押品 · 负 carry · 券商机制对照</div>
+    <h1>用 T-bill 顶保证金去卖 Put<br><span class="thin">机制成立，成败在两格利率的落差</span></h1>
+    <p class="dek">段永平在嘉信的路径——股票被 call 走 → 现金买 T-bill 吃息 → T-bill 充当保证金 → 卖 put 收权利金 → 到期滚动。这套动作在 Schwab 和 IBKR 规则上都跑得通。真正分胜负的不是抵押率，而是接货那一刻你按什么利率借钱：IBKR 约 5.12%，Schwab 约 11.3%。</p>
+    <div class="stamp">
+      <span>数据截至 2026-07-27</span>
+      <span>联邦基金 3.50–3.75%</span>
+      <span>3M T-bill ≈ 3.9%</span>
+      <span>信息性分析 · 非投资建议</span>
+    </div>
+  </div>
+</header>
+
+<!-- 1 结论 -->
+<section id="verdict">
+  <div class="wrap">
+    <div class="sec-head"><span class="sec-idx">01</span><h2>结论先行</h2></div>
+    <p class="sec-sub">三句话可以概括：机制两家都有；成本 IBKR 碾压；风险 IBKR 更硬。</p>
+    <div class="verdicts">
+      <div class="verdict">
+        <div class="tag">机制 / 是否可行</div>
+        <div class="big">1%</div>
+        <p>IBKR 对 6 个月内到期的美国国债只收 <b>1% 保证金</b>（<1 年 2%，1–3 年 3%），即约 99% 抵押价值。Schwab 对国债按"善意"给 90%+ 贷款价值。覆盖卖 naked put 约 20% 的要求绰绰有余——机制完全成立。</p>
+      </div>
+      <div class="verdict warn">
+        <div class="tag">成本 / 接货那一刻</div>
+        <div class="big">11.3% <span style="font-size:15px;font-weight:400">vs</span> 5.12%</div>
+        <p>Put 被行权而账上无现金时，系统<b>不会自动卖 T-bill</b>，而是生成保证金借款。Schwab 约 11.3%、IBKR Pro 约 5.12%，都高于 T-bill 的 3.81–4.12%——这就是负 carry。Schwab 借一周就能吃掉大半权利金。</p>
+      </div>
+      <div class="verdict gold">
+        <div class="tag">陷阱 / 别踩</div>
+        <div class="big">SWVXX ✕</div>
+        <p>Schwab 官方明确<b>货币市场基金不作为保证金抵押品</b>，所以必须买直接持有的 T-bill 而非 SWVXX。同理 IBKR 上 SGOV 的初始保证金高达约 27.5%，当抵押底仓远不如直接持 T-bill（1%）。</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 2 利率阶梯 signature -->
+<section id="ladder">
+  <div class="wrap">
+    <div class="sec-head"><span class="sec-idx">02</span><h2>利率阶梯</h2></div>
+    <p class="sec-sub">整套策略的经济学压缩成一把梯子：你站在下半截吃息，接货时被抬到上半截付息。中间那段落差，就是负 carry。点任意一格看细节。</p>
+    <div class="ladder-shell">
+      <div class="ladder">
+        <div class="ladder-div">付息端 · 借款利率</div>
+        <div id="payRungs"></div>
+        <div class="carry-box">
+          <div class="cb-t">负 CARRY = 借款利率 − T-bill 收益率</div>
+          <div class="cb-v"><span id="carryIB">—</span> <span style="font-size:13px;color:var(--ink-soft);font-weight:400">IBKR</span> &nbsp;·&nbsp; <span id="carrySW">—</span> <span style="font-size:13px;color:var(--ink-soft);font-weight:400">Schwab</span></div>
+          <div class="cb-n">借 10 万美元接货、30 天不还：IBKR 净损 <span class="num" id="carryDolIB">—</span>，Schwab 净损 <span class="num" id="carryDolSW">—</span>。</div>
+        </div>
+        <div class="ladder-div">吃息端 · 收益率</div>
+        <div id="earnRungs"></div>
+      </div>
+      <aside class="rung-detail" id="rungDetail" aria-live="polite">
+        <div class="rd-name">选一格看细节</div>
+        <div class="rd-rate">—</div>
+        <div class="rd-body">左侧每一格是这套策略里真实会碰到的一个利率。默认选中的是 3 个月 T-bill，也就是段永平那约 4% 的来源。</div>
+      </aside>
+    </div>
+  </div>
+</section>
+
+<!-- 3 五步 -->
+<section id="flow">
+  <div class="wrap">
+    <div class="sec-head"><span class="sec-idx">03</span><h2>五步机制拆解</h2></div>
+    <p class="sec-sub">按原图的五步走，每一步标注两家券商的差别。点开看该步的机制细节与踩坑点。</p>
+    <div class="flow" id="flowSteps"></div>
+  </div>
+</section>
+
+<!-- 4 抵押资格 -->
+<section id="collateral">
+  <div class="wrap">
+    <div class="sec-head"><span class="sec-idx">04</span><h2>什么能当抵押品</h2></div>
+    <p class="sec-sub">同样是"看起来像现金"的东西，在保证金系统里待遇天差地别。横条 = 每 100 美元资产能顶多少保证金。</p>
+    <div class="tbl-tools">
+      <button class="chip" id="collIB" aria-pressed="true">IBKR 口径</button>
+      <button class="chip" id="collSW" aria-pressed="false">Schwab 口径</button>
+    </div>
+    <div class="coll" id="collBars"></div>
+  </div>
+</section>
+
+<!-- 5 对比表 -->
+<section id="table">
+  <div class="wrap">
+    <div class="sec-head"><span class="sec-idx">05</span><h2>逐项对比</h2></div>
+    <p class="sec-sub">标签表示该项谁占优。可以只看有实质差异的行。</p>
+    <div class="tbl-tools">
+      <button class="chip" id="fAll" aria-pressed="true">全部条目</button>
+      <button class="chip" id="fDiff" aria-pressed="false">只看实质差异</button>
+    </div>
+    <div class="tblwrap">
+      <table>
+        <thead><tr><th>维度</th><th>Interactive Brokers (Pro)</th><th>Charles Schwab</th></tr></thead>
+        <tbody id="cmpBody"></tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+<!-- 6 计算器 -->
+<section id="calc">
+  <div class="wrap">
+    <div class="sec-head"><span class="sec-idx">06</span><h2>收益与成本计算器</h2></div>
+    <p class="sec-sub">权利金收入在"买 T-bill"和"持现金"两个方案里完全相同，是噪音——所以主数字只算<b>资金端差额</b>：多吃的利息，减去负 carry 与佣金。左边调参数，右边同时算两家。把「接货后借款天数」拖到 0，就能看到纪律值多少钱。</p>
+    <div class="calc">
+      <div class="panel sticky">
+        <div class="fld">
+          <label for="iNav">账户净值 <span class="lv" id="vNav"></span></label>
+          <input type="range" id="iNav" min="100000" max="3000000" step="50000" value="500000">
+        </div>
+        <div class="fld">
+          <label for="iYield">T-bill 年化收益率 <span class="lv" id="vYield"></span></label>
+          <input type="range" id="iYield" min="2.5" max="5.5" step="0.05" value="3.95">
+        </div>
+        <div class="fld">
+          <label for="iNot">卖出 put 名义 / 净值 <span class="lv" id="vNot"></span></label>
+          <input type="range" id="iNot" min="30" max="250" step="5" value="100">
+          <div class="hint">100% = 全部可被接货（等效现金担保）。超过 100% 即真正意义的裸卖杠杆。</div>
+        </div>
+        <div class="fld">
+          <label for="iPrem">单周期权利金 / 名义 <span class="lv" id="vPrem"></span></label>
+          <input type="range" id="iPrem" min="0.3" max="5" step="0.1" value="2.0">
+        </div>
+        <div class="fld">
+          <label for="iCyc">每年滚动周期数 <span class="lv" id="vCyc"></span></label>
+          <input type="range" id="iCyc" min="4" max="26" step="1" value="12">
+        </div>
+        <div class="fld">
+          <label for="iAsg">年内被接货名义占比 <span class="lv" id="vAsg"></span></label>
+          <input type="range" id="iAsg" min="0" max="100" step="5" value="25">
+        </div>
+        <div class="fld">
+          <label for="iDays">接货后借款天数 <span class="lv" id="vDays"></span></label>
+          <input type="range" id="iDays" min="0" max="120" step="1" value="14">
+          <div class="hint">0 天 = 立刻卖 T-bill 换现金还款，无负 carry。这是最该守的纪律。</div>
+        </div>
+        <div class="fld">
+          <label style="margin-bottom:8px">税务身份</label>
+          <div class="seg">
+            <button id="tNRA" aria-pressed="true">非美税务居民</button>
+            <button id="tUS" aria-pressed="false">美国税务居民</button>
+          </div>
+          <div class="hint" id="taxHint"></div>
+        </div>
+        <div class="fld" id="stateWrap" hidden>
+          <label for="iState">州所得税边际税率 <span class="lv" id="vState"></span></label>
+          <input type="range" id="iState" min="0" max="13.3" step="0.1" value="0">
+        </div>
+      </div>
+
+      <div>
+        <div class="bkr-grid">
+          <div class="bkr ib">
+            <div class="bkr-h"><span>Interactive Brokers</span><span class="hr">借 5.12% · 现金 3.13%</span></div>
+            <div class="bkr-b">
+              <div class="opt">
+                <div class="opt-t">买 T-BILL 相对持现金，多赚</div>
+                <div class="opt-v" id="ibD">—</div>
+                <div class="opt-s" id="ibDy">—</div>
+              </div>
+              <div class="opt">
+                <div class="opt-t">资金端 · T-bill 方案 / 现金方案</div>
+                <div class="opt-s2" id="ibAB">—</div>
+              </div>
+              <div class="delta" id="ibT">—</div>
+            </div>
+          </div>
+          <div class="bkr sw">
+            <div class="bkr-h"><span>Charles Schwab</span><span class="hr">借 11.3% · sweep 0.35%</span></div>
+            <div class="bkr-b">
+              <div class="opt">
+                <div class="opt-t">买 T-BILL 相对持现金，多赚</div>
+                <div class="opt-v" id="swD">—</div>
+                <div class="opt-s" id="swDy">—</div>
+              </div>
+              <div class="opt">
+                <div class="opt-t">资金端 · T-bill 方案 / 现金方案</div>
+                <div class="opt-s2" id="swAB">—</div>
+              </div>
+              <div class="delta" id="swT">—</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="breakdown">
+          <h3 style="margin-bottom:12px">资金端拆解（年化，剔除权利金）</h3>
+          <div class="bd-row"><span>T-bill 利息收入</span><span class="v pos" id="bdTbill">—</span></div>
+          <div class="bd-row"><span>券商现金利息（对照 · IBKR / Schwab）</span><span class="v" id="bdCash">—</span></div>
+          <div class="bd-row"><span>负 carry 拖累（IBKR / Schwab）</span><span class="v neg" id="bdCarry">—</span></div>
+          <div class="bd-row"><span>T-bill 滚动佣金（IBKR / Schwab）</span><span class="v neg" id="bdComm">—</span></div>
+          <div class="bd-row"><span>税负差异</span><span class="v neg" id="bdTax">—</span></div>
+          <div class="bd-row"><span>资金端净收益（IBKR / Schwab）</span><span class="v" id="bdNet">—</span></div>
+          <div class="hint" style="margin-top:11px">参考：本设定下权利金毛收入 <span class="num" id="bdPrem">—</span>／年，两方案相同。</div>
+        </div>
+
+        <div class="breakdown" style="margin-top:16px">
+          <h3 style="margin-bottom:12px">保证金占用检查</h3>
+          <div class="bd-row"><span>卖 put 保证金要求（Reg T，平值近似）</span><span class="v" id="mgReq">—</span></div>
+          <div class="bd-row"><span>T-bill 提供的抵押价值（IBKR 99% / Schwab 92.5%）</span><span class="v" id="mgColl">—</span></div>
+          <div class="bd-row"><span>保证金使用率（IBKR / Schwab）</span><span class="v" id="mgUtil">—</span></div>
+        </div>
+        <div class="hint" style="margin-top:12px">保证金按平值 naked put 近似取名义值 20%（Reg T 公式 max[20%×现价 − 价外 + 权利金, 10%×行权价 + 权利金]）。Schwab 用 25% 变体，实际占用更高。实盘以账户内实时保证金计算为准。</div>
+
+        <div class="readout">
+          <h3 style="margin-bottom:12px">两个反直觉的读数</h3>
+          <div class="ro">
+            <div class="ro-n">壹</div>
+            <div>
+              <b>「买 T-bill」这个动作，在 Schwab 上比在 IBKR 上值钱得多。</b>
+              默认参数下，Schwab 用户买 T-bill 每年多赚约 3.53%，IBKR 用户只多赚约 0.86%。原因不是 Schwab 更好，恰恰相反——Schwab 的默认 sweep 近乎零息，买 T-bill 是从 0 到 4；而 IBKR 闲置现金本来就给 3.13%，买 T-bill 只是从 3.13 到 3.95。
+              <span class="ro-t">段永平在嘉信必须买 T-bill，因为不买就是白扔。换到 IBKR，这个动作的紧迫性大幅下降。</span>
+            </div>
+          </div>
+          <div class="ro">
+            <div class="ro-n">贰</div>
+            <div>
+              <b>但整体水位仍是 IBKR 更高。</b>
+              同样默认参数，资金端净收益 IBKR 约 $19,653、Schwab 约 $19,393——差距不大，可一旦接货借款，Schwab 的 11.3% 会迅速拉开距离（接货 60% 借 90 天：IBKR 净损 $877，Schwab 净损 $5,512，六倍）。
+              <span class="ro-t">把 T-bill 收益率拖到 3.20% 试试：IBKR 上买 T-bill 只多赚约 0.11%，佣金和滚动麻烦已经不值得——这就是「不必折腾」的阈值。</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 7 压力测试 -->
+<section id="stress">
+  <div class="wrap">
+    <div class="sec-head"><span class="sec-idx">07</span><h2>保证金压力测试</h2></div>
+    <p class="sec-sub">标的下跌时，put 亏损侵蚀净值、保证金要求同时抬升——双向挤压。拖动看两家什么时候见底。</p>
+    <div class="panel">
+      <div class="fld" style="margin-bottom:0">
+        <label for="iDrop">标的自行权价下跌 <span class="lv" id="vDrop"></span></label>
+        <input type="range" id="iDrop" min="0" max="60" step="1" value="0">
+      </div>
+    </div>
+    <div class="stress">
+      <div class="gauge ib">
+        <div class="gauge-h"><span>Interactive Brokers</span><span class="status" id="stIB">—</span></div>
+        <div class="meter"><div class="meter-fill" id="mfIB" style="width:100%;background:var(--teal-light)"></div><div class="meter-zero"></div></div>
+        <dl>
+          <dt>账户净值</dt><dd id="sNavIB">—</dd>
+          <dt>保证金要求</dt><dd id="sReqIB">—</dd>
+          <dt>剩余流动性</dt><dd id="sExIB">—</dd>
+        </dl>
+      </div>
+      <div class="gauge sw">
+        <div class="gauge-h"><span>Charles Schwab</span><span class="status" id="stSW">—</span></div>
+        <div class="meter"><div class="meter-fill" id="mfSW" style="width:100%;background:var(--terracotta-light)"></div><div class="meter-zero"></div></div>
+        <dl>
+          <dt>账户净值</dt><dd id="sNavSW">—</dd>
+          <dt>保证金要求</dt><dd id="sReqSW">—</dd>
+          <dt>剩余流动性</dt><dd id="sExSW">—</dd>
+        </dl>
+      </div>
+    </div>
+    <div class="conflict" style="margin-top:18px"><b>关键差别不在数字，在处置方式。</b>IBKR 触及维持保证金即可能在几分钟内自动强平，不发传统 margin call、不给宽限期，且强平可能连 T-bill 一起卖掉——你精心搭的吃息底仓会在最坏的时点被动清算。Schwab 通常给一定处理时间，但其官方明确"客户无权要求延期"，组合保证金账户须在 2 个交易日内补足，剧烈波动时可立即要求。</div>
+  </div>
+</section>
+
+<!-- 8 接货决策 -->
+<section id="assign">
+  <div class="wrap">
+    <div class="sec-head"><span class="sec-idx">08</span><h2>接货那一刻的决策</h2></div>
+    <p class="sec-sub">这是整套策略唯一真正需要你做判断的节点。IBKR 官方文档写得很清楚：保证金要求被计算，不等于账户在借款；只有在没有足额已交收资金支持买入时，才会真的生成保证金贷款。</p>
+    <div class="tree">
+      <div class="node">
+        <div class="nq">触发</div>
+        <h4>Put 进入价内、临近到期</h4>
+        <p>被指派概率上升。此刻账户里是 T-bill，不是现金。系统不会替你做任何事，等你被动接货。</p>
+      </div>
+      <div class="node act">
+        <div class="nq">路径 A · 推荐</div>
+        <h4>主动卖出等额 T-bill</h4>
+        <p>T+1 结算，提前 1–2 个交易日操作即可在交收日备好现金。零负 carry，代价只是损失剩余期限的利息与极小的买卖价差。</p>
+      </div>
+      <div class="node avoid">
+        <div class="nq">路径 B · 被动</div>
+        <h4>任由系统生成保证金借款</h4>
+        <p>T-bill 继续吃息，但同时按 IBKR 约 5.12% / Schwab 约 11.3% 付息。在 Schwab 是每天净损约 7 个百分点年化——权利金撑不了几天。</p>
+      </div>
+      <div class="node avoid">
+        <div class="nq">失控情形</div>
+        <h4>大面积同时被行权</h4>
+        <p>名义值超过净值时，接货需要的现金超过 T-bill 总额，缺口只能靠真杠杆补。此时若标的继续下跌，净值缩水 + 保证金抬升 + 借款计息三重挤压，最容易触发强平。</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 9 风险 -->
+<section id="risk">
+  <div class="wrap">
+    <div class="sec-head"><span class="sec-idx">09</span><h2>风险清单</h2></div>
+    <p class="sec-sub">T-bill 的稳定性不对冲任何股票敞口。它只解决"闲钱吃息"，不解决"卖 put 的方向性风险"。</p>
+    <div class="risks">
+      <div class="risk"><h4>方向性风险才是主体</h4><p>卖 put 的本质是在标的大跌时高价接货。MU / TSLA / PLTR 这类高波动标的，一次 30% 的下杀就能抹掉两年权利金。T-bill 那 4% 在这个量级面前是零头。</p></div>
+      <div class="risk"><h4>相关性风险</h4><p>组合里所有短 put 同时价内时，亏损不是分散的而是叠加的。加上都是同一风格的成长股，实际相关性远高于直觉。</p></div>
+      <div class="risk"><h4>自动强平会卖掉底仓</h4><p>IBKR 强平算法不保护你的 T-bill。最坏情况是在标的底部同时被平掉股票和债券，把浮亏锁成实亏。</p></div>
+      <div class="risk"><h4>杠杆幻觉</h4><p>20% 保证金意味着理论上能卖 5 倍名义值的 put，但真接货时需要 100% 现金。保证金占用低 ≠ 风险低，只是风险还没兑现。</p></div>
+      <div class="risk"><h4>负 carry 的复利</h4><p>Schwab 的保证金利息按 360 天基准每日复利。约 11.3% 借三个月，成本接近 2.9%——一个季度的权利金往往就这个量级。</p></div>
+      <div class="risk"><h4>规则会变</h4><p>Haircut、house requirement、借款利率券商可随时调整，通常在波动放大时收紧——也就是你最需要保证金的时候。</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- 10 实操 -->
+<section id="ops">
+  <div class="wrap">
+    <div class="sec-head"><span class="sec-idx">10</span><h2>IBKR 实操清单</h2></div>
+    <p class="sec-sub">点一下打勾，进度存在本页（刷新即重置，不写任何存储）。</p>
+    <div class="check" id="checklist"></div>
+  </div>
+</section>
+
+<!-- 11 caveats -->
+<section id="caveats" style="border-bottom:none">
+  <div class="wrap">
+    <div class="sec-head"><span class="sec-idx">11</span><h2>数据说明与保留</h2></div>
+    <div class="caveat">
+      <ul>
+        <li><b>这是信息性分析，不是投资建议。</b>本页只回答"机制是否成立、成本几何"，不对是否应该执行这套策略作任何推荐。</li>
+        <li><b>利率为 2026 年 7 月数据，会变。</b>下次 FOMC 为 7 月 28–29 日。佣金、haircut、house requirement 券商可随时调整，实盘前以券商实时页面为准。</li>
+        <li><b>Schwab 基准借款利率存在官网页面间冲突：</b>margin-rates 页面载明基准 10.00%（末次调整 2025-12-12），另一页仍显示 11.25%，其教学文举例最高档实际利率 11.825%。本页统一按有效约 11.3% 计算并已标注。</li>
+        <li><b>Schwab naked put 的 25% 系数</b>来自较早年份公开说明，可能已调整。实盘请以账户内 Buying Power Detail / Margin Requirement Lookup Tool 的实时计算为准。</li>
+        <li><b>IBKR 现金利息 3.13% 有门槛：</b>仅对超过 $10,000 的部分计息，且需净清算值 ≥ $100,000 才拿满额，否则按 NAV 比例折算（如 $50k NAV 只拿一半）。IBKR Lite 利率更低。</li>
+        <li><b>计算器为简化模型。</b>保证金按平值近似取名义 20%，未计入 delta 变化、隐含波动率、提前指派、股息、汇率与实际买卖价差。压力测试为示意性线性近似，非组合保证金的真实压力情景计算。</li>
+        <li><b>段永平的操作细节</b>来自其网络公开言论转述，本页仅就机制可行性与成本作客观分析，未核实其个人账户实况。</li>
+        <li><b>税务处理请咨询专业人士。</b>非美税务居民的组合利息豁免、中美税收协定股息预扣（10%）等适用条件因人而异。</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    单文件 · 零构建 · 可直接部署 GitHub Pages<br>
+    数据源：U.S. Treasury / FRED / IBKR Bonds Margin Requirements / Schwab Margin Rates & Requirements / FINRA Rule 4210 / Reg T (12 CFR §220)<br>
+    构建于 2026-07-27
+  </div>
+</footer>
+
+<script>
+"use strict";
+
+/* ══════════ 常量 ══════════ */
+const IB = { name:"IBKR", haircut:0.01, borrow:5.12, cash:3.13, cashFree:10000, key:"ib" };
+const SW = { name:"Schwab", haircut:0.075, borrow:11.30, cash:0.35, cashFree:0, key:"sw" };
+
+const fmt0 = n => (n<0?"−$":"$") + Math.abs(Math.round(n)).toLocaleString("en-US");
+const pct  = (n,d=2) => n.toFixed(d) + "%";
+
+/* ══════════ 02 利率阶梯 ══════════ */
+const RUNGS = [
+  { side:"pay", v:11.30, label:"Schwab 保证金借款", color:"var(--terracotta)",
+    body:"Schwab 有效保证金借款利率。其教学文举例最高档达 11.825%，官网基准页面则载 10.00%（末次调整 2025-12-12）与另一页 11.25% 冲突。无论取哪个口径，都远高于 T-bill 收益率。按 360 天基准每日复利。",
+    src:"Schwab Margin Rates & Requirements（页面间数据冲突，已标注）" },
+  { side:"pay", v:6.12, label:"IBKR Lite 借款", color:"var(--terracotta-light)",
+    body:"IBKR Lite 的固定保证金借款利率，比 Pro 高约 1 个百分点。跑这套策略应当用 Pro。",
+    src:"IBKR 官网 Margin Rates" },
+  { side:"pay", v:5.12, label:"IBKR Pro 借款（最低档）", color:"var(--terracotta-light)",
+    body:"基准约 3.62% + 1.5%，适用首档余额。大额可降至约 4.62%（+1.0%）乃至约 4.12%（+0.5%）。这是接货时真正付出的价格——比 Schwab 便宜约 6 个百分点。",
+    src:"IBKR 官网 Margin Rates（分档随基准每日浮动）" },
+  { side:"earn", v:4.34, label:"2 年期国债", color:"var(--gold)",
+    body:"作为期限溢价参照。但 2 年期在 IBKR 的保证金要求是 3%（vs 6 个月内的 1%），且久期风险显著上升——当抵押底仓不划算。",
+    src:"FRED，2026-07-23" },
+  { side:"earn", v:4.12, label:"1 年期 T-bill", color:"var(--teal)",
+    body:"曲线上收益最高的短端 bill。IBKR 保证金要求 2%（<1 年档）。若确定一年内不需要动用，这是吃息效率最高的一档。",
+    src:"U.S. Treasury / StreetStats，2026-07-24" },
+  { side:"earn", v:4.09, label:"6 个月 T-bill", color:"var(--teal)",
+    body:"仍落在 IBKR 的 1% 保证金档（<6 个月）内的临界点，兼顾收益与抵押效率。",
+    src:"FRED DGS6MO，2026-07-23" },
+  { side:"earn", v:3.90, label:"3 个月 T-bill ★", color:"var(--teal)",
+    body:"段永平口中「约 4%」的来源。投资基准约 3.9%，贴现基准 3.81%。IBKR 保证金要求仅 1%，即约 99% 抵押价值——吃息与顶保证金两不误，是这套策略的标准底仓。",
+    src:"U.S. Treasury / FRED DTB3，2026-07-23/24" },
+  { side:"earn", v:3.63, label:"有效联邦基金利率", color:"var(--ink-faint)",
+    body:"目标区间 3.50–3.75%，2026 年 6 月 17 日 FOMC 以 12–0 维持不变（主席 Kevin Warsh）。IBKR 的现金利息与借款利率均以此为基准加减点。",
+    src:"FRED，2026-07-02；FOMC 2026-06-17" },
+  { side:"earn", v:3.57, label:"SGOV（0–3月国债 ETF）", color:"var(--ink-faint)",
+    body:"费率 0.09%，规模约 $95.9B，30 日 SEC 收益率约 3.57%。买卖方便，但在 IBKR 的初始保证金要求高达约 27.5%——当抵押底仓比直接持 T-bill（1%）差 27 倍。只适合纯吃息、不需顶保证金的场景。",
+    src:"iShares / Elite Trader 实盘反馈" },
+  { side:"earn", v:3.50, label:"SWVXX 货币基金", color:"var(--ink-faint)",
+    body:"7 日收益率约 3.5%，TTM 3.73%，费率 0.34%。致命问题：Schwab 官方明确将货币市场基金排除在保证金抵押品之外。这正是段永平必须买直接持有的 T-bill、而不是简单买 SWVXX 的核心原因。",
+    src:"Morningstar / Schwab 官方抵押品说明" },
+  { side:"earn", v:3.13, label:"IBKR 现金利息", color:"var(--teal-light)",
+    body:"基准约 3.63% − 0.5%。仅对超过 $10,000 的余额计息，且需 NAV ≥ $100,000 才拿满额，否则按比例折算。与 3 个月 T-bill 相差约 77 个基点——这就是买 T-bill 的边际收益。",
+    src:"IBKR 官网 / BrokerChooser" },
+  { side:"earn", v:0.35, label:"Schwab 默认 sweep", color:"var(--terracotta-light)",
+    body:"银行 sweep 业内约 0.05–0.40%，近乎不计息。（其智能组合专用 sweep 为 3.26% APY，但不适用于普通经纪账户。）与 T-bill 相差 350 个基点以上——这就是段永平弃 sweep 买 T-bill 的直接动机。",
+    src:"Schwab 官网；SIP sweep 3.26% 自 2026-07-01" }
+];
+
+const MAXR = 12;
+function buildLadder(){
+  const pay = RUNGS.filter(r=>r.side==="pay");
+  const earn = RUNGS.filter(r=>r.side==="earn");
+  const render = (arr, host) => {
+    host.innerHTML = "";
+    arr.forEach(r => {
+      const b = document.createElement("button");
+      b.className = "rung " + r.side;
+      b.type = "button";
+      b.innerHTML = `<span class="rung-val">${r.v.toFixed(2)}%</span>
+        <span class="rung-track"><span class="rung-bar" style="width:0%;background:${r.color}"></span></span>
+        <span class="rung-label">${r.label}</span>`;
+      b.addEventListener("click", ()=>selectRung(r,b));
+      host.appendChild(b);
+      requestAnimationFrame(()=>{ b.querySelector(".rung-bar").style.width = (r.v/MAXR*100)+"%"; });
+    });
+  };
+  render(pay, document.getElementById("payRungs"));
+  render(earn, document.getElementById("earnRungs"));
+}
+function selectRung(r, el){
+  document.querySelectorAll(".rung").forEach(x=>x.classList.remove("on"));
+  el.classList.add("on");
+  document.getElementById("rungDetail").innerHTML =
+    `<div class="rd-name">${r.label}</div>
+     <div class="rd-rate">${r.v.toFixed(2)}%</div>
+     <div class="rd-body">${r.body}</div>
+     <div class="rd-src">来源：${r.src}</div>`;
+}
+buildLadder();
+(function initCarry(){
+  const tb = 3.90;
+  document.getElementById("carryIB").textContent = "−" + (IB.borrow-tb).toFixed(2) + "%";
+  document.getElementById("carrySW").textContent = "−" + (SW.borrow-tb).toFixed(2) + "%";
+  document.getElementById("carryDolIB").textContent = fmt0(-100000*(IB.borrow-tb)/100*30/360);
+  document.getElementById("carryDolSW").textContent = fmt0(-100000*(SW.borrow-tb)/100*30/360);
+  const def = document.querySelectorAll("#earnRungs .rung")[3];
+  if (def) def.click();
+})();
+
+/* ══════════ 03 五步 ══════════ */
+const STEPS = [
+  { t:"苹果（熟了）", s:"卖 covered call 被行权", body:
+    `持仓被 call 走，股票变现金。<br><br>
+     <span class="flag t">IBKR</span>指派当晚生成现金，T+1 交收。<span class="flag s">SCHWAB</span>同。<br><br>
+     这一步两家没有实质差别。真正的分歧从"这笔现金放哪"开始——放着不动，Schwab 的默认 sweep 只有约 0.05–0.40%，一年 50 万美元的闲钱少赚约 1.8 万。` },
+  { t:"现金买 T-bill", s:"吃约 4% 利息，同时充当保证金", body:
+    `法规基础：美国国债是 Reg T（12 CFR §220）项下的<b>豁免证券</b>，联邦不设固定初始保证金比例，由券商按"善意"自定；FINRA Rule 4210 对政府证券的维持保证金按剩余期限分档，通常 1–6%。<br><br>
+     <span class="flag t">IBKR</span>官方档位：&lt;6 月 <b>1%</b>｜&lt;1 年 2%｜1–3 年 3%｜3–5 年 4%｜5–10 年 5%｜10–20 年 7%｜20 年+ 9%。佣金 0.002% 面值，每笔最低 $5。<br>
+     <span class="flag s">SCHWAB</span>国债作抵押品，善意贷款价值 90%+（参照其 Pledged Asset Line 合格抵押品范围）。在线交易国债 <b>$0 佣金</b>，经纪协助 $25。<br><br>
+     <b>硬性前提：必须是保证金账户。</b>现金账户里的国债须全额付清，不提供任何抵押能力。` },
+  { t:"卖 put", s:"MU / SPCX / TSLA / PLTR", body:
+    `Reg T naked put 保证金公式：<br>
+     <span class="num">max[ 20%×标的现价 − 价外金额 + 权利金 , 10%×行权价 + 权利金 ] × 100 × 张数</span><br><br>
+     <span class="flag t">IBKR</span>按上述标准 20% 公式。组合保证金门槛 $110,000 起、维持 $100,000。<br>
+     <span class="flag s">SCHWAB</span>需 Level 3 期权权限；公开说明采用 25% 变体（25%×标的市值 + 权利金 − 价外金额，与 10%×行权价 + 权利金 取大者），占用更高。低于 $5 的股票必须全额现金担保。组合保证金门槛净清算值 ≥ $125,000 + Level 3 + 通过 20 题测试。<br><br>
+     组合保证金下按整个组合最坏情景压力测试（广基指数下探 15%），通常比 Reg T 低约 30%。Schwab 官方例子：卖一张 $120 put（标的 $125），Reg T 约 $2,000，PM 约 $1,350。` },
+  { t:"两种结局", s:"没跌破白收权利金 ｜ 跌破按认购价接货", body:
+    `没跌破：权利金落袋，T-bill 继续吃息，年化叠加。<br><br>
+     跌破接货——<b>这里是整套策略的成本分水岭</b>。IBKR 官方文档明确：保证金要求被计算，不等于账户在借款；只有在没有足额已交收资金支持买入或持有证券时，才会真正生成保证金贷款。也就是说：<b>系统不会替你卖 T-bill</b>，它直接给你记一笔负现金。<br><br>
+     <span class="flag t">IBKR</span>借款约 5.12%（最低档），负 carry 约 1.0–1.3 个百分点。<br>
+     <span class="flag s">SCHWAB</span>借款约 11.3%，负 carry 约 <b>7 个百分点</b>。其官方"Understanding Margin Interest"明确将"被指派的短仓期权"列为触发保证金借款的常见情形，利息按 360 天基准每日复利。<br><br>
+     纪律：进入价内、接货概率上升时，<b>主动卖出等额 T-bill 换现金</b>（T+1 结算），别让系统替你借钱。` },
+  { t:"到期后", s:"继续卖 put，滚动（他的原话）", body:
+    `滚动本身不产生额外成本，但有两个持续性开销要计入：<br><br>
+     ① <b>T-bill 到期滚动</b>——3 个月期一年滚 4 次。IBKR 每笔最低 $5 佣金，50 万美元底仓一年约 $40–80，可忽略；Schwab $0 佣金，此项占优。<br>
+     ② <b>期限错配</b>——T-bill 到期日与期权到期日不同步，会周期性出现现金空窗。可用阶梯化（laddering）不同到期日的 bill 缓解。<br><br>
+     真正的长期风险不在滚动成本，而在<b>滚动的心理惯性</b>：连续多期白收权利金会系统性低估尾部风险，逐步放大名义敞口，直到一次大跌兑现全部累积杠杆。` }
+];
+(function buildSteps(){
+  const host = document.getElementById("flowSteps");
+  STEPS.forEach((s,i)=>{
+    const d = document.createElement("div");
+    d.className = "step" + (i===3 ? " open" : "");
+    d.innerHTML = `<button class="step-btn" type="button" aria-expanded="${i===3}">
+        <span class="step-n">${i+1}</span>
+        <span class="step-t">${s.t}</span>
+        <span class="step-s">${s.s}</span>
+        <span class="step-caret">▸</span>
+      </button>
+      <div class="step-body"><div class="step-inner">${s.body}</div></div>`;
+    d.querySelector(".step-btn").addEventListener("click", function(){
+      const open = d.classList.toggle("open");
+      this.setAttribute("aria-expanded", open);
+    });
+    host.appendChild(d);
+  });
+})();
+
+/* ══════════ 04 抵押资格 ══════════ */
+const COLL = {
+  ib:[
+    {n:"现金 (USD)",  e:"100% 抵押",       v:100, c:"var(--ink-soft)",       note:"基准。但闲置只拿 3.13%，且前 $10k 不计息"},
+    {n:"T-bill <6 月", e:"1% 保证金要求",   v:99,  c:"var(--teal)",           note:"策略最优解：吃息约 3.9% + 几乎不占保证金"},
+    {n:"T-bill <1 年", e:"2% 保证金要求",   v:98,  c:"var(--teal)",           note:"吃息约 4.12%，抵押效率仅降 1 个点"},
+    {n:"国债 1–3 年",  e:"3% 保证金要求",   v:97,  c:"var(--teal-light)",     note:"久期风险上升，收益提升有限"},
+    {n:"国债 20 年+",  e:"9% 保证金要求",   v:91,  c:"var(--gold)",           note:"利率风险大，不适合当短期抵押底仓"},
+    {n:"SGOV 等短债 ETF", e:"约 27.5% 初始保证金", v:72.5, c:"var(--terracotta)", note:"当抵押品极不划算，比直接持 T-bill 差 27 倍"},
+    {n:"一般股票",     e:"Reg T 50%",       v:50,  c:"var(--terracotta-light)", note:"参照项"}
+  ],
+  sw:[
+    {n:"现金 (USD)",   e:"100% 抵押",      v:100, c:"var(--ink-soft)",       note:"基准。但默认 sweep 仅约 0.05–0.40%"},
+    {n:"美国国债",     e:"善意贷款价值 90%+", v:92.5, c:"var(--terracotta)",  note:"合格抵押品（Pledged Asset Line 明确含 Treasury）"},
+    {n:"SWVXX 货币基金", e:"不作为抵押品",   v:0,   c:"var(--terracotta-light)", note:"Schwab 官方明确排除货币基金 —— 这是最大的坑"},
+    {n:"CD 存单",      e:"不作为抵押品",    v:0,   c:"var(--terracotta-light)", note:"同上，官方明确排除"},
+    {n:"期权持仓",     e:"不作为抵押品",    v:0,   c:"var(--terracotta-light)", note:"同上"},
+    {n:"一般股票",     e:"Reg T 50%",      v:50,  c:"var(--ink-faint)",      note:"参照项"}
+  ]
+};
+function drawColl(k){
+  const host = document.getElementById("collBars");
+  host.innerHTML = "";
+  COLL[k].forEach(r=>{
+    const d = document.createElement("div");
+    d.className = "coll-row";
+    d.innerHTML = `<div class="coll-name">${r.n}<em>${r.e}</em></div>
+      <div class="coll-track"><div class="coll-fill" style="width:0%;background:${r.c}">${r.v>8?r.v+"%":""}</div></div>
+      <div class="coll-note">${r.note}</div>`;
+    host.appendChild(d);
+    requestAnimationFrame(()=>{ d.querySelector(".coll-fill").style.width = Math.max(r.v,0.4)+"%"; });
+  });
+}
+document.getElementById("collIB").addEventListener("click", ()=>{
+  document.getElementById("collIB").setAttribute("aria-pressed","true");
+  document.getElementById("collSW").setAttribute("aria-pressed","false");
+  drawColl("ib");
+});
+document.getElementById("collSW").addEventListener("click", ()=>{
+  document.getElementById("collSW").setAttribute("aria-pressed","true");
+  document.getElementById("collIB").setAttribute("aria-pressed","false");
+  drawColl("sw");
+});
+drawColl("ib");
+
+/* ══════════ 05 对比表 ══════════ */
+const CMP = [
+  ["T-bill 交易佣金", "0.002% 面值，每笔最低 $5，无上限无加价", "在线 $0（拍卖+二级市场），经纪协助 $25", "s", true],
+  ["国债作保证金抵押", "&lt;6 月 1%｜&lt;1 年 2%｜1–3 年 3%（约 99% 抵押价值）", "善意贷款价值 90%+，合格抵押品", "t", true],
+  ["货币基金作抵押", "可计入（按基金类型 haircut）", "<b>明确排除</b>：货币基金 / CD / 期权均不作抵押品", "t", true],
+  ["短债 ETF (SGOV)", "初始保证金约 27.5%，当抵押品很差", "按 Reg T 处理", "tie", false],
+  ["闲置现金利率", "<b>3.13%</b>（&gt;$10k 部分，需 NAV ≥ $100k 满额）", "银行 sweep 约 0.05–0.40%（智能组合 sweep 3.26%）", "t", true],
+  ["保证金借款利率", "<b>约 5.12%</b>（最低档），大额低至约 4.12%；Lite 6.12%", "<b>约 11.3%</b>（基准 10.00% 与 11.25% 页面冲突，举例 11.825%）", "t", true],
+  ["Naked put 保证金公式", "Reg T 标准 20% 公式", "25% 变体，占用更高；需 Level 3 权限", "t", true],
+  ["组合保证金门槛", "$110,000 起 / 维持 $100,000", "净清算值 ≥ $125,000 + Level 3 + 20 题测试", "t", true],
+  ["接货无现金时", "自动生成 margin loan，不自动卖 T-bill", "同样自动生成 margin loan（官方列为常见触发情形）", "tie", false],
+  ["强平政策", "<b>自动强平</b>，不发 call、不给宽限，可能连 T-bill 一起卖", "通常给处理时间，但官方明确客户无权要求延期；PM 账户 2 个交易日内补足", "s", true],
+  ["国债最低面值", "$1,000", "$1,000", "tie", false],
+  ["利息计息基准", "按日计息", "360 天基准每日复利", "tie", false]
+];
+(function buildTable(){
+  const b = document.getElementById("cmpBody");
+  CMP.forEach(r=>{
+    const tr = document.createElement("tr");
+    tr.dataset.diff = r[4];
+    const badge = r[3]==="t" ? '<span class="win">IBKR 占优</span>'
+                : r[3]==="s" ? '<span class="win s">Schwab 占优</span>'
+                : '<span class="win tie">相当</span>';
+    tr.innerHTML = `<td>${r[0]}${badge}</td><td>${r[1]}</td><td>${r[2]}</td>`;
+    b.appendChild(tr);
+  });
+})();
+function filterTbl(diffOnly){
+  document.querySelectorAll("#cmpBody tr").forEach(tr=>{
+    const isDiff = tr.dataset.diff === "true";
+    tr.style.display = (!diffOnly || isDiff) ? "" : "none";
+    tr.classList.toggle("hi", diffOnly && isDiff);
+  });
+}
+document.getElementById("fAll").addEventListener("click", ()=>{
+  document.getElementById("fAll").setAttribute("aria-pressed","true");
+  document.getElementById("fDiff").setAttribute("aria-pressed","false");
+  filterTbl(false);
+});
+document.getElementById("fDiff").addEventListener("click", ()=>{
+  document.getElementById("fDiff").setAttribute("aria-pressed","true");
+  document.getElementById("fAll").setAttribute("aria-pressed","false");
+  filterTbl(true);
+});
+
+/* ══════════ 06 计算器 ══════════ */
+const $ = id => document.getElementById(id);
+let taxMode = "nra";
+
+function taxHintText(){
+  return taxMode === "nra"
+    ? "非美税务居民：T-bill 利息与券商现金利息通常同样适用组合利息豁免，无美国预扣，两者<b>无税差</b>。（接货后持股的股息按中美协定 10% 预扣。）"
+    : "美国税务居民：T-bill 利息<b>免州及地方所得税</b>，券商现金利息全额应税。高州税州这项差异可观。";
+}
+$("tNRA").addEventListener("click", ()=>{
+  taxMode="nra"; $("tNRA").setAttribute("aria-pressed","true"); $("tUS").setAttribute("aria-pressed","false");
+  $("stateWrap").hidden = true; $("taxHint").innerHTML = taxHintText(); calc();
+});
+$("tUS").addEventListener("click", ()=>{
+  taxMode="us"; $("tUS").setAttribute("aria-pressed","true"); $("tNRA").setAttribute("aria-pressed","false");
+  $("stateWrap").hidden = false; $("taxHint").innerHTML = taxHintText(); calc();
+});
+
+function calc(){
+  const nav   = +$("iNav").value;
+  const yld   = +$("iYield").value;
+  const notP  = +$("iNot").value;
+  const prem  = +$("iPrem").value;
+  const cyc   = +$("iCyc").value;
+  const asg   = +$("iAsg").value;
+  const days  = +$("iDays").value;
+  const st    = taxMode==="us" ? +$("iState").value : 0;
+
+  $("vNav").textContent   = fmt0(nav);
+  $("vYield").textContent = pct(yld);
+  $("vNot").textContent   = notP + "%";
+  $("vPrem").textContent  = pct(prem,1);
+  $("vCyc").textContent   = cyc + " 次/年";
+  $("vAsg").textContent   = asg + "%";
+  $("vDays").textContent  = days + " 天";
+  $("vState").textContent = pct(st,1);
+
+  const notional = nav * notP/100;
+  const tbill    = nav * yld/100;
+  const premInc  = notional * prem/100 * cyc;
+  const assigned = notional * asg/100;
+  const rolls    = 4;
+
+  const res = {};
+  [IB,SW].forEach(bk=>{
+    const carry = assigned * Math.max(0,(bk.borrow - yld))/100 * days/360;
+    const comm  = bk.key==="ib" ? rolls * Math.max(5, nav*0.00002) : 0;
+    // 现金方案利息
+    const cashInt = bk.key==="ib"
+      ? Math.max(0, nav - bk.cashFree) * bk.cash/100
+      : nav * bk.cash/100;
+    // 州税差：现金利息缴州税，T-bill 不缴
+    const taxCash  = cashInt * st/100;
+    const taxTbill = 0;
+    // 资金端：剔除权利金（两方案完全相同，属噪音），这才是"买不买 T-bill"的真实差额
+    const fundB = tbill - carry - comm - taxTbill;
+    const fundA = cashInt - taxCash;
+    const netB = fundB + premInc;
+    const netA = fundA + premInc;
+    res[bk.key] = { carry, comm, cashInt, fundA, fundB, netA, netB, taxCash,
+      mgReq: notional*0.20, coll: nav*(1-bk.haircut) };
+  });
+
+  ["ib","sw"].forEach(k=>{
+    const r = res[k];
+    const d = r.fundB - r.fundA;
+    const el = $(k+"D");
+    el.textContent = (d>=0?"+":"") + fmt0(d);
+    el.style.color = d>=0 ? "" : "var(--terracotta)";
+    $(k+"Dy").textContent = "年化 " + (d>=0?"+":"") + pct(d/nav*100) + " · 每年";
+    $(k+"AB").innerHTML   = `${fmt0(r.fundB)} <span style="font-weight:400;color:var(--ink-faint)">/</span> ${fmt0(r.fundA)}`;
+    $(k+"T").innerHTML    = `含权利金后组合毛收益 <b>${fmt0(r.netB)}</b>（${pct(r.netB/nav*100)}）<br>
+      <span style="font-size:12px;color:var(--ink-faint)">权利金为毛额，未扣接货后持股的浮亏</span>`;
+  });
+
+  $("bdTbill").textContent = fmt0(tbill);
+  $("bdPrem").textContent  = fmt0(premInc);
+  $("bdCash").textContent  = fmt0(res.ib.cashInt) + "  /  " + fmt0(res.sw.cashInt);
+  $("bdCarry").textContent = fmt0(-res.ib.carry) + "  /  " + fmt0(-res.sw.carry)
+      + (days>0 ? `  （−${pct(res.ib.carry/nav*100,2)} / −${pct(res.sw.carry/nav*100,2)}）` : "");
+  $("bdComm").textContent  = fmt0(-res.ib.comm) + "  /  " + fmt0(-res.sw.comm);
+  $("bdTax").textContent   = taxMode==="us"
+      ? "T-bill 免州税；现金方案计 " + fmt0(-res.ib.taxCash) + " / " + fmt0(-res.sw.taxCash)
+      : "无税差（组合利息豁免）";
+  $("bdNet").innerHTML     = `<span class="pos">${fmt0(res.ib.fundB)}</span>  /  <span class="neg">${fmt0(res.sw.fundB)}</span>`;
+
+  $("mgReq").textContent  = fmt0(res.ib.mgReq);
+  $("mgColl").textContent = fmt0(res.ib.coll) + "  /  " + fmt0(res.sw.coll);
+  const uIB = res.ib.mgReq/res.ib.coll*100, uSW = res.sw.mgReq/res.sw.coll*100;
+  $("mgUtil").innerHTML   = `<span class="${uIB>85?'neg':'pos'}">${pct(uIB,1)}</span>  /  <span class="${uSW>85?'neg':'pos'}">${pct(uSW,1)}</span>`;
+
+  stress();
+}
+["iNav","iYield","iNot","iPrem","iCyc","iAsg","iDays","iState"].forEach(id=>{
+  $(id).addEventListener("input", calc);
+});
+
+/* ══════════ 07 压力测试 ══════════ */
+function stress(){
+  const nav  = +$("iNav").value;
+  const notP = +$("iNot").value;
+  const prem = +$("iPrem").value;
+  const d    = +$("iDrop").value;
+  $("vDrop").textContent = d + "%";
+
+  const notional = nav * notP/100;
+  const loss     = notional * d/100;
+  const premOne  = notional * prem/100;
+  const newNav   = nav + premOne - loss;
+  const req      = notional * (0.20 + 0.80*d/100);
+
+  [IB,SW].forEach(bk=>{
+    const coll   = newNav * (1 - bk.haircut);
+    const excess = coll - req;
+    const ratio  = Math.max(0, Math.min(100, excess / Math.max(coll,1) * 100));
+    const K = bk.key.toUpperCase();
+    $("sNav"+K).textContent = fmt0(newNav);
+    $("sReq"+K).textContent = fmt0(req);
+    $("sEx"+K).textContent  = fmt0(excess);
+    const mf = $("mf"+K);
+    mf.style.width = ratio + "%";
+    const stEl = $("st"+K);
+    if (excess < 0){
+      mf.style.background = "var(--terracotta)";
+      stEl.className = "status bad";
+      stEl.textContent = bk.key==="ib" ? "自动强平区" : "追缴保证金";
+    } else if (ratio < 20){
+      mf.style.background = "var(--gold)";
+      stEl.className = "status warnst";
+      stEl.textContent = "缓冲告急";
+    } else {
+      mf.style.background = bk.key==="ib" ? "var(--teal-light)" : "var(--terracotta-light)";
+      stEl.className = "status ok";
+      stEl.textContent = "缓冲充足";
+    }
+  });
+}
+$("iDrop").addEventListener("input", stress);
+
+/* ══════════ 10 清单 ══════════ */
+const CHECK = [
+  ["开立保证金账户（非现金账户）", "现金账户里的国债不提供任何抵押能力"],
+  ["申请期权权限至可卖 naked put 的等级", "Schwab 需 Level 3；IBKR 按问卷评级"],
+  ["确认账户为 IBKR Pro 而非 Lite", "Lite 借款 6.12% vs Pro 5.12%，现金利息也更低"],
+  ["在 TWS Bond Scanner 买入 3–6 个月 T-bill", "Fixed Income → US Treasury，面值 $1,000 起，限价挂单"],
+  ["核对 Excess Liquidity 只下降约 1% 面值", "确认 T-bill 确实按 1% 档计入保证金，而非被当普通证券"],
+  ["卖出 put 前用 Order Preview 看保证金占用", "IBKR 会实时显示该笔对 Excess Liquidity 的影响"],
+  ["把 T-bill 到期日阶梯化，避开期权到期日", "减少现金空窗与被迫借款的窗口"],
+  ["设定纪律：put 进入价内即主动卖 T-bill", "别让系统替你按 5.12%／11.3% 借钱"],
+  ["用 Risk Navigator 跑一次下跌 30% 情景", "确认最坏情况下 Excess Liquidity 仍为正"],
+  ["确认卖出 put 名义总额不超过 T-bill 面值", "即「全部接货也接得住」，把裸卖降级为等效现金担保"]
+];
+(function buildCheck(){
+  const host = $("checklist");
+  CHECK.forEach((c,i)=>{
+    const l = document.createElement("label");
+    l.className = "ck";
+    l.innerHTML = `<input type="checkbox" id="ck${i}"><span class="ck-t">${c[0]}<em>${c[1]}</em></span>`;
+    l.querySelector("input").addEventListener("change", function(){
+      l.classList.toggle("done", this.checked);
+    });
+    host.appendChild(l);
+  });
+})();
+
+/* init */
+$("taxHint").innerHTML = taxHintText();
+calc();
+</script>
+</body>
+</html>

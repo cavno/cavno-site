@@ -1,0 +1,570 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>四律 · 逻辑思脉地图（科普勒斯顿全谱系）Atlas Logoi</title>
+<meta name="description" content="把同一律、矛盾律、排中律、充足理由律当作可装可卸的'选择公理'——以《科普勒斯顿哲学史》全套为基础，约百位哲学家的逻辑思脉与历史分叉。">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;1,500;1,600&family=GFS+Didot&family=Noto+Serif+SC:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root{
+  --parchment:#f3ebda; --parchment-light:#faf4e6; --parchment-dark:#e8ddc6;
+  --ink:#1c1916; --ink-soft:#3a342c; --ink-fade:#6e6253;
+  --terracotta:#a73e2c; --terracotta-dark:#7e2d1f; --terracotta-soft:#d9a89c;
+  --aegean:#1d4e5f; --aegean-soft:#5a8a96; --gold:#b8893a; --gold-soft:#d4b76a;
+  --purple:#6d4a8f; --green:#3f7a52;
+  --line:rgba(28,25,22,.12); --line-strong:rgba(28,25,22,.26);
+  --serif:"Noto Serif SC","Noto Serif CJK SC",Georgia,serif;
+  --display:"Cormorant Garamond","Noto Serif SC",Georgia,serif;
+  --greek:"GFS Didot","Noto Serif SC",Georgia,serif;
+  --mono:"JetBrains Mono","Courier New",monospace;
+  --s-green:#2e8b57; --s-red:#cf3b2e; --s-yellow:#d6a500; --s-na:#c9bda8;
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+html,body{height:100%;}
+body{background:var(--parchment);
+  background-image:radial-gradient(ellipse at top left,rgba(184,137,58,.06),transparent 50%),radial-gradient(ellipse at bottom right,rgba(29,78,95,.05),transparent 50%);
+  color:var(--ink);font-family:var(--serif);font-size:16px;line-height:1.7;-webkit-font-smoothing:antialiased;overflow:hidden;}
+body::before{content:'';position:fixed;inset:0;z-index:0;pointer-events:none;mix-blend-mode:multiply;opacity:.05;
+  background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3'/%3E%3CfeColorMatrix values='0 0 0 0 0.2 0 0 0 0 0.15 0 0 0 0 0.1 0 0 0 0.4 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");}
+.greek{font-family:var(--greek);letter-spacing:.01em;}
+.app{position:relative;z-index:1;height:100vh;display:flex;flex-direction:column;}
+
+header{flex-shrink:0;border-bottom:1px solid var(--line);background:rgba(243,235,218,.9);backdrop-filter:blur(8px);}
+.hbar{display:flex;align-items:baseline;gap:14px;padding:10px 24px 5px;flex-wrap:wrap;}
+.hbar h1{font-family:var(--display);font-weight:600;font-size:23px;white-space:nowrap;}
+.hbar .latin{font-family:var(--greek);font-size:12px;letter-spacing:.2em;color:var(--terracotta);text-transform:uppercase;}
+.hbar .sub{font-size:12px;color:var(--ink-fade);}
+.hbar .acts{margin-left:auto;display:flex;gap:8px;}
+.btn{font-family:var(--serif);font-size:13px;color:var(--ink-soft);background:var(--parchment-light);border:1px solid var(--line-strong);border-radius:18px;padding:5px 14px;cursor:pointer;transition:all .2s;white-space:nowrap;}
+.btn:hover{border-color:var(--terracotta);color:var(--terracotta);}
+.btn.on{background:var(--ink);color:var(--parchment-light);border-color:var(--ink);}
+
+.board{display:flex;gap:10px;padding:3px 24px 10px;flex-wrap:wrap;}
+.law{flex:1;min-width:206px;border:1px solid var(--line-strong);border-radius:9px;background:var(--parchment-light);padding:8px 12px;border-top:3px solid var(--lc);}
+.law[data-law=id]{--lc:#1d4e5f;} .law[data-law=ct]{--lc:#6d4a8f;} .law[data-law=ex]{--lc:#3f7a52;} .law[data-law=re]{--lc:#b8893a;}
+.law-h{display:flex;align-items:baseline;justify-content:space-between;margin-bottom:7px;}
+.law-n{font-weight:700;font-size:15px;}
+.law-f{font-family:var(--mono);font-size:12px;color:var(--ink-fade);}
+.seg{display:flex;border:1px solid var(--line-strong);border-radius:7px;overflow:hidden;}
+.seg button{flex:1;font-family:var(--serif);font-size:12.5px;color:var(--ink-soft);background:transparent;border:none;border-right:1px solid var(--line);padding:5px 4px;cursor:pointer;transition:all .15s;}
+.seg button:last-child{border-right:none;}
+.seg button:hover{background:rgba(28,25,22,.05);}
+.seg button.active{color:#fff;font-weight:600;}
+.seg button[data-s=on].active{background:var(--lc);}
+.seg button[data-s=off].active{background:var(--terracotta);}
+.seg button[data-s=neutral].active{background:var(--ink-fade);}
+
+.legend{display:flex;gap:12px;align-items:center;padding:6px 24px;border-top:1px solid var(--line);flex-wrap:wrap;font-size:11.5px;color:var(--ink-fade);}
+.lg{display:inline-flex;align-items:center;gap:6px;white-space:nowrap;}
+.lg .pip{width:12px;height:12px;border-radius:50%;display:inline-block;}
+.lg .ed{width:20px;height:0;border-top:2px solid var(--ink-fade);display:inline-block;}
+.lg .ed.anti{border-top-style:dashed;border-color:var(--terracotta);}
+
+.main{flex:1;display:flex;min-height:0;}
+.mapwrap{flex:1;overflow:auto;padding:14px 12px 60px;}
+.mapwrap svg{display:block;margin:0 auto;}
+.panel{width:404px;flex-shrink:0;border-left:1px solid var(--line);background:var(--parchment-light);overflow-y:auto;padding:20px 24px 60px;}
+
+.node{cursor:pointer;}
+.node rect{transition:opacity .25s,stroke-width .15s;}
+.node text,.node circle{transition:opacity .25s;}
+.nbox{fill:var(--parchment-light);stroke:var(--line-strong);stroke-width:1;}
+.node:hover .nbox{stroke:var(--terracotta);}
+.n-name{fill:var(--ink);font-family:var(--serif);font-weight:600;}
+.n-rep{fill:var(--ink-fade);font-family:var(--serif);}
+.n-tag{font-family:var(--serif);font-weight:600;}
+.band-bg{fill:rgba(29,78,95,.028);}
+.band-lab{fill:var(--ink-fade);font-family:var(--greek);letter-spacing:.14em;text-transform:uppercase;}
+.edge{fill:none;stroke:var(--ink-fade);stroke-linecap:round;transition:stroke-opacity .25s,stroke-width .2s;}
+.edge.anti{stroke:var(--terracotta);stroke-dasharray:5 5;}
+.dim{opacity:.09 !important;}
+.edge.dimE{stroke-opacity:.025 !important;}
+.edge.hlE{stroke-opacity:.8 !important;stroke-width:2.2 !important;}
+.node.hl .nbox{stroke-width:2.1;}
+.node.sel .nbox{stroke-width:2.6;stroke:var(--terracotta);}
+
+.quad{border:1px solid var(--line-strong);border-radius:9px;background:var(--parchment);padding:12px 14px;margin-bottom:18px;}
+.quad-t{font-family:var(--greek);font-size:11.5px;letter-spacing:.22em;color:var(--terracotta);text-transform:uppercase;margin-bottom:2px;}
+.quad-sub{font-size:11px;color:var(--ink-fade);margin-bottom:10px;}
+.quad-grid{display:grid;grid-template-columns:1fr 1fr;gap:7px;}
+.qc{border:1px solid var(--line);border-radius:6px;padding:8px 10px;cursor:pointer;transition:all .18s;background:var(--parchment-light);}
+.qc:hover{border-color:var(--terracotta);}
+.qc b{font-size:13px;font-weight:600;color:var(--ink);display:block;}
+.qc span{font-size:10.5px;color:var(--ink-fade);}
+.qc.active{background:var(--ink);border-color:var(--ink);}
+.qc.active b{color:var(--parchment-light);} .qc.active span{color:var(--gold-soft);}
+
+.p-eyebrow{font-family:var(--greek);font-size:11.5px;letter-spacing:.24em;color:var(--terracotta);text-transform:uppercase;margin-bottom:8px;}
+.p-name{font-family:var(--display);font-size:26px;font-weight:600;line-height:1.16;}
+.p-rep{font-size:13.5px;color:var(--ink-fade);margin:3px 0 4px;}
+.p-era{display:inline-block;font-size:11px;letter-spacing:.05em;background:var(--aegean);color:#fff;border-radius:11px;padding:2px 10px;margin-bottom:15px;}
+.stances{display:flex;flex-direction:column;gap:8px;margin-bottom:16px;}
+.st{display:flex;align-items:center;gap:12px;font-size:13.5px;}
+.st .sn{width:64px;color:var(--ink-soft);}
+.st .pip{width:13px;height:13px;border-radius:50%;flex-shrink:0;margin-left:3px;}
+.st .sv{font-weight:600;}
+.st .sf{font-family:var(--mono);font-size:11px;color:var(--ink-fade);margin-left:auto;}
+.p-move{font-size:15px;line-height:1.6;color:var(--ink);border-left:3px solid var(--gold);padding:3px 0 3px 14px;margin-bottom:14px;font-weight:500;}
+.p-label{font-family:var(--greek);font-size:11px;letter-spacing:.22em;color:var(--terracotta);text-transform:uppercase;margin:14px 0 7px;display:flex;align-items:center;gap:9px;}
+.p-label::after{content:'';flex:1;height:1px;background:var(--line);}
+.p-note{font-size:14px;line-height:1.76;color:var(--ink-soft);}
+.chips{margin-top:16px;}
+.chips h4{font-family:var(--greek);font-size:10.5px;letter-spacing:.18em;color:var(--ink-fade);text-transform:uppercase;margin:12px 0 7px;}
+.chip{display:inline-flex;align-items:center;gap:6px;font-size:12.5px;color:var(--ink-soft);background:var(--parchment);border:1px solid var(--line-strong);border-radius:14px;padding:3px 11px;margin:0 6px 7px 0;cursor:pointer;transition:all .18s;}
+.chip:hover{border-color:var(--terracotta);color:var(--terracotta);}
+.chip.anti{border-style:dashed;}
+.chip .ar{color:var(--terracotta);font-size:11px;}
+.guide{color:var(--ink-soft);}
+.guide h3{font-family:var(--display);font-size:20px;font-weight:600;margin-bottom:11px;color:var(--ink);}
+.guide p{font-size:13.5px;line-height:1.74;margin-bottom:10px;}
+.guide em{color:var(--terracotta);font-style:italic;} .guide strong{color:var(--ink);}
+.guide .mini{font-size:12.5px;color:var(--ink-fade);}
+.pipkey{display:inline-flex;align-items:center;gap:5px;margin:0 9px 5px 0;font-size:12px;}
+.pipkey .pip{width:13px;height:13px;border-radius:50%;}
+.filt .row{font-size:14px;margin-bottom:10px;}
+.filt .big{font-family:var(--display);font-size:20px;font-weight:600;color:var(--ink);margin-bottom:6px;}
+
+.stepbar{display:none;align-items:center;gap:14px;padding:8px 24px;border-top:1px solid var(--line);background:rgba(243,235,218,.92);}
+.stepbar.show{display:flex;}
+.stepbar input{flex:1;accent-color:var(--terracotta);}
+.stepbar .lab{font-size:13px;color:var(--ink-soft);min-width:190px;}
+.stepbar .lab b{color:var(--terracotta);}
+.play{cursor:pointer;border:1px solid var(--line-strong);background:var(--parchment-light);border-radius:50%;width:32px;height:32px;display:flex;align-items:center;justify-content:center;color:var(--ink);}
+.play:hover{border-color:var(--terracotta);color:var(--terracotta);}
+
+@media(max-width:980px){
+  body{overflow:auto;} .app{height:auto;} .main{flex-direction:column;}
+  .panel{width:100%;border-left:none;border-top:1px solid var(--line);}
+  .mapwrap{overflow:visible;}
+}
+</style>
+</head>
+<body>
+<div class="app">
+  <header>
+    <div class="hbar">
+      <h1>四律 · 逻辑思脉地图</h1>
+      <span class="latin">Atlas Logoi · 科普勒斯顿全谱系</span>
+      <span class="sub">四条逻辑律作为可装可卸的「选择公理」——以《科普勒斯顿哲学史》全套为基础，约百位哲学家</span>
+      <div class="acts">
+        <button class="btn" id="btnPlay">▶ 松绑史</button>
+        <button class="btn" id="btnReset">↺ 重置</button>
+      </div>
+    </div>
+    <div class="board" id="board"></div>
+    <div class="legend" id="legend"></div>
+  </header>
+
+  <div class="stepbar" id="stepbar">
+    <button class="play" id="playBtn">▶</button>
+    <span class="lab" id="stepLab">第 0 幕</span>
+    <input type="range" id="stepRange" min="0" max="25" value="0">
+  </div>
+
+  <div class="main">
+    <div class="mapwrap"><svg id="map" xmlns="http://www.w3.org/2000/svg"></svg></div>
+    <aside class="panel" id="panel"></aside>
+  </div>
+</div>
+
+<script>
+/* ===================== 四律 ===================== */
+const LAWS=[
+ {id:'id',n:'同一律',f:'A = A',role:'基底：概念能否在运算中保持自身'},
+ {id:'ct',n:'矛盾律',f:'¬(A∧¬A)',role:'禁过剩 no gluts：不得既真又假'},
+ {id:'ex',n:'排中律',f:'A∨¬A',role:'禁空缺 no gaps：不得既非真又非假'},
+ {id:'re',n:'充足理由律',f:'PSR',role:'正交轴：存在能否被理由穷尽'},
+];
+const LAWC={id:'#1d4e5f',ct:'#6d4a8f',ex:'#3f7a52',re:'#b8893a'};
+
+/* 立场色板：绿/红/黄 × 镶环 */
+const STANCE={
+ keep:{lab:'持守',pip:'#2e8b57'},
+ keepmax:{lab:'持守 · 极致',pip:'#2e8b57',ring:true},
+ weaken:{lab:'松动',pip:'#cf3b2e'},
+ reject:{lab:'否弃',pip:'#cf3b2e',ring:true},
+ limit:{lab:'限定',pip:'#d6a500'},
+ suspend:{lab:'悬置',pip:'#d6a500',ring:true},
+ na:{lab:'—',pip:'#c9bda8',hollow:true},
+};
+function matchStance(st,sw){if(sw==='neutral')return true;if(st==='na')return false;
+  if(sw==='on')return st==='keep'||st==='keepmax';
+  return st==='weaken'||st==='reject'||st==='limit'||st==='suspend';}
+
+/* ===================== 思脉（时代带） ===================== */
+const BANDS=[
+ {lab:'前苏格拉底 · 自然哲学',nodes:['thales','anaximander','pythagoras','heraclitus','parmenides','zeno']},
+ {lab:'多元论与原子论',nodes:['empedocles','anaxagoras','democritus']},
+ {lab:'智者与苏格拉底学派',nodes:['protagoras','gorgias','socrates','antisthenes','euclidmegara']},
+ {lab:'柏拉图与亚里士多德',nodes:['plato','aristotle']},
+ {lab:'希腊化 · 罗马',nodes:['epicurus','stoic','skeptic','cicero']},
+ {lab:'新柏拉图主义',nodes:['plotinus','porphyry','proclus']},
+ {lab:'教父 · 早期中世纪',nodes:['augustine','boethius','dionysius','eriugena']},
+ {lab:'经院盛期 · 阿拉伯与犹太',nodes:['avicenna','averroes','ghazali','maimonides','anselm','abelard']},
+ {lab:'经院盛期 · 拉丁',nodes:['albert','bonaventure','aquinas']},
+ {lab:'经院后期 · 神秘主义',nodes:['scotus','ockham','eckhart','cusa']},
+ {lab:'文艺复兴 · 科学革命',nodes:['bruno','bacon','galileo','hobbes']},
+ {lab:'大陆理性论',nodes:['descartes','pascal','malebranche','spinoza','leibniz']},
+ {lab:'英国经验论',nodes:['locke','berkeley','hume']},
+ {lab:'启蒙运动',nodes:['voltaire','rousseau','diderot','lamettrie','wolff']},
+ {lab:'批判哲学',nodes:['kant']},
+ {lab:'德国唯心论',nodes:['fichte','schelling','schleiermacher','hegel']},
+ {lab:'黑格尔之后',nodes:['feuerbach','marx','schopenhauer','kierkegaard','nietzsche']},
+ {lab:'19世纪英美',nodes:['bentham','mill','spencer','bradley','peirce','james','dewey']},
+ {lab:'法国哲学',nodes:['comte','bergson','marcel','merleau']},
+ {lab:'现象学 · 存在主义',nodes:['husserl','jaspers','heidegger','sartre','camus']},
+ {lab:'过程 · 实在论奠基',nodes:['whitehead','moore']},
+ {lab:'分析哲学 · 逻辑奠基',nodes:['frege','russell','wittgenstein','carnap','quine']},
+ {lab:'元逻辑（分层）',nodes:['tarski','godel']},
+ {lab:'非经典逻辑分叉（20C）',nodes:['brouwer','lukasiewicz','zadeh','priest']},
+ {lab:'后结构 · 解构',nodes:['derrida','deleuze','foucault']},
+ {lab:'当代 · 思辨实在论',nodes:['meillassoux','badiou']},
+];
+
+const C={
+ thales:{name:'泰勒斯',rep:'米利都派',s:{id:'keep',ct:'keep',ex:'keep',re:'keep'},move:'以水为本原，首寻自然之理由',note:'哲学的开端：万物可被追问其自然本原(水)，神话让位于逻各斯。',lin:[]},
+ anaximander:{name:'阿那克西曼德',rep:'无定 ἄπειρον',s:{id:'keep',ct:'keep',ex:'keep',re:'keep'},move:'以「无定(ἄπειρον)」为本原',note:'本原无定形、无界限——《逻各斯原本》命题三之「无定」源头。',lin:[]},
+ pythagoras:{name:'毕达哥拉斯',rep:'数 · 限度 πέρας',s:{id:'keep',ct:'keep',ex:'keep',re:'keep'},move:'以数与限度(πέρας)为秩序',note:'数即万物之序——命题三之「有限(πέρας)」源头。',lin:[['plato','cont']]},
+ heraclitus:{name:'赫拉克利特',rep:'逻各斯 · 流变',s:{id:'reject',ct:'weaken',ex:'weaken',re:'keep'},move:'「人不能两次踏进同一条河」',note:'以流变与对立同一松开同一律，但仍保留逻各斯之理由——第一套「非巴门尼德」路线。',lin:[['hegel','cont'],['nietzsche','cont'],['bergson','cont']]},
+ parmenides:{name:'巴门尼德',rep:'残篇 · 真理之路',tag:'原点·锁死',tagc:'#cf3b2e',s:{id:'keepmax',ct:'keep',ex:'keep',re:'keep'},move:'四律全开 ＋ 思维=存在 → 世界冻结',note:'把四律连同「思维=存在」一并最大化，逻辑直接证出世界唯一、不动、不可分。整部历史的原点与「锁死」。',lin:[['plato','cont'],['aristotle','cont'],['zeno','cont'],['empedocles','cont'],['democritus','cont'],['heraclitus','anti']]},
+ zeno:{name:'芝诺',rep:'飞矢不动 · 四悖论',s:{id:'keep',ct:'keepmax',ex:'keepmax',re:'keep'},move:'用归谬反证运动与多之不可能',note:'以悖论把矛盾律、排中律推到极致作归谬，反证运动与「多」皆不可能，巩固巴门尼德。',lin:[]},
+
+ empedocles:{name:'恩培多克勒',rep:'四根 · 爱憎',s:{id:'keep',ct:'keep',ex:'keep',re:'keep'},move:'四根聚散解释变化',note:'向巴门尼德低头，但以四根之组合分离救住常识的变化。',lin:[]},
+ anaxagoras:{name:'阿那克萨戈拉',rep:'努斯 νοῦς',s:{id:'keep',ct:'keep',ex:'keep',re:'keep'},move:'以「努斯(心灵)」安排万物',note:'种子无限，唯「努斯」推动并安排秩序——目的论的先声。',lin:[]},
+ democritus:{name:'德谟克利特',rep:'原子论',s:{id:'keep',ct:'keep',ex:'keep',re:'keepmax'},move:'原子＋虚空：机械必然',note:'让「虚空(非存在)」获得地位以容运动；万物为原子的机械碰撞之必然——彻底决定论。',lin:[['epicurus','cont']]},
+
+ protagoras:{name:'普罗泰戈拉',rep:'智者派',s:{id:'keep',ct:'weaken',ex:'weaken',re:'weaken'},move:'「人是万物的尺度」',note:'真理随人而异的相对主义，松动客观真假之硬度。',lin:[['socrates','anti'],['gorgias','cont']]},
+ gorgias:{name:'高尔吉亚',rep:'《论非存在》',s:{id:'weaken',ct:'weaken',ex:'weaken',re:'reject'},move:'无物存在；即便存在也不可知',note:'智者派的虚无论修辞，瓦解逻各斯的对象与可知性。',lin:[]},
+ socrates:{name:'苏格拉底',rep:'辩证诘问',s:{id:'keep',ct:'keep',ex:'keep',re:'keep'},move:'反诘逼出概念的稳固定义',note:'以诘问回击智者，逼出「是其所是」的普遍定义，维护逻各斯。',lin:[['plato','cont'],['antisthenes','cont'],['euclidmegara','cont']]},
+ antisthenes:{name:'安提斯泰尼',rep:'犬儒派',s:{id:'keepmax',ct:'keep',ex:'keep',re:'na'},move:'各物只有自身的逻各斯，拒复合谓述',note:'把同一推向极端，以否认「以此谓彼」(故谓矛盾不可能)。',lin:[]},
+ euclidmegara:{name:'麦加拉的欧几里得',rep:'麦加拉派',s:{id:'keep',ct:'keepmax',ex:'keepmax',re:'keep'},move:'善即一；精于逻辑与悖论',note:'麦加拉派(说谎者、主论证)把矛盾律、排中律推至极致。',lin:[]},
+
+ plato:{name:'柏拉图',rep:'《智者篇》',s:{id:'keep',ct:'weaken',ex:'keep',re:'keep'},move:'弑父巴门尼德，给非存在以相异性',note:'理念层维持强同一与排中；《智者篇》承认非存在以相异性(τὸ ἕτερον)存在——够说出「假」与「差异」。',lin:[['aristotle','cont'],['plotinus','cont'],['augustine','cont']]},
+ aristotle:{name:'亚里士多德',rep:'《工具论》《解释篇》',tag:'形式逻辑奠基',tagc:'#2e8b57',s:{id:'keep',ct:'keepmax',ex:'limit',re:'keep'},move:'潜能/现实＋论域分层：绕而非破',note:'正式确立三律；以分层论域保全：潜能/现实让变化回来而不犯排中。《解释篇》「明日海战」留下排中律的第一道裂缝。',lin:[['averroes','cont'],['aquinas','cont'],['boethius','cont'],['albert','cont'],['frege','cont'],['lukasiewicz','cont'],['brouwer','cont']]},
+
+ epicurus:{name:'伊壁鸠鲁',rep:'原子偏斜 clinamen',s:{id:'keep',ct:'keep',ex:'keep',re:'weaken'},move:'原子无故偏斜：为自由凿缺口',note:'在决定论里塞入「无故偏斜」，朝充足理由律凿出第一个洞。',lin:[['meillassoux','cont']]},
+ stoic:{name:'斯多葛',rep:'芝诺 · 克吕西普',s:{id:'keep',ct:'keep',ex:'keep',re:'keepmax'},move:'命题逻辑＋宇宙命运（决定论）',note:'建立命题逻辑，并把充足理由律推成宇宙的命运链。',lin:[['spinoza','cont'],['leibniz','cont']]},
+ skeptic:{name:'怀疑派',rep:'皮浪 · 塞克斯都',tag:'停机',tagc:'#6b7280',s:{id:'suspend',ct:'suspend',ex:'suspend',re:'suspend'},move:'等效＋阿格里帕三难 → 全盘悬置',note:'用等效让排中律无从判定、矛盾律无处落脚，用阿格里帕三难击穿PSR——《逻各斯原本》命题十四【停机】。',lin:[['descartes','cont'],['hume','cont'],['cicero','cont']]},
+ cicero:{name:'西塞罗',rep:'学园派折中',s:{id:'keep',ct:'keep',ex:'keep',re:'keep'},move:'折中主义，传希腊哲学于罗马',note:'学园怀疑色彩的折中者，奠定拉丁哲学语汇。',lin:[]},
+
+ plotinus:{name:'普罗提诺',rep:'太一 · 流溢',s:{id:'limit',ct:'keep',ex:'keep',re:'keepmax'},move:'太一超越存在与言说；流溢',note:'太一在理智与逻辑之上、不可言说；万物由之流溢——逻辑止于其下。',lin:[['porphyry','cont'],['proclus','cont'],['dionysius','cont'],['eriugena','cont'],['eckhart','cont'],['bruno','cont']]},
+ porphyry:{name:'波菲利',rep:'《导论》',s:{id:'keep',ct:'keep',ex:'keep',re:'keep'},move:'《导论》开出共相问题',note:'整理普罗提诺；共相之问由此传入中世纪。',lin:[['abelard','cont']]},
+ proclus:{name:'普罗克洛',rep:'《神学要素》',s:{id:'keep',ct:'keep',ex:'keep',re:'keepmax'},move:'以公理法推演形而上学',note:'《神学要素》是欧几里得式的演绎神学——与《逻各斯原本》同体例。',lin:[]},
+
+ augustine:{name:'奥古斯丁',rep:'《忏悔录》',s:{id:'keep',ct:'keep',ex:'keep',re:'keepmax'},move:'万物之理由归于上帝',note:'承新柏拉图主义，把终极理由收束于上帝——PSR的神学化开端。',lin:[['anselm','cont'],['aquinas','cont'],['bonaventure','cont'],['descartes','cont']]},
+ boethius:{name:'波爱修',rep:'《哲学的慰藉》',s:{id:'keep',ct:'keepmax',ex:'keep',re:'keep'},move:'把亚里士多德逻辑传入拉丁西方',note:'中世纪逻辑的中介；共相问题的传递者。',lin:[]},
+ dionysius:{name:'伪狄奥尼修斯',rep:'否定神学',s:{id:'limit',ct:'limit',ex:'limit',re:'keepmax'},move:'上帝超越肯定与否定',note:'否定神学：逻辑止于受造界，神超越矛盾与排中。',lin:[]},
+ eriugena:{name:'爱留根纳',rep:'《自然的区分》',s:{id:'limit',ct:'keep',ex:'keep',re:'keepmax'},move:'自然四分；上帝超越范畴',note:'新柏拉图主义的拉丁系统。',lin:[]},
+
+ avicenna:{name:'阿维森纳',rep:'伊本·西那',s:{id:'keep',ct:'keep',ex:'keep',re:'keepmax'},move:'本质/存在之分；必然存在者',note:'伊斯兰亚里士多德主义；以必然存在者强化PSR。',lin:[['aquinas','cont'],['scotus','cont']]},
+ averroes:{name:'阿威罗伊',rep:'伊本·鲁世德',s:{id:'keep',ct:'keepmax',ex:'keep',re:'keep'},move:'亚里士多德大注释家',note:'理智单一论；(被指)双重真理。',lin:[['aquinas','cont']]},
+ ghazali:{name:'安萨里',rep:'《哲学家的矛盾》',s:{id:'keep',ct:'keep',ex:'keep',re:'reject'},move:'否认必然因果（偶因论）',note:'攻击哲学家的必然因果——休谟之先声。',lin:[['malebranche','cont'],['hume','cont']]},
+ maimonides:{name:'迈蒙尼德',rep:'《迷途指津》',s:{id:'keep',ct:'keep',ex:'keep',re:'keepmax'},move:'否定神学论神之属性',note:'调和亚里士多德与信仰。',lin:[]},
+ anselm:{name:'安瑟伦',rep:'本体论证明',s:{id:'keep',ct:'keep',ex:'keep',re:'keepmax'},move:'信仰寻求理解；本体论证明',note:'由「无可设想更大者」之概念推出上帝存在。',lin:[['descartes','cont']]},
+ abelard:{name:'阿伯拉尔',rep:'《是与否》',s:{id:'keep',ct:'keepmax',ex:'keep',re:'keep'},move:'概念论；以辩证处理矛盾文本',note:'以逻辑调和共相之争(概念论)。',lin:[['ockham','cont']]},
+
+ albert:{name:'大阿尔伯特',rep:'阿奎那之师',s:{id:'keep',ct:'keep',ex:'keep',re:'keep'},move:'亚里士多德主义集大成',note:'把亚里士多德与经验科学引入经院。',lin:[['aquinas','cont']]},
+ bonaventure:{name:'波纳文图拉',rep:'方济各派',s:{id:'keep',ct:'keep',ex:'keep',re:'keepmax'},move:'奥古斯丁式光照论',note:'反世界永恒；心向上帝的旅程。',lin:[]},
+ aquinas:{name:'阿奎那',rep:'五路证明',s:{id:'keep',ct:'keep',ex:'keep',re:'keepmax'},move:'五路：通向上帝的因果链',note:'以「五路」把充足理由律组织成终于上帝的因果链——经院理性的顶点。',lin:[['leibniz','cont']]},
+
+ scotus:{name:'司各脱',rep:'精微博士',s:{id:'keepmax',ct:'keep',ex:'keep',re:'weaken'},move:'存在单义、个体性、意志优先',note:'存在单义性与个体性(haecceitas)；意志高于理智——为唯名论与意志论铺路。',lin:[['ockham','cont']]},
+ ockham:{name:'奥卡姆',rep:'唯名论 · 剃刀',s:{id:'weaken',ct:'keep',ex:'keep',re:'weaken'},move:'唯名论＋神之意志高于理性',note:'否认共相之实在(松动同一之根)；上帝意志不受理由束缚(松动PSR)。',lin:[['hobbes','cont'],['locke','cont']]},
+ eckhart:{name:'埃克哈特',rep:'莱茵神秘主义',s:{id:'limit',ct:'limit',ex:'limit',re:'keepmax'},move:'神性超越一切区分',note:'灵魂根基与神合一；逻辑止于神秘之巅。',lin:[]},
+ cusa:{name:'库萨的尼古拉',rep:'有学识的无知',s:{id:'weaken',ct:'reject',ex:'reject',re:'keepmax'},move:'对立之重合(coincidentia oppositorum)',note:'在无限中矛盾与排中失效——黑格尔的先声。',lin:[['bruno','cont'],['hegel','cont']]},
+
+ bruno:{name:'布鲁诺',rep:'无限宇宙',s:{id:'weaken',ct:'weaken',ex:'weaken',re:'keepmax'},move:'无限宇宙与泛神论',note:'承库萨之对立重合，宇宙无限、神即自然。',lin:[['spinoza','cont']]},
+ bacon:{name:'弗朗西斯·培根',rep:'《新工具》',s:{id:'keep',ct:'keep',ex:'keep',re:'keep'},move:'归纳法；破除「假象」',note:'近代经验科学方法论的奠基。',lin:[['locke','cont']]},
+ galileo:{name:'伽利略',rep:'科学革命',s:{id:'keep',ct:'keepmax',ex:'keep',re:'keep'},move:'自然之书以数学写就',note:'自然的数学化——近代科学的诞生。',lin:[['descartes','cont'],['hobbes','cont']]},
+ hobbes:{name:'霍布斯',rep:'《利维坦》',s:{id:'weaken',ct:'keep',ex:'keep',re:'keepmax'},move:'唯物机械论；推理即计算',note:'唯名论＋彻底机械决定论；「reasoning is reckoning」。',lin:[['lamettrie','cont']]},
+
+ descartes:{name:'笛卡尔',rep:'《沉思集》',s:{id:'keep',ct:'keep',ex:'keep',re:'keep'},move:'我思故我在：重建确定性',note:'以可疑一切后剩下的「我思」为阿基米德点，凭清晰分明重建理性确定性。',lin:[['spinoza','cont'],['leibniz','cont'],['malebranche','cont'],['locke','anti'],['kant','cont'],['husserl','cont']]},
+ pascal:{name:'帕斯卡',rep:'《思想录》',s:{id:'keep',ct:'keep',ex:'keep',re:'weaken'},move:'「心有其理由」；理性有限',note:'理性有其限度，信仰与「心的理由」在其外——赌注。',lin:[['kierkegaard','cont']]},
+ malebranche:{name:'马勒伯朗士',rep:'偶因论',s:{id:'keep',ct:'keep',ex:'keep',re:'keepmax'},move:'唯上帝是真正的原因',note:'偶因论：在神中看见；次级原因只是「机缘」。',lin:[['hume','cont']]},
+ spinoza:{name:'斯宾诺莎',rep:'《伦理学》',s:{id:'keep',ct:'keep',ex:'keep',re:'keepmax'},move:'以实体定义偷渡，PSR→必然主义',note:'用「实体」之定义偷渡思维=存在之桥；PSR推至极致——一切皆必然。',lin:[['hegel','cont']]},
+ leibniz:{name:'莱布尼茨',rep:'单子论',tag:'PSR巅峰',tagc:'#2e8b57',s:{id:'keep',ct:'keep',ex:'keep',re:'keepmax'},move:'「无理由则不存在」',note:'把充足理由律与矛盾律并列为两大原则，并将前者绝对化——理性主义顶峰。',lin:[['wolff','cont'],['kant','cont'],['hume','anti']]},
+
+ locke:{name:'洛克',rep:'《人类理解论》',s:{id:'keep',ct:'keep',ex:'keep',re:'keep'},move:'白板：观念源于经验',note:'否认天赋观念；但仍守因果与三律——经验论的奠基。',lin:[['berkeley','cont'],['hume','cont'],['voltaire','cont']]},
+ berkeley:{name:'贝克莱',rep:'存在即被感知',s:{id:'keep',ct:'keep',ex:'keep',re:'keep'},move:'esse est percipi',note:'否认物质实体(非否认逻辑律)；唯有心灵与观念。',lin:[['hume','cont']]},
+ hume:{name:'休谟',rep:'《人性论》',s:{id:'keep',ct:'keep',ex:'keep',re:'reject'},move:'因果=习惯，砍断PSR理性根',note:'因果只是习惯性联想，没有可被理性把握的「必然连接」——PSR失去理性根据。',lin:[['kant','cont'],['schopenhauer','cont'],['comte','cont'],['mill','cont'],['heidegger','cont'],['meillassoux','cont']]},
+
+ voltaire:{name:'伏尔泰',rep:'法国启蒙',s:{id:'keep',ct:'keep',ex:'keep',re:'keep'},move:'自然神论；普及牛顿与洛克',note:'反形而上学体系，倡经验与宽容。',lin:[]},
+ rousseau:{name:'卢梭',rep:'《社会契约论》',s:{id:'keep',ct:'keep',ex:'keep',re:'weaken'},move:'以情感与良知抗衡冷峻理性',note:'公意；浪漫主义的先声——理性之外另立情感之据。',lin:[]},
+ diderot:{name:'狄德罗',rep:'百科全书派',s:{id:'keep',ct:'keep',ex:'keep',re:'keepmax'},move:'唯物论的自然主义',note:'《百科全书》；决定论的物质世界。',lin:[['marx','cont']]},
+ lamettrie:{name:'拉美特利',rep:'《人是机器》',s:{id:'keep',ct:'keep',ex:'keep',re:'keepmax'},move:'极端机械唯物论',note:'把人彻底化约为机器——法国唯物论之极。',lin:[]},
+ wolff:{name:'沃尔夫',rep:'德国启蒙',s:{id:'keep',ct:'keep',ex:'keep',re:'keepmax'},move:'莱布尼茨派体系化',note:'把充足理由律教科书化、体系化——康德的箭靶。',lin:[['kant','anti']]},
+
+ kant:{name:'康德',rep:'《纯粹理性批判》',tag:'大铰链',tagc:'#cf3b2e',s:{id:'keep',ct:'keep',ex:'keep',re:'limit'},move:'因果是认知结构，仅现象界有效',note:'逻辑三律作为「一般逻辑」普遍有效；但因果(≈PSR)只是知性构造现象界的范畴，对物自体无效——等于否弃「思维=存在」，开「非欧/语言极限」路径。',lin:[['fichte','cont'],['schelling','cont'],['hegel','cont'],['schopenhauer','cont'],['husserl','cont'],['brouwer','cont'],['wittgenstein','cont']]},
+
+ fichte:{name:'费希特',rep:'知识学',s:{id:'keep',ct:'weaken',ex:'weaken',re:'keep'},move:'绝对自我设定非我',note:'以「自我=自我」为绝对起点，靠自我设定非我的对立运动展开——辩证发端。',lin:[['schelling','cont'],['hegel','cont']]},
+ schelling:{name:'谢林',rep:'同一哲学',s:{id:'weaken',ct:'weaken',ex:'weaken',re:'keep'},move:'绝对中主客无差别',note:'主客在「绝对」中同一，松动抽象同一与对立的硬界限。',lin:[['hegel','cont']]},
+ schleiermacher:{name:'施莱尔马赫',rep:'诠释学之父',s:{id:'keep',ct:'keep',ex:'keep',re:'weaken'},move:'宗教＝绝对依赖感',note:'宗教奠基于情感而非理性证明；现代诠释学奠基。',lin:[['heidegger','cont']]},
+ hegel:{name:'黑格尔',rep:'《逻辑学》· 辩证法',s:{id:'weaken',ct:'reject',ex:'reject',re:'keep'},move:'矛盾即自我推进的发动机',note:'抽象同一(A=A)被斥为空洞，真理是「同一与差异之同一」；矛盾是自我推进的发动机(扬弃)。',lin:[['feuerbach','cont'],['marx','cont'],['bradley','cont'],['priest','cont'],['kierkegaard','anti']]},
+
+ feuerbach:{name:'费尔巴哈',rep:'《基督教的本质》',s:{id:'keep',ct:'keep',ex:'keep',re:'keep'},move:'宗教是人之本质的投射',note:'感性唯物论，桥接黑格尔与马克思。',lin:[['marx','cont']]},
+ marx:{name:'马克思',rep:'辩证唯物论',s:{id:'weaken',ct:'reject',ex:'weaken',re:'keep'},move:'把辩证法落到物质与阶级矛盾',note:'倒转黑格尔，矛盾落实为物质生产与阶级的现实矛盾。',lin:[['foucault','cont']]},
+ schopenhauer:{name:'叔本华',rep:'《作为意志和表象的世界》',s:{id:'keep',ct:'keep',ex:'keep',re:'weaken'},move:'世界之「意志」在理由之下无根',note:'整理表象界的理由形式，但作为物自体的「意志」盲目、无理由——PSR的开口。',lin:[['nietzsche','cont']]},
+ kierkegaard:{name:'克尔凯郭尔',rep:'《恐惧与战栗》',s:{id:'keep',ct:'weaken',ex:'weaken',re:'weaken'},move:'信仰之悖论；实存先于体系',note:'亚伯拉罕的信仰是理性无法消化的悖论；个体实存溢出黑格尔体系。',lin:[['heidegger','cont'],['sartre','cont'],['jaspers','cont'],['marcel','cont']]},
+ nietzsche:{name:'尼采',rep:'权力意志',s:{id:'weaken',ct:'weaken',ex:'weaken',re:'reject'},move:'真理是权力意志的产物',note:'「事实」皆为解释，真理服务于生命/权力意志；PSR失效——现代虚无主义开端。',lin:[['heidegger','cont'],['deleuze','cont'],['foucault','cont'],['derrida','cont']]},
+
+ bentham:{name:'边沁',rep:'功利主义',s:{id:'keep',ct:'keep',ex:'keep',re:'keep'},move:'功利主义与快乐计算',note:'以「最大幸福」与快乐计算为伦理之尺。',lin:[['mill','cont']]},
+ mill:{name:'密尔',rep:'《逻辑体系》',s:{id:'keep',ct:'weaken',ex:'weaken',re:'keep'},move:'连逻辑数学也是经验概括',note:'彻底经验论：逻辑与数学是高度确证的经验概括，而非必然真理；归纳五法。',lin:[]},
+ spencer:{name:'斯宾塞',rep:'综合哲学',s:{id:'keep',ct:'keep',ex:'keep',re:'keep'},move:'进化论综合哲学',note:'以进化统摄万有；终极者为「不可知」。',lin:[]},
+ bradley:{name:'布拉德雷',rep:'《现象与实在》',s:{id:'weaken',ct:'weaken',ex:'weaken',re:'keep'},move:'关系性思维自相矛盾，统于「绝对」',note:'英国唯心论：日常的关系性思维导致矛盾，统一于无所不包的「绝对」。',lin:[['moore','anti'],['russell','anti']]},
+ peirce:{name:'皮尔士',rep:'实用主义 · 符号学',s:{id:'keep',ct:'keep',ex:'keep',re:'weaken'},move:'实用主义＋机遇论(tychism)',note:'奠基现代关系逻辑(预示三值)，却以「机遇论」承认绝对偶然，松动PSR。',lin:[['james','cont'],['dewey','cont']]},
+ james:{name:'詹姆斯',rep:'《实用主义》',s:{id:'keep',ct:'weaken',ex:'weaken',re:'weaken'},move:'「有用即真」；多元宇宙',note:'真理由实践效果确定，世界多元而非铁板，松动双值之硬度。',lin:[['dewey','cont']]},
+ dewey:{name:'杜威',rep:'工具主义',s:{id:'keep',ct:'keep',ex:'weaken',re:'weaken'},move:'真理＝「有保证的可断言性」',note:'探究的工具主义与可错论；以「可断言性」取代固定真值。',lin:[]},
+
+ comte:{name:'孔德',rep:'实证主义',s:{id:'keep',ct:'keep',ex:'keep',re:'limit'},move:'只问「如何」，弃「为何」',note:'三阶段律；弃绝形而上学的终极理由，只问现象的规律——限定PSR于实证。',lin:[['carnap','cont']]},
+ bergson:{name:'柏格森',rep:'绵延 durée',s:{id:'reject',ct:'weaken',ex:'weaken',re:'weaken'},move:'绵延：不可分的生命之流',note:'以「绵延」反对把时间空间化的静态同一；实在是连续不可分的生成。',lin:[['deleuze','cont'],['whitehead','cont'],['merleau','cont']]},
+ marcel:{name:'马塞尔',rep:'基督教存在主义',s:{id:'keep',ct:'keep',ex:'keep',re:'weaken'},move:'「奥秘」不可还原为「问题」',note:'存在之「奥秘」溢出可被理由穷尽的「问题」。',lin:[]},
+ merleau:{name:'梅洛庞蒂',rep:'《知觉现象学》',s:{id:'weaken',ct:'weaken',ex:'weaken',re:'na'},move:'身体现象学；知觉的含混',note:'身体—世界的含混松动了非此即彼的清晰界限。',lin:[]},
+
+ husserl:{name:'胡塞尔',rep:'现象学还原',s:{id:'keep',ct:'keep',ex:'keep',re:'na'},move:'悬搁自然态度（非悬置逻辑）',note:'epoché是把「自然世界存在」加括号的方法，而非悬置逻辑；反心理主义，严守逻辑客观性。',lin:[['heidegger','cont'],['sartre','cont'],['merleau','cont'],['derrida','cont']]},
+ jaspers:{name:'雅斯贝尔斯',rep:'临界处境',s:{id:'limit',ct:'limit',ex:'limit',re:'weaken'},move:'临界处境与「大全」',note:'超越主客分裂的「大全」只能以密码暗示；逻辑触及其界限。',lin:[]},
+ heidegger:{name:'海德格尔',rep:'《存在与时间》·《根据律》',tag:'同一律危机',tagc:'#cf3b2e',s:{id:'reject',ct:'weaken',ex:'weaken',re:'reject'},move:'存在非对象；玫瑰无why',note:'存在不是存在者，A=A不足以解释存在；《根据律》把PSR翻回自身——「无物无根据」通向存在之无根。',lin:[['sartre','cont'],['derrida','cont'],['deleuze','cont'],['meillassoux','anti']]},
+ sartre:{name:'萨特',rep:'《存在与虚无》',s:{id:'weaken',ct:'weaken',ex:'weaken',re:'reject'},move:'存在先于本质；存在是多余的',note:'自在存在无理由地「在那里」(de trop)；人被抛入自由、无据地抉择自身。',lin:[]},
+ camus:{name:'加缪',rep:'《西西弗神话》',s:{id:'na',ct:'na',ex:'na',re:'reject'},move:'荒诞：世界对理由之问沉默',note:'荒诞生于人对意义的渴求与世界无理由之沉默的对峙。',lin:[]},
+
+ whitehead:{name:'怀特海',rep:'《过程与实在》',s:{id:'reject',ct:'na',ex:'weaken',re:'keep'},move:'过程哲学＋本体论原理',note:'以「现实际遇」之生成取代静态实体(松同一)；但以「本体论原理」坚持理由须在现实实有中可寻。',lin:[['deleuze','cont']]},
+ moore:{name:'摩尔',rep:'常识 · 分析',s:{id:'keep',ct:'keepmax',ex:'keep',re:'na'},move:'常识哲学；驳唯心论',note:'以常识与分析驳斥英国唯心论——分析哲学的一源。',lin:[['russell','cont']]},
+
+ frege:{name:'弗雷格',rep:'《概念文字》',s:{id:'keep',ct:'keepmax',ex:'keepmax',re:'na'},move:'逻辑主义：现代形式逻辑奠基',note:'以概念文字重建逻辑、反心理主义，把古典三律推到形式精确的极致——现代的亚里士多德。',lin:[['russell','cont'],['wittgenstein','cont'],['carnap','cont'],['godel','cont'],['tarski','cont'],['quine','cont']]},
+ russell:{name:'罗素',rep:'类型论 · 《数学原理》',s:{id:'keep',ct:'keepmax',ex:'keep',re:'na'},move:'类型分层以消解悖论',note:'罗素悖论迫出类型分层，以保住矛盾律——与塔尔斯基同属「分层保全」路线。',lin:[['wittgenstein','cont'],['quine','cont'],['tarski','cont']]},
+ wittgenstein:{name:'维特根斯坦',rep:'《逻辑哲学论》/ 语言游戏',tag:'≈你的立场',tagc:'#1d4e5f',s:{id:'limit',ct:'limit',ex:'limit',re:'limit'},move:'逻辑是语言的界限 / 语法',note:'前期：逻辑是语言与世界的界限；后期：逻辑是语言游戏的语法规则。四律整体降为「思之语法」。',lin:[['carnap','cont']]},
+ carnap:{name:'卡尔纳普',rep:'宽容原则 · 维也纳学派',s:{id:'limit',ct:'limit',ex:'limit',re:'limit'},move:'逻辑句法＋宽容原则：逻辑是约定',note:'维也纳学派：逻辑是重言式，形而上学(含PSR)无认知意义；语言框架的选择是约定。',lin:[['quine','anti']]},
+ quine:{name:'蒯因',rep:'《经验主义的两个教条》',s:{id:'limit',ct:'limit',ex:'limit',re:'na'},move:'整体论：连逻辑律原则上也可修正',note:'取消分析/综合之分；信念之网整体面对经验，必要时连逻辑律也可修订。',lin:[]},
+
+ tarski:{name:'塔尔斯基',rep:'真之定义 · 对象/元语言',s:{id:'keep',ct:'keep',ex:'keep',re:'na'},move:'语言分层＝论域分层的形式化',note:'用对象语言/元语言分层避开说谎者悖论，从而保住矛盾律——《逻各斯原本》那条受迫引理的形式化。',lin:[]},
+ godel:{name:'哥德尔',rep:'不完备定理',tag:'停机·同构',tagc:'#6b7280',s:{id:'keep',ct:'keep',ex:'keep',re:'na'},move:'系统内有真而不可证者',note:'柏拉图主义者，守经典逻辑；其不完备定理正是《逻各斯原本》「停机」的同构。',lin:[]},
+
+ brouwer:{name:'布劳威尔',rep:'直觉主义',s:{id:'keep',ct:'keep',ex:'reject',re:'na'},move:'未证明≠假：撤排中',note:'真=构造性可证；未被证明也未被否证者不能断言 A∨¬A。数学因此分叉(ZF 与 ZFC)。',lin:[['lukasiewicz','cont']]},
+ lukasiewicz:{name:'卢卡西维茨',rep:'三值/多值逻辑',s:{id:'keep',ct:'keep',ex:'weaken',re:'na'},move:'第三值：弱化双值与排中',note:'其动机正是亚里士多德的「明日海战」——为未来偶然引入第三值。',lin:[['zadeh','cont']]},
+ zadeh:{name:'扎德',rep:'模糊逻辑',s:{id:'keep',ct:'keep',ex:'weaken',re:'na'},move:'程度真：处理含混（沙堆）',note:'引入[0,1]连续程度的真，处理含混谓词，进一步弱化排中。',lin:[]},
+ priest:{name:'达科斯塔 · 普里斯特',rep:'次协调 / 双面真理',s:{id:'keep',ct:'reject',ex:'keep',re:'na'},move:'真矛盾：爆炸原理失效',note:'让矛盾不再爆炸，并主张某些矛盾(如说谎者)是真的——普里斯特读作黑格尔的形式版本。',lin:[]},
+
+ derrida:{name:'德里达',rep:'解构 · 延异',s:{id:'reject',ct:'weaken',ex:'reject',re:'reject'},move:'一切二元对立可被解构',note:'différance：意义永远延异、从不自我同一；二元对立皆可拆解——排中律在文本层瓦解。',lin:[]},
+ deleuze:{name:'德勒兹',rep:'《差异与重复》',s:{id:'reject',ct:'na',ex:'weaken',re:'weaken'},move:'差异先行：同一是派生效果',note:'差异在先，同一只是被生产出的效果；以生成、多样取代静态同一。',lin:[]},
+ foucault:{name:'福柯',rep:'知识型 · 谱系学',s:{id:'weaken',ct:'na',ex:'weaken',re:'reject'},move:'真理由权力—知识体制生产',note:'谱系学揭示「真」由历史性的权力-知识体制生产，瓦解中立的奠基理由。',lin:[]},
+
+ meillassoux:{name:'梅亚苏',rep:'《有限性之后》',s:{id:'na',ct:'keep',ex:'keep',re:'reject'},move:'非理由原则：偶然才是唯一必然',note:'提出非理由原则(撤PSR)：唯一必然的就是一切皆可无理由地另作他样；却反过来论证矛盾律成立。',lin:[]},
+ badiou:{name:'巴迪欧',rep:'《存在与事件》',s:{id:'keep',ct:'keep',ex:'keep',re:'na'},move:'数学(集合论)即本体论',note:'以ZFC集合论为本体论，逻辑守经典；「事件」打破情势而不违逻辑律。',lin:[]},
+};
+
+const EDGES=[];
+Object.keys(C).forEach(f=>(C[f].lin||[]).forEach(([t,k])=>{if(C[t])EDGES.push({f,t,k});}));
+
+/* ===================== 布局（带内换行） ===================== */
+const W=944, TOP=30, NODEW=212, NODEH=64, COLGAP=16, ROWH=80, PERROW=4, PADTOP=24, PADBOT=12, MARGIN=24;
+const box={};
+let cy=TOP;
+BANDS.forEach(b=>{
+  const k=b.nodes.length, rows=Math.ceil(k/PERROW);
+  b.bandTop=cy; b.rows=rows;
+  b.nodes.forEach((id,i)=>{
+    const r=Math.floor(i/PERROW), inRow=Math.min(PERROW,k-r*PERROW), col=i%PERROW;
+    const total=inRow*NODEW+(inRow-1)*COLGAP, startX=(W-total)/2;
+    const x=startX+col*(NODEW+COLGAP), y=cy+PADTOP+r*ROWH;
+    box[id]={x,y,w:NODEW,h:NODEH,cx:x+NODEW/2,cy:y+NODEH/2};
+  });
+  b.bandH=PADTOP+rows*ROWH+PADBOT;
+  cy+=b.bandH;
+});
+const VBH=cy+20;
+
+function edgePath(f,t){
+  const a=box[f],b=box[t];
+  const x1=a.cx,y1=a.y+a.h,x2=b.cx,y2=b.y;
+  if(y2>y1+4)return `M${x1},${y1} C${x1},${y1+42} ${x2},${y2-42} ${x2},${y2}`;
+  const x1b=a.x+a.w,x2b=b.x+b.w,mx=Math.max(x1b,x2b)+46;
+  return `M${x1b},${a.cy} C${mx},${a.cy} ${mx},${b.cy} ${x2b},${b.cy}`;
+}
+function pipSVG(cat,cx,cy,r){const s=STANCE[cat];
+  if(s.hollow)return `<circle cx="${cx}" cy="${cy}" r="${r}" fill="none" stroke="${s.pip}" stroke-width="1.5"/>`;
+  let o=`<circle cx="${cx}" cy="${cy}" r="${r}" fill="${s.pip}"/>`;
+  if(s.ring)o+=`<circle cx="${cx}" cy="${cy}" r="${r+2.5}" fill="none" stroke="${s.pip}" stroke-width="1.4"/>`;
+  return o;}
+
+function buildMap(){
+  const svg=document.getElementById('map');
+  svg.setAttribute('viewBox',`0 0 ${W} ${VBH}`);svg.setAttribute('width',W);svg.setAttribute('height',VBH);
+  let bg='',ed='',nd='';
+  BANDS.forEach((b,bi)=>{
+    if(bi%2===0)bg+=`<rect class="band-bg" x="8" y="${b.bandTop}" width="${W-16}" height="${b.bandH}" rx="8"/>`;
+    bg+=`<text class="band-lab" x="18" y="${b.bandTop+15}" font-size="11">${b.lab}</text>`;
+  });
+  EDGES.forEach(e=>{ed+=`<path class="edge ${e.k==='anti'?'anti':''}" data-f="${e.f}" data-t="${e.t}" d="${edgePath(e.f,e.t)}" stroke-width="${e.k==='anti'?1.2:1.3}" stroke-opacity="0.13"/>`;});
+  Object.keys(C).forEach(id=>{
+    const n=C[id],b=box[id];
+    let g=`<rect class="nbox" x="${b.x}" y="${b.y}" width="${b.w}" height="${b.h}" rx="8"/>`;
+    g+=`<text class="n-name" x="${b.x+13}" y="${b.y+21}" font-size="14">${n.name}</text>`;
+    g+=`<text class="n-rep" x="${b.x+13}" y="${b.y+37}" font-size="10">${n.rep}</text>`;
+    ['id','ct','ex','re'].forEach((L,i)=>{g+=pipSVG(n.s[L],b.x+16+i*16,b.y+53,4.2);});
+    g+=`<text class="n-rep" x="${b.x+16+4*16-2}" y="${b.y+56.5}" font-size="8.5" fill="var(--ink-fade)">同·矛·排·理</text>`;
+    if(n.tag)g+=`<text class="n-tag" x="${b.x+b.w-9}" y="${b.y+15}" font-size="9" text-anchor="end" fill="${n.tagc}">${n.tag}</text>`;
+    nd+=`<g class="node" data-id="${id}" tabindex="0"><title>${n.name}　同一:${STANCE[n.s.id].lab} 矛盾:${STANCE[n.s.ct].lab} 排中:${STANCE[n.s.ex].lab} 理由:${STANCE[n.s.re].lab}</title>${g}</g>`;
+  });
+  svg.innerHTML=bg+ed+nd;
+}
+
+/* ===================== 状态 + 高亮 ===================== */
+const state={sw:{id:'neutral',ct:'neutral',ex:'neutral',re:'neutral'}};
+let selected=null;
+const svg=()=>document.getElementById('map');
+function matchSet(){
+  const any=Object.values(state.sw).some(v=>v!=='neutral');if(!any)return null;
+  const set=new Set();
+  Object.keys(C).forEach(id=>{const s=C[id].s;let ok=true;for(const L of['id','ct','ex','re']){if(!matchStance(s[L],state.sw[L])){ok=false;break;}}if(ok)set.add(id);});
+  return set;
+}
+function applyHighlight(){
+  const set=matchSet();
+  svg().querySelectorAll('.node').forEach(g=>g.classList.remove('dim','hl','sel'));
+  svg().querySelectorAll('.edge').forEach(e=>e.classList.remove('dimE','hlE'));
+  if(!set)return;
+  svg().querySelectorAll('.node').forEach(g=>{const id=g.dataset.id;if(set.has(id)){g.classList.add('hl');if(id===selected)g.classList.add('sel');}else g.classList.add('dim');});
+  svg().querySelectorAll('.edge').forEach(e=>{if(set.has(e.dataset.f)&&set.has(e.dataset.t))e.classList.add('hlE');else e.classList.add('dimE');});
+}
+
+/* ===================== 开关 ===================== */
+function buildBoard(){
+  const el=document.getElementById('board');
+  el.innerHTML=LAWS.map(L=>`<div class="law" data-law="${L.id}">
+     <div class="law-h"><span class="law-n">${L.n}</span><span class="law-f greek">${L.f}</span></div>
+     <div class="seg" data-law="${L.id}">
+        <button data-s="on">装上 · 守</button><button data-s="neutral" class="active">中立</button><button data-s="off">卸下 · 松/弃</button>
+     </div>
+     <div class="law-f" style="margin-top:5px;font-family:var(--serif);color:var(--ink-fade);font-size:11px">${L.role}</div>
+   </div>`).join('');
+  el.querySelectorAll('.seg button').forEach(btn=>btn.addEventListener('click',()=>setSwitch(btn.parentElement.dataset.law,btn.dataset.s,true)));
+}
+function syncBoard(){document.querySelectorAll('.seg').forEach(seg=>{const law=seg.dataset.law;seg.querySelectorAll('button').forEach(b=>b.classList.toggle('active',b.dataset.s===state.sw[law]));});}
+function setSwitch(law,val,manual){state.sw[law]=val;if(manual)selected=null;syncBoard();applyHighlight();updateQuad();if(manual)renderFilterPanel();}
+
+/* ===================== 四象限 ===================== */
+const QUAD=[
+ {ct:'on',ex:'on',name:'经典逻辑',sub:'留矛盾 · 留排中'},
+ {ct:'on',ex:'off',name:'直觉主义',sub:'留矛盾 · 撤排中'},
+ {ct:'off',ex:'on',name:'次协调 / 双面真理',sub:'撤矛盾 · 留排中'},
+ {ct:'off',ex:'off',name:'相关逻辑 FDE',sub:'撤矛盾 · 撤排中'},
+];
+function quadHTML(){return `<div class="quad"><div class="quad-t">现代逻辑 · 四象限</div>
+  <div class="quad-sub">矛盾律 × 排中律：撤哪条 → 哪套逻辑</div>
+  <div class="quad-grid">${QUAD.map((q,i)=>`<div class="qc" data-i="${i}"><b>${q.name}</b><span>${q.sub}</span></div>`).join('')}</div></div>`;}
+function updateQuad(){document.querySelectorAll('.qc').forEach(c=>{const q=QUAD[+c.dataset.i];c.classList.toggle('active',state.sw.ct===q.ct&&state.sw.ex===q.ex);});}
+function wireQuad(){document.querySelectorAll('.qc').forEach(c=>c.addEventListener('click',()=>{const q=QUAD[+c.dataset.i];state.sw.ct=q.ct;state.sw.ex=q.ex;selected=null;syncBoard();applyHighlight();updateQuad();renderFilterPanel();}));}
+
+/* ===================== 面板 ===================== */
+const LAWNAME={id:'同一律',ct:'矛盾律',ex:'排中律',re:'充足理由律'};
+const LAWF={id:'A=A',ct:'¬(A∧¬A)',ex:'A∨¬A',re:'PSR'};
+function bandLabel(id){const b=BANDS.find(b=>b.nodes.includes(id));return b?b.lab:'';}
+function pipStyle(cat){const s=STANCE[cat];
+  if(s.hollow)return `border:1.7px solid ${s.pip};background:transparent`;
+  if(s.ring)return `background:${s.pip};box-shadow:0 0 0 1.6px var(--parchment-light),0 0 0 3.1px ${s.pip}`;
+  return `background:${s.pip}`;}
+function stancesHTML(s){
+  return `<div class="stances">`+['id','ct','ex','re'].map(L=>{
+    const st=STANCE[s[L]],isNa=s[L]==='na';
+    return `<div class="st"><span class="sn">${LAWNAME[L]}</span><span class="pip" style="${pipStyle(s[L])}"></span><span class="sv" style="color:${isNa?'var(--ink-fade)':st.pip}">${st.lab}</span><span class="sf">${LAWF[L]}</span></div>`;
+  }).join('')+`</div>`;
+}
+function lineageChips(id){
+  const out=[],inc=[];EDGES.forEach(e=>{if(e.f===id)out.push(e);if(e.t===id)inc.push(e);});
+  let h='';
+  if(inc.length){h+='<h4>承自 / 对反（上游）</h4>'+inc.map(e=>chip(e.f,e.k)).join('');}
+  if(out.length){h+='<h4>影响 / 反动（下游）</h4>'+out.map(e=>chip(e.t,e.k)).join('');}
+  return h?`<div class="chips">${h}</div>`:'';
+}
+function chip(id,kind){const n=C[id];return `<span class="chip ${kind==='anti'?'anti':''}" data-target="${id}">${kind==='anti'?'<span class="ar">⊣</span>':''}${n.name}</span>`;}
+function renderNodePanel(id){
+  const n=C[id];
+  document.getElementById('panel').innerHTML=quadHTML()+`
+   <div class="p-eyebrow">思脉 · CURRENT</div>
+   <div class="p-name">${n.name}</div><div class="p-rep">${n.rep}</div>
+   <div class="p-era">${bandLabel(id)}</div>
+   ${stancesHTML(n.s)}
+   <div class="p-move">${n.move}</div>
+   <div class="p-label">注</div><div class="p-note">${n.note}</div>
+   ${lineageChips(id)}`;
+  wireQuad();updateQuad();
+  document.getElementById('panel').querySelectorAll('[data-target]').forEach(c=>c.addEventListener('click',()=>selectNode(c.dataset.target)));
+}
+function renderFilterPanel(){
+  const set=matchSet();
+  const active=LAWS.filter(L=>state.sw[L.id]!=='neutral').map(L=>`${L.n}<b style="color:${state.sw[L.id]==='on'?LAWC[L.id]:'var(--terracotta)'}">${state.sw[L.id]==='on'?'守':'松/弃'}</b>`).join(' · ');
+  let body;
+  if(!set)body=guideBody();
+  else{const list=[...set];body=`<div class="filt"><div class="p-eyebrow">筛选 · FILTER</div>
+    <div class="big">${active||'—'}</div>
+    <div class="row" style="color:var(--ink-fade)">符合此公理配置的哲学家（${list.length}）：</div>
+    <div class="chips">${list.map(id=>chip(id,'cont')).join('')}</div>
+    <div class="p-label">读法</div><div class="p-note">点亮的节点共享同一套「装/卸」配置，连线即它们之间的历史承继(实线)或对反(虚线⊣)。再调一个开关可进一步收窄；点任一哲学家可读其全貌并把开关设成它的签名。</div></div>`;}
+  document.getElementById('panel').innerHTML=quadHTML()+body;
+  wireQuad();updateQuad();
+  document.getElementById('panel').querySelectorAll('[data-target]').forEach(c=>c.addEventListener('click',()=>selectNode(c.dataset.target)));
+}
+function selectNode(id){
+  selected=id;const s=C[id].s;
+  ['id','ct','ex','re'].forEach(L=>{state.sw[L]= s[L]==='na'?'neutral':(s[L]==='keep'||s[L]==='keepmax'?'on':'off');});
+  syncBoard();applyHighlight();renderNodePanel(id);exitPlay();scrollIntoView(id);
+}
+function scrollIntoView(id){const b=box[id];if(!b)return;const wrap=document.querySelector('.mapwrap');const sc=svg().getBoundingClientRect().height/VBH;wrap.scrollTo({top:Math.max(0,b.y*sc-wrap.clientHeight/2+50),behavior:'smooth'});}
+function guideBody(){
+  return `<div class="guide">
+   <div class="p-eyebrow">导读 · LECTORI</div>
+   <h3>四条律 = 四条「选择公理」</h3>
+   <p>如同集合论里的<strong>选择公理(AC)</strong>：不被真理强迫、<em>独立</em>于其余公理、<em>否定它也得到同样融贯的另一套数学</em>(ZF+¬AC，如同非欧几何)。这张图把<strong>同一·矛盾·排中·充足理由</strong>四律都当成可装可卸的选项，以《科普勒斯顿哲学史》全套为基础摊开约百位哲学家。</p>
+   <p>顶部四个开关：<strong>装上·守 / 中立 / 卸下·松或弃</strong>。拨动后，地图高亮<em>符合该配置的哲学家</em>，并把彼此的承继(实线)与对反(虚线⊣)连成<em>分叉</em>；多开关叠加=取交集。</p>
+   <div style="margin:4px 0 8px"><span class="pipkey"><span class="pip" style="background:#2e8b57"></span>持守</span><span class="pipkey"><span class="pip" style="background:#2e8b57;box-shadow:0 0 0 1.6px var(--parchment-light),0 0 0 3.1px #2e8b57"></span>极致</span><span class="pipkey"><span class="pip" style="background:#cf3b2e"></span>松动</span><span class="pipkey"><span class="pip" style="background:#cf3b2e;box-shadow:0 0 0 1.6px var(--parchment-light),0 0 0 3.1px #cf3b2e"></span>否弃</span><span class="pipkey"><span class="pip" style="background:#d6a500"></span>限定</span><span class="pipkey"><span class="pip" style="background:#d6a500;box-shadow:0 0 0 1.6px var(--parchment-light),0 0 0 3.1px #d6a500"></span>悬置</span><span class="pipkey"><span class="pip" style="border:1.7px solid #c9bda8"></span>不涉</span></div>
+   <p class="mini">绿＝持守 / 红＝松开 / 黄＝限定，<strong>镶环</strong>为同族中更强的一档（极致 / 否弃 / 悬置）。每个节点下方四颗点即其「同·矛·排·理」签名。<br>· 点任一哲学家：读其全貌，并把四开关设成它的签名。<br>· 右上<strong>四象限</strong>：矛盾×排中的形式收成，点格子即设这两个开关。<br>· <strong>▶ 松绑史</strong>：自巴门尼德「全开锁死」逐代下行。</p>
+   <p class="mini" style="margin-top:10px;border-top:1px solid var(--line);padding-top:10px">与《逻各斯原本》同源：<strong>巴门尼德</strong>=四律全开＋思维=存在的那台锁死机器；此后整部史就是<em>为让世界重获运动而依次松绑</em>的历史。而「该卸哪条」这一选择本身没有上一级理由——正是那个阿格里帕式的独断停机点。</p>
+  </div>`;
+}
+
+/* ===================== 松绑史 ===================== */
+let playMode=false,playK=0,timer=null;
+function enterPlay(){playMode=true;selected=null;document.getElementById('stepbar').classList.add('show');document.getElementById('btnPlay').classList.add('on');document.getElementById('stepRange').max=BANDS.length-1;stepTo(0);}
+function exitPlay(){if(!playMode)return;playMode=false;stop();document.getElementById('stepbar').classList.remove('show');document.getElementById('btnPlay').classList.remove('on');}
+function stepTo(k){
+  playK=k;document.getElementById('stepRange').value=k;
+  state.sw={id:'neutral',ct:'neutral',ex:'neutral',re:'neutral'};syncBoard();
+  const shown=new Set();for(let i=0;i<=k;i++)BANDS[i].nodes.forEach(id=>shown.add(id));
+  const cur=new Set(BANDS[k].nodes);
+  svg().querySelectorAll('.node').forEach(g=>{g.classList.remove('dim','hl','sel');const id=g.dataset.id;if(cur.has(id))g.classList.add('sel');else if(shown.has(id))g.classList.add('hl');else g.classList.add('dim');});
+  svg().querySelectorAll('.edge').forEach(e=>{e.classList.remove('dimE','hlE');if(shown.has(e.dataset.f)&&shown.has(e.dataset.t))e.classList.add('hlE');else e.classList.add('dimE');});
+  const b=BANDS[k];
+  document.getElementById('stepLab').innerHTML=`第 <b>${k+1}</b> / ${BANDS.length} 幕　${b.lab}`;
+  document.getElementById('panel').innerHTML=quadHTML()+`<div class="filt"><div class="p-eyebrow">松绑史 · ${k+1}/${BANDS.length}</div>
+     <div class="big">${b.lab}</div>
+     <div class="chips">${b.nodes.map(id=>chip(id,'cont')).join('')}</div>
+     <div class="p-note" style="margin-top:10px">${b.nodes.map(id=>`<b style="color:var(--ink)">${C[id].name}</b>：${C[id].move}`).join('<br>')}</div></div>`;
+  wireQuad();updateQuad();
+  document.getElementById('panel').querySelectorAll('[data-target]').forEach(c=>c.addEventListener('click',()=>selectNode(c.dataset.target)));
+  const wrap=document.querySelector('.mapwrap');const sc=svg().getBoundingClientRect().height/VBH;wrap.scrollTo({top:Math.max(0,b.bandTop*sc-58),behavior:'smooth'});
+}
+function play(){if(timer){stop();return;}document.getElementById('playBtn').textContent='⏸';timer=setInterval(()=>{if(playK>=BANDS.length-1){stop();return;}stepTo(playK+1);},1700);}
+function stop(){if(timer){clearInterval(timer);timer=null;}document.getElementById('playBtn').textContent='▶';}
+
+/* ===================== 图例 ===================== */
+function buildLegend(){
+  const ring=c=>`background:${c};box-shadow:0 0 0 1.4px var(--parchment),0 0 0 2.8px ${c}`;
+  const items=[['持守','background:#2e8b57'],['极致',ring('#2e8b57')],['松动','background:#cf3b2e'],['否弃',ring('#cf3b2e')],['限定','background:#d6a500'],['悬置',ring('#d6a500')]];
+  let h=items.map(([l,st])=>`<span class="lg"><span class="pip" style="${st}"></span>${l}</span>`).join('');
+  h+=`<span class="lg"><span class="pip" style="background:transparent;border:1.7px solid #c9bda8"></span>不涉</span>`;
+  h+=`<span class="lg" style="margin-left:4px"><span class="ed"></span>承继</span><span class="lg"><span class="ed anti"></span>对反 ⊣</span>`;
+  document.getElementById('legend').innerHTML=h;
+}
+
+/* ===================== init ===================== */
+buildMap();buildBoard();buildLegend();renderFilterPanel();
+svg().addEventListener('click',e=>{const g=e.target.closest('.node');if(g)selectNode(g.dataset.id);});
+svg().addEventListener('keydown',e=>{if(e.key==='Enter'){const g=e.target.closest('.node');if(g)selectNode(g.dataset.id);}});
+document.getElementById('btnPlay').addEventListener('click',()=>{if(playMode)exitPlay();else enterPlay();});
+document.getElementById('playBtn').addEventListener('click',play);
+document.getElementById('stepRange').addEventListener('input',e=>{stop();stepTo(+e.target.value);});
+document.getElementById('btnReset').addEventListener('click',()=>{exitPlay();state.sw={id:'neutral',ct:'neutral',ex:'neutral',re:'neutral'};selected=null;syncBoard();applyHighlight();updateQuad();renderFilterPanel();document.querySelector('.mapwrap').scrollTo({top:0,behavior:'smooth'});});
+</script>
+</body>
+</html>

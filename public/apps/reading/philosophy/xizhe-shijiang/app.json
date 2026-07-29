@@ -1,0 +1,19 @@
+{
+  "pages": [
+    "pages/index/index",
+    "pages/lecture/lecture",
+    "pages/thread/thread",
+    "pages/atlas/atlas",
+    "pages/figures/figures"
+  ],
+  "window": {
+    "navigationBarBackgroundColor": "#1c1916",
+    "navigationBarTitleText": "西方哲学史考察",
+    "navigationBarTextStyle": "white",
+    "backgroundColor": "#f3ebda",
+    "backgroundTextStyle": "dark"
+  },
+  "style": "v2",
+  "sitemapLocation": "sitemap.json",
+  "lazyCodeLoading": "requiredComponents"
+}

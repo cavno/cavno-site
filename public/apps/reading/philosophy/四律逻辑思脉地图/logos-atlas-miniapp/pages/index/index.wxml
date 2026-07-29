@@ -1,0 +1,151 @@
+<view class="app">
+
+  <!-- ===== 顶部：标题 + 开关 + 图例 ===== -->
+  <view class="header">
+    <view class="hbar">
+      <view class="titlewrap">
+        <text class="h1">四律 · 逻辑思脉地图</text>
+        <text class="sub">四条逻辑律＝可装可卸的「选择公理」· 科普勒斯顿全谱系</text>
+      </view>
+      <view class="acts">
+        <view class="btn {{playMode?'on':''}}" bindtap="togglePlay">▶ 松绑史</view>
+        <view class="btn" bindtap="reset">↺ 重置</view>
+      </view>
+    </view>
+
+    <view class="board">
+      <view class="law" wx:for="{{laws}}" wx:key="id" style="border-top-color:{{item.c}}">
+        <view class="law-h"><text class="law-n">{{item.n}}</text><text class="law-f">{{item.f}}</text></view>
+        <view class="seg">
+          <view class="segbtn {{sw[item.id]==='on'?'active':''}}"
+                style="{{sw[item.id]==='on'?('background:'+item.c+';color:#fff;border-color:'+item.c):''}}"
+                data-law="{{item.id}}" data-s="on" bindtap="onSwitch">守</view>
+          <view class="segbtn neu {{sw[item.id]==='neutral'?'active':''}}"
+                data-law="{{item.id}}" data-s="neutral" bindtap="onSwitch">中</view>
+          <view class="segbtn off {{sw[item.id]==='off'?'active':''}}"
+                data-law="{{item.id}}" data-s="off" bindtap="onSwitch">弃</view>
+        </view>
+      </view>
+    </view>
+
+    <scroll-view scroll-x class="legend" enable-flex>
+      <view class="lg" wx:for="{{legend}}" wx:key="l"><view class="pip" style="{{item.style}}"></view><text>{{item.l}}</text></view>
+    </scroll-view>
+  </view>
+
+  <!-- ===== 地图 ===== -->
+  <scroll-view scroll-y class="mapwrap" scroll-into-view="{{intoView}}" scroll-with-animation>
+    <view class="mapinner" style="height:{{mapH}}px">
+      <block wx:for="{{bands}}" wx:key="lab" wx:for-index="bi">
+        <view class="bandbg" wx:if="{{item.bg}}" style="top:{{item.top}}px;height:{{item.h}}px"></view>
+        <view class="bandlab" id="b-{{bi}}" style="top:{{item.labTop}}px">{{item.lab}}</view>
+      </block>
+
+      <view class="node {{item.cls}}" wx:for="{{nodes}}" wx:key="id" id="n-{{item.id}}"
+            data-id="{{item.id}}" bindtap="onNode"
+            style="left:{{item.left}}px;top:{{item.top}}px;width:{{item.w}}px;height:{{item.h}}px">
+        <view class="nrow">
+          <text class="n-name">{{item.name}}</text>
+          <text wx:if="{{item.tag}}" class="n-tag" style="color:{{item.tagc}}">{{item.tag}}</text>
+        </view>
+        <text class="n-rep">{{item.rep}}</text>
+        <view class="pips">
+          <view class="pip" wx:for="{{item.pips}}" wx:for-item="p" wx:key="*this" style="{{p}}"></view>
+          <text class="pipcap">同·矛·排·理</text>
+        </view>
+      </view>
+    </view>
+  </scroll-view>
+
+  <!-- ===== 底部抽屉：四象限 + 详情 ===== -->
+  <view class="sheet {{sheetOpen?'open':'closed'}}">
+    <view class="handle" bindtap="toggleSheet"><view class="bar"></view></view>
+    <scroll-view scroll-y class="sheetbody">
+
+      <!-- 现代逻辑四象限 -->
+      <view class="quad">
+        <view class="quad-t">现代逻辑 · 四象限</view>
+        <view class="quad-sub">矛盾律 × 排中律：撤哪条 → 哪套逻辑</view>
+        <view class="quad-grid">
+          <view class="qc {{item.active?'active':''}}" wx:for="{{quad}}" wx:key="name" data-i="{{index}}" bindtap="onQuad">
+            <text class="qc-b">{{item.name}}</text><text class="qc-s">{{item.sub}}</text>
+          </view>
+        </view>
+      </view>
+
+      <!-- 导读 -->
+      <block wx:if="{{panel.type==='guide'}}">
+        <view class="eyebrow">导读 · LECTORI</view>
+        <view class="p-name sm">四条律 = 四条「选择公理」</view>
+        <view class="note">如同集合论里的<text class="em">选择公理(AC)</text>：不被真理强迫、独立于其余公理、否定它也得到同样融贯的另一套数学(ZF+¬AC，如同非欧几何)。本图把同一·矛盾·排中·充足理由四律都当成可装可卸的选项，以《科普勒斯顿哲学史》全套为基础摊开约百位哲学家。</view>
+        <view class="note">顶部四个开关：装上·守 / 中立 / 卸下·松或弃。拨动后地图高亮符合该配置的哲学家；多开关叠加＝取交集。</view>
+        <view class="pipline">
+          <view class="pk" wx:for="{{pipKeys}}" wx:key="l"><view class="pip" style="{{item.style}}"></view><text>{{item.l}}</text></view>
+        </view>
+        <view class="note sm">绿＝持守 / 红＝松开 / 黄＝限定，<text class="em">镶环</text>为同族中更强的一档（极致/否弃/悬置）。点任一哲学家：看其四律签名与谱系，相连者（承自/影响）会一并点亮。点右上「松绑史」自巴门尼德「全开锁死」逐代下行。</view>
+      </block>
+
+      <!-- 筛选结果 -->
+      <block wx:elif="{{panel.type==='filter'}}">
+        <view class="eyebrow">筛选 · FILTER</view>
+        <view class="filt-active">
+          <text wx:for="{{panel.active}}" wx:key="n" class="fa">{{item.n}}<text class="fav" style="color:{{item.on?item.c:'#a73e2c'}}">{{item.v}}</text></text>
+        </view>
+        <view class="note sm">符合此公理配置的哲学家（{{panel.count}}）：</view>
+        <view class="chips">
+          <view class="chip" wx:for="{{panel.list}}" wx:key="id" data-id="{{item.id}}" bindtap="onNode">{{item.name}}</view>
+        </view>
+      </block>
+
+      <!-- 单个哲学家 -->
+      <block wx:elif="{{panel.type==='node'}}">
+        <view class="eyebrow">思脉 · CURRENT</view>
+        <view class="p-name">{{panel.name}}</view>
+        <view class="p-rep">{{panel.rep}}</view>
+        <view class="p-era">{{panel.era}}</view>
+        <view class="stances">
+          <view class="st" wx:for="{{panel.stances}}" wx:key="name">
+            <text class="sn">{{item.name}}</text>
+            <view class="pip" style="{{item.pip}}"></view>
+            <text class="sv" style="color:{{item.color}}">{{item.lab}}</text>
+            <text class="sf">{{item.f}}</text>
+          </view>
+        </view>
+        <view class="p-move">{{panel.move}}</view>
+        <view class="p-label">注</view>
+        <view class="note">{{panel.note}}</view>
+        <view class="btn-cfg" bindtap="setConfigFromNode">▷ 用此公理配置筛选全图</view>
+        <block wx:if="{{panel.inc.length}}">
+          <view class="chips-h">承自 / 对反（上游）</view>
+          <view class="chips">
+            <view class="chip {{item.anti?'anti':''}}" wx:for="{{panel.inc}}" wx:key="id" data-id="{{item.id}}" bindtap="onNode">{{item.anti?'⊣ ':''}}{{item.name}}</view>
+          </view>
+        </block>
+        <block wx:if="{{panel.out.length}}">
+          <view class="chips-h">影响 / 反动（下游）</view>
+          <view class="chips">
+            <view class="chip {{item.anti?'anti':''}}" wx:for="{{panel.out}}" wx:key="id" data-id="{{item.id}}" bindtap="onNode">{{item.anti?'⊣ ':''}}{{item.name}}</view>
+          </view>
+        </block>
+      </block>
+
+      <!-- 松绑史 -->
+      <block wx:elif="{{panel.type==='play'}}">
+        <view class="play-ctrl">
+          <view class="pbtn" bindtap="stepPrev">‹</view>
+          <view class="pbtn main" bindtap="playToggle">{{playing?'⏸':'▶'}}</view>
+          <view class="pbtn" bindtap="stepNext">›</view>
+          <text class="play-idx">第 {{panel.idx}} / {{panel.total}} 幕</text>
+        </view>
+        <view class="p-name sm">{{panel.lab}}</view>
+        <view class="play-items">
+          <view class="pi" wx:for="{{panel.items}}" wx:key="id" data-id="{{item.id}}" bindtap="onNode">
+            <text class="pi-n">{{item.name}}</text><text class="pi-m">{{item.move}}</text>
+          </view>
+        </view>
+      </block>
+
+    </scroll-view>
+  </view>
+
+</view>

@@ -1,0 +1,413 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#F3EAD3">
+<meta name="description" content="以主客二元与悖论为轴的西方哲学史交互地图——裂缝、跳跃与悬置的两千五百年。">
+<title>裂缝的两千五百年 · 二元悖论视角下的西方哲学史</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --parchment:#F3EAD3;
+  --card:#FAF4E6;
+  --card2:#EDE0C2;
+  --ink:#2C241B;
+  --ink2:#5C5040;
+  --muted:#8C7F69;
+  --teal:#3F7E6B;
+  --terra:#BC4B33;
+  --amber:#C9972B;
+  --amber-d:#A47B1E;
+  --line:rgba(44,36,27,.16);
+  --line-s:rgba(44,36,27,.32);
+}
+*{box-sizing:border-box}
+@media (prefers-reduced-motion:no-preference){html{scroll-behavior:smooth}}
+body{
+  margin:0;background:var(--parchment);color:var(--ink);
+  font-family:"Noto Serif SC","Source Han Serif SC","Songti SC","SimSun",serif;
+  font-size:16px;line-height:1.9;-webkit-font-smoothing:antialiased;
+}
+.wrap{max-width:940px;margin:0 auto;padding:0 22px}
+a{color:var(--amber-d);text-decoration:none}
+a:hover{color:var(--terra)}
+a:focus-visible,button:focus-visible{outline:2px solid var(--amber-d);outline-offset:3px}
+
+header.hero{padding:76px 0 34px;text-align:center}
+.kicker{font-size:13px;letter-spacing:.4em;color:var(--muted);margin:0 0 16px}
+h1{font-size:clamp(30px,5.5vw,46px);font-weight:700;margin:0 0 12px;letter-spacing:.08em}
+.sub{font-size:15px;color:var(--ink2);margin:0 0 30px;letter-spacing:.05em}
+.thesis{max-width:660px;margin:0 auto;padding:20px 28px;background:var(--card);
+  border-left:3px solid var(--amber);text-align:left;font-size:17.5px;line-height:2.1}
+.thesis small{display:block;margin-top:8px;font-size:13.5px;color:var(--muted);letter-spacing:.04em}
+nav.toc{margin:30px 0 0;font-size:13.5px;color:var(--muted);letter-spacing:.06em}
+nav.toc a{color:var(--muted);margin:0 4px}
+nav.toc a:hover{color:var(--amber-d)}
+
+section{padding:52px 0 6px}
+h2{font-size:24px;font-weight:700;margin:0 0 8px;letter-spacing:.05em}
+h2 .no{color:var(--amber-d);margin-right:12px;font-weight:500}
+.lede{font-size:14.5px;color:var(--ink2);margin:0 0 24px;max-width:760px}
+hr.sep{border:none;border-top:1px solid var(--line);margin:52px auto 0;max-width:940px}
+
+.svgwrap{overflow-x:auto;background:var(--card);border:1px solid var(--line);border-radius:14px;padding:14px 8px 6px}
+.svgwrap svg{display:block;min-width:680px;width:100%}
+.legend{font-size:12.5px;color:var(--muted);text-align:center;margin:10px 0 0;letter-spacing:.05em}
+.st{font-size:14px;font-weight:500;fill:var(--ink)}
+.ss{font-size:12px;fill:var(--ink2)}
+.node{cursor:pointer;transition:opacity .18s}
+.node:hover{opacity:.68}
+.leader{stroke:var(--line-s);stroke-width:.8;stroke-dasharray:3 3}
+
+.tabs{display:flex;gap:10px;flex-wrap:wrap;margin:20px 0 14px}
+.tabs button{
+  font-family:inherit;font-size:14px;padding:7px 20px;background:transparent;
+  border:1px solid var(--line-s);border-radius:999px;color:var(--ink2);
+  cursor:pointer;transition:border-color .18s,color .18s,box-shadow .18s;letter-spacing:.06em}
+.tabs button:hover{border-color:var(--amber-d);color:var(--ink)}
+.tabs button.on{border-color:var(--amber-d);color:var(--ink);background:var(--card);
+  box-shadow:inset 0 -2px 0 var(--amber)}
+
+.detail{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:22px 26px}
+.dph{display:flex;align-items:baseline;gap:14px;flex-wrap:wrap;margin-bottom:8px}
+.dpn{font-size:19px;font-weight:700;letter-spacing:.05em}
+.dpt{font-size:13px;color:var(--muted)}
+.dpst{font-size:12px;color:var(--amber-d);border:1px solid var(--amber);border-radius:999px;padding:2px 13px;letter-spacing:.08em}
+.dpc{font-size:14.5px;color:var(--ink2);margin:0 0 16px}
+.dpg{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:10px;margin-bottom:16px}
+.dpg>div{background:var(--parchment);border:1px solid var(--line);border-radius:10px;padding:10px 14px}
+.dpg b{display:block;font-size:12px;color:var(--muted);font-weight:500;margin-bottom:3px;letter-spacing:.18em}
+.dpg span{font-size:13.5px;line-height:1.75}
+.chips{display:flex;flex-wrap:wrap;gap:8px}
+.chip{font-size:13px;border:1px solid var(--line);border-radius:999px;padding:3px 14px;background:var(--parchment)}
+.chip i{font-style:normal;font-weight:700}
+.chip em{font-style:normal;color:var(--muted)}
+
+.w3{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:12px}
+.w3>div{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:18px 20px}
+.w3 b{display:block;font-size:15px;font-weight:700;margin-bottom:6px}
+.w3 b s{color:var(--amber-d);text-decoration:none;margin-right:8px;font-weight:500}
+.w3 span{font-size:13.5px;color:var(--ink2)}
+.wnote{font-size:13px;color:var(--muted);margin:14px 0 0;text-align:center;letter-spacing:.06em}
+
+.iso{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:12px}
+.iso>div{background:var(--card);border:1px solid var(--line);border-top:3px solid;border-radius:12px;padding:18px 22px}
+.isoA{border-top-color:var(--teal)}
+.isoB{border-top-color:var(--terra)}
+.iso h3{font-size:16px;font-weight:700;margin:0 0 4px;letter-spacing:.04em}
+.iso .isub{font-size:12.5px;color:var(--muted);margin:0 0 12px}
+.pair{display:flex;gap:12px;padding:8px 0;border-bottom:1px dashed var(--line);font-size:13.5px}
+.pair:last-of-type{border-bottom:none}
+.pair b{min-width:96px;flex-shrink:0;font-weight:700}
+.pair span{color:var(--ink2)}
+.isonote{font-size:13px;color:var(--muted);margin:14px 0 0;text-align:center;letter-spacing:.04em}
+
+.duel{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:12px}
+.duel>div{background:var(--card);border:1px solid var(--line);border-top:3px solid;border-radius:12px;padding:18px 22px}
+.duelA{border-top-color:var(--terra)}
+.duelB{border-top-color:var(--teal)}
+.dh{display:flex;align-items:center;gap:9px;font-size:16px;font-weight:700;margin-bottom:12px;letter-spacing:.04em}
+.dot{width:10px;height:10px;border-radius:50%;flex-shrink:0}
+.core{font-size:13.5px;color:var(--ink2);margin:12px 0 0;padding-top:12px;border-top:1px dashed var(--line)}
+.core b{font-weight:700;color:var(--ink)}
+.verdict{text-align:center;font-size:15px;color:var(--ink2);margin:20px 0 0;letter-spacing:.08em}
+
+.pos{border:1.5px solid var(--amber);background:var(--card);border-radius:14px;padding:24px 28px}
+.posb{display:inline-block;font-size:12px;color:var(--amber-d);border:1px solid var(--amber);
+  border-radius:999px;padding:2px 14px;margin-bottom:10px;letter-spacing:.14em}
+.post{font-size:18px;font-weight:700;margin:0 0 14px;letter-spacing:.04em}
+.posg{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:10px}
+.posg>div{background:var(--parchment);border:1px solid var(--line);border-radius:10px;padding:10px 14px}
+.posg b{display:block;font-size:13.5px;font-weight:700;margin-bottom:3px}
+.posg span{font-size:13px;color:var(--ink2)}
+.posq{font-size:15px;color:var(--ink2);margin:18px 0 0;text-align:center;line-height:2.1;letter-spacing:.03em}
+
+.ladder{position:relative;margin:8px 0 0;padding-left:40px;max-width:760px}
+.ladder::before{content:"";position:absolute;left:13px;top:10px;bottom:14px;width:2px;background:var(--line-s)}
+.step{position:relative;padding:11px 0}
+.step::before{content:attr(data-n);position:absolute;left:-40px;top:13px;width:26px;height:26px;border-radius:50%;
+  background:var(--parchment);border:1.5px solid var(--amber-d);color:var(--amber-d);
+  font-size:12px;display:flex;align-items:center;justify-content:center}
+.step b{font-weight:700;letter-spacing:.03em}
+.step span{display:block;font-size:13.5px;color:var(--ink2);margin-top:2px}
+.step.last::before{background:var(--amber);border-color:var(--amber-d);color:var(--ink)}
+.step.last b{color:var(--amber-d)}
+
+footer{padding:52px 0 64px;text-align:center;color:var(--muted);font-size:13px;letter-spacing:.06em}
+footer .fq{font-size:14px;color:var(--ink2);margin:0 0 12px}
+
+@media (max-width:560px){
+  header.hero{padding:52px 0 26px}
+  section{padding:40px 0 4px}
+  .thesis{font-size:15.5px;padding:16px 20px}
+  .detail{padding:18px 18px}
+  .pos{padding:20px 18px}
+}
+</style>
+</head>
+<body>
+
+<header class="hero">
+  <p class="kicker">哲 学 史 · 交 互 地 图</p>
+  <h1>裂缝的两千五百年</h1>
+  <p class="sub">以主客二元与悖论为轴，重读西方哲学史</p>
+  <blockquote class="thesis">
+    悖论是认识工具的裂缝，而非存在的结构。
+    <small>裂缝在工具一侧；世界那一侧，悬置。</small>
+  </blockquote>
+  <nav class="toc">
+    <a href="#s1">一 裂缝地图</a> ·
+    <a href="#s2">二 三个世界</a> ·
+    <a href="#s3">三 量子同构</a> ·
+    <a href="#s4">四 永恒博弈</a> ·
+    <a href="#s5">五 你的坐标</a> ·
+    <a href="#s6">六 对话之梯</a>
+  </nav>
+</header>
+
+<div class="wrap">
+
+<section id="s1">
+  <h2><span class="no">一</span>裂缝地图</h2>
+  <p class="lede">一道代表主客二元与悖论的裂缝，从古希腊的细线逐渐加宽为当代的鸿沟。中世纪以上帝之桥中介它；康德在它内部立下界碑；黑格尔以精神之桥跨越它——桥断了；当代把梯子架进裂缝，又将它抽走。点击时代区域或琥珀色节点，查看每个时期对裂缝的处理方式。</p>
+
+  <div class="svgwrap">
+  <svg viewBox="0 0 680 258" role="img" aria-labelledby="svgt svgd">
+  <title id="svgt">主客裂缝的两千五百年</title>
+  <desc id="svgd">裂缝从古希腊的细线加宽至当代的鸿沟，途经上帝之桥、康德界碑与黑格尔断桥，右端是维特根斯坦的梯子与悬置者。</desc>
+
+  <line x1="40" y1="30" x2="640" y2="30" stroke="rgba(44,36,27,.32)" stroke-width="0.5"/>
+
+  <path d="M40,58 L640,58 L640,84 L626,85 L610,86 L590,87 L570,88 L552,89.5 L534,90.5 L518,91.5 L502,92.5 L486,93.5 L470,94.5 L456,95.5 L440,97 L420,98.5 L400,100 L384,101 L362,103.5 L340,106 L318,108 L296,110 L272,112 L252,112.5 L228,113 L206,113.5 L184,114 L160,115 L138,116 L118,116 L96,117 L70,117.5 L40,118 Z" fill="#E7D8B6" stroke="rgba(44,36,27,.2)" stroke-width="0.5"/>
+  <path d="M40,121 L70,121.5 L96,122 L118,123 L138,123.5 L160,124 L184,125 L206,126 L228,127 L252,128 L272,129 L296,131.5 L318,134 L340,136.5 L362,139.5 L384,142 L400,143.5 L420,145.5 L440,147 L456,148.5 L470,150 L486,151.5 L502,152.5 L518,154 L534,155.5 L552,157 L570,158.5 L590,160.5 L610,162 L626,163 L640,164 L640,196 L40,196 Z" fill="#E7D8B6" stroke="rgba(44,36,27,.2)" stroke-width="0.5"/>
+
+  <path d="M40,118 L70,117.5 L96,117 L118,116 L138,116 L160,115 L184,114 L206,113.5 L228,113 L252,112.5 L272,112 L296,110 L318,108 L340,106 L362,103.5 L384,101 L400,100 L420,98.5 L440,97 L456,95.5 L470,94.5 L486,93.5 L502,92.5 L518,91.5 L534,90.5 L552,89.5 L570,88 L590,87 L610,86 L626,85 L640,84 L640,164 L626,163 L610,162 L590,160.5 L570,158.5 L552,157 L534,155.5 L518,154 L502,152.5 L486,151.5 L470,150 L456,148.5 L440,147 L420,145.5 L400,143.5 L384,142 L362,139.5 L340,136.5 L318,134 L296,131.5 L272,129 L252,128 L228,127 L206,126 L184,125 L160,124 L138,123.5 L118,123 L96,122 L70,121.5 L40,121 Z" fill="#C9972B" fill-opacity="0.3"/>
+  <path d="M40,118 L96,117 L118,116 L160,115 L206,113.5 L252,112.5 L296,110 L340,106 L384,101 L420,98.5 L456,95.5 L486,93.5 L518,91.5 L552,89.5 L590,87 L626,85 L640,84" fill="none" stroke="#A47B1E" stroke-width="1"/>
+  <path d="M40,121 L96,122 L118,123 L160,124 L206,126 L252,128 L296,131.5 L340,136.5 L384,142 L420,145.5 L456,148.5 L486,151.5 L518,154 L552,157 L590,160.5 L626,163 L640,164" fill="none" stroke="#A47B1E" stroke-width="1"/>
+
+  <text class="ss" x="112" y="76" text-anchor="middle">存在（未分化）</text>
+  <text class="st" x="585" y="74" text-anchor="middle">主体</text>
+  <text class="st" x="585" y="184" text-anchor="middle">客体</text>
+
+  <circle cx="118" cy="117" r="2.5" fill="#C9972B"/>
+
+  <path d="M192,114 Q225,56 258,113" fill="none" stroke="#3F7E6B" stroke-width="3" stroke-linecap="round"/>
+  <text class="ss" x="225" y="76" text-anchor="middle">上帝之桥</text>
+
+  <line x1="395" y1="101" x2="395" y2="142" stroke="#A47B1E" stroke-width="1.5" stroke-dasharray="4 3"/>
+  <text class="ss" x="383" y="124" text-anchor="end">现象</text>
+  <text class="ss" x="407" y="124" text-anchor="start">物自体</text>
+
+  <path d="M452,96 Q463,62 476,60" fill="none" stroke="#BC4B33" stroke-width="3" stroke-linecap="round"/>
+  <path d="M482,60 Q493,62 506,92" fill="none" stroke="#BC4B33" stroke-width="3" stroke-linecap="round"/>
+  <path d="M477,66 L474,76" stroke="#BC4B33" stroke-width="2" stroke-linecap="round" fill="none"/>
+  <path d="M481,67 L484,77" stroke="#BC4B33" stroke-width="2" stroke-linecap="round" fill="none"/>
+  <text class="ss" x="514" y="52" text-anchor="start">精神之桥（断）</text>
+
+  <path d="M562,87 L546,140" stroke="#3F7E6B" stroke-width="1.8" stroke-linecap="round" fill="none"/>
+  <path d="M573,88 L557,141" stroke="#3F7E6B" stroke-width="1.8" stroke-linecap="round" fill="none"/>
+  <path d="M558,100 L569,101" stroke="#3F7E6B" stroke-width="1.8" stroke-linecap="round" fill="none"/>
+  <path d="M554,113 L565,114" stroke="#3F7E6B" stroke-width="1.8" stroke-linecap="round" fill="none"/>
+  <path d="M550,126 L561,127" stroke="#3F7E6B" stroke-width="1.8" stroke-linecap="round" fill="none"/>
+
+  <circle cx="622" cy="68" r="3.2" fill="none" stroke="#2C241B" stroke-width="1.3"/>
+  <path d="M622,71.5 L622,79 M616,74 L628,74 M622,79 L617,85 M622,79 L627,85" stroke="#2C241B" stroke-width="1.3" stroke-linecap="round" fill="none"/>
+  <text class="ss" x="622" y="57" text-anchor="middle">悬置</text>
+
+  <line x1="118" y1="35" x2="118" y2="113" class="leader"/>
+  <line x1="395" y1="35" x2="395" y2="98" class="leader"/>
+  <line x1="478" y1="35" x2="478" y2="54" class="leader"/>
+
+  <g class="node" onclick="selEra(0)"><circle cx="118" cy="30" r="5" fill="#C9972B" stroke="#A47B1E" stroke-width="0.8"/><text class="st" x="118" y="16" text-anchor="middle">苏格拉底—柏拉图</text></g>
+  <g class="node" onclick="selEra(2)"><circle cx="395" cy="30" r="5" fill="#C9972B" stroke="#A47B1E" stroke-width="0.8"/><text class="st" x="395" y="16" text-anchor="middle">康德</text></g>
+  <g class="node" onclick="selEra(3)"><circle cx="478" cy="30" r="5" fill="#C9972B" stroke="#A47B1E" stroke-width="0.8"/><text class="st" x="478" y="16" text-anchor="middle">黑格尔分水岭</text></g>
+
+  <rect id="tint0" x="40" y="50" width="125" height="148" fill="#C9972B" fill-opacity="0" style="pointer-events:all;cursor:pointer" onclick="selEra(0)"/>
+  <rect id="tint1" x="165" y="50" width="115" height="148" fill="#C9972B" fill-opacity="0" style="pointer-events:all;cursor:pointer" onclick="selEra(1)"/>
+  <rect id="tint2" x="280" y="50" width="155" height="148" fill="#C9972B" fill-opacity="0" style="pointer-events:all;cursor:pointer" onclick="selEra(2)"/>
+  <rect id="tint3" x="435" y="50" width="95" height="148" fill="#C9972B" fill-opacity="0" style="pointer-events:all;cursor:pointer" onclick="selEra(3)"/>
+  <rect id="tint4" x="530" y="50" width="110" height="148" fill="#C9972B" fill-opacity="0" style="pointer-events:all;cursor:pointer" onclick="selEra(4)"/>
+
+  <g class="node" onclick="selEra(0)"><text class="st" x="102" y="214" text-anchor="middle">古希腊</text><text class="ss" x="102" y="234" text-anchor="middle">前6–前4世纪</text></g>
+  <g class="node" onclick="selEra(1)"><text class="st" x="222" y="214" text-anchor="middle">中世纪</text><text class="ss" x="222" y="234" text-anchor="middle">4–14世纪</text></g>
+  <g class="node" onclick="selEra(2)"><text class="st" x="357" y="214" text-anchor="middle">近代</text><text class="ss" x="357" y="234" text-anchor="middle">17–18世纪</text></g>
+  <g class="node" onclick="selEra(3)"><text class="st" x="482" y="214" text-anchor="middle">古典</text><text class="ss" x="482" y="234" text-anchor="middle">18末–19世纪</text></g>
+  <g class="node" onclick="selEra(4)"><text class="st" x="585" y="214" text-anchor="middle">当代</text><text class="ss" x="585" y="234" text-anchor="middle">20世纪–今</text></g>
+  <rect id="u0" x="84" y="220" width="36" height="2" rx="1" fill="#A47B1E" opacity="0"/>
+  <rect id="u1" x="204" y="220" width="36" height="2" rx="1" fill="#A47B1E" opacity="0"/>
+  <rect id="u2" x="339" y="220" width="36" height="2" rx="1" fill="#A47B1E" opacity="0"/>
+  <rect id="u3" x="464" y="220" width="36" height="2" rx="1" fill="#A47B1E" opacity="0"/>
+  <rect id="u4" x="567" y="220" width="36" height="2" rx="1" fill="#A47B1E" opacity="0"/>
+  </svg>
+  </div>
+  <p class="legend">琥珀＝裂缝与关键节点 · 青绿＝中介与悬置 · 赤陶＝跳跃与断裂</p>
+
+  <div class="tabs" role="tablist" aria-label="时代切换">
+    <button id="tb0" onclick="selEra(0)">古希腊</button>
+    <button id="tb1" onclick="selEra(1)">中世纪</button>
+    <button id="tb2" onclick="selEra(2)">近代</button>
+    <button id="tb3" onclick="selEra(3)">古典</button>
+    <button id="tb4" onclick="selEra(4)">当代</button>
+  </div>
+
+  <div class="detail" id="dp" aria-live="polite">
+    <div class="dph"><span class="dpn">古希腊</span><span class="dpt">前6–前4世纪</span><span class="dpst">裂缝潜藏</span></div>
+    <p class="dpc">主体尚未苏醒，问题直接是"世界是什么"——二元结构已在结构中埋下，但无人看见它。</p>
+    <div class="dpg">
+      <div><b>主体</b><span>隐没；苏格拉底转向后初醒</span></div>
+      <div><b>客体</b><span>自明涌现的自然（physis）</span></div>
+      <div><b>悖论</b><span>芝诺——首次显形，未被主题化</span></div>
+      <div><b>姿态</b><span>朴素的本体论自信</span></div>
+    </div>
+    <div class="chips">
+      <span class="chip"><i>巴门尼德</i> · <em>理性与表象初裂</em></span>
+      <span class="chip"><i>芝诺</i> · <em>悖论首次登场</em></span>
+      <span class="chip"><i>柏拉图</i> · <em>首次形而上学跳跃</em></span>
+      <span class="chip"><i>亚里士多德</i> · <em>逻辑学·世界3奠基</em></span>
+    </div>
+  </div>
+</section>
+
+<hr class="sep">
+
+<section id="s2">
+  <h2><span class="no">二</span>悖论的栖居地</h2>
+  <p class="lede">按波普尔的三世界划分定位悖论：它不均匀地分布于实在，而是随抽象层级上升而递增——直至在纯粹的观念世界中被显式化为可证明的定理。</p>
+  <div class="w3">
+    <div><b><s>世界 1</s>物理世界</b><span>可能无悖论；但这一断言只能从悖论驱动的系统内部作出——我们永远无法在世界1自身之中考察世界1。</span></div>
+    <div><b><s>世界 2</s>经验世界</b><span>意向性即主客结构：意识总是"关于某物"的意识。二元与悖论是意识的构成性命运，不是偶然缺陷。</span></div>
+    <div><b><s>世界 3</s>观念世界</b><span>符号系统的自我指涉将悖论显式化为定理——哥德尔、罗素、说谎者。悖论在此最严格，也最不可回避。</span></div>
+  </div>
+  <p class="wnote">世界 1 → 世界 2 → 世界 3：抽象层级上升，悖论性递增</p>
+</section>
+
+<hr class="sep">
+
+<section id="s3">
+  <h2><span class="no">三</span>同一个跳跃的两副面孔</h2>
+  <p class="lede">量子力学的两种解读与哲学史上的两大立场在结构上严格同构：分歧不在物理，而在裂缝的归属——它属于认识，还是属于存在。</p>
+  <div class="iso">
+    <div class="isoA">
+      <h3>解读 A · 裂缝在认识一侧</h3>
+      <p class="isub">划定知识的边界，拒绝越界追问</p>
+      <div class="pair"><b>玻尔</b><span>测不准标示知识的边界；"测量前的电子是什么"是病态问题，应予悬置。</span></div>
+      <div class="pair"><b>康德</b><span>二律背反标示现象界的边界；物自体存在但不可知。</span></div>
+      <div class="pair"><b>共同动作</b><span>做认识论的警察——"到此为止，别再往前问了。"</span></div>
+    </div>
+    <div class="isoB">
+      <h3>解读 B · 裂缝在存在一侧</h3>
+      <p class="isub">把认识的结构直接读作实在的结构</p>
+      <div class="pair"><b>激进哥本哈根</b><span>叠加态不是我们的无知，而是实在的本来状态。</span></div>
+      <div class="pair"><b>黑格尔</b><span>矛盾不是认识的失败，而是存在自身的辩证运动。</span></div>
+      <div class="pair"><b>共同动作</b><span>形而上学跳跃——将工具的裂缝投影为世界的形状。</span></div>
+    </div>
+  </div>
+  <p class="isonote">贝尔不等式的实验违反令"裂缝只在认识侧"的退路收窄——但施压不等于推翻悬置；黑格尔的跳跃是自愿的，量子的跳跃是被迫的。</p>
+</section>
+
+<hr class="sep">
+
+<section id="s4">
+  <h2><span class="no">四</span>永恒的博弈</h2>
+  <p class="lede">两种策略贯穿两千五百年，互握对方无法回答的困难。每一次交锋——柏拉图对怀疑论、阿奎那对奥卡姆、黑格尔对克尔凯郭尔、海德格尔对卡尔纳普——都产生了哲学史上最丰富的对话。</p>
+  <div class="duel">
+    <div class="duelA">
+      <div class="dh"><span class="dot" style="background:#BC4B33"></span>跳跃派 · 声称越过裂缝</div>
+      <div class="chips">
+        <span class="chip"><i>柏拉图</i> · <em>理念</em></span>
+        <span class="chip"><i>阿奎那</i> · <em>上帝</em></span>
+        <span class="chip"><i>黑格尔</i> · <em>精神</em></span>
+        <span class="chip"><i>海德格尔</i> · <em>存在</em></span>
+      </div>
+      <p class="core"><b>不可反驳的内核：</b>永远停在裂缝前，哲学等于自我取消——人需要意义、真理与方向。</p>
+    </div>
+    <div class="duelB">
+      <div class="dh"><span class="dot" style="background:#3F7E6B"></span>悬置派 · 停在裂缝前</div>
+      <div class="chips">
+        <span class="chip"><i>皮浪</i></span>
+        <span class="chip"><i>奥卡姆</i></span>
+        <span class="chip"><i>休谟</i></span>
+        <span class="chip"><i>康德</i> · <em>半</em></span>
+        <span class="chip"><i>维特根斯坦</i></span>
+        <span class="chip"><i>卡尔纳普</i></span>
+      </div>
+      <p class="core"><b>不可反驳的内核：</b>每一次跳跃都把认识结构投射到存在上——无法证明，只能信仰。</p>
+    </div>
+  </div>
+  <p class="verdict">博弈永不终结——这不是哲学的失败，而是哲学的形式。</p>
+</section>
+
+<hr class="sep">
+
+<section id="s5">
+  <h2><span class="no">五</span>你的坐标</h2>
+  <p class="lede">这条悬置的传统——芝诺的对面、奥卡姆、休谟、康德的一半、维特根斯坦、卡尔纳普——在当下的样子。它不是任何流派的门徒，但学会了每个流派的免疫系统。</p>
+  <div class="pos">
+    <span class="posb">悬置派的当代表达</span>
+    <p class="post">彻底的认识论谦逊主义（哲学沉默主义）</p>
+    <div class="posg">
+      <div><b>较皮浪更严格</b><span>握有哥德尔定理与量子实验的硬证据，而非仅凭姿态悬置。</span></div>
+      <div><b>较休谟更克制</b><span>不以"心理习惯"做肯定性解释——那也是一次越界。</span></div>
+      <div><b>较康德更谦逊</b><span>连物自体的"存在"亦悬置：不说不可知之物存在。</span></div>
+      <div><b>较维特根斯坦更自觉</b><span>深知此立场本身亦是待扔的梯子，而非终极安顿处。</span></div>
+    </div>
+    <p class="posq">「用可说的，说到可说的边界；指出边界之外不可说；<br>而这一指出本身，随梯子一同被扔掉。」</p>
+  </div>
+</section>
+
+<hr class="sep">
+
+<section id="s6">
+  <h2><span class="no">六</span>对话之梯</h2>
+  <p class="lede">这张地图本身来自一场对话的十级台阶——从"悖论能否作为通道"出发，到发现通道并不存在为止。梯子记录在此，随后照例扔掉。</p>
+  <div class="ladder">
+    <div class="step" data-n="1"><b>起点之问</b><span>悖论能否作为从认识论进入本体论的通道？</span></div>
+    <div class="step" data-n="2"><b>三条路径</b><span>辩证法把裂缝读作存在；语言界限读作工具；现象学读作遮蔽揭开的时刻。</span></div>
+    <div class="step" data-n="3"><b>立场确立</b><span>裂缝在工具一侧——哥德尔证明这是形式理性的结构性天花板。</span></div>
+    <div class="step" data-n="4"><b>消除二元？</b><span>任何言说"不二"的尝试，在言说的那一刻重新落入二元。</span></div>
+    <div class="step" data-n="5"><b>量子检验</b><span>解读A同构于康德，解读B同构于黑格尔；贝尔实验施压，但施压不等于推翻悬置。</span></div>
+    <div class="step" data-n="6"><b>结构性命运</b><span>在现象界，只要采取"认识"姿态，二元与悖论就是唯一路径。</span></div>
+    <div class="step" data-n="7"><b>三个世界</b><span>世界2与世界3以二元悖论为底层引擎；世界1只能被悬置地猜测。</span></div>
+    <div class="step" data-n="8"><b>海德格尔检验</b><span>上手与在手是认识强度的两种状态，而非存在的揭示；其跳跃与黑格尔同构。</span></div>
+    <div class="step" data-n="9"><b>哲学史归纳</b><span>两千五百年是跳跃派与悬置派围绕裂缝的博弈；博弈是哲学的形式。</span></div>
+    <div class="step last" data-n="10"><b>终点</b><span>通道并不存在；看清这一点，是哲学能抵达的最远处——然后扔掉梯子。</span></div>
+  </div>
+</section>
+
+</div>
+
+<footer>
+  <p class="fq">裂缝在工具一侧；世界那一侧，悬置。</p>
+  <p>裂缝的两千五百年 · 二元悖论视角下的西方哲学史</p>
+</footer>
+
+<script>
+var eras=[
+{n:"古希腊",t:"前6–前4世纪",s:"裂缝潜藏",c:"主体尚未苏醒，问题直接是\u201c世界是什么\u201d——二元结构已在结构中埋下，但无人看见它。",g:[["主体","隐没；苏格拉底转向后初醒"],["客体","自明涌现的自然（physis）"],["悖论","芝诺——首次显形，未被主题化"],["姿态","朴素的本体论自信"]],f:[["巴门尼德","理性与表象初裂"],["芝诺","悖论首次登场"],["柏拉图","首次形而上学跳跃"],["亚里士多德","逻辑学·世界3奠基"]]},
+{n:"中世纪",t:"4–14世纪",s:"裂缝被中介",c:"上帝作为绝对主体兼绝对客体，桥接了尚未爆发的裂缝——只要保证者在场，主客便不必对峙。",g:[["主体","向内深化，锚定于上帝之光"],["客体","上帝造物的存在等级"],["悖论","化为神学悖论，被信仰吸收"],["姿态","神学—本体论统一"]],f:[["奥古斯丁","内省传统开启"],["阿奎那","上帝保证主客对应"],["奥卡姆","唯名论·桥的第一道裂纹"]]},
+{n:"近代",t:"17–18世纪",s:"裂缝爆发",c:"上帝中介崩解，主体独自面对世界——二元问题正式诞生，并在康德处触到理性的边界。",g:[["主体","被主题化为起点（我思）"],["客体","分离在外、有待认识的世界"],["悖论","二律背反——确立为理性的结构性命运"],["姿态","认识论的自我反思"]],f:[["笛卡尔","心物二元确立"],["斯宾诺莎·莱布尼茨","一元论与预定和谐"],["休谟","经验主义走到破产"],["康德","哥白尼革命·划界"]]},
+{n:"古典",t:"18世纪末–19世纪",s:"跳跃的巅峰与崩塌",c:"黑格尔宣称裂缝即存在本身的辩证结构——史上最大的本体论跳跃，随即遭遇四重反抗。",g:[["主体","被绝对化为精神"],["客体","被吸收进精神的自我展开"],["悖论","被本体论化——矛盾即实在的运动"],["姿态","形而上学的最大野心"]],f:[["费希特","取消物自体"],["黑格尔","裂缝投射为存在"],["克尔凯郭尔","反抗①生存"],["马克思","反抗②物质"],["叔本华·尼采","反抗③④意志与权力"]]},
+{n:"当代",t:"20世纪–今",s:"碎片化回应",c:"无人再宣称统一解决；每条路线各自照亮裂缝的一个侧面——这是哲学的成熟，也是哲学的疲惫。",g:[["主体","被解构、降格、历史化"],["客体","同样被解构与历史化"],["悖论","被精密化：罗素、哥德尔、循环、差延"],["姿态","后形而上学的谦逊与焦虑"]],f:[["分析哲学","语言降格"],["现象学","向下深挖原初"],["解释学","历史化循环"],["存在主义","生存搁置"],["后结构主义","解构起点"]]}
+];
+function selEra(i){
+  var e=eras[i],h;
+  h='<div class="dph"><span class="dpn">'+e.n+'</span><span class="dpt">'+e.t+'</span><span class="dpst">'+e.s+'</span></div>';
+  h+='<p class="dpc">'+e.c+'</p><div class="dpg">';
+  for(var a=0;a<e.g.length;a++){h+='<div><b>'+e.g[a][0]+'</b><span>'+e.g[a][1]+'</span></div>';}
+  h+='</div><div class="chips">';
+  for(var b=0;b<e.f.length;b++){h+='<span class="chip"><i>'+e.f[b][0]+'</i> · <em>'+e.f[b][1]+'</em></span>';}
+  h+='</div>';
+  document.getElementById("dp").innerHTML=h;
+  for(var k=0;k<5;k++){
+    document.getElementById("tint"+k).setAttribute("fill-opacity",k===i?"0.13":"0");
+    document.getElementById("u"+k).setAttribute("opacity",k===i?"1":"0");
+    document.getElementById("tb"+k).classList.toggle("on",k===i);
+  }
+}
+selEra(0);
+</script>
+</body>
+</html>

@@ -1,0 +1,105 @@
+<view class="page-shell thread-page">
+  <view class="thread-hero page-pad">
+    <view class="eyebrow">思想主线</view>
+    <view class="display-title">人类如何把<br />混沌变成秩序</view>
+    <view class="rule"></view>
+    <view class="hero-copy">前四讲可以压缩成八个动作。它们并非彼此替代，而是层层沉积：现代人的理性、信仰与制度中，仍保存着象征、仪式和神话的深层结构。</view>
+  </view>
+
+  <view class="formula-wrap page-pad">
+    <view class="formula-card">
+      <view class="formula-label">课程公式</view>
+      <scroll-view class="formula-scroll" scroll-x enhanced show-scrollbar="{{false}}">
+        <view class="formula-row">
+          <text>不确定</text><text class="formula-arrow">→</text>
+          <text>象征</text><text class="formula-arrow">→</text>
+          <text>仪式</text><text class="formula-arrow">→</text>
+          <text>叙事</text><text class="formula-arrow">→</text>
+          <text>制度</text><text class="formula-arrow">→</text>
+          <text>理性</text><text class="formula-arrow">→</text>
+          <text>救赎</text><text class="formula-arrow">→</text>
+          <text>个体</text>
+        </view>
+      </scroll-view>
+    </view>
+  </view>
+
+  <scroll-view class="stage-tabs" scroll-x enhanced show-scrollbar="{{false}}">
+    <view class="stage-tab-row">
+      <button
+        wx:for="{{spine}}"
+        wx:key="id"
+        class="stage-tab {{activeId == item.id ? 'stage-tab-active' : ''}}"
+        data-id="{{item.id}}"
+        bindtap="selectStage"
+      >
+        <text class="tab-no">{{item.id}}</text>
+        <text>{{item.verb}}</text>
+      </button>
+    </view>
+  </scroll-view>
+
+  <scroll-view
+    class="stage-scroll"
+    scroll-y
+    scroll-with-animation
+    scroll-into-view="{{scrollIntoView}}"
+  >
+    <view class="stage-list page-pad">
+      <view
+        class="stage-item"
+        wx:for="{{spine}}"
+        wx:key="id"
+        id="stage-{{item.id}}"
+      >
+        <view class="stage-rail">
+          <view class="stage-dot">{{item.id}}</view>
+          <view class="stage-line" wx:if="{{index < spine.length - 1}}"></view>
+        </view>
+        <view class="stage-card paper-card">
+          <view class="stage-age">{{item.age}} · {{item.verb}}</view>
+          <view class="stage-title">{{item.title}}</view>
+          <view class="stage-formula">{{item.formula}}</view>
+
+          <view class="stage-block">
+            <view class="stage-block-label">核心问题</view>
+            <view class="stage-block-text">{{item.question}}</view>
+          </view>
+          <view class="stage-block">
+            <view class="stage-block-label">时代回答</view>
+            <view class="stage-block-text">{{item.answer}}</view>
+          </view>
+          <view class="tension">
+            <view class="tension-label">留下的张力</view>
+            <view>{{item.tension}}</view>
+          </view>
+          <button class="stage-link" data-id="{{item.lectureId}}" bindtap="goLecture">
+            <text>进入相关讲次</text>
+            <text>→</text>
+          </button>
+        </view>
+      </view>
+    </view>
+  </scroll-view>
+
+  <view class="sediment page-pad">
+    <view class="sediment-card">
+      <view class="eyebrow">不是替代，而是转化</view>
+      <view class="sediment-title">现代性仍携带古老层次</view>
+      <view class="sediment-copy">法律中有禁忌的边界，国家中有图腾的象征，政治中有神话的叙事，科学中有控制世界的冲动，哲学与宗教中则共同保存着对终极秩序的追问。</view>
+    </view>
+  </view>
+
+  <view class="cross-section page-pad">
+    <view class="eyebrow">横向阅读</view>
+    <view class="section-heading">三条问题线</view>
+    <view class="cross-card paper-card" wx:for="{{hiddenThreads}}" wx:key="title">
+      <view class="cross-top">
+        <view class="cross-index">0{{index + 1}}</view>
+        <view class="cross-title">{{item.title}}</view>
+      </view>
+      <view class="cross-path">{{item.path}}</view>
+      <view class="cross-insight">{{item.insight}}</view>
+    </view>
+  </view>
+</view>

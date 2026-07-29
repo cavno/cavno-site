@@ -1,0 +1,618 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>中国国家治理的制度逻辑 · 全书内在逻辑重构</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@400;500;600;700;900&family=Noto+Sans+SC:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --paper:#F3EAD3; --paper-deep:#EBDFC0; --paper-card:#F8F1DF;
+  --ink:#2A241B; --ink-soft:#5D5140; --ink-faint:#8B7D63;
+  --teal:#1E6B63; --teal-deep:#124F48; --teal-wash:rgba(30,107,99,.08);
+  --terra:#B4562F; --terra-deep:#8E3F1E; --terra-wash:rgba(180,86,47,.09);
+  --gold:#8A6C33; --line:#D5C7A3; --line-soft:#E2D6B4;
+  --serif:'Noto Serif SC','Songti SC','STSong',serif;
+  --sans:'Noto Sans SC','PingFang SC','Microsoft YaHei',sans-serif;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
+body{background:var(--paper);color:var(--ink);font-family:var(--serif);font-size:17px;line-height:1.95;
+  background-image:radial-gradient(rgba(138,108,51,.05) 1px,transparent 1px);background-size:26px 26px;}
+.wrap{max-width:960px;margin:0 auto;padding:0 28px}
+a{color:var(--teal);text-decoration:none}
+a:hover{color:var(--terra)}
+::selection{background:var(--teal);color:var(--paper)}
+
+/* ---------- 卷首 ---------- */
+header.hero{padding:72px 0 40px;border-bottom:3px double var(--line)}
+.hero-grid{display:flex;gap:36px;align-items:flex-start;justify-content:space-between}
+.eyebrow{font-family:var(--sans);font-size:12px;letter-spacing:.35em;color:var(--ink-faint);text-transform:uppercase;margin-bottom:14px}
+h1.booktitle{font-size:clamp(30px,5vw,46px);font-weight:900;line-height:1.35;letter-spacing:.04em}
+h1 .thin{font-weight:500;color:var(--ink-soft)}
+.subtitle{margin-top:10px;font-size:17px;color:var(--ink-soft);letter-spacing:.12em}
+.bookmeta{margin-top:20px;font-family:var(--sans);font-size:13px;color:var(--ink-faint);letter-spacing:.06em;line-height:2}
+.seal{flex:0 0 auto;width:92px;height:92px;border:3px solid var(--terra);color:var(--terra);
+  display:grid;place-items:center;grid-template-columns:1fr 1fr;padding:8px;gap:2px;
+  font-size:26px;font-weight:900;line-height:1;writing-mode:vertical-rl;letter-spacing:0;
+  box-shadow:inset 0 0 0 2px var(--paper),inset 0 0 0 4px rgba(180,86,47,.35);transform:rotate(-2deg);background:rgba(180,86,47,.04)}
+.seal span{display:block;text-align:center}
+
+/* 核心论纲 */
+.thesis{margin:44px 0 0;background:var(--paper-card);border:1px solid var(--line);border-left:6px solid var(--teal);
+  padding:30px 34px;box-shadow:4px 4px 0 rgba(42,36,27,.06)}
+.thesis .tag{font-family:var(--sans);font-size:12px;letter-spacing:.3em;color:var(--teal-deep);margin-bottom:12px;font-weight:700}
+.thesis p{font-size:17.5px;text-align:justify}
+.thesis b{color:var(--teal-deep)}
+.thesis .terra{color:var(--terra-deep);font-weight:700}
+
+/* 目录 */
+nav.toc{margin:40px 0 0;border:1px solid var(--line);background:rgba(248,241,223,.6)}
+nav.toc .toc-head{font-family:var(--sans);font-size:12px;letter-spacing:.3em;padding:12px 20px;border-bottom:1px solid var(--line);color:var(--ink-faint)}
+nav.toc ol{list-style:none;display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr))}
+nav.toc li{border-bottom:1px dashed var(--line-soft);border-right:1px dashed var(--line-soft)}
+nav.toc a{display:flex;gap:12px;padding:12px 20px;font-size:14.5px;color:var(--ink-soft);align-items:baseline}
+nav.toc a:hover{background:var(--teal-wash);color:var(--teal-deep)}
+nav.toc .no{font-family:var(--sans);font-size:11px;color:var(--terra);letter-spacing:.1em;min-width:34px}
+
+/* ---------- 章节骨架 ---------- */
+section{padding:64px 0 8px}
+.sec-head{display:flex;align-items:baseline;gap:18px;border-bottom:2px solid var(--ink);padding-bottom:12px;margin-bottom:8px}
+.sec-no{font-family:var(--sans);font-weight:700;font-size:13px;color:var(--paper);background:var(--ink);padding:4px 12px;letter-spacing:.25em;white-space:nowrap}
+.sec-no.t{background:var(--teal-deep)}
+.sec-no.r{background:var(--terra-deep)}
+h2{font-size:clamp(22px,3.4vw,30px);font-weight:900;letter-spacing:.05em}
+.sec-src{margin-left:auto;font-family:var(--sans);font-size:12px;color:var(--ink-faint);letter-spacing:.15em;white-space:nowrap}
+.lede{margin:22px 0 6px;font-size:18px;font-weight:700;color:var(--teal-deep);letter-spacing:.02em}
+p.body{margin:16px 0;text-align:justify}
+p.body b{color:var(--ink);background:linear-gradient(transparent 62%,rgba(30,107,99,.18) 62%)}
+p.body .rb{background:linear-gradient(transparent 62%,rgba(180,86,47,.20) 62%);font-weight:700}
+h3.sub{margin:34px 0 6px;font-size:19px;font-weight:700;color:var(--ink);display:flex;align-items:center;gap:10px}
+h3.sub::before{content:"";width:14px;height:14px;background:var(--terra);flex:0 0 auto;transform:rotate(45deg) scale(.7)}
+h4.mini{margin:24px 0 4px;font-size:16.5px;font-weight:700;color:var(--teal-deep)}
+
+/* 定义/批注块 */
+.defbox{margin:22px 0;padding:20px 24px;background:var(--teal-wash);border:1px solid rgba(30,107,99,.25);position:relative}
+.defbox::before{content:attr(data-t);position:absolute;top:-11px;left:16px;background:var(--paper);padding:0 10px;
+  font-family:var(--sans);font-size:12px;font-weight:700;letter-spacing:.2em;color:var(--teal-deep)}
+.defbox p{font-size:15.5px;text-align:justify;line-height:1.9}
+.defbox.r{background:var(--terra-wash);border-color:rgba(180,86,47,.3)}
+.defbox.r::before{color:var(--terra-deep)}
+.quote{margin:22px 0;padding:6px 0 6px 22px;border-left:3px solid var(--gold);color:var(--ink-soft);font-size:15.5px;font-style:normal}
+.quote .who{display:block;margin-top:6px;font-family:var(--sans);font-size:12px;color:var(--ink-faint);letter-spacing:.1em}
+
+/* 因果链条条 */
+.chain{margin:22px 0;display:flex;flex-wrap:wrap;align-items:stretch;gap:0;font-family:var(--sans);font-size:13.5px}
+.chain .node{background:var(--paper-card);border:1.5px solid var(--ink);padding:9px 14px;display:flex;align-items:center;text-align:center;line-height:1.5}
+.chain .node.t{border-color:var(--teal-deep);color:var(--teal-deep);font-weight:700}
+.chain .node.r{border-color:var(--terra-deep);color:var(--terra-deep);font-weight:700}
+.chain .arr{display:flex;align-items:center;padding:0 8px;color:var(--terra);font-weight:700;font-size:16px}
+.chain-note{font-family:var(--sans);font-size:12.5px;color:var(--ink-faint);margin:-12px 0 18px;letter-spacing:.05em}
+
+/* 表格 */
+table{width:100%;border-collapse:collapse;margin:22px 0;font-size:14.5px;background:var(--paper-card)}
+caption{caption-side:top;text-align:left;font-family:var(--sans);font-size:12.5px;font-weight:700;letter-spacing:.18em;color:var(--ink-faint);padding-bottom:8px}
+th{background:var(--ink);color:var(--paper);font-family:var(--sans);font-weight:500;font-size:13px;letter-spacing:.08em;padding:10px 12px;text-align:left}
+td{border:1px solid var(--line);padding:10px 12px;vertical-align:top;line-height:1.75}
+tr:nth-child(even) td{background:rgba(235,223,192,.35)}
+td.key{font-weight:700;color:var(--teal-deep);white-space:nowrap}
+td.hold-c{color:var(--teal-deep);font-weight:700}
+td.hold-m{color:var(--terra-deep);font-weight:700}
+.tbl-note{font-family:var(--sans);font-size:12.5px;color:var(--ink-faint);margin:-12px 0 20px}
+
+/* SVG 图 */
+figure.diagram{margin:30px 0;border:1px solid var(--line);background:var(--paper-card);padding:22px 18px 12px;box-shadow:4px 4px 0 rgba(42,36,27,.05)}
+figure.diagram svg{width:100%;height:auto;display:block}
+figcaption{font-family:var(--sans);font-size:12.5px;color:var(--ink-faint);letter-spacing:.15em;text-align:center;padding:12px 0 6px;border-top:1px dashed var(--line)}
+
+/* 命题卡 */
+.prop{display:flex;gap:16px;margin:14px 0;padding:14px 18px;background:var(--paper-card);border:1px solid var(--line)}
+.prop .pno{font-family:var(--sans);font-weight:700;font-size:13px;color:var(--paper);background:var(--terra);align-self:flex-start;padding:3px 9px;white-space:nowrap}
+.prop .ptxt{font-size:15.5px;line-height:1.85;text-align:justify}
+.prop .psrc{display:block;margin-top:4px;font-family:var(--sans);font-size:12px;color:var(--ink-faint)}
+
+/* 章末小结钩子 */
+.hook{margin:30px 0 10px;padding:16px 20px;border:1.5px dashed var(--terra);background:var(--terra-wash);font-size:15px}
+.hook b{color:var(--terra-deep)}
+.hook .hlabel{font-family:var(--sans);font-size:11.5px;letter-spacing:.25em;color:var(--terra-deep);display:block;margin-bottom:6px;font-weight:700}
+
+footer{margin-top:70px;padding:40px 0 60px;border-top:3px double var(--line);font-family:var(--sans);font-size:13px;color:var(--ink-faint);line-height:2.1}
+footer b{color:var(--ink-soft)}
+
+@media (max-width:640px){
+  body{font-size:16px}
+  .hero-grid{flex-direction:column}
+  .seal{transform:rotate(-2deg) scale(.85);transform-origin:left top}
+  .sec-head{flex-wrap:wrap}
+  .sec-src{margin-left:0;width:100%}
+  .chain{font-size:12.5px}
+  td,th{padding:8px}
+}
+@media print{
+  body{background:#fff}
+  .diagram,.thesis,.prop{box-shadow:none}
+}
+</style>
+</head>
+<body>
+
+<header class="hero">
+  <div class="wrap">
+    <div class="hero-grid">
+      <div>
+        <div class="eyebrow">全书内在逻辑重构 · 依原著观点自洽呈现</div>
+        <h1 class="booktitle">中国国家治理的制度逻辑<br><span class="thin">—— 一个组织学研究</span></h1>
+        <div class="subtitle">周雪光 著 · 生活·读书·新知三联书店 · 2017</div>
+        <div class="bookmeta">
+          本文档按原书"矛盾 → 维系机制 → 应对机制 → 政府行为 → 国家与社会 → 历史判断"的因果次序，<br>
+          将十二章的论证还原为一个闭合的分析系统。全部论断均取自书中原意，不作外部评价。
+        </div>
+      </div>
+      <div class="seal" aria-hidden="true"><span>治理</span><span>逻辑</span></div>
+    </div>
+
+    <div class="thesis">
+      <div class="tag">核心论纲 · 一段话总述</div>
+      <p>中国政体的突出特点是以中央政府为中心的<b>一统体制</b>；在辽阔国土与巨大治理规模的约束下，这一体制内生出一个无法根除的深刻矛盾——<span class="terra">一统体制与有效治理之间的矛盾</span>，集中表现为中央统辖权与地方治理权的紧张：集权越强、越刚性，地方解决实际问题的能力越弱；有效治理增强，又表现为各行其是、偏离失控，反过来威胁一统体制。矛盾不可根除，只能在动态中寻找暂时平衡。为此，中国政治过程演化出三个应对机制——<b>决策一统性与执行灵活性的动态平衡（逐级代理/行政发包）</b>、<b>政治教化的礼仪化</b>、<b>运动型治理的"纠偏"机制</b>。这些机制缓和了矛盾，却与现代国家制度建设（法治、官僚理性、专业化）不兼容，衍生出变通、共谋、拼凑应对、逆向攫取等稳定再生的政府行为，并把国家推入<span class="terra">集权—放权、名—实、失控—纠偏之间的周期性震荡</span>。这些纷杂现象背后的稳定因果联系，即是国家治理的制度逻辑；历史地看，它以牺牲效率换取稳定，造就了中华文明的长期延续、长期停滞与王朝循环，也规定着当代中国转型的可能与限度。</p>
+    </div>
+
+    <nav class="toc">
+      <div class="toc-head">阅读次序 · 即全书论证次序</div>
+      <ol>
+        <li><a href="#s1"><span class="no">壹</span>问题缘起与研究策略</a></li>
+        <li><a href="#s2"><span class="no">贰</span>基本矛盾：一统体制与有效治理</a></li>
+        <li><a href="#s3"><span class="no">叁</span>三大应对机制</a></li>
+        <li><a href="#s4"><span class="no">肆</span>动态循环：集权—放权的钟摆</a></li>
+        <li><a href="#s5"><span class="no">伍</span>支配形式：从君主官僚制到卡理斯玛权威</a></li>
+        <li><a href="#s6"><span class="no">陆</span>控制权理论：治理模式的统一框架</a></li>
+        <li><a href="#s7"><span class="no">柒</span>运动型治理：模式切换的离合器</a></li>
+        <li><a href="#s8"><span class="no">捌</span>微观机制四联：谈判·共谋·拼凑·攫取</a></li>
+        <li><a href="#s9"><span class="no">玖</span>国家与社会三幕：修路·选举·集体行动</a></li>
+        <li><a href="#s10"><span class="no">拾</span>大历史判断：稳定、停滞与循环</a></li>
+        <li><a href="#s11"><span class="no">拾壹</span>当代：延续、转型与两大危险</a></li>
+        <li><a href="#s12"><span class="no">拾贰</span>全书命题总表</a></li>
+        <li><a href="#s13"><span class="no">拾叁</span>章节—逻辑对照与编制说明</a></li>
+      </ol>
+    </nav>
+  </div>
+</header>
+
+<main class="wrap">
+
+<!-- ═══════════════ 壹 ═══════════════ -->
+<section id="s1">
+  <div class="sec-head"><span class="sec-no">壹</span><h2>问题缘起与研究策略</h2><span class="sec-src">对应：自序 · 第1章导论前半</span></div>
+  <p class="lede">全书由三个大历史之问出发，落脚于一个可分析的问题：纷杂现象背后是否存在一个稳定共享的制度逻辑。</p>
+  <p class="body">书首借兰德斯、孔飞力、汪晖三段引文提出中国大历史的三个问题：<b>其一</b>，与其他古老文明相比，中国文明有机体为何能生存如此之久；<b>其二</b>，为何既有辉煌的文明历程，又有长期停滞徘徊的经历；<b>其三</b>，为何中国社会在近几十年里突然迸发出巨大活力。作者随即把目光收拢到当代六十余年的政治历程：宏观上，中央与地方在集权与放权间轮番交替，运动式治理整顿在不同领域反复出现，政治教育运动绵延不断，法律制度与理性官僚制的发展举步维艰；微观上，政策执行不力、变通与共谋等基层痼疾急药慢攻、去而复来。这些现象场景各异、节奏不一，却<span class="rb">重复再现</span>——由此引出全书的问题意识：它们背后是否隐藏着中国国家运行与大历史演变的深层密码。</p>
+  <div class="defbox" data-t="核心概念 · 制度逻辑">
+    <p>一个国家的运行过程、解决问题的能力与方式、应对危机的抉择、央地关系与国家—社会关系，都建立在一系列稳定制度设施之上；这些制度安排塑造了解决问题的途径，诱导了相应的微观行为，从而在很大程度上规定了国家治理的轨迹、抉择和后果。书中把这一制度安排所导致的<b>因果联系</b>称为国家治理的制度逻辑——如蒂利所言，它们是一些重复再现的动因，在不同情形与排列组合中相互作用，导致相去甚远但有迹可查的结果。纷杂多样却稳定出现的各类现象，正是这一逻辑的具体表征。</p>
+  </div>
+  <p class="body">研究策略上有四点自觉。<b>第一，组织学的特定视角</b>：国家首先是一个组织制度，官僚体制为国家治理提供微观基础——政策指令正是经由各部门、各级政府中官员的日常工作与接踵而来的运动加以执行落实的；组织学以正式组织的权威结构、激励设置、信息流动、非正式制度与组织—环境关系为分析工具，恰好切中以往研究（如王亚南的阶级分析）未及之处。<b>第二，由微观及宏观、由现实及历史、由中国及比较</b>：以十年乡镇田野观察为素材（作者2004年起常驻北方FS镇），借理论、比较、历史三个视角"拔地而起"，跳出身在此山中的困境。<b>第三，自上而下的国家视角</b>：从国家建设与中央政府面临的挑战压力来解读现象与应对机制，这有利于透视逻辑联系，但不含对现象合理性的价值判断。<b>第四，行为科学取向</b>：着眼"是什么、为什么"，而非"应该怎样"的规范性讨论——没有对现实的满意回答，"应该怎么做"只能是空中楼阁。自序中借黄仁宇之语点题：学术的意义不在发现和批评荒谬，而在<span class="rb">发掘和解释荒谬背后的逻辑</span>。</p>
+</section>
+
+<!-- ═══════════════ 贰 ═══════════════ -->
+<section id="s2">
+  <div class="sec-head"><span class="sec-no t">贰</span><h2>基本矛盾：一统体制与有效治理</h2><span class="sec-src">对应：第1章导论核心</span></div>
+  <p class="lede">矛盾由治理规模内生：规模决定负荷，负荷压在官僚组织与观念制度两大维系机制上，两者双双承压，矛盾由此凸显。</p>
+
+  <h3 class="sub">前提约束：治理规模与负荷</h3>
+  <p class="body">治理规模指国家统领、管理、整合其疆土及民众的空间规模与实际内容。比较研究常引新加坡、日本、韩国模式，却忽略了规模这一关键维度——书中给出的参照框架是：思考中国治理，更合适的想象是<span class="rb">把整个欧洲纳入一个一统治理制度</span>所面临的挑战。治理规模由三个因素决定并与之成正比：<b>物理空间与人口</b>（区域差异、多元文化、发展不平衡使天灾人祸"聚而集之，无时不有"）；<b>治理内容</b>（历史上"政不下县"的简约国家与人民公社时期国家直接全面管理形成鲜明对比）；<b>治理形式</b>（集权形式下全国的问题压力汇于中央，分权结构则将其分解稀释）。组织经济学的结论在此适用：随着组织规模扩大、等级链条延长，私有信息分布随之分散，信息不对称恶化，出现<b>组织规模负效率</b>。书中特别指出，"数目字管理"式的技术治理无法根本化解规模难题，且可能加剧困境——技术由人操控且信息有模糊性；技术是双刃剑，也给下级新的谈判筹码；条框繁衍导致繁文缛节与组织僵化。</p>
+
+  <h3 class="sub">矛盾的正式表述</h3>
+  <div class="defbox r" data-t="全书第一命题 · 基本矛盾">
+    <p><b>一统体制</b>：广义中央政府对广大国土的统辖权，体现于自上而下推行政策意图、在资源与人事安排上统辖各地的最高权力。<b>有效治理</b>：政府在不同领域或属地处理解决具体问题的可行性与有效性，尤其体现在基层政府解决实际问题的能力上。两者的深刻矛盾在于：<b>一统体制的集中程度越高、越刚性，必然以削弱地方治理权为代价，有效治理能力随之减弱</b>（表现为集权下的死寂呆板）；<b>反之，有效治理增强意味着地方治理权扩张，常表现为——或被解读为——各行其是、偏离失控，对一统体制产生威胁</b>。矛盾的激烈程度取决于统辖内容之多实、治理范围之大小、资源与权力重心之高低。此矛盾为治理模式所内生，无法根本解决，只能在动态中寻找暂时平衡点。</p>
+  </div>
+
+  <h3 class="sub">两大维系机制及其各自的危机</h3>
+  <p class="body"><b>其一，官僚组织制度。</b>中央通过自上而下的人事管理（进入、考核、选拔、流动皆有统一规定与向上决定权）与资源集中调配（再分配又反向强化中央权威）来确保一统性；当代国家组织覆盖之广、层次之深、动员之频，历史上无出其右。但集权在组织实施上有"委托—代理"的固有困难：央地目标各异、信息不对称，漫长行政链条只能层层节制，常态表现为行政发包。书中引周黎安对这一两难的经典表述——中央须同时完成提供公共服务与防止代理权力被滥用两项任务，而两者本质冲突：<b>从公共服务角度应尽可能分权（基层最了解当地），从监督控制角度应尽可能集权（越下放越难监督）</b>。<b>其二，观念制度。</b>面对辽阔多元的国土，任何组织形式都无法单独维系一统权力，须有认同中央权威的共享观念渗透各层各处：历史上是儒教文化——科举使官吏经历礼教"专业化"，千万小农在君臣父子的等级观念中被润滑整合，且小农生产方式的同构性给了它长期稳定的基础；当代则以马列主义统一执政党观念，靠绵延不断的政治教育、思想改造以至大规模群众运动来<span class="rb">持续地维系、修补和强化</span>。危机在于：官僚组织承担的治理功能越来越多，不堪重负；观念制度遭遇多元社会——毛泽东时代对儒家的颠覆与"文革"对等级秩序的冲击伤及传统教化，更根本的是社会分工精细化、利益集团分化令涂尔干意义上靠共享观念凝聚的"机械团结"难以为继，与扁平组织、专业判断、多元价值经常性摩擦。</p>
+
+  <h3 class="sub">一个"成功"案例的双重含义：计划生育</h3>
+  <p class="body">计生政策规模之大、范围之广、持续之久、效果之显，是一统体制贯彻国家意图的突出"成功"案例。其机制正是官僚组织与政治化教育的配套：专门机构层层设立直至村居；"一票否决"的强激励；压力型体制分解指标、层层加码，最早引入数目字管理；铺天盖地的宣传教育维持注意力的持续分配。但这一成功恰恰说明代价：行政成本、人力、动员与政府注意力的耗费高昂，<b>难以在其他领域复制</b>——由此得出关键推论：一统体制欲强力推行其政策，<span class="rb">只能是有选择的、局部的、暂时的</span>。而"政令自中央出"的一统决策必然"一刀切"（若制度上允许各地免于自上而下干预而各自为政，中央权威久之式微，"国将不国"），越刚性越脱离各地实情；一以贯之的举国做法不仅代价高昂难以为继，且可能诱发"大跃进""文革"式的重大灾难。矛盾正随社会多元化而日益明朗、尖锐。</p>
+
+  <figure class="diagram">
+    <svg viewBox="0 0 900 640" role="img" aria-label="全书理论分析脉络总图">
+      <defs>
+        <marker id="ar" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#B4562F"/></marker>
+        <marker id="art" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#1E6B63"/></marker>
+      </defs>
+      <!-- 约束层 -->
+      <rect x="150" y="16" width="600" height="46" fill="none" stroke="#8A6C33" stroke-width="1.5" stroke-dasharray="6 4"/>
+      <text x="450" y="45" text-anchor="middle" font-family="Noto Sans SC,sans-serif" font-size="15" fill="#8A6C33" font-weight="700">约束条件 · 治理规模：辽阔国土 × 亿万人口 × 多元区域 × 治理内容与形式</text>
+      <line x1="450" y1="62" x2="450" y2="92" stroke="#8A6C33" stroke-width="1.5" marker-end="url(#ar)"/>
+      <!-- 基本矛盾 -->
+      <rect x="90" y="96" width="290" height="72" fill="rgba(30,107,99,.10)" stroke="#124F48" stroke-width="2.5"/>
+      <text x="235" y="126" text-anchor="middle" font-family="Noto Serif SC,serif" font-size="19" font-weight="900" fill="#124F48">一 统 体 制</text>
+      <text x="235" y="152" text-anchor="middle" font-family="Noto Sans SC,sans-serif" font-size="12.5" fill="#124F48">中央统辖权 · 人事与资源向上集中</text>
+      <rect x="520" y="96" width="290" height="72" fill="rgba(180,86,47,.10)" stroke="#8E3F1E" stroke-width="2.5"/>
+      <text x="665" y="126" text-anchor="middle" font-family="Noto Serif SC,serif" font-size="19" font-weight="900" fill="#8E3F1E">有 效 治 理</text>
+      <text x="665" y="152" text-anchor="middle" font-family="Noto Sans SC,sans-serif" font-size="12.5" fill="#8E3F1E">地方治理权 · 因地制宜解决问题</text>
+      <line x1="382" y1="120" x2="518" y2="120" stroke="#B4562F" stroke-width="2" marker-end="url(#ar)" marker-start="url(#ar)"/>
+      <text x="450" y="112" text-anchor="middle" font-family="Noto Sans SC,sans-serif" font-size="13" fill="#B4562F" font-weight="700">基本矛盾</text>
+      <text x="450" y="144" text-anchor="middle" font-family="Noto Sans SC,sans-serif" font-size="11.5" fill="#5D5140">集权愈刚 → 治理愈弱｜治理愈强 → 偏离失控</text>
+      <!-- 维系机制 -->
+      <line x1="235" y1="168" x2="235" y2="204" stroke="#124F48" stroke-width="1.5" marker-end="url(#art)"/>
+      <text x="252" y="192" font-family="Noto Sans SC,sans-serif" font-size="11.5" fill="#124F48">依赖维系</text>
+      <rect x="60" y="208" width="180" height="58" fill="#F8F1DF" stroke="#1E6B63" stroke-width="1.5"/>
+      <text x="150" y="232" text-anchor="middle" font-family="Noto Serif SC,serif" font-size="15" font-weight="700" fill="#124F48">官僚组织制度</text>
+      <text x="150" y="253" text-anchor="middle" font-family="Noto Sans SC,sans-serif" font-size="11" fill="#5D5140">等级结构 · 人事 · 资源</text>
+      <rect x="256" y="208" width="180" height="58" fill="#F8F1DF" stroke="#1E6B63" stroke-width="1.5"/>
+      <text x="346" y="232" text-anchor="middle" font-family="Noto Serif SC,serif" font-size="15" font-weight="700" fill="#124F48">一统观念制度</text>
+      <text x="346" y="253" text-anchor="middle" font-family="Noto Sans SC,sans-serif" font-size="11" fill="#5D5140">儒教礼制 → 政治教化</text>
+      <rect x="500" y="208" width="330" height="58" fill="none" stroke="#8E3F1E" stroke-width="1.5" stroke-dasharray="5 4"/>
+      <text x="665" y="232" text-anchor="middle" font-family="Noto Sans SC,sans-serif" font-size="13" fill="#8E3F1E" font-weight="700">两大机制双双承压</text>
+      <text x="665" y="253" text-anchor="middle" font-family="Noto Sans SC,sans-serif" font-size="11.5" fill="#5D5140">官僚不堪重负 · 观念遭多元冲击（机械团结难继）</text>
+      <!-- 应对机制 -->
+      <line x1="450" y1="270" x2="450" y2="304" stroke="#B4562F" stroke-width="2" marker-end="url(#ar)"/>
+      <text x="468" y="292" font-family="Noto Sans SC,sans-serif" font-size="12" fill="#B4562F" font-weight="700">矛盾诱发应对机制</text>
+      <rect x="52" y="308" width="252" height="86" fill="rgba(30,107,99,.07)" stroke="#124F48" stroke-width="2"/>
+      <text x="178" y="336" text-anchor="middle" font-family="Noto Serif SC,serif" font-size="15.5" font-weight="900" fill="#124F48">决策一统性 × 执行灵活性</text>
+      <text x="178" y="358" text-anchor="middle" font-family="Noto Sans SC,sans-serif" font-size="11.5" fill="#5D5140">逐级代理 / 行政发包</text>
+      <text x="178" y="378" text-anchor="middle" font-family="Noto Sans SC,sans-serif" font-size="11.5" fill="#5D5140">悖论：集中愈强 → 灵活性愈大</text>
+      <rect x="324" y="308" width="252" height="86" fill="rgba(30,107,99,.07)" stroke="#124F48" stroke-width="2"/>
+      <text x="450" y="336" text-anchor="middle" font-family="Noto Serif SC,serif" font-size="15.5" font-weight="900" fill="#124F48">政治教化的礼仪化</text>
+      <text x="450" y="358" text-anchor="middle" font-family="Noto Sans SC,sans-serif" font-size="11.5" fill="#5D5140">维系象征性权威 · 共同知识</text>
+      <text x="450" y="378" text-anchor="middle" font-family="Noto Sans SC,sans-serif" font-size="11.5" fill="#5D5140">参与即顺从 · 为动员操练</text>
+      <rect x="596" y="308" width="252" height="86" fill="rgba(30,107,99,.07)" stroke="#124F48" stroke-width="2"/>
+      <text x="722" y="336" text-anchor="middle" font-family="Noto Serif SC,serif" font-size="15.5" font-weight="900" fill="#124F48">运动型治理机制</text>
+      <text x="722" y="358" text-anchor="middle" font-family="Noto Sans SC,sans-serif" font-size="11.5" fill="#5D5140">叫停常规 · 政治动员纠偏</text>
+      <text x="722" y="378" text-anchor="middle" font-family="Noto Sans SC,sans-serif" font-size="11.5" fill="#5D5140">规范灵活性的边界</text>
+      <!-- 后果 -->
+      <line x1="450" y1="398" x2="450" y2="432" stroke="#B4562F" stroke-width="2" marker-end="url(#ar)"/>
+      <text x="468" y="420" font-family="Noto Sans SC,sans-serif" font-size="12" fill="#B4562F" font-weight="700">机制衍生后果</text>
+      <rect x="52" y="436" width="252" height="80" fill="rgba(180,86,47,.07)" stroke="#8E3F1E" stroke-width="2"/>
+      <text x="178" y="464" text-anchor="middle" font-family="Noto Serif SC,serif" font-size="14.5" font-weight="700" fill="#8E3F1E">稳定再生的政府行为</text>
+      <text x="178" y="486" text-anchor="middle" font-family="Noto Sans SC,sans-serif" font-size="11.5" fill="#5D5140">变通·共谋·拼凑应对·逆向攫取</text>
+      <text x="178" y="504" text-anchor="middle" font-family="Noto Sans SC,sans-serif" font-size="11.5" fill="#5D5140">上下级谈判 ·（第5–8章）</text>
+      <rect x="324" y="436" width="252" height="80" fill="rgba(180,86,47,.07)" stroke="#8E3F1E" stroke-width="2"/>
+      <text x="450" y="464" text-anchor="middle" font-family="Noto Serif SC,serif" font-size="14.5" font-weight="700" fill="#8E3F1E">集权—放权周期震荡</text>
+      <text x="450" y="486" text-anchor="middle" font-family="Noto Sans SC,sans-serif" font-size="11.5" fill="#5D5140">名（象征性国家）⇄ 实（强势国家）</text>
+      <text x="450" y="504" text-anchor="middle" font-family="Noto Sans SC,sans-serif" font-size="11.5" fill="#5D5140">失控 ⇄ 纠偏 ·（第4章）</text>
+      <rect x="596" y="436" width="252" height="80" fill="rgba(180,86,47,.07)" stroke="#8E3F1E" stroke-width="2"/>
+      <text x="722" y="464" text-anchor="middle" font-family="Noto Serif SC,serif" font-size="14.5" font-weight="700" fill="#8E3F1E">与现代国家建设不兼容</text>
+      <text x="722" y="486" text-anchor="middle" font-family="Noto Sans SC,sans-serif" font-size="11.5" fill="#5D5140">法治·官僚理性·专业化</text>
+      <text x="722" y="504" text-anchor="middle" font-family="Noto Sans SC,sans-serif" font-size="11.5" fill="#5D5140">难以充分展开、畸形生长</text>
+      <!-- 反馈 -->
+      <path d="M 848 476 L 878 476 L 878 132 L 814 132" fill="none" stroke="#B4562F" stroke-width="1.8" stroke-dasharray="7 5" marker-end="url(#ar)"/>
+      <text x="893" y="308" text-anchor="middle" font-family="Noto Sans SC,sans-serif" font-size="11.5" fill="#B4562F" writing-mode="tb" letter-spacing="4">后果反哺矛盾与机制有效性</text>
+      <text x="450" y="560" text-anchor="middle" font-family="Noto Sans SC,sans-serif" font-size="12" fill="#8B7D63">现象三类归位：① 矛盾及维系机制的体现　② 应对矛盾的治理机制　③ 机制衍生之后果（后果又反向影响矛盾与机制）</text>
+      <text x="450" y="600" text-anchor="middle" font-family="Noto Serif SC,serif" font-size="13" fill="#5D5140">—— 依原书图 1-1「理论分析脉络」重绘，为全书十二章的总路线图 ——</text>
+    </svg>
+    <figcaption>总图 · 矛盾 → 维系机制 → 应对机制 → 后果 → 反馈：全书论证的因果骨架</figcaption>
+  </figure>
+</section>
+
+<!-- ═══════════════ 叁 ═══════════════ -->
+<section id="s3">
+  <div class="sec-head"><span class="sec-no t">叁</span><h2>三大应对机制</h2><span class="sec-src">对应：第1章导论后半</span></div>
+  <p class="lede">矛盾不可根除，体制只能上下求索：三个机制各司其职——一个松绑，一个维名，一个纠偏。</p>
+
+  <h3 class="sub">机制一 · 决策一统性与执行灵活性的动态平衡</h3>
+  <p class="body">一统政策本质上不可能兼顾各地实情，制度上必须允许执行中的应变处理。中央权威体现于各级对一统决策的服从贯彻，而在政策主线附近允许各地不同方向的偏移。由此产生全书反复引用的组织学悖论：<span class="rb">一统决策的集中程度越强，执行过程中的灵活性就越大</span>——权力越集中，决策与各地实情差距越大，越不得不容忍更大偏移。其常态制度形式是<b>逐级代理制/行政发包制</b>：属地事权一揽子交付下级，官员任免考核委托直接（或隔级）上级；形式上，"代理"维系了一统结构与象征权威，事权下放则把治理权放到最有信息的层次。但书中强调，发包制只是关系的一面——一统体制的逻辑是中央保留<b>自上而下随意干预的绝对权力</b>（压力型体制即其特征），执行灵活性本身因事因地而异、有待自上而下裁决；中央还可通过政治动员、人事变动、资源与项目安排随时打断、重排下级工作的轻重缓急（周飞舟：大跃进中毛以更换省级领导迫使地方追随动员）。故发包制更近于应对一统束缚的<b>权宜之计</b>，始终处于被打断的动态之中。其行为表现即"变通"（正式机构按非正式程序运作的准正式方式）与基层共谋——它们填补了官方话语与地方性知识、正式制度与非正式制度之间的空隙。代价同样明确：<b>有效治理是以弱化一统体制的正式制度为代价的</b>。</p>
+
+  <h3 class="sub">机制二 · 政治教化的礼仪化</h3>
+  <p class="body">组织机制的局限加剧了观念整合的迫切：既然不得不容许灵活性与实际治理权，如何让官员按中央意志行事便至关重要。然而面对多元剧变的社会，教化收效甚微，不得不越来越依靠组织的刚性束缚——参观学习、传达动员、政治活动被硬性编入时间与激励，与实际工作关系甚微，遂成人们不得不参与的<b>仪式</b>；另一来源是基层的避险需求：变通共谋有实在风险，在仪式上表现与中央一致的姿态遂尤为重要（墙报上整齐排列的党性分析报告、搁置专业判断重复官方话语、汇报工作的"点睛之笔"须挂靠上级部署）。基层对"虚活""实活"分辨清楚，所谓"认认真真走过场，踏踏实实搞形式"。书中对其功能的解读是双层的：<b>其一</b>，仪式不在认知上建立共享观念，而在象征符号与动员程序上完成制度化，从而在日常中延续、强化一统体制的象征意义，使地方性偏离不致构成对体制的正面否定；<b>其二</b>，仪式并非仅具象征性——"走过场"这一行为本身就是顺从与接受，如军营操练之于战场：列队与实战无直接关系，却操练出服从命令的习性，一旦政治动员到来，顺从行为随之启动，观念制度即完成由名到实的转换。仪式化产生了<b>民众顺从权威的共同知识与同步启动效果</b>——这正是权力的基础，也未必出自推行者的设计，而是多方参与的政治过程演化的始料未及之果。</p>
+
+  <h3 class="sub">机制三 · 运动型治理机制（纠偏）</h3>
+  <p class="body">当中央默许因地制宜，各地可能按己意解读政策，越走越远乃至隐含割据之危；故制度安排的要害不止于保持决策一统、默认执行灵活，更在于保持<b>最后裁决权——纠偏与规范边界的能力</b>。运动型治理由此应运而生：暂时叫停官僚制常规过程，以政治动员替代之，超越官僚制的组织失败，将信号在短期内传递到各领域。整治中对个别案例严惩以儆效尤、惩处对象却颇具随意性、令人感到治标不治本——书中的解释是：<span class="rb">执行的"灵活性"与执行中的"偏离"本是同一现象的不同标签</span>，一旦越过临界度、触动一统体制的神经，灵活性即被定义为偏离甚至对抗；而运动的目的并非取消灵活性，而是<b>通过间或的运动规范灵活性的边界</b>，在一统体制与有效治理间维持动态平衡。三个机制并非并列而是互相依赖：官僚组织实施的仪式活动为运动治理提供了动员机构、基本程序与不断操练的协调能力，也提供了合法性基础；而运动机制的前提是自上而下的任意专断权——中途修改游戏规则而不被质疑——这又要求为专断干预提供观念基础。灵活执行松绑于实，礼仪化维系于名，运动治理纠偏于界，三者合成一统体制得以"在不断调整与波动中走下去"的机制组合。</p>
+</section>
+
+<!-- ═══════════════ 肆 ═══════════════ -->
+<section id="s4">
+  <div class="sec-head"><span class="sec-no r">肆</span><h2>动态循环：集权—放权的钟摆</h2><span class="sec-src">对应：第1章"应对机制间的动态演变"</span></div>
+  <p class="lede">三机制的相互作用不是静态并置，而是一个有固定节拍的循环——这是全书对"重复再现"现象的正面解释。</p>
+  <p class="body">观察起点是国家运行的<b>常态</b>：决策一统性与执行灵活性间的松散关联——中央制定大政方略引导地方，给予因地制宜的空间；基层一面以听命形式行事获取自上而下的权威合法性，一面在发包的权责利激励下以非正式形式、与直接上级同谋、经由变通完成任务并获取资源。执行展开后，各地做法在不同方向上<b>越走越远</b>，偏离原定政策主线；偏离乃至对抗之势威胁中央权威，酿成央地紧张与"失控"危机，<b>迫使中央启动运动型治理纠偏</b>：组织权力（人事、资源）向上集中，以政治画线规范观念行为，大张旗鼓推行新政策精神以穿透官僚组织惯性的过滤与噪音——钟摆偏向强化中央统辖权。但运动的任意性使纠偏常常<b>矫枉过正</b>：风头一来人人谨慎，社会整齐划一、万马齐喑，"一管就死"——组织与仪式上的服从被巩固，基层解决实际问题的能力却被削弱；高度动员有效于一时而代价极大难以为继。书中以90年代中期以来的资源上收为例：汲取能力提高的同时，<b>资源支配权与有效信息分离</b>——地方资源匮乏则解决问题能力衰弱，"条条"自上而下的再分配（退耕还林、村村通等）常与地方实情不合，地方的应对（变通与共谋）便造就司空见惯的"挪用"；高压之下官员噤若寒蝉、手脚束缚，一统体制与有效治理的矛盾重新积累、恶化、显现危机。于是中央<b>不得不调整</b>：以权力资源下放调动地方积极性——局部试验、特殊政策、授意的地区性改革，并在舆论上大造声势、鼓励观念创新以打消上轮整治的肃杀气氛——钟摆摆向放权，央地关系回到松散关联的常态起点。如此，国家在循环中经历<b>名（象征性国家）与实（强势国家）的角色转换</b>。</p>
+
+  <figure class="diagram">
+    <svg viewBox="0 0 880 560" role="img" aria-label="集权放权循环图">
+      <defs><marker id="arc" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#B4562F"/></marker></defs>
+      <ellipse cx="440" cy="285" rx="330" ry="205" fill="none" stroke="#D5C7A3" stroke-width="1.2" stroke-dasharray="3 6"/>
+      <!-- center -->
+      <text x="440" y="262" text-anchor="middle" font-family="Noto Serif SC,serif" font-size="21" font-weight="900" fill="#2A241B">名 ⇄ 实</text>
+      <text x="440" y="292" text-anchor="middle" font-family="Noto Sans SC,sans-serif" font-size="12.5" fill="#5D5140">象征性国家 ⇄ 强势国家</text>
+      <text x="440" y="316" text-anchor="middle" font-family="Noto Sans SC,sans-serif" font-size="12.5" fill="#8B7D63">矛盾无解 · 循环求衡</text>
+      <!-- nodes: 8 around -->
+      <g font-family="Noto Sans SC,sans-serif" font-size="12.5">
+        <rect x="330" y="26" width="220" height="52" fill="rgba(30,107,99,.10)" stroke="#124F48" stroke-width="2"/>
+        <text x="440" y="48" text-anchor="middle" font-weight="700" fill="#124F48">① 常态：松散关联</text>
+        <text x="440" y="68" text-anchor="middle" fill="#5D5140">一统决策 × 灵活执行（发包）</text>
+
+        <rect x="622" y="88" width="206" height="52" fill="#F8F1DF" stroke="#8E3F1E" stroke-width="1.6"/>
+        <text x="725" y="110" text-anchor="middle" font-weight="700" fill="#8E3F1E">② 变通·共谋累积</text>
+        <text x="725" y="130" text-anchor="middle" fill="#5D5140">获取资源 · 因地制宜</text>
+
+        <rect x="672" y="238" width="192" height="52" fill="#F8F1DF" stroke="#8E3F1E" stroke-width="1.6"/>
+        <text x="768" y="260" text-anchor="middle" font-weight="700" fill="#8E3F1E">③ 偏离扩大·失控信号</text>
+        <text x="768" y="280" text-anchor="middle" fill="#5D5140">威胁中央权威</text>
+
+        <rect x="622" y="400" width="206" height="52" fill="rgba(180,86,47,.12)" stroke="#8E3F1E" stroke-width="2"/>
+        <text x="725" y="422" text-anchor="middle" font-weight="700" fill="#8E3F1E">④ 运动纠偏：集权</text>
+        <text x="725" y="442" text-anchor="middle" fill="#5D5140">权力资源上收 · 政治画线</text>
+
+        <rect x="330" y="470" width="220" height="52" fill="#F8F1DF" stroke="#124F48" stroke-width="1.6"/>
+        <text x="440" y="492" text-anchor="middle" font-weight="700" fill="#124F48">⑤ 一管就死 · 万马齐喑</text>
+        <text x="440" y="512" text-anchor="middle" fill="#5D5140">支配权与有效信息分离</text>
+
+        <rect x="52" y="400" width="206" height="52" fill="#F8F1DF" stroke="#124F48" stroke-width="1.6"/>
+        <text x="155" y="422" text-anchor="middle" font-weight="700" fill="#124F48">⑥ 有效治理衰弱</text>
+        <text x="155" y="442" text-anchor="middle" fill="#5D5140">挪用盛行 · 噤若寒蝉</text>
+
+        <rect x="16" y="238" width="192" height="52" fill="#F8F1DF" stroke="#124F48" stroke-width="1.6"/>
+        <text x="112" y="260" text-anchor="middle" font-weight="700" fill="#124F48">⑦ 矛盾积累·危机显现</text>
+        <text x="112" y="280" text-anchor="middle" fill="#5D5140">代价高昂 · 难以为继</text>
+
+        <rect x="52" y="88" width="206" height="52" fill="rgba(30,107,99,.12)" stroke="#124F48" stroke-width="2"/>
+        <text x="155" y="110" text-anchor="middle" font-weight="700" fill="#124F48">⑧ 放权搞活</text>
+        <text x="155" y="130" text-anchor="middle" fill="#5D5140">试验 · 特殊政策 · 造势</text>
+      </g>
+      <!-- arrows clockwise -->
+      <path d="M 556 62 Q 618 66 660 86" fill="none" stroke="#B4562F" stroke-width="2" marker-end="url(#arc)"/>
+      <path d="M 746 142 Q 768 180 770 234" fill="none" stroke="#B4562F" stroke-width="2" marker-end="url(#arc)"/>
+      <path d="M 770 292 Q 768 350 748 396" fill="none" stroke="#B4562F" stroke-width="2" marker-end="url(#arc)"/>
+      <path d="M 660 456 Q 616 486 556 496" fill="none" stroke="#B4562F" stroke-width="2" marker-end="url(#arc)"/>
+      <path d="M 324 496 Q 262 486 220 456" fill="none" stroke="#B4562F" stroke-width="2" marker-end="url(#arc)"/>
+      <path d="M 132 396 Q 112 350 110 294" fill="none" stroke="#B4562F" stroke-width="2" marker-end="url(#arc)"/>
+      <path d="M 110 234 Q 112 180 134 142" fill="none" stroke="#B4562F" stroke-width="2" marker-end="url(#arc)"/>
+      <path d="M 222 86 Q 262 66 324 62" fill="none" stroke="#B4562F" stroke-width="2" marker-end="url(#arc)"/>
+    </svg>
+    <figcaption>循环图 · "失控"与"纠偏"两极之间的往复：矛盾的重复再现即制度逻辑的运行轨迹</figcaption>
+  </figure>
+
+  <div class="hook"><span class="hlabel">导论收束 · 遗留的代价</span>这些机制缓和了矛盾，却带来两重深患：<b>其一</b>，国家建设在集权与放权、名与实、失控与纠偏两极间摇摆转换，对负荷累累的体制造成不断冲击，稍有不慎可能酿成动荡；<b>其二</b>，这一制度逻辑限制了制度创新与抉择空间，使依法治国、官僚理性、专业化难以充分展开、只能畸形生长——为未来投下更大的不确定性阴影。此两点在第12章正面展开。</div>
+</section>
+
+<!-- ═══════════════ 伍 ═══════════════ -->
+<section id="s5">
+  <div class="sec-head"><span class="sec-no t">伍</span><h2>支配形式：从君主官僚制到卡理斯玛权威</h2><span class="sec-src">对应：第2章 · 韦伯理论视角</span></div>
+  <p class="lede">要理解官僚体制，先要把"国家权力"与"官僚权力"在分析上区别开来——两者合法性来源不同，主从关系及其紧张是治理逻辑的深层密码。</p>
+
+  <div class="defbox" data-t="分析工具 · 韦伯三位一体">
+    <p>任何权力都不能持久建立在强制之上，须有<b>合法性基础</b>为自己辩护；建立在合法性之上的权力即<b>权威</b>，其三个理想类型为<b>传统权威</b>（习俗传承）、<b>卡理斯玛权威</b>（领袖超凡禀赋获追随者拥戴，须以不断的"奇迹"维系）、<b>法理权威</b>（公认程序）。权威类型对应三种<b>支配形式</b>——家长（产）制、卡理斯玛制、官僚制，各有匹配的制度设施；不同合法性基础可混合共存，但错位嫁接会引发紧张与不稳定。韦伯式官僚制以法理权威为基、以规则为本、即事化行事，故可与"法律面前人人平等"的大众民主同构；但官僚制作为高效工具也可为其他支配形式所用——在家产制下，官吏权力来自对支配者的臣属，是"婢仆对主人的忠诚"而非对规则的即事忠诚。<b>中国官僚体制正属后者：形似韦伯式，质为家产制。</b></p>
+  </div>
+
+  <h3 class="sub">历史形态：君主官僚制</h3>
+  <p class="body">中国历史上的国家支配形式是皇权为中心的家产制，学界称<b>君主官僚制</b>：皇权与官僚权力双重并存治国，皇权为最高权力，官僚体制为其组织基础与治理工具——但并非可随心所欲使唤的工具，而是有内在机制的有机体（明帝数十年不理朝政而国家运转如常即为明证）。两种权力各有合法性：<b>皇权</b>兼具传统权威（祖宗之法）与卡理斯玛权威（受命于天、德治天下），"天下无二君"，嫡长继承天经地义，其合法性渗透于儒学经典、科举、礼仪等日常制度，对民众而言皇权即自然秩序；<b>官僚权力</b>的合法性则来源于<span class="rb">自上而下的授权</span>，集中体现为向上负责制——录用拔擢生杀予夺终握于君手，官员所作所为是代皇帝行使权力，皇帝在各环节保有最终决定与任意干预的专断权力。两者既交融又紧张：列文森所谓从一开始就相互依存又彼此排斥——儒教文人身兼二任，既在权势上依附君权，又以道统（祖宗之法、天道灾异、言官规谏）从道德上约束君权，君主专制的活力正产生于这一互相钳制之中；组织上，官僚体制自成运转机制、发展出节制皇权独断的种种规则（明代废相之后君主行使权力受到的制度限制反而更大），官僚过程与皇权利益分离，时常激化矛盾。</p>
+  <p class="body">由此得出全书最要紧的一条推理链：<b>皇权的专断权力可以随时打断、叫停官僚体制按部就班的运转 → 因此官僚体制断然不可真正制度化、不能把行为建立在程序规则（法理权威）之上，否则将削弱乃至否定专断权力 → 欲使专断指令得以执行，各级官员也须对其下属拥有类似权力，故<span class="rb">专断权力在官僚体制中逐级复制</span> → 官僚制不能规则化，便为非正式制度敞开大门</b>：向上负责造成极大不确定性，评判操于上司专断之手（"爱则援破格之词，恶则以成法相诘"），上下级遂结成相依为命的庇护关系——上级靠得力下属完成任务或掩盖问题，下级靠上级赏识关照以求进取或于事发时得庇护——同门、同乡、同事的人情网络繁衍交织、派别林立，形成"封建土围子"，官僚体制的实际运行反过来对一统皇权构成威胁。两权关系可概括为：君权强，则官僚体制为用；君权弱，则官僚体制自行其是。</p>
+
+  <h3 class="sub">当代形态：卡理斯玛权威为实的支配形式</h3>
+  <p class="body">帝制消亡后仍须在分析上区分居于最高权力的执政党及其领袖（"党和国家"）与其下的官僚组织（"各级干部"）——毛泽东对官僚体制的反复批评与频繁整风，正说明二者在实际运行中存在经常性紧张。当代国家的合法性建立在<b>以法理权威为表、卡理斯玛权威为实</b>的混合基础上：建国之初民主宪政的法理形式（人大与选举任命制度）几无争议，但在浸濡数千年儒教与君主官僚制的社会中法理权威并未真正植根；执政党的实质权力依据是卡理斯玛权威——革命史上出乎意料的胜利、建国初摧枯拉朽地平定时局（陈永发：其"平天下"远比传统朝代顺利）、抗美援朝与经济迅速恢复等一系列"奇迹"，加上群众路线所维系的追随者认同，在期冀奇迹、崇尚伟人的土壤上确立并在"文革"中登峰造极。随后经历韦伯所说的<b>常规化</b>：超凡禀赋由领袖个人移植于稳定组织设施——执政党本身被赋予卡理斯玛禀性（光荣革命史、先锋队称谓），实质的卡理斯玛权威在形式上与法理权威融为一体。</p>
+  <p class="body">在这一支配形式中，官僚体制的结构位置一如帝国——合法性仍源于自上而下授权、体现于向上负责制——但主从关系有两点强化与新变：<b>其一，主从更甚</b>。传统道统对君臣的双向约束（言官、廷议、罪己诏）随传统权威一并消失；官员身处封闭狭窄的内部人事"市场"，几无退出渠道，依附较帝国文人"进可仕退可隐"更深。<b>其二，官僚体制史无前例地扩展至社会各领域角落</b>——因为卡理斯玛权威须建立在与民众的密切纽带上：一方面靠官僚体制实现意识形态一统与话语垄断（任何挑战性话语都会瓦解合法性）；另一方面把民众组织起来（单位、公社、街居），以组织纪律保证追随者与领袖的关系——政治教化不再如帝国寓于日常礼教，而是建立在严密官僚体制之上。列宁式政党的官僚体制为卡理斯玛权威提供了坚实组织基础，也使这一组织形态的内在机制以空前程度充斥社会。</p>
+
+  <h3 class="sub">当代官僚体制的四个组织特征</h3>
+  <p class="body"><b>（一）垄断权力逐级复制。</b>与君主官僚制同一逻辑：最高领袖行使专断权力打断常规，各级官员亦须有类似专断权方能实现领袖意图；向上负责制由此获得强大的自上而下动员能力——但其组织结构与"上传下达"的反馈职能内在相悖：一个为高效执行自上而下任务而构建的组织，若兼传自下而上信息之职，执行强度必打折扣，故<b>动员强而反馈弱</b>是体制性的，且与卡理斯玛逻辑一致——民众是追随者而非授权者。<b>（二）从"向上负责"到"向直接上级负责"。</b>治理规模使授权不得不层层下放，柔性刚性约束（考核指标、整风教育）皆力不从心，实际监管评判只能落在直接上级手中——即便直接上级无晋升决定权，其日常职责安排亦对官员地位与实际权力有决定性影响；结果是官员对体制的依附体现于此，各部门、区域高度封闭。<b>（三）规则的尴尬。</b>规则是组织协调之本，却是卡理斯玛权威的大敌：按规则行事的官僚体制把权力从领袖手中转到官僚手中，且诱发谨小慎微、"法令日繁……人材亦以不振"（顾炎武）的惰性；于是整党整风等运动反复打断规则——<b>正式制度既不稳定，非正式制度则得以盛行</b>，且在当代有新意义：变通成为政策落实的常规，其风险须靠官员间共谋化解，非正式关系遂成落实高压政策的必要手段。<b>（四）领袖—官僚—群众的三角困境。</b>官僚体制在领袖与群众之间是双刃剑：既建立了稳定的组织联系，其等级制度又趋于把追随者与领袖分离；官僚体制的组织失败为民众切身感受，不可避免引致对最高权威的质疑，动摇卡理斯玛的合法性基础。毛泽东的两个应对——把执政党抽象化、卡理斯玛化以与官僚问题切割；以官僚体制与群众运动双重并用、互为钳制——皆有制度性困难：两个机制难以兼容，或运动冲击常规秩序，或官僚体制窒息群众声音，失之偏颇又矫枉过正；群众运动一旦与官僚体制分离，连毛的权威亦难驾驭，最终以"文革"的巨大代价验证了这一尝试的失败结局。</p>
+
+  <div class="hook"><span class="hlabel">后毛泽东时代 · 两个过程此消彼长</span>开放时代的比较竞争压力、组织与观念两大设施的削弱，使<b>卡理斯玛权威日渐式微</b>（历次整治官僚体制的努力与失败、力不从心即其表征）；同时国家囿于绩效合法性压力，更依赖官僚体制的动员能力，权力资源持续向其集中，<b>官僚权力在约束缺失下急剧扩张</b>——且扮演了历史上未见先例的双重角色：既是垄断强制权力，又是"经营"属地的实质经济主体（帝国除盐铁官营外官僚体制从不直接为经济主体；计划时代亦仅是中央布局的执行者）。与此同时，民众不再以追随者角色出现，而是在公民权利、法律面前人人平等的基础上发声——<b>国家治理的合法性基础成为亟须回答的问题</b>。此判断在第12章展开为"两大危险"。</div>
+</section>
+
+<!-- ═══════════════ 陆 ═══════════════ -->
+<section id="s6">
+  <div class="sec-head"><span class="sec-no t">陆</span><h2>控制权理论：治理模式的统一框架</h2><span class="sec-src">对应：第3章 · 环保领域案例</span></div>
+  <p class="lede">"层层加码"与"共谋"这对表面矛盾的行为，其实是同一承包逻辑在两个阶段的两副面孔——控制权的分配组合决定了治理模式与行为方式。</p>
+  <p class="body">研究缘起于政府研究的<b>理论贫困</b>：田野呈现出相互矛盾的政府形象——一面压力型体制层层加码、极力执行，一面共谋变通、敷衍弱化；检查一面大张旗鼓、风声鹤唳，一面时紧时松、发现问题后不了了之；同一机构常兼扮矛盾角色。宏观模型（财政联邦主义、晋升锦标赛）解释不了这些微观行为。作者借鉴不完全契约与新产权理论——契约不可能完备，故资产所有者持有契约规定之外的<b>剩余控制权</b>（区别于剩余索取权）；控制权分配蕴含权威关系（Aghion–Tirole 进一步区分基于职位的正式权威与基于信息占有的实质权威：即便正式权威未变，实际控制权也可能以非正式形式转移）——并将其重新概念化为三个维度：</p>
+  <div class="defbox" data-t="核心概念 · 三维控制权（置于"委托方—管理方—代理方"三级结构中）">
+    <p><b>目标设定权</b>：为下属设定目标任务，科层权威关系的核心，可单方制定亦可协商产生。<b>检查验收权</b>：附属于目标设定权，检查"交货"是否符合契约要求——其目的是验收结果，<b>而非</b>对代理方作绩效评估。<b>激励分配权</b>：针对代理方的激励设置、考核奖惩，以及执行中的组织实施与资源配置。三权在概念上可分解、在实际中可分离，在各层级间作不同分配组合——但组合并非任意：中央若尽收三权，须掌握数以万计项目的准确信息，成本高昂、不堪重负，分离常是不得已而为之。</p>
+  </div>
+
+  <table>
+    <caption>依原书表 3-1 · 控制权分配与政府治理模式</caption>
+    <tr><th style="width:17%">治理模式</th><th>目标设定权</th><th>检查验收权</th><th>激励分配权</th><th style="width:36%">特征与条件</th></tr>
+    <tr><td class="key">高度关联型</td><td class="hold-c">委托方</td><td class="hold-c">委托方</td><td class="hold-c">委托方</td><td>高度集权整合，常伴运动型动员；成本极高、基层丧失积极性，内在不稳定，倾向转化为他种模式（计生早期、维稳收紧期）。</td></tr>
+    <tr><td class="key">行政发包制</td><td class="hold-c">委托方</td><td class="hold-c">委托方</td><td class="hold-m">管理方</td><td>目标"发包"，管理方以承包商角色行使辖内剩余控制权；诸多领域的<b>常态</b>模式。</td></tr>
+    <tr><td class="key">松散关联型</td><td class="hold-c">委托方</td><td class="hold-m">管理方</td><td class="hold-m">管理方</td><td>委托方保有正式（象征性）权威，实质权威在管理方（放权时期、边缘领域如改革前集体企业）。</td></tr>
+    <tr><td class="key">联邦制</td><td class="hold-m">管理方</td><td class="hold-m">管理方</td><td class="hold-m">管理方</td><td>名实权威皆归管理方；在中国只能是有限、非正式、暂时的，故不稳定，书中存而不论。</td></tr>
+  </table>
+  <p class="tbl-note">青绿＝委托方持有；赭红＝管理方持有。模式为理想类型，现实中交错重叠、可相互转化。</p>
+
+  <h3 class="sub">发包制的行为含义：一个逻辑，两个阶段</h3>
+  <p class="body"><b>委托方行为</b>：只关心承包结果不问过程，故以<b>抽查</b>形式验收，并<b>刻意制造检查的不确定性</b>——标准时紧时松、地点不断变换——以维持压力；抽查中发现的具体问题类似整批货物允许误差内的"次品"，多被大事化小；但对<b>弄虚作假</b>极为敏感（它意味着整批货物可能普遍有问题），一旦发现即严惩以儆效尤，而被查方则极力将问题解释为偶然、个别。<b>管理方行为</b>随阶段切换：<b>执行阶段</b>，为确保交货而"层层加码"、行使激励分配权督促代理方；<b>检查验收阶段</b>，与代理方利益一致，共同确保"货物"通过验收——共谋由此而生。表面矛盾的两类行为实为同一承包逻辑所驱使。由此还能区分三类"偏差"的不同性质：管理方按自有信息行使激励权而不理会委托方验收发现（合乎发包契约）；变通完成上级目标（与目标设置一致，上级视而不见甚至默许）；验收阶段共谋掩盖问题（唯此实质违约）。共谋最可能发生于<b>发包制＋验收阶段</b>——高度关联型下各方反应敏锐、共谋代价高昂不易发生；松散/联邦型下管理方自身即扮演委托方角色，共谋激励消失。</p>
+
+  <figure class="diagram">
+    <svg viewBox="0 0 880 330" role="img" aria-label="三级结构与两阶段行为">
+      <defs><marker id="ard" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#B4562F"/></marker>
+      <marker id="ard2" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#1E6B63"/></marker></defs>
+      <g font-family="Noto Sans SC,sans-serif">
+        <rect x="330" y="20" width="220" height="56" fill="rgba(30,107,99,.12)" stroke="#124F48" stroke-width="2.2"/>
+        <text x="440" y="44" text-anchor="middle" font-size="16" font-weight="700" fill="#124F48">委托方（中央 / 部委）</text>
+        <text x="440" y="64" text-anchor="middle" font-size="11.5" fill="#5D5140">目标设定权 · 检查验收权 · 随意干预权</text>
+        <rect x="330" y="138" width="220" height="56" fill="#F8F1DF" stroke="#8A6C33" stroke-width="2"/>
+        <text x="440" y="162" text-anchor="middle" font-size="16" font-weight="700" fill="#8A6C33">管理方（中间政府＝承包商）</text>
+        <text x="440" y="182" text-anchor="middle" font-size="11.5" fill="#5D5140">激励分配权 · 执行实施权</text>
+        <rect x="330" y="256" width="220" height="56" fill="rgba(180,86,47,.10)" stroke="#8E3F1E" stroke-width="2.2"/>
+        <text x="440" y="280" text-anchor="middle" font-size="16" font-weight="700" fill="#8E3F1E">代理方（基层政府）</text>
+        <text x="440" y="300" text-anchor="middle" font-size="11.5" fill="#5D5140">执行落实 · 地方性信息优势</text>
+        <line x1="440" y1="76" x2="440" y2="134" stroke="#2A241B" stroke-width="1.6" marker-end="url(#ard2)"/>
+        <line x1="440" y1="194" x2="440" y2="252" stroke="#2A241B" stroke-width="1.6" marker-end="url(#ard2)"/>
+        <!-- 左：执行阶段 -->
+        <path d="M 326 158 Q 200 158 200 96 Q 200 48 326 48" fill="none" stroke="#1E6B63" stroke-width="2" stroke-dasharray="2 0"/>
+        <rect x="40" y="120" width="180" height="76" fill="none" stroke="#1E6B63" stroke-width="1.4"/>
+        <text x="130" y="146" text-anchor="middle" font-size="13.5" font-weight="700" fill="#124F48">执行阶段</text>
+        <text x="130" y="166" text-anchor="middle" font-size="11.5" fill="#5D5140">管理方"层层加码"</text>
+        <text x="130" y="184" text-anchor="middle" font-size="11.5" fill="#5D5140">行使激励 · 督促代理方</text>
+        <path d="M 220 196 Q 300 230 326 268" fill="none" stroke="#1E6B63" stroke-width="1.8" marker-end="url(#ard2)"/>
+        <!-- 右：验收阶段 -->
+        <rect x="660" y="120" width="180" height="76" fill="none" stroke="#B4562F" stroke-width="1.4"/>
+        <text x="750" y="146" text-anchor="middle" font-size="13.5" font-weight="700" fill="#8E3F1E">检查验收阶段</text>
+        <text x="750" y="166" text-anchor="middle" font-size="11.5" fill="#5D5140">管理方＋代理方共谋</text>
+        <text x="750" y="184" text-anchor="middle" font-size="11.5" fill="#5D5140">确保"交货"通过验收</text>
+        <path d="M 554 166 Q 610 166 656 158" fill="none" stroke="#B4562F" stroke-width="1.8"/>
+        <path d="M 554 284 Q 630 268 660 196" fill="none" stroke="#B4562F" stroke-width="1.8"/>
+        <path d="M 750 116 Q 690 60 554 48" fill="none" stroke="#B4562F" stroke-width="1.8" stroke-dasharray="6 4" marker-end="url(#ard)"/>
+        <text x="712" y="86" text-anchor="middle" font-size="11.5" fill="#B4562F">应对委托方抽查</text>
+      </g>
+    </svg>
+    <figcaption>三级结构 · 加码在执行阶段（左，青绿），共谋在验收阶段（右，赭红）——同一逻辑的两面</figcaption>
+  </figure>
+
+  <p class="body">环保案例（某市环保局2006–2010年五年减排的追踪观察）验证了这一分配：环保部/省厅握目标设定权（市县局无缘参与）与验收权（半年、年终两查＋不定期抽查，讨价还价充斥其间而最终决定权在上），市局对县局行使激励分配权且投入大量精力于此——与发包制特征吻合。但书中随即给出三点<b>限定</b>，使模型逼近中国现实：目标常为强行下达而非谈判达成，与本地不符概率极高；政策结果不是工业品，测量评估随意性大，讨价还价空间随之扩大；最关键者，<b>委托方的授权不具可信承诺——中央保留随意干预的权力</b>，故行政发包只是诸模式之一，随控制权收放而与其他模式相互转化（计生由早期高度关联转为发包；维稳由发包/松散收为高度关联；危机或重大活动时委托方以高度动员将控制权暂时而有效地收回）。<b>转化的机制是什么？</b>这一问题交由第4章的运动型治理回答。理论上的批评指向亦明确：以激励设置为中心的思路（含锦标赛）有明显局限——激励机制为控制权分配形式所制约，检查权在谁手中，共谋激励便随之生灭；激励解释只在特定治理模式条件下有效。</p>
+</section>
+
+<!-- ═══════════════ 柒 ═══════════════ -->
+<section id="s7">
+  <div class="sec-head"><span class="sec-no r">柒</span><h2>运动型治理：模式切换的离合器</h2><span class="sec-src">对应：第4章 · 叫魂/大跃进/文革谱系</span></div>
+  <p class="lede">运动不是"非制度化"的偶发，而是建立在稳定组织设施上的常备机制：因常规失败而启动，为纠偏与切换而存在。</p>
+  <p class="body">从乾隆1768年"叫魂"大恐慌、荒政的紧急动员，到"大跃进""文革"，再到严打、整治小金库、市容整顿、奥运安保、维稳——运动式治理时隐时现而明晰可辨地贯穿大历史。其定义特征是：<b>暂时打断、叫停官僚体制各就其位、按部就班的常规运作，代以自上而下政治动员的方式调集资源与注意力完成特定任务</b>。作者部分认同冯仕政"革命教化政体"的解释，但明确修正其"非制度化、非常规化"判断：叫魂事件说明这一机制的渊源远早于革命政体，且它<b>植根于稳定的、制度化的组织基础之上</b>。分析因此从常规机制的失败入手。</p>
+
+  <h3 class="sub">常规为何失败：中国官僚体制与韦伯式官僚制的对照</h3>
+  <p class="body">叫魂案暴露了官僚体制的信息学：基层官吏对个案有最准确的判断（孤立事件、屈打成招并加纠正），却陷入上报两难——上报恐无事生非、成执政不力之证，不报又可能担"欺君罔上"之罪；君臣互疑之下同一信息解释各异；高压定性一下，各级放弃独立判断，带着"完成任务"的有色眼镜寻找谋反者，推波助澜。更深层的对照在于两种体制的行为根基：韦伯式官僚制以规章制度为本——上级以规则约束下级、下级以规则自保，"循规蹈矩"内化为第二天性（默顿），故其风险规避源于规则之牢；中国官僚体制的核心却是<b>忠诚、信任、庇护交织而成的向上负责制</b>——官吏没有规则条文保护、评判无客观标准，只能在上司鼻息下小心翼翼，其风险规避恰恰源于<b>缺乏</b>稳定规则的保护，由此衍生三种行为定式：规避风险、投资人际关系以求庇护、揣摩上级意图察言观色。人际关系不是体制的副产品而是其有机组成部分（孔飞力：约束官员的两套制度——正式常规与特殊性个人关系）。以交易成本论之：任何组织形式各有其成本，成本急升即诱发替代形式；而中国官僚体制的固有问题被四个条件放大——政府垄断封闭使市场性纠错机制失灵、庞大规模与漫长链条加剧信息困难、地方差异所需的灵活性又诱发偏离与上下猜疑、监管成本高昂非技术治理可解。建国后毛泽东对"五多"、官僚主义、宗派主义的反复批评与频繁整风，正是这一紧张的当代记录。<b>当一种治理机制负荷累累、积弊日久，便须另辟蹊径寻找可暂时替代的机制——运动型治理由此产生并再生产。</b></p>
+
+  <h3 class="sub">专断权力的合法性：从"受命于天"到"组织设施卡理斯玛化"</h3>
+  <p class="body">为什么皇权能叫停常规而各级官僚不像韦伯式官员那样据规则抵制？孔飞力区分了君主官僚制中的<b>常规权力</b>（等级结构与规章制度）与<b>专断权力</b>（君主超越官僚体制的最高权力）；后者的行使亦须合法性——历史上来自受命于天的卡理斯玛权威与传统权威的交织，并以"政治罪"为切换契机：政治罪意味着常规过程的失败，为叫停常规、直通君意提供口实（官僚君主制"以社会中的事件为原料"，将其加工为权力与地位）。帝制崩溃后，专断权力的合法性来自<b>卡理斯玛权威的常规化</b>——韦伯所谓"组织设施卡理斯玛化"：超凡禀赋由个人转附于特定组织。当代的具体体现即执政党——被赋予内生的领导、纠错、更新能力，其严密组织与统领全局的能力为卡理斯玛权威提供稳定组织基础，也因此获得在必要情势下叫停常规、切换挡位的专断合法性，并可在很大程度上替代和排斥法理权威的出现。由此得出一个重要含义：<b>意识形态的一统管控是这一支配形式的逻辑结果</b>——放任观念多元化，即是对承载卡理斯玛的组织制度本身的质疑。</p>
+
+  <h3 class="sub">运动机制的制度设施四件套</h3>
+  <p class="body"><b>①党政双轨并存</b>：政务系统体现分工精细、按部就班的常规机制；党务系统听命于最高权威、以政治动员为行为方式，其组织特点恰是打破行政边界、统领各方（政法委、农工委等），为统筹动员之需。改革期趋势是"条条"业务部门党政合一而行政为主，"块块"综合层次党务领导——因为恰恰在块块的空间领域，组织分割与失控之忧最为突出，运动设施遂在此凸显。<b>②红专人事</b>：党务干部以红为主（使命是执行动员指令，政治忠诚至上），业务部门以专为主，红专并行而<b>以红统专</b>——历史上"政治忠诚 vs 技术治理"之分的现代版。<b>③动员的节奏化</b>：整风、贯彻、部署等隐形动员编入日常工作节拍，运动机制本身随之常规化（奥运安保例：省抽机关干部进驻每一乡镇，县上行下效进驻每一村庄，镇叫停一切工作集中人力，由省及镇长达数月）。<b>④行政问题政治化</b>：与曼海姆笔下官僚制"把政治问题转化为行政问题"的取向恰恰相反，中国政体趋于把行政问题转化为政治问题——"这是政治任务，必须完成"——以此不断强化卡理斯玛权威的有效性，为各级官员提供推动落实的有效手段。党政两线在实际中互相渗透：人事互流（县长升书记、党务干部掌业务局）造成红专一身的角色冲突；党务系统官僚化使动员流于仪式，政务系统政治化则借动员落实任务。</p>
+
+  <h3 class="sub">限制、条件与体制位置</h3>
+  <p class="body">专断权力并非无代价：运动一旦启动便难为启动者持续控制——向上负责制下官员闻风而动、投机跟进，"动员力度越强，偏离趋势越大"（弘历自叹宽严皆致诸臣相率争趋），严打式的不重证据为诬陷报复开门；失控风险为运动的启动设置了无形限制，故其运作是<b>间歇的、短期的、有针对性的</b>。启动条件有三：环境突变（重大灾害危机，常规无法应对）；重大事件暴露常规弊病、为当权者提供口实契机（叫魂即是）；政策重大转向而官僚惯性未能适从（大跃进的政治锦标赛）。在全书框架中，运动型治理正是<b>第3章所留问题的答案——治理模式间转化的机制</b>：自上而下的运动使上下级进入紧密关联、高度敏感的状态，把发包制/松散关联切换为高度关联；反向亦然——"拨乱反正""思想解放"等运动把"文革"的高度动员状态切换回常规为主的模式。常规与运动互为因果地循环：常规愈发达，其组织失败愈凸显，愈可能诱发运动；运动的失控又迫使治理回归常规轨道。若基本治理逻辑未变、替代机制缺失，<b>则运动型治理机制不废</b>。</p>
+  <div class="hook"><span class="hlabel">当代危机三条 · 通往第11、12章</span><b>其一</b>，边界模糊化：运动"长效化"即被常规同化，动员仪式化、效果每况愈下，党政、红专、常规与运动的多方位紧张限制组织效率；<b>其二</b>，与现代社会日益强势的法理权威摩擦碰撞，卡理斯玛及其常规化形式与多元趋势相悖、与法治理性不兼容，信仰危机、公信危机接踵；且政治动员为官员民众超越常规渠道的利益追求提供契机，可能酿成无组织的集体行为（第11章）；<b>其三</b>，运动型机制折射国家—社会的高度关联：专断权力既建于须获民众认可的卡理斯玛之上，国家便不得不对民众的信仰、敬畏与恐惧做出反应（叫魂中百姓在上苍与政治之间充当调停）——专断权力与常规权力反受大众社会的制约。</div>
+</section>
+
+<!-- ═══════════════ 捌 ═══════════════ -->
+<section id="s8">
+  <div class="sec-head"><span class="sec-no">捌</span><h2>微观机制四联：谈判 · 共谋 · 拼凑 · 攫取</h2><span class="sec-src">对应：第5–8章 · 国家治理逻辑与政府行为</span></div>
+  <p class="lede">第二单元把镜头推到基层：四章各解剖一类司空见惯的政府行为，证明它们不是官员素质问题，而是制度逻辑的稳定产物——并为宏观机制提供微观基础。</p>
+
+  <h3 class="sub">其一 · 政府内部上下级谈判（第5章）</h3>
+  <p class="body">谈判之所以在科层权威之下普遍盛行，源于任务环境三特征：<b>条块双重权威与多委托方</b>（市环保局既受省厅"条条"指导又受市政府"块块"管辖，而属地考核中环保仅占4%、经济高达25%，目标冲突内置）；<b>信息模糊性</b>——不同于不完备或不对称，模糊性指同一信息可作多重解释（同一超标水样可归咎监管不力、测量误差或暴雨不可抗力），故增加信息与激励设计皆难奏效；<b>时间压力与可信承诺</b>——预算、检查、期限的周期节奏使拖延对下级成本极高，而上级承诺/威胁的可信度并非恒量。序贯博弈由此展开：<b>委托方先行一步</b>，在常规模式（松散关联，留出谈判空间）与运动模式（高度耦合，压缩谈判空间但成本高昂难持续）之间选择，此选择即向下级发送可信承诺强度的信号；<b>代理方随后在三种策略中应对</b>——</p>
+  <div class="chain">
+    <div class="node t">委托方选择：常规 / 运动<br>（可信威胁信号）</div><div class="arr">→</div>
+    <div class="node">正式谈判<br>信号博弈·编织理由</div><div class="arr">或</div>
+    <div class="node">非正式谈判<br>多轮出价·多维交易</div><div class="arr">或</div>
+    <div class="node r">准退出<br>接受指令·执行中调整</div>
+  </div>
+  <p class="body"><b>正式权威基础上的谈判</b>依托组织合法性与"合乎情理"的逻辑，以文本经正式程序进行：或为信号博弈（主动传递私有信息——努力、成就、困难——以增强谈判能力），或为"编织理由"博弈（利用信息模糊性事后自圆其说）；其缺陷是多为一次性博弈。<b>非正式谈判</b>把互动移入社会关系场景（餐桌、聚会），将一次性博弈转为多轮"轮流出价"：弱化上级的可信威胁、延长时间减轻期限压力、放大信息优势；其机制是<b>多维度交易</b>——政治、社会、经济资本相互转化（以特殊性关系转移上级对问题的注意、减轻责任）——由此解释了风险规避的官员为何有强激励投资社会资本、政府组织内非正式关系为何盛行。<b>准退出</b>则是正式结构中"无退出"约束下的第三条路：被迫接受指令，却在随后执行中私自调整、消极抵制乃至歪曲操纵（"弱者的武器"），把博弈推延到下一轮执行博弈；委托方预期到此，反而不得不让渡一定谈判空间。落点回到总框架：<b>正是这些松紧不断变化的谈判过程，在微妙短暂的层面上调节着控制权分配，构成治理模式转化的微观基础。</b></p>
+
+  <h3 class="sub">其二 · 基层政府间的"共谋现象"（第6章）</h3>
+  <div class="defbox" data-t="定义与中心命题">
+    <p><b>共谋行为</b>（中性分析概念）：基层政府与其<b>直接上级</b>相互配合，采取各种策略应对来自<b>更上级</b>政府的政策法令与监督检查（梯若尔三层结构中"管理方＋代理方"对委托方的博弈）。中心命题：在中国行政体制中，共谋已是<b>制度化了的非正式行为</b>——虽与正式规定相悖、多以非正式形式出现（打招呼、私下安排），却在正式组织权力结构下公开运作、以政府组织权威辅以实施，成为上下级乃至中央的"共享常识"，具有广泛深厚的合法性基础，是"政策一统性与执行灵活性"的具体表现。</p>
+  </div>
+  <p class="body">其制度根源由三个组织学悖论构成。<b>悖论一：政策一统性与执行灵活性。</b>一统决策必然"一刀切"，与各地实情差异内置；执行灵活性遂成不可缺少的运行机制，且有三种理想类型——政策留白授权（解释执行权在基层、监督权在直接上级，因其最有信息）、跨领域挪用资源以完成多重任务（从单一政策点看不合理，从基层多重压力看合理，如挪退耕还林款修"村村通"）、借灵活之名谋私。三者在实际中交织难辨，而威廉姆森"有选择干预"之不可能在此适用：允许灵活性的机制一旦制度化（选人、激励、常规皆为之配套），就排斥不兼容的临时禁令——<b>默许此时此地的挪用，就同时默许了彼时彼地的同类做法</b>；各级政府在检查中一夜之间互换"检查者/被检查者"角色，双重角色的亲身参与使认知同化、共识形成，赋予共谋以合法性。<b>悖论二：激励强度与目标替代。</b>考核制度三特点——明确可测的责任目标、连带追责、一票否决式强度——本意提高执行有效性；但激励设计的原则（Kerr：奖励A而期待B是愚蠢的；强度应与努力—产出关联及测量准确性成正比）在此被违反：目标无法完成而惩罚强大时，激励只诱导作假与经营关系；连带机制更造就"一荣俱荣、一损俱损"的利益共同体（田野例：计生罚款须养活编外人员，遂有"自然平衡点"）。<b>悖论三：官僚制度非人格化与行政关系人缘化。</b>规章考核愈正式化，官员职业生涯的风险与不确定性愈大（过去可游说通融，如今指标刚性），遂催生双重需求——动员资源完成任务、编织安全网以备庇护；"分灶吃饭""专款专用"的资源分隔更人为制造了跨边界挪借的共谋需求（非正式关系与资源依赖成正比）。于是出现互为强化的怪圈：上级为防共谋而集权、加大激励、推动正式化——恰恰加剧执行压力，令关系经营与共谋更盛。</p>
+  <p class="body">与经济学厂商共谋对比，政府共谋失败的可能与代价都小得多：它建立在<b>上下级行政隶属关系之上</b>——上级（以非正式方式）"要求"下级参与，后者无法拒绝；官员身处封闭的组织内部市场，<b>没有"退出"共谋的机制</b>（干部轮换亦难解，因流动不出组织内部结构）；共谋与合法的灵活执行在实际中难以分辨。故利益共同体甚至不是必要条件——即便无共同利益，共谋亦在所难免。章末的再解读把共谋放回治理逻辑：许多共谋正是基层借灵活执行完成自上而下任务、缓和一统政策与地方实情的冲突；一方面"政令自中央出"强化中央权威的象征意义，另一方面共谋对集权决策的内容因地制宜地调整化解，使一统决策的形式免受与现实矛盾的挑战——<b>两者互为依存：唯有共谋存在，方能维系一统决策的象征意义</b>；共谋或可解释为对中央集权制约平衡的一种制度安排，其普遍存在与强大生命力有深层制度渊源——一言蔽之，<span class="rb">共谋是中央集权决策过程所付出的代价</span>。</p>
+
+  <h3 class="sub">其三 · "拼凑应对"：多重逻辑下的基层行为（第7章）</h3>
+  <p class="body">如何解释官员一面对自上而下任务高度敏感、极力执行，一面被动应付、得过且过？作者借林德布罗姆 muddling through 概念（有限理性下渐进搜寻、反复解决、目标随条件不断调整），并以三重相互冲突的<b>官僚制逻辑</b>解释其制度根源：<b>完成任务的逻辑</b>——向上负责制的中心，官员对指令高度敏感（对照韦伯式组织的规则为本），但压力常诱发象征性顺从与实际行为的分离；<b>政治联合体的逻辑</b>（马奇）——部门任务高度相互依赖（环保局须协调统计、城管、财政与各县政府），须维系战略联盟、化解目标冲突；<b>激励机制的逻辑</b>——锦标赛有效的前提（相对表现可准确测定、排除随机因素）在多任务、多协作、环境各异的现实中难以满足。三重逻辑冲突之下，行为呈四个特征：<b>被动应对</b>而非主动谋划；<b>注意力与资源</b>随轻重缓急在任务、领域、时点间"救火式"调配（组织期限——年检、考核——是调动注意力的节拍器）；<b>短期化</b>（任期短暂＋负荷繁重，无从长计议，只能伺机行事）；<b>前后不一</b>——如走钢丝者，目标（对岸标杆）明确，途中却须向不同方向摆动以保持平衡。两个比较静态命题：拼凑应对程度与部门管理任务环境的<b>自主性成反比</b>（档案局 vs 环保局），与部门间<b>相互依赖程度成正比</b>（由此解释锦标赛为何更适用于任务相对独立的属地政府）。环保案例的含义尖锐：市局帮县局向上争取减排认可乃至明知造假亦为之、刻意缩小县局间绩效差距使其皆达标——激励原则在完成任务与政治联合体逻辑面前被束之高阁，任务完成后才认真兑现激励。由此提出再解释：<b>锦标赛在政府内的广泛应用，可能主要不是激励手段，而是上级推行意愿与指令的权威手段</b>——目标可给定、任务可分解、规则明晰、对信息督察要求低，且能聚拢下属注意力。</p>
+
+  <h3 class="sub">其四 · 逆向软预算约束（第8章）</h3>
+  <div class="defbox r" data-t="定义 · 传统软预算约束在转型中的变异">
+    <p>科尔奈的软预算约束：公有制下企业不断突破预算、<b>自下而上</b>向上级索取资源弥补亏空，根源在国家的家长主义角色。20世纪90年代分税制等改革硬化了这一自下而上的通道之后，凸显出方向相反的同类现象——地方政府（尤其基层）<b>自上而下</b>向辖区单位与个人攫取预算外资源：苛捐杂税与执章罚款、以政治压力促企业向政绩工程"捐资出力"、自上而下的"钓鱼工程"（政府出小头，诱使基层不断追加资源完成其欲办工程）。账面预算对政府行为无实际约束，且其目标设置已建立在这一软约束预期之上——是为<b>逆向软预算约束</b>。</p>
+  </div>
+  <p class="body"><b>微观激励</b>：前提假设是官员关切职业生涯；命题为<b>对任期内短期政绩的追求是突破预算约束的激励机制</b>——晋升实行锦标赛/淘汰制（相对标准取胜、早期成功至关重要、年龄限制卡位），任期三至五年，官员只能关注站台式阶段性目标，且离任前景意味着对入不敷出的后果不必负责。信息不对称之下，<b>资源密集型政绩工程</b>成为向上传递能力的有效信号（三理由：资源紧缺环境中具区分度；自主动员资源的能力素为考核所重；引人注目、实在可测、减少主观解释）；同级攀比使信号竞赛不断升级。<b>宏观约束三重失灵</b>：自上而下——基层双重角色（执行者＋属地经营者）使灵活动员资源在体制与社会中素有合法性（"没有条件创造条件也要上"），而直接上级与基层<b>同构同激励</b>，新官上任即出政绩项目、向下摊派，"领导只要结果不问过程"，上下追求政绩的行为互为强化形成<b>共振</b>——与传统软约束的因果不同：不是上级约束不力，而是上下利益同向结成共同体，加之共谋屏障，组织设计的自上而下约束被大大削弱；自下而上——政府是特殊垄断组织，辖区企业个人在市场经销、供给、环保、治安诸事上受其正式非正式制约，公然拒绝摊派即威胁生存，而分散经营者缺乏内在组织能力，只能消极抵制或以特殊性关系通融减负（这又进一步瓦解集体抵制的基础），且双方常有互惠交换（纳摊派换税收庇护）；内部——垄断、封闭、无退出使市场性纠错机制失灵。差异三命题：逆向软预算程度与地方政府<b>组织能力成正比</b>、与可控<b>公有资产成反比</b>、与当地<b>财政能力成反比</b>。</p>
+  <p class="body">历史回声令作者自序中特别标出：这些90年代的向下攫取与清代"火耗归公"前后的官府行为惊人相似——简约财政下州县幕僚衙吏赖"火耗"生存；雍正将火耗纳为正式地方财政、按当地需要使用，大大提高有效治理、缓解央地紧张；乾隆收紧控制，地方活力<b>得而复失</b>。当代的对称演变是：21世纪资源大规模向中央集中后，以"项目制"招标分配，各级政府忙于自下而上"跑项目"——<b>科尔奈式软预算约束的幽灵以新形式重现</b>。由此提炼的一般规律：国家资源不足时放地方以积极性缓解压力，资源富裕时借再分配加强自上而下控制——<span class="rb">资源在层级间的流动变化，为治理模式之间的转化注入内在动力</span>；逆向软预算约束从资源侧折射出国家治理的深层逻辑。</p>
+</section>
+
+<!-- ═══════════════ 玖 ═══════════════ -->
+<section id="s9">
+  <div class="sec-head"><span class="sec-no r">玖</span><h2>国家与社会三幕：修路 · 选举 · 集体行动</h2><span class="sec-src">对应：第9–11章 · 第二条主线</span></div>
+  <p class="lede">治理逻辑向下延伸，必然遭遇官僚制逻辑之外的另一套逻辑——中国社会以其特有的、常常是扭曲的方式顽强参与国家治理，成为治理逻辑的组成部分。</p>
+
+  <h3 class="sub">第一幕 · 通往集体债务之路：从官僚制逻辑到社会逻辑（第9章）</h3>
+  <p class="body">场景是FS镇执行国家"村村通"修路项目：政府所供水泥较市价加价三成，配套资金须基层自筹——典型的自上而下"钓鱼工程"。叙事由两条相互交织的线索构成。<b>"政治"的故事（官僚制逻辑）</b>：修路是政治任务，"只要结果不问过程"；镇政府挪用退耕还林资金乃至邻镇挪用二十万灌溉预算以完成之；官员费尽心思各方周旋，自始至终对村庄由此背上的债务几无实在忧虑——数月后该镇获评一等奖，成为引人注目的政绩。作者的判断：当韦伯式组织（按专业与规则高效运转的发展型国家想象）遭遇<b>默顿式官僚</b>（行为受制于向上负责的激励与任务环境、关注任期政绩），呈现的是一幅与理性组织迥然不同的图画。<b>"社会"的故事（乡村社会逻辑）</b>：工程款项与随后的债务危机，靠家族、邻里、熟人网络的借贷动员得以完成与消化；还债遵循"屈从压力"模式——哪个方向压力大就向哪个方向让步，强关系债权人的债务能拖则拖；村支书甚至把债权人转化为招商引资的帮手（"有钱钱养人，没钱话养人"），并以年前登门拜年、公开账目暂缓讨债浪潮——债务关系本身是否正在再生产社会关系，书中留为开放问题。<b>双重结论</b>：一方面，若无社会机制的积极参与，资源动员与危机应对皆不可能，"政治"故事根本无法顺利展开——评价政府在发展中的作用，必须置于与社会机制互动的背景中；另一方面，代价深远——巨额集体债务、为还债变卖小学校舍引发的干群冲突、公共信任被侵蚀、集体权威被削弱、自治空间被挤压：<b>不负责任的政府工程不是一次而是多次地伤害了村庄的治理基础</b>。对照斯科特《国家的视角》的四要素（行政化安排社会＋高度现代化意识形态＋威权强制力＋公民社会弱小），村村通虽非灾难级社会工程，四要素中"社会无力抵御"一项却清晰在场；而"这些资源是否有更好的用途"之问悬而未答。</p>
+
+  <h3 class="sub">第二幕 · 多重逻辑下的村庄选举（第10章）</h3>
+  <div class="defbox" data-t="三重制度逻辑（据FS镇2000–2008四轮选举）">
+    <p><b>国家的逻辑</b>：国家非铁板一块——民政部积极推动而他部忧其失控，故政策带有模糊性与内在矛盾，在极力推行与谨慎防范之间摇摆并存；且政策随执行反馈内生调整（良性反馈强化制度化，冲突反馈诱导转向；针对村主任—村支书矛盾出台的"一肩挑"即产生始料未及的影响）。<b>官僚制的逻辑</b>：镇政府面临多重矛盾目标——完成选举任务、助中意者当选、维护社会稳定；其态度行为取决于任务环境中各目标代价收益的总体权衡；命题：任务环境造成的镇村相互依赖越密切，政府干预选举的激励越大。<b>乡村的逻辑</b>：差序格局把村民编入家族邻里网络，土地承包以农户（而非个人）为决策单位——故代票在乡村逻辑中合情合理，却与一人一票的正式程序内在紧张；命题：乡村逻辑随时间由经济社会领域扩展至政治领域，且其兴盛放大而非抹平村庄间差异。</p>
+  </div>
+  <p class="body">演变的因果叙事：早期选举不过三年一度的仪式性走过场，"村委会人选在镇政府会议室里已见分晓"；2004年之后镇政府却由积极操纵者转变为<b>程序公正的维护者</b>——转变不是内在自愿的，而是组织环境变迁的内生结果：其一，取消农业税、税费征收改道、计生随时间制度化，<b>镇政府对村干部的依赖骤降</b>，干预选举的收益消失；其二，"稳定压倒一切"的一票否决使维稳高居目标序列之首——程序公正反而成为防范恶性事件、威慑闹事者、并在事发后的上级调查中自保的<b>武器与合法介入工具</b>（警车摄像的震慑、按关系网精心指派工作队人选——水委会主任被派往其项目合作者所在村，以"闲谈"化解前村书记的搅局）；其三，资源上收与干部轮换弱化了镇村庇护关系并使官员短期化。同一时期，村民在历轮选举中<b>学会使用规则</b>——持选举条例质问干部、要求选前公开集体账目（他村迅速仿效）、候选人间互学竞选策略（新任村主任受点拨后动员支持者把自己选为村支书，公然越过镇里安排）；外出打工与创业提供的"退出"渠道，则降低了落选者滞留对抗的冲突烈度（落选村支书卷起铺盖离村、或辞职专营运输）。方法论落点有三：机制的作用只能<b>在诸逻辑的相互关系中</b>认识（孤立的单一机制模型有简约美感却易致片面）；制度逻辑须落到<b>微观行为</b>的实证层面；制度变迁是<b>内生过程</b>——互动的时间性与结构本身随过程而变，同一官僚制逻辑在不同任务环境下既可诱导干预、也可诱导守护程序。</p>
+
+  <h3 class="sub">第三幕 · 无组织利益的集体行动（第11章）</h3>
+  <p class="body">悖论现象：高度组织化的管理体制严控自组织，却时常爆发<b>基于无组织利益的集体行动</b>——短暂、策略匮乏、内部纷争、"非直接利益相关者"大规模参与——资源动员理论（组织、领袖、资源）对此无从解释。作者的制度主义解释：民众追求利益与抗争的形式折射国家治理的制度安排——制度建构了权威关系、政治过程与资源渠道，也就规定了解决问题的空间与冲突的指向。传统模型（全权/威权/庇护主义）的共同判断——国家杜绝自组织、民众为无权无势无组织的个人（马克思"一袋马铃薯"之喻；沃尔德：政治顺从的激励将个人与单位捆绑，庇护关系替代群体联合）——大体成立，却恰恰由此生出三个命题：</p>
+  <div class="chain">
+    <div class="node t">制度结构：取消群体边界<br>个人直连国家</div><div class="arr">→</div>
+    <div class="node">① 大数现象<br>同构处境·同步反应·"一窝蜂"</div><div class="arr">＋</div>
+    <div class="node">② 诉求同向<br>不满一致指向国家</div><div class="arr">＋</div>
+    <div class="node">③ 机会内嵌<br>运动动员提供联结契机</div><div class="arr">→</div>
+    <div class="node r">无组织利益的<br>集体行动</div>
+  </div>
+  <p class="body"><b>大数现象</b>：国家取消社会中介、把所有群体降至同一结构位置（工资、住房、福利皆由国家决定），政策超越单位边界同时冲击所有人（大跃进动员波及各业、上山下乡牵动千家、四万亿波及全国楼市）——共享同一环境与经历的人们即便未清楚表达群体利益，也会对政策变化作出<b>自发的同步行动</b>；单位制非但未阻隔，反而把局部不满直连国家政治、并在各单位复制同类官僚问题。<b>诉求同向</b>：公共与私人领域的界限被国家渗透所取消（斯塔克：个人若不与执政党及其附属组织相联系便无从提出有效诉求），国家垄断公共品而否认个体利益的合法性，其后果是<b>任何越出国家控制的行为都被视为对体制的挑战</b>（哈维尔），群体间冲突也只能向上寻求解决——各自分散甚至相互矛盾的不满，不约而同汇向同一目标：国家。<b>机会内嵌</b>：国家以政治运动治官僚、以群众动员促发展，恰为分散个体提供了同时启动、相互联结的合法契机。由此还识别出一种特殊形态——<b>集体无作为</b>：消极怠工、逃避义务、不合作、次文化，在国家垄断公共域的制度中具有集体性质与政治含义，直接削弱国家汲取能力、挑战治理能力；证据是公社时期农业总产值年增4.3%，承包后跃至7.5%再至13%，而要素投入未增（帕金斯：关键在"家庭生产能量的释放"）——集体无作为的成本之巨于此可见；1987年农民闻政策风声而杀猪砍树、企业停产观望，逼得最高层公开回应——人们应对的不是市场不确定性而是<b>政治不确定性</b>，其个体行为径直转化为政治压力。总括为三化：<b>社会政治化</b>（一切需求经政治渠道实现，民众行为成为冲击力极强的政治力量）、<b>政治集中化</b>（中央如守门员，被迫应对各方踢来的每一个球，政策遂多变而不连贯）、<b>政治放大化</b>（地方问题放大为中央压力，局部冲突放大为宏观动荡）。比较印证：1976年波兰价格改革宣布当日百余工厂同日罢工、政策取消次日即散——无组织而同步。政治后果构成改革周期的动力：集体抗争与集体无作为打断政策、削弱组织力量、限制实施能力，<b>最终迫使国家转变政策、启动改革</b>。</p>
+</section>
+
+<!-- ═══════════════ 拾 ═══════════════ -->
+<section id="s10">
+  <div class="sec-head"><span class="sec-no">拾</span><h2>大历史判断：稳定、停滞与循环</h2><span class="sec-src">对应：第12章结语上半</span></div>
+  <p class="lede">回到开篇三问：长寿、停滞、循环出自同一逻辑——这一体制以牺牲效率换取稳定，以"不变"应万变，又以"万变"应不变。</p>
+  <p class="body">与金观涛、刘青峰的宏观"超稳定结构"（王权官僚—士绅—宗法三层，儒家文化黏合为一体）相对照，本书缩短历史尺度：连接三层的制度与过程<b>充满紧张、摩擦与变动</b>——即便"社会上层"内部，皇权与官僚体制也各有利益、机制与设施。全书主线遂可重述为：<b>一统体制与有效治理的矛盾，在很大程度上体现为国家权力与官僚权力的紧张</b>——历史长河中两权并存、主从有序、互为依附又内在紧张；家产制支配形式的两个特点是：官僚权力来自自上而下授权，而国家专断权力可干预、打断、扭转官僚体制的运行；两权分离与漫长链条又意味着权力集团利益的向上延伸有限，地方"土围子"可被自上而下的过程间或打破。国家权力同样受制度性约束——治理规模迫使其容许灵活空间，官僚阶层则发展出非正式制度与策略应对专断权力。<b>国家治理的诸多机制，正是在"用"官僚机器实施意图、又不得不"治"官僚体制弊病的矛盾中演化而生。</b></p>
+  <p class="body">具体制度上，其一为<b>逐级分权治理</b>（郡县制之核心、当代五级政府为其现代版）：政策目标与配置资源"打包"承包给属地政府，缓解链条漫长与信息不对称、调动地方积极性——由此可对执行中的偏差、变通乃至共谋给出正面定位：它们常常<b>体现体制的活力而不一定是弊病</b>。针对分权拥地自重之险，配套三类制约：人事高度集权＋官员频繁流动，资源集于中央、经"条条"收放相济，条块分权、行政督察军事互相钳制。其二为<b>"收放松紧"调节相济</b>——全书对"变与不变"的总括：不变者二，国家权力（皇权/执政党权力）的至高位置、国家权力与官僚体制的主从关系；应万变者，是<b>非正式制度与行为的适应性调节</b>——控制权在不同维度上的收放组合导致治理模式因时因地而变（第3章），上下级谈判随时调整权威关系（第5章），常规与运动交替、以运动打断惰性推动同步运转（第4章），制度化的共谋与多重逻辑下的应对弥合政策与实情的沟壑（第6–8章），乡土逻辑与无组织集体行动以隐蔽形式影响治理的节奏与走向（第9–11章）。一言蔽之：<span class="rb">以不变应万变，以万变应不变</span>——体制的核心既非持续的高度集权，亦非一成不变的行政发包，而是国家权力与官僚权力间收放松紧的<b>节奏性变化</b>；国家亦随之在名与实之间转换角色：或为高压集权之渊源（叫魂、大跃进），或为象征性国家（改革期相对日益强大的地方权力）。</p>
+
+  <h3 class="sub">代价的正面陈述：效率与稳定的根本权衡</h3>
+  <p class="body">长期生存的适变能力是有代价的——<b>帝国的逻辑是以牺牲效率来换取安定</b>，这是书中汇集的一致结论：韦伯指出帝国统一后，战国时代曾激励行政理性化的竞争驱动力消失，权力垄断"窒息了行政运作、财政管理与经济政策的理性化"；列文森观察到清帝被迫在政治安全与行政效率两个目标间抉择，而皇权的选择通常是牺牲后者保全前者；黄仁宇考察明代财政，见其"简单、生硬"乃开国者<b>有意的设计</b>——洪武所关注的不是改善运作，而是"在大而不变的结构中阻止任何次一级体系的形成"，政策甚至压抑经济中较先进的部门以迁就落后、降低区域不平衡。制度端倪有三：简约国家刻意限制官吏数目与治理规模；官员频繁流动虽防地方坐大，却使官员急功近利、无从长期经营；<b>拒绝走向法理权威的制度建设</b>——因为它既限制皇权、又刚性约束执行灵活性，于是只能诉诸道德忠诚约束，久之诱发任人唯亲。曾小萍笔下"火耗归公"的得而复失是此逻辑的缩影：理性化改革带来的地方活力，随乾隆朝财权收紧戛然而止——地方自主削弱自上而下的权力、威胁最高权力，遂不能容。<b>王朝循环的机理</b>由此闭合：实质性制度变革需要新的治理机制、新的合法性基础乃至支配形式更替，这既威胁皇权利益、又威胁科举官僚体制；官方儒教之下新观念无生长空间——朝廷内外遂只能在帝国窠臼中补苴罅漏，矛盾在积累、爆发、释放的兴衰周期中往复。这一逻辑得以延续的<b>最重要条件</b>是：近代以前，中华帝国未曾面临建立在新生产力基础上的外来威胁与国际竞争——19世纪下半叶国门一开，几十年明治维新的日本即令庞大帝国不堪一击，体制的虚弱性暴露无遗，帝国在内外交困中轰然崩溃。至此，开篇三问获得同源的回答：<b>长寿</b>出自收放调节的适变能力与官僚体制的整合（皇帝以官员统治而不依赖地方豪绅，帝国轨迹因此有别于罗马），<b>停滞</b>出自效率对稳定的持续让位，<b>循环</b>出自矛盾无解只能周期释放。</p>
+</section>
+
+<!-- ═══════════════ 拾壹 ═══════════════ -->
+<section id="s11">
+  <div class="sec-head"><span class="sec-no r">拾壹</span><h2>当代：延续、转型与两大危险</h2><span class="sec-src">对应：第12章结语下半</span></div>
+  <p class="lede">当代在三个维度上既延续又转型；经济起飞恰是历史钟摆暂时偏向"效率"一端的产物——而历史的惯性正试图把它拉回旧轨。</p>
+  <p class="body"><b>其一，封闭与开放。</b>帝国逻辑的许多鲜明特点植根于封闭性；新中国以民族国家置身世界，但冷战阵营的对峙使其自50年代末至70年代末重入一种奇特的封闭；改革开放才真正融入国际竞争——传统治理逻辑第一次在更大环境中经受更大挑战。<b>其二，组织制度的质变。</b>列宁式政党在黄仁宇所谓"潜水艇三明治"上下大而无当的层次之间，补上了严密有力的中层组织架构；由此的两面性：集中资源办大事、实现领袖抱负的强大能力（国有化、合作化以至三十余年经济大发展皆赖之），与信息传递、激励设置制度安排相关的重大失误风险并存；随国家意志强化、治理负荷增加，官僚体制急剧膨胀，非正式应对机制随之繁衍——它们缓和了制度僵化，却削弱国家权力的正统性与合法性。<b>其三，观念制度的断裂。</b>由"向后看"的传统权威转为"向前看"的历史发展观，对"历史规律"的把握执于领袖之手，成为卡理斯玛权威的观念基础；官方全面控制压缩了历史上尚存的民间信仰空间，一统性、垄断性、排他性反被强化；而"文革"的动荡民凋又对绩效合法性提出严重质疑——书中断言：<b>中国社会的转型将在很大程度上取决于这一观念制度的转变。</b></p>
+  <p class="body"><b>经济起飞的书内解释</b>：认可张五常"县域竞争"的思路——数千"诸侯"作为经济实体持续竞争焕发了经济活力——但点出其两个前提条件：开放环境使地方得以利用后发优势；<b>政府间竞争打破了传统帝国以牺牲效率换取安定的平衡点，历史的钟摆（暂时地）偏向了"效率"一端</b>。且地方政府以历史上前所未有的经济主体角色参与其中，以行政力量掌控资本、土地、人口流动等市场要素来推动经济。由此的判断意味深长：1980年代以来的发展途径，似乎是对中国传统治理轨迹的一次"偏离"尝试；由此引起的种种问题压力、历史依赖与利益紧张，正<b>试图将中国社会重新纳入原来的轨道</b>——能否脱离历史惯性的束缚，何去何从，尚待回答。</p>
+
+  <h3 class="sub">官僚体制化的大趋势与两大危险</h3>
+  <p class="body">近年支配形式在合法性压力下资源持续向官僚权力集中，官僚体制延伸至各领域角落；今日政府已不止于统筹管制或保护推动工商业，而<b>趋于成为自成一体的经济主体，与其他法人组织在资源和机会上直接竞争</b>——遍览中国历史未见先例；权力、意志、绩效互为推动，<b>官僚体制化成为近年中国社会演变的一个大趋势</b>。以韦伯三位一体透视国家—官僚—民众三角：传统权威下民众为传统制度所组织、大体游离于官僚体制之外；法理权威下民众经稳定程序与官僚体制发生既授权又受制的关系；而当代卡理斯玛为实的支配形式使三者关系充满紧张、难以平衡——历史上的"三明治"结构虽使皇权对基层无力，却也缓冲了国家与社会的直接冲突；今日官僚体制的强连接使国家<b>不得不直接面对充满紧张的社会</b>，官僚体制遂成国家治理的双刃剑。书中点出两个尤为突出的危险：<b>危险一</b>，在法理权威基础缺失的情况下，国家权力官僚化、与渊源深远的官僚体制上下联手融为一体，走向<b>官僚专制</b>的支配形式（而非韦伯意义上建于法理权威的官僚制）——如此官僚体制将窒息社会的内在发展动力，封闭停滞之虞难以避免；<b>危险二</b>，官僚权力的膨胀与组织失败<b>诱发卡理斯玛权威重登历史舞台</b>，重回历史旧辙。两种趋向在当今社会均有丰富土壤。</p>
+
+  <h3 class="sub">为什么法治、官僚理性、专业化步履维艰</h3>
+  <p class="body">治理逻辑对现代国家建设的约束在此得到正面解释。<b>法治之难</b>：法律的核心是稳定刚性的同一尺度，这对一统体制有双重不容——独立权威体系与非人格化条文的稳定性，束缚中央使用运动型机制的空间、限制自上而下的动员能力；独立司法裁决又刚性约束地方解决实际问题的灵活性。于是地方政府在拆迁、严打、城管、信访中的种种做法一面增强解决问题的能力，一面<b>不断侵蚀弱化法治基础与法理观念</b>。<b>官僚理性之难</b>：按章办事的官僚"牢笼"一面否认中央任意干涉的权威，一面束缚基层灵活性，两头加剧基本矛盾；动员型政府欲保持应急高效，就必须以政治逻辑替代行政逻辑——"行政问题政治化"（这是政治任务，必须完成）之下，正式制度不断被打断、被弱化。<b>专业化之难</b>：专业化过程（教育训练、职业自律、协会期刊）形成各领域相对独立的专业权威与共享观念，恰是现代社会整合的重要机制，却难以纳入一统逻辑、甚至构成挑战——于是被限制、被虚化：专业人员在教化仪式中须将专业价值判断束之高阁，充当仪式化过程的司仪，专业化沦为象征符号。<b>出路</b>，书中给出两条方向：以新的治理模式减缓转化矛盾——例如经由制度化途径将权力和利益分而治之；或缩减各级政府特别是中央政府的管理功能、缩小"有效治理"的范围，以社会机制替代之——两者殊途同归，皆在<b>减轻权威体制的运行负荷</b>；并特别警示：权宜之计的分权或权力下放并不能使集权困境迎刃而解，这一点在集权与放权的不断转换震荡中已显露无遗。</p>
+  <div class="hook"><span class="hlabel">全书终点 · 主线的转移</span>国家治理的两条主线中，中央与地方关系在大历史中长期居于主位，国家与民众关系只是时隐时现的副线。当代国家建设使中央与民众建立了直接、全面的关系：一面提供了新的联结纽带与巨大动员能力，一面区域失衡、民生压力、民权维护构成新的负荷。修路、选举与无组织集体行动三幕表明，中国社会并非被动地"被治理"，而是以自己的逻辑顽强参与——或动员资源达成政府目标，或充当政治压力的缓冲，或提供抵制反抗的机制。随着社会多元化与自组织能力增强，<b>国家与民众关系这条主线日益凸显，正在成为国家治理的主要场域</b>。当代中国正处于寻求新支配形式与新合法性基础的过程中——逐步稳妥地走向法理权威、建立法治国家是既定方向；关键在于在法理权威的合法性基础上重新构建国家、官僚体制、民众三者的权威关系。即便在法理权威之下，官僚体制的内在机制与弊病仍将存在；但新的支配形式与合法性基础，将为寻找新的治理机制与制度约束提供<b>更大的想象空间</b>。</div>
+</section>
+
+<!-- ═══════════════ 拾贰 ═══════════════ -->
+<section id="s12">
+  <div class="sec-head"><span class="sec-no t">拾贰</span><h2>全书命题总表</h2><span class="sec-src">书中明确提出的因果命题 · 依出现次序汇编</span></div>
+  <p class="lede">周雪光的写法是把观察提炼为可检验的因果句式；集中排列，即可见全书作为一个演绎系统的自洽性。</p>
+  <div class="prop"><span class="pno">P01</span><div class="ptxt">一统体制的集中程度越高、越刚性，地方治理权被削弱越甚，有效治理能力越弱；有效治理能力增强则表现为地方扩权与偏离失控，反向威胁一统体制。<span class="psrc">第1章 · 基本矛盾</span></div></div>
+  <div class="prop"><span class="pno">P02</span><div class="ptxt">一统决策的集中程度越强，执行过程中的灵活性就越大——政策一统性本身隐含执行灵活性的存在根据。<span class="psrc">第1、6章 · 组织学悖论</span></div></div>
+  <div class="prop"><span class="pno">P03</span><div class="ptxt">一统体制强力推行其政策意图，只能是有选择的、局部的、暂时的（计生案例的反面推论）。<span class="psrc">第1章</span></div></div>
+  <div class="prop"><span class="pno">P04</span><div class="ptxt">执行的"灵活性"与"偏离"是同一现象的不同标签；运动型治理的目的不是取消灵活性，而是规范其边界，从而在一统体制与有效治理间维持动态平衡。<span class="psrc">第1、4章</span></div></div>
+  <div class="prop"><span class="pno">P05</span><div class="ptxt">专断权力可随时打断官僚常规，故官僚体制断不可真正制度化于程序规则之上；专断权力必在体制中逐级复制——由此非正式制度弥漫盛行。<span class="psrc">第2章 · 君主官僚制推理链</span></div></div>
+  <div class="prop"><span class="pno">P06</span><div class="ptxt">向上负责制的组织结构与"上传下达"的反馈职能内在相悖：自上而下动员强大有效，自下而上传达必然受限。<span class="psrc">第2章</span></div></div>
+  <div class="prop"><span class="pno">P07</span><div class="ptxt">控制权三维（目标设定、检查验收、激励分配）的不同分配组合，决定政府内部权威关系与治理模式；激励机制的效果为控制权分配所制约，仅在特定模式条件下有效。<span class="psrc">第3章</span></div></div>
+  <div class="prop"><span class="pno">P08</span><div class="ptxt">"层层加码"发生于高度关联与发包制的执行阶段；"共谋"最可能发生于发包制的检查验收阶段——两类表面矛盾的行为为同一承包逻辑所驱使。<span class="psrc">第3章</span></div></div>
+  <div class="prop"><span class="pno">P09</span><div class="ptxt">委托方的授权不具可信承诺（保留随意干预权），故行政发包制不稳定，随控制权收放与其他治理模式相互转化；运动型治理是模式转化的重要机制。<span class="psrc">第3、4章</span></div></div>
+  <div class="prop"><span class="pno">P10</span><div class="ptxt">常规机制愈发达，其组织失败愈凸显，愈可能诱发运动型治理；运动的失控风险又迫使治理回归常规——若基本治理逻辑未变、替代机制缺失，则运动型治理机制不废。<span class="psrc">第4章</span></div></div>
+  <div class="prop"><span class="pno">P11</span><div class="ptxt">上级选择常规或运动实施模式，即向下级发送可信承诺/威胁强度的信号，并决定下级在正式谈判、非正式谈判与准退出之间的策略选择。<span class="psrc">第5章</span></div></div>
+  <div class="prop"><span class="pno">P12</span><div class="ptxt">政策统一性越强，与基层实情差异越大，执行灵活性越大，基层政府间共谋行为的空间便越大；资源分配渠道越集中、执行链条越长，共谋的合法性越强。<span class="psrc">第6章 · 悖论一</span></div></div>
+  <div class="prop"><span class="pno">P13</span><div class="ptxt">在激励与组织目标不一致的情况下，正式激励机制力度越大，目标替代现象越严重，共谋行为的驱动力越强。<span class="psrc">第6章 · 悖论二</span></div></div>
+  <div class="prop"><span class="pno">P14</span><div class="ptxt">制度正式化的环境压力越大，政策执行的不确定性越高，行政关系人缘化趋势越强，政府间共谋程度便越高。<span class="psrc">第6章 · 悖论三</span></div></div>
+  <div class="prop"><span class="pno">P15</span><div class="ptxt">组织决策与执行过程的分离程度与决策集中程度成正比——基层共谋是中央集权决策过程所付出的代价；且唯有共谋存在，方能维系一统决策的象征意义，两者互为依存。<span class="psrc">第6章 · 小结</span></div></div>
+  <div class="prop"><span class="pno">P16</span><div class="ptxt">拼凑应对的行为特征与政府部门管理任务环境的自主程度成反比，与任务环境中部门间相互依赖程度成正比；锦标赛在政府中的广泛应用或非为激励，而是上级推行意愿的权威手段。<span class="psrc">第7章</span></div></div>
+  <div class="prop"><span class="pno">P17</span><div class="ptxt">官员对任期内短期政绩的追求是突破预算约束的激励机制；资源密集型政绩工程是解决上下级信息不对称的有效信号。<span class="psrc">第8章</span></div></div>
+  <div class="prop"><span class="pno">P18</span><div class="ptxt">逆向软预算约束的程度与地方政府组织能力成正比，与其可控公有资产成反比，与当地财政能力成反比；资源在层级间的集散流动为治理模式转化注入内在动力。<span class="psrc">第8章</span></div></div>
+  <div class="prop"><span class="pno">P19</span><div class="ptxt">有关村庄选举的国家政策取决于部门间多重目标利益的互动竞争与妥协，故常不一致甚至矛盾，并随执行反馈内生调整；任务环境导致的镇村相互依赖越密切，地方政府干预选举的激励越大；乡村逻辑随时间由经济社会领域扩展至政治领域，并延续加剧村庄间差异。<span class="psrc">第10章 · 三逻辑三命题</span></div></div>
+  <div class="prop"><span class="pno">P20</span><div class="ptxt">社会主义国家的制度结构通过取消群体边界产生"大数"现象、使诉求同向指向国家、并以运动动员内嵌集体行动的机会——无组织的利益由此系统地转化为挑战国家的集体行动；集体无作为亦具集体性质与政治含义。<span class="psrc">第11章 · 三命题</span></div></div>
+  <div class="prop"><span class="pno">P21</span><div class="ptxt">帝国的逻辑是以牺牲效率换取安定；体制以正式制度之"不变"（权力至上、主从关系）配合非正式制度之"适变"（控制权收放、常规运动交替、共谋变通、社会逻辑参与），以不变应万变、以万变应不变。<span class="psrc">第12章</span></div></div>
+  <div class="prop"><span class="pno">P22</span><div class="ptxt">改革期经济起飞的条件是开放的后发优势与政府间竞争暂时打破"效率—稳定"的传统平衡点；官僚体制化为当下大趋势，两大危险为法理缺失下的官僚专制与卡理斯玛权威重临；出路在分而治之或缩小治理范围以减轻体制负荷，权宜性放权不解困局。<span class="psrc">第12章</span></div></div>
+</section>
+
+<!-- ═══════════════ 拾叁 ═══════════════ -->
+<section id="s13">
+  <div class="sec-head"><span class="sec-no">拾叁</span><h2>章节—逻辑对照与编制说明</h2><span class="sec-src">全书结构索引</span></div>
+  <table>
+    <caption>十二章在总框架中的位置</caption>
+    <tr><th style="width:14%">章</th><th style="width:20%">在框架中的层位</th><th style="width:33%">核心概念 / 命题</th><th>经验载体与历史参照</th></tr>
+    <tr><td class="key">第1章 导论</td><td>总纲：矛盾—机制—后果</td><td>一统体制 vs 有效治理；治理规模；三大应对机制；集权—放权循环</td><td>计划生育政策；数目字管理之限</td></tr>
+    <tr><td class="key">第2章</td><td>制度分析 · 支配形式</td><td>合法性—权威类型—支配形式；君主官僚制；卡理斯玛常规化；专断权力逐级复制</td><td>中华帝国官制；建国后整风；后毛时代双过程</td></tr>
+    <tr><td class="key">第3章</td><td>制度分析 · 静态框架</td><td>三维控制权；四种治理模式；加码/共谋的阶段定位；随意干预权</td><td>环保系统五年减排（2006–2010田野）</td></tr>
+    <tr><td class="key">第4章</td><td>制度分析 · 动态切换</td><td>常规与动员双重机制；组织设施卡理斯玛化；党政双轨·红专人事·行政问题政治化</td><td>叫魂（1768）·荒政·大跃进·文革·奥运安保</td></tr>
+    <tr><td class="key">第5章</td><td>政府行为 · 权威的弹性</td><td>序贯谈判模型；信息模糊性；信号/编织理由/多维交易/准退出</td><td>省厅—市环保局谈判过程</td></tr>
+    <tr><td class="key">第6章</td><td>政府行为 · 灵活性的制度化</td><td>制度化的非正式行为；三悖论三命题；共谋与一统决策互为依存</td><td>计生检查；考核验收案例</td></tr>
+    <tr><td class="key">第7章</td><td>政府行为 · 多重逻辑</td><td>拼凑应对；完成任务/政治联合体/激励三逻辑；锦标赛再解释</td><td>市环保局绩效评定的实际过程</td></tr>
+    <tr><td class="key">第8章</td><td>政府行为 · 资源维度</td><td>逆向软预算约束；短期政绩激励与信号机制；三重约束失灵</td><td>税费摊派·钓鱼工程；清代火耗归公；项目制</td></tr>
+    <tr><td class="key">第9章</td><td>国家与社会 · 公共品供给</td><td>官僚制逻辑 × 乡村社会逻辑；默顿式官僚；社会机制的完成与代价</td><td>FS镇"村村通"修路与两村集体债务</td></tr>
+    <tr><td class="key">第10章</td><td>国家与社会 · 制度变迁</td><td>国家/官僚制/乡村三重逻辑；变迁的内生性；镇政府角色转变的因果</td><td>FS镇2000–2008四轮村庄选举</td></tr>
+    <tr><td class="key">第11章</td><td>国家与社会 · 集体行动</td><td>无组织利益的集体行动三命题；集体无作为；社会政治化—集中化—放大化</td><td>公社农业增长率对比；1976波兰罢工；1987杀猪砍树</td></tr>
+    <tr><td class="key">第12章 结语</td><td>历史判断与前瞻</td><td>效率—稳定权衡；变与不变；延续与转型；两大危险；主线转移</td><td>韦伯·列文森·黄仁宇·曾小萍的汇证</td></tr>
+  </table>
+
+  <h3 class="sub">编制说明与边界</h3>
+  <p class="body"><b>底本与取材</b>：三联书店2017年2月第1版电子底本。自序、第1章、第2章、第4章、第12章全文精读；第3、5、6、7、8、9、10、11章的理论主体与"讨论与小结"全部精读，其间的田野案例细节（谈判个案的逐幕过程、考核检查的完整实录、两村债务明细、四轮选举的镜头片段与统计趋势）作了压缩转述，理论要点与因果结论未有省略。<b>立场</b>：本文档为原书观点的重构性呈现，全部判断（包括对经济起飞的解释、对当下趋势与危险的判断、对法治与专业化困境的论断）均出自书中，编制者不加入外部评价与后见之明；引号内短语为书中原语或书中转引之成语俗语。<b>语境提示</b>：原书各章多改写自2005–2014年间发表的论文，成书于2017年，文中"近年来""当下"均指该时段语境；第11章明言主要以改革开放前为背景立论、兼及其现实意义。<b>阅读建议</b>：本文档的十三节次序即原书论证次序——先立矛盾（贰），再立机制（叁肆），继以理论深化（伍陆柒），落到微观行为（捌）与国家社会互动（玖），终于历史判断（拾拾壹）；命题总表（拾贰）可作全书演绎系统的独立检验清单。</p>
+</section>
+
+</main>
+
+<footer>
+  <div class="wrap">
+    <b>《中国国家治理的制度逻辑：一个组织学研究》内在逻辑重构</b><br>
+    原著：周雪光 · 生活·读书·新知三联书店 · 三联·哈佛燕京学术丛书 · 2017年2月第1版<br>
+    本文档依原书图1-1"理论分析脉络"重建总图，依第1章"应对机制间的动态演变"重建循环图，依表3-1重制控制权—治理模式对照表；单文件、零构建，可直接部署于 GitHub Pages。
+  </div>
+</footer>
+
+</body>
+</html>

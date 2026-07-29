@@ -1,0 +1,45 @@
+/* =========================================================
+   Biblical Atlas · 全局样式与主题变量
+   ========================================================= */
+
+page {
+  /* 浅色主题变量 */
+  --bg: #f5f0e6;
+  --bg-elev: #faf6ee;
+  --bg-soft: #efe8d9;
+  --bg-tint: #e8dec9;
+  --rule: #d8cfb9;
+  --rule-soft: #e6dec9;
+  --ink: #2c2823;
+  --ink-soft: #4a443a;
+  --ink-mute: #786e5e;
+  --accent: #8b2635;
+  --accent-soft: #b35062;
+  --gold: #a17821;
+
+  background: #f5f0e6;
+  font-family: -apple-system, "PingFang SC", "Helvetica Neue", sans-serif;
+  font-size: 30rpx;
+  line-height: 1.7;
+}
+
+/* 深色主题：变量定义在包裹层上，向子树级联 */
+.theme-dark {
+  --bg: #1a1814;
+  --bg-elev: #232019;
+  --bg-soft: #2a261e;
+  --bg-tint: #322d23;
+  --rule: #3a342a;
+  --rule-soft: #2a261e;
+  --ink: #ede4d0;
+  --ink-soft: #c8bfa8;
+  --ink-mute: #918675;
+  --accent: #d4717f;
+  --accent-soft: #b35062;
+  --gold: #d4a64a;
+}
+
+/* 衬线字体工具类（中文宋体观感 + 拉丁衬线） */
+.serif {
+  font-family: "Songti SC", "Noto Serif CJK SC", Georgia, "Times New Roman", serif;
+}

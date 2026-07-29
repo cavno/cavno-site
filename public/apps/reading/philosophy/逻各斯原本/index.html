@@ -1,0 +1,663 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>逻各斯原本 · 公理推演图 Elements of Logos</title>
+<meta name="description" content="《逻各斯原本》——欧几里得式的公理推演：四公理、两公设，派生十六组对立。交互式推演路径图。">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;1,500;1,600&family=GFS+Didot&family=Noto+Serif+SC:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root{
+  --parchment:#f3ebda; --parchment-light:#faf4e6; --parchment-dark:#e8ddc6;
+  --ink:#1c1916; --ink-soft:#3a342c; --ink-fade:#6e6253;
+  --terracotta:#a73e2c; --terracotta-dark:#7e2d1f; --terracotta-soft:#d9a89c;
+  --aegean:#1d4e5f; --aegean-soft:#5a8a96; --gold:#b8893a; --gold-soft:#d4b76a;
+  --purple:#6d4a8f; --green:#3f7a52;
+  --line:rgba(28,25,22,.12); --line-strong:rgba(28,25,22,.26);
+  --serif:"Noto Serif SC","Noto Serif CJK SC",Georgia,serif;
+  --display:"Cormorant Garamond","Noto Serif SC",Georgia,serif;
+  --greek:"GFS Didot","Noto Serif SC",Georgia,serif;
+  --mono:"JetBrains Mono","Courier New",monospace;
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+html,body{height:100%;}
+body{
+  background:var(--parchment);
+  background-image:
+    radial-gradient(ellipse at top left, rgba(184,137,58,.06), transparent 50%),
+    radial-gradient(ellipse at bottom right, rgba(29,78,95,.05), transparent 50%);
+  color:var(--ink); font-family:var(--serif); font-size:16px; line-height:1.7;
+  -webkit-font-smoothing:antialiased; overflow:hidden;
+}
+body::before{content:'';position:fixed;inset:0;z-index:0;pointer-events:none;mix-blend-mode:multiply;opacity:.05;
+  background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3'/%3E%3CfeColorMatrix values='0 0 0 0 0.2 0 0 0 0 0.15 0 0 0 0 0.1 0 0 0 0.4 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");}
+.greek{font-family:var(--greek);letter-spacing:.01em;}
+.app{position:relative;z-index:1;height:100vh;display:flex;flex-direction:column;}
+
+/* ---------- header ---------- */
+header{flex-shrink:0;border-bottom:1px solid var(--line);background:rgba(243,235,218,.86);backdrop-filter:blur(8px);}
+.hbar{display:flex;align-items:center;gap:20px;padding:12px 26px;flex-wrap:wrap;}
+.title-wrap{display:flex;align-items:baseline;gap:14px;min-width:0;}
+.title-wrap h1{font-family:var(--display);font-weight:600;font-size:25px;letter-spacing:.01em;white-space:nowrap;}
+.title-wrap .latin{font-family:var(--greek);font-size:13px;letter-spacing:.22em;color:var(--terracotta);text-transform:uppercase;}
+.sub{font-size:12.5px;color:var(--ink-fade);white-space:nowrap;}
+.tools{margin-left:auto;display:flex;gap:8px;flex-wrap:wrap;}
+.btn{font-family:var(--serif);font-size:13.5px;color:var(--ink-soft);background:var(--parchment-light);
+  border:1px solid var(--line-strong);border-radius:20px;padding:6px 15px;cursor:pointer;transition:all .2s;white-space:nowrap;display:inline-flex;align-items:center;gap:7px;}
+.btn:hover{border-color:var(--terracotta);color:var(--terracotta);}
+.btn.on{background:var(--ink);color:var(--parchment-light);border-color:var(--ink);}
+.btn .dot{width:7px;height:7px;border-radius:50%;background:var(--terracotta);}
+
+/* legend */
+.legend{display:flex;gap:14px;align-items:center;padding:7px 26px;border-top:1px solid var(--line);flex-wrap:wrap;font-size:12px;color:var(--ink-fade);}
+.lg{display:inline-flex;align-items:center;gap:6px;white-space:nowrap;}
+.lg .sw{width:20px;height:3px;border-radius:2px;display:inline-block;}
+.lg .nd{width:12px;height:12px;border-radius:3px;border:1px solid var(--line-strong);display:inline-block;}
+
+/* ---------- main split ---------- */
+.main{flex:1;display:flex;min-height:0;}
+.mapwrap{flex:1;overflow:auto;padding:20px 14px 60px;}
+.mapwrap svg{display:block;margin:0 auto;}
+.panel{width:404px;flex-shrink:0;border-left:1px solid var(--line);background:var(--parchment-light);
+  overflow-y:auto;padding:24px 26px 60px;}
+
+/* nodes */
+.node{cursor:pointer;}
+.node rect{transition:opacity .25s, stroke-width .15s;}
+.node text{transition:opacity .25s;}
+.nbox{fill:var(--parchment-light);stroke:var(--line-strong);stroke-width:1;}
+.node:hover .nbox{stroke:var(--terracotta);}
+.t-num{fill:var(--ink-fade);font-family:var(--serif);}
+.t-title{fill:var(--ink);font-family:var(--serif);font-weight:600;}
+.t-greek{fill:var(--aegean);font-family:var(--greek);}
+.t-name{fill:var(--ink);font-family:var(--serif);font-weight:600;}
+.t-form{fill:var(--ink-fade);font-family:var(--mono);}
+.t-tag{font-family:var(--serif);font-weight:600;}
+.badge{stroke:none;}
+.badge-t{fill:#fff;font-family:var(--greek);text-anchor:middle;}
+.edge{fill:none;stroke-linecap:round;transition:stroke-opacity .25s, stroke-width .2s;}
+.edge.prop{stroke:var(--ink-fade);stroke-dasharray:none;}
+/* states */
+.dim{opacity:.13 !important;}
+.edge.dimE{stroke-opacity:.05 !important;}
+.edge.hlE{stroke-opacity:.95 !important;stroke-width:2.6 !important;}
+.node.hl .nbox{stroke-width:2.2;}
+.node.sel .nbox{stroke-width:2.6;stroke:var(--terracotta);}
+
+/* ---------- detail panel ---------- */
+.p-eyebrow{font-family:var(--greek);font-size:11.5px;letter-spacing:.26em;color:var(--terracotta);text-transform:uppercase;margin-bottom:10px;}
+.p-kind{display:inline-block;font-size:11.5px;letter-spacing:.04em;padding:2px 10px;border-radius:12px;color:#fff;margin-bottom:12px;}
+.p-num{font-size:13px;color:var(--ink-fade);letter-spacing:.05em;margin-bottom:3px;}
+.p-title{font-family:var(--display);font-size:27px;font-weight:600;line-height:1.18;margin-bottom:8px;}
+.p-greek{font-family:var(--greek);font-size:18px;color:var(--aegean);margin-bottom:16px;}
+.p-greek .sep{color:var(--terracotta);margin:0 8px;font-style:italic;}
+.p-statement{font-size:16.5px;line-height:1.75;color:var(--ink);border-left:3px solid var(--gold);padding:2px 0 2px 15px;margin-bottom:18px;font-weight:500;}
+.p-label{font-family:var(--greek);font-size:11.5px;letter-spacing:.24em;color:var(--terracotta);text-transform:uppercase;margin:18px 0 8px;display:flex;align-items:center;gap:10px;}
+.p-label::after{content:'';flex:1;height:1px;background:var(--line);}
+.p-proof p{font-size:14.5px;line-height:1.78;color:var(--ink-soft);margin-bottom:9px;}
+.p-proof p:last-child{margin-bottom:0;}
+.p-scholium{font-size:13.5px;line-height:1.74;color:var(--ink-fade);background:rgba(184,137,58,.07);border:1px solid var(--line);border-radius:6px;padding:12px 15px;margin-top:6px;}
+.p-scholium.crisis{background:rgba(167,62,44,.07);}
+.cite{color:var(--terracotta);border-bottom:1px dotted var(--terracotta-soft);cursor:pointer;font-weight:500;}
+.cite:hover{background:var(--terracotta);color:#fff;border-radius:3px;}
+.chips{margin-top:20px;}
+.chips h4{font-family:var(--greek);font-size:11px;letter-spacing:.2em;color:var(--ink-fade);text-transform:uppercase;margin-bottom:8px;}
+.chip{display:inline-flex;align-items:center;gap:5px;font-size:12.5px;color:var(--ink-soft);background:var(--parchment);
+  border:1px solid var(--line-strong);border-radius:14px;padding:3px 11px;margin:0 6px 7px 0;cursor:pointer;transition:all .18s;}
+.chip:hover{border-color:var(--terracotta);color:var(--terracotta);}
+.chip .k{width:7px;height:7px;border-radius:2px;flex-shrink:0;}
+.guide{color:var(--ink-soft);}
+.guide h3{font-family:var(--display);font-size:21px;font-weight:600;margin-bottom:12px;color:var(--ink);}
+.guide p{font-size:14px;line-height:1.74;margin-bottom:11px;}
+.guide .mini{font-size:12.5px;color:var(--ink-fade);}
+.guide em{color:var(--terracotta);font-style:italic;}
+.guide strong{color:var(--ink);}
+
+/* step bar */
+.stepbar{display:none;align-items:center;gap:14px;padding:8px 26px;border-top:1px solid var(--line);background:rgba(243,235,218,.9);}
+.stepbar.show{display:flex;}
+.stepbar input[type=range]{flex:1;accent-color:var(--terracotta);}
+.stepbar .lab{font-size:13px;color:var(--ink-soft);white-space:nowrap;min-width:120px;}
+.stepbar .lab b{color:var(--terracotta);font-weight:600;}
+.play{cursor:pointer;border:1px solid var(--line-strong);background:var(--parchment-light);border-radius:50%;width:34px;height:34px;display:flex;align-items:center;justify-content:center;font-size:14px;color:var(--ink);}
+.play:hover{border-color:var(--terracotta);color:var(--terracotta);}
+
+/* modal full text */
+.modal-bg{position:fixed;inset:0;background:rgba(28,25,22,.5);z-index:200;display:none;}
+.modal-bg.show{display:block;}
+.modal{position:fixed;top:0;right:0;height:100%;width:min(720px,94vw);background:var(--parchment);z-index:201;
+  transform:translateX(100%);transition:transform .35s cubic-bezier(.4,0,.2,1);box-shadow:-12px 0 40px rgba(28,25,22,.2);
+  display:flex;flex-direction:column;}
+.modal.show{transform:translateX(0);}
+.modal-head{flex-shrink:0;display:flex;align-items:center;justify-content:space-between;padding:18px 30px;border-bottom:1px solid var(--line);}
+.modal-head h2{font-family:var(--display);font-size:23px;font-weight:600;}
+.modal-close{font-size:24px;cursor:pointer;color:var(--ink-fade);background:none;border:none;line-height:1;}
+.modal-close:hover{color:var(--terracotta);}
+.modal-body{overflow-y:auto;padding:30px 40px 80px;}
+.fx-sec{font-family:var(--greek);font-size:13px;letter-spacing:.3em;color:var(--terracotta);text-transform:uppercase;
+  margin:34px 0 16px;padding-bottom:8px;border-bottom:1px solid var(--line-strong);}
+.fx-sec:first-child{margin-top:0;}
+.fx-item{margin-bottom:15px;}
+.fx-item .h{font-weight:600;color:var(--ink);}
+.fx-item .h .g{font-family:var(--greek);color:var(--aegean);font-weight:400;margin-left:8px;font-size:.95em;}
+.fx-item .b{font-size:14.5px;line-height:1.76;color:var(--ink-soft);margin-top:4px;}
+.fx-pr{font-size:14px;line-height:1.76;color:var(--ink-fade);margin-top:5px;}
+.fx-pr .pl{color:var(--terracotta);font-weight:600;margin-right:5px;}
+.fx-note{font-size:13.5px;line-height:1.72;color:var(--ink-fade);background:rgba(184,137,58,.07);border:1px solid var(--line);border-radius:6px;padding:11px 14px;margin-top:8px;}
+.fx-sg p{font-size:14.5px;line-height:1.82;color:var(--ink-soft);margin-bottom:14px;}
+.fx-sg b{color:var(--ink);}
+
+@media(max-width:980px){
+  body{overflow:auto;}
+  .app{height:auto;min-height:100vh;}
+  .main{flex-direction:column;}
+  .panel{width:100%;border-left:none;border-top:1px solid var(--line);max-height:none;}
+  .mapwrap{overflow:visible;}
+}
+</style>
+</head>
+<body>
+<div class="app">
+  <header>
+    <div class="hbar">
+      <div class="title-wrap">
+        <h1>逻各斯原本</h1>
+        <span class="latin">Elementa Logou</span>
+      </div>
+      <span class="sub">四公理 · 两公设 · 十六对立的公理推演</span>
+      <div class="tools">
+        <button class="btn" id="btnStep">▶ 推演演示</button>
+        <button class="btn" id="btnLens"><span class="dot"></span>公设二透镜</button>
+        <button class="btn" id="btnText">⊟ 全文</button>
+        <button class="btn" id="btnReset">↺ 重置</button>
+      </div>
+    </div>
+    <div class="legend" id="legend"></div>
+  </header>
+
+  <div class="stepbar" id="stepbar">
+    <button class="play" id="playBtn">▶</button>
+    <span class="lab" id="stepLab">第 0 步</span>
+    <input type="range" id="stepRange" min="0" max="16" value="0">
+  </div>
+
+  <div class="main">
+    <div class="mapwrap"><svg id="map" xmlns="http://www.w3.org/2000/svg"></svg></div>
+    <aside class="panel" id="panel"></aside>
+  </div>
+</div>
+
+<div class="modal-bg" id="modalBg"></div>
+<div class="modal" id="modal">
+  <div class="modal-head"><h2>逻各斯原本 · 全文</h2><button class="modal-close" id="modalClose">×</button></div>
+  <div class="modal-body" id="modalBody"></div>
+</div>
+
+<script>
+/* ============================================================
+   DATA  (verbatim from 《逻各斯原本》)
+   ============================================================ */
+const AXC={ax1:'var(--aegean)',ax2:'var(--purple)',ax3:'var(--green)',ax4:'var(--gold)',post1:'#c98a5e',post2:'var(--terracotta)'};
+const AXHEX={ax1:'#1d4e5f',ax2:'#6d4a8f',ax3:'#3f7a52',ax4:'#b8893a',post1:'#c98a5e',post2:'#a73e2c'};
+
+const FOUND=[
+ {id:'ax1',cat:'公理',label:'公理一',name:'同一律',formula:'A = A',y:430,
+  text:`A = A。每一概念于同一论域中保持自身。`},
+ {id:'ax2',cat:'公理',label:'公理二',name:'矛盾律',formula:'¬(A ∧ ¬A)',y:600,
+  text:`¬(A ∧ ¬A)。同一者不能在同一方面既是又不是。`},
+ {id:'ax3',cat:'公理',label:'公理三',name:'排中律',formula:'A ∨ ¬A',y:1018,
+  text:`A ∨ ¬A。在同一方面，非此即彼，中间不留地带。`},
+ {id:'ax4',cat:'公理',label:'公理四',name:'充足理由律',formula:'(p∧(p⇒q))⇒q',y:800,
+  text:`凡断定为真者，必有使其为真之理由；且 (p ∧ (p⇒q)) ⇒ q。`},
+ {id:'post1',cat:'公设',label:'公设一',name:'逻各斯公设',formula:'',y:84,
+  text:`容许对任何事物，皆以逻各斯取代神话来对待之——即皆可对之追问理由。`},
+ {id:'post2',cat:'公设',label:'公设二',name:'思维—存在桥',formula:'νοεῖν = εἶναι',y:262,load:true,
+  text:`凡于思维中一致成立者，于存在中亦成立；思维之结构即存在之结构。（νοεῖν = εἶναι）`,
+  note:`此即全书之承重梁，亦即本系统的"第五公设"。它与前一公设不同：公设一只是开工的决定，公设二却是一项关于世界的强断言，既不自明，亦可独立否弃。后文一切由逻辑通向存在论的推论，皆暗援此条；故全书之可疑，尽萃于此一行。斯宾诺莎《伦理学》以"实体"之定义偷渡此桥，巴门尼德则以此桥铸成其残篇第三。记住它——总附释将专论其否定之后果。`},
+];
+
+const PROPS=[
+ {id:'p1',row:0,opp:1,num:'命题一',title:'神话当让位于理性',greek:'Μῦθος / Λόγος',
+  statement:`凡对世界之解释，神话之路当被理性之路取代。`,
+  proof:`神话依定义一不可追问、不索理由。然据公设一，对任何事物皆容许以逻各斯对待，即皆得追问其理由。神话既拒绝追问，即不能满足此一要求，故当让位于可追问、可反驳之理性表达。此所欲证。`,
+  scholium:`此为系统之开机：非由某公理推出，而由接受公设一这一动作本身奏效。接受四律去运思，与从神话切入哲学，是同一事件。`,
+  ax:['post1'],pp:[],df:['def1']},
+ {id:'p2',row:1,opp:2,num:'命题二',title:'自然与约定相对',greek:'Φύσις / Νόμος',
+  statement:`对人间法律道德，必追问其根据系于自然抑或系于约定。`,
+  proof:`据公设一所许之追问，循公理四，凡存在之秩序必被问其理由。诸城邦法律相异（依命题一已入理性之域，故须给出理由）。其理由或在事物自然如此（φύσις），或在人为设定（νόμος）。二者既穷尽其类，遂成一对立。此所欲证。`,
+  ax:['post1','ax4'],pp:['p1'],df:[]},
+ {id:'p3',row:2,opp:3,num:'命题三',title:'本原须于无定与有限之间受规定',greek:'Ἄπειρον / Πέρας',
+  statement:`万物之本原，必既为无定形之无限者，又须受界限比例之限定。`,
+  proof:`由公理四，因果之追溯不可无穷退行，否则无理由可得；故必有一本原（定义五），自身不复需他物为之理由。今以公理一绳此本原：设本原有定形、有边界，则其"界外"为他物所据，本原即依赖于他者而不自足，违其为终极之义〔定义五〕；故本原须无边界、无规定，是为无定（ἄπειρον）。然纯然无规定者，依定义二即非任何确定之物，不能生出有序之万物。故又须引入界限与比例（πέρας），使无定者受限定而成可识之物。二需并立，遂成对立。此所欲证。`,
+  ax:['ax4','ax1'],pp:[],df:['def5','def2']},
+ {id:'p4',row:3,opp:4,num:'命题四',title:'纯然之同一导致"一"而排斥"多"',greek:'Ἕν / Πολλά',
+  statement:`将同一律推至其极，本原为唯一不可分之"一"，而"多"为其违例。`,
+  proof:`据公理一，本原绝对是其自身。设有他者与之并立，则此他者即限定本原、使之非纯然自身〔参命题三之理〕。故绝对之自身不容他者，惟余其一。"一"（ἕν）者，同一律之满格；"多"（πολλά）者，其所排斥。此所欲证。`,
+  ax:['ax1'],pp:['p3'],df:[]},
+ {id:'p5',row:4,opp:5,num:'命题五',title:'非存在被逐出系统',greek:'Ὄν / Μὴ Ὄν',
+  statement:`非存在不可言、不可思、不存在。`,
+  proof:`欲断"非存在亦是一种存在"，即断同一主体在同一方面"是且不是"，违公理二。又据公设二，凡思维中不一致者于存在中亦不立；故非存在于思维既不可一致把握，于存在亦无其位。是以非存在被逐〔定义六〕。此所欲证。`,
+  ax:['ax2','post2'],pp:[],df:['def6']},
+ {id:'p6',row:5,special:'lock',num:'命题六',title:'运动与分割不可能，世界为不动之一',greek:'巴门尼德之锁死',
+  statement:`在公理一、二与公设二之下，运动、分割、生成皆不可能，世界乃不动、浑圆、唯一者。`,
+  proof:`由命题五，非存在不存在。今运动须有"空处"以容移行，分割须有"间隙"以隔彼此——而空处与间隙皆为某种非存在，已被命题五所禁。故不能动、不能分。复由命题四，所余惟一。一而不动、不可分者，即浑然之全。证毕——`,
+  scholium:`此为系统第一次自我锁死，亦巴门尼德之像。须注意：此"一"非分两步先后造出，而是公理一（求绝对自足）与公理二（禁作间隙之非存在）同时双向夹逼之唯一不动点。系统至此僵死：依公理它证得世界不动，然感官昭示万物流变。二者若同处一论域，则犯公理二。系统欲存，必有所变通。下引一引理以救之。`,crisis:true,
+  ax:['ax1','ax2','post2'],pp:['p5','p4'],df:[]},
+ {id:'lemma',row:6,special:'forced',num:'引理',title:'论域分层之必要',greek:'Lemma · 受迫而生',
+  statement:`若"世界不动"（命题六）与"世界在动"（感官所予）须并存，则二者不得处于同一论域。`,
+  proof:`设二命题同处一论域。则同一世界在同一方面既动又不动，违公理二，系统崩解〔由公理二，一矛盾既立，万断皆可推，系统失效〕。欲不崩解，惟将二者分置于不同论域，使其不在同一方面相遇〔定义九〕。故论域之分层为必要。此所欲证。`,
+  scholium:`此引理即你那部逻辑笔记反复所言"在同一论域下"之来历。希腊人非于开篇即特许此分层，而是被锁死所逼出；故此处不列为公设，而列为受迫而生之引理。后凡"分层""加维度"之救治，皆援此引理。`,
+  ax:['ax2'],pp:['p6'],df:['def9']},
+ {id:'p7',row:7,opp:7,num:'命题七',title:'真理与意见相分',greek:'Ἐπιστήμη / Δόξα',
+  statement:`守诸公理而不变者为真理，随感官而流变者降为意见。`,
+  proof:`据引理，须设两论域以容纳"不变"与"流变"而不相犯。于是合于诸公理之稳固者归一域，名真理（ἐπιστήμη）；流变而违公理者归另一域，降为意见（δόξα）〔定义八〕。此所欲证。`,
+  ax:[],pp:['lemma'],df:['def8']},
+ {id:'cor1',row:8,side:'l',special:'cor',opp:11,num:'系一',title:'感性与理性相分',greek:'Αἴσθησις / Νοῦς',
+  statement:`两论域须各有把握之官能：感性（αἴσθησις）司流变之域，理性（νοῦς）司不变之域。此乃同一刀于"官能"层之切口，故为命题七之直接推论。`,
+  proof:``,ax:[],pp:['p7'],df:[]},
+ {id:'cor2',row:8,side:'r',special:'cor',opp:12,num:'系二',title:'现象与本体相分',greek:'Φαινόμενον / Οὐσία',
+  statement:`两论域须各有所对之实在：流变之域所现者为现象（φαινόμενον），不变之域所是者为本体（οὐσία）。此乃同一刀于"实在"层之切口。`,
+  proof:``,ax:[],pp:['p7'],df:[]},
+ {id:'p8',row:9,opp:9,num:'命题八',title:'以潜能—现实偷渡排中之禁',greek:'Δύναμις / Ἐνέργεια',
+  statement:`为解释变化而不违排中律，须立一不算违规之中间态。`,
+  proof:`由命题六，纯依公理变化已被禁。今欲救之：一物自"未是"趋向"是"，其过渡之际既非全是、又非全不是，正属公理三所禁之中间。直立此中间态则违公理三。故援引理，借论域之分以化之：橡实就潜能（δύναμις）而言已是橡树，就现实（ἐνέργεια）而言尚非橡树——"潜能"与"现实"分属二论域，故"已是且未是"不在同一方面相犯，公理三得全，而生成得释。此所欲证。`,
+  scholium:`此命题所破者为公理三（排中律），非公理二。上一版误系于矛盾律，今正之。亚里士多德于此不与巴门尼德正面相抗，而以一中项绕过排中之关卡——是为"绕"，非"破"。`,
+  ax:['ax3'],pp:['p6','lemma'],df:[]},
+ {id:'p9',row:10,opp:8,num:'命题九',title:'变中须有持存之底，遂分形式与质料',greek:'Μορφή / Ὕλη',
+  statement:`变化须有一持存者以承同一律，是为质料；其所受之规定，是为形式。`,
+  proof:`由命题八，变化既立，则必有某物于变化中持存而不断〔否则无"同一物在变"可言，违公理一〕。此持存之底曰质料（ὕλη），所加之规定曰形式（μορφή）。又此正消化命题三：质料即彼无定之底料，形式即彼予以限定之界限。此所欲证。`,
+  ax:['ax1'],pp:['p8','p3'],df:[]},
+ {id:'p10',row:11,opp:10,num:'命题十',title:'同一律入于谓述，遂分个别与共相',greek:"Καθ' ἕκαστον / Καθόλου",
+  statement:`施同一律于"某是某"之判断，得共相与个别之对立。`,
+  proof:`据公理一，于"S 是 P"中，能在众多个体上保持自身同一者，为共相（καθόλου）；剥尽规定而余之"就此一个"者，为个别（καθ' ἕκαστον）〔参命题七系二，共相牵于本体之域〕。二者遂成对立。此所欲证。`,
+  ax:['ax1'],pp:['cor2'],df:[]},
+ {id:'p11',row:12,opp:13,num:'命题十一',title:'充足理由律推至极，必然与自由相对',greek:'Ἀνάγκη / Προαίρεσις',
+  statement:`充足理由律施于宇宙，推至其极则万物皆必然；欲救自由，须于因果链上凿一无理由之缺口。`,
+  proof:`由公理四，凡事必有使之然之理由。施于一切事件并推至极，则每一事件皆为前因所全定，是为必然（ἀνάγκη）。然如此则无自主之位。欲救自由（προαίρεσις），惟于因果之链上凿一不索理由之缺口（如令原子无故偏斜）。必然与自由遂相对。此所欲证。`,
+  scholium:`此处充足理由律首度显其双刃：既是建构之引擎，又过载而吞噬自由。"偏斜"者，朝公理四自身凿出之第一个洞——预告命题十四。`,
+  ax:['ax4'],pp:[],df:[]},
+ {id:'p12',row:13,opp:14,num:'命题十二',title:'追问生命之理由，德性与快乐相对',greek:'Ἀρετή / Ἡδονή',
+  statement:`问一生命之终极目的，得德性与快乐之对立。`,
+  proof:`由公理四，生命之活亦被问其终极理由（τέλος）。其答或为合乎理性之卓越（ἀρετή），或为身体无苦之愉悦（ἡδονή）。二者既为最高善之异解，遂成对立〔与命题十一同出公理四之一脉探针〕。此所欲证。`,
+  ax:['ax4'],pp:['p11'],df:[]},
+ {id:'p13',row:14,opp:15,num:'命题十三',title:'追问活物之本原，灵魂与肉体相对',greek:'Ψυχή / Σῶμα',
+  statement:`问解释生命与思想之根本，得灵魂与肉体之对立。`,
+  proof:`由公理四，活物之所以为活，亦须一理由（定义五，本原）。此本原或归于灵魂（ψυχή），或归于肉体（σῶμα）；灵魂遂被推为组织肉体之本原。二者相对。此所欲证。`,
+  ax:['ax4'],pp:[],df:['def5']},
+ {id:'p14',row:15,special:'halt',opp:16,num:'命题十四',title:'四律自我穷尽，系统归于悬置',greek:'Ἐποχή / Ἀταραξία',
+  statement:`诸公理推至自身，必相互卡死；其时唯一合规之动作，为停止施用诸公理，是为悬置，而臻于不动心。`,
+  proof:`其穷尽有二途。\n其一，公理四之自噬：以公理四施于其自身之每一运用，则每一理由复索更上之理由，其链非无穷退行，即循环自指，即止于一"本无理由"之独断点（三者即阿格里帕三难）。三皆不能为知识奠基。\n其二，公理二、三之卡死：对任一断定 p，皆可觅得等强之反断定 ¬p（ἰσοσθένεια，等效）。二者既等强，则 p∨¬p 无从判定（公理三失效），亦不能安断任一边（公理二失其落点）。\n二途交汇，凡施用诸公理皆不能得稳固之果。故仍合规者，惟一动作：停止施用诸公理而不予肯否，是为悬置（ἐποχή）〔定义十〕。诸断既悬，扰动遂息，余者为不受扰之安宁，是为不动心（ἀταραξία）。此所欲证。`,
+  scholium:`悬置非系统认输，乃系统正确识得己身诸公理之界限：四律推至自身必卡死，则停机为唯一一致之输出。其地位与哥德尔之句同构——系统于内部正确地证得"有些事在此系统内不可证"。`,
+  ax:['ax4','ax2','ax3'],pp:[],df:['def10']},
+];
+
+const DEFS=[
+ {id:'def1',label:'定义一',t:`逻各斯（λόγος）：可言说、可追问、可被理由支持的理性表达。与之相对者为神话（μῦθος），即不可追问、不索理由的叙事。`},
+ {id:'def2',label:'定义二',t:`概念（A）：思维中一个被划出边界、从而与其余者区分开的规定。`},
+ {id:'def3',label:'定义三',t:`划界（规定）：给某物划出边界的动作。凡划界，必同时分出"界内者（A）"与"界外者（¬A）"；故划界即否定。`},
+ {id:'def4',label:'定义四',t:`对立：一概念 A 与其否定 ¬A 之间的关系。`},
+ {id:'def5',label:'定义五',t:`本原（ἀρχή）：万物由之而生、而自身不复需由他物予以理由者。`},
+ {id:'def6',label:'定义六',t:`存在者（ὄν）：是其所是者。非存在者（μὴ ὄν）：不是者。`},
+ {id:'def7',label:'定义七',t:`思维（νοεῖν）：把握概念并依诸公理进行推论的活动。`},
+ {id:'def8',label:'定义八',t:`真理（ἐπιστήμη）：合于诸公理而稳固不移者。意见（δόξα）：随感官而流变、不稳固者。`},
+ {id:'def9',label:'定义九',t:`论域（语境）：诸公理在其中被一致地施用的范围。同一断定，在不同论域中可有不同真值。`},
+ {id:'def10',label:'定义十',t:`悬置（ἐποχή）：停止施用诸公理、对任何断定皆不予肯否的状态。不动心（ἀταραξία）：因悬置而得的不受扰的安宁。`},
+];
+
+const POST_INTRO=`公设者，非自明之真，乃推演得以触及对象所须特许之要求，犹欧氏"容自任一点至任一点引一直线"。`;
+const AX_INTRO=`公理者，自明之共同观念，关乎思维自身，无待证明。本系统唯取四条，即所求之四推论原点。`;
+
+const SCHOLIUM=[
+ `其一，所谓"古希腊 logos 之发展"，在此架构下即四公理在两公设之上派生十六对立之全程。全部命题悉长于公理一至四，而其能由"逻辑如此"跨至"存在如此"，无不暗援公设二。十六组对立——连同思维/存在本身——已尽数各得其位：思维/存在升为公设二，其余十五组为命题与系，巴门尼德之锁死为命题六，论域分层为受迫而生之引理。形式上的欠缺至此填补：每一步皆标明所据，凡"逻辑⇒存在"之跃迁皆可回溯至那一行公设。`,
+ `其二，公设二即本系统之平行公设，而你之立场，恰是那"非欧几何"。 欧氏第五公设两千年间被疑为"可证之定理"，终乃证其独立：既不可由前四推出，否定之亦得一融贯的非欧几何。公设二（思维=存在）正是此系统中地位相同的一条——不自明、可独立、其否定亦自成一系。否定它，便得一套"非巴门尼德几何"：于其中，四公理仅为思维之语法，绝不保证即是存在之结构。此非空想——它正是康德的批判哲学（四律只在现象界有效，物自体之域逻辑不及）、维特根斯坦与塔尔斯基的语言极限路径之所居。于此另一几何中，命题五"非存在被逐"不再是存在论真理，仅为我们这套工具的内部规约；巴门尼德那冻结之"一"根本不会成形。两套几何皆融贯；分野只在你是否特许公设二。`,
+ `其三，全程之三义，今以严格之相述之。`,
+ `（一）十六对立为四公理之定理，非对世界之发现。易其公理（如弃公理三），则命题八之"潜能中项"不复为偷渡之巧，而成寻常；命题六之锁死亦不生。故希腊 logos 之命运，锁于其开篇所择之公理——此乃相对于四公理之条件必然，非绝对必然。`,
+ `（二）欲松动此系统，所当拆者非诸命题，乃公设二。一旦不认此桥，十六对立即自"存在之骨架"降为"思维工具之内部纹理"。树犹是树，然其根扎于"我们如何思"，而非"世界是什么"。`,
+ `（三）终局之悬置非失败，乃清醒。它暴露者为此工具之极限，非世界自身之自相矛盾——此正与你历来所持者相合：悖论显于划界之运作，不在事物本身。亦于此见出与黑格尔之分野：黑格尔将命题六那台自指、矛盾、扬弃之引擎升格为存在之自我运动；本系统则令其仅运行于命题与论域之操作台上，停机时老实停在思维这一侧，绝不读作"存在矛盾着前进"。`,
+ `末了一诚实之残余。 本系统自陈"逻辑唯有此四公理"，然此一前提自身亦无理由——它恰落入命题十四证明中那"止于一本无理由之独断点"。换言之，"唯四之律"这一开宗的设定，正是阿格里帕三难里那个独断停机点的一个实例。是故这部《逻各斯原本》并不比它所欲推演的对象站得更高；它只是把那个无根之根，画得清晰到足以让你亲眼看见：它无根。欧几里得当年也未能证明他的第五公设——他只是把它老实地列为公设，而非伪称为定理。本书所求者，亦不过如此。`,
+];
+
+/* ============================================================
+   INDEX + GRAPH RELATIONS
+   ============================================================ */
+const NODES={}; FOUND.forEach(n=>NODES[n.id]=n); PROPS.forEach(n=>NODES[n.id]=n);
+DEFS.forEach(d=>NODES[d.id]={id:d.id,num:d.label,title:d.t,kind:'def'});
+// ancestors (transitive over ax+pp)
+function deps(id){const n=NODES[id];if(!n)return[];return [...(n.ax||[]),...(n.pp||[])];}
+function ancestors(id){const seen=new Set();(function go(x){deps(x).forEach(d=>{if(!seen.has(d)){seen.add(d);go(d);}});})(id);return seen;}
+// dependents (reverse)
+const DEPENDENTS={}; Object.keys(NODES).forEach(id=>DEPENDENTS[id]=[]);
+[...FOUND,...PROPS].forEach(n=>deps(n.id).forEach(d=>{if(DEPENDENTS[d])DEPENDENTS[d].push(n.id);}));
+function descendants(id){const seen=new Set();(function go(x){(DEPENDENTS[x]||[]).forEach(d=>{if(!seen.has(d)){seen.add(d);go(d);}});})(id);return seen;}
+
+/* ============================================================
+   LAYOUT + RENDER MAP
+   ============================================================ */
+const VBW=772, ROWY=r=>52+r*78, NH=58, FX=22, FW=240, PX=300, PW=392, CW=185;
+const box={}; // id -> {x,y,w,h,cx,cy}
+PROPS.forEach(p=>{
+  const y=ROWY(p.row);
+  if(p.special==='cor'){const x=p.side==='l'?PX:PX+207; box[p.id]={x,y,w:CW,h:50,cx:x+CW/2,cy:y+25};}
+  else box[p.id]={x:PX,y,w:PW,h:NH,cx:PX+PW/2,cy:y+NH/2};
+});
+FOUND.forEach(f=>{box[f.id]={x:FX,y:f.y,w:FW,h:60,cx:FX+FW/2,cy:f.y+30};});
+const VBH=ROWY(15)+NH+40;
+
+function edgePath(s,t,kind){
+  const a=box[s],b=box[t];
+  if(kind==='ax'){ // foundation(left) -> prop : from right edge to left edge
+    const x1=a.x+a.w,y1=a.cy,x2=b.x,y2=b.cy;
+    const dx=Math.max(60,(x2-x1)*0.5);
+    return `M${x1},${y1} C${x1+dx},${y1} ${x2-dx},${y2} ${x2},${y2}`;
+  } else { // prop -> prop : right side arc, from right edge of source to right edge of target
+    const x1=a.x+a.w,y1=a.cy,x2=b.x+b.w,y2=b.cy;
+    const bulge=34+Math.abs(y2-y1)*0.12;
+    const mx=Math.max(x1,x2)+bulge;
+    return `M${x1},${y1} C${mx},${y1} ${mx},${y2} ${x2},${y2}`;
+  }
+}
+
+function buildMap(){
+  const svg=document.getElementById('map');
+  svg.setAttribute('viewBox',`0 0 ${VBW} ${VBH}`);
+  svg.setAttribute('width',VBW); svg.setAttribute('height',VBH);
+  let edges='',nodes='';
+  // lane background for foundations
+  edges+=`<rect x="6" y="34" width="${FW+24}" height="${VBH-70}" rx="10" fill="rgba(29,78,95,0.04)" stroke="var(--line)" stroke-dasharray="3 5"/>`;
+  edges+=`<text x="${FX+8}" y="26" class="t-num" font-size="12" letter-spacing="3" fill="var(--ink-fade)">公 理 · 公 设 　 推 演 原 点</text>`;
+  edges+=`<text x="${PX+4}" y="26" class="t-num" font-size="12" letter-spacing="3" fill="var(--ink-fade)">命 题 · 推 演 级 联 （ 一 → 十 四 ）</text>`;
+  // edges
+  PROPS.forEach(p=>{
+    (p.ax||[]).forEach(a=>{edges+=`<path class="edge axe" data-to="${p.id}" data-from="${a}" d="${edgePath(a,p.id,'ax')}" stroke="${AXHEX[a]}" stroke-width="1.6" stroke-opacity="0.16"/>`;});
+    (p.pp||[]).forEach(s=>{edges+=`<path class="edge prop" data-to="${p.id}" data-from="${s}" d="${edgePath(s,p.id,'pp')}" stroke-width="1.4" stroke-opacity="0.18"/>`;});
+  });
+  // foundation nodes
+  FOUND.forEach(f=>{
+    const b=box[f.id],col=AXHEX[f.id];
+    let inner=`<rect class="nbox" x="${b.x}" y="${b.y}" width="${b.w}" height="${b.h}" rx="7"/>`;
+    inner+=`<rect x="${b.x}" y="${b.y}" width="5" height="${b.h}" rx="2.5" fill="${col}"/>`;
+    inner+=`<text class="t-num" x="${b.x+16}" y="${b.y+22}" font-size="11.5" letter-spacing="1">${f.label}</text>`;
+    inner+=`<text class="t-name" x="${b.x+60}" y="${b.y+22}" font-size="14.5">${f.name}${f.load?'　<tspan fill="'+col+'" font-size="10.5" font-weight="400">· 承重梁 · 第五公设</tspan>':''}</text>`;
+    if(f.formula) inner+=`<text class="t-form" x="${b.x+16}" y="${b.y+44}" font-size="12.5">${esc(f.formula)}</text>`;
+    nodes+=`<g class="node" data-id="${f.id}" tabindex="0">${inner}</g>`;
+  });
+  // prop nodes
+  PROPS.forEach(p=>{
+    const b=box[p.id];
+    if(p.special==='cor'){
+      let inner=`<rect class="nbox" x="${b.x}" y="${b.y}" width="${b.w}" height="${b.h}" rx="6" fill="var(--parchment)"/>`;
+      inner+=`<circle class="badge" cx="${b.x+18}" cy="${b.cy}" r="11" fill="var(--aegean-soft)"/>`;
+      inner+=`<text class="badge-t" x="${b.x+18}" y="${b.cy+4}" font-size="10.5">${p.opp}</text>`;
+      inner+=`<text class="t-title" x="${b.x+36}" y="${b.cy-2}" font-size="12.5">${p.num}·${p.title}</text>`;
+      inner+=`<text class="t-greek" x="${b.x+36}" y="${b.cy+14}" font-size="11.5">${p.greek}</text>`;
+      nodes+=`<g class="node" data-id="${p.id}" tabindex="0">${inner}</g>`;
+      return;
+    }
+    const lock=p.special==='lock',halt=p.special==='halt',forced=p.special==='forced';
+    let fill='var(--parchment-light)',bstroke='var(--line-strong)';
+    if(lock){fill='#efe2dc';bstroke='var(--terracotta)';}
+    if(halt){fill='#f4ead2';bstroke='var(--gold)';}
+    if(forced){fill='#e7eef0';bstroke='var(--aegean-soft)';}
+    let inner=`<rect class="nbox" x="${b.x}" y="${b.y}" width="${b.w}" height="${b.h}" rx="7" fill="${fill}" stroke="${bstroke}"${forced?' stroke-dasharray="5 4"':''}/>`;
+    // badge
+    let bc='var(--terracotta)',bt=p.opp!=null?p.opp:'';
+    if(lock){bc='var(--terracotta-dark)';bt='🔒';}
+    if(forced){bc='var(--aegean)';bt='⇄';}
+    if(halt){bc='var(--gold)';bt='∎';}
+    inner+=`<circle class="badge" cx="${b.x+24}" cy="${b.cy}" r="14" fill="${bc}"/>`;
+    inner+=`<text class="badge-t" x="${b.x+24}" y="${b.cy+5}" font-size="${(''+bt).length>1?11:13}">${bt}</text>`;
+    inner+=`<text class="t-num" x="${b.x+48}" y="${b.cy-7}" font-size="11">${p.num}${lock?'　【锁死】':halt?'　【停机】':forced?'　【受迫】':''}</text>`;
+    inner+=`<text class="t-title" x="${b.x+48}" y="${b.cy+9}" font-size="13.5">${clip(p.title,17)}</text>`;
+    inner+=`<text class="t-greek" x="${b.x+48}" y="${b.cy+24}" font-size="12">${p.greek}</text>`;
+    nodes+=`<g class="node" data-id="${p.id}" tabindex="0">${inner}</g>`;
+  });
+  svg.innerHTML=edges+nodes;
+}
+function clip(s,n){return s.length>n?s.slice(0,n-1)+'…':s;}
+function esc(s){return (s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
+
+/* ============================================================
+   CITATION LINKIFY
+   ============================================================ */
+const CN={'一':1,'二':2,'三':3,'四':4,'五':5,'六':6,'七':7,'八':8,'九':9,'十':10};
+function cn2num(s){if(s==='十')return 10;if(s[0]==='十')return 10+(CN[s[1]]||0);if(s.length===1)return CN[s]||0;return CN[s]||0;}
+const PFX={'公理':'ax','公设':'post','定义':'def','命题':'p','系':'cor'};
+function linkify(text){
+  let h=esc(text);
+  h=h.replace(/(公理|公设|定义|命题|系)([一二三四五六七八九十]+(?:、[一二三四五六七八九十]+)*)/g,(m,cat,nums)=>{
+    const first=nums.split('、')[0];
+    const id=PFX[cat]+cn2num(first);
+    if(!NODES[id])return m;
+    return `<span class="cite" data-target="${id}">${m}</span>`;
+  });
+  h=h.replace(/引理/g,`<span class="cite" data-target="lemma">引理</span>`);
+  return h;
+}
+
+/* ============================================================
+   DETAIL PANEL
+   ============================================================ */
+const KINDLABEL={def:'定义 DEFINITIO',post:'公设 POSTULATUM',ax:'公理 AXIOMA'};
+function kindOf(id){const n=NODES[id];if(n.kind==='def')return'def';if(id.startsWith('post'))return'post';if(id.startsWith('ax'))return'ax';if(n.special==='cor')return'cor';if(n.special==='lemma'||id==='lemma')return'lemma';return'prop';}
+function kindColor(id){const k=kindOf(id);if(k==='ax'||k==='post')return AXHEX[id]||'#6e6253';if(k==='lemma')return'#1d4e5f';if(k==='cor')return'#5a8a96';return'#a73e2c';}
+
+function renderPanel(id){
+  const n=NODES[id],p=document.getElementById('panel');
+  const k=kindOf(id);
+  let h='';
+  if(k==='def'){
+    h+=`<div class="p-eyebrow">定义 · DEFINITIO</div>`;
+    h+=`<div class="p-num">${n.num}</div>`;
+    h+=`<div class="p-proof"><p>${linkify(n.title)}</p></div>`;
+    h+=depChips(id);
+    p.innerHTML=h;return;
+  }
+  if(k==='ax'||k==='post'){
+    const f=NODES[id];
+    h+=`<div class="p-eyebrow">${k==='ax'?'公理 · AXIOMA':'公设 · POSTULATUM'}</div>`;
+    h+=`<span class="p-kind" style="background:${kindColor(id)}">${f.label} ${f.name}</span>`;
+    if(f.formula)h+=`<div class="p-greek" style="font-family:var(--mono);font-size:16px;color:var(--ink-soft)">${esc(f.formula)}</div>`;
+    h+=`<div class="p-statement">${linkify(f.text)}</div>`;
+    if(f.note)h+=`<div class="p-label">按</div><div class="p-scholium">${linkify(f.note)}</div>`;
+    if(id==='post2')h+=`<div class="p-label">否定之后果</div><div class="p-scholium">${linkify(SCHOLIUM[1])}</div>`;
+    h+=depChips(id);
+    p.innerHTML=h;return;
+  }
+  // proposition / lemma / corollary
+  const special=n.special;
+  h+=`<div class="p-eyebrow">${special==='lock'?'锁死 · CRISIS':special==='halt'?'停机 · HALT':special==='forced'?'引理 · LEMMA':special==='cor'?'系 · COROLLARIUM':'命题 · PROPOSITIO'}</div>`;
+  if(n.opp!=null)h+=`<span class="p-kind" style="background:${kindColor(id)}">第 ${n.opp} 对立 · 十六之一</span>`;
+  else if(special==='lock')h+=`<span class="p-kind" style="background:var(--terracotta-dark)">巴门尼德 · 系统僵死点</span>`;
+  else if(special==='forced')h+=`<span class="p-kind" style="background:var(--aegean)">受迫而生 · 非公设</span>`;
+  h+=`<div class="p-num">${n.num}</div>`;
+  h+=`<div class="p-title">${n.title}</div>`;
+  h+=`<div class="p-greek greek">${greekHTML(n.greek)}</div>`;
+  h+=`<div class="p-statement">${linkify(n.statement)}</div>`;
+  if(n.proof){
+    h+=`<div class="p-label">证明 Demonstratio</div><div class="p-proof">`;
+    n.proof.split('\n').forEach(par=>{if(par.trim())h+=`<p>${linkify(par)}</p>`;});
+    h+=`</div>`;
+  }
+  if(n.scholium){
+    h+=`<div class="p-label">附释 Scholium</div><div class="p-scholium${n.crisis?' crisis':''}">${linkify(n.scholium)}</div>`;
+  }
+  h+=depChips(id);
+  p.innerHTML=h;
+}
+function greekHTML(g){if(g.includes('/')){const[a,b]=g.split('/');return `${a.trim()}<span class="sep">/</span>${b.trim()}`;}return g;}
+function depChips(id){
+  const n=NODES[id];
+  let h='<div class="chips">';
+  const rests=[...(n.df||[]),...(n.ax||[]),...(n.pp||[])];
+  if(rests.length){
+    h+='<h4>▽ 依据 / 所据 (rests on)</h4>';
+    rests.forEach(d=>{h+=chip(d);});
+  }
+  const sup=DEPENDENTS[id]||[];
+  if(sup.length){
+    h+='<h4 style="margin-top:14px">△ 支撑 / 所推 (supports)</h4>';
+    sup.forEach(d=>{h+=chip(d);});
+  }
+  h+='</div>';return h;
+}
+function chip(id){
+  const n=NODES[id],c=kindColor(id),k=kindOf(id);
+  const head=n.num||n.label||'';
+  let extra='';
+  if(k==='ax'||k==='post')extra=' '+(n.name||'');
+  else if(k!=='def'&&n.title)extra=' '+clip(n.title,8);
+  return `<span class="chip" data-target="${id}"><span class="k" style="background:${c}"></span>${head}${extra}</span>`;
+}
+
+/* ============================================================
+   HIGHLIGHT STATE
+   ============================================================ */
+const svg=()=>document.getElementById('map');
+function clearState(){
+  svg().querySelectorAll('.node').forEach(g=>g.classList.remove('dim','hl','sel'));
+  svg().querySelectorAll('.edge').forEach(e=>e.classList.remove('dimE','hlE'));
+}
+function highlightPath(id){
+  clearState();
+  const path=new Set([id,...ancestors(id)]);
+  svg().querySelectorAll('.node').forEach(g=>{const nid=g.dataset.id;if(path.has(nid)){g.classList.add('hl');if(nid===id)g.classList.add('sel');}else g.classList.add('dim');});
+  svg().querySelectorAll('.edge').forEach(e=>{const f=e.dataset.from,t=e.dataset.to;if(path.has(f)&&path.has(t))e.classList.add('hlE');else e.classList.add('dimE');});
+}
+function highlightCone(id){ // descendants of a foundation (e.g., 公设二)
+  clearState();
+  const cone=new Set([id,...descendants(id)]);
+  svg().querySelectorAll('.node').forEach(g=>{const nid=g.dataset.id;if(cone.has(nid)){g.classList.add('hl');if(nid===id)g.classList.add('sel');}else g.classList.add('dim');});
+  svg().querySelectorAll('.edge').forEach(e=>{const f=e.dataset.from,t=e.dataset.to;if(cone.has(f)&&cone.has(t)&&(f===id||cone.has(f)))e.classList.add('hlE');else e.classList.add('dimE');});
+}
+let selected=null;
+function select(id){selected=id;exitStep();exitLens();highlightPath(id);renderPanel(id);scrollNodeIntoView(id);}
+function scrollNodeIntoView(id){const b=box[id];if(!b)return;const wrap=document.querySelector('.mapwrap');const svgEl=svg();const scale=svgEl.getBoundingClientRect().height/VBH;const top=(b.y)*scale-wrap.clientHeight/2+60;wrap.scrollTo({top:Math.max(0,top),behavior:'smooth'});}
+
+/* ============================================================
+   STEP MODE
+   ============================================================ */
+const STEPS=['p1','p2','p3','p4','p5','p6','lemma','p7','cor1','cor2','p8','p9','p10','p11','p12','p13','p14'];
+let stepMode=false,stepK=0,playTimer=null;
+function enterStep(){stepMode=true;exitLens();document.getElementById('stepbar').classList.add('show');document.getElementById('btnStep').classList.add('on');stepTo(0);}
+function exitStep(){if(!stepMode)return;stepMode=false;stopPlay();document.getElementById('stepbar').classList.remove('show');document.getElementById('btnStep').classList.remove('on');}
+function stepTo(k){
+  stepK=k;document.getElementById('stepRange').value=k;
+  const cur=STEPS[k];const shownProps=new Set(STEPS.slice(0,k+1));
+  const shownFound=new Set();shownProps.forEach(pid=>{(NODES[pid].ax||[]).forEach(a=>shownFound.add(a));});
+  const shown=new Set([...shownProps,...shownFound]);
+  clearState();
+  svg().querySelectorAll('.node').forEach(g=>{const nid=g.dataset.id;if(shown.has(nid)){g.classList.add('hl');if(nid===cur)g.classList.add('sel');}else g.classList.add('dim');});
+  svg().querySelectorAll('.edge').forEach(e=>{const f=e.dataset.from,t=e.dataset.to;if(shown.has(f)&&shown.has(t)&&(t===cur||STEPS.indexOf(t)<=k))e.classList.add('hlE');else e.classList.add('dimE');});
+  const n=NODES[cur];
+  document.getElementById('stepLab').innerHTML=`第 <b>${k+1}</b> / 17 步　${n.num}`;
+  renderPanel(cur);scrollNodeIntoView(cur);
+}
+function play(){if(playTimer){stopPlay();return;}document.getElementById('playBtn').textContent='⏸';playTimer=setInterval(()=>{if(stepK>=STEPS.length-1){stopPlay();return;}stepTo(stepK+1);},1600);}
+function stopPlay(){if(playTimer){clearInterval(playTimer);playTimer=null;}document.getElementById('playBtn').textContent='▶';}
+
+/* ============================================================
+   LENS (公设二)
+   ============================================================ */
+let lensOn=false;
+function toggleLens(){if(lensOn){exitLens();}else{enterLens();}}
+function enterLens(){lensOn=true;exitStep();document.getElementById('btnLens').classList.add('on');highlightCone('post2');renderPanel('post2');}
+function exitLens(){if(!lensOn)return;lensOn=false;document.getElementById('btnLens').classList.remove('on');}
+
+/* ============================================================
+   FULL TEXT MODAL
+   ============================================================ */
+function buildModal(){
+  let h='';
+  h+=`<div class="fx-sec">定义 Definitiones</div>`;
+  DEFS.forEach(d=>{h+=`<div class="fx-item"><span class="h">${d.label}</span><div class="b">${linkify(d.t)}</div></div>`;});
+  h+=`<div class="fx-sec">公设 Postulata</div>`;
+  h+=`<div class="fx-note">${linkify(POST_INTRO)}</div>`;
+  FOUND.filter(f=>f.cat==='公设').forEach(f=>{
+    h+=`<div class="fx-item"><span class="h">${f.label}（${f.name}）</span><div class="b">${linkify(f.text)}</div>`;
+    if(f.note)h+=`<div class="fx-note">公设二之按：${linkify(f.note)}</div>`;
+    h+=`</div>`;
+  });
+  h+=`<div class="fx-sec">公理 Axiomata</div>`;
+  h+=`<div class="fx-note">${linkify(AX_INTRO)}</div>`;
+  FOUND.filter(f=>f.cat==='公理').forEach(f=>{h+=`<div class="fx-item"><span class="h">${f.label}（${f.name}）</span><div class="b">${linkify(f.text)}</div></div>`;});
+  h+=`<div class="fx-sec">命题 Propositiones</div>`;
+  PROPS.forEach(p=>{
+    if(p.special==='cor'){
+      h+=`<div class="fx-item" style="margin-left:18px"><span class="h">${p.num}　${p.title}<span class="g">${p.greek}</span></span><div class="b">${linkify(p.statement)}</div></div>`;
+      return;
+    }
+    const tag=p.special==='lock'?'【锁死】':p.special==='halt'?'【停机】':p.special==='forced'?'':'';
+    h+=`<div class="fx-item"><span class="h">${p.num}　${p.title}${tag}<span class="g">${p.greek}</span></span>`;
+    h+=`<div class="b">${linkify(p.statement)}</div>`;
+    if(p.proof){h+=`<div class="fx-pr"><span class="pl">证明</span>`;p.proof.split('\n').forEach((par,i)=>{if(par.trim())h+=(i?'<br>':'')+linkify(par);});h+=`</div>`;}
+    if(p.scholium)h+=`<div class="fx-note"><b>附释</b>　${linkify(p.scholium)}</div>`;
+    h+=`</div>`;
+  });
+  h+=`<div class="fx-sec">总附释 Scholium Generale</div><div class="fx-sg">`;
+  SCHOLIUM.forEach(par=>{h+=`<p>${linkify(par)}</p>`;});
+  h+=`</div>`;
+  document.getElementById('modalBody').innerHTML=h;
+}
+function openModal(){document.getElementById('modalBg').classList.add('show');document.getElementById('modal').classList.add('show');}
+function closeModal(){document.getElementById('modalBg').classList.remove('show');document.getElementById('modal').classList.remove('show');}
+
+/* ============================================================
+   LEGEND
+   ============================================================ */
+function buildLegend(){
+  const items=[
+    ['sw','#1d4e5f','公理一 同一律'],['sw','#6d4a8f','公理二 矛盾律'],['sw','#3f7a52','公理三 排中律'],
+    ['sw','#b8893a','公理四 充足理由律'],['sw','#c98a5e','公设一'],['sw','#a73e2c','公设二（承重梁）'],
+    ['swd','#6e6253','命题→命题'],
+  ];
+  let h='';
+  items.forEach(([t,c,l])=>{
+    if(t==='swd')h+=`<span class="lg"><span class="sw" style="background:repeating-linear-gradient(90deg,${c},${c} 4px,transparent 4px,transparent 7px)"></span>${l}</span>`;
+    else h+=`<span class="lg"><span class="sw" style="background:${c}"></span>${l}</span>`;
+  });
+  h+=`<span class="lg" style="margin-left:6px"><span class="nd" style="background:#efe2dc;border-color:#a73e2c"></span>🔒 锁死</span>`;
+  h+=`<span class="lg"><span class="nd" style="background:#e7eef0;border-color:#5a8a96;border-style:dashed"></span>⇄ 受迫引理</span>`;
+  h+=`<span class="lg"><span class="nd" style="background:#f4ead2;border-color:#b8893a"></span>∎ 停机</span>`;
+  document.getElementById('legend').innerHTML=h;
+}
+
+/* ============================================================
+   GUIDE (default panel)
+   ============================================================ */
+function showGuide(){
+  document.getElementById('panel').innerHTML=`
+   <div class="guide">
+     <div class="p-eyebrow">导读 · LECTORI</div>
+     <h3>一座欧几里得式的哲学机器</h3>
+     <p>《逻各斯原本》仿欧几里得《几何原本》与斯宾诺莎《伦理学》之体例：从 <strong>4 条公理</strong> 与 <strong>2 条公设</strong> 出发，逐步推演出古希腊哲学的 <strong>十六组对立</strong>。</p>
+     <p>左栏是<strong>推演原点</strong>（公理与公设）；右栏是<strong>命题级联</strong>，自 <em>命题一</em> 顺次下行至 <em>命题十四 · 停机</em>。连线按其<strong>源头公理着色</strong>——你可一眼看出哪条公理在驱动哪些命题。</p>
+     <p class="mini">· <strong>点击</strong>任一节点：高亮其回溯到公理的<em>完整推演路径</em>，并在此显示其命题、证明与附释。<br>· <strong>▶ 推演演示</strong>：自命题一逐步生长至停机。<br>· <strong>公设二透镜</strong>：照出整座体系中依赖于"思维=存在"这座桥的部分。<br>· <strong>全文</strong>：通读原典。</p>
+     <p class="mini" style="margin-top:14px;border-top:1px solid var(--line);padding-top:12px">三个关键节点：<br>🔒 <strong>命题六 锁死</strong>——巴门尼德式僵死；<br>⇄ <strong>引理 受迫</strong>——被锁死逼出的论域分层；<br>∎ <strong>命题十四 停机</strong>——四律自噬，与哥德尔同构。</p>
+   </div>`;
+}
+
+/* ============================================================
+   WIRE UP
+   ============================================================ */
+buildMap(); buildLegend(); buildModal(); showGuide();
+document.getElementById('stepRange').max=STEPS.length-1;
+
+svg().addEventListener('click',e=>{const g=e.target.closest('.node');if(g)select(g.dataset.id);});
+svg().addEventListener('keydown',e=>{if(e.key==='Enter'){const g=e.target.closest('.node');if(g)select(g.dataset.id);}});
+document.getElementById('panel').addEventListener('click',e=>{const c=e.target.closest('[data-target]');if(c)select(c.dataset.target);});
+document.getElementById('modalBody').addEventListener('click',e=>{const c=e.target.closest('[data-target]');if(c){closeModal();select(c.dataset.target);}});
+
+document.getElementById('btnStep').addEventListener('click',()=>{if(stepMode)exitStep();else enterStep();});
+document.getElementById('playBtn').addEventListener('click',play);
+document.getElementById('stepRange').addEventListener('input',e=>{stopPlay();stepTo(+e.target.value);});
+document.getElementById('btnLens').addEventListener('click',toggleLens);
+document.getElementById('btnText').addEventListener('click',openModal);
+document.getElementById('btnReset').addEventListener('click',()=>{exitStep();exitLens();clearState();selected=null;showGuide();document.querySelector('.mapwrap').scrollTo({top:0,behavior:'smooth'});});
+document.getElementById('modalClose').addEventListener('click',closeModal);
+document.getElementById('modalBg').addEventListener('click',closeModal);
+document.addEventListener('keydown',e=>{if(e.key==='Escape'){closeModal();}});
+</script>
+</body>
+</html>

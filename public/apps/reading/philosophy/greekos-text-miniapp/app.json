@@ -1,0 +1,12 @@
+{
+  "pages": ["pages/index/index"],
+  "window": {
+    "navigationBarTitleText": "十六组二元对立·古希腊哲学",
+    "navigationBarBackgroundColor": "#f3ebda",
+    "navigationBarTextStyle": "black",
+    "backgroundColor": "#f3ebda",
+    "enablePullDownRefresh": false
+  },
+  "style": "v2",
+  "sitemapLocation": "sitemap.json"
+}

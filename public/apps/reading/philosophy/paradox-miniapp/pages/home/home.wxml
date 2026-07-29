@@ -1,0 +1,32 @@
+<view class="wrap">
+  <view class="hero">
+    <view class="hero-en">AN ATLAS OF PARADOXES</view>
+    <view class="hero-cn">悖论图谱</view>
+    <view class="hero-sub">张力即演化的动力</view>
+    <view class="hero-stats">
+      <view class="hs"><text class="hs-n">{{stats.sys}}</text><text class="hs-l">系统</text></view>
+      <view class="hs-div"></view>
+      <view class="hs"><text class="hs-n">{{stats.ten}}</text><text class="hs-l">张力</text></view>
+      <view class="hs-div"></view>
+      <view class="hs"><text class="hs-n">{{stats.cat}}</text><text class="hs-l">分类</text></view>
+    </view>
+  </view>
+
+  <view class="intro">
+    不再问「发生了什么」，而是问「哪些对立张力在此刻达到了临界爆发」。每个系统都有一个<text class="em">母悖论</text>，具体张力是它在不同维度上的变奏。
+  </view>
+
+  <view class="sec-label">系统索引 · INDEX</view>
+
+  <view class="cat-card" wx:for="{{cats}}" wx:key="name" data-name="{{item.name}}" bindtap="goCat" style="border-left-color:{{item.color}}">
+    <view class="cc-top">
+      <text class="cc-name">{{item.name}}</text>
+      <text class="cc-count" style="color:{{item.color}}">{{item.count}}</text>
+    </view>
+    <view class="cc-samples">{{item.samples}}{{item.count>3?'…':''}}</view>
+    <view class="cc-go" style="color:{{item.color}}">进入 →</view>
+  </view>
+
+  <view class="foot">「正统不是真理的终点，而是张力的暂时管理协议。」</view>
+  <view class="safe-bottom"></view>
+</view>

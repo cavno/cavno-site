@@ -1,0 +1,73 @@
+<view class="wrap">
+
+  <!-- 顶部题区 -->
+  <view class="hero">
+    <text class="eyebrow">西方哲学史考察十讲 · 梅春雷</text>
+    <text class="hero-title">前四讲 · 思想脉络</text>
+    <text class="hero-sub">图腾禁忌 — 神话宗教 — 希腊哲学 — 神学千年</text>
+    <text class="hero-dates">2026.03 — 2026.06</text>
+  </view>
+
+  <!-- 课程主轴 -->
+  <view class="card chain-card">
+    <text class="chain-label">课程主轴 · 人应当用人类史来说明</text>
+    <view class="chain">
+      <block wx:for="{{chain}}" wx:key="name">
+        <view class="chain-node {{item.on ? 'chain-node-on' : ''}}">
+          <text>{{item.name}}</text>
+        </view>
+        <text wx:if="{{index < chain.length - 1}}" class="chain-arrow">→</text>
+      </block>
+    </view>
+    <text class="chain-note">深色为本四讲覆盖范围;「科学」与现代部分为课程后续。</text>
+  </view>
+
+  <!-- 引言 -->
+  <view class="quote">
+    <text class="qmark">「</text>
+    <text class="qtx">认识你自己,就是认识历史。理解历史文化传统,才能理解世界,理解自己。</text>
+    <text class="qby">—— 孔德 · 课程开篇</text>
+  </view>
+
+  <!-- 思想脉络主入口 -->
+  <view class="thread-entry" bindtap="goThread">
+    <view class="te-left">
+      <text class="te-name">思想脉络</text>
+      <text class="te-sub">六条贯穿线:恒常的追问 · 连续与转换 · 命运的长河 · Logos 的漂流 · 解释权的转移 · 语言的边界</text>
+    </view>
+    <text class="te-go">读</text>
+  </view>
+
+  <!-- 四讲 -->
+  <text class="orn">· · ·</text>
+  <text class="sec-label">四讲讲义</text>
+  <view class="lec-list">
+    <view wx:for="{{lectures}}" wx:key="id" class="lec-card ac-{{item.accent}}" bindtap="goLecture" data-id="{{item.id}}">
+      <view class="lec-top">
+        <text class="lec-num">{{item.num}}</text>
+        <text class="lec-date">{{item.date}}</text>
+      </view>
+      <text class="lec-title">{{item.title}}</text>
+      <text class="lec-sub">{{item.sub}}</text>
+    </view>
+  </view>
+
+  <!-- 专题 -->
+  <text class="orn">· · ·</text>
+  <text class="sec-label">专题工具</text>
+  <view class="sp-list">
+    <view wx:for="{{specials}}" wx:key="key" class="sp-card" bindtap="goSpecial" data-key="{{item.key}}">
+      <view class="sp-dot sp-{{item.accent}}"></view>
+      <view class="sp-body">
+        <text class="sp-name">{{item.name}}</text>
+        <text class="sp-sub">{{item.sub}}</text>
+      </view>
+    </view>
+  </view>
+
+  <view class="foot">
+    <text class="foot-tx">讲义来源:梅春雷《西方哲学史考察十讲》前四讲</text>
+    <text class="foot-tx">视频号:老K的呐喊</text>
+  </view>
+
+</view>

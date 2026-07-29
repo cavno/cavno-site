@@ -1,0 +1,473 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>公理组合矩阵 · Axiom Combinatorics</title>
+<meta name="description" content="把四条逻辑律当作一个集合/矩阵，每条取持守·极致·松动·否弃·限定·悬置·不涉之一；不同的排列组合对应一种哲学倾向——打破历史线，按公理构型聚类。">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;1,500;1,600&family=GFS+Didot&family=Noto+Serif+SC:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root{
+  --parchment:#f3ebda; --parchment-light:#faf4e6; --parchment-dark:#e8ddc6;
+  --ink:#1c1916; --ink-soft:#3a342c; --ink-fade:#6e6253;
+  --terracotta:#a73e2c; --terracotta-dark:#7e2d1f; --terracotta-soft:#d9a89c;
+  --aegean:#1d4e5f; --aegean-soft:#5a8a96; --gold:#b8893a; --gold-soft:#d4b76a;
+  --purple:#6d4a8f; --green:#3f7a52;
+  --line:rgba(28,25,22,.12); --line-strong:rgba(28,25,22,.26);
+  --serif:"Noto Serif SC","Noto Serif CJK SC",Georgia,serif;
+  --display:"Cormorant Garamond","Noto Serif SC",Georgia,serif;
+  --greek:"GFS Didot","Noto Serif SC",Georgia,serif;
+  --mono:"JetBrains Mono","Courier New",monospace;
+  --s-green:#2e8b57; --s-red:#cf3b2e; --s-yellow:#d6a500; --s-na:#c9bda8;
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+html,body{height:100%;}
+body{background:var(--parchment);
+  background-image:radial-gradient(ellipse at top left,rgba(184,137,58,.06),transparent 50%),radial-gradient(ellipse at bottom right,rgba(29,78,95,.05),transparent 50%);
+  color:var(--ink);font-family:var(--serif);font-size:16px;line-height:1.7;-webkit-font-smoothing:antialiased;overflow:hidden;}
+body::before{content:'';position:fixed;inset:0;z-index:0;pointer-events:none;mix-blend-mode:multiply;opacity:.05;
+  background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3'/%3E%3CfeColorMatrix values='0 0 0 0 0.2 0 0 0 0 0.15 0 0 0 0 0.1 0 0 0 0.4 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");}
+.greek{font-family:var(--greek);}
+.app{position:relative;z-index:1;height:100vh;display:flex;flex-direction:column;}
+
+header{flex:none;border-bottom:1px solid var(--line);background:rgba(243,235,218,.92);backdrop-filter:blur(8px);}
+.hbar{display:flex;align-items:baseline;gap:14px;padding:11px 24px 9px;flex-wrap:wrap;}
+.hbar h1{font-family:var(--display);font-weight:600;font-size:24px;white-space:nowrap;}
+.hbar .latin{font-family:var(--greek);font-size:12.5px;letter-spacing:.2em;color:var(--terracotta);text-transform:uppercase;}
+.hbar .sub{font-size:12.5px;color:var(--ink-fade);}
+.hbar .tools{margin-left:auto;display:flex;gap:8px;}
+.btn{font-family:var(--serif);font-size:13px;color:var(--ink-soft);background:var(--parchment-light);border:1px solid var(--line-strong);border-radius:18px;padding:5px 14px;cursor:pointer;transition:all .2s;white-space:nowrap;}
+.btn:hover{border-color:var(--terracotta);color:var(--terracotta);}
+.btn.on{background:var(--ink);color:var(--parchment-light);border-color:var(--ink);}
+
+/* combinator matrix */
+.combinator{flex:none;padding:10px 24px 12px;border-bottom:1px solid var(--line);}
+.matrix{display:grid;gap:5px;align-items:stretch;}
+.mh{font-family:var(--greek);font-size:11px;letter-spacing:.08em;color:var(--ink-fade);text-transform:uppercase;text-align:center;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;gap:3px;padding-bottom:3px;}
+.mh .pip{width:13px;height:13px;border-radius:50%;}
+.mh.any{color:var(--ink-soft);}
+.rowlab{display:flex;flex-direction:column;justify-content:center;padding:6px 10px;border-radius:7px;background:var(--parchment-light);border:1px solid var(--line-strong);border-left:4px solid var(--lc);}
+.rowlab .n{font-weight:700;font-size:14px;}
+.rowlab .f{font-family:var(--mono);font-size:11px;color:var(--ink-fade);}
+.cell{border:1px solid var(--line);border-radius:7px;background:var(--parchment-light);cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:12.5px;color:var(--ink-soft);transition:all .14s;min-height:38px;user-select:none;}
+.cell:hover{border-color:var(--terracotta);}
+.cell .vp{width:11px;height:11px;border-radius:50%;margin-right:6px;flex:none;}
+.cell.on{font-weight:700;color:var(--ink);border-width:2px;}
+.cell.any-cell{font-size:12px;color:var(--ink-fade);}
+.cell.any-cell.on{color:var(--ink);border-color:var(--ink-fade);background:var(--parchment-dark);}
+.readout{margin-top:9px;font-size:12.5px;color:var(--ink-fade);display:flex;gap:18px;flex-wrap:wrap;align-items:center;}
+.readout b{color:var(--terracotta);font-family:var(--mono);}
+.readout .cur{display:flex;gap:6px;align-items:center;}
+.readout .cur .pip{width:12px;height:12px;border-radius:50%;}
+.readout .cur .lbl{font-size:11px;color:var(--ink-fade);}
+
+.main{flex:1;display:flex;min-height:0;}
+.scatterwrap{flex:1;min-width:0;position:relative;display:flex;flex-direction:column;}
+.scatterwrap svg{flex:1;width:100%;height:100%;display:block;}
+.scleg{position:absolute;left:14px;bottom:10px;display:flex;gap:12px;flex-wrap:wrap;font-size:11px;color:var(--ink-fade);background:rgba(250,244,230,.7);padding:5px 9px;border-radius:8px;border:1px solid var(--line);}
+.scleg .k{display:inline-flex;align-items:center;gap:5px;}
+.scleg .d{width:11px;height:11px;border-radius:50%;}
+.panel{width:392px;flex:none;border-left:1px solid var(--line);background:var(--parchment-light);overflow-y:auto;padding:18px 22px 50px;}
+
+/* scatter elements */
+.regionlab{fill:var(--ink-fade);font-family:var(--greek);letter-spacing:.06em;opacity:.5;text-transform:uppercase;}
+.axislab{fill:var(--ink-fade);font-family:var(--serif);font-size:11px;}
+.axis{stroke:var(--line-strong);stroke-dasharray:3 4;}
+.cnode{cursor:pointer;transition:opacity .2s;}
+.cnode circle{transition:stroke-width .15s,r .15s;}
+.cnode:hover circle{stroke:var(--ink);stroke-width:2;}
+.cnode .clab{fill:var(--ink-soft);font-family:var(--serif);font-size:10px;pointer-events:none;}
+.cnode.dim{opacity:.13;}
+.cnode.sel circle{stroke:var(--terracotta);stroke-width:3;}
+
+/* panel content */
+.eyebrow{font-family:var(--greek);font-size:11.5px;letter-spacing:.24em;color:var(--terracotta);text-transform:uppercase;margin-bottom:8px;}
+.ism{font-family:var(--display);font-size:26px;font-weight:600;line-height:1.16;}
+.ism-sig{font-family:var(--mono);font-size:12px;color:var(--ink-fade);margin:5px 0 10px;}
+.cfgrow{display:flex;flex-direction:column;gap:7px;margin:8px 0 14px;}
+.cfg{display:flex;align-items:center;gap:10px;font-size:13.5px;}
+.cfg .cn{width:64px;color:var(--ink-soft);}
+.cfg .pip{width:13px;height:13px;border-radius:50%;}
+.cfg .cv{font-weight:600;}
+.cfg .cf{margin-left:auto;font-family:var(--mono);font-size:11px;color:var(--ink-fade);}
+.blurb{font-size:14px;line-height:1.7;color:var(--ink-soft);border-left:3px solid var(--gold);padding:2px 0 2px 13px;margin-bottom:14px;}
+.p-label{font-family:var(--greek);font-size:11px;letter-spacing:.22em;color:var(--terracotta);text-transform:uppercase;margin:14px 0 8px;display:flex;align-items:center;gap:9px;}
+.p-label::after{content:'';flex:1;height:1px;background:var(--line);}
+.chips{display:flex;flex-wrap:wrap;}
+.chip{font-size:12.5px;color:var(--ink-soft);background:var(--parchment);border:1px solid var(--line-strong);border-radius:14px;padding:3px 11px;margin:0 6px 7px 0;cursor:pointer;transition:all .16s;}
+.chip:hover{border-color:var(--terracotta);color:var(--terracotta);}
+.note{font-size:14px;line-height:1.76;color:var(--ink-soft);}
+.matched-card{border:1px solid var(--line-strong);border-radius:10px;background:var(--parchment);padding:11px 13px;margin-bottom:10px;cursor:pointer;transition:all .16s;}
+.matched-card:hover{border-color:var(--terracotta);}
+.matched-card .mc-h{display:flex;align-items:center;gap:8px;margin-bottom:7px;}
+.matched-card .mc-name{font-weight:600;font-size:15px;color:var(--ink);}
+.matched-card .mc-ct{margin-left:auto;font-family:var(--mono);font-size:11px;color:var(--ink-fade);}
+.matched-card .mc-pips{display:flex;gap:5px;}
+.matched-card .mc-pips .pip{width:11px;height:11px;border-radius:50%;}
+.matched-card .mc-mem{font-size:12px;color:var(--ink-fade);line-height:1.5;}
+.guide h3{font-family:var(--display);font-size:20px;font-weight:600;margin-bottom:10px;color:var(--ink);}
+.guide p{font-size:13.5px;line-height:1.74;margin-bottom:10px;color:var(--ink-soft);}
+.guide em{color:var(--terracotta);font-style:italic;} .guide strong{color:var(--ink);}
+.guide .mini{font-size:12.5px;color:var(--ink-fade);}
+.pipkey{display:inline-flex;align-items:center;gap:5px;margin:0 9px 5px 0;font-size:12px;}
+.pipkey .pip{width:13px;height:13px;border-radius:50%;}
+
+/* modal */
+.modal-bg{position:fixed;inset:0;background:rgba(28,25,22,.4);z-index:90;display:none;}
+.modal-bg.show{display:block;}
+.modal{position:fixed;z-index:91;inset:5% 6%;background:var(--parchment-light);border:1px solid var(--line-strong);border-radius:14px;box-shadow:0 20px 60px rgba(28,25,22,.3);display:none;flex-direction:column;overflow:hidden;}
+.modal.show{display:flex;}
+.modal-h{display:flex;align-items:baseline;gap:12px;padding:16px 22px;border-bottom:1px solid var(--line);}
+.modal-h h2{font-family:var(--display);font-size:21px;font-weight:600;}
+.modal-h .x{margin-left:auto;cursor:pointer;font-size:22px;color:var(--ink-fade);border:none;background:none;line-height:1;}
+.modal-h .x:hover{color:var(--terracotta);}
+.modal-body{overflow-y:auto;padding:16px 22px 26px;display:grid;grid-template-columns:repeat(auto-fill,minmax(232px,1fr));gap:11px;}
+@media(max-width:980px){
+  body{overflow:auto;} .app{height:auto;} .main{flex-direction:column;}
+  .scatterwrap{height:74vh;} .panel{width:100%;border-left:none;border-top:1px solid var(--line);}
+}
+</style>
+</head>
+<body>
+<div class="app">
+  <header>
+    <div class="hbar">
+      <h1>公理组合矩阵</h1>
+      <span class="latin">Axiom Combinatorics</span>
+      <span class="sub">四律＝一个集合/矩阵，每条取一值；排列组合 → 一种哲学倾向（打破历史线，按构型聚类）</span>
+      <div class="tools">
+        <button class="btn" id="btnRandom">🎲 随机一种</button>
+        <button class="btn" id="btnBrowse">⊞ 浏览全部组合</button>
+        <button class="btn" id="btnReset">↺ 重置</button>
+      </div>
+    </div>
+    <div class="combinator">
+      <div class="matrix" id="matrix"></div>
+      <div class="readout" id="readout"></div>
+    </div>
+  </header>
+
+  <div class="main">
+    <div class="scatterwrap">
+      <svg id="scatter" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid meet"></svg>
+      <div class="scleg" id="scleg"></div>
+    </div>
+    <aside class="panel" id="panel"></aside>
+  </div>
+</div>
+
+<div class="modal-bg" id="modalBg"></div>
+<div class="modal" id="modal">
+  <div class="modal-h"><h2>全部已占据组合</h2><span class="sub" id="modalSub"></span><button class="x" id="modalX">×</button></div>
+  <div class="modal-body" id="modalBody"></div>
+</div>
+
+<script src="data.js"></script>
+<script>
+const C = window.DATA.C, LAWS = window.DATA.LAWS;
+const LAWMETA = {id:{n:'同一律',f:'A=A',c:'#1d4e5f'},ct:{n:'矛盾律',f:'¬(A∧¬A)',c:'#6d4a8f'},ex:{n:'排中律',f:'A∨¬A',c:'#3f7a52'},re:{n:'充足理由律',f:'PSR',c:'#b8893a'}};
+const LK = ['id','ct','ex','re'];
+const VALUES = ['keep','keepmax','weaken','reject','limit','suspend','na'];
+const VLAB = {keep:'持守',keepmax:'极致',weaken:'松动',reject:'否弃',limit:'限定',suspend:'悬置',na:'不涉'};
+const VSHORT = {keep:'守',keepmax:'极',weaken:'松',reject:'弃',limit:'限',suspend:'悬',na:'—'};
+const PIP = {keep:'#2e8b57',keepmax:'#2e8b57',weaken:'#cf3b2e',reject:'#cf3b2e',limit:'#d6a500',suspend:'#d6a500',na:'#c9bda8'};
+const RING = {keepmax:1,reject:1,suspend:1};
+const HOLLOW = {na:1};
+const INT = {keepmax:2,keep:1,limit:0,suspend:-0.6,weaken:-1,reject:-2,na:0};
+
+function pipStyle(v){
+  if(HOLLOW[v]) return 'border:2px solid '+PIP[v]+';background:transparent';
+  if(RING[v]) return 'background:'+PIP[v]+';box-shadow:0 0 0 2px var(--parchment-light),0 0 0 3.6px '+PIP[v];
+  return 'background:'+PIP[v];
+}
+function sigOf(s){ return s.id+'|'+s.ct+'|'+s.ex+'|'+s.re; }
+function sigShort(cfg){ return '同'+VSHORT[cfg.id]+'·矛'+VSHORT[cfg.ct]+'·排'+VSHORT[cfg.ex]+'·理'+VSHORT[cfg.re]; }
+
+/* curated isms (sig -> {name, blurb}) */
+const ISMS = {
+ 'keepmax|keep|keep|keep':{name:'巴门尼德式绝对一元',blurb:'四律全开＋思维=存在，世界冻为不动、不可分的「一」。'},
+ 'keep|keepmax|limit|keep':{name:'亚里士多德式形式逻辑',blurb:'立三律，以潜能/现实与论域分层绕过排中（明日海战）。'},
+ 'keep|keepmax|keepmax|keep':{name:'爱利亚-麦加拉归谬',blurb:'把矛盾律、排中律推到极致，用归谬反证运动与「多」不可能。'},
+ 'keep|keep|keep|keepmax':{name:'理性论 · 必然主义',blurb:'守全部逻辑律，并把充足理由律推到极致——凡存在皆有理由，故一切皆必然。'},
+ 'keep|keep|keep|keep':{name:'古典理性 · 常识',blurb:'四律皆守，理由律不过度——西方理性的「默认」主流。'},
+ 'keep|keep|keep|reject':{name:'因果怀疑论（休谟式）',blurb:'守逻辑而砍断必然因果：因果只是习惯，PSR 失去理性根。'},
+ 'keep|keep|keep|limit':{name:'批判 / 实证（限定理由）',blurb:'逻辑普遍有效，但充足理由律只在现象界 / 实证规律内有效。'},
+ 'keep|keep|keep|weaken':{name:'理由松动（意志·情感优先）',blurb:'守逻辑，但在理性之外另立根据（意志、情感、心的理由）。'},
+ 'suspend|suspend|suspend|suspend':{name:'怀疑主义 · 悬置',blurb:'四律皆悬，判断全盘停机（epoché）。'},
+ 'weaken|reject|reject|keep':{name:'辩证法（黑格尔式）',blurb:'抽象同一空洞，矛盾成为自我推进的发动机。'},
+ 'weaken|reject|weaken|keep':{name:'辩证唯物（马克思式）',blurb:'矛盾落到物质生产与阶级的现实运动。'},
+ 'reject|weaken|weaken|keep':{name:'流变 / 过程（赫拉克利特式）',blurb:'否同一而保留逻各斯之理由：万物流变、对立同一。'},
+ 'keep|weaken|weaken|keep':{name:'唯心辩证发端 / 经验逻辑',blurb:'守同一与理由，松动矛盾与排中（费希特的自我设定；密尔视逻辑为经验概括）。'},
+ 'weaken|weaken|weaken|keep':{name:'绝对唯心 · 同一哲学',blurb:'关系性思维自相矛盾，统一于「绝对」（谢林、布拉德雷）。'},
+ 'reject|weaken|weaken|reject':{name:'存在论解构（海德格尔式）',blurb:'存在非对象，A=A 不足以解释存在；玫瑰无 why。'},
+ 'weaken|weaken|weaken|reject':{name:'存在主义 / 权力意志',blurb:'自由无据、存在是多余的；真理是（权力）意志的产物。'},
+ 'na|na|na|reject':{name:'荒诞（加缪式）',blurb:'世界对人索要理由的呼声保持沉默。'},
+ 'reject|weaken|reject|reject':{name:'解构（德里达式）',blurb:'二元对立可拆，意义永远延异、从不自我同一。'},
+ 'reject|na|weaken|weaken':{name:'差异哲学（德勒兹式）',blurb:'差异在先，同一只是被生产出的效果。'},
+ 'weaken|na|weaken|reject':{name:'谱系学 / 权力（福柯式）',blurb:'真理由历史性的权力-知识体制生产，无中立奠基。'},
+ 'keep|keep|reject|na':{name:'直觉主义',blurb:'未证明 ≠ 假，撤排中；数学因此分叉。'},
+ 'keep|keep|weaken|na':{name:'多值 / 模糊逻辑',blurb:'第三值与连续程度的真，弱化排中。'},
+ 'keep|reject|keep|na':{name:'次协调 / 双面真理',blurb:'让矛盾不再爆炸，并主张某些矛盾为真。'},
+ 'keep|keepmax|keepmax|na':{name:'逻辑主义（弗雷格式）',blurb:'以概念文字把古典三律推至形式精确的极致。'},
+ 'keep|keepmax|keep|na':{name:'类型论 / 分层（罗素式）',blurb:'用类型分层消解悖论，以保住矛盾律。'},
+ 'keep|keep|keep|na':{name:'元逻辑 / 分析常识',blurb:'守经典逻辑，对形而上学的「理由」存而不论。'},
+ 'limit|limit|limit|limit':{name:'语言批判 · 约定论',blurb:'四律整体降为「思之语法」/ 语言框架的约定（维特根斯坦、卡尔纳普）。'},
+ 'limit|limit|limit|na':{name:'逻辑可修正（蒯因式）',blurb:'整体论：原则上连逻辑律也可为保全经验而修订。'},
+ 'keepmax|keep|keep|weaken':{name:'意志优先经院（司各脱式）',blurb:'个体性（haecceitas）与意志高于理智。'},
+ 'weaken|keep|keep|weaken':{name:'唯名论（奥卡姆式）',blurb:'否认共相之实在；神之意志高于理性。'},
+ 'weaken|keep|keep|keepmax':{name:'机械决定论（霍布斯式）',blurb:'唯名＋彻底机械必然，推理即计算。'},
+ 'weaken|reject|reject|keepmax':{name:'对立重合（库萨式）',blurb:'在无限中矛盾与排中重合——黑格尔的先声。'},
+ 'weaken|weaken|weaken|keepmax':{name:'无限泛神（布鲁诺式）',blurb:'承库萨之对立重合，宇宙无限、神即自然。'},
+ 'limit|keep|keep|keepmax':{name:'否定神学 / 流溢（普罗提诺式）',blurb:'太一超越言说与逻辑，万物由之流溢。'},
+ 'limit|limit|limit|keepmax':{name:'神秘主义超逻辑（埃克哈特式）',blurb:'神性超越一切区分，逻辑止于神秘之巅。'},
+ 'keep|weaken|keep|keep':{name:'给非存在留位（柏拉图式）',blurb:'以相异性容纳「非存在」，够说出「假」与「差异」。'},
+ 'keep|weaken|weaken|weaken':{name:'相对 · 多元 · 实存',blurb:'真理随人/处境而异（智者—克尔凯郭尔—詹姆斯，跨越两千余年同型）。'},
+ 'keep|keep|weaken|weaken':{name:'工具主义（杜威式）',blurb:'真理＝「有保证的可断言性」，可错而多元。'},
+ 'reject|weaken|weaken|weaken':{name:'绵延 / 生命流（柏格森式）',blurb:'不可分的生成反对把时间空间化的静态同一。'},
+ 'weaken|weaken|weaken|na':{name:'含混身体现象学（梅洛庞蒂式）',blurb:'身体—世界的含混松动了非此即彼的界限。'},
+ 'limit|limit|limit|weaken':{name:'临界 · 大全（雅斯贝尔斯式）',blurb:'超越主客的「大全」只能以密码暗示。'},
+ 'na|keep|keep|reject':{name:'思辨实在 / 非理由（梅亚苏式）',blurb:'撤充足理由律、偶然为绝对，却反过来论证矛盾律成立。'}
+};
+function ismFor(sig, cfg){
+  if(ISMS[sig]) return ISMS[sig];
+  return {name:sigShort(cfg)+' 倾向', blurb:'此构型尚无单一命名——由其四律配置定义的一种混合倾向。'};
+}
+
+/* ---- build clusters (distinct configs) ---- */
+const clusters = {}; // sig -> {sig,cfg,members:[ids]}
+Object.keys(C).forEach(id=>{
+  const s=C[id].s, sig=sigOf(s);
+  if(!clusters[sig]) clusters[sig]={sig, cfg:{id:s.id,ct:s.ct,ex:s.ex,re:s.re}, members:[]};
+  clusters[sig].members.push(id);
+});
+const CL = Object.keys(clusters).map(k=>clusters[k]);
+const NCONF = CL.length;
+const TOTAL = Math.pow(7,4);
+
+/* ---- scatter layout ---- */
+const SW=1000, SH=760, PADL=70, PADR=40, PADT=46, PADB=58;
+function xPos(cfg){ const v=(INT[cfg.id]+INT[cfg.ct]+INT[cfg.ex])/3; return PADL + (v+2)/4*(SW-PADL-PADR); }
+function yPos(cfg){ const v=INT[cfg.re]; return (SH-PADB) - (v+2)/4*(SH-PADT-PADB); }
+function hashJit(sig){ let h=0; for(let i=0;i<sig.length;i++) h=(h*31+sig.charCodeAt(i))|0; const a=(h%1000)/1000, b=((h>>10)%1000)/1000; return {dx:(a-0.5)*30, dy:(b-0.5)*30}; }
+function quadColor(cfg){
+  const ctK=(cfg.ct==='keep'||cfg.ct==='keepmax'), exK=(cfg.ex==='keep'||cfg.ex==='keepmax');
+  if(ctK&&exK) return '#1d4e5f';      // 经典
+  if(ctK&&!exK) return '#3f7a52';     // 直觉主义系
+  if(!ctK&&exK) return '#6d4a8f';     // 次协调系
+  return '#a73e2c';                    // FDE/解构系
+}
+CL.forEach(c=>{ const j=hashJit(c.sig); c.x=xPos(c.cfg)+j.dx; c.y=yPos(c.cfg)+j.dy; c.color=quadColor(c.cfg); c.r=7+Math.sqrt(c.members.length)*4.2; });
+
+/* ---- state ---- */
+const combo={id:'any',ct:'any',ex:'any',re:'any'};
+let selectedSig=null, selectedPhilo=null;
+
+function comboConstrained(){ return LK.some(L=>combo[L]!=='any'); }
+function clusterMatches(c){ return LK.every(L=> combo[L]==='any' || c.cfg[L]===combo[L]); }
+function matchedClusters(){ return comboConstrained()? CL.filter(clusterMatches) : []; }
+
+/* ---- render combinator matrix ---- */
+function buildMatrix(){
+  const m=document.getElementById('matrix');
+  m.style.gridTemplateColumns = '140px 64px repeat(7,1fr)';
+  let h='';
+  // header row
+  h+='<div></div>';
+  h+='<div class="mh any">任意</div>';
+  VALUES.forEach(v=>{ h+='<div class="mh"><span class="pip" style="'+pipStyle(v)+'"></span>'+VLAB[v]+'</div>'; });
+  // law rows
+  LK.forEach(L=>{
+    const meta=LAWMETA[L];
+    h+='<div class="rowlab" style="--lc:'+meta.c+'"><span class="n">'+meta.n+'</span><span class="f greek">'+meta.f+'</span></div>';
+    h+='<div class="cell any-cell'+(combo[L]==='any'?' on':'')+'" data-law="'+L+'" data-v="any">任意</div>';
+    VALUES.forEach(v=>{
+      const on=combo[L]===v;
+      const style=on?('border-color:'+PIP[v]+';background:'+hexA(PIP[v],.13)):'';
+      h+='<div class="cell'+(on?' on':'')+'" data-law="'+L+'" data-v="'+v+'" style="'+style+'"><span class="vp" style="'+pipStyle(v)+'"></span>'+VSHORT[v]+'</div>';
+    });
+  });
+  m.innerHTML=h;
+  m.querySelectorAll('.cell').forEach(c=>c.addEventListener('click',()=>setCombo(c.dataset.law,c.dataset.v)));
+  renderReadout();
+}
+function hexA(hex,a){ const n=parseInt(hex.slice(1),16); return 'rgba('+(n>>16&255)+','+(n>>8&255)+','+(n&255)+','+a+')'; }
+function renderReadout(){
+  const r=document.getElementById('readout');
+  const mc=matchedClusters();
+  const philos = mc.reduce((s,c)=>s+c.members.length,0);
+  let cur='<div class="cur">当前组合：';
+  LK.forEach(L=>{
+    if(combo[L]==='any') cur+='<span class="lbl" style="margin:0 4px">'+LAWMETA[L].n+'<b style="color:var(--ink-fade)">任意</b></span>';
+    else cur+='<span class="pip" style="'+pipStyle(combo[L])+'" title="'+LAWMETA[L].n+'·'+VLAB[combo[L]]+'"></span>';
+  });
+  cur+='</div>';
+  r.innerHTML='<span>组合空间 7⁴ = <b>'+TOTAL+'</b> 种</span><span>已被占据 <b>'+NCONF+'</b> 种</span>'+
+    (comboConstrained()?('<span>当前匹配 <b>'+mc.length+'</b> 种构型 / <b>'+philos+'</b> 位</span>'):'<span>（未约束：显示全部）</span>')+cur;
+}
+function setCombo(law,v){
+  combo[law]=v; selectedSig=null; selectedPhilo=null;
+  buildMatrix(); refreshScatter(); renderPanel();
+}
+
+/* ---- render scatter ---- */
+function buildScatter(){
+  const svg=document.getElementById('scatter');
+  svg.setAttribute('viewBox','0 0 '+SW+' '+SH);
+  let g='';
+  // axes
+  const cx=xPos({id:'limit',ct:'limit',ex:'limit',re:'limit'}); // x at v=0
+  const cy=yPos({re:'limit'}); // y at 0
+  g+='<line class="axis" x1="'+cx+'" y1="'+PADT+'" x2="'+cx+'" y2="'+(SH-PADB)+'"/>';
+  g+='<line class="axis" x1="'+PADL+'" y1="'+cy+'" x2="'+(SW-PADR)+'" y2="'+cy+'"/>';
+  // axis labels
+  g+='<text class="axislab" x="'+(SW-PADR)+'" y="'+(cy-8)+'" text-anchor="end">形式逻辑严格 →</text>';
+  g+='<text class="axislab" x="'+PADL+'" y="'+(cy-8)+'" text-anchor="start">← 消解形式逻辑</text>';
+  g+='<text class="axislab" x="'+(cx+8)+'" y="'+(PADT+12)+'">↑ 理由极致（必然）</text>';
+  g+='<text class="axislab" x="'+(cx+8)+'" y="'+(SH-PADB-6)+'">↓ 理由否弃（偶然）</text>';
+  // region labels
+  g+='<text class="regionlab" x="'+(SW-PADR-10)+'" y="'+(PADT+30)+'" text-anchor="end" font-size="15">必然主义 · 理性论</text>';
+  g+='<text class="regionlab" x="'+(PADL+10)+'" y="'+(PADT+30)+'" font-size="15">辩证 · 思辨</text>';
+  g+='<text class="regionlab" x="'+(SW-PADR-10)+'" y="'+(SH-PADB-14)+'" text-anchor="end" font-size="15">分析 · 逻辑严格 / 弃理由</text>';
+  g+='<text class="regionlab" x="'+(PADL+10)+'" y="'+(SH-PADB-14)+'" font-size="15">解构 · 虚无 · 存在</text>';
+  g+='<text class="regionlab" x="'+cx+'" y="'+(cy+22)+'" text-anchor="middle" font-size="13">怀疑 · 悬置 / 批判限定</text>';
+  // nodes (smaller first so big drawn under labels? draw all)
+  CL.slice().sort((a,b)=>b.r-a.r).forEach(c=>{
+    const ism=ismFor(c.sig,c.cfg);
+    const showLab = c.members.length>=2;
+    g+='<g class="cnode" data-sig="'+c.sig+'"><title>'+ism.name+'　'+sigShort(c.cfg)+'　('+c.members.length+'位)</title>'+
+       '<circle cx="'+c.x+'" cy="'+c.y+'" r="'+c.r+'" fill="'+hexA(c.color,.5)+'" stroke="'+c.color+'" stroke-width="1.3"/>'+
+       (showLab?'<text class="clab" x="'+c.x+'" y="'+(c.y+c.r+11)+'" text-anchor="middle">'+ism.name.replace(/（.*）/,'')+'</text>':'')+
+       '</g>';
+  });
+  svg.innerHTML=g;
+  svg.querySelectorAll('.cnode').forEach(n=>n.addEventListener('click',()=>selectCluster(n.dataset.sig)));
+  // legend
+  document.getElementById('scleg').innerHTML=
+    '<span class="k"><span class="d" style="background:'+hexA('#1d4e5f',.6)+';border:1px solid #1d4e5f"></span>经典（守矛盾·守排中）</span>'+
+    '<span class="k"><span class="d" style="background:'+hexA('#3f7a52',.6)+';border:1px solid #3f7a52"></span>直觉主义系（撤排中）</span>'+
+    '<span class="k"><span class="d" style="background:'+hexA('#6d4a8f',.6)+';border:1px solid #6d4a8f"></span>次协调系（撤矛盾）</span>'+
+    '<span class="k"><span class="d" style="background:'+hexA('#a73e2c',.6)+';border:1px solid #a73e2c"></span>FDE/解构系</span>'+
+    '<span class="k">· 点大小 ∝ 同型人数</span>';
+}
+function refreshScatter(){
+  const svg=document.getElementById('scatter');
+  const constrained=comboConstrained();
+  const mset={}; if(constrained) matchedClusters().forEach(c=>mset[c.sig]=1);
+  svg.querySelectorAll('.cnode').forEach(n=>{
+    n.classList.remove('dim','sel');
+    const sig=n.dataset.sig;
+    if(selectedSig){ if(sig===selectedSig) n.classList.add('sel'); else n.classList.add('dim'); }
+    else if(constrained){ if(!mset[sig]) n.classList.add('dim'); }
+  });
+}
+
+/* ---- panel ---- */
+function cfgRows(cfg){
+  return '<div class="cfgrow">'+LK.map(L=>{
+    const v=cfg[L];
+    return '<div class="cfg"><span class="cn">'+LAWMETA[L].n+'</span><span class="pip" style="'+pipStyle(v)+'"></span><span class="cv" style="color:'+(HOLLOW[v]?'var(--ink-fade)':PIP[v])+'">'+VLAB[v]+'</span><span class="cf">'+LAWMETA[L].f+'</span></div>';
+  }).join('')+'</div>';
+}
+function renderPanel(){
+  const p=document.getElementById('panel');
+  if(selectedPhilo){ p.innerHTML=philoHTML(selectedPhilo); wirePanel(p); return; }
+  if(selectedSig){ p.innerHTML=clusterHTML(clusters[selectedSig]); wirePanel(p); return; }
+  if(comboConstrained()){ p.innerHTML=matchedHTML(); wirePanel(p); return; }
+  p.innerHTML=guideHTML(); wirePanel(p);
+}
+function clusterHTML(c){
+  const ism=ismFor(c.sig,c.cfg);
+  return '<div class="eyebrow">哲学倾向 · TENDENCY</div>'+
+   '<div class="ism">'+ism.name+'</div><div class="ism-sig">'+sigShort(c.cfg)+'　·　'+c.members.length+' 位同型</div>'+
+   cfgRows(c.cfg)+
+   '<div class="blurb">'+ism.blurb+'</div>'+
+   '<div class="p-label">同型哲学家（共享此构型）</div>'+
+   '<div class="chips">'+c.members.map(id=>'<span class="chip" data-philo="'+id+'">'+C[id].name+'</span>').join('')+'</div>'+
+   '<div class="note mini" style="margin-top:10px">点任一姓名看其单独注解；此组合无视年代，把不同世纪、不同传统但公理配置相同者归为同一倾向。</div>';
+}
+function philoHTML(id){
+  const n=C[id], sig=sigOf(n.s);
+  const same=clusters[sig].members.filter(m=>m!==id);
+  const ism=ismFor(sig,n.s);
+  return '<div class="eyebrow">哲学家 · 在此构型中</div>'+
+   '<div class="ism" style="font-size:24px">'+n.name+'</div><div class="ism-sig">'+n.rep+'</div>'+
+   '<div style="margin:6px 0 12px"><span class="chip" data-sig="'+sig+'" style="cursor:pointer;border-color:var(--terracotta);color:var(--terracotta)">所属倾向：'+ism.name+'</span></div>'+
+   cfgRows(n.s)+
+   '<div class="blurb">'+n.move+'</div>'+
+   '<div class="p-label">注</div><div class="note">'+n.note+'</div>'+
+   (same.length?('<div class="p-label">同型者</div><div class="chips">'+same.map(m=>'<span class="chip" data-philo="'+m+'">'+C[m].name+'</span>').join('')+'</div>'):'');
+}
+function matchedHTML(){
+  const mc=matchedClusters().slice().sort((a,b)=>b.members.length-a.members.length);
+  const philos=mc.reduce((s,c)=>s+c.members.length,0);
+  const active=LK.filter(L=>combo[L]!=='any').map(L=>LAWMETA[L].n+'='+VLAB[combo[L]]).join(' · ');
+  let h='<div class="eyebrow">筛选 · 匹配构型</div>'+
+    '<div class="ism" style="font-size:21px">'+(active||'—')+'</div>'+
+    '<div class="ism-sig">'+mc.length+' 种构型 · '+philos+' 位</div>';
+  if(!mc.length){ h+='<div class="note" style="margin-top:12px">没有任何已知哲学家落在这个组合里——它是 7⁴ 空间中一个<em>尚未被占据</em>的格子。调整某条律试试。</div>'; return h; }
+  h+='<div style="margin-top:6px">'+mc.map(c=>{
+     const ism=ismFor(c.sig,c.cfg);
+     return '<div class="matched-card" data-sig="'+c.sig+'"><div class="mc-h"><span class="mc-name">'+ism.name+'</span><span class="mc-ct">'+c.members.length+'位</span></div>'+
+       '<div class="mc-pips">'+LK.map(L=>'<span class="pip" style="'+pipStyle(c.cfg[L])+'" title="'+LAWMETA[L].n+'·'+VLAB[c.cfg[L]]+'"></span>').join('')+' <span style="font-family:var(--mono);font-size:10.5px;color:var(--ink-fade);margin-left:4px">'+sigShort(c.cfg)+'</span></div>'+
+       '<div class="mc-mem">'+c.members.map(id=>C[id].name).join('、')+'</div></div>';
+   }).join('')+'</div>';
+  return h;
+}
+function guideHTML(){
+  const pk=VALUES.map(v=>'<span class="pipkey"><span class="pip" style="'+pipStyle(v)+'"></span>'+VLAB[v]+'</span>').join('');
+  return '<div class="guide"><div class="eyebrow">导读 · LECTORI</div>'+
+   '<h3>把四律当作一个矩阵</h3>'+
+   '<p>四条逻辑律＝一个集合 {同一, 矛盾, 排中, 充足理由}；每条可取一个值：</p>'+
+   '<div style="margin:2px 0 8px">'+pk+'</div>'+
+   '<p>于是每一种<strong>排列组合</strong>（共 <em>7⁴ = 2401</em> 种）就是一个「公理构型」，对应<strong>一种哲学倾向</strong>（流派 / 哲学家 / 主义）。上方<strong>矩阵</strong>里每条律点一个格子即设定其值，点「任意」放开该条；右侧星图按构型把哲学家排布开来——<em>横轴＝形式逻辑的硬度</em>（右严格、左消解），<em>纵轴＝充足理由的承诺</em>（上必然、下偶然）。</p>'+
+   '<p class="mini">· 圆点＝一个被占据的构型，大小∝同型人数，颜色＝矛盾×排中所落的逻辑家族。点它看该倾向与其成员。<br>· 在 101 位中，只有 <strong>'+NCONF+'</strong> 种构型被占据；其余 '+(TOTAL-NCONF)+' 种是空格。<br>· <strong>🎲随机一种</strong>＝掷骰落到一个真实存在的构型；<strong>⊞浏览全部组合</strong>＝列出全部已占据构型。</p>'+
+   '<p class="mini" style="border-top:1px solid var(--line);padding-top:10px">这一视角<em>打破历史发展线</em>：普罗泰戈拉、克尔凯郭尔、詹姆斯相隔两千余年，却因「守同一·松矛盾·松排中·松理由」而归为同一倾向；高尔吉亚、尼采、萨特亦然。年代被抹去，剩下的是公理配置的亲缘。</p></div>';
+}
+function wirePanel(p){
+  p.querySelectorAll('[data-philo]').forEach(e=>e.addEventListener('click',()=>selectPhilo(e.dataset.philo)));
+  p.querySelectorAll('[data-sig]').forEach(e=>e.addEventListener('click',()=>selectCluster(e.dataset.sig)));
+}
+
+/* ---- selection ---- */
+function selectCluster(sig){
+  selectedSig=sig; selectedPhilo=null;
+  const cfg=clusters[sig].cfg; LK.forEach(L=>combo[L]=cfg[L]);
+  buildMatrix(); refreshScatter(); renderPanel(); closeModal();
+}
+function selectPhilo(id){
+  selectedPhilo=id; selectedSig=sigOf(C[id].s);
+  const cfg=C[id].s; LK.forEach(L=>combo[L]=cfg[L]);
+  buildMatrix(); refreshScatter(); renderPanel();
+}
+
+/* ---- modal browse ---- */
+function openModal(){
+  const body=document.getElementById('modalBody');
+  const list=CL.slice().sort((a,b)=>b.members.length-a.members.length);
+  document.getElementById('modalSub').textContent='共 '+NCONF+' 种已占据构型（按同型人数排序）';
+  body.innerHTML=list.map(c=>{
+    const ism=ismFor(c.sig,c.cfg);
+    return '<div class="matched-card" data-sig="'+c.sig+'"><div class="mc-h"><span class="mc-name">'+ism.name+'</span><span class="mc-ct">'+c.members.length+'位</span></div>'+
+      '<div class="mc-pips">'+LK.map(L=>'<span class="pip" style="'+pipStyle(c.cfg[L])+'"></span>').join('')+' <span style="font-family:var(--mono);font-size:10.5px;color:var(--ink-fade);margin-left:4px">'+sigShort(c.cfg)+'</span></div>'+
+      '<div class="mc-mem">'+c.members.map(id=>C[id].name).join('、')+'</div></div>';
+  }).join('');
+  body.querySelectorAll('[data-sig]').forEach(e=>e.addEventListener('click',()=>selectCluster(e.dataset.sig)));
+  document.getElementById('modalBg').classList.add('show');
+  document.getElementById('modal').classList.add('show');
+}
+function closeModal(){ document.getElementById('modalBg').classList.remove('show'); document.getElementById('modal').classList.remove('show'); }
+
+/* ---- buttons ---- */
+document.getElementById('btnRandom').addEventListener('click',()=>{ const c=CL[Math.floor(Math.random()*CL.length)]; selectCluster(c.sig); });
+document.getElementById('btnBrowse').addEventListener('click',openModal);
+document.getElementById('btnReset').addEventListener('click',()=>{ LK.forEach(L=>combo[L]='any'); selectedSig=null; selectedPhilo=null; buildMatrix(); refreshScatter(); renderPanel(); });
+document.getElementById('modalX').addEventListener('click',closeModal);
+document.getElementById('modalBg').addEventListener('click',closeModal);
+
+/* ---- init ---- */
+buildMatrix(); buildScatter(); refreshScatter(); renderPanel();
+</script>
+</body>
+</html>

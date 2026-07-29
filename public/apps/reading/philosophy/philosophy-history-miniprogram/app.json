@@ -1,0 +1,39 @@
+{
+  "pages": [
+    "pages/index/index",
+    "pages/thread/thread",
+    "pages/glossary/glossary",
+    "pages/lecture/lecture",
+    "pages/about/about"
+  ],
+  "window": {
+    "navigationBarTitleText": "西方哲学史考察十讲",
+    "navigationBarBackgroundColor": "#17362f",
+    "navigationBarTextStyle": "white",
+    "backgroundColor": "#f3eee3",
+    "backgroundTextStyle": "dark"
+  },
+  "tabBar": {
+    "color": "#7b7468",
+    "selectedColor": "#a64f32",
+    "backgroundColor": "#fbf8f1",
+    "borderStyle": "white",
+    "list": [
+      {
+        "pagePath": "pages/index/index",
+        "text": "首页"
+      },
+      {
+        "pagePath": "pages/thread/thread",
+        "text": "思想脉络"
+      },
+      {
+        "pagePath": "pages/glossary/glossary",
+        "text": "概念谱系"
+      }
+    ]
+  },
+  "sitemapLocation": "sitemap.json",
+  "style": "v2",
+  "lazyCodeLoading": "requiredComponents"
+}

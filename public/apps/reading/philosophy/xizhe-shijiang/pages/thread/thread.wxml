@@ -1,0 +1,57 @@
+<view class="wrap">
+
+  <view class="thead">
+    <text class="eyebrow">四讲如何连成一条河</text>
+    <text class="thead-title">思想脉络</text>
+    <text class="thead-sub">一条主轴 · 六条贯穿线——把图腾、神话、哲学、神学读成同一个故事。</text>
+  </view>
+
+  <!-- 主轴 -->
+  <text class="orn">· · ·</text>
+  <text class="t-sec">主轴 · 精神形式的演进</text>
+  <view class="spine">
+    <view wx:for="{{spine}}" wx:key="id" wx:for-item="st" class="spine-row" bindtap="goLecture" data-lec="{{st.lec}}">
+      <view class="spine-rail">
+        <view class="spine-dot sd-{{st.accent}}"></view>
+        <view wx:if="{{index < spine.length - 1}}" class="spine-line"></view>
+      </view>
+      <view class="spine-body">
+        <view class="spine-top">
+          <text class="spine-name">{{st.name}}</text>
+          <text class="spine-lec">{{st.lec}}</text>
+        </view>
+        <text class="spine-role sr-{{st.accent}}">{{st.role}}</text>
+        <text class="spine-desc">{{st.desc}}</text>
+      </view>
+    </view>
+  </view>
+
+  <!-- 六条贯穿线 -->
+  <text class="orn">· · ·</text>
+  <text class="t-sec">六条贯穿线</text>
+
+  <view wx:for="{{threads}}" wx:key="id" wx:for-item="th" class="th-block">
+    <view class="th-head">
+      <view class="th-no"><text>{{th.id}}</text></view>
+      <view class="th-head-tx">
+        <text class="th-title">{{th.title}}</text>
+        <text class="th-sub">{{th.sub}}</text>
+      </view>
+    </view>
+    <text class="th-intro">{{th.intro}}</text>
+    <view class="th-stops">
+      <view wx:for="{{th.stops}}" wx:key="k" wx:for-item="sp" class="th-stop">
+        <view class="th-stop-tag"><text>{{sp.lec}}</text></view>
+        <text class="th-stop-tx">{{sp.tx}}</text>
+      </view>
+    </view>
+    <view class="th-close">
+      <text>{{th.close}}</text>
+    </view>
+  </view>
+
+  <view class="foot">
+    <text class="foot-tx">主轴各站可点按跳转至对应讲义</text>
+  </view>
+
+</view>

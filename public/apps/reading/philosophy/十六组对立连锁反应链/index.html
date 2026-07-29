@@ -1,0 +1,393 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>十六组对立 · 连锁反应链 — 缺口·填补·新缺口</title>
+<meta name="description" content="不画对立本身，画它们之间的驱动力：每一步堵了什么洞、又凿开了什么新洞——一条从'开始追问'到'承认追问有极限'的完整因果弧。">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;1,500;1,600&family=GFS+Didot&family=Noto+Serif+SC:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root{
+  --parchment:#f3ebda; --parchment-light:#faf4e6; --parchment-dark:#e8ddc6;
+  --ink:#1c1916; --ink-soft:#3a342c; --ink-fade:#6e6253;
+  --terracotta:#a73e2c; --terracotta-dark:#7e2d1f; --terracotta-soft:#d9a89c;
+  --aegean:#1d4e5f; --aegean-soft:#5a8a96; --gold:#b8893a; --gold-soft:#d4b76a;
+  --purple:#6d4a8f; --green:#3f7a52; --grey:#8a7f6d;
+  --line:rgba(28,25,22,.12); --line-strong:rgba(28,25,22,.26);
+  --serif:"Noto Serif SC","Noto Serif CJK SC",Georgia,serif;
+  --display:"Cormorant Garamond","Noto Serif SC",Georgia,serif;
+  --greek:"GFS Didot","Noto Serif SC",Georgia,serif;
+  --mono:"JetBrains Mono","Courier New",monospace;
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+html,body{height:100%;}
+body{background:var(--parchment);
+  background-image:radial-gradient(ellipse at top left,rgba(184,137,58,.06),transparent 50%),radial-gradient(ellipse at bottom right,rgba(29,78,95,.05),transparent 50%);
+  color:var(--ink);font-family:var(--serif);font-size:16px;line-height:1.7;-webkit-font-smoothing:antialiased;overflow:hidden;}
+.greek{font-family:var(--greek);}
+.app{position:relative;z-index:1;height:100vh;display:flex;flex-direction:column;}
+
+header{flex:none;border-bottom:1px solid var(--line);background:rgba(243,235,218,.92);backdrop-filter:blur(8px);padding:13px 24px 10px;}
+.hbar{display:flex;align-items:baseline;gap:14px;flex-wrap:wrap;}
+h1{font-family:var(--display);font-weight:600;font-size:23px;white-space:nowrap;}
+.latin{font-family:var(--greek);font-size:12px;letter-spacing:.18em;color:var(--terracotta);text-transform:uppercase;}
+.sub{font-size:12.5px;color:var(--ink-fade);}
+.tools{margin-left:auto;display:flex;gap:8px;}
+.btn{font-size:13px;color:var(--ink-soft);background:var(--parchment-light);border:1px solid var(--line-strong);border-radius:18px;padding:5px 14px;cursor:pointer;white-space:nowrap;transition:all .2s;}
+.btn:hover{border-color:var(--terracotta);color:var(--terracotta);}
+.btn.on{background:var(--ink);color:var(--parchment-light);border-color:var(--ink);}
+.legend{display:flex;gap:15px;flex-wrap:wrap;margin-top:8px;font-size:11.5px;color:var(--ink-fade);align-items:center;}
+.lg{display:inline-flex;align-items:center;gap:6px;white-space:nowrap;}
+.lg .sw{width:13px;height:13px;border-radius:3px;display:inline-block;}
+.lg .harm{width:20px;height:0;border-top:2.4px solid var(--terracotta);display:inline-block;}
+.lg .cure{width:20px;height:0;border-top:2.4px solid var(--green);display:inline-block;}
+
+.main{flex:1;display:flex;min-height:0;}
+.mapwrap{flex:1;overflow:auto;padding:8px 0 60px;}
+.mapwrap svg{display:block;margin:0 auto;}
+.panel{width:392px;flex:none;border-left:1px solid var(--line);background:var(--parchment-light);overflow-y:auto;padding:20px 22px 50px;}
+
+.phaseband{fill:rgba(29,78,95,.03);}
+.phaselab{fill:var(--ink-fade);font-family:var(--greek);letter-spacing:.14em;text-transform:uppercase;}
+.phaseroman{fill:var(--terracotta);font-family:var(--display);font-weight:600;opacity:.5;}
+
+.node{cursor:pointer;}
+.node rect{transition:opacity .2s,stroke-width .15s;}
+.node:hover .nbox{stroke:var(--terracotta);}
+.nbox{stroke-width:1.2;}
+.n-no{fill:#fff;font-family:var(--mono);font-weight:700;}
+.n-cn{fill:var(--ink);font-family:var(--serif);font-weight:600;}
+.n-gk{fill:var(--ink-fade);font-family:var(--greek);font-style:italic;}
+.n-role{font-family:var(--serif);font-weight:500;}
+
+.flow{fill:none;stroke-linecap:round;transition:stroke-opacity .2s,stroke-width .18s;}
+.flow.harm{stroke:var(--terracotta);}
+.flow.cure{stroke:var(--green);}
+.flow.ext{stroke:var(--grey);stroke-dasharray:6 5;}
+.flowhead.harm{fill:var(--terracotta);}
+.flowhead.cure{fill:var(--green);}
+.flowhead.ext{fill:var(--grey);}
+.edgelab{font-family:var(--serif);}
+.edgelab .em{font-weight:600;}
+.elab-harm{fill:var(--terracotta-dark);}
+.elab-cure{fill:var(--green);}
+.elab-bg{fill:var(--parchment-light);opacity:.86;}
+
+.dim{opacity:.12 !important;}
+.dimE{stroke-opacity:.06 !important;}
+.dimL{opacity:.08 !important;}
+.node.sel .nbox{stroke:var(--terracotta);stroke-width:2.6;}
+.node.hl .nbox{stroke-width:2.2;}
+
+.eyebrow{font-family:var(--greek);font-size:11.5px;letter-spacing:.24em;color:var(--terracotta);text-transform:uppercase;margin-bottom:8px;}
+.p-no{display:inline-block;font-family:var(--mono);font-weight:700;color:#fff;border-radius:8px;padding:2px 9px;font-size:13px;margin-bottom:8px;}
+.p-name{font-family:var(--display);font-size:25px;font-weight:600;line-height:1.18;}
+.p-gk{font-family:var(--greek);font-style:italic;font-size:14px;color:var(--ink-fade);margin:2px 0 6px;}
+.p-who{font-size:12px;color:var(--ink-fade);margin-bottom:12px;letter-spacing:.02em;}
+.blk{border-radius:9px;padding:11px 13px;margin-bottom:11px;font-size:13.5px;line-height:1.66;}
+.blk.in{background:rgba(167,62,44,.07);border-left:3px solid var(--terracotta);}
+.blk.did{background:rgba(63,122,82,.09);border-left:3px solid var(--green);}
+.blk.out{background:rgba(28,25,22,.05);border-left:3px solid var(--ink-fade);}
+.blk h4{font-family:var(--greek);font-size:10.5px;letter-spacing:.18em;text-transform:uppercase;margin-bottom:5px;}
+.blk.in h4{color:var(--terracotta);} .blk.did h4{color:var(--green);} .blk.out h4{color:var(--ink-fade);}
+.blk .none{color:var(--ink-fade);font-style:italic;}
+.nav{display:flex;gap:8px;margin-top:14px;}
+.nav .b{flex:1;text-align:center;font-size:12.5px;color:var(--ink-soft);background:var(--parchment);border:1px solid var(--line-strong);border-radius:16px;padding:6px 0;cursor:pointer;}
+.nav .b:hover{border-color:var(--terracotta);color:var(--terracotta);}
+.nav .b.dis{opacity:.35;pointer-events:none;}
+.guide h3{font-family:var(--display);font-size:20px;font-weight:600;margin-bottom:10px;color:var(--ink);}
+.guide p{font-size:13.5px;line-height:1.74;margin-bottom:10px;color:var(--ink-soft);}
+.guide em{color:var(--terracotta);font-style:italic;} .guide strong{color:var(--ink);}
+.guide .mini{font-size:12.5px;color:var(--ink-fade);}
+.guide .k{display:flex;gap:8px;margin:5px 0;font-size:12.5px;color:var(--ink-soft);align-items:baseline;}
+.guide .k b{color:var(--terracotta);font-family:var(--mono);flex:none;}
+
+@media(max-width:980px){
+  body{overflow:auto;} .app{height:auto;} .main{flex-direction:column;}
+  .panel{width:100%;border-left:none;border-top:1px solid var(--line);}
+  .mapwrap{overflow:visible;}
+}
+</style>
+</head>
+<body>
+<div class="app">
+  <header>
+    <div class="hbar">
+      <h1>十六组对立 · 连锁反应链</h1>
+      <span class="latin">Aporia → Lysis → Aporia</span>
+      <span class="sub">不画对立本身，画驱动力：每一步堵了什么洞、又凿开了什么新洞</span>
+      <div class="tools">
+        <button class="btn" id="btnPlay">▶ 顺链演示</button>
+        <button class="btn" id="btnReset">↺ 全览</button>
+      </div>
+    </div>
+    <div class="legend">
+      <span class="lg"><span class="harm"></span>制造的麻烦（病 · 新缺口）</span>
+      <span class="lg"><span class="cure"></span>堵上的洞（药 · 填补）</span>
+      <span class="lg" style="margin-left:6px"><span class="sw" style="background:#a73e2c"></span>门槛</span>
+      <span class="lg"><span class="sw" style="background:#1d4e5f"></span>本原之墙</span>
+      <span class="lg"><span class="sw" style="background:#7e2d1f"></span>巴门尼德引擎</span>
+      <span class="lg"><span class="sw" style="background:#3f7a52"></span>缝合手术</span>
+      <span class="lg"><span class="sw" style="background:#6d4a8f"></span>伦理学重演</span>
+    </div>
+  </header>
+
+  <div class="main">
+    <div class="mapwrap"><svg id="map" xmlns="http://www.w3.org/2000/svg"></svg></div>
+    <aside class="panel" id="panel"></aside>
+  </div>
+</div>
+
+<script>
+/* ===== 节点：16 组，按链条顺序（含族色/角色/人物） ===== */
+const FAM={ thr:{c:'#a73e2c',lab:'门槛'}, wall:{c:'#1d4e5f',lab:'本原之墙'}, eng:{c:'#7e2d1f',lab:'巴门尼德引擎'}, sut:{c:'#3f7a52',lab:'缝合手术'}, eth:{c:'#6d4a8f',lab:'伦理学重演'} };
+const N=[
+ {id:'o1', no:'01', cn:'神话 — 理性', gk:'Μῦθος·Λόγος', fam:'thr', who:'荷马/赫西俄德 → 泰勒斯',
+   role:'开机', in:null,
+   did:'把"讲故事"换成"可被反驳的命题"——哲学这门手艺得以开机的那一下。',
+   out:'Logos 这把刀一旦开刃就停不下来：能追问自然，凭什么不能追问人间规矩？' },
+ {id:'o2', no:'02', cn:'自然 — 约定', gk:'Φύσις·Νόμος', fam:'thr', who:'智者派 / 苏格拉底',
+   role:'追问外溢', in:'Logos 的追问资格无法自限。',
+   did:'把追问从自然扩到社会规则：道德是自然本有还是人为约定？',
+   out:'追问范围一旦打开，下一步必然回到最硬的问题——世界的本原究竟是什么？' },
+ {id:'o3', no:'03', cn:'无定 — 有限', gk:'Ἄπειρον·Πέρας', fam:'wall', who:'阿那克西曼德 / 毕达哥拉斯',
+   role:'第一道墙', in:'一旦追问"终极本原"，本原就不能是有限的（否则不够终极）。',
+   did:'提出无定(Apeiron)保证终极；再用有限/比例(Peras)让无定"被数限定"而可认识。底层公式：秩序＝给无定形加上限定。',
+   out:'"完全无规定的东西怎么生出有规定的万物"未解；而追问终极还撞上第二道墙。' },
+ {id:'o4', no:'04', cn:'一 — 多', gk:'Ἕν·Πολλά', fam:'wall', who:'全体前苏格拉底',
+   role:'第二道墙', in:'本原若不是"一"，就还要追问"多"背后的"一"——终极性要求它为一。',
+   did:'成为前苏格拉底共用的考题：一与多如何兼容？（水、气、火、数、四根、原子……各给解法）',
+   out:'把"必须是一"推到极致会怎样？巴门尼德决定毫不妥协地贯彻到底。' },
+ {id:'o6', no:'06', cn:'思维 — 存在', gk:'Νοεῖν·Εἶναι', fam:'eng', who:'巴门尼德',
+   role:'装上逻辑锁', in:'"本原必须是一、必须终极"被推向极致。',
+   did:'装上公设："能被思想的才能存在"——把逻辑可能性直接等同于本体可能性，给存在上了一把逻辑锁。',
+   out:'用这把锁一推，灾难性结论呼之欲出：凡逻辑上说不通的，一律判为"不存在"。' },
+ {id:'o7', no:'07', cn:'存在 — 非存在', gk:'Ὄν·Μὴ Ὄν', fam:'eng', who:'巴门尼德 / 芝诺',
+   role:'引擎·伤口', in:'"思维=存在"这把锁的直接后承。',
+   did:'推出"非存在不存在"→ 虚空不存在→运动不可能；"还不是"不存在→变化不可能；"不是"不存在→多不可能。世界＝唯一、不动、不变的一（芝诺悖论护航）。',
+   out:'与常识彻底对撞。此后全部希腊哲学都在收拾这道伤口——每组对立都是一种缝合手术。' },
+ {id:'o5', no:'05', cn:'真理 — 意见', gk:'Ἐπιστήμη·Δόξα', fam:'eng', who:'巴门尼德 → 柏拉图',
+   role:'切开真相/假象', in:'既然感官报告的变化与多是"不可能"的，它们必是假象。',
+   did:'第一次严格切开"看上去如何(Doxa)"与"实际如何(真理)"——现象/实在的原型。',
+   out:'真相与假象被切成两截，两截如何安放？柏拉图接手，索性给它们各造一个世界。' },
+ {id:'o11', no:'11', cn:'感性 — 理性', gk:'Αἴσθησις·Νοῦς', fam:'sut', who:'柏拉图',
+   role:'两世界·认知端', in:'巴门尼德把世界切成真相/假象(5)，需要一套安放方式。',
+   did:'柏拉图"两世界"的认知端：感性只够得着现象，理性才够得着本体。',
+   out:'（与12、5同为一事的三种表述）留下总问题：被切成两半的世界怎么连回去？' },
+ {id:'o12', no:'12', cn:'现象 — 本体', gk:'Φαινόμενον·Οὐσία', fam:'sut', who:'柏拉图',
+   role:'两世界·本体端', in:'同上：为消化巴门尼德，把不变的一放进理念界、变化的多留在感性界。',
+   did:'两世界的本体端：洞穴墙上的影子(现象) vs 洞外真实的理念(本体)。洞穴喻＝5+11+12画成一幅画。',
+   out:'代价：世界被撕成两半，两半之间横着无法跨越的鸿沟（"第三人"难题）。' },
+ {id:'o10', no:'10', cn:'个别 — 共相', gk:"Καθ' ἕκαστον·Καθόλου", fam:'sut', who:'亚里士多德 vs 柏拉图',
+   role:'把分歧摆明', in:'柏拉图两世界之间有无法跨越的鸿沟，亚里士多德要粘回一个世界。',
+   did:'摆明分歧：具体的马(个别)与"马本身"(共相)哪个更真？亚里士多德反柏拉图，主张个别更真，共相只是抽出的共同结构。',
+   out:'"共相在个别之中"还只是口号，缺一套机制来兑现。' },
+ {id:'o8', no:'08', cn:'形式 — 质料', gk:'Μορφή·Ὕλη', fam:'sut', who:'亚里士多德',
+   role:'内化的机制', in:'需要机制兑现"共相不在彼岸，而在个别之中"(10)。',
+   did:'形质论：青铜(质料)被铸成雕像(形式)，形式不在彼岸，就内在于这块青铜里——直接堵上对立10。',
+   out:'这只解决了"静态的存在"；最硬的骨头——巴门尼德的变化问题(7)——还杵在那儿。' },
+ {id:'o9', no:'09', cn:'潜能 — 现实', gk:'Δύναμις·Ἐνέργεια', fam:'sut', who:'亚里士多德',
+   role:'缝合完成', in:'形式/质料(8)仍未解决"变化如何可能"这一最古老的洞(7)。',
+   did:'橡子以潜能"是"橡树，长成后以现实"是"橡树——变化不是从无到有，而是从潜在的有到实现的有。没否认巴门尼德，却给变化上了户口。困扰一个多世纪的伤口到此缝合。',
+   out:'"世界是什么"这条线走完。接着来的不是推导，而是外部冲击：城邦崩溃。' },
+ {id:'o13', no:'13', cn:'必然 — 自由', gk:'Ἀνάγκη·Προαίρεσις', fam:'eth', who:'斯多葛 / 伊壁鸠鲁',
+   role:'决定论下沉', in:'城邦解体、个人被宏大力量碾压——宇宙论的"必然"(4/7)压到人身上。',
+   did:'把决定论问题从宇宙下沉为伦理：外部全是必然，但内心判断可自由抉择（爱比克泰德"在我 vs 不在我"；伊壁鸠鲁以"原子偏斜"留缝隙）。',
+   out:'"我该如何活"这条新战线打开，同类问题接连以伦理形态重演。' },
+ {id:'o14', no:'14', cn:'德性 — 快乐', gk:'Ἀρετή·Ἡδονή', fam:'eth', who:'亚里士多德 / 伊壁鸠鲁',
+   role:'好存在→好生活', in:'"什么是好的存在"这一本体问题被迫转向。',
+   did:'降级为"什么是好的生活"：最高善是德性还是快乐？（伊壁鸠鲁的"快乐"是身体无痛、心灵无扰的稳定状态）',
+   out:'追问"我该向什么靠拢"，把问题引向灵魂与肉体的取舍。' },
+ {id:'o15', no:'15', cn:'灵魂 — 肉体', gk:'Ψυχή·Σῶμα', fam:'eth', who:'柏拉图 / 亚里士多德 / 新柏拉图',
+   role:'两世界内化到人', in:'现象/本体、两世界(12)被搬进"人"自己身上。',
+   did:'肉体属会变灭的现象界、灵魂属不变的本体界（"肉体是灵魂的坟墓"）；亚里士多德又用形式/质料(8)反收编："灵魂是肉体的形式"。两世界之争在"人"的尺度重演。',
+   out:'但把整套 Logos 工具用到底，真能封住真理吗？怀疑派给出最后一击。' },
+ {id:'o16', no:'16', cn:'悬置判断 — 不动心', gk:'Ἐποχή·Ἀταραξία', fam:'eth', who:'皮浪怀疑派',
+   role:'认命·收尾', in:'从对立1开始的整套 Logos 工具，被发现最终封不住真理。',
+   did:'每个命题都有同样有力的反命题 → 悬置判断(Epoche)，再由此获得心灵宁静(Ataraxia)：通过放弃认识来达到安顿。',
+   out:'首尾咬合：对立1让 Logos 开机，对立16 让 Logos 认命——一条完整的因果弧闭合。' },
+];
+/* 边：链条顺序 + 传导标签（label = 上一步凿开、被下一步接手的那个"洞/病"） */
+const E=[
+ ['o1','o2','harm','追问无法自限'],
+ ['o2','o3','harm','回到本原之问'],
+ ['o3','o4','harm','终极性要求'],
+ ['o4','o6','harm','把"一"推到极致'],
+ ['o6','o7','harm','逻辑锁的后承'],
+ ['o7','o5','harm','变化=假象'],
+ ['o5','o11','cure','安放真相/假象'],
+ ['o11','o12','ext','同一事的两端'],
+ ['o12','o10','harm','两世界的鸿沟'],
+ ['o10','o8','cure','兑现"共相在个别中"'],
+ ['o8','o9','harm','仍缺变化的机制'],
+ ['o9','o13','ext','城邦崩溃·战场转移'],
+ ['o13','o14','harm','好存在→好生活'],
+ ['o14','o15','harm','向什么靠拢'],
+ ['o15','o16','harm','Logos 能封住真理吗'],
+];
+/* 跨节点"回指"箭头：药精确地堵向更早的洞 */
+const BACK=[
+ ['o8','o10','cure','堵：共相之在哪'],
+ ['o9','o7','cure','堵：变化不可能'],
+ ['o15','o12','ext','重演：两世界'],
+ ['o13','o7','ext','下沉：必然/决定论'],
+];
+const N_BY={}; N.forEach((n,i)=>{n.i=i;N_BY[n.id]=n;});
+
+/* 阶段带 */
+const PHASES=[
+ {roman:'Ⅰ',lab:'起点 · 门槛',ids:['o1','o2']},
+ {roman:'Ⅱ',lab:'宇宙论 · 本原之墙',ids:['o3','o4']},
+ {roman:'Ⅲ',lab:'巴门尼德引擎',ids:['o6','o7','o5']},
+ {roman:'Ⅳ',lab:'缝合手术 · 柏拉图与亚里士多德',ids:['o11','o12','o10','o8','o9']},
+ {roman:'Ⅴ',lab:'希腊化 · 伦理学重演',ids:['o13','o14','o15','o16']},
+];
+
+/* ===== 布局：单列竖链 ===== */
+const W=900, CX=W*0.44, NODEW=326, NODEH=62, VGAP=64, TOP=44, LABW=W-(CX+NODEW/2)-24;
+const box={};
+let cy=TOP; const phaseRects=[];
+PHASES.forEach(ph=>{
+  const top=cy-14;
+  ph.ids.forEach(id=>{ box[id]={x:CX-NODEW/2,y:cy,w:NODEW,h:NODEH,cx:CX,cy:cy+NODEH/2}; cy+=NODEH+VGAP; });
+  phaseRects.push({top,bottom:cy-VGAP+8,roman:ph.roman,lab:ph.lab});
+});
+const VBH=cy-VGAP+40;
+
+function down(a,b){ // vertical connector a.bottom -> b.top with label
+  return {x1:a.cx,y1:a.y+a.h,x2:b.cx,y2:b.y,my:(a.y+a.h+b.y)/2};
+}
+function backPath(f,t){ // curved arrow on the RIGHT, from node f up to earlier node t
+  const a=box[f],b=box[t];
+  const sx=a.x+a.w, sy=a.cy, tx=b.x+b.w, ty=b.cy;
+  const bow=Math.max(sx,tx)+70+ (f==='o13'?46:0);
+  return `M${sx},${sy} C${bow},${sy} ${bow},${ty} ${tx},${ty}`;
+}
+
+function esc(s){return s.replace(/&/g,'&amp;').replace(/</g,'&lt;');}
+
+function buildMap(){
+  const svg=document.getElementById('map');
+  svg.setAttribute('viewBox',`0 0 ${W} ${VBH}`);svg.setAttribute('width',W);svg.setAttribute('height',VBH);
+  let defs=`<defs>
+    <marker id="ah-harm" markerWidth="9" markerHeight="9" refX="6.5" refY="3" orient="auto"><path d="M0,0 L7,3 L0,6 Z" class="flowhead harm"/></marker>
+    <marker id="ah-cure" markerWidth="9" markerHeight="9" refX="6.5" refY="3" orient="auto"><path d="M0,0 L7,3 L0,6 Z" class="flowhead cure"/></marker>
+    <marker id="ah-ext" markerWidth="9" markerHeight="9" refX="6.5" refY="3" orient="auto"><path d="M0,0 L7,3 L0,6 Z" class="flowhead ext"/></marker>
+  </defs>`;
+  let bg='',flows='',backs='',nodes='';
+  // phase bands + labels
+  phaseRects.forEach((p,i)=>{
+    if(i%2===0) bg+=`<rect class="phaseband" x="6" y="${p.top}" width="${W-12}" height="${p.bottom-p.top}" rx="12"/>`;
+    bg+=`<text class="phaseroman" x="26" y="${p.top+30}" font-size="30">${p.roman}</text>`;
+    bg+=`<text class="phaselab" x="60" y="${p.top+22}" font-size="11.5">${p.lab}</text>`;
+  });
+  // main vertical flows + edge labels
+  E.forEach(([f,t,k,lab])=>{
+    const a=box[f],b=box[t],d=down(a,b);
+    flows+=`<path class="flow ${k}" data-f="${f}" data-t="${t}" d="M${d.x1},${d.y1} L${d.x2},${d.y2}" stroke-width="2.2" stroke-opacity="0.85" marker-end="url(#ah-${k})"/>`;
+    // label with bg
+    const labX=d.x1+16, labY=d.my+4;
+    const wsize=lab.length*13+16;
+    flows+=`<g class="edgelab" data-f="${f}" data-t="${t}"><rect class="elab-bg" x="${labX-6}" y="${labY-15}" width="${wsize}" height="21" rx="5"/><text class="${k==='cure'?'elab-cure':'elab-harm'}" x="${labX}" y="${labY}" font-size="13">${k==='cure'?'▸ 药：':(k==='ext'?'▸ ':'▸ 病：')}${esc(lab)}</text></g>`;
+  });
+  // back arrows (right side)
+  BACK.forEach(([f,t,k,lab])=>{
+    backs+=`<path class="flow ${k}" data-back="1" data-f="${f}" data-t="${t}" d="${backPath(f,t)}" stroke-width="1.8" stroke-opacity="0.7" marker-end="url(#ah-${k})"/>`;
+    const a=box[f],b=box[t];
+    const midY=(a.cy+b.cy)/2, x=Math.max(a.x+a.w,b.x+b.w)+70+(f==='o13'?46:0)+6;
+    backs+=`<g class="edgelab" data-back="1" data-f="${f}" data-t="${t}"><text class="${k==='cure'?'elab-cure':'elab-harm'}" x="${x}" y="${midY+4}" font-size="12" transform="rotate(90 ${x} ${midY})" text-anchor="middle">${esc(lab)}</text></g>`;
+  });
+  // nodes
+  N.forEach(n=>{
+    const b=box[n.id],col=FAM[n.fam].c;
+    let g=`<rect class="nbox" x="${b.x}" y="${b.y}" width="${b.w}" height="${b.h}" rx="10" fill="var(--parchment-light)" stroke="${col}"/>`;
+    g+=`<rect x="${b.x}" y="${b.y}" width="6" height="${b.h}" rx="3" fill="${col}"/>`;
+    g+=`<rect x="${b.x+16}" y="${b.y+b.h/2-13}" width="34" height="26" rx="6" fill="${col}"/>`;
+    g+=`<text class="n-no" x="${b.x+33}" y="${b.y+b.h/2+5}" font-size="13" text-anchor="middle">${n.no}</text>`;
+    g+=`<text class="n-cn" x="${b.x+60}" y="${b.y+26}" font-size="16.5">${n.cn}</text>`;
+    g+=`<text class="n-gk" x="${b.x+60}" y="${b.y+45}" font-size="12">${n.gk}</text>`;
+    g+=`<text class="n-role" x="${b.x+b.w-14}" y="${b.y+b.h/2+4.5}" font-size="12.5" text-anchor="end" fill="${col}">${n.role}</text>`;
+    nodes+=`<g class="node" data-id="${n.id}" tabindex="0"><title>${n.cn}｜${n.role}</title>${g}</g>`;
+  });
+  svg.innerHTML=defs+bg+flows+backs+nodes;
+  svg.querySelectorAll('.node').forEach(nd=>nd.addEventListener('click',()=>select(nd.dataset.id)));
+  svg.querySelectorAll('.node').forEach(nd=>nd.addEventListener('keydown',e=>{if(e.key==='Enter')select(nd.dataset.id);}));
+}
+
+/* ===== 交互 ===== */
+let selected=null;
+function svg(){return document.getElementById('map');}
+function relEdges(id){
+  const s=new Set();
+  svg().querySelectorAll('.flow').forEach(e=>{ if(e.dataset.f===id||e.dataset.t===id) s.add(e); });
+  return s;
+}
+function applySel(id){
+  const nb=new Set([id]);
+  [...E,...BACK].forEach(([f,t])=>{ if(f===id)nb.add(t); if(t===id)nb.add(f); });
+  svg().querySelectorAll('.node').forEach(n=>{ n.classList.remove('dim','hl','sel');
+    if(n.dataset.id===id)n.classList.add('sel'); else if(nb.has(n.dataset.id))n.classList.add('hl'); else n.classList.add('dim'); });
+  svg().querySelectorAll('.flow').forEach(e=>{ const on=e.dataset.f===id||e.dataset.t===id; e.classList.toggle('hlE',on); e.classList.toggle('dimE',!on); });
+  svg().querySelectorAll('.edgelab').forEach(l=>{ const on=l.dataset.f===id||l.dataset.t===id; l.classList.toggle('dimL',!on); });
+}
+function clearSel(){
+  svg().querySelectorAll('.node').forEach(n=>n.classList.remove('dim','hl','sel'));
+  svg().querySelectorAll('.flow').forEach(e=>e.classList.remove('hlE','dimE'));
+  svg().querySelectorAll('.edgelab').forEach(l=>l.classList.remove('dimL'));
+}
+function panelFor(id){
+  const n=N_BY[id],col=FAM[n.fam].c,idx=n.i;
+  const prev=idx>0?N[idx-1]:null, next=idx<N.length-1?N[idx+1]:null;
+  document.getElementById('panel').innerHTML=`
+   <div class="eyebrow">${FAM[n.fam].lab} · 第 ${idx+1} / 16 环</div>
+   <span class="p-no" style="background:${col}">N° ${n.no}</span>
+   <div class="p-name">${n.cn}</div>
+   <div class="p-gk greek">${n.gk}</div>
+   <div class="p-who">${n.who}　·　角色：<b style="color:${col}">${n.role}</b></div>
+   <div class="blk in"><h4>← 它要收拾的洞（上一步留下的病）</h4>${n.in?esc0(n.in):'<span class="none">无——这是整条链的第一推动，不为收拾任何洞而生。</span>'}</div>
+   <div class="blk did"><h4>▸ 它做了什么（药 · 填补）</h4>${esc0(n.did)}</div>
+   <div class="blk out"><h4>→ 它凿开的新洞（病 · 传给下一步）</h4>${esc0(n.out)}</div>
+   <div class="nav">
+     <div class="b ${prev?'':'dis'}" onclick="window.__sel('${prev?prev.id:''}')">‹ 上一环</div>
+     <div class="b" onclick="window.__reset()">全览</div>
+     <div class="b ${next?'':'dis'}" onclick="window.__sel('${next?next.id:''}')">下一环 ›</div>
+   </div>`;
+}
+function esc0(s){return s;}
+function select(id){ if(!id)return; selected=id; exitPlay(); applySel(id); panelFor(id); scrollTo(id); }
+function scrollTo(id){ const b=box[id]; if(!b)return; const wrap=document.querySelector('.mapwrap'); const sc=svg().getBoundingClientRect().height/VBH; wrap.scrollTo({top:Math.max(0,b.y*sc-wrap.clientHeight/2+40),behavior:'smooth'}); }
+window.__sel=select; window.__reset=reset;
+
+function guide(){
+  document.getElementById('panel').innerHTML=`<div class="guide">
+   <div class="eyebrow">导读 · LECTORI</div>
+   <h3>一条被逼出来的因果链</h3>
+   <p>这16组不是一张目录，而是<strong>一台连锁机器</strong>：每一组都是为了收拾<em>上一组留下的洞</em>才出现，堵上之后又<em>恰好凿开下一个洞</em>。竖看是时间顺序，箭头上的标签是传导的"病"与"药"。</p>
+   <div class="k"><b>红</b>「病」：这一步凿开、并逼出下一步的新缺口。</div>
+   <div class="k"><b>绿</b>「药」：这一步精确堵上的那个洞。</div>
+   <div class="k"><b>灰虚线</b>：外部冲击（城邦崩溃）或"同一事的重演"。</div>
+   <p class="mini" style="margin-top:8px">右侧的弯箭头是<strong>回指</strong>——某步的"药"往回堵向更早的那个洞：形式/质料(08)回堵共相(10)、潜能/现实(09)回堵变化(07)、灵魂/肉体(15)重演两世界(12)、必然/自由(13)下沉自决定论(07)。</p>
+   <p class="mini">点任一环：读它"收拾了什么洞 / 做了什么 / 又凿开什么洞"，并可逐环上下走。或按<strong>▶ 顺链演示</strong>从"开机"看到"认命"。</p>
+   <p class="mini" style="border-top:1px solid var(--line);padding-top:9px">首尾咬合：<strong>01 让 Logos 开机，16 让 Logos 认命</strong>。中间的巴门尼德引擎(06→07)制造了那道贯穿全链的伤口，其余各组都是不同的缝合手术。删掉任一环，后面的问题就失去由来——这正是它们作为整体沉淀下来的原因。</p>
+  </div>`;
+}
+function reset(){ selected=null; exitPlay(); clearSel(); guide(); document.querySelector('.mapwrap').scrollTo({top:0,behavior:'smooth'}); }
+
+/* 顺链演示 */
+let playing=false,pt=null,pk=0;
+function play(){
+  playing=true;pk=0;document.getElementById('btnPlay').classList.add('on');
+  step();
+  pt=setInterval(()=>{ pk++; if(pk>=N.length){exitPlay();return;} step(); },1700);
+}
+function step(){ const n=N[pk]; applySel(n.id); panelFor(n.id); scrollTo(n.id); }
+function exitPlay(){ if(pt){clearInterval(pt);pt=null;} if(playing){playing=false;document.getElementById('btnPlay').classList.remove('on');} }
+
+buildMap(); guide();
+document.getElementById('btnPlay').addEventListener('click',()=>{ if(playing)exitPlay(); else play(); });
+document.getElementById('btnReset').addEventListener('click',reset);
+</script>
+</body>
+</html>

@@ -1,0 +1,66 @@
+<view class="page-shell about-page">
+  <view class="about-hero page-pad">
+    <view class="eyebrow">关于本项目</view>
+    <view class="display-title">把 104 页讲义，<br />编成一条可阅读的路</view>
+    <view class="rule"></view>
+    <view class="about-lead">本小程序依据梅春雷老师“西方哲学史考察十讲”前四讲讲义整理。目标不是替代原课件，而是把跨讲呼应、概念迁徙与核心判断集中呈现。</view>
+  </view>
+
+  <view class="about-content page-pad">
+    <view class="about-card paper-card">
+      <view class="card-label">内容整理原则</view>
+      <view class="principle">
+        <view class="principle-no">01</view>
+        <view>
+          <view class="principle-title">忠实于讲义的论证重心</view>
+          <view class="principle-copy">保留“原始文化不是低级理性”“神话是哲学前形态”“希腊哲学为神学提供语言”等课程判断。</view>
+        </view>
+      </view>
+      <view class="principle">
+        <view class="principle-no">02</view>
+        <view>
+          <view class="principle-title">合并重复，显出结构</view>
+          <view class="principle-copy">将人物、概念和历史材料重新编排为核心问题、时代回答、思想张力与下一步过渡。</view>
+        </view>
+      </view>
+      <view class="principle">
+        <view class="principle-no">03</view>
+        <view>
+          <view class="principle-title">让概念跨讲流动</view>
+          <view class="principle-copy">重点追踪命运、秩序、Logos、灵魂、共相、恩典与个体等概念如何改变含义。</view>
+        </view>
+      </view>
+    </view>
+
+    <view class="source-section">
+      <view class="eyebrow">讲义来源</view>
+      <view class="section-heading">前四讲 · 104 页</view>
+      <button
+        class="source-card"
+        wx:for="{{lectures}}"
+        wx:key="id"
+        data-id="{{item.id}}"
+        bindtap="goLecture"
+      >
+        <view class="source-no">0{{item.id}}</view>
+        <view class="source-main">
+          <view class="source-title">{{item.title}}</view>
+          <view class="source-meta">{{item.date}} · {{item.sourceSlides}} 页</view>
+        </view>
+        <text class="source-arrow">→</text>
+      </button>
+    </view>
+
+    <view class="usage-card">
+      <view class="card-label light-label">建议阅读方式</view>
+      <view class="usage-title">先看脉络，再读讲次，最后查概念</view>
+      <view class="usage-copy">“思想脉络”解决历史方向感；“四讲精读”保留具体论证；“概念谱系”用于横向复习。阅读进度与收藏只保存在本机，不上传任何个人数据。</view>
+    </view>
+
+    <view class="credit">
+      <view class="credit-line"></view>
+      <view class="credit-title">西方哲学史考察十讲</view>
+      <view class="credit-copy">主讲：梅春雷老师<br />课程阅读版：依据 2026 年 3 月至 6 月前四讲讲义整理</view>
+    </view>
+  </view>
+</view>
