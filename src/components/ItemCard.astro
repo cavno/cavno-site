@@ -1,0 +1,16 @@
+---
+interface Props {
+  href: string;
+  title: string;
+  summary?: string;
+  tag: string;
+  date: string;
+}
+const { href, title, summary = '', tag, date } = Astro.props;
+const external = /^https?:\/\//.test(href);
+---
+<a class="item" href={href} target={external ? '_blank' : undefined} rel={external ? 'noopener' : undefined}>
+  <div class="item-meta"><span class="tag">{tag}</span><span class="date">{date}</span></div>
+  <h3>{title}</h3>
+  {summary && <p>{summary}</p>}
+</a>
