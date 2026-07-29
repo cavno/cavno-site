@@ -6,7 +6,7 @@ backend:
   branch: main
   base_url: https://sveltia-cms-auth.YOUR-SUBDOMAIN.workers.dev   # ← 部署 OAuth Worker 后替换
 
-site_url: https://cavno.pages.dev
+site_url: https://cavno-site.tchow.workers.dev
 media_folder: public/covers
 public_folder: /covers
 
