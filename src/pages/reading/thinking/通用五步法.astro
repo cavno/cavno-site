@@ -1,0 +1,26 @@
+---
+// 由 scripts/convert.mjs 生成，可自由手工精修
+import Base from '../../../layouts/Base.astro';
+import body from '../../../legacy/reading/thinking/通用五步法/body.html?raw';
+import '../../../legacy/reading/thinking/通用五步法/style.css';
+
+const meta = {
+  "title": "五步法 · 通用系统推演引擎",
+  "description": ""
+};
+---
+<Base title={meta.title + ' · Cavno'} description={meta.description}>
+
+  <section class="page-head">
+    <div class="wrap">
+      <div class="eyebrow">Reading & Thinking · Thinking</div>
+      <h1 class="page-title">{meta.title}</h1>
+      
+      <a class="crumb-back" href="/reading/thinking/">← 返回思考栏目</a>
+    </div>
+  </section>
+
+  <article class="lp">
+    <Fragment set:html={body} />
+  </article>
+</Base>

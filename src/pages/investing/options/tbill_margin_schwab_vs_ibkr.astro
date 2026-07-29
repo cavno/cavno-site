@@ -1,0 +1,26 @@
+---
+// 由 scripts/convert.mjs 生成，可自由手工精修
+import Base from '../../../layouts/Base.astro';
+import body from '../../../legacy/investing/options/tbill_margin_schwab_vs_ibkr/body.html?raw';
+import '../../../legacy/investing/options/tbill_margin_schwab_vs_ibkr/style.css';
+
+const meta = {
+  "title": "T-bill 当保证金 · 滚动卖 Put — Schwab 与 IBKR 对照拆解",
+  "description": ""
+};
+---
+<Base title={meta.title + ' · Cavno'} description={meta.description}>
+
+  <section class="page-head">
+    <div class="wrap">
+      <div class="eyebrow">Investing · Options</div>
+      <h1 class="page-title">{meta.title}</h1>
+      
+      <a class="crumb-back" href="/investing/options/">← 返回期权栏目</a>
+    </div>
+  </section>
+
+  <article class="lp">
+    <Fragment set:html={body} />
+  </article>
+</Base>

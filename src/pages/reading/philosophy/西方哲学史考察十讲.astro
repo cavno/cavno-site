@@ -1,0 +1,26 @@
+---
+// 由 scripts/convert.mjs 生成，可自由手工精修
+import Base from '../../../layouts/Base.astro';
+import body from '../../../legacy/reading/philosophy/西方哲学史考察十讲/body.html?raw';
+import '../../../legacy/reading/philosophy/西方哲学史考察十讲/style.css';
+
+const meta = {
+  "title": "西方哲学史考察 · 前五讲",
+  "description": "梅春雷《西方哲学史考察十讲》前五讲思想脉络:一条主轴、六条贯穿线、五讲全文要义、概念谱系、张力总表、人物长廊。"
+};
+---
+<Base title={meta.title + ' · Cavno'} description={meta.description}>
+
+  <section class="page-head">
+    <div class="wrap">
+      <div class="eyebrow">Reading & Thinking · Philosophy</div>
+      <h1 class="page-title">{meta.title}</h1>
+      <p class="lede">{meta.description}</p>
+      <a class="crumb-back" href="/reading/philosophy/">← 返回哲学栏目</a>
+    </div>
+  </section>
+
+  <article class="lp">
+    <Fragment set:html={body} />
+  </article>
+</Base>

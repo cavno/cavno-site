@@ -1,0 +1,26 @@
+---
+// 由 scripts/convert.mjs 生成，可自由手工精修
+import Base from '../../../layouts/Base.astro';
+import body from '../../../legacy/investing/cases/jane-street-viz/body.html?raw';
+import '../../../legacy/investing/cases/jane-street-viz/style.css';
+
+const meta = {
+  "title": "Jane Street 操纵指数策略拆解 · SEBI 调查可视化",
+  "description": "基于 SEBI 临时禁令对 Jane Street 操纵 BANKNIFTY/NIFTY 指数的交互式拆解可视化"
+};
+---
+<Base title={meta.title + ' · Cavno'} description={meta.description}>
+
+  <section class="page-head">
+    <div class="wrap">
+      <div class="eyebrow">Investing · Cases</div>
+      <h1 class="page-title">{meta.title}</h1>
+      <p class="lede">{meta.description}</p>
+      <a class="crumb-back" href="/investing/cases/">← 返回案例栏目</a>
+    </div>
+  </section>
+
+  <article class="lp">
+    <Fragment set:html={body} />
+  </article>
+</Base>

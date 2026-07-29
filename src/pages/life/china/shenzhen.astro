@@ -1,0 +1,26 @@
+---
+// 由 scripts/convert.mjs 生成，可自由手工精修
+import Base from '../../../layouts/Base.astro';
+import body from '../../../legacy/life/china/shenzhen/body.html?raw';
+import '../../../legacy/life/china/shenzhen/style.css';
+
+const meta = {
+  "title": "深圳 · 地形—战略叠加底图",
+  "description": "山链·流域·口岸·通道分层叠加：读懂深圳每份规划背后未署名的第一作者。"
+};
+---
+<Base title={meta.title + ' · Cavno'} description={meta.description}>
+
+  <section class="page-head">
+    <div class="wrap">
+      <div class="eyebrow">Life & Skills · China</div>
+      <h1 class="page-title">{meta.title}</h1>
+      <p class="lede">{meta.description}</p>
+      <a class="crumb-back" href="/life/china/">← 返回中国栏目</a>
+    </div>
+  </section>
+
+  <article class="lp">
+    <Fragment set:html={body} />
+  </article>
+</Base>

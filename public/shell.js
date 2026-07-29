@@ -2,19 +2,8 @@
 (function () {
   var doc = document;
   if (doc.getElementById('cavno-shell')) return;
-  var me = doc.currentScript;
-  var noPad = !!(me && me.hasAttribute('data-nopad'));
-
-  /* 主站地址：内嵌值兜底；跨域引用时运行时跟随脚本实际来源域。
-     同域引用（主站自身页面，或把 shell.js 拷进旧仓库的本地模式）仍用内嵌值。 */
-  var SITE = "https://cavno-site.tchow.workers.dev";
-  try {
-    if (me && me.src) {
-      var u = new URL(me.src, location.href);
-      if ((u.protocol === 'https:' || u.protocol === 'http:') && u.origin !== location.origin) SITE = u.origin;
-    }
-  } catch (e) {}
-  var NAV = [{"slug":"investing","en":"Investing","zh":"投资","subs":[{"slug":"options","en":"Options","zh":"期权"},{"slug":"valuation","en":"Valuation","zh":"估值"},{"slug":"cases","en":"Cases","zh":"案例"}]},{"slug":"reading","en":"Reading & Thinking","zh":"阅读与思考","subs":[{"slug":"books","en":"Books","zh":"书籍视察"},{"slug":"philosophy","en":"Philosophy","zh":"哲学"},{"slug":"thinking","en":"Thinking","zh":"思考"},{"slug":"math","en":"Mathematics","zh":"数学"}]},{"slug":"life","en":"Life & Skills","zh":"生活与技能","subs":[{"slug":"driving","en":"Driving","zh":"驾驶"},{"slug":"ai","en":"AI","zh":"AI"},{"slug":"school","en":"School","zh":"学校"},{"slug":"skills","en":"Skills","zh":"技能"}]},{"slug":"working","en":"Working","zh":"工作","subs":[{"slug":"amazon","en":"Amazon Tools","zh":"亚马逊工具"}]}];
+  var SITE = "https://cavno.pages.dev";
+  var NAV = [{"slug":"investing","en":"Investing","zh":"投资","subs":[{"slug":"options","en":"Options","zh":"期权"},{"slug":"valuation","en":"Valuation","zh":"估值"},{"slug":"cases","en":"Cases","zh":"案例"}]},{"slug":"reading","en":"Reading & Thinking","zh":"阅读与思考","subs":[{"slug":"books","en":"Books","zh":"书籍视察"},{"slug":"philosophy","en":"Philosophy","zh":"哲学"},{"slug":"thinking","en":"Thinking","zh":"思考"},{"slug":"math","en":"Mathematics","zh":"数学"}]},{"slug":"life","en":"Life & Skills","zh":"生活与技能","subs":[{"slug":"driving","en":"Driving","zh":"驾驶"},{"slug":"house","en":"House","zh":"房产"},{"slug":"school","en":"School","zh":"学校"},{"slug":"china","en":"China","zh":"中国"},{"slug":"family","en":"Family","zh":"育儿"},{"slug":"orders","en":"Orders","zh":"报单"},{"slug":"ai","en":"AI","zh":"AI"},{"slug":"skills","en":"Skills","zh":"技能"}]},{"slug":"working","en":"Working","zh":"工作","subs":[{"slug":"amazon","en":"Amazon Tools","zh":"亚马逊工具"}]}];
   var MAP = {"Investing":"investing","Reading_and_Thinking":"reading","Life_Style_and_Skills":"life","Working":"working"};
 
   function esc(s) {
@@ -26,14 +15,17 @@
   var cur = MAP[seg] || '';
   if (!cur) for (var i = 0; i < NAV.length; i++) if (NAV[i].slug === seg) cur = seg;
 
+  var me = doc.currentScript;
+  var noPad = !!(me && me.hasAttribute('data-nopad'));
+
   var css = [
     ':host{all:initial}',
     '*{box-sizing:border-box}',
     '.bar{position:fixed;top:0;left:0;right:0;height:60px;z-index:2147483000;',
-    '  display:flex;align-items:center;gap:4px;padding:0 18px;',
     '  background:rgba(250,249,245,.94);-webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px);',
     '  border-bottom:1px solid #E3E0D5;',
     "  font-family:-apple-system,BlinkMacSystemFont,'Segoe UI','PingFang SC','Hiragino Sans GB','Microsoft YaHei',sans-serif}",
+    '.in{max-width:1180px;height:100%;margin:0 auto;padding:0 24px;display:flex;align-items:center;gap:4px}',
     ".brand{font-family:'Noto Serif SC','Songti SC',Georgia,serif;font-weight:700;font-size:19px;",
     '  color:#141413;text-decoration:none;margin-right:12px;white-space:nowrap}',
     '.brand b{color:#D97757}',
@@ -102,11 +94,13 @@
   var root = host.attachShadow({ mode: 'open' });
   root.innerHTML = '<style>' + css + '</style>' +
     '<div class="bar" id="w">' +
-      '<a class="brand" href="' + SITE + '/">Cavno<b>.</b></a>' +
-      items +
-      '<span class="sp"></span>' +
-      '<a class="home" href="' + SITE + '/">\u56DE\u5230\u4E3B\u7AD9</a>' +
-      '<button class="bg" id="bg" aria-label="\u83DC\u5355" aria-expanded="false"><span></span><span></span><span></span></button>' +
+      '<div class="in">' +
+        '<a class="brand" href="' + SITE + '/">Cavno<b>.</b></a>' +
+        items +
+        '<span class="sp"></span>' +
+        '<a class="home" href="' + SITE + '/">\u56DE\u5230\u4E3B\u7AD9</a>' +
+        '<button class="bg" id="bg" aria-label="\u83DC\u5355" aria-expanded="false"><span></span><span></span><span></span></button>' +
+      '</div>' +
       '<nav class="mp" aria-label="\u7AD9\u70B9\u5BFC\u822A">' + mob + '</nav>' +
     '</div>';
 

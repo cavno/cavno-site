@@ -1,0 +1,26 @@
+---
+// 由 scripts/convert.mjs 生成，可自由手工精修
+import Base from '../../../layouts/Base.astro';
+import body from '../../../legacy/reading/thinking/elementsofgeometry/body.html?raw';
+import '../../../legacy/reading/thinking/elementsofgeometry/style.css';
+
+const meta = {
+  "title": "公理化演绎 · 《几何原本》的整体思维方式",
+  "description": "以可交互的方式呈现欧几里得《几何原本》的公理化演绎方法:从极少数公理逐级推出全书 465 条命题,直观展示确定性如何传递。"
+};
+---
+<Base title={meta.title + ' · Cavno'} description={meta.description}>
+
+  <section class="page-head">
+    <div class="wrap">
+      <div class="eyebrow">Reading & Thinking · Thinking</div>
+      <h1 class="page-title">{meta.title}</h1>
+      <p class="lede">{meta.description}</p>
+      <a class="crumb-back" href="/reading/thinking/">← 返回思考栏目</a>
+    </div>
+  </section>
+
+  <article class="lp">
+    <Fragment set:html={body} />
+  </article>
+</Base>

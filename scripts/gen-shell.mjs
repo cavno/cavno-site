@@ -10,10 +10,8 @@
  * （批量注入见 scripts/inject-shell.mjs；主站 public/ 里的原样页面同样适用）
  *
  * 关键设计：
- *   - 所有链接均为绝对地址：构建时内嵌 astro.config.mjs 的 site 字段作兜底，
- *     跨域引用时运行时自动改用脚本实际来源域（currentScript.src 的 origin）——
- *     即使 site 配置过时或以后换域名，只要旧页能加载到脚本，链接就指对；
- *     经典 <script> 跨域加载不受 CORS 限制
+ *   - 所有链接均为绝对地址（取自 astro.config.mjs 的 site 字段），
+ *     跨域引用不迷路；经典 <script> 跨域加载不受 CORS 限制
  *   - Shadow DOM 渲染，与旧页样式互不污染
  *   - 悬停展开二级栏目（隐形桥 + 关闭延迟，与主站行为一致）
  *   - 依据 LEGACY_MAP 识别旧仓库路径，自动高亮当前板块
@@ -53,18 +51,7 @@ const js = `/* 自动生成：node scripts/gen-shell.mjs（数据源 nav.json + 
 (function () {
   var doc = document;
   if (doc.getElementById('cavno-shell')) return;
-  var me = doc.currentScript;
-  var noPad = !!(me && me.hasAttribute('data-nopad'));
-
-  /* 主站地址：内嵌值兜底；跨域引用时运行时跟随脚本实际来源域。
-     同域引用（主站自身页面，或把 shell.js 拷进旧仓库的本地模式）仍用内嵌值。 */
   var SITE = ${JSON.stringify(site)};
-  try {
-    if (me && me.src) {
-      var u = new URL(me.src, location.href);
-      if ((u.protocol === 'https:' || u.protocol === 'http:') && u.origin !== location.origin) SITE = u.origin;
-    }
-  } catch (e) {}
   var NAV = ${JSON.stringify(data)};
   var MAP = ${JSON.stringify(LEGACY_MAP)};
 
@@ -77,14 +64,17 @@ const js = `/* 自动生成：node scripts/gen-shell.mjs（数据源 nav.json + 
   var cur = MAP[seg] || '';
   if (!cur) for (var i = 0; i < NAV.length; i++) if (NAV[i].slug === seg) cur = seg;
 
+  var me = doc.currentScript;
+  var noPad = !!(me && me.hasAttribute('data-nopad'));
+
   var css = [
     ':host{all:initial}',
     '*{box-sizing:border-box}',
     '.bar{position:fixed;top:0;left:0;right:0;height:60px;z-index:2147483000;',
-    '  display:flex;align-items:center;gap:4px;padding:0 18px;',
     '  background:rgba(250,249,245,.94);-webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px);',
     '  border-bottom:1px solid #E3E0D5;',
     "  font-family:-apple-system,BlinkMacSystemFont,'Segoe UI','PingFang SC','Hiragino Sans GB','Microsoft YaHei',sans-serif}",
+    '.in{max-width:1180px;height:100%;margin:0 auto;padding:0 24px;display:flex;align-items:center;gap:4px}',
     ".brand{font-family:'Noto Serif SC','Songti SC',Georgia,serif;font-weight:700;font-size:19px;",
     '  color:#141413;text-decoration:none;margin-right:12px;white-space:nowrap}',
     '.brand b{color:#D97757}',
@@ -153,11 +143,13 @@ const js = `/* 自动生成：node scripts/gen-shell.mjs（数据源 nav.json + 
   var root = host.attachShadow({ mode: 'open' });
   root.innerHTML = '<style>' + css + '</style>' +
     '<div class="bar" id="w">' +
-      '<a class="brand" href="' + SITE + '/">Cavno<b>.</b></a>' +
-      items +
-      '<span class="sp"></span>' +
-      '<a class="home" href="' + SITE + '/">\\u56DE\\u5230\\u4E3B\\u7AD9</a>' +
-      '<button class="bg" id="bg" aria-label="\\u83DC\\u5355" aria-expanded="false"><span></span><span></span><span></span></button>' +
+      '<div class="in">' +
+        '<a class="brand" href="' + SITE + '/">Cavno<b>.</b></a>' +
+        items +
+        '<span class="sp"></span>' +
+        '<a class="home" href="' + SITE + '/">\\u56DE\\u5230\\u4E3B\\u7AD9</a>' +
+        '<button class="bg" id="bg" aria-label="\\u83DC\\u5355" aria-expanded="false"><span></span><span></span><span></span></button>' +
+      '</div>' +
       '<nav class="mp" aria-label="\\u7AD9\\u70B9\\u5BFC\\u822A">' + mob + '</nav>' +
     '</div>';
 

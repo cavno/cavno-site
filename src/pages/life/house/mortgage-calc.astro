@@ -1,0 +1,26 @@
+---
+// 由 scripts/convert.mjs 生成，可自由手工精修
+import Base from '../../../layouts/Base.astro';
+import body from '../../../legacy/life/house/mortgage-calc/body.html?raw';
+import '../../../legacy/life/house/mortgage-calc/style.css';
+
+const meta = {
+  "title": "房贷计算器 · Mortgage Calculator",
+  "description": "精确的中国房贷计算器 — 等额本息/等额本金、当期还款状态、提前还款分析"
+};
+---
+<Base title={meta.title + ' · Cavno'} description={meta.description}>
+
+  <section class="page-head">
+    <div class="wrap">
+      <div class="eyebrow">Life & Skills · House</div>
+      <h1 class="page-title">{meta.title}</h1>
+      <p class="lede">{meta.description}</p>
+      <a class="crumb-back" href="/life/house/">← 返回房产栏目</a>
+    </div>
+  </section>
+
+  <article class="lp">
+    <Fragment set:html={body} />
+  </article>
+</Base>

@@ -1,0 +1,26 @@
+---
+// 由 scripts/convert.mjs 生成，可自由手工精修
+import Base from '../../../layouts/Base.astro';
+import body from '../../../legacy/investing/cases/creditexpansion/body.html?raw';
+import '../../../legacy/investing/cases/creditexpansion/style.css';
+
+const meta = {
+  "title": "信用扩张场景全景图 · 明斯基脆弱度地形",
+  "description": "家庭·公司·银行·国家四层的三十个信用扩张场景，按抵押品／杠杆／反身性打分，定位其在对冲—投机—庞氏谱系上的坐标。"
+};
+---
+<Base title={meta.title + ' · Cavno'} description={meta.description}>
+
+  <section class="page-head">
+    <div class="wrap">
+      <div class="eyebrow">Investing · Cases</div>
+      <h1 class="page-title">{meta.title}</h1>
+      <p class="lede">{meta.description}</p>
+      <a class="crumb-back" href="/investing/cases/">← 返回案例栏目</a>
+    </div>
+  </section>
+
+  <article class="lp">
+    <Fragment set:html={body} />
+  </article>
+</Base>

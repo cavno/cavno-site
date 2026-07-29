@@ -1,0 +1,26 @@
+---
+// 由 scripts/convert.mjs 生成，可自由手工精修
+import Base from '../../../layouts/Base.astro';
+import body from '../../../legacy/reading/philosophy/greek-philosophy/body.html?raw';
+import '../../../legacy/reading/philosophy/greek-philosophy/style.css';
+
+const meta = {
+  "title": "古希腊哲学：16组对立中的底层原理",
+  "description": "以16组核心二元对立为骨架，重新梳理整个古希腊哲学史。从泰勒斯到新柏拉图主义，500年思想的操作系统。"
+};
+---
+<Base title={meta.title + ' · Cavno'} description={meta.description}>
+
+  <section class="page-head">
+    <div class="wrap">
+      <div class="eyebrow">Reading & Thinking · Philosophy</div>
+      <h1 class="page-title">{meta.title}</h1>
+      <p class="lede">{meta.description}</p>
+      <a class="crumb-back" href="/reading/philosophy/">← 返回哲学栏目</a>
+    </div>
+  </section>
+
+  <article class="lp">
+    <Fragment set:html={body} />
+  </article>
+</Base>
