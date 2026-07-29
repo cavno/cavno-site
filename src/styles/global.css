@@ -46,11 +46,15 @@ nav.primary{display:flex;gap:2px}
 .panel{position:absolute;top:calc(100% + 10px);left:0;min-width:310px;
   background:var(--card);border:1px solid var(--line);border-radius:var(--radius-m);
   box-shadow:var(--shadow-pop);padding:10px;
-  opacity:0;transform:translateY(6px);pointer-events:none;transition:opacity .18s,transform .18s}
-.nav-item.open .panel{opacity:1;transform:translateY(0);pointer-events:auto}
+  opacity:0;visibility:hidden;transform:translateY(6px);
+  transition:opacity .18s ease,transform .18s ease,visibility 0s linear .28s}
+/* 隐形桥：把按钮与面板之间的 10px 间隙纳入悬停区域，鼠标下移不会丢失 hover */
+.panel::before{content:"";position:absolute;left:-8px;right:-8px;top:-14px;height:14px}
+.nav-item.open .panel{opacity:1;visibility:visible;transform:translateY(0);transition-delay:0s}
 @media (hover:hover) and (pointer:fine){
-  .nav-item:hover .panel{opacity:1;transform:translateY(0);pointer-events:auto}
+  .nav-item:hover .panel{opacity:1;visibility:visible;transform:translateY(0);transition-delay:0s}
   .nav-item:hover .chev{transform:rotate(180deg)}
+  .nav-item:hover .nav-btn{background:#ECE9DF}
 }
 .group-label{font-family:var(--mono);font-size:10.5px;letter-spacing:.14em;
   text-transform:uppercase;color:var(--ink-2);padding:8px 12px 4px}
@@ -224,3 +228,8 @@ footer.site-foot{background:var(--ink);color:rgba(250,249,245,.72);margin-top:20
   *,*::before,*::after{transition:none!important;animation:none!important}
   html{scroll-behavior:auto}
 }
+
+/* ---------- 重构后的旧页容器 ---------- */
+.lp{position:relative;isolation:isolate}
+.crumb-back{display:inline-block;margin-top:6px;font-size:13.5px;color:var(--ink-2)}
+.crumb-back:hover{color:var(--coral-deep)}

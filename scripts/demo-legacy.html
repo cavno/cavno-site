@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>《债务危机》三阶段模型 · 全书视察（示例）</title>
+<meta name="description" content="转换脚本示例页：旧羊皮纸/青绿/赭陶设计系统下的书籍视察，含标签页交互与返回顶部按钮。">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@500;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --parchment:#F3EAD3; --panel:#EFE6CF;
+  --ink:#2B2B2B; --teal:#1F6F6B; --terra:#C96F4A;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:#F3EAD3;color:#2B2B2B;
+  font-family:"Noto Serif SC","Songti SC",serif;line-height:1.8;padding:40px 20px}
+.book{max-width:860px;margin:0 auto}
+header.hero h1{font-size:34px;color:#1F6F6B;border-bottom:3px double #C96F4A;
+  padding-bottom:14px;margin-bottom:10px}
+header.hero p{color:#555;font-size:15px;margin-bottom:26px}
+.tabs{display:flex;gap:10px;margin-bottom:18px}
+.tabs button{font-family:inherit;font-size:15px;padding:8px 18px;cursor:pointer;
+  background:#EFE6CF;border:1.5px solid #1F6F6B;color:#1F6F6B;border-radius:6px}
+.tabs button.on{background:#1F6F6B;color:#F3EAD3}
+.stage{display:none;background:#EFE6CF;border:1.5px solid #1F6F6B;border-radius:10px;
+  padding:24px;animation:fadein .3s ease}
+.stage.on{display:block}
+.stage h2{color:#C96F4A;font-size:21px;margin-bottom:10px}
+.stage ul{padding-left:1.4em}
+.stage li{margin:6px 0}
+blockquote{border-left:4px solid #C96F4A;padding:8px 16px;margin:16px 0;
+  background:rgba(201,111,74,.08);font-size:15px}
+#backtop{position:fixed;right:24px;bottom:24px;width:44px;height:44px;border-radius:50%;
+  border:none;background:#1F6F6B;color:#F3EAD3;font-size:18px;cursor:pointer;display:none}
+@keyframes fadein{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+@media (max-width:600px){
+  header.hero h1{font-size:26px}
+  .tabs{flex-wrap:wrap}
+}
+</style>
+</head>
+<body>
+<div class="book">
+  <header class="hero">
+    <h1>《债务危机》三阶段模型</h1>
+    <p>Ray Dalio · 典型通缩性去杠杆的阶段划分与政策工具箱 —— 转换示例页</p>
+  </header>
+
+  <nav class="tabs" id="tabs">
+    <button class="on" data-t="s1">① 泡沫期</button>
+    <button data-t="s2">② 顶部与挤压</button>
+    <button data-t="s3">③ 和谐去杠杆</button>
+  </nav>
+
+  <section class="stage on" id="s1">
+    <h2>泡沫期：债务增速 &gt; 收入增速</h2>
+    <ul>
+      <li>信贷宽松推高资产价格，抵押物升值反哺借贷能力，正反馈成形。</li>
+      <li>识别信号：偿债支出占收入比持续攀升、新增债务用于投机而非生产。</li>
+    </ul>
+    <blockquote>泡沫的定义不在价格高低，而在"以不可持续的方式融资的购买"。</blockquote>
+  </section>
+
+  <section class="stage" id="s2">
+    <h2>顶部与挤压：紧缩触发去杠杆</h2>
+    <ul>
+      <li>央行加息刺破正反馈，抵押物贬值与追缴保证金形成负反馈。</li>
+      <li>此阶段政策空间最窄：降息受零利率约束，财政受政治约束。</li>
+    </ul>
+  </section>
+
+  <section class="stage" id="s3">
+    <h2>和谐去杠杆：四种力量的配比</h2>
+    <ul>
+      <li>紧缩、债务违约/重组、财富转移、债务货币化 —— 四力平衡则"和谐"。</li>
+      <li>目标是让名义收入增速重新高于名义利率。</li>
+    </ul>
+  </section>
+</div>
+
+<button id="backtop" title="回到顶部">↑</button>
+
+<script>
+document.getElementById('tabs').addEventListener('click', function(e){
+  var b = e.target.closest('button'); if(!b) return;
+  document.querySelectorAll('.tabs button').forEach(function(x){ x.classList.remove('on'); });
+  document.querySelectorAll('.stage').forEach(function(x){ x.classList.remove('on'); });
+  b.classList.add('on');
+  document.getElementById(b.dataset.t).classList.add('on');
+});
+var bt = document.getElementById('backtop');
+window.addEventListener('scroll', function(){
+  bt.style.display = window.scrollY > 300 ? 'block' : 'none';
+});
+bt.addEventListener('click', function(){ window.scrollTo({top:0, behavior:'smooth'}); });
+</script>
+</body>
+</html>
