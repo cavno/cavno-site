@@ -566,5 +566,6 @@ document.getElementById('playBtn').addEventListener('click',play);
 document.getElementById('stepRange').addEventListener('input',e=>{stop();stepTo(+e.target.value);});
 document.getElementById('btnReset').addEventListener('click',()=>{exitPlay();state.sw={id:'neutral',ct:'neutral',ex:'neutral',re:'neutral'};selected=null;syncBoard();applyHighlight();updateQuad();renderFilterPanel();document.querySelector('.mapwrap').scrollTo({top:0,behavior:'smooth'});});
 </script>
+<script src="https://cavno-site.tchow.workers.dev/shell.js" defer data-cavno-shell></script>
 </body>
 </html>
