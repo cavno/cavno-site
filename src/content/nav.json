@@ -32,9 +32,9 @@
       "slug": "reading_thinking",
       "en": "Reading & Thinking",
       "zh": "阅读与思考",
-      "short": "Reading&Thinking",
+      "short": "Reading & Thinking",
       "desc": "全书视察、哲学史讲义、思考图谱与数学基础。",
-      "planned": true,
+      "planned": false,
       "subsections": [
         {
           "slug": "books",
