@@ -71,3 +71,7 @@
 .lp .tablewrap{max-height:74vh;overflow:auto;overscroll-behavior:contain}
 .lp .tablewrap table.flat th{position:sticky;top:0;z-index:3;border-bottom:none;box-shadow:0 2px 0 var(--teal)}
 .lp table.pivot th{z-index:3}
+
+/* ---------- 冻结末行：总计吸附滚动视口底部（透视/目标对比/ASIN趋势） ---------- */
+.lp .tablewrap tr.grand td{position:sticky;bottom:0;z-index:2;border-top:none;
+  box-shadow:0 -1px 0 var(--teal),0 -3px 0 var(--teal)}

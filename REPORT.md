@@ -65,3 +65,6 @@
 - 顺序轴 bug 取证结论：新手页 CSS/JS 经逐规则、逐字节比对与转换前完全一致；病根是站点吸顶顶栏（sticky top:0, z-index:60）把旧页自身的吸顶元素（如承载数字圆徽的 .st-head, z-index:30）压在底下——数字随章节头吸顶伴行的原版效果被顶栏遮蔽。受影响面为全站 50 个含 sticky、22 个含 fixed 的旧页。
 - 根治：`body:has(.lp) .cv-site-head{position:static}` —— 旧页上顶栏退回文档流，旧页 sticky/fixed 语义与 GitHub 原版逐像素等价；目录/首页保持吸顶导航。:has 不支持的老浏览器维持现状（渐进降级）。
 - 同批关门（此前挂账的"元素级泄漏"）：外壳 `* / a / h1 / h2 / code / button` 六条元素规则全部 `:where(:not(.lp *))` 化（零特异性，外壳表现不变），.lp 内恢复浏览器默认——依赖默认链接色/默认边距/content-box 的旧页恢复原版排版；补 `.lp{box-sizing:border-box}` 兜底。全站补回 `html{scroll-behavior:smooth}`（新手页原有的平滑锚点滚动在作用域化中丢失；prefers-reduced-motion 下仍为 auto）。
+
+## 2026-07-30 · 增量五补：总计行冻结
+- 三张数据表（透视分析/目标对比/ASIN趋势）的总计行吸附滚动视口底部，与冻结表头成对；border-collapse 下 sticky 会滚丢上边框，改以 box-shadow 双线还原原 3px double 签名。ASIN 趋势的"全部汇总"行由表首移至表尾（冻结后恒可见，置顶价值不减），改标"总计 · 全部 ASIN"，与另两表语义对齐。

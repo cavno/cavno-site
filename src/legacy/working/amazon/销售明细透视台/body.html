@@ -1696,10 +1696,10 @@ var SAMPLE_PERF_AOA = (function () {
         '<td class="r">' + fmtInt(curM.adord) + '</td>' +
         pfCellRate(rc.acos, rp ? rp.acos : undefined, false) + '</tr>';
     }
-    h += lineOf('全部 ASIN 汇总', agg.overall[pk] || z, agg.overall[pv] || null, '', false);
     rows.slice(0, CAP).forEach(function (a) {
       h += lineOf(a.asin + (a.name ? ' · ' + a.name : ''), a.series[pk] || z, a.series[pv] || null, a.asin, a.asin === S.pf.asin);
     });
+    h += lineOf('总计 · 全部 ASIN', agg.overall[pk] || z, agg.overall[pv] || null, '', false);
     h += '</tbody></table>';
     if (cut) h += '<div class="hint">按 Sessions 仅展示前 ' + CAP + ' 个 ASIN（共 ' + rows.length + '），其余请用上方 ASIN 筛选或导出 CSV 查看。</div>';
     $('perfWrap').innerHTML = h;
