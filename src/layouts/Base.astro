@@ -61,16 +61,16 @@ const isSub = (slug: string, sub: string) => norm.startsWith(`/${slug}/${sub}/`)
       <a class="cv-btn cv-btn-ink" href="/#recent">最近更新</a>
     </div>
 
-    <button class="cv-cvBurger" id="cv-cvBurger" aria-label="打开菜单" aria-expanded="false">
+    <button class="cv-burger" id="cvBurger" aria-label="打开菜单" aria-expanded="false">
       <span></span><span></span><span></span>
     </button>
   </div>
 </header>
 
-<div class="cv-cvDrawer" id="cv-cvDrawer" role="dialog" aria-label="站点菜单">
-  <div class="cv-cvDrawer-top">
+<div class="cv-drawer" id="cvDrawer" role="dialog" aria-label="站点菜单">
+  <div class="cv-drawer-top">
     <span class="cv-brand">Cavno<span class="cv-bdot">.</span></span>
-    <button class="cv-cvDrawer-close" id="cvDrawerClose" aria-label="关闭菜单">×</button>
+    <button class="cv-drawer-close" id="cvDrawerClose" aria-label="关闭菜单">×</button>
   </div>
   {nav.sections.map((s) => (
     <div class:list={['cv-acc', { open: isSec(s.slug) }]}>
@@ -142,8 +142,8 @@ const isSub = (slug: string, sub: string) => norm.startsWith(`/${slug}/${sub}/`)
   document.addEventListener('click', closeAll);
 
   // 移动端抽屉
-  const cvDrawer = document.getElementById('cv-cvDrawer');
-  const cvBurger = document.getElementById('cv-cvBurger');
+  const cvDrawer = document.getElementById('cvDrawer');
+  const cvBurger = document.getElementById('cvBurger');
   const openDrawer = () => { cvDrawer?.classList.add('open'); document.body.classList.add('lock'); cvBurger?.setAttribute('aria-expanded', 'true'); };
   const closeDrawer = () => { cvDrawer?.classList.remove('open'); document.body.classList.remove('lock'); cvBurger?.setAttribute('aria-expanded', 'false'); };
   cvBurger?.addEventListener('click', openDrawer);

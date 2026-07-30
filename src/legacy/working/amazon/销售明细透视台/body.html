@@ -107,6 +107,8 @@
       <tr><td>促销折扣占比 Promotion</td><td>Σ 促销折扣 ÷ Σ 销售额</td></tr>
       <tr><td>推广费占比 Marketing</td><td>Σ 推广费 ÷ Σ 销售额</td></tr>
       <tr><td>仓储费占比 Warehouse</td><td>Σ（月仓储＋长期仓储＋FBA销毁费＋FBA移除费＋其他仓储费）÷ Σ 销售额</td></tr>
+      <tr><td>采购成本占比 Purchase</td><td>Σ 采购成本 ÷ Σ 销售额（源表为正值，占比亦为正）</td></tr>
+      <tr><td>头程成本占比 First-leg</td><td>Σ 头程成本 ÷ Σ 销售额（源表为正值，占比亦为正）</td></tr>
     </table>
     <p style="font-size:12.5px;color:var(--muted);margin:8px 0">
       约定：费用列沿用财务表的负号，占比因此为负值；率值一律「和÷和」（与 Excel 计算字段一致），绝不做「率的平均」。
@@ -320,8 +322,9 @@ const PivotCore = (() => {
    * 指标口径（率值均为汇总层「和÷和」，与 Excel 计算字段一致）：
    *  TotalUnits=Σ销量  TotalSales=Σ销售额  TotalGross=Σ毛利  Margin=Gross/Sales
    *  Ad=Σ广告费/Σ销售额  Promotion=Σ促销折扣/Σ销售额  Marketing=Σ推广费/Σ销售额
-   *  Warehouse=Σ(月仓储+长期仓储+FBA销毁费+FBA移除费+其他仓储费)/Σ销售额          */
-  const SUM_KEYS = ['销量', '销售额', '毛利', '广告费', '促销折扣', '推广费', '月仓储', '长期仓储', 'FBA销毁费', 'FBA移除费', '其他仓储费'];
+   *  Warehouse=Σ(月仓储+长期仓储+FBA销毁费+FBA移除费+其他仓储费)/Σ销售额
+   *  Purchase=Σ采购成本/Σ销售额  FirstLeg=Σ头程成本/Σ销售额（沿用源表符号，采购/头程在财务导出中为正值）*/
+  const SUM_KEYS = ['销量', '销售额', '毛利', '广告费', '促销折扣', '推广费', '月仓储', '长期仓储', 'FBA销毁费', 'FBA移除费', '其他仓储费', '采购成本', '头程成本'];
   const MONTH_EN = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
 
   const zeroSums = () => { const o = {}; SUM_KEYS.forEach((k) => { o[k] = 0; }); return o; };
@@ -332,7 +335,8 @@ const PivotCore = (() => {
     return {
       units: s['销量'], sales: sales, gross: s['毛利'],
       margin: rate(s['毛利']), ad: rate(s['广告费']), promo: rate(s['促销折扣']), mkt: rate(s['推广费']),
-      wh: rate(s['月仓储'] + s['长期仓储'] + s['FBA销毁费'] + s['FBA移除费'] + s['其他仓储费'])
+      wh: rate(s['月仓储'] + s['长期仓储'] + s['FBA销毁费'] + s['FBA移除费'] + s['其他仓储费']),
+      pur: rate(s['采购成本']), fl: rate(s['头程成本'])
     };
   }
 
@@ -447,7 +451,7 @@ var SAMPLE_AOA = [["国家","日期","MSKU","ASIN","父ASIN","店铺","品名","
   function metricCells(mt) {
     return tdNum(mt.units, fmtInt) + tdNum(mt.sales, fmtMoney) + tdNum(mt.gross, fmtMoney) +
       tdNum(mt.margin, fmtPct) + tdNum(mt.ad, fmtPct) + tdNum(mt.promo, fmtPct) +
-      tdNum(mt.mkt, fmtPct) + tdNum(mt.wh, fmtPct);
+      tdNum(mt.mkt, fmtPct) + tdNum(mt.wh, fmtPct) + tdNum(mt.pur, fmtPct) + tdNum(mt.fl, fmtPct);
   }
   function dayLabel(d) { return d.ds === d.de ? d.ds : (d.ds + '～' + d.de); }
 
@@ -661,7 +665,8 @@ var SAMPLE_AOA = [["国家","日期","MSKU","ASIN","父ASIN","店铺","品名","
       '<th class="dim">父品名汇总 / 层级</th>' +
       '<th>销量<i>TotalUnits</i></th><th>销售额<i>TotalSales</i></th><th>毛利<i>TotalGross</i></th>' +
       '<th>毛利率<i>Margin</i></th><th>广告占比<i>Ad Rate</i></th><th>促销折扣占比<i>Promotion</i></th>' +
-      '<th>推广费占比<i>Marketing</i></th><th>仓储费占比<i>Warehouse</i></th></tr></thead><tbody>';
+      '<th>推广费占比<i>Marketing</i></th><th>仓储费占比<i>Warehouse</i></th>' +
+      '<th>采购成本占比<i>Purchase</i></th><th>头程成本占比<i>First-leg</i></th></tr></thead><tbody>';
     agg.tree.forEach(function (p) {
       var pPath = 'p|' + p.name;
       var pHas = p.years.length > 0;
@@ -943,10 +948,10 @@ var SAMPLE_AOA = [["国家","日期","MSKU","ASIN","父ASIN","店铺","品名","
       ['日期切片', (S.f.years.size ? '年=' + Array.from(S.f.years).join('、') + ' ' : '') + (S.f.months.size ? '月=' + Array.from(S.f.months).join('、') : (S.f.years.size ? '' : 'All'))],
       ['粒度', { year: '年', month: '月', day: '日' }[S.gran]],
       [],
-      ['父品名汇总', 'Year', 'Month', 'DateColumn', 'TotalUnits 销量', 'TotalSales 销售额', 'TotalGross 毛利', 'Margin 毛利率', 'Ad Sales Rate 广告占比', 'Promotion Sales Rate 促销折扣占比', 'Marketing Cost Sales Rate 推广费占比', 'Warehouse Charges Sales Rate 仓储费占比']
+      ['父品名汇总', 'Year', 'Month', 'DateColumn', 'TotalUnits 销量', 'TotalSales 销售额', 'TotalGross 毛利', 'Margin 毛利率', 'Ad Sales Rate 广告占比', 'Promotion Sales Rate 促销折扣占比', 'Marketing Cost Sales Rate 推广费占比', 'Warehouse Charges Sales Rate 仓储费占比', 'Purchase Cost Sales Rate 采购成本占比', 'First-leg Cost Sales Rate 头程成本占比']
     ];
     var rows = [];
-    var M = function (mt) { return [mt.units, mt.sales, mt.gross, mt.margin, mt.ad, mt.promo, mt.mkt, mt.wh]; };
+    var M = function (mt) { return [mt.units, mt.sales, mt.gross, mt.margin, mt.ad, mt.promo, mt.mkt, mt.wh, mt.pur, mt.fl]; };
     agg.tree.forEach(function (p) {
       var pFirst = true;
       p.years.forEach(function (y) {

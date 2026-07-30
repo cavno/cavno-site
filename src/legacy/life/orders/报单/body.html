@@ -112,12 +112,12 @@ const PH='data:image/svg+xml;utf8,'+encodeURIComponent('<svg xmlns="http://www.w
 /* ---------- 演示种子数据 ---------- */
 function seed(){const t=now();
 const users=[
- {id:'u1',phone:'13800000001',pwd:'123456',wechat:'kokodi_demo',alipayAcc:'demo01@example.com',alipayName:'周一',status:'正常',createdAt:t-30*D},
+ {id:'u1',phone:'13800000001',pwd:'123456',wechat:'demo_user',alipayAcc:'demo01@example.com',alipayName:'周一',status:'正常',createdAt:t-30*D},
  {id:'u2',phone:'13800000002',pwd:'123456',wechat:'wx_xiaoli',alipayAcc:'demo02@example.com',alipayName:'李二',status:'正常',createdAt:t-22*D}];
 const acts=[
- {id:'a1',name:'7·10 写字板高返场',platform:'天猫',shop:'KOKODI旗舰店',product:'儿童LCD写字板 10寸 护眼款',refPrice:89,startAt:t-3*D,endAt:t+4*D,rebateType:'fixed',rebateVal:35,rebateCap:0,materials:['物流单号','评价图','完成图'],couponInfo:'专属券「KOKODI35」',remarkTpl:'KD710',useGouwujin:false,notice:NOTICE9,incomeTotal:3000,status:'进行中',createdAt:t-3*D},
- {id:'a2',name:'夏季新品尝鲜(免素材)',platform:'京东',shop:'KOKODI京东自营',product:'写字板 8.5寸 彩虹笔迹',refPrice:59,startAt:t-2*D,endAt:t+9*D,rebateType:'pct',rebateVal:40,rebateCap:50,materials:[],couponInfo:'',remarkTpl:'',useGouwujin:false,notice:NOTICE9,incomeTotal:800,status:'进行中',createdAt:t-2*D},
- {id:'a3',name:'6·18 预售场(已结束)',platform:'天猫',shop:'KOKODI旗舰店',product:'写字板 12寸 双面款',refPrice:129,startAt:t-25*D,endAt:t-12*D,rebateType:'fixed',rebateVal:42,rebateCap:0,materials:['尾款图','物流单号','评价图','完成图'],couponInfo:'专属券「KD618」',remarkTpl:'KD618',useGouwujin:true,notice:NOTICE9,incomeTotal:5200,status:'已结束',createdAt:t-25*D}];
+ {id:'a1',name:'7·10 写字板高返场',platform:'天猫',shop:'示例旗舰店',product:'儿童LCD写字板 10寸 护眼款',refPrice:89,startAt:t-3*D,endAt:t+4*D,rebateType:'fixed',rebateVal:35,rebateCap:0,materials:['物流单号','评价图','完成图'],couponInfo:'专属券「AB35」',remarkTpl:'KD710',useGouwujin:false,notice:NOTICE9,incomeTotal:3000,status:'进行中',createdAt:t-3*D},
+ {id:'a2',name:'夏季新品尝鲜(免素材)',platform:'京东',shop:'示例京东自营',product:'写字板 8.5寸 彩虹笔迹',refPrice:59,startAt:t-2*D,endAt:t+9*D,rebateType:'pct',rebateVal:40,rebateCap:50,materials:[],couponInfo:'',remarkTpl:'',useGouwujin:false,notice:NOTICE9,incomeTotal:800,status:'进行中',createdAt:t-2*D},
+ {id:'a3',name:'6·18 预售场(已结束)',platform:'天猫',shop:'示例旗舰店',product:'写字板 12寸 双面款',refPrice:129,startAt:t-25*D,endAt:t-12*D,rebateType:'fixed',rebateVal:42,rebateCap:0,materials:['尾款图','物流单号','评价图','完成图'],couponInfo:'专属券「KD618」',remarkTpl:'KD618',useGouwujin:true,notice:NOTICE9,incomeTotal:5200,status:'已结束',createdAt:t-25*D}];
 function L(steps){const logs=[];let prev=null;steps.forEach(s=>{logs.push({from:prev,to:s[0],op:s[1],note:s[2]||'',at:s[3]});prev=s[0]});return logs}
 function W(id,us){const u=us.find(x=>x.id===id);return u?u.wechat:''}
 function R(o){return{id:o.id,code:o.code,userId:o.u,actId:o.a,orderNo:o.no,amount:o.amt,wechat:W(o.u,users),remark:o.rm||'',img:PH,imgCount:2,status:o.logs[o.logs.length-1].to,rejectReason:o.rj||'',rebate:o.rb||0,materials:o.mt||{},batchId:o.bi||'',violation:!!o.vi,appeal:o.ap||null,createdAt:o.logs[0].at,paidAt:o.pd||0,logs:o.logs}}

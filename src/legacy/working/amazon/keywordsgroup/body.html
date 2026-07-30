@@ -71,7 +71,7 @@
           <tr><td class="l1 qual"></td><td class="l2">产品特点</td><td class="l3">可擦写·磁性·发光·便携·无尘无墨·安全无毒·充电电池·附笔·教育益智·安静·电子智能·防水·价格诉求</td></tr>
           <tr><td class="l1 qual"></td><td class="l2">使用场景</td><td class="l3">出行/旅行·学校课堂·居家室内·户外</td></tr>
           <tr><td class="l1 qual"></td><td class="l2">产品主题</td><td class="l3">节日场合·生日·礼物·促销热点（prime day/deals/clearance）·造型风格（unicorn/dinosaur）</td></tr>
-          <tr><td class="l1 brand">品牌词</td><td class="l2">自有品牌</td><td class="l3">KOKODI</td></tr>
+          <tr><td class="l1 brand">品牌词</td><td class="l2">自有品牌</td><td class="l3">示例品牌</td></tr>
           <tr><td class="l1 brand"></td><td class="l2">竞品品牌</td><td class="l3">① 直接竞品/同类制造商（TEKFUN、Bravokids、Crayola、Melissa & Doug、VTech、Fisher-Price…）；② 相邻玩具/IP 引流品牌（LEGO、Barbie、Disney、Bluey、Paw Patrol…）。三级=品牌名</td></tr>
           <tr><td class="l1 ext">扩展词</td><td class="l2">配件</td><td class="l3">手写笔/替换笔·屏幕保护·收纳套·充电线·模板等耗材配件</td></tr>
           <tr><td class="l1 ext"></td><td class="l2">关联产品 <span class="star">★</span></td><td class="l3">涂色/美术用品、相邻绘画用品（水画垫·画架·白板）、相邻玩具/品类（娃娃·相机·积木·拼图）、泛玩具/游戏、安静/忙碌玩具</td></tr>
@@ -302,7 +302,7 @@ add(buildP('unicorn','dinosaur','dino','princess','mermaid','fairy','space','rob
   'animal themed','outer space'), '限定词','产品主题','造型/风格');
 
 // 品牌词 / 自有品牌
-add(buildP('kokodi'), '品牌词','自有品牌','KOKODI');
+add(buildP('mybrand'), '品牌词','自有品牌','示例品牌');
 
 // 品牌词 / 竞品品牌（含相邻玩具/IP 品牌）
 const BRANDS = {
@@ -698,7 +698,7 @@ if (typeof module !== 'undefined' && module.exports) {
       ['限定词', '使用场景', '出行/旅行（travel·airplane·car ride）·学校课堂·居家室内·户外'],
       ['限定词', '产品主题', '节日场合·生日·礼物·促销热点（prime day/deals/clearance）·造型风格（unicorn/dinosaur 等）'],
       ['限定词', '产品系列', '系列/型号名（本类目极少，按需补充）'],
-      ['品牌词', '自有品牌', 'KOKODI'],
+      ['品牌词', '自有品牌', '示例品牌'],
       ['品牌词', '竞品品牌', '① 直接竞品/同类制造商（TEKFUN、Bravokids、Boogie Board、Crayola、Melissa & Doug、VTech、Fisher-Price…）；② 相邻玩具/IP 引流品牌（LEGO、Barbie、Disney、Bluey、Paw Patrol、Peppa Pig…）。三级=品牌名'],
       ['扩展词', '配件', '手写笔/替换笔·屏幕保护·收纳套·充电线·模板等耗材配件'],
       ['扩展词', merge ? '（关联产品已并入配件）' : '关联产品 ★', merge

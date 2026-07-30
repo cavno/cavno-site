@@ -87,7 +87,7 @@ const desc = (sub?.desc || section.desc) ?? '';
           </div>
         </div>
 
-        <div class="cv-cvCatalog" id="cv-cvCatalog" data-view="cards">
+        <div class="cv-catalog" id="cvCatalog" data-view="cards">
           <div class="cv-v-flat cv-recent-grid">
             {items.map((i) => (
               <ItemCard
@@ -135,7 +135,7 @@ const desc = (sub?.desc || section.desc) ?? '';
 
 <script>
   // 视图切换：URL ?view= 优先，其次 localStorage 记忆，默认卡片
-  const cat = document.getElementById('cv-cvCatalog');
+  const cat = document.getElementById('cvCatalog');
   const seg = document.querySelector('.cv-v-seg') as HTMLElement | null;
   if (cat && seg) {
     const modes = (seg.dataset.modes || 'cards').split(',');
