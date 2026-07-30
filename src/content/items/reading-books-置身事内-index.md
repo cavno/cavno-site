@@ -1,9 +1,0 @@
----
-title: "《置身事内》全书逻辑图谱 · 内在逻辑 / 发生顺序 / 事件因果"
-section: reading
-subsection: "books"
-href: "/apps/reading/books/置身事内/index.html"
-date: 2026-07-13
-tags: []
-summary: ""
----
