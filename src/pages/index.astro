@@ -24,76 +24,76 @@ const tagFor = (sectionSlug: string, subSlug: string) => {
 ---
 <Base>
 
-<section class="hero">
-  <div class="wrap hero-grid">
+<section class="cv-hero">
+  <div class="cv-wrap cv-hero-grid">
     <div>
-      <div class="eyebrow">Cavno · 个人公开工作台</div>
+      <div class="cv-eyebrow">Cavno · 个人公开工作台</div>
       <h1>散落的页面，<br />收进同一张桌面。</h1>
-      <p class="lede">投资、阅读与思考、生活与技能、工作工具——原先分布在四个 GitHub Pages 仓库的静态页面，全部重构为站内原生页面：同一域名、同一套设计系统贯穿到底。静态构建，托管于 Cloudflare。</p>
-      <div class="cta-row">
-        <a class="btn btn-ink" href="#recent">浏览最近更新</a>
-        <a class="btn btn-line" href="#boards">查看站点结构</a>
+      <p class="cv-lede">投资、阅读与思考、生活与技能、工作工具——原先分布在四个 GitHub Pages 仓库的静态页面，全部重构为站内原生页面：同一域名、同一套设计系统贯穿到底。静态构建，托管于 Cloudflare。</p>
+      <div class="cv-cta-row">
+        <a class="cv-btn cv-btn-ink" href="#recent">浏览最近更新</a>
+        <a class="cv-btn cv-btn-line" href="#boards">查看站点结构</a>
       </div>
     </div>
 
-    <aside class="index-card" aria-label="站点索引">
-      <div class="ic-head"><span>Site Index · 站点索引</span><b>●</b></div>
+    <aside class="cv-index-card" aria-label="站点索引">
+      <div class="cv-ic-head"><span>Site Index · 站点索引</span><b>●</b></div>
       {nav.sections.map((s) => (
-        <a class="ic-row" href={`/${s.slug}/`}>
+        <a class="cv-ic-row" href={`/${s.slug}/`}>
           <span>
-            <span class="ic-name">{s.en}</span>
-            <div class="ic-sub">{s.subsections.map((x) => x.zh).join(' · ')}</div>
+            <span class="cv-ic-name">{s.en}</span>
+            <div class="cv-ic-sub">{s.subsections.map((x) => x.zh).join(' · ')}</div>
           </span>
-          <span class="ic-meta">{counts[s.slug]} 项 <span class="arrow">→</span></span>
+          <span class="cv-ic-meta">{counts[s.slug]} 项 <span class="cv-arrow">→</span></span>
         </a>
       ))}
-      <div class="ic-foot">UPDATED {latest} · 共 {total} 项 · 由内容集合自动统计</div>
+      <div class="cv-ic-foot">UPDATED {latest} · 共 {total} 项 · 由内容集合自动统计</div>
     </aside>
   </div>
 </section>
 
-<section class="pipeline">
-  <div class="wrap">
-    <div class="pl-label">Content Pipeline · 内容更新流程</div>
-    <div class="pl-grid">
-      <div class="pl-step"><div class="pl-num">01</div><div class="pl-t">重构旧页</div><div class="pl-d">convert 脚本统一外壳与令牌，再逐页精修</div></div>
-      <div class="pl-step"><div class="pl-num">02</div><div class="pl-t">提交推送</div><div class="pl-d">页面、样式与目录条目全部在仓库内</div></div>
-      <div class="pl-step"><div class="pl-num">03</div><div class="pl-t">Cloudflare 自动构建</div><div class="pl-d">Astro 静态生成，免费额度内完成</div></div>
-      <div class="pl-step"><div class="pl-num">04</div><div class="pl-t">全站生效</div><div class="pl-d">约一分钟后经全球 CDN 上线</div></div>
+<section class="cv-pipeline">
+  <div class="cv-wrap">
+    <div class="cv-pl-label">Content Pipeline · 内容更新流程</div>
+    <div class="cv-pl-grid">
+      <div class="cv-pl-step"><div class="cv-pl-num">01</div><div class="cv-pl-t">重构旧页</div><div class="cv-pl-d">convert 脚本统一外壳与令牌，再逐页精修</div></div>
+      <div class="cv-pl-step"><div class="cv-pl-num">02</div><div class="cv-pl-t">提交推送</div><div class="cv-pl-d">页面、样式与目录条目全部在仓库内</div></div>
+      <div class="cv-pl-step"><div class="cv-pl-num">03</div><div class="cv-pl-t">Cloudflare 自动构建</div><div class="cv-pl-d">Astro 静态生成，免费额度内完成</div></div>
+      <div class="cv-pl-step"><div class="cv-pl-num">04</div><div class="cv-pl-t">全站生效</div><div class="cv-pl-d">约一分钟后经全球 CDN 上线</div></div>
     </div>
   </div>
 </section>
 
-<section class="section-pad" id="boards">
-  <div class="wrap">
-    <div class="sec-head"><h2>四个板块，一套外壳。</h2></div>
-    <p class="sec-lede">每个一级板块一张目录页，二级栏目按卡片陈列；旧页面经重构成为站内原生子页面——统一导航外壳与设计令牌，保留原有内容与交互结构，不再使用 iframe 嵌套。</p>
-    <div class="board-grid">
+<section class="cv-section-pad" id="boards">
+  <div class="cv-wrap">
+    <div class="cv-sec-head"><h2>四个板块，一套外壳。</h2></div>
+    <p class="cv-sec-lede">每个一级板块一张目录页，二级栏目按卡片陈列；旧页面经重构成为站内原生子页面——统一导航外壳与设计令牌，保留原有内容与交互结构，不再使用 iframe 嵌套。</p>
+    <div class="cv-board-grid">
       {nav.sections.map((s) => (
-        <article class="board">
+        <article class="cv-board">
           <h3>{s.en} <small>{s.zh}</small></h3>
           <p>{s.desc}</p>
-          <div class="chip-row">
+          <div class="cv-chip-row">
             {s.subsections.map((sub) => (
-              <a class:list={['chip', { plan: s.planned }]} href={`/${s.slug}/${sub.slug}/`}>
+              <a class:list={['cv-chip', { plan: s.planned }]} href={`/${s.slug}/${sub.slug}/`}>
                 {sub.en}{sub.zh !== sub.en ? ` ${sub.zh}` : ''}
               </a>
             ))}
           </div>
-          <a class="board-go" href={`/${s.slug}/`}>进入板块 →</a>
+          <a class="cv-board-go" href={`/${s.slug}/`}>进入板块 →</a>
         </article>
       ))}
     </div>
   </div>
 </section>
 
-<section class="section-pad" id="recent" style="padding-top:0">
-  <div class="wrap">
-    <div class="sec-head">
+<section class="cv-section-pad" id="recent" style="padding-top:0">
+  <div class="cv-wrap">
+    <div class="cv-sec-head">
       <h2>最近更新</h2>
     </div>
-    <p class="sec-lede">每条对应 <code>src/content/items/</code> 下的一个 Markdown 文件，由重构脚本自动生成，也可手工维护。</p>
-    <div class="recent-grid">
+    <p class="cv-sec-lede">每条对应 <code>src/content/items/</code> 下的一个 Markdown 文件，由重构脚本自动生成，也可手工维护。</p>
+    <div class="cv-recent-grid">
       {recent.length > 0 ? (
         recent.map((i) => (
           <ItemCard
@@ -105,7 +105,7 @@ const tagFor = (sectionSlug: string, subSlug: string) => {
           />
         ))
       ) : (
-        <div class="empty">暂无条目。在 <code>/admin</code> 后台新增，或运行 <code>npm run migrate</code> 批量导入旧站作品。</div>
+        <div class="cv-empty">暂无条目。在 <code>/admin</code> 后台新增，或运行 <code>npm run migrate</code> 批量导入旧站作品。</div>
       )}
     </div>
   </div>

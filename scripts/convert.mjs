@@ -325,12 +325,12 @@ for (const u of units) {
   const up = '../'.repeat(segs.length + 1);
   const relLegacy = `${up}legacy/${[...segs, u.slug].join('/')}`;
   const headBlock = NO_HEAD ? '' : `
-  <section class="page-head">
-    <div class="wrap">
-      <div class="eyebrow">${secEn}${subEn ? ' · ' + subEn : ''}</div>
-      <h1 class="page-title">{meta.title}</h1>
-      ${desc ? '<p class="lede">{meta.description}</p>' : ''}
-      <a class="crumb-back" href="${'/' + segs.join('/') + '/'}">← 返回${subDef?.zh ?? secZh}栏目</a>
+  <section class="cv-page-head">
+    <div class="cv-wrap">
+      <div class="cv-eyebrow">${secEn}${subEn ? ' · ' + subEn : ''}</div>
+      <h1 class="cv-page-title">{meta.title}</h1>
+      ${desc ? '<p class="cv-lede">{meta.description}</p>' : ''}
+      <a class="cv-crumb-back" href="${'/' + segs.join('/') + '/'}">← 返回${subDef?.zh ?? secZh}栏目</a>
     </div>
   </section>
 `;
