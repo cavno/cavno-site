@@ -35,3 +35,21 @@
   padding:10px 18px;border-radius:4px;font-size:13.5px;opacity:0;transform:translateY(8px);
   transition:all .25s;z-index:60;pointer-events:none;max-width:70vw}.lp .toast.show{opacity:1;transform:none}.lp .toast.warn{background:var(--terra)}@media (max-width:720px){.lp .flabel{min-width:100%;padding-top:0}.lp .panel{padding:14px 12px}.lp .masthead{padding:12px 14px 10px}
 }
+
+/* ---------- 目标对比（年度规划 × 明细） ---------- */
+.lp .subhead{margin:26px 0 10px;padding-top:18px;border-top:1px dashed var(--line);font-size:15px;color:var(--ink)}
+.lp table.pivot.cmp th{font-size:11.5px;padding:8px 8px;white-space:nowrap}
+.lp table.pivot.cmp td{font-size:12.5px;padding:7px 8px;white-space:nowrap}
+.lp table.pivot.cmp td.dim{white-space:normal;min-width:180px}
+.lp .cmp .lv2 td.dim{padding-left:64px}
+.lp .asub{font-size:10.5px;color:var(--muted);margin-left:4px}
+.lp .abar{display:inline-block;width:52px;height:6px;background:var(--line);border-radius:3px;margin-right:6px;vertical-align:1px}
+.lp .abar i{display:block;height:100%;background:var(--teal);border-radius:3px}
+.lp .ach{white-space:nowrap}
+.lp .ach.hi .abar i{background:var(--ok)}
+.lp .ach.lo .abar i{background:var(--terra)}
+.lp .ach .ov{color:var(--ok);font-size:9px;margin-left:2px;font-weight:700}
+.lp .ach .na{color:var(--muted)}
+.lp .okv{color:var(--ok)}
+.lp .cflag{font-size:10px;font-style:normal;border:1px solid var(--terra);color:var(--terra);border-radius:3px;padding:0 4px;margin-left:6px;vertical-align:1px}
+.lp .cflag.p{border-color:var(--muted);color:var(--muted)}

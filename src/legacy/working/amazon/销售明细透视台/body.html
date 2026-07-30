@@ -16,6 +16,7 @@
 
 <nav class="tabbar">
   <button data-tab="pivot" class="on">透视分析</button>
+  <button data-tab="compare">目标对比</button>
   <button data-tab="import">数据导入</button>
   <button data-tab="batches">批次管理</button>
   <button data-tab="browse">明细浏览</button>
@@ -52,6 +53,37 @@
   </div>
 </section>
 
+<!-- ============ 目标对比 ============ -->
+<section class="panel" id="panel-compare">
+  <div id="cmpEmpty" class="empty" style="display:none">
+    <h3>目标对比需要两份数据</h3>
+    <p id="cmpEmptyMsg"></p>
+    <div class="actrow">
+      <button class="btn primary" id="btnCmpDemoRows">载入示例明细</button>
+      <button class="btn" id="btnCmpDemoPlan">载入示例规划</button>
+    </div>
+  </div>
+  <div id="cmpBody" style="display:none">
+    <div class="toolrow" style="margin-top:0">
+      <span class="flabel" style="min-width:auto">规划批次</span><select id="cmpBatch" class="txt" style="width:auto;max-width:280px"></select>
+      <span class="flabel" style="min-width:auto">维度</span>
+      <span class="seg" id="cmpModeSeg">
+        <button data-m="owner" class="on">按负责人</button><button data-m="product">按产品</button><button data-m="owner-product">负责人×产品</button>
+      </span>
+      <span class="flabel" style="min-width:auto">粒度</span>
+      <span class="seg" id="cmpGranSeg">
+        <button data-g="year">年</button><button data-g="month" class="on">月</button>
+      </span>
+      <span class="flabel" style="min-width:auto">国家</span><select id="cmpCountry" class="txt" style="width:auto"></select>
+      <span class="spacer"></span>
+      <button class="btn ghost" id="btnCmpCsv">导出 CSV</button>
+    </div>
+    <div class="kpirow" id="cmpKpi"></div>
+    <div class="tablewrap" id="cmpWrap"></div>
+    <div class="hint" id="cmpNote" style="padding:8px 2px">口径：人员按「负责人 = Listing负责人」精确匹配，产品按「父ASIN」匹配；达成率 = 实际 ÷ 目标，毛利以差额呈现；广告费两侧取绝对值；金额默认同为 RMB 口径。详见「口径说明」。</div>
+  </div>
+</section>
+
 <!-- ============ 数据导入 ============ -->
 <section class="panel" id="panel-import">
   <div class="dropzone" id="dropZone">
@@ -70,6 +102,15 @@
     </div>
   </div>
   <div id="importReport"></div>
+
+  <h4 class="subhead">年度目标规划</h4>
+  <div class="dropzone" id="planDrop">
+    点击选择或拖入《年度目标规划》文件（.xlsx / .csv）
+    <div class="sub">行式月度拆解：月份(YYYYMM) / 负责人 / 父ASIN / 父体名称 / 销量 / 销售额RMB / 毛利额RMB / 广告费金额RMB；同一年度可多次导入为不同批次（版本并存，对比时按批次选择）</div>
+  </div>
+  <input type="file" id="planFile" accept=".xlsx,.xls,.xlsm,.csv,.tsv,.txt" hidden>
+  <div class="actrow"><button class="btn ghost" id="btnPlanDemo">载入内置示例规划</button></div>
+  <div id="planReport"></div>
 </section>
 
 <!-- ============ 批次管理 ============ -->
@@ -80,6 +121,8 @@
     <button class="btn danger tiny" id="btnWipe">清空全库</button>
   </div>
   <div id="batchList"></div>
+  <h4 class="subhead">规划批次</h4>
+  <div id="planBatchList"></div>
 </section>
 
 <!-- ============ 明细浏览 ============ -->
@@ -109,6 +152,11 @@
       <tr><td>仓储费占比 Warehouse</td><td>Σ（月仓储＋长期仓储＋FBA销毁费＋FBA移除费＋其他仓储费）÷ Σ 销售额</td></tr>
       <tr><td>采购成本占比 Purchase</td><td>Σ 采购成本 ÷ Σ 销售额（源表为正值，占比亦为正）</td></tr>
       <tr><td>头程成本占比 First-leg</td><td>Σ 头程成本 ÷ Σ 销售额（源表为正值，占比亦为正）</td></tr>
+      <tr><td colspan="2" style="background:var(--panel);font-weight:600">目标对比（年度规划 × 销售明细）</td></tr>
+      <tr><td>匹配键</td><td>人员按「负责人 = Listing负责人」精确匹配；产品优先按「父ASIN」匹配，规划中无 ASIN 的新品仅在目标侧展示</td></tr>
+      <tr><td>达成率</td><td>实际 ÷ 目标（销量、销售额）；毛利以「差额 = 实际 − 目标」呈现，规避正负号下比率失真</td></tr>
+      <tr><td>广告口径</td><td>明细广告费为负号支出，对比时取绝对值；广告占比两侧均为 |广告费| ÷ 销售额</td></tr>
+      <tr><td>币种假设</td><td>规划金额为 RMB；默认销售明细亦为人民币口径（领星 RMB 导出）。若明细为店铺本币，请先统一币种再对比</td></tr>
     </table>
     <p style="font-size:12.5px;color:var(--muted);margin:8px 0">
       约定：费用列沿用财务表的负号，占比因此为负值；率值一律「和÷和」（与 Excel 计算字段一致），绝不做「率的平均」。
@@ -429,6 +477,21 @@ if (typeof module !== 'undefined') module.exports = PivotCore;
 </script>
 <script>
 var SAMPLE_AOA = [["国家","日期","MSKU","ASIN","父ASIN","店铺","品名","SKU","父品名汇总","Listing\r\n负责人","部门","分类","销量","补（换）货量","多渠道销量","销售额","买家运费","促销折扣","退款金额","退款量","其它收入","FBA库存赔偿","平台费","FBA发货费\r\n（已扣减多渠道发货费）","其他订单费用","月仓储","长期仓储","FBA销毁费","FBA移除费","其他仓储费","广告费","推广费","FBA国际物流运费","调整费","平台其他费","入库配置费(原合仓费)","采购单价","采购成本","头程单价","头程成本","站外测评","毛利"],["美国","2026-01-01~2026-01-31","BRK-10-FXHB-FEN","B083BCTLP5","B0DSC18122","A0041-全站点-丁官秀-主账号-US","BRK10寸-方形-粉色彩色","A1-210C-PIN","10寸方形","李禹三","运营一部","LCD手写板",4175,9,3,517912.56,20376.14,-51654.3,-50038.29,385,0,3790.13,-71944.6,-118623.061871709,0,-4063.23,0,-205.89,0,0,-315121.67,-5179.1256,0,-362.2,0,-12.11,14.25,54135.75,8.27,31417.73,0,-160679.127471709],["美国","2026-01-01~2026-01-31","LCD-CS-BLUE-10-X","B082KFTF41","B0DWJVF81Z","A0002-US","KKD10寸-方形-蓝色彩色","A1-210C-BLU","10寸方形","魏荷芬","运营一部","LCD手写板",3949,14,3,422051.84,14791.73,-15285.31,-51564.35,549,0,5709.06,-62507.38,-109214.811037449,0,-9704.37,0,-3006.45,0,0,-239596.16,-4220.5184,0,-186.13,-4769.07,-77.41,14.2857142857143,48771.4285714286,3.41,11641.74,0,-117992.498008878],["美国","2026-01-01~2026-01-31","OS-85IN-KL-GREEN","B09FZ42BTP","B09M8D62RS","A0010-北美-DINFLY-35-US","OS8.5寸-恐龙-绿色","A6-385C-GRE","8.5寸恐龙","李禹三","运营一部","LCD手写板",3947,15,4,517623.45,18044.3,-13970.94,-68636.01,550,0,2930.17,-77405.07,-107354.683766135,0,-7550.58,0,0,0,0,-230965.35,-5176.2345,0,-104.68,0,-107.58,16,54592,3.27,11157.24,0,-38422.4482661352],["美国","2026-01-01~2026-01-31","KKD02G-SJL","B0C8HWWP4Q","B0DNRKMSH5","A0002-US","KD-KP001K儿童手机-恐龙手机套款蓝色（美式）-可插拔内存卡","KP001RB101","KP001K儿童手机","王昱翔","运营一部","儿童手机",2544,42,7,522727.88,23153.97,-22069.42,-94075.01,529,0,15335.31,-77945.96,-99609.9859192474,0,-4562.05,0,-3007.23,0,0,-93093.37,-5227.2788,0,-1086.74,-8132.13,-91.22,78.23,160919.11,5.39,11087.23,0,-19689.5747192474],["美国","2026-01-01~2026-01-31","LCD-CS-PINK-10-X","B082KFCDBM","B0DWJVF81Z","A0002-US","KKD10寸-方形-粉色彩色","A1-210C-PIN","10寸方形","魏荷芬","运营一部","LCD手写板",2072,8,5,217768.89,8887.55,-7920.15,-28698.64,291,0,3005.03,-17225.14,-58073.2618199326,0,-6223.89,0,-1511.19,0,0,-99477.04,-2177.6889,0,-145.69,-3189.82,-47.74,14.25,25493.25,3.31,5921.59,0,-26443.6207199326],["美国","2026-01-01~2026-01-31","BRK-10-FXHB-LAN","B083BG4MXC","B0DSC18122","A0041-全站点-丁官秀-主账号-US","BRK10寸-方形-蓝色彩色","A1-210C-BLU","10寸方形","李禹三","运营一部","LCD手写板",2027,9,6,209012.86,6578.79,-7878.79,-44830.81,420,0,4077.4,-16503,-51676.5553566158,0,-8569.68,0,0,-430.12,0,-63755.11,-2090.1286,0,-185.42,0,-3.9,14.2857142857143,23085.7142857143,3.44,5559.04,0,-4899.21824233014],["美国","2026-01-01~2026-01-31","TKF-TYBS01001BBC02-BACK","B0B9N694YS","B0B9N4K7K1","A0011-北美-MINITOM-113-US","TKF-BS010曲边画板-8.5寸蓝蓝2PCS","BS01001BBC02","曲边","邝灵渊","运营一部","LCD手写板",1249,3,2,73652.9,2932.3,-2804.88,-3776.96,97,0,675.17,-10972.63,-26815.6705755396,0,-1583.22,0,-504.42,0,0,-28031.76,-736.529,0,0,-1037.02,0,17.89,20662.95,3.18,3672.9,0,-23338.5695755396],["美国","2026-01-01~2026-01-31","BRK-85-2PACK-QBHB","B0B944N6JW","B0DSV69LF3","A0041-全站点-丁官秀-主账号-US","通用8.5寸曲边写字板打孔2pc-蓝粉色","AABQBBP85CK-2PC","曲边","李禹三","运营一部","LCD手写板",1069,13,2,65602.29,2720.32,-5764.31,-7946.42,118,0,710.94,-9274.04,-21776.6878338002,0,-2824.08,0,0,-74.22,0,-28526.68,-656.0229,0,0,0,-2.27,11.1504424778761,10749.0265486726,3.01,2901.64,0,-21461.8472824728],["美国","2026-01-01~2026-01-31","KKD02-DDB-H","B0DFCKK62Q","B0FQV3996S","A0002-US","KD-PP001点读笔-单词书1&2配红色款笔（亚马逊）","PP0011R001","PP001点读笔","王昱翔","运营一部","点读笔",945,10,1,314266.46,13976.04,-23573.18,-51670.66,186,0,5656.44,-45546.14,-38590.9430232558,0,-11720.69,0,-761.51,0,0,-127071.81,-3142.6646,0,-234.78,-4386.9,-39.52,59.61,45840.09,8.61,6621.09,0,-25301.0376232558],["美国","2026-01-01~2026-01-31","LCD-CS-YELLOW-10\"","B082K7QYFJ","B0DWJVF81Z","A0002-US","KKD10寸-方形-黄色彩色","A1-210C-YEL","10寸方形","魏荷芬","运营一部","LCD手写板",873,5,1,85328.69,1787.55,-2712.1,-8766.93,86,0,954.79,-6705.29,-23771.0308695652,0,-1097.36,0,-440.67,0,0,-16122.04,-853.2869,0,-62.4,-232.59,-16.86,14.25,11286,3.35,2653.2,0,13351.2722304348]];
+
+var SAMPLE_PLAN_AOA = [
+ ['月份','国家','父ASIN','父体名称','负责人','2026销量','销售额RMB','毛利额RMB','广告费金额RMB'],
+ [202601,'美国','B0DWJVF81Z','KKD-十寸方形','魏荷芬',7500,760000,15000,250000],
+ [202601,'美国','B0DSC18122','BRK-十寸方形','李禹三',5000,800000,-150000,420000],
+ [202601,'美国','B09M8D62RS','OS-8.5寸恐龙','李禹三',3500,480000,-20000,200000],
+ [202601,'美国','B0DSV69LF3','通用曲边','李禹三',1200,70000,-15000,26000],
+ [202601,'美国','B0DNRKMSH5','KP001K儿童手机','王昱翔',3000,600000,10000,110000],
+ [202601,'美国','B0FQV3996S','PP001点读笔','王昱翔',900,300000,-15000,120000],
+ [202601,'美国','B0B9N4K7K1','TKF-曲边画板','邝灵渊',1500,80000,-18000,30000],
+ [202602,'美国','B0DWJVF81Z','KKD-十寸方形','魏荷芬',8200,830000,40000,240000],
+ [202602,'美国','B0DSC18122','BRK-十寸方形','李禹三',5500,880000,-60000,400000],
+ [202602,'美国','','新品A','李禹三',2000,700000,140000,0]
+];
+
 </script>
 <script>
 /* ================= 应用层：状态 / 存储 / 交互 ================= */
@@ -455,6 +518,140 @@ var SAMPLE_AOA = [["国家","日期","MSKU","ASIN","父ASIN","店铺","品名","
   }
   function dayLabel(d) { return d.ds === d.de ? d.ds : (d.ds + '～' + d.de); }
 
+
+  /* ---------- 4b. 年度规划：解析与对比核心 ---------- */
+  /*CMP-CORE-BEGIN*/
+  function parsePlanYM(v) {
+    if (v == null || v === '') return null;
+    var s = String(v).trim(); var m;
+    if ((m = s.match(/^(\d{4})(\d{2})$/)) || (m = s.match(/^(\d{4})[-/.年](\d{1,2})月?$/))) {
+      var y = +m[1], mo = +m[2];
+      if (y >= 2000 && y <= 2100 && mo >= 1 && mo <= 12) return { y: y, mo: mo, ym: y + '-' + pad2(mo) };
+    }
+    return null;
+  }
+  var PLAN_REQ = ['月份', '负责人', '销售额'];
+  function planHeaderResolve(raw) {
+    var k = String(raw == null ? '' : raw).replace(/[\s\r\n*　]/g, '').toLowerCase();
+    if (!k) return null;
+    if (k === '月份' || k === '年月' || k === 'month') return '月份';
+    if (k.indexOf('负责人') >= 0) return '负责人';
+    if (k === '国家') return '国家';
+    if (k === '父asin') return '父ASIN';
+    if (k === '父体名称' || k === '父品名' || k === '父品名汇总') return '父体名称';
+    if (/^(\d{4})?销量$/.test(k)) return '销量';
+    if (k === '销售额rmb' || k === '销售额') return '销售额';
+    if (k === '毛利额rmb' || k === '毛利额' || k === '毛利') return '毛利';
+    if (k === '广告费金额rmb' || k === '广告费金额' || k === '广告费') return '广告费';
+    return null;
+  }
+  /* 返回 { rows, issues:{fatal?,badYM[],merged,unknown[]}, years[], months[], owners[] }
+   * 同一 (月份×负责人×国家×父ASIN×父体名称) 的多行在解析期合并求和 */
+  function buildPlanRows(aoa) {
+    if (!aoa || !aoa.length) return { rows: [], issues: { fatal: '文件为空' } };
+    var hdrIdx = 0, best = -1, map = null, unknown = [];
+    for (var i = 0; i < Math.min(10, aoa.length); i++) {
+      var mm = {}, un = [], hit = 0;
+      (aoa[i] || []).forEach(function (h, ci) {
+        var c = planHeaderResolve(h);
+        if (c) { if (!(c in mm)) mm[c] = ci; }
+        else if (String(h == null ? '' : h).trim() !== '') un.push(String(h));
+      });
+      PLAN_REQ.forEach(function (c) { if (c in mm) hit++; });
+      if (hit > best) { best = hit; hdrIdx = i; map = mm; unknown = un; }
+      if (hit === PLAN_REQ.length) break;
+    }
+    var reqMiss = PLAN_REQ.filter(function (c) { return !(c in map); });
+    if (reqMiss.length) return { rows: [], issues: { fatal: '缺少关键列：' + reqMiss.join('、') + '（需含 月份 / 负责人 / 销售额RMB）', unknown: unknown } };
+    var byKey = {}, badYM = [], merged = 0, ySet = {}, mSet = {}, oSet = {};
+    var num = function (arr, c) { if (!(c in map)) return 0; var p = parseNumber(arr[map[c]]); return p.bad ? 0 : p.v; };
+    var str = function (arr, c) { return (c in map) ? String(arr[map[c]] == null ? '' : arr[map[c]]).trim() : ''; };
+    for (var r = hdrIdx + 1; r < aoa.length; r++) {
+      var arr = aoa[r]; if (!arr) continue;
+      if (arr.every(function (c) { return c == null || String(c).trim() === ''; })) continue;
+      var pm = parsePlanYM(arr[map['月份']]);
+      if (!pm) { badYM.push({ line: r + 1, raw: String(arr[map['月份']]) }); continue; }
+      var owner = str(arr, '负责人') || '(未填写)';
+      var country = str(arr, '国家'), pasin = str(arr, '父ASIN'), pname = str(arr, '父体名称');
+      var key = [pm.ym, owner, country, pasin, pname].join('\x1f');
+      var t = byKey[key];
+      if (!t) t = byKey[key] = { ym: pm.ym, year: pm.y, owner: owner, country: country, pasin: pasin, pname: pname, t: { u: 0, s: 0, g: 0, ad: 0 } };
+      else merged++;
+      t.t.u += num(arr, '销量'); t.t.s += num(arr, '销售额');
+      t.t.g += num(arr, '毛利'); t.t.ad += Math.abs(num(arr, '广告费'));
+      ySet[pm.y] = 1; mSet[pm.ym] = 1; oSet[owner] = 1;
+    }
+    var rows = Object.keys(byKey).map(function (k2) { var t2 = byKey[k2]; t2.k = fnv1a(k2); return t2; });
+    return { rows: rows, issues: { badYM: badYM, merged: merged, unknown: unknown },
+      years: Object.keys(ySet).map(Number).sort(), months: Object.keys(mSet).sort(), owners: Object.keys(oSet).sort() };
+  }
+  /* 对比聚合：某规划批次的 plans × 明细 rows（自动限定在规划年度内）
+   * mode: 'owner' | 'product' | 'owner-product'；country: '' = 全部 */
+  function buildCompare(plans, rows, opt) {
+    var mode = (opt && opt.mode) || 'owner', country = (opt && opt.country) || '';
+    var years = {};
+    plans.forEach(function (p) { years[p.year] = 1; });
+    var zero = function () { return { u: 0, s: 0, g: 0, ad: 0 }; };
+    var addT = function (o, t) { o.u += t.u; o.s += t.s; o.g += t.g; o.ad += t.ad; };
+    var prodKeyP = function (p) { return p.pasin ? 'a:' + p.pasin : 'pn:' + (p.pname || '(未命名)'); };
+    var prodKeyR = function (r) { var pa = r.d['父ASIN']; return pa ? 'a:' + pa : 'dn:' + (r.d['父品名汇总'] || '(未填写)'); };
+    var lv1P = mode === 'product' ? prodKeyP : function (p) { return p.owner; };
+    var lv1R = mode === 'product' ? prodKeyR : function (r) { return r.d['Listing负责人'] || '(未填写)'; };
+    var useLv2 = mode === 'owner-product';
+    var nodes = {}, covered = {};
+    function nodeOf(store, key, withChildren) {
+      var n = store[key];
+      if (!n) n = store[key] = { key: key, label: '', sub: '', tgt: zero(), act: zero(), months: {}, children: withChildren ? {} : null };
+      return n;
+    }
+    function monthOf(n, ym) { return n.months[ym] || (n.months[ym] = { tgt: zero(), act: zero() }); }
+    plans.forEach(function (p) {
+      if (country && p.country !== country) return;
+      var n = nodeOf(nodes, lv1P(p), useLv2);
+      if (!n.label) n.label = mode === 'product' ? (p.pname || p.pasin || '(未命名)') : p.owner;
+      if (mode === 'product' && p.pasin && !n.sub) n.sub = p.pasin;
+      addT(n.tgt, p.t); addT(monthOf(n, p.ym).tgt, p.t);
+      if (useLv2) {
+        var c = nodeOf(n.children, prodKeyP(p), false);
+        if (!c.label) c.label = p.pname || p.pasin || '(未命名)';
+        if (p.pasin && !c.sub) c.sub = p.pasin;
+        addT(c.tgt, p.t); addT(monthOf(c, p.ym).tgt, p.t);
+      }
+    });
+    rows.forEach(function (r) {
+      var y = +r.ds.slice(0, 4);
+      if (years[y] !== 1) return;
+      if (country && r.d['国家'] !== country) return;
+      var ym = r.ds.slice(0, 7); covered[ym] = 1;
+      var t = { u: r.m['销量'] || 0, s: r.m['销售额'] || 0, g: r.m['毛利'] || 0, ad: Math.abs(r.m['广告费'] || 0) };
+      var n = nodeOf(nodes, lv1R(r), useLv2);
+      if (!n.label) n.label = mode === 'product' ? (r.d['父品名汇总'] || '(未填写)') : (r.d['Listing负责人'] || '(未填写)');
+      if (mode === 'product' && r.d['父ASIN'] && !n.sub) n.sub = r.d['父ASIN'];
+      addT(n.act, t); addT(monthOf(n, ym).act, t);
+      if (useLv2) {
+        var c = nodeOf(n.children, prodKeyR(r), false);
+        if (!c.label) c.label = r.d['父品名汇总'] || '(未填写)';
+        if (r.d['父ASIN'] && !c.sub) c.sub = r.d['父ASIN'];
+        addT(c.act, t); addT(monthOf(c, ym).act, t);
+      }
+    });
+    var toList = function (store) {
+      return Object.keys(store).map(function (k) {
+        var n = store[k];
+        n.monthList = Object.keys(n.months).sort();
+        n.flag = (n.tgt.s === 0 && n.tgt.u === 0 && (n.act.s !== 0 || n.act.u !== 0)) ? 'noplan'
+               : ((n.act.s === 0 && n.act.u === 0 && (n.tgt.s !== 0 || n.tgt.u !== 0)) ? 'planonly' : '');
+        if (n.children) n.childList = toList(n.children);
+        return n;
+      }).sort(function (a, b) { return (b.tgt.s - a.tgt.s) || (b.act.s - a.act.s); });
+    };
+    var list = toList(nodes);
+    var total = { tgt: zero(), act: zero() };
+    list.forEach(function (n) { addT(total.tgt, n.tgt); addT(total.act, n.act); });
+    return { nodes: list, total: total, years: Object.keys(years).map(Number).sort(), coveredMonths: Object.keys(covered).sort() };
+  }
+  /*CMP-CORE-END*/
+
   /* ---------- 存储层：IndexedDB，失败则内存兜底 ---------- */
   var DB = (function () {
     var db = null, mem = false;
@@ -462,11 +659,13 @@ var SAMPLE_AOA = [["国家","日期","MSKU","ASIN","父ASIN","店铺","品名","
       return new Promise(function (resolve) {
         try {
           if (!window.indexedDB) { mem = true; return resolve(); }
-          var req = indexedDB.open('kokodi_sales_pivot', 1);
+          var req = indexedDB.open('kokodi_sales_pivot', 2);
           req.onupgradeneeded = function (e) {
             var d = e.target.result;
             if (!d.objectStoreNames.contains('rows')) d.createObjectStore('rows', { keyPath: 'k' });
             if (!d.objectStoreNames.contains('batches')) d.createObjectStore('batches', { keyPath: 'id' });
+            if (!d.objectStoreNames.contains('plans')) d.createObjectStore('plans', { keyPath: 'k' });
+            if (!d.objectStoreNames.contains('planBatches')) d.createObjectStore('planBatches', { keyPath: 'id' });
           };
           req.onsuccess = function (e) { db = e.target.result; resolve(); };
           req.onerror = function () { mem = true; resolve(); };
@@ -499,15 +698,24 @@ var SAMPLE_AOA = [["国家","日期","MSKU","ASIN","父ASIN","店铺","品名","
       open: open,
       isMemory: function () { return mem; },
       loadAll: function () {
-        return Promise.all([readAll('rows'), readAll('batches')]).then(function (r) { return { rows: r[0], batches: r[1] }; });
+        return Promise.all([readAll('rows'), readAll('batches'), readAll('plans'), readAll('planBatches')])
+          .then(function (r) { return { rows: r[0], batches: r[1], plans: r[2], planBatches: r[3] }; });
       },
       putRows: function (rows) { return tx('rows', 'readwrite', function (s) { rows.forEach(function (r) { s.put(r); }); }); },
       delRows: function (keys) { return tx('rows', 'readwrite', function (s) { keys.forEach(function (k) { s.delete(k); }); }); },
       putBatch: function (b) { return tx('batches', 'readwrite', function (s) { s.put(b); }); },
+      putPlans: function (rows) { return tx('plans', 'readwrite', function (s) { rows.forEach(function (r) { s.put(r); }); }); },
+      delPlans: function (keys) { return tx('plans', 'readwrite', function (s) { keys.forEach(function (k) { s.delete(k); }); }); },
+      putPlanBatch: function (b) { return tx('planBatches', 'readwrite', function (s) { s.put(b); }); },
+      delPlanBatch: function (id) { return tx('planBatches', 'readwrite', function (s) { s.delete(id); }); },
       delBatch: function (id) { return tx('batches', 'readwrite', function (s) { s.delete(id); }); },
       clearAll: function () {
         return tx('rows', 'readwrite', function (s) { s.clear(); }).then(function () {
           return tx('batches', 'readwrite', function (s) { s.clear(); });
+        }).then(function () {
+          return tx('plans', 'readwrite', function (s) { s.clear(); });
+        }).then(function () {
+          return tx('planBatches', 'readwrite', function (s) { s.clear(); });
         });
       }
     };
@@ -515,7 +723,9 @@ var SAMPLE_AOA = [["国家","日期","MSKU","ASIN","父ASIN","店铺","品名","
 
   /* ---------- 全局状态 ---------- */
   var S = {
-    rows: [], batches: [],
+    rows: [], batches: [], plans: [], planBatches: [],
+    cmp: { batch: '', mode: 'owner', gran: 'month', country: '', collapsed: {} },
+    planPending: null,
     f: { '国家': new Set(), '店铺': new Set(), '负责人': new Set(), '部门': new Set(), '分类': new Set(), years: new Set(), months: new Set() },
     gran: 'month',
     collapsed: {},          // pathKey -> true
@@ -861,10 +1071,11 @@ var SAMPLE_AOA = [["国家","日期","MSKU","ASIN","父ASIN","店铺","品名","
   }
 
   function wipeAll() {
-    if (!S.rows.length && !S.batches.length) return;
-    if (!confirm('清空全库：' + S.rows.length + ' 行明细与 ' + S.batches.length + ' 个批次都将删除。建议先「备份 JSON」。确认清空？')) return;
+    if (!S.rows.length && !S.batches.length && !S.plans.length) return;
+    if (!confirm('清空全库：' + S.rows.length + ' 行明细、' + S.plans.length + ' 行规划与全部批次都将删除。建议先「备份 JSON」。确认清空？')) return;
     if (!confirm('再次确认：清空后不可恢复（除非用备份文件）。')) return;
     S.rows = []; S.batches = []; S.collapsed = {};
+    S.plans = []; S.planBatches = []; S.cmp.batch = ''; S.cmp.collapsed = {};
     DB.clearAll().catch(function () { });
     renderAll();
     toast('已清空全库', true);
@@ -902,6 +1113,229 @@ var SAMPLE_AOA = [["国家","日期","MSKU","ASIN","父ASIN","店铺","品名","
     $('pgNext').onclick = function () { if (S.page < pages) { S.page++; renderBrowse(); } };
   }
 
+
+  /* ---------- 目标对比：渲染 ---------- */
+  function fmtAch(a) { return a == null ? '–' : (a * 100).toFixed(1) + '%'; }
+  function achCell(act, tgt) {
+    if (!tgt) return '<td class="ach"><span class="na">–</span></td>';
+    var a = act / tgt, w = Math.max(0, Math.min(1, a)) * 100;
+    var cl = a >= 1 ? ' hi' : (a < 0.7 ? ' lo' : '');
+    return '<td class="ach' + cl + '"><span class="abar"><i style="width:' + w.toFixed(1) + '%"></i></span>' +
+      fmtAch(a) + (a > 1 ? '<b class="ov">▲</b>' : '') + '</td>';
+  }
+  function cmpCells(T, A) {
+    var dg = A.g - T.g;
+    var tAd = T.s ? T.ad / T.s : null, aAd = A.s ? A.ad / A.s : null;
+    return tdNum(T.u, fmtInt) + tdNum(A.u, fmtInt) + achCell(A.u, T.u) +
+      tdNum(T.s, fmtMoney) + tdNum(A.s, fmtMoney) + achCell(A.s, T.s) +
+      tdNum(T.g, fmtMoney) + tdNum(A.g, fmtMoney) +
+      '<td class="' + (dg < 0 ? 'neg' : 'okv') + '">' + (dg >= 0 ? '+' : '') + fmtMoney(dg) + '</td>' +
+      '<td>' + fmtPct(tAd) + '</td>' +
+      '<td class="' + (aAd != null && tAd != null && aAd > tAd ? 'neg' : '') + '">' + fmtPct(aAd) + '</td>';
+  }
+  function cmpFlag(n) {
+    if (n.flag === 'noplan') return ' <em class="cflag">未规划</em>';
+    if (n.flag === 'planonly') return ' <em class="cflag p">仅目标</em>';
+    return '';
+  }
+  function renderCompare() {
+    var hasPlan = S.planBatches.length > 0, hasRows = S.rows.length > 0;
+    var ok = hasPlan && hasRows;
+    $('cmpEmpty').style.display = ok ? 'none' : '';
+    $('cmpBody').style.display = ok ? '' : 'none';
+    if (!ok) {
+      $('cmpEmptyMsg').textContent = !hasPlan && !hasRows ? '需要「销售明细」与「年度规划」各至少一个批次，均可在「数据导入」页导入或载入示例。'
+        : (!hasPlan ? '已有销售明细，还差「年度规划」批次（数据导入页下方）。' : '已有年度规划，还差「销售明细」批次。');
+      return;
+    }
+    var pbs = S.planBatches.slice().sort(function (a, b) { return a.ts < b.ts ? 1 : -1; });
+    if (!S.cmp.batch || !pbs.some(function (b) { return b.id === S.cmp.batch; })) S.cmp.batch = pbs[0].id;
+    $('cmpBatch').innerHTML = pbs.map(function (b) {
+      return '<option value="' + b.id + '"' + (b.id === S.cmp.batch ? ' selected' : '') + '>' +
+        esc((b.years || []).join('/') + ' · ' + b.name + (b.note ? '（' + b.note + '）' : '')) + '</option>';
+    }).join('');
+    var plans = S.plans.filter(function (p) { return p.b === S.cmp.batch; });
+    var ySet = {}; plans.forEach(function (p) { ySet[p.year] = 1; });
+    var cSet = {}; plans.forEach(function (p) { if (p.country) cSet[p.country] = 1; });
+    S.rows.forEach(function (r) { if (ySet[+r.ds.slice(0, 4)] && r.d['国家']) cSet[r.d['国家']] = 1; });
+    var cs = Object.keys(cSet).sort();
+    if (S.cmp.country && cs.indexOf(S.cmp.country) < 0) S.cmp.country = '';
+    $('cmpCountry').innerHTML = '<option value="">全部</option>' + cs.map(function (c) {
+      return '<option' + (c === S.cmp.country ? ' selected' : '') + '>' + esc(c) + '</option>';
+    }).join('');
+    document.querySelectorAll('#cmpModeSeg button').forEach(function (b) { b.classList.toggle('on', b.dataset.m === S.cmp.mode); });
+    document.querySelectorAll('#cmpGranSeg button').forEach(function (b) { b.classList.toggle('on', b.dataset.g === S.cmp.gran); });
+    var res = buildCompare(plans, S.rows, { mode: S.cmp.mode, country: S.cmp.country });
+    S._cmp = res;
+    renderCmpKpi(res);
+    renderCmpTable(res);
+  }
+  function renderCmpKpi(res) {
+    var T = res.total.tgt, A = res.total.act;
+    var ach = T.s ? A.s / T.s : null;
+    var dg = A.g - T.g;
+    var monthsTotal = res.years.length * 12;
+    var cards = [
+      ['目标销售额', fmtMoney(T.s), ''],
+      ['实际销售额', fmtMoney(A.s), ''],
+      ['销售额达成', fmtAch(ach), ach != null && ach >= 1 ? 'pos' : (ach != null && ach < 0.7 ? 'neg' : '')],
+      ['毛利差额（实−目）', (dg >= 0 ? '+' : '') + fmtMoney(dg), dg < 0 ? 'neg' : 'pos'],
+      ['时间进度', res.coveredMonths.length + ' / ' + monthsTotal + ' 月', '']
+    ];
+    $('cmpKpi').innerHTML = cards.map(function (c) {
+      return '<div class="kpi"><div class="kv ' + c[2] + '">' + c[1] + '</div><div class="kl">' + c[0] + '</div></div>';
+    }).join('');
+  }
+  function renderCmpTable(res) {
+    var dimName = S.cmp.mode === 'owner' ? '负责人' : (S.cmp.mode === 'product' ? '产品（父ASIN）' : '负责人 × 产品');
+    var byMonth = S.cmp.gran === 'month';
+    var h = '<table class="pivot cmp"><thead><tr><th class="dim">' + dimName + '</th>' +
+      '<th>目标销量</th><th>实际销量</th><th>达成</th>' +
+      '<th>目标销售额</th><th>实际销售额</th><th>达成</th>' +
+      '<th>目标毛利</th><th>实际毛利</th><th>差额</th>' +
+      '<th>目标广告占比</th><th>实际广告占比</th></tr></thead><tbody>';
+    function caretC(path, has) {
+      if (!has) return '<span class="caret-slot"></span>';
+      return '<button type="button" class="caret" data-cpath="' + esc(path) + '">' + (S.cmp.collapsed[path] ? '▸' : '▾') + '</button>';
+    }
+    function monthRows(n, indentCls) {
+      var mh = '';
+      n.monthList.forEach(function (ym) {
+        var m = n.months[ym];
+        mh += '<tr class="' + indentCls + '"><td class="dim"><span class="caret-slot"></span><span class="nm">' + ym + '</span></td>' + cmpCells(m.tgt, m.act) + '</tr>';
+      });
+      return mh;
+    }
+    res.nodes.forEach(function (n) {
+      var path = 'c|' + n.key;
+      var kids = n.childList && n.childList.length;
+      var has = byMonth || kids;
+      h += '<tr class="lv0"><td class="dim">' + caretC(path, has) + '<span class="nm">' + esc(n.label) + '</span>' +
+        (n.sub ? ' <small class="asub">' + esc(n.sub) + '</small>' : '') + cmpFlag(n) + '</td>' + cmpCells(n.tgt, n.act) + '</tr>';
+      if (S.cmp.collapsed[path]) return;
+      if (kids) {
+        n.childList.forEach(function (c) {
+          var cp = path + '|' + c.key;
+          h += '<tr class="lv1"><td class="dim">' + caretC(cp, byMonth) + '<span class="nm">' + esc(c.label) + '</span>' +
+            (c.sub ? ' <small class="asub">' + esc(c.sub) + '</small>' : '') + cmpFlag(c) + '</td>' + cmpCells(c.tgt, c.act) + '</tr>';
+          if (byMonth && !S.cmp.collapsed[cp]) h += monthRows(c, 'lv2');
+        });
+      } else if (byMonth) {
+        h += monthRows(n, 'lv1');
+      }
+    });
+    h += '<tr class="grand"><td class="dim">总计</td>' + cmpCells(res.total.tgt, res.total.act) + '</tr>';
+    h += '</tbody></table>';
+    $('cmpWrap').innerHTML = h;
+  }
+  function exportCompareCsv() {
+    var res = S._cmp;
+    if (!res) return;
+    var pct = function (x) { return x == null ? '' : (x * 100).toFixed(2) + '%'; };
+    var line = function (l1, l2, ym, T, A) {
+      var au = T.u ? A.u / T.u : null, as = T.s ? A.s / T.s : null;
+      return [l1, l2, ym, Math.round(T.u), Math.round(A.u), pct(au), T.s.toFixed(2), A.s.toFixed(2), pct(as),
+        T.g.toFixed(2), A.g.toFixed(2), (A.g - T.g).toFixed(2), pct(T.s ? T.ad / T.s : null), pct(A.s ? A.ad / A.s : null)];
+    };
+    var out = [['维度一', '维度二', '月份', '目标销量', '实际销量', '销量达成', '目标销售额', '实际销售额', '销售额达成', '目标毛利', '实际毛利', '毛利差额', '目标广告占比', '实际广告占比']];
+    res.nodes.forEach(function (n) {
+      out.push(line(n.label + (n.sub ? '(' + n.sub + ')' : ''), '', '', n.tgt, n.act));
+      var kids = n.childList && n.childList.length;
+      if (kids) {
+        n.childList.forEach(function (c) {
+          out.push(line(n.label, c.label + (c.sub ? '(' + c.sub + ')' : ''), '', c.tgt, c.act));
+          c.monthList.forEach(function (ym) { out.push(line(n.label, c.label, ym, c.months[ym].tgt, c.months[ym].act)); });
+        });
+      } else {
+        n.monthList.forEach(function (ym) { out.push(line(n.label, '', ym, n.months[ym].tgt, n.months[ym].act)); });
+      }
+    });
+    out.push(line('总计', '', '', res.total.tgt, res.total.act));
+    var lines = out.map(function (r) {
+      return r.map(function (v) { var t = String(v == null ? '' : v); return /[",\n]/.test(t) ? '"' + t.replace(/"/g, '""') + '"' : t; }).join(',');
+    });
+    download(['\uFEFF' + lines.join('\r\n')], 'text/csv;charset=utf-8', '目标对比_' + stamp() + '.csv');
+    toast('已导出目标对比 CSV');
+  }
+
+  /* ---------- 规划导入 / 规划批次 ---------- */
+  function handlePlanFile(file) {
+    if (/\.(csv|tsv|txt)$/i.test(file.name)) {
+      var fr = new FileReader();
+      fr.onload = function () { previewPlanImport(parseCSV(String(fr.result)), file.name); };
+      fr.readAsText(file, 'utf-8');
+      return;
+    }
+    if (!ensureXLSX()) { toast('表格解析库未加载：可先另存为 CSV 导入', true); return; }
+    var fr2 = new FileReader();
+    fr2.onload = function () {
+      try {
+        var wb = XLSX.read(new Uint8Array(fr2.result), { type: 'array' });
+        var name = wb.SheetNames.filter(function (n) { return n.indexOf('规划') >= 0; })[0] || wb.SheetNames[0];
+        var aoa = XLSX.utils.sheet_to_json(wb.Sheets[name], { header: 1, raw: true, defval: '' });
+        previewPlanImport(aoa, file.name + '（' + name + '）');
+      } catch (e) { toast('文件解析失败：' + e.message, true); }
+    };
+    fr2.readAsArrayBuffer(file);
+  }
+  function previewPlanImport(aoa, srcName) {
+    var built = buildPlanRows(aoa);
+    var box = $('planReport');
+    if (built.issues.fatal) {
+      box.innerHTML = '<div class="card danger"><b>无法入库</b><div>' + esc(built.issues.fatal) + '</div></div>';
+      S.planPending = null; return;
+    }
+    S.planPending = { built: built, srcName: srcName };
+    var sameYear = S.planBatches.filter(function (b) { return (b.years || []).some(function (y) { return built.years.indexOf(y) >= 0; }); });
+    var h = '<div class="card"><div class="cardtitle">规划校验 · ' + esc(srcName) + '</div><div class="repgrid">';
+    h += '<div><b>' + built.rows.length + '</b><span>目标行（合并后）</span></div>';
+    h += '<div><b>' + built.years.join('、') + '</b><span>年度</span></div>';
+    h += '<div><b>' + built.months.length + '</b><span>覆盖月份数</span></div>';
+    h += '<div><b>' + built.owners.length + '</b><span>负责人数</span></div></div>';
+    if (built.issues.merged) h += '<div class="isline">同键多行已合并求和：' + built.issues.merged + ' 行</div>';
+    if (built.issues.badYM.length) h += '<div class="isline bad">月份无法解析（该行剔除）：' + esc(built.issues.badYM.slice(0, 6).map(function (x) { return '第' + x.line + '行「' + x.raw + '」'; }).join('；')) + (built.issues.badYM.length > 6 ? ' …共 ' + built.issues.badYM.length + ' 处' : '') + '</div>';
+    if (sameYear.length) h += '<div class="isline warn2">同年度已有 ' + sameYear.length + ' 个规划批次，将并存为新版本，对比时按批次选择。</div>';
+    h += '<div class="strat"><span class="flabel">批次备注</span><input id="planNote" class="txt" placeholder="例如：' + built.years.join('/') + ' 年初定稿" maxlength="60"></div>';
+    h += '<div class="actrow"><button id="btnPlanCommit" class="btn primary">确认入库 ' + built.rows.length + ' 行目标</button><button id="btnPlanCancel" class="btn ghost">放弃本次</button></div></div>';
+    box.innerHTML = h;
+    $('btnPlanCommit').onclick = commitPlanImport;
+    $('btnPlanCancel').onclick = function () { S.planPending = null; box.innerHTML = ''; };
+  }
+  function commitPlanImport() {
+    var p = S.planPending; if (!p) return;
+    var id = 'P' + Date.now().toString(36) + Math.random().toString(36).slice(2, 5);
+    var rows = p.built.rows.map(function (r) { r.b = id; r.k = id + '|' + r.k; return r; });
+    S.plans = S.plans.concat(rows);
+    var batch = { id: id, ts: new Date().toISOString(), name: p.srcName, note: ($('planNote') && $('planNote').value.trim()) || '',
+      years: p.built.years, months: p.built.months, count: rows.length, owners: p.built.owners.length };
+    S.planBatches.push(batch);
+    DB.putPlans(rows).then(function () { return DB.putPlanBatch(batch); }).catch(function () { });
+    S.planPending = null; S.cmp.batch = id; S.cmp.collapsed = {};
+    $('planReport').innerHTML = '<div class="card ok"><b>规划已入库</b> ' + rows.length + ' 行目标（' + batch.years.join('、') + ' 年度）。<button class="btn link" id="goCmp">去目标对比 →</button></div>';
+    $('goCmp').onclick = function () { switchTab('compare'); };
+    renderAll();
+    toast('规划入库完成');
+  }
+  function renderPlanBatches() {
+    if (!S.planBatches.length) { $('planBatchList').innerHTML = '<div class="hint">尚无规划批次。在「数据导入」页下方导入《年度目标规划》。</div>'; return; }
+    var h = '<table class="flat"><thead><tr><th>时间</th><th>来源</th><th>年度</th><th>覆盖月份</th><th>目标行</th><th>负责人</th><th>备注</th><th></th></tr></thead><tbody>';
+    S.planBatches.slice().sort(function (a, b) { return a.ts < b.ts ? 1 : -1; }).forEach(function (b) {
+      h += '<tr><td>' + esc(b.ts.slice(0, 16).replace('T', ' ')) + '</td><td>' + esc(b.name) + '</td><td>' + esc((b.years || []).join('、')) + '</td>' +
+        '<td>' + (b.months || []).length + '</td><td>' + b.count + '</td><td>' + (b.owners || 0) + '</td><td>' + esc(b.note || '') + '</td>' +
+        '<td><button class="btn tiny danger" data-delplanbatch="' + b.id + '">删除本批</button></td></tr>';
+    });
+    $('planBatchList').innerHTML = h + '</tbody></table>';
+  }
+  function deletePlanBatch(id) {
+    var victim = S.plans.filter(function (r) { return r.b === id; });
+    if (!confirm('删除该规划批次（' + victim.length + ' 行目标）？不影响销售明细。')) return;
+    S.plans = S.plans.filter(function (r) { return r.b !== id; });
+    S.planBatches = S.planBatches.filter(function (b) { return b.id !== id; });
+    DB.delPlans(victim.map(function (r) { return r.k; })).then(function () { return DB.delPlanBatch(id); }).catch(function () { });
+    renderAll();
+    toast('规划批次已删除');
+  }
+
   /* ---------- 备份 / 恢复 ---------- */
   function download(blobParts, type, filename) {
     var blob = new Blob(blobParts, { type: type });
@@ -917,9 +1351,9 @@ var SAMPLE_AOA = [["国家","日期","MSKU","ASIN","父ASIN","店铺","品名","
     return '' + d.getFullYear() + p(d.getMonth() + 1) + p(d.getDate()) + '_' + p(d.getHours()) + p(d.getMinutes());
   }
   function backup() {
-    var payload = { app: 'sales-pivot', version: 1, exportedAt: new Date().toISOString(), batches: S.batches, rows: S.rows };
+    var payload = { app: 'sales-pivot', version: 2, exportedAt: new Date().toISOString(), batches: S.batches, rows: S.rows, plans: S.plans, planBatches: S.planBatches };
     download([JSON.stringify(payload)], 'application/json', '销售明细库备份_' + stamp() + '.json');
-    toast('备份已下载（' + S.rows.length + ' 行）');
+    toast('备份已下载（明细 ' + S.rows.length + ' 行 · 规划 ' + S.plans.length + ' 行）');
   }
   function restoreFile(file) {
     var fr = new FileReader();
@@ -929,8 +1363,13 @@ var SAMPLE_AOA = [["国家","日期","MSKU","ASIN","父ASIN","店铺","品名","
         if (p.app !== 'sales-pivot' || !Array.isArray(p.rows) || !Array.isArray(p.batches)) throw new Error('不是本工具的备份文件');
         if (!confirm('恢复将替换当前全部数据（现有 ' + S.rows.length + ' 行 → 备份 ' + p.rows.length + ' 行）。继续？')) return;
         S.rows = p.rows; S.batches = p.batches; S.collapsed = {};
+        S.plans = Array.isArray(p.plans) ? p.plans : [];
+        S.planBatches = Array.isArray(p.planBatches) ? p.planBatches : [];
+        S.cmp.batch = ''; S.cmp.collapsed = {};
         DB.clearAll().then(function () { return DB.putRows(S.rows); }).then(function () {
           return Promise.all(S.batches.map(function (b) { return DB.putBatch(b); }));
+        }).then(function () { return DB.putPlans(S.plans); }).then(function () {
+          return Promise.all(S.planBatches.map(function (b) { return DB.putPlanBatch(b); }));
         }).catch(function () { });
         renderAll();
         toast('恢复完成：' + S.rows.length + ' 行');
@@ -1032,8 +1471,12 @@ var SAMPLE_AOA = [["国家","日期","MSKU","ASIN","父ASIN","店铺","品名","
     renderFilters();
     renderPivot();
     renderBatches();
+    renderPlanBatches();
     renderBrowse();
-    $('dataCount').textContent = S.rows.length ? S.rows.length + ' 行 · ' + S.batches.length + ' 批' : '空库';
+    renderCompare();
+    var dc = S.rows.length ? S.rows.length + ' 行 · ' + S.batches.length + ' 批' : '空库';
+    if (S.plans.length) dc += ' · 规划 ' + S.plans.length + ' 行';
+    $('dataCount').textContent = dc;
   }
 
   function bind() {
@@ -1068,6 +1511,12 @@ var SAMPLE_AOA = [["国家","日期","MSKU","ASIN","父ASIN","店铺","品名","
         renderPivot();
       } else if (t.dataset.delbatch) {
         deleteBatch(t.dataset.delbatch);
+      } else if (t.dataset.delplanbatch) {
+        deletePlanBatch(t.dataset.delplanbatch);
+      } else if (t.dataset.cpath) {
+        if (S.cmp.collapsed[t.dataset.cpath]) delete S.cmp.collapsed[t.dataset.cpath];
+        else S.cmp.collapsed[t.dataset.cpath] = true;
+        if (S._cmp) renderCmpTable(S._cmp);
       }
     });
     // 粒度
@@ -1115,6 +1564,27 @@ var SAMPLE_AOA = [["国家","日期","MSKU","ASIN","父ASIN","店铺","品名","
     // 明细浏览
     $('browseQ').oninput = function () { S.page = 1; renderBrowse(); };
     $('browseMonth').onchange = function () { S.page = 1; renderBrowse(); };
+    // 规划导入
+    var planDemo = function () { previewPlanImport(SAMPLE_PLAN_AOA, '内置示例规划（2026 两个月）'); switchTab('import'); };
+    var pdz = $('planDrop');
+    pdz.onclick = function () { $('planFile').click(); };
+    $('planFile').onchange = function (e) { if (e.target.files[0]) handlePlanFile(e.target.files[0]); e.target.value = ''; };
+    ['dragover', 'dragenter'].forEach(function (ev) { pdz.addEventListener(ev, function (e) { e.preventDefault(); pdz.classList.add('drag'); }); });
+    ['dragleave', 'drop'].forEach(function (ev) { pdz.addEventListener(ev, function (e) { e.preventDefault(); pdz.classList.remove('drag'); }); });
+    pdz.addEventListener('drop', function (e) { var f = e.dataTransfer && e.dataTransfer.files && e.dataTransfer.files[0]; if (f) handlePlanFile(f); });
+    $('btnPlanDemo').onclick = planDemo;
+    // 目标对比控件
+    $('btnCmpDemoRows').onclick = $('btnDemo').onclick;
+    $('btnCmpDemoPlan').onclick = planDemo;
+    $('cmpBatch').onchange = function () { S.cmp.batch = this.value; S.cmp.collapsed = {}; renderCompare(); };
+    $('cmpCountry').onchange = function () { S.cmp.country = this.value; renderCompare(); };
+    document.querySelectorAll('#cmpModeSeg button').forEach(function (b) {
+      b.onclick = function () { S.cmp.mode = b.dataset.m; S.cmp.collapsed = {}; renderCompare(); };
+    });
+    document.querySelectorAll('#cmpGranSeg button').forEach(function (b) {
+      b.onclick = function () { S.cmp.gran = b.dataset.g; renderCompare(); };
+    });
+    $('btnCmpCsv').onclick = exportCompareCsv;
     // 口径说明
     $('btnGauge').onclick = function () { $('gaugeModal').classList.add('show'); };
     $('gaugeClose').onclick = function () { $('gaugeModal').classList.remove('show'); };
@@ -1127,6 +1597,8 @@ var SAMPLE_AOA = [["国家","日期","MSKU","ASIN","父ASIN","店铺","品名","
   }).then(function (d) {
     S.rows = d.rows || [];
     S.batches = d.batches || [];
+    S.plans = d.plans || [];
+    S.planBatches = d.planBatches || [];
     if (DB.isMemory()) {
       $('storageBadge').textContent = '仅内存运行 · 关闭页面即丢失（请部署到本地或 GitHub Pages 获得持久化）';
       $('storageBadge').classList.add('warn');
