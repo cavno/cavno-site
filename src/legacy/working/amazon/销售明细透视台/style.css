@@ -53,3 +53,16 @@
 .lp .okv{color:var(--ok)}
 .lp .cflag{font-size:10px;font-style:normal;border:1px solid var(--terra);color:var(--terra);border-radius:3px;padding:0 4px;margin-left:6px;vertical-align:1px}
 .lp .cflag.p{border-color:var(--muted);color:var(--muted)}
+
+/* ---------- ASIN 趋势 ---------- */
+.lp .pf-badges{margin-top:5px;display:flex;gap:6px;flex-wrap:wrap}
+.lp .pf-delta{font-size:10.5px;border-radius:3px;padding:1px 5px;background:var(--panel);color:var(--muted);white-space:nowrap}
+.lp .pf-delta.up{background:#e6f2ea;color:var(--ok)}
+.lp .pf-delta.down{background:#f7e8e2;color:var(--terra)}
+.lp .pf-scopeline{font-size:12px;color:var(--muted);margin:4px 0 6px}
+.lp table.flat.pftab td,.lp table.flat.pftab th{white-space:nowrap;font-size:12.5px}
+.lp table.flat.pftab td.clip{max-width:280px}
+.lp .pfrow{cursor:pointer}
+.lp .pfrow:hover{background:var(--panel)}
+.lp .pfrow.sel{background:var(--tealsoft)}
+.lp .pftab .grand td{font-weight:600;background:var(--panel)}

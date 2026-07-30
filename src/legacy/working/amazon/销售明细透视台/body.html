@@ -17,6 +17,7 @@
 <nav class="tabbar">
   <button data-tab="pivot" class="on">透视分析</button>
   <button data-tab="compare">目标对比</button>
+  <button data-tab="perf">ASIN 趋势</button>
   <button data-tab="import">数据导入</button>
   <button data-tab="batches">批次管理</button>
   <button data-tab="browse">明细浏览</button>
@@ -84,6 +85,32 @@
   </div>
 </section>
 
+<!-- ============ ASIN 趋势 ============ -->
+<section class="panel" id="panel-perf">
+  <div id="perfEmpty" class="empty" style="display:none">
+    <h3>还没有产品表现数据</h3>
+    <p>在「数据导入」页下方导入领星《产品表现ASIN》按日导出的报告（可多次导入累积成连续序列），或先载入内置示例感受交互。</p>
+    <div class="actrow"><button class="btn primary" id="btnPerfDemoEmpty">载入示例表现数据</button></div>
+  </div>
+  <div id="perfBody" style="display:none">
+    <div class="toolrow" style="margin-top:0">
+      <span class="flabel" style="min-width:auto">粒度</span>
+      <span class="seg" id="perfGranSeg">
+        <button data-g="day" class="on">日</button><button data-g="week">周</button><button data-g="month">月</button>
+      </span>
+      <span class="flabel" style="min-width:auto">国家</span><select id="perfCountry" class="txt" style="width:auto"></select>
+      <span class="flabel" style="min-width:auto">ASIN</span><select id="perfAsin" class="txt" style="width:auto;max-width:300px"></select>
+      <span class="flabel" style="min-width:auto">统计截止</span><select id="perfAnchor" class="txt" style="width:auto"></select>
+      <span class="spacer"></span>
+      <button class="btn ghost" id="btnPerfCsv">导出 CSV</button>
+    </div>
+    <div class="kpirow" id="perfKpi"></div>
+    <div id="perfCharts"></div>
+    <div class="tablewrap" id="perfWrap"></div>
+    <div class="hint" id="perfNote" style="padding:8px 2px"></div>
+  </div>
+</section>
+
 <!-- ============ 数据导入 ============ -->
 <section class="panel" id="panel-import">
   <div class="dropzone" id="dropZone">
@@ -111,6 +138,15 @@
   <input type="file" id="planFile" accept=".xlsx,.xls,.xlsm,.csv,.tsv,.txt" hidden>
   <div class="actrow"><button class="btn ghost" id="btnPlanDemo">载入内置示例规划</button></div>
   <div id="planReport"></div>
+
+  <h4 class="subhead">产品表现（ASIN 日报）</h4>
+  <div class="dropzone" id="perfDrop">
+    点击选择或拖入领星《产品表现ASIN》导出文件（.xlsx / .csv）
+    <div class="sub">按日导出、ASIN 维度；识别 日期 / ASIN / 店铺 / 国家 / Sessions / PV / 订单量 / 展示 / 点击 / 广告花费 / 广告销售额 / 广告订单量 等列，其余列自动忽略；可多次导入累积为连续时间序列</div>
+  </div>
+  <input type="file" id="perfFile" accept=".xlsx,.xls,.xlsm,.csv,.tsv,.txt" hidden>
+  <div class="actrow"><button class="btn ghost" id="btnPerfDemo">载入内置示例表现</button></div>
+  <div id="perfReport"></div>
 </section>
 
 <!-- ============ 批次管理 ============ -->
@@ -123,6 +159,8 @@
   <div id="batchList"></div>
   <h4 class="subhead">规划批次</h4>
   <div id="planBatchList"></div>
+  <h4 class="subhead">表现批次</h4>
+  <div id="perfBatchList"></div>
 </section>
 
 <!-- ============ 明细浏览 ============ -->
@@ -157,6 +195,11 @@
       <tr><td>达成率</td><td>实际 ÷ 目标（销量、销售额）；毛利以「差额 = 实际 − 目标」呈现，规避正负号下比率失真</td></tr>
       <tr><td>广告口径</td><td>明细广告费为负号支出，对比时取绝对值；广告占比两侧均为 |广告费| ÷ 销售额</td></tr>
       <tr><td>币种假设</td><td>规划金额为 RMB；默认销售明细亦为人民币口径（领星 RMB 导出）。若明细为店铺本币，请先统一币种再对比</td></tr>
+      <tr><td colspan="2" style="background:var(--panel);font-weight:600">ASIN 趋势（产品表现日报）</td></tr>
+      <tr><td>比率口径</td><td>所有比率一律"先求和、再相除"：CVR＝Σ订单量÷ΣSessions；CTR＝Σ点击÷Σ展示；广告CVR＝Σ广告订单÷Σ点击；ACOS＝Σ广告花费÷Σ广告销售额；CPC＝Σ花费÷Σ点击。不使用报告自带的百分比列</td></tr>
+      <tr><td>环比定义</td><td>与相邻上一期比较（日：昨日；周：上周，周一为界；月：上月）；日粒度另给「周同比」＝上周同一天。数量/金额为百分比变化，比率为百分点（pp）变化</td></tr>
+      <tr><td>数据滞后</td><td>亚马逊流量报表（Sessions/PV/订单）通常滞后 1～2 天，广告数据当天可得；「统计截止」默认取最近一个流量非零的期，可手动切换</td></tr>
+      <tr><td>范围口径</td><td>金额为各站点本币；国家选「全部」时金额跨币种相加仅作量级参考，比率不受影响。ASIN 为"-"的店铺占位行在导入时剔除</td></tr>
     </table>
     <p style="font-size:12.5px;color:var(--muted);margin:8px 0">
       约定：费用列沿用财务表的负号，占比因此为负值；率值一律「和÷和」（与 Excel 计算字段一致），绝不做「率的平均」。
@@ -304,7 +347,7 @@ const PivotCore = (() => {
     if (/^\(.*\)$/.test(s)) { neg = true; s = s.slice(1, -1); }
     let pct = false;
     if (/%$/.test(s)) { pct = true; s = s.slice(0, -1); }
-    s = s.replace(/[,，\s\u00A0]/g, '').replace(/^[￥¥$€£]/, '');
+    s = s.replace(/[,，\s\u00A0]/g, '').replace(/^[￥¥$€£￡＄]/, '');
     const n = Number(s);
     if (!isFinite(n)) return { v: 0, bad: true };
     let r = n; if (neg) r = -r; if (pct) r = r / 100;
@@ -602,8 +645,113 @@ const PivotCore = (() => {
   }
   /*CMP-CORE-END*/
 
+  /* ---------- 4c. 产品表现（ASIN 日报）：解析 / 期化 / 聚合核心 ---------- */
+  /*PERF-CORE-BEGIN*/
+  var PERF_METRICS = ['sess', 'pv', 'ord', 'units', 'sales', 'imp', 'clk', 'spend', 'adsales', 'adord'];
+  function perfHeaderResolve(raw) {
+    var k = String(raw == null ? '' : raw).replace(/[\s\r\n*　]/g, '').toLowerCase();
+    if (!k) return null;
+    var M = { '日期': 'ds', 'asin': 'asin', '父asin': 'pasin', '店铺': 'shop', '国家': 'country', '品名': 'name',
+      'sessions-total': 'sess', 'pv-total': 'pv', '订单量': 'ord', '销量': 'units', '销售额': 'sales',
+      '展示': 'imp', '点击': 'clk', '广告花费': 'spend', '广告销售额': 'adsales', '广告订单量': 'adord' };
+    return M.hasOwnProperty(k) ? M[k] : null;
+  }
+  /* aoa → { rows, issues:{fatal?,badDate[],noAsin,unknown}, dates[], countries[], asinCount } */
+  function buildPerfRows(aoa) {
+    if (!aoa || !aoa.length) return { rows: [], issues: { fatal: '文件为空' } };
+    var hdrIdx = 0, best = -1, map = null, unknown = 0;
+    for (var i = 0; i < Math.min(10, aoa.length); i++) {
+      var mm = {}, un = 0, hit = 0;
+      (aoa[i] || []).forEach(function (h, ci) {
+        var c = perfHeaderResolve(h);
+        if (c) { if (!(c in mm)) mm[c] = ci; }
+        else if (String(h == null ? '' : h).trim() !== '') un++;
+      });
+      ['ds', 'asin'].forEach(function (c) { if (c in mm) hit++; });
+      if (hit > best) { best = hit; hdrIdx = i; map = mm; unknown = un; }
+      if (hit === 2) break;
+    }
+    if (!map || !('ds' in map) || !('asin' in map))
+      return { rows: [], issues: { fatal: '缺少关键列：日期 / ASIN（请使用领星《产品表现ASIN》按日导出）' } };
+    var rows = [], badDate = [], noAsin = 0, dSet = {}, cSet = {}, aSet = {};
+    var num = function (arr, c) { if (!(c in map)) return 0; var p = parseNumber(arr[map[c]]); return p.bad ? 0 : p.v; };
+    var str = function (arr, c) { return (c in map) ? String(arr[map[c]] == null ? '' : arr[map[c]]).trim() : ''; };
+    for (var r = hdrIdx + 1; r < aoa.length; r++) {
+      var arr = aoa[r]; if (!arr) continue;
+      if (arr.every(function (c) { return c == null || String(c).trim() === ''; })) continue;
+      var asin = str(arr, 'asin');
+      if (!asin || asin === '-') { noAsin++; continue; }
+      var pd = parseDateCell(arr[map['ds']]);
+      if (!pd || pd.ds !== pd.de) { badDate.push({ line: r + 1, raw: String(arr[map['ds']]) }); continue; }
+      var row = { ds: pd.ds, asin: asin, pasin: str(arr, 'pasin'), shop: str(arr, 'shop'),
+        country: str(arr, 'country'), name: str(arr, 'name'), m: {} };
+      PERF_METRICS.forEach(function (c) { row.m[c] = num(arr, c); });
+      row.k = fnv1a([row.ds, row.asin, row.shop].join('\x1f'));
+      rows.push(row);
+      dSet[row.ds] = 1; if (row.country) cSet[row.country] = 1; aSet[row.asin] = 1;
+    }
+    return { rows: rows, issues: { badDate: badDate, noAsin: noAsin, unknown: unknown },
+      dates: Object.keys(dSet).sort(), countries: Object.keys(cSet).sort(), asinCount: Object.keys(aSet).length };
+  }
+  /* ---- 期化：day / week(周一为界) / month ---- */
+  function perfDateAdd(ds, n) {
+    var t = Date.UTC(+ds.slice(0, 4), +ds.slice(5, 7) - 1, +ds.slice(8, 10)) + n * 86400000;
+    var d = new Date(t);
+    return d.getUTCFullYear() + '-' + pad2(d.getUTCMonth() + 1) + '-' + pad2(d.getUTCDate());
+  }
+  function perfWeekStart(ds) {
+    var d = new Date(Date.UTC(+ds.slice(0, 4), +ds.slice(5, 7) - 1, +ds.slice(8, 10)));
+    var wd = (d.getUTCDay() + 6) % 7; // 周一=0
+    return perfDateAdd(ds, -wd);
+  }
+  function perfPeriodKey(ds, gran) {
+    if (gran === 'week') return perfWeekStart(ds);
+    if (gran === 'month') return ds.slice(0, 7);
+    return ds;
+  }
+  function perfPrevKey(pk, gran) {
+    if (gran === 'month') {
+      var y = +pk.slice(0, 4), m = +pk.slice(5, 7) - 1;
+      if (m === 0) { y--; m = 12; }
+      return y + '-' + pad2(m);
+    }
+    return perfDateAdd(pk, gran === 'week' ? -7 : -1);
+  }
+  function perfLastWeekKey(pk) { return perfDateAdd(pk, -7); } // 仅日粒度：上周同日
+  /* ---- 比率与环比：一律"先求和再相除" ---- */
+  function perfZero() { var o = {}; PERF_METRICS.forEach(function (c) { o[c] = 0; }); return o; }
+  function perfAdd(a, b) { PERF_METRICS.forEach(function (c) { a[c] += b[c]; }); }
+  function perfRates(m) {
+    var dv = function (a, b) { return b > 0 ? a / b : null; };
+    return { cvr: dv(m.ord, m.sess), ctr: dv(m.clk, m.imp), adcvr: dv(m.adord, m.clk),
+      acos: dv(m.spend, m.adsales), cpc: dv(m.spend, m.clk), tacos: dv(m.spend, m.sales) };
+  }
+  function pctDelta(cur, prev) { return prev > 0 ? (cur - prev) / prev : null; }
+  function ppDelta(cur, prev) { return (cur == null || prev == null) ? null : cur - prev; }
+  /* rows(+country筛) → { periods[], overall:{pk→m}, asins:[{asin,name,pasin,series:{pk→m},sum}] } */
+  function aggPerf(rows, opt) {
+    var gran = (opt && opt.gran) || 'day', country = (opt && opt.country) || '';
+    var overall = {}, byA = {}, pSet = {};
+    rows.forEach(function (r) {
+      if (country && r.country !== country) return;
+      var pk = perfPeriodKey(r.ds, gran); pSet[pk] = 1;
+      if (!overall[pk]) overall[pk] = perfZero();
+      perfAdd(overall[pk], r.m);
+      var a = byA[r.asin];
+      if (!a) a = byA[r.asin] = { asin: r.asin, name: r.name, pasin: r.pasin, series: {}, sum: perfZero() };
+      if (!a.name && r.name) a.name = r.name;
+      if (!a.series[pk]) a.series[pk] = perfZero();
+      perfAdd(a.series[pk], r.m); perfAdd(a.sum, r.m);
+    });
+    var asins = Object.keys(byA).map(function (k) { return byA[k]; })
+      .sort(function (x, y) { return (y.sum.sess - x.sum.sess) || (y.sum.spend - x.sum.spend); });
+    return { periods: Object.keys(pSet).sort(), overall: overall, asins: asins };
+  }
+  /*PERF-CORE-END*/
+
   return { matchKey, resolveHeader, mapHeaders, parseDateCell, isFullMonth, parseNumber, serialToYMD,
-    buildRows, aggregate, dimValues, rowKey, parsePlanYM, buildPlanRows, buildCompare, DIM_COLS, NUM_COLS, REQUIRED, SUM_KEYS, MONTH_EN };
+    buildRows, aggregate, dimValues, rowKey, parsePlanYM, buildPlanRows, buildCompare,
+    buildPerfRows, aggPerf, perfRates, perfPeriodKey, perfPrevKey, perfLastWeekKey, perfDateAdd, pctDelta, ppDelta, PERF_METRICS, DIM_COLS, NUM_COLS, REQUIRED, SUM_KEYS, MONTH_EN };
 })();
 if (typeof module !== 'undefined') module.exports = PivotCore;
 
@@ -624,6 +772,38 @@ var SAMPLE_PLAN_AOA = [
  [202602,'美国','B0DSC18122','BRK-十寸方形','李禹三',5500,880000,-60000,400000],
  [202602,'美国','','新品A','李禹三',2000,700000,140000,0]
 ];
+
+var SAMPLE_PERF_AOA = (function () {
+  var hdr = ['日期','ASIN','父ASIN','店铺','国家','品名','销量','销售额','订单量','Sessions-Total','PV-Total','展示','点击','广告花费','广告销售额','广告订单量'];
+  var items = [
+    { asin:'B082KFTF41', pasin:'B0DWJVF81Z', name:'KKD10寸-方形-蓝色彩色', sess:420, ctr:0.032, cvr:0.085, imp:26000, price:16.9, spendPerClk:0.62, trend:0.004 },
+    { asin:'B09FZ42BTP', pasin:'B09M8D62RS', name:'OS8.5寸-恐龙-绿色',   sess:300, ctr:0.024, cvr:0.070, imp:21000, price:13.5, spendPerClk:0.55, trend:0.012 },
+    { asin:'B0DFCKK62Q', pasin:'B0FQV3996S', name:'KD-PP001点读笔-红',    sess:150, ctr:0.041, cvr:0.055, imp:9000,  price:52.0, spendPerClk:0.85, trend:-0.010 }
+  ];
+  var aoa = [hdr];
+  for (var d = 0; d < 14; d++) {
+    var ds = '2026-07-' + (d + 17 < 10 ? '0' : '') + (d + 17);
+    var wk = new Date(Date.UTC(2026, 6, 17 + d)).getUTCDay();
+    var boost = (wk === 0 || wk === 6) ? 1.28 : 1;           // 周末抬升
+    var lag = d === 13;                                       // 最新一天流量滞后
+    items.forEach(function (it, ix) {
+      var wave = 1 + 0.10 * Math.sin((d + ix * 2) / 2.2);
+      var sess = lag ? 0 : Math.round(it.sess * boost * wave * (1 + it.trend * d));
+      var pv = Math.round(sess * 1.35);
+      var ord = lag ? 0 : Math.round(sess * it.cvr * (1 + it.trend * d * 0.6));
+      var units = Math.round(ord * 1.15);
+      var sales = +(units * it.price).toFixed(2);
+      var imp = Math.round(it.imp * boost * wave);
+      var clk = Math.round(imp * it.ctr * (1 + it.trend * d));
+      var spend = +(clk * it.spendPerClk).toFixed(2);
+      var adord = Math.round(clk * it.cvr * 0.9);
+      var adsales = +(adord * it.price).toFixed(2);
+      aoa.push([ds, it.asin, it.pasin, 'A0002-US', '美国', it.name, units, lag ? 0 : sales, ord, sess, pv, imp, clk, spend, adsales, adord]);
+    });
+  }
+  return aoa;
+})();
+
 
 </script>
 <script>
@@ -658,13 +838,15 @@ var SAMPLE_PLAN_AOA = [
       return new Promise(function (resolve) {
         try {
           if (!window.indexedDB) { mem = true; return resolve(); }
-          var req = indexedDB.open('kokodi_sales_pivot', 2);
+          var req = indexedDB.open('kokodi_sales_pivot', 3);
           req.onupgradeneeded = function (e) {
             var d = e.target.result;
             if (!d.objectStoreNames.contains('rows')) d.createObjectStore('rows', { keyPath: 'k' });
             if (!d.objectStoreNames.contains('batches')) d.createObjectStore('batches', { keyPath: 'id' });
             if (!d.objectStoreNames.contains('plans')) d.createObjectStore('plans', { keyPath: 'k' });
             if (!d.objectStoreNames.contains('planBatches')) d.createObjectStore('planBatches', { keyPath: 'id' });
+            if (!d.objectStoreNames.contains('perf')) d.createObjectStore('perf', { keyPath: 'k' });
+            if (!d.objectStoreNames.contains('perfBatches')) d.createObjectStore('perfBatches', { keyPath: 'id' });
           };
           req.onsuccess = function (e) { db = e.target.result; resolve(); };
           req.onerror = function () { mem = true; resolve(); };
@@ -697,8 +879,8 @@ var SAMPLE_PLAN_AOA = [
       open: open,
       isMemory: function () { return mem; },
       loadAll: function () {
-        return Promise.all([readAll('rows'), readAll('batches'), readAll('plans'), readAll('planBatches')])
-          .then(function (r) { return { rows: r[0], batches: r[1], plans: r[2], planBatches: r[3] }; });
+        return Promise.all([readAll('rows'), readAll('batches'), readAll('plans'), readAll('planBatches'), readAll('perf'), readAll('perfBatches')])
+          .then(function (r) { return { rows: r[0], batches: r[1], plans: r[2], planBatches: r[3], perf: r[4], perfBatches: r[5] }; });
       },
       putRows: function (rows) { return tx('rows', 'readwrite', function (s) { rows.forEach(function (r) { s.put(r); }); }); },
       delRows: function (keys) { return tx('rows', 'readwrite', function (s) { keys.forEach(function (k) { s.delete(k); }); }); },
@@ -707,6 +889,10 @@ var SAMPLE_PLAN_AOA = [
       delPlans: function (keys) { return tx('plans', 'readwrite', function (s) { keys.forEach(function (k) { s.delete(k); }); }); },
       putPlanBatch: function (b) { return tx('planBatches', 'readwrite', function (s) { s.put(b); }); },
       delPlanBatch: function (id) { return tx('planBatches', 'readwrite', function (s) { s.delete(id); }); },
+      putPerf: function (rows) { return tx('perf', 'readwrite', function (s) { rows.forEach(function (r) { s.put(r); }); }); },
+      delPerf: function (keys) { return tx('perf', 'readwrite', function (s) { keys.forEach(function (k) { s.delete(k); }); }); },
+      putPerfBatch: function (b) { return tx('perfBatches', 'readwrite', function (s) { s.put(b); }); },
+      delPerfBatch: function (id) { return tx('perfBatches', 'readwrite', function (s) { s.delete(id); }); },
       delBatch: function (id) { return tx('batches', 'readwrite', function (s) { s.delete(id); }); },
       clearAll: function () {
         return tx('rows', 'readwrite', function (s) { s.clear(); }).then(function () {
@@ -715,6 +901,10 @@ var SAMPLE_PLAN_AOA = [
           return tx('plans', 'readwrite', function (s) { s.clear(); });
         }).then(function () {
           return tx('planBatches', 'readwrite', function (s) { s.clear(); });
+        }).then(function () {
+          return tx('perf', 'readwrite', function (s) { s.clear(); });
+        }).then(function () {
+          return tx('perfBatches', 'readwrite', function (s) { s.clear(); });
         });
       }
     };
@@ -725,6 +915,9 @@ var SAMPLE_PLAN_AOA = [
     rows: [], batches: [], plans: [], planBatches: [],
     cmp: { batch: '', mode: 'owner', gran: 'month', country: '', collapsed: {} },
     planPending: null,
+    perfRows: [], perfBatches: [],
+    pf: { gran: 'day', country: null, asin: '', anchor: '' },
+    perfPending: null,
     f: { '国家': new Set(), '店铺': new Set(), '负责人': new Set(), '部门': new Set(), '分类': new Set(), years: new Set(), months: new Set() },
     gran: 'month',
     collapsed: {},          // pathKey -> true
@@ -1070,11 +1263,12 @@ var SAMPLE_PLAN_AOA = [
   }
 
   function wipeAll() {
-    if (!S.rows.length && !S.batches.length && !S.plans.length) return;
-    if (!confirm('清空全库：' + S.rows.length + ' 行明细、' + S.plans.length + ' 行规划与全部批次都将删除。建议先「备份 JSON」。确认清空？')) return;
+    if (!S.rows.length && !S.batches.length && !S.plans.length && !S.perfRows.length) return;
+    if (!confirm('清空全库：' + S.rows.length + ' 行明细、' + S.plans.length + ' 行规划、' + S.perfRows.length + ' 行表现与全部批次都将删除。建议先「备份 JSON」。确认清空？')) return;
     if (!confirm('再次确认：清空后不可恢复（除非用备份文件）。')) return;
     S.rows = []; S.batches = []; S.collapsed = {};
     S.plans = []; S.planBatches = []; S.cmp.batch = ''; S.cmp.collapsed = {};
+    S.perfRows = []; S.perfBatches = []; S.pf = { gran: 'day', country: null, asin: '', anchor: '' };
     DB.clearAll().catch(function () { });
     renderAll();
     toast('已清空全库', true);
@@ -1335,6 +1529,300 @@ var SAMPLE_PLAN_AOA = [
     toast('规划批次已删除');
   }
 
+
+  /* ---------- ASIN 趋势：渲染 ---------- */
+  function pfFmtPk(pk, gran) { return gran === 'month' ? pk : (gran === 'week' ? pk.slice(5) + '周' : pk.slice(5)); }
+  function pfDeltaHtml(label, delta, isPP, goodUp) {
+    if (delta == null) return '<span class="pf-delta na">' + label + ' –</span>';
+    var up = delta > 0, good = (up === goodUp) || delta === 0;
+    var txt = (up ? '▲' : '▼') + (isPP ? Math.abs(delta * 100).toFixed(2) + 'pp' : Math.abs(delta * 100).toFixed(1) + '%');
+    return '<span class="pf-delta ' + (delta === 0 ? 'na' : (good ? 'up' : 'down')) + '">' + label + ' ' + txt + '</span>';
+  }
+  function pfScope(agg) {
+    if (S.pf.asin) {
+      var a = null;
+      agg.asins.forEach(function (x) { if (x.asin === S.pf.asin) a = x; });
+      if (a) return { label: a.asin + ' · ' + (a.name || ''), series: a.series };
+    }
+    return { label: '全部 ASIN 汇总', series: agg.overall };
+  }
+  function renderPerf() {
+    var has = S.perfRows.length > 0;
+    $('perfEmpty').style.display = has ? 'none' : '';
+    $('perfBody').style.display = has ? '' : 'none';
+    if (!has) return;
+    // 国家：默认取流量最大的站点，避免跨币种相加
+    var cSum = {};
+    S.perfRows.forEach(function (r) { if (r.country) cSum[r.country] = (cSum[r.country] || 0) + r.m.sess + r.m.clk; });
+    var cList = Object.keys(cSum).sort(function (a, b) { return cSum[b] - cSum[a]; });
+    if (S.pf.country === null) S.pf.country = cList[0] || '';
+    if (S.pf.country && cList.indexOf(S.pf.country) < 0) S.pf.country = cList[0] || '';
+    $('perfCountry').innerHTML = '<option value="">全部（金额混币仅参考）</option>' + cList.map(function (c) {
+      return '<option' + (c === S.pf.country ? ' selected' : '') + '>' + esc(c) + '</option>';
+    }).join('');
+    var agg = C.aggPerf(S.perfRows, { gran: S.pf.gran, country: S.pf.country });
+    S._perfAgg = agg;
+    if (!agg.periods.length) {
+      $('perfKpi').innerHTML = ''; $('perfCharts').innerHTML = '';
+      $('perfWrap').innerHTML = '<div class="hint">当前筛选下没有数据。</div>'; $('perfNote').textContent = '';
+      return;
+    }
+    // ASIN 下拉（按流量排序，上限 300）
+    var opts = '<option value="">全部 ASIN 汇总</option>';
+    agg.asins.slice(0, 300).forEach(function (a) {
+      opts += '<option value="' + esc(a.asin) + '"' + (a.asin === S.pf.asin ? ' selected' : '') + '>' +
+        esc(a.asin + (a.name ? ' · ' + a.name.slice(0, 16) : '')) + '</option>';
+    });
+    if (S.pf.asin && !agg.asins.some(function (a) { return a.asin === S.pf.asin; })) S.pf.asin = '';
+    $('perfAsin').innerHTML = opts;
+    // 统计截止：默认最近一个流量非零的期（流量报表滞后 1～2 天）
+    if (agg.periods.indexOf(S.pf.anchor) < 0) {
+      var pick = '';
+      for (var i = agg.periods.length - 1; i >= 0; i--) {
+        var pk = agg.periods[i];
+        if ((agg.overall[pk] || {}).sess > 0) { pick = pk; break; }
+      }
+      S.pf.anchor = pick || agg.periods[agg.periods.length - 1];
+    }
+    $('perfAnchor').innerHTML = agg.periods.slice().reverse().map(function (pk) {
+      return '<option value="' + pk + '"' + (pk === S.pf.anchor ? ' selected' : '') + '>' + pfFmtPk(pk, S.pf.gran) + '</option>';
+    }).join('');
+    document.querySelectorAll('#perfGranSeg button').forEach(function (b) { b.classList.toggle('on', b.dataset.g === S.pf.gran); });
+    var sc = pfScope(agg);
+    renderPerfKpi(sc);
+    renderPerfCharts(agg, sc);
+    renderPerfTable(agg);
+    var lagTail = (function () {
+      var n = 0;
+      for (var i = agg.periods.length - 1; i >= 0; i--) {
+        if ((agg.overall[agg.periods[i]] || {}).sess > 0) break; n++;
+      }
+      return n;
+    })();
+    $('perfNote').textContent = '口径：比率先求和再相除；环比 = 相邻上一期' + (S.pf.gran === 'day' ? '，另给上周同日对比' : '') +
+      (lagTail ? '。最近 ' + lagTail + ' 期流量为 0（亚马逊流量报表通常滞后 1～2 天，属正常），「统计截止」已自动取最近的流量非零期' : '') +
+      (S.pf.country === '' ? '。国家=全部时金额为跨币种相加，仅作量级参考' : '') + '。';
+  }
+  function renderPerfKpi(sc) {
+    var z = { sess: 0, pv: 0, ord: 0, units: 0, sales: 0, imp: 0, clk: 0, spend: 0, adsales: 0, adord: 0 };
+    var cur = sc.series[S.pf.anchor] || z;
+    var prev = sc.series[C.perfPrevKey(S.pf.anchor, S.pf.gran)] || null;
+    var lw = S.pf.gran === 'day' ? (sc.series[C.perfLastWeekKey(S.pf.anchor)] || null) : null;
+    var rc = C.perfRates(cur), rp = prev ? C.perfRates(prev) : null, rl = lw ? C.perfRates(lw) : null;
+    function badges(get, isPP, goodUp) {
+      var h = pfDeltaHtml('环比', prev ? (isPP ? C.ppDelta(get(rc, cur), get(rp, prev)) : C.pctDelta(get(rc, cur), get(rp, prev))) : null, isPP, goodUp);
+      if (S.pf.gran === 'day') h += pfDeltaHtml('周同', lw ? (isPP ? C.ppDelta(get(rc, cur), get(rl, lw)) : C.pctDelta(get(rc, cur), get(rl, lw))) : null, isPP, goodUp);
+      return h;
+    }
+    var cards = [
+      ['Sessions', fmtInt(cur.sess), badges(function (r, m) { return m.sess; }, false, true)],
+      ['CVR（订单/Sessions）', fmtPct(rc.cvr), badges(function (r) { return r.cvr; }, true, true)],
+      ['广告点击', fmtInt(cur.clk), badges(function (r, m) { return m.clk; }, false, true)],
+      ['CTR（点击/展示）', fmtPct(rc.ctr), badges(function (r) { return r.ctr; }, true, true)],
+      ['广告花费', fmtMoney(cur.spend), badges(function (r, m) { return m.spend; }, false, false)],
+      ['ACOS', fmtPct(rc.acos), badges(function (r) { return r.acos; }, true, false)]
+    ];
+    $('perfKpi').innerHTML = cards.map(function (c) {
+      return '<div class="kpi"><div class="kv">' + c[1] + '</div><div class="kl">' + c[0] + '</div><div class="pf-badges">' + c[2] + '</div></div>';
+    }).join('');
+  }
+  function perfChartSvg(periods, series, barKey, rateOf, barLb, lineLb, lineFmt, gran) {
+    var n = periods.length;
+    var W = Math.max(560, n * 54), H = 158, padL = 8, padR = 8, padT = 16, padB = 30;
+    var iw = W - padL - padR, ih = H - padT - padB;
+    var z = function (pk) { return series[pk] || { sess: 0, pv: 0, ord: 0, units: 0, sales: 0, imp: 0, clk: 0, spend: 0, adsales: 0, adord: 0 }; };
+    var bars = periods.map(function (pk) { return z(pk)[barKey] || 0; });
+    var lines = periods.map(function (pk) { return rateOf(C.perfRates(z(pk)), z(pk)); });
+    var maxB = Math.max.apply(null, bars.concat([1]));
+    var lineVals = lines.filter(function (v) { return v != null; });
+    var maxL = Math.max.apply(null, lineVals.concat([0.0001])) * 1.15;
+    var bw = Math.min(30, iw / n * 0.55);
+    var x = function (i) { return padL + iw * (i + 0.5) / n; };
+    var yB = function (v) { return padT + ih * (1 - v / maxB); };
+    var yL = function (v) { return padT + ih * (1 - v / maxL); };
+    var svg = '<svg viewBox="0 0 ' + W + ' ' + H + '" class="trend" role="img">';
+    svg += '<line x1="' + padL + '" y1="' + (padT + ih) + '" x2="' + (W - padR) + '" y2="' + (padT + ih) + '" class="axis"/>';
+    periods.forEach(function (pk, i) {
+      var by = yB(bars[i]);
+      svg += '<rect x="' + (x(i) - bw / 2).toFixed(1) + '" y="' + by.toFixed(1) + '" width="' + bw.toFixed(1) + '" height="' + (padT + ih - by).toFixed(1) + '" class="bar"><title>' + pk + ' ' + barLb + ' ' + fmtInt(bars[i]) + '</title></rect>';
+      svg += '<text x="' + x(i).toFixed(1) + '" y="' + (H - 10) + '" class="xl">' + pfFmtPk(pk, gran) + '</text>';
+    });
+    var d = '', pen = false;
+    lines.forEach(function (v, i) {
+      if (v == null) { pen = false; return; }
+      d += (pen ? 'L' : 'M') + x(i).toFixed(1) + ',' + yL(v).toFixed(1);
+      pen = true;
+    });
+    if (d) svg += '<path d="' + d + '" class="gline" fill="none"/>';
+    lines.forEach(function (v, i) {
+      if (v == null) return;
+      svg += '<circle cx="' + x(i).toFixed(1) + '" cy="' + yL(v).toFixed(1) + '" r="3.2" class="gdot"><title>' + periods[i] + ' ' + lineLb + ' ' + lineFmt(v) + '</title></circle>';
+    });
+    svg += '</svg>';
+    return '<div class="trendhead"><span><i class="sw bar"></i>' + barLb + '</span><span><i class="sw dot"></i>' + lineLb + '</span></div><div class="trendscroll">' + svg + '</div>';
+  }
+  function renderPerfCharts(agg, sc) {
+    var g = S.pf.gran;
+    var h = '<div class="pf-scopeline">趋势对象：' + esc(sc.label) + '</div>';
+    h += perfChartSvg(agg.periods, sc.series, 'sess', function (r) { return r.cvr; }, 'Sessions', 'CVR', fmtPct, g);
+    h += perfChartSvg(agg.periods, sc.series, 'clk', function (r) { return r.ctr; }, '广告点击', 'CTR', fmtPct, g);
+    h += perfChartSvg(agg.periods, sc.series, 'spend', function (r) { return r.acos; }, '广告花费', 'ACOS', fmtPct, g);
+    $('perfCharts').innerHTML = h;
+  }
+  function pfCellCnt(cur, prev, goodUp) {
+    return '<td class="r">' + fmtInt(cur) + ' ' + pfDeltaHtml('', prev == null ? null : C.pctDelta(cur, prev), false, goodUp) + '</td>';
+  }
+  function pfCellRate(cur, prev, goodUp) {
+    return '<td class="r">' + fmtPct(cur) + ' ' + pfDeltaHtml('', prev === undefined ? null : C.ppDelta(cur, prev), true, goodUp) + '</td>';
+  }
+  function renderPerfTable(agg) {
+    var pk = S.pf.anchor, pv = C.perfPrevKey(pk, S.pf.gran);
+    var z = { sess: 0, pv: 0, ord: 0, units: 0, sales: 0, imp: 0, clk: 0, spend: 0, adsales: 0, adord: 0 };
+    var rows = agg.asins.slice().sort(function (a, b) {
+      return ((b.series[pk] || z).sess - (a.series[pk] || z).sess) || ((b.series[pk] || z).spend - (a.series[pk] || z).spend);
+    });
+    var CAP = 100, cut = rows.length > CAP;
+    var h = '<table class="flat pftab"><thead><tr><th>ASIN · 品名</th><th class="r">Sessions</th><th class="r">CVR</th>' +
+      '<th class="r">点击</th><th class="r">CTR</th><th class="r">广告花费</th><th class="r">广告订单</th><th class="r">ACOS</th></tr></thead><tbody>';
+    function lineOf(label, curM, prevM, asin, sel) {
+      var rc = C.perfRates(curM), rp = prevM ? C.perfRates(prevM) : null;
+      return '<tr' + (asin ? ' data-pfasin="' + esc(asin) + '" class="pfrow' + (sel ? ' sel' : '') + '"' : ' class="grand"') + '>' +
+        '<td class="clip" title="' + esc(label) + '">' + esc(label) + '</td>' +
+        pfCellCnt(curM.sess, prevM ? prevM.sess : null, true) +
+        pfCellRate(rc.cvr, rp ? rp.cvr : undefined, true) +
+        pfCellCnt(curM.clk, prevM ? prevM.clk : null, true) +
+        pfCellRate(rc.ctr, rp ? rp.ctr : undefined, true) +
+        '<td class="r">' + fmtMoney(curM.spend) + ' ' + pfDeltaHtml('', prevM ? C.pctDelta(curM.spend, prevM.spend) : null, false, false) + '</td>' +
+        '<td class="r">' + fmtInt(curM.adord) + '</td>' +
+        pfCellRate(rc.acos, rp ? rp.acos : undefined, false) + '</tr>';
+    }
+    h += lineOf('全部 ASIN 汇总', agg.overall[pk] || z, agg.overall[pv] || null, '', false);
+    rows.slice(0, CAP).forEach(function (a) {
+      h += lineOf(a.asin + (a.name ? ' · ' + a.name : ''), a.series[pk] || z, a.series[pv] || null, a.asin, a.asin === S.pf.asin);
+    });
+    h += '</tbody></table>';
+    if (cut) h += '<div class="hint">按 Sessions 仅展示前 ' + CAP + ' 个 ASIN（共 ' + rows.length + '），其余请用上方 ASIN 筛选或导出 CSV 查看。</div>';
+    $('perfWrap').innerHTML = h;
+  }
+  function exportPerfCsv() {
+    var agg = S._perfAgg; if (!agg) return;
+    var pk = S.pf.anchor, pv = C.perfPrevKey(pk, S.pf.gran);
+    var z = { sess: 0, pv: 0, ord: 0, units: 0, sales: 0, imp: 0, clk: 0, spend: 0, adsales: 0, adord: 0 };
+    var pct = function (x) { return x == null ? '' : (x * 100).toFixed(2) + '%'; };
+    var pp = function (x) { return x == null ? '' : (x * 100).toFixed(2) + 'pp'; };
+    var out = [['ASIN', '品名', '期', 'Sessions', 'Sessions环比', 'CVR', 'CVR环比pp', '点击', '点击环比', 'CTR', 'CTR环比pp', '广告花费', '花费环比', '广告订单', 'ACOS', 'ACOS环比pp']];
+    function push(label, name, curM, prevM) {
+      var rc = C.perfRates(curM), rp = prevM ? C.perfRates(prevM) : { cvr: null, ctr: null, acos: null };
+      out.push([label, name, pk, Math.round(curM.sess), prevM ? pct(C.pctDelta(curM.sess, prevM.sess)) : '', pct(rc.cvr), pp(C.ppDelta(rc.cvr, rp.cvr)),
+        Math.round(curM.clk), prevM ? pct(C.pctDelta(curM.clk, prevM.clk)) : '', pct(rc.ctr), pp(C.ppDelta(rc.ctr, rp.ctr)),
+        curM.spend.toFixed(2), prevM ? pct(C.pctDelta(curM.spend, prevM.spend)) : '', Math.round(curM.adord), pct(rc.acos), pp(C.ppDelta(rc.acos, rp.acos))]);
+    }
+    push('__ALL__', '全部汇总', agg.overall[pk] || z, agg.overall[pv] || null);
+    agg.asins.forEach(function (a) { push(a.asin, a.name || '', a.series[pk] || z, a.series[pv] || null); });
+    var lines = out.map(function (r) {
+      return r.map(function (v) { var t = String(v == null ? '' : v); return /[",\n]/.test(t) ? '"' + t.replace(/"/g, '""') + '"' : t; }).join(',');
+    });
+    download(['\uFEFF' + lines.join('\r\n')], 'text/csv;charset=utf-8', 'ASIN趋势_' + stamp() + '.csv');
+    toast('已导出 ASIN 趋势 CSV');
+  }
+
+  /* ---------- 表现导入 / 表现批次 ---------- */
+  function handlePerfFile(file) {
+    if (/\.(csv|tsv|txt)$/i.test(file.name)) {
+      var fr = new FileReader();
+      fr.onload = function () { previewPerfImport(parseCSV(String(fr.result)), file.name); };
+      fr.readAsText(file, 'utf-8');
+      return;
+    }
+    if (!ensureXLSX()) { toast('表格解析库未加载：可先另存为 CSV 导入', true); return; }
+    var fr2 = new FileReader();
+    fr2.onload = function () {
+      try {
+        var wb = XLSX.read(new Uint8Array(fr2.result), { type: 'array' });
+        var aoa = XLSX.utils.sheet_to_json(wb.Sheets[wb.SheetNames[0]], { header: 1, raw: true, defval: '' });
+        previewPerfImport(aoa, file.name);
+      } catch (e) { toast('文件解析失败：' + e.message, true); }
+    };
+    fr2.readAsArrayBuffer(file);
+  }
+  function previewPerfImport(aoa, srcName) {
+    var built = C.buildPerfRows(aoa);
+    var box = $('perfReport');
+    if (built.issues.fatal) {
+      box.innerHTML = '<div class="card danger"><b>无法入库</b><div>' + esc(built.issues.fatal) + '</div></div>';
+      S.perfPending = null; return;
+    }
+    var existing = new Set(S.perfRows.map(function (r) { return r.k; }));
+    var dup = built.rows.filter(function (r) { return existing.has(r.k); });
+    S.perfPending = { built: built, dup: dup, srcName: srcName };
+    var h = '<div class="card"><div class="cardtitle">表现校验 · ' + esc(srcName) + '</div><div class="repgrid">';
+    h += '<div><b>' + built.rows.length + '</b><span>有效 ASIN·日 行</span></div>';
+    h += '<div><b>' + built.dates[0] + ' ~ ' + built.dates[built.dates.length - 1] + '</b><span>覆盖 ' + built.dates.length + ' 天</span></div>';
+    h += '<div><b>' + built.asinCount + '</b><span>ASIN 数（' + built.countries.length + ' 个国家）</span></div>';
+    h += '<div><b class="' + (dup.length ? 'warn' : '') + '">' + dup.length + '</b><span>与库中重复行</span></div></div>';
+    if (built.issues.noAsin) h += '<div class="isline">已剔除 ASIN 为空/"-" 的店铺占位行：' + built.issues.noAsin + ' 行</div>';
+    if (built.issues.badDate.length) h += '<div class="isline bad">日期无法解析（剔除）：' + built.issues.badDate.length + ' 行</div>';
+    if (built.issues.unknown) h += '<div class="isline">未使用的其余列已忽略：' + built.issues.unknown + ' 列</div>';
+    h += '<div class="strat"><span class="flabel">重复行策略</span>' +
+      '<label><input type="radio" name="perfDup" value="skip" checked> 跳过重复行</label>' +
+      '<label><input type="radio" name="perfDup" value="replace"> 覆盖重复行（以本次为准）</label></div>';
+    h += '<div class="strat"><span class="flabel">批次备注</span><input id="perfNoteIn" class="txt" placeholder="例如：0727-0730 全部广告" maxlength="60"></div>';
+    h += '<div class="actrow"><button id="btnPerfCommit" class="btn primary">确认入库 ' + built.rows.length + ' 行</button><button id="btnPerfCancel" class="btn ghost">放弃本次</button></div></div>';
+    box.innerHTML = h;
+    $('btnPerfCommit').onclick = commitPerfImport;
+    $('btnPerfCancel').onclick = function () { S.perfPending = null; box.innerHTML = ''; };
+  }
+  function commitPerfImport() {
+    var p = S.perfPending; if (!p) return;
+    var strat = (document.querySelector('input[name="perfDup"]:checked') || {}).value || 'skip';
+    var id = 'F' + Date.now().toString(36) + Math.random().toString(36).slice(2, 5);
+    var existing = new Set(S.perfRows.map(function (r) { return r.k; }));
+    var toAdd = [], replacedKeys = [];
+    p.built.rows.forEach(function (r) {
+      r.b = id;
+      if (existing.has(r.k)) { if (strat === 'replace') { replacedKeys.push(r.k); toAdd.push(r); } }
+      else toAdd.push(r);
+    });
+    if (replacedKeys.length) {
+      var rk = new Set(replacedKeys);
+      S.perfRows = S.perfRows.filter(function (r) { return !rk.has(r.k); });
+    }
+    S.perfRows = S.perfRows.concat(toAdd);
+    var batch = { id: id, ts: new Date().toISOString(), name: p.srcName, note: ($('perfNoteIn') && $('perfNoteIn').value.trim()) || '',
+      from: p.built.dates[0], to: p.built.dates[p.built.dates.length - 1], days: p.built.dates.length,
+      added: toAdd.length - replacedKeys.length, replaced: replacedKeys.length, skipped: p.dup.length - replacedKeys.length,
+      asins: p.built.asinCount };
+    S.perfBatches.push(batch);
+    DB.putPerf(toAdd).then(function () { return DB.putPerfBatch(batch); }).catch(function () { });
+    S.perfPending = null; S.pf.anchor = '';
+    $('perfReport').innerHTML = '<div class="card ok"><b>表现数据已入库</b> 新增 ' + batch.added + ' 行' +
+      (batch.replaced ? '，覆盖 ' + batch.replaced + ' 行' : '') + (batch.skipped ? '，跳过 ' + batch.skipped + ' 行' : '') +
+      '。<button class="btn link" id="goPerf">去 ASIN 趋势 →</button></div>';
+    $('goPerf').onclick = function () { switchTab('perf'); };
+    renderAll();
+    toast('表现入库完成');
+  }
+  function renderPerfBatches() {
+    if (!S.perfBatches.length) { $('perfBatchList').innerHTML = '<div class="hint">尚无表现批次。在「数据导入」页下方导入《产品表现ASIN》日报。</div>'; return; }
+    var h = '<table class="flat"><thead><tr><th>时间</th><th>来源</th><th>日期范围</th><th>天数</th><th>新增</th><th>覆盖</th><th>跳过</th><th>ASIN</th><th>备注</th><th></th></tr></thead><tbody>';
+    S.perfBatches.slice().sort(function (a, b) { return a.ts < b.ts ? 1 : -1; }).forEach(function (b) {
+      var live = S.perfRows.filter(function (r) { return r.b === b.id; }).length;
+      h += '<tr><td>' + esc(b.ts.slice(0, 16).replace('T', ' ')) + '</td><td>' + esc(b.name) + '</td><td>' + esc(b.from + ' ~ ' + b.to) + '</td>' +
+        '<td>' + b.days + '</td><td>' + b.added + '</td><td>' + (b.replaced || 0) + '</td><td>' + (b.skipped || 0) + '</td><td>' + (b.asins || 0) + '</td><td>' + esc(b.note || '') + '</td>' +
+        '<td><button class="btn tiny danger" data-delperfbatch="' + b.id + '">删除本批（现存 ' + live + ' 行）</button></td></tr>';
+    });
+    $('perfBatchList').innerHTML = h + '</tbody></table>';
+  }
+  function deletePerfBatch(id) {
+    var victim = S.perfRows.filter(function (r) { return r.b === id; });
+    if (!confirm('删除该表现批次将移除其现存 ' + victim.length + ' 行（被后续批次覆盖的行不受影响）。继续？')) return;
+    S.perfRows = S.perfRows.filter(function (r) { return r.b !== id; });
+    S.perfBatches = S.perfBatches.filter(function (b) { return b.id !== id; });
+    DB.delPerf(victim.map(function (r) { return r.k; })).then(function () { return DB.delPerfBatch(id); }).catch(function () { });
+    renderAll();
+    toast('表现批次已删除');
+  }
+
   /* ---------- 备份 / 恢复 ---------- */
   function download(blobParts, type, filename) {
     var blob = new Blob(blobParts, { type: type });
@@ -1350,9 +1838,9 @@ var SAMPLE_PLAN_AOA = [
     return '' + d.getFullYear() + p(d.getMonth() + 1) + p(d.getDate()) + '_' + p(d.getHours()) + p(d.getMinutes());
   }
   function backup() {
-    var payload = { app: 'sales-pivot', version: 2, exportedAt: new Date().toISOString(), batches: S.batches, rows: S.rows, plans: S.plans, planBatches: S.planBatches };
+    var payload = { app: 'sales-pivot', version: 3, exportedAt: new Date().toISOString(), batches: S.batches, rows: S.rows, plans: S.plans, planBatches: S.planBatches, perf: S.perfRows, perfBatches: S.perfBatches };
     download([JSON.stringify(payload)], 'application/json', '销售明细库备份_' + stamp() + '.json');
-    toast('备份已下载（明细 ' + S.rows.length + ' 行 · 规划 ' + S.plans.length + ' 行）');
+    toast('备份已下载（明细 ' + S.rows.length + ' · 规划 ' + S.plans.length + ' · 表现 ' + S.perfRows.length + ' 行）');
   }
   function restoreFile(file) {
     var fr = new FileReader();
@@ -1364,11 +1852,15 @@ var SAMPLE_PLAN_AOA = [
         S.rows = p.rows; S.batches = p.batches; S.collapsed = {};
         S.plans = Array.isArray(p.plans) ? p.plans : [];
         S.planBatches = Array.isArray(p.planBatches) ? p.planBatches : [];
-        S.cmp.batch = ''; S.cmp.collapsed = {};
+        S.perfRows = Array.isArray(p.perf) ? p.perf : [];
+        S.perfBatches = Array.isArray(p.perfBatches) ? p.perfBatches : [];
+        S.cmp.batch = ''; S.cmp.collapsed = {}; S.pf.anchor = ''; S.pf.country = null; S.pf.asin = '';
         DB.clearAll().then(function () { return DB.putRows(S.rows); }).then(function () {
           return Promise.all(S.batches.map(function (b) { return DB.putBatch(b); }));
         }).then(function () { return DB.putPlans(S.plans); }).then(function () {
           return Promise.all(S.planBatches.map(function (b) { return DB.putPlanBatch(b); }));
+        }).then(function () { return DB.putPerf(S.perfRows); }).then(function () {
+          return Promise.all(S.perfBatches.map(function (b) { return DB.putPerfBatch(b); }));
         }).catch(function () { });
         renderAll();
         toast('恢复完成：' + S.rows.length + ' 行');
@@ -1471,10 +1963,13 @@ var SAMPLE_PLAN_AOA = [
     renderPivot();
     renderBatches();
     renderPlanBatches();
+    renderPerfBatches();
     renderBrowse();
     renderCompare();
+    renderPerf();
     var dc = S.rows.length ? S.rows.length + ' 行 · ' + S.batches.length + ' 批' : '空库';
     if (S.plans.length) dc += ' · 规划 ' + S.plans.length + ' 行';
+    if (S.perfRows.length) dc += ' · 表现 ' + S.perfRows.length + ' 行';
     $('dataCount').textContent = dc;
   }
 
@@ -1516,6 +2011,8 @@ var SAMPLE_PLAN_AOA = [
         if (S.cmp.collapsed[t.dataset.cpath]) delete S.cmp.collapsed[t.dataset.cpath];
         else S.cmp.collapsed[t.dataset.cpath] = true;
         if (S._cmp) renderCmpTable(S._cmp);
+      } else if (t.dataset.delperfbatch) {
+        deletePerfBatch(t.dataset.delperfbatch);
       }
     });
     // 粒度
@@ -1563,6 +2060,13 @@ var SAMPLE_PLAN_AOA = [
     // 明细浏览
     $('browseQ').oninput = function () { S.page = 1; renderBrowse(); };
     $('browseMonth').onchange = function () { S.page = 1; renderBrowse(); };
+    // 表现表格行点击 → 聚焦该 ASIN
+    $('perfWrap').addEventListener('click', function (e) {
+      var tr = e.target.closest ? e.target.closest('tr[data-pfasin]') : null;
+      if (!tr) return;
+      S.pf.asin = (S.pf.asin === tr.dataset.pfasin) ? '' : tr.dataset.pfasin;
+      renderPerf();
+    });
     // 规划导入
     var planDemo = function () { previewPlanImport(SAMPLE_PLAN_AOA, '内置示例规划（2026 两个月）'); switchTab('import'); };
     var pdz = $('planDrop');
@@ -1584,6 +2088,24 @@ var SAMPLE_PLAN_AOA = [
       b.onclick = function () { S.cmp.gran = b.dataset.g; renderCompare(); };
     });
     $('btnCmpCsv').onclick = exportCompareCsv;
+    // 表现导入
+    var perfDemo = function () { previewPerfImport(SAMPLE_PERF_AOA, '内置示例表现（3 ASIN × 14 天）'); switchTab('import'); };
+    var fdz = $('perfDrop');
+    fdz.onclick = function () { $('perfFile').click(); };
+    $('perfFile').onchange = function (e) { if (e.target.files[0]) handlePerfFile(e.target.files[0]); e.target.value = ''; };
+    ['dragover', 'dragenter'].forEach(function (ev) { fdz.addEventListener(ev, function (e) { e.preventDefault(); fdz.classList.add('drag'); }); });
+    ['dragleave', 'drop'].forEach(function (ev) { fdz.addEventListener(ev, function (e) { e.preventDefault(); fdz.classList.remove('drag'); }); });
+    fdz.addEventListener('drop', function (e) { var f = e.dataTransfer && e.dataTransfer.files && e.dataTransfer.files[0]; if (f) handlePerfFile(f); });
+    $('btnPerfDemo').onclick = perfDemo;
+    $('btnPerfDemoEmpty').onclick = perfDemo;
+    // ASIN 趋势控件
+    $('perfCountry').onchange = function () { S.pf.country = this.value; S.pf.asin = ''; S.pf.anchor = ''; renderPerf(); };
+    $('perfAsin').onchange = function () { S.pf.asin = this.value; renderPerf(); };
+    $('perfAnchor').onchange = function () { S.pf.anchor = this.value; renderPerf(); };
+    document.querySelectorAll('#perfGranSeg button').forEach(function (b) {
+      b.onclick = function () { S.pf.gran = b.dataset.g; S.pf.anchor = ''; renderPerf(); };
+    });
+    $('btnPerfCsv').onclick = exportPerfCsv;
     // 口径说明
     $('btnGauge').onclick = function () { $('gaugeModal').classList.add('show'); };
     $('gaugeClose').onclick = function () { $('gaugeModal').classList.remove('show'); };
@@ -1598,6 +2120,8 @@ var SAMPLE_PLAN_AOA = [
     S.batches = d.batches || [];
     S.plans = d.plans || [];
     S.planBatches = d.planBatches || [];
+    S.perfRows = d.perf || [];
+    S.perfBatches = d.perfBatches || [];
     if (DB.isMemory()) {
       $('storageBadge').textContent = '仅内存运行 · 关闭页面即丢失（请部署到本地或 GitHub Pages 获得持久化）';
       $('storageBadge').classList.add('warn');
