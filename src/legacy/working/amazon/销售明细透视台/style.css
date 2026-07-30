@@ -66,3 +66,8 @@
 .lp .pfrow:hover{background:var(--panel)}
 .lp .pfrow.sel{background:var(--tealsoft)}
 .lp .pftab .grand td{font-weight:600;background:var(--panel)}
+
+/* ---------- 冻结窗格：表区容器为滚动视口，表头吸顶（透视/目标对比/ASIN趋势/明细浏览通用） ---------- */
+.lp .tablewrap{max-height:74vh;overflow:auto;overscroll-behavior:contain}
+.lp .tablewrap table.flat th{position:sticky;top:0;z-index:3;border-bottom:none;box-shadow:0 2px 0 var(--teal)}
+.lp table.pivot th{z-index:3}

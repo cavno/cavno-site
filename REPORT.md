@@ -59,3 +59,9 @@
 - 币种边界：金额为各站点本币，国家筛选默认自动选流量最大站点；选「全部」时注记提示金额跨币种仅作量级参考（比率不受影响）。
 - 存储：IndexedDB v2→v3 增量加 perf/perfBatches 两仓；批次管理页新增表现批次区（可删）；备份 JSON v3 含表现数据，旧备份可无损恢复；清空全库同步。
 - 验证：Node 回归新增 14 项断言全绿（累计 31 项），含真实附件端到端（4384 行/32 占位剔除/4 天）、**双口径对账**（美国 07-28 Sessions 独立扫描=聚合结果=19230）、期化与环比助手、示例生成器经真实模块解析、周/日聚合总量守恒；命名审计与全站构建通过。
+
+## 2026-07-30 · 增量五：冻结窗格 + 旧页 sticky 遮挡根治
+- 透视台四张数据表（透视分析/目标对比/ASIN趋势/明细浏览）获得 Excel 式冻结首行：.tablewrap 成为垂直滚动视口（max-height:74vh），表头 sticky 吸附其顶（pivot 青底自带，flat 表头补 panel 底+青色底线阴影防 border-collapse 滚动丢线）。
+- 顺序轴 bug 取证结论：新手页 CSS/JS 经逐规则、逐字节比对与转换前完全一致；病根是站点吸顶顶栏（sticky top:0, z-index:60）把旧页自身的吸顶元素（如承载数字圆徽的 .st-head, z-index:30）压在底下——数字随章节头吸顶伴行的原版效果被顶栏遮蔽。受影响面为全站 50 个含 sticky、22 个含 fixed 的旧页。
+- 根治：`body:has(.lp) .cv-site-head{position:static}` —— 旧页上顶栏退回文档流，旧页 sticky/fixed 语义与 GitHub 原版逐像素等价；目录/首页保持吸顶导航。:has 不支持的老浏览器维持现状（渐进降级）。
+- 同批关门（此前挂账的"元素级泄漏"）：外壳 `* / a / h1 / h2 / code / button` 六条元素规则全部 `:where(:not(.lp *))` 化（零特异性，外壳表现不变），.lp 内恢复浏览器默认——依赖默认链接色/默认边距/content-box 的旧页恢复原版排版；补 `.lp{box-sizing:border-box}` 兜底。全站补回 `html{scroll-behavior:smooth}`（新手页原有的平滑锚点滚动在作用域化中丢失；prefers-reduced-motion 下仍为 auto）。

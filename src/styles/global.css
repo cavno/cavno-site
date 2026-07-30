@@ -17,17 +17,22 @@
   --mono:"SF Mono",ui-monospace,Menlo,Consolas,monospace;
   --shadow-pop:0 16px 40px rgba(20,20,19,.08);
 }
-*{margin:0;padding:0;box-sizing:border-box}
+*:where(:not(.lp *)){margin:0;padding:0;box-sizing:border-box}
+.lp{box-sizing:border-box}
 html{scroll-behavior:smooth}
 body{background:var(--paper);color:var(--ink);font-family:var(--sans);
   font-size:16px;line-height:1.7;-webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility}
-a{color:inherit;text-decoration:none}
-button{font-family:inherit;cursor:pointer}
+a:where(:not(.lp *)){color:inherit;text-decoration:none}
+button:where(:not(.lp *)){font-family:inherit;cursor:pointer}
 :focus-visible{outline:2px solid var(--coral);outline-offset:2px;border-radius:4px}
-code{font-family:var(--mono);font-size:.88em;background:var(--panel);padding:2px 6px;border-radius:6px}
+code:where(:not(.lp *)){font-family:var(--mono);font-size:.88em;background:var(--panel);padding:2px 6px;border-radius:6px}
 .cv-wrap{max-width:1180px;margin:0 auto;padding:0 24px}
 
 /* ---------- 顶部导航 ---------- */
+/* 旧页（含 .lp 内容区）上顶栏不吸顶：旧页普遍自带 sticky/fixed 顶部元素（top:0），
+   站点吸顶顶栏(z-index:60)会将其压在底下，破坏原版效果（如驾驶新手页的顺序轴数字）。
+   :has 不支持的旧浏览器维持吸顶现状，属渐进降级。 */
+body:has(.lp) .cv-site-head{position:static}
 .cv-site-head{position:sticky;top:0;z-index:60;background:rgba(250,249,245,.9);
   -webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px);
   border-bottom:1px solid transparent;transition:border-color .25s}
@@ -106,7 +111,7 @@ body.lock{overflow:hidden}
 .cv-eyebrow{font-family:var(--mono);font-size:12px;letter-spacing:.16em;text-transform:uppercase;
   color:var(--ink-2);display:flex;align-items:center;gap:8px}
 .cv-eyebrow::before{content:"";width:6px;height:6px;border-radius:50%;background:var(--coral)}
-h1{font-family:var(--serif);font-weight:600;font-size:clamp(38px,5.1vw,58px);
+h1:where(:not(.lp *)){font-family:var(--serif);font-weight:600;font-size:clamp(38px,5.1vw,58px);
   line-height:1.14;letter-spacing:-.015em;margin:18px 0 20px}
 .cv-lede{font-size:17px;color:var(--ink-2);max-width:34em;line-height:1.8}
 .cv-cta-row{display:flex;gap:12px;margin-top:30px;flex-wrap:wrap}
@@ -144,7 +149,7 @@ h1{font-family:var(--serif);font-weight:600;font-size:clamp(38px,5.1vw,58px);
 /* ---------- 板块 ---------- */
 .cv-section-pad{padding:84px 0}
 .cv-sec-head{display:flex;align-items:flex-end;justify-content:space-between;gap:20px;margin-bottom:14px}
-h2{font-family:var(--serif);font-weight:600;font-size:clamp(27px,3.2vw,34px);letter-spacing:-.01em;line-height:1.25}
+h2:where(:not(.lp *)){font-family:var(--serif);font-weight:600;font-size:clamp(27px,3.2vw,34px);letter-spacing:-.01em;line-height:1.25}
 .cv-sec-lede{font-size:15.5px;color:var(--ink-2);max-width:44em;margin-bottom:34px}
 .cv-more-link{font-size:14px;white-space:nowrap;color:var(--ink);border-bottom:1px solid var(--line-2);padding-bottom:2px}
 .cv-more-link:hover{color:var(--coral-deep);border-color:var(--coral-deep)}
