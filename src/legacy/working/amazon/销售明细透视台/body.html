@@ -1,0 +1,1138 @@
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+<header class="masthead">
+  <div class="mastrow">
+    <span class="mast-title">销售明细透视台</span>
+    <span class="mast-sub">跨月汇总 · 提成口径统一 · 数据留档</span>
+    <div class="mast-actions">
+      <span id="dataCount">空库</span>
+      <span id="storageBadge">检测存储…</span>
+      <button class="btn tiny" id="btnGauge">口径说明</button>
+      <button class="btn tiny" id="btnBackup">备份 JSON</button>
+      <button class="btn tiny" id="btnRestore">恢复备份</button>
+      <input type="file" id="restoreInput" accept=".json" hidden>
+    </div>
+  </div>
+</header>
+
+<nav class="tabbar">
+  <button data-tab="pivot" class="on">透视分析</button>
+  <button data-tab="import">数据导入</button>
+  <button data-tab="batches">批次管理</button>
+  <button data-tab="browse">明细浏览</button>
+</nav>
+
+<!-- ============ 透视分析 ============ -->
+<section class="panel show" id="panel-pivot">
+  <div id="pivotEmpty" class="empty" style="display:none">
+    <h3>库中还没有明细数据</h3>
+    <p>把财务发来的《销售明细》月度表逐月导入，即可在这里做跨月透视。</p>
+    <div class="actrow">
+      <button class="btn primary" id="btnDemo">载入内置示例（10 行）</button>
+    </div>
+  </div>
+  <div id="pivotBody">
+    <div id="filterArea"></div>
+    <div id="sliceArea"></div>
+    <div class="toolrow">
+      <span class="flabel" style="min-width:auto">时间粒度</span>
+      <span class="seg" id="granSeg">
+        <button data-g="year">年</button><button data-g="month" class="on">月</button><button data-g="day">日</button>
+      </span>
+      <button class="btn tiny ghost" id="btnExpandAll">全部展开</button>
+      <button class="btn tiny ghost" id="btnCollapseAll">全部收起</button>
+      <span class="spacer"></span>
+      <button class="btn" id="btnExportX">导出 Excel</button>
+      <button class="btn ghost" id="btnExportC">导出 CSV</button>
+    </div>
+    <div id="pivotScope"></div>
+    <div class="kpirow" id="kpiRow"></div>
+    <div id="trendBox"></div>
+    <div style="height:12px"></div>
+    <div class="tablewrap" id="pivotWrap"></div>
+  </div>
+</section>
+
+<!-- ============ 数据导入 ============ -->
+<section class="panel" id="panel-import">
+  <div class="dropzone" id="dropZone">
+    点击选择或拖入财务《销售明细》文件（.xlsx / .csv）
+    <div class="sub">系统自动归一列名、解析日期区间、清洗数值格式，入库前给出校验报告与重复检测</div>
+  </div>
+  <input type="file" id="fileInput" accept=".xlsx,.xls,.xlsm,.csv,.tsv,.txt" hidden>
+  <div class="card danger" id="cdnWarn"><b>表格解析库（SheetJS CDN）未能加载。</b>
+    xlsx 文件导入与 Excel 导出暂不可用；可先在 Excel 里「另存为 CSV」后用下方粘贴导入，导出请用 CSV。联网环境恢复后刷新页面即可。</div>
+  <div class="pasteblock">
+    <div class="flabel" style="min-width:auto;margin-bottom:4px">或直接从 Excel 复制区域后粘贴（含表头，制表符/逗号分隔均可）：</div>
+    <textarea id="pasteArea" placeholder="国家	日期	MSKU	…（从 Excel 直接 Ctrl+C / Ctrl+V）"></textarea>
+    <div class="actrow" style="margin-top:8px">
+      <button class="btn" id="btnParsePaste">解析粘贴内容</button>
+      <button class="btn ghost" id="btnDemo2">载入内置示例</button>
+    </div>
+  </div>
+  <div id="importReport"></div>
+</section>
+
+<!-- ============ 批次管理 ============ -->
+<section class="panel" id="panel-batches">
+  <div class="toolrow" style="margin-top:0">
+    <span class="hint" style="padding:0">每次导入为一个批次；某月数据导错时，删掉该批次重新导入即可，不影响其他月份。</span>
+    <span class="spacer"></span>
+    <button class="btn danger tiny" id="btnWipe">清空全库</button>
+  </div>
+  <div id="batchList"></div>
+</section>
+
+<!-- ============ 明细浏览 ============ -->
+<section class="panel" id="panel-browse">
+  <div class="browsebar">
+    <input class="txt" id="browseQ" placeholder="搜索：店铺 / 品名 / SKU / 负责人 / ASIN…">
+    <select id="browseMonth"></select>
+  </div>
+  <div class="tablewrap" style="border:none"><div id="browseTable"></div></div>
+  <div id="browsePager"></div>
+</section>
+
+<!-- ============ 口径说明 ============ -->
+<div class="modal" id="gaugeModal">
+  <div class="modalbox">
+    <button class="modalclose" id="gaugeClose">×</button>
+    <h3>统计口径说明</h3>
+    <table>
+      <tr><th>指标</th><th>公式（均为当前筛选范围内求和后再相除）</th></tr>
+      <tr><td>销量 TotalUnits</td><td>Σ 销量</td></tr>
+      <tr><td>销售额 TotalSales</td><td>Σ 销售额</td></tr>
+      <tr><td>毛利 TotalGross</td><td>Σ 毛利</td></tr>
+      <tr><td>毛利率 Margin</td><td>Σ 毛利 ÷ Σ 销售额</td></tr>
+      <tr><td>广告占比 Ad Sales Rate</td><td>Σ 广告费 ÷ Σ 销售额</td></tr>
+      <tr><td>促销折扣占比 Promotion</td><td>Σ 促销折扣 ÷ Σ 销售额</td></tr>
+      <tr><td>推广费占比 Marketing</td><td>Σ 推广费 ÷ Σ 销售额</td></tr>
+      <tr><td>仓储费占比 Warehouse</td><td>Σ（月仓储＋长期仓储＋FBA销毁费＋FBA移除费＋其他仓储费）÷ Σ 销售额</td></tr>
+    </table>
+    <p style="font-size:12.5px;color:var(--muted);margin:8px 0">
+      约定：费用列沿用财务表的负号，占比因此为负值；率值一律「和÷和」（与 Excel 计算字段一致），绝不做「率的平均」。
+      日期区间（如 2026-01-01~2026-01-31）按<b>起始日</b>归属年月；行唯一键 = 国家＋店铺＋日期区间＋MSKU＋SKU＋ASIN＋品名，跨批次判重据此进行。
+    </p>
+    <div class="risk"><b>风险提示：</b>「促销折扣占比」「仓储费占比」两项的费用归集范围是按列名语义设定的；若财务对这两项另有口径（例如促销含买家运费补贴、仓储含入库配置费），请先与财务核对，并在文件内 <code>SUM_KEYS / metricsOf</code> 处按实际口径调整后再作为提成依据。</div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+/* ===================================================================
+ * PivotCore —— 销售明细透视台 核心纯函数层（无 DOM 依赖，可在 Node 测试）
+ * 口径与列结构以财务《销售明细》42 列模板为准
+ * =================================================================== */
+const PivotCore = (() => {
+  'use strict';
+
+  /* ---------- 1. 列名归一 ---------- */
+  // 匹配键：去掉所有空白（含换行、全角空格、不间断空格），半角括号转全角，ASCII 转小写
+  const matchKey = (s) => String(s == null ? '' : s)
+    .replace(/[\s\u00A0\u3000]+/g, '')
+    .replace(/\(/g, '（').replace(/\)/g, '）')
+    .replace(/[A-Z]/g, (c) => c.toLowerCase());
+
+  const DIM_COLS = ['国家', '日期', 'MSKU', 'ASIN', '父ASIN', '店铺', '品名', 'SKU', '父品名汇总', 'Listing负责人', '部门', '分类'];
+  const NUM_COLS = ['销量', '补（换）货量', '多渠道销量', '销售额', '买家运费', '促销折扣', '退款金额', '退款量', '其它收入',
+    'FBA库存赔偿', '平台费', 'FBA发货费', '其他订单费用', '月仓储', '长期仓储', 'FBA销毁费', 'FBA移除费', '其他仓储费',
+    '广告费', '推广费', 'FBA国际物流运费', '调整费', '平台其他费', '入库配置费', '采购单价', '采购成本', '头程单价', '头程成本', '站外测评', '毛利'];
+  const ALL_COLS = DIM_COLS.concat(NUM_COLS);
+  // 关键列：缺失则拒绝入库
+  const REQUIRED = ['国家', '日期', '店铺', '父品名汇总', 'Listing负责人', '销量', '销售额', '毛利'];
+
+  const EXACT = {};
+  ALL_COLS.forEach((c) => { EXACT[matchKey(c)] = c; });
+  // 常见别名
+  [['其他收入', '其它收入'], ['listing负责人', 'Listing负责人'], ['负责人', 'Listing负责人']]
+    .forEach(([a, c]) => { EXACT[matchKey(a)] = c; });
+  // 前缀规则：兼容「FBA发货费（已扣减多渠道发货费）」「入库配置费（原合仓费）」等尾注变体
+  const PREFIX = ['FBA发货费', '入库配置费', '月仓储', '长期仓储', '平台费'].map((c) => [matchKey(c), c]);
+
+  function resolveHeader(raw) {
+    const k = matchKey(raw);
+    if (!k) return null;
+    if (EXACT[k]) return EXACT[k];
+    for (const [p, c] of PREFIX) if (k.indexOf(p) === 0) return c;
+    return null;
+  }
+
+  // headers: 原始表头数组 → { map: {canonical: colIndex}, unknown: [原始名], missing: [canonical], requiredMissing: [] }
+  function mapHeaders(headers) {
+    const map = {}; const unknown = [];
+    headers.forEach((h, i) => {
+      const c = resolveHeader(h);
+      if (c) { if (!(c in map)) map[c] = i; }
+      else if (String(h == null ? '' : h).trim() !== '') unknown.push(String(h));
+    });
+    const missing = ALL_COLS.filter((c) => !(c in map));
+    const requiredMissing = REQUIRED.filter((c) => !(c in map));
+    return { map, unknown, missing, requiredMissing };
+  }
+
+  /* ---------- 2. 日期解析 ----------
+   * 支持：Excel 序列号 / JS Date / "YYYY-MM-DD~YYYY-MM-DD" 区间（~ ～ 至 到）
+   *      / 单日 "YYYY-MM-DD" "YYYY/M/D" "YYYY.M.D" "YYYY年M月D日" "YYYYMMDD"
+   *      / 年月 "YYYY-MM" "YYYY年M月" "YYYYMM" → 整月区间
+   * 输出 { ds:'YYYY-MM-DD', de:'YYYY-MM-DD' }，失败返回 null            */
+  const pad2 = (n) => (n < 10 ? '0' : '') + n;
+  const ymd = (y, m, d) => y + '-' + pad2(m) + '-' + pad2(d);
+  const daysInMonth = (y, m) => new Date(Date.UTC(y, m, 0)).getUTCDate();
+
+  function serialToYMD(n) { // Excel 1900 体系：1899-12-30 + n 天（现代数据不涉 1900 闰年 bug）
+    const t = Date.UTC(1899, 11, 30) + Math.round(n) * 86400000;
+    const d = new Date(t);
+    return ymd(d.getUTCFullYear(), d.getUTCMonth() + 1, d.getUTCDate());
+  }
+
+  function parseSingleDate(s) {
+    s = s.trim();
+    let m;
+    if ((m = s.match(/^(\d{4})[-/.年](\d{1,2})[-/.月](\d{1,2})日?$/)))
+      return validYMD(+m[1], +m[2], +m[3]);
+    if ((m = s.match(/^(\d{4})(\d{2})(\d{2})$/)))
+      return validYMD(+m[1], +m[2], +m[3]);
+    return null;
+  }
+  function parseYearMonth(s) {
+    s = s.trim();
+    let m;
+    if ((m = s.match(/^(\d{4})[-/.年](\d{1,2})月?$/)) || (m = s.match(/^(\d{4})(\d{2})$/))) {
+      const y = +m[1], mo = +m[2];
+      if (mo >= 1 && mo <= 12) return { ds: ymd(y, mo, 1), de: ymd(y, mo, daysInMonth(y, mo)) };
+    }
+    return null;
+  }
+  function validYMD(y, mo, d) {
+    if (y < 1990 || y > 2100 || mo < 1 || mo > 12 || d < 1 || d > daysInMonth(y, mo)) return null;
+    return ymd(y, mo, d);
+  }
+
+  function parseDateCell(v) {
+    if (v == null || v === '') return null;
+    if (typeof v === 'number' && isFinite(v)) {
+      if (v < 20000 || v > 80000) return null; // 约 1954–2119 年之外视为异常
+      const d = serialToYMD(v); return { ds: d, de: d };
+    }
+    if (v instanceof Date && !isNaN(v)) {
+      // SheetJS cellDates 产物按 UTC 取分量，避免时区回拨一天
+      const d = ymd(v.getUTCFullYear(), v.getUTCMonth() + 1, v.getUTCDate());
+      return { ds: d, de: d };
+    }
+    const s = String(v).trim();
+    if (!s) return null;
+    // 区间：~ ～ 至 到（不拿 "-" 当区间分隔，避免与日期连字符冲突）
+    const parts = s.split(/\s*(?:~|～|至|到)\s*/);
+    if (parts.length === 2) {
+      const a = parseSingleDate(parts[0]); const b = parseSingleDate(parts[1]);
+      if (a && b) return a <= b ? { ds: a, de: b } : { ds: b, de: a };
+      return null;
+    }
+    const one = parseSingleDate(s);
+    if (one) return { ds: one, de: one };
+    const mo = parseYearMonth(s);
+    if (mo) return mo;
+    // 纯数字字符串按序列号兜底
+    if (/^\d+(\.\d+)?$/.test(s)) return parseDateCell(+s);
+    return null;
+  }
+
+  const isFullMonth = (ds, de) => {
+    const y = +ds.slice(0, 4), m = +ds.slice(5, 7);
+    return ds.slice(8) === '01' && de === ymd(y, m, daysInMonth(y, m));
+  };
+
+  /* ---------- 3. 数值清洗 ----------
+   * 空/横线 → 0（视为无发生额）；"1,234.5" "￥-3.2" "(500)" "12%" 均可解析
+   * 解析失败返回 { v:0, bad:true }                                     */
+  function parseNumber(v) {
+    if (v == null || v === '') return { v: 0, blank: true };
+    if (typeof v === 'number') return isFinite(v) ? { v: v } : { v: 0, bad: true };
+    let s = String(v).trim();
+    if (s === '' || s === '-' || s === '—' || s === '--') return { v: 0, blank: true };
+    let neg = false;
+    if (/^\(.*\)$/.test(s)) { neg = true; s = s.slice(1, -1); }
+    let pct = false;
+    if (/%$/.test(s)) { pct = true; s = s.slice(0, -1); }
+    s = s.replace(/[,，\s\u00A0]/g, '').replace(/^[￥¥$€£]/, '');
+    const n = Number(s);
+    if (!isFinite(n)) return { v: 0, bad: true };
+    let r = n; if (neg) r = -r; if (pct) r = r / 100;
+    return { v: r };
+  }
+
+  /* ---------- 4. 行构建（导入管线） ---------- */
+  function fnv1a(str) {
+    let h = 0x811c9dc5;
+    for (let i = 0; i < str.length; i++) { h ^= str.charCodeAt(i); h = (h * 0x01000193) >>> 0; }
+    return ('0000000' + h.toString(16)).slice(-8);
+  }
+  const rowKey = (r) => fnv1a([r.d['国家'], r.d['店铺'], r.ds, r.de, r.d['MSKU'], r.d['SKU'], r.d['ASIN'], r.d['品名']].join('\x1f'));
+
+  /**
+   * aoa: 含表头的二维数组（SheetJS sheet_to_json header:1, raw:true, defval:''）
+   * 返回 { rows, issues:{unknown,missing,requiredMissing,badDate:[{line,raw}],badNum:[{line,col,raw}],emptyDim:[{line,col}]}, months:['YYYY-MM'…] }
+   */
+  function buildRows(aoa, batchId) {
+    if (!aoa || !aoa.length) return { rows: [], issues: { fatal: '文件为空' } };
+    // 允许表头前有空行/标题行：找到能命中最多关键列的一行作为表头（前 10 行内）
+    let hdrIdx = 0, best = -1, hm = null;
+    for (let i = 0; i < Math.min(10, aoa.length); i++) {
+      const t = mapHeaders(aoa[i] || []);
+      const score = REQUIRED.length - t.requiredMissing.length;
+      if (score > best) { best = score; hdrIdx = i; hm = t; }
+      if (t.requiredMissing.length === 0) { hdrIdx = i; hm = t; break; }
+    }
+    if (!hm || hm.requiredMissing.length) {
+      return { rows: [], issues: { fatal: '缺少关键列：' + (hm ? hm.requiredMissing.join('、') : '无法识别表头'), unknown: hm ? hm.unknown : [], missing: hm ? hm.missing : [] } };
+    }
+    const { map, unknown, missing } = hm;
+    const rows = []; const badDate = []; const badNum = []; const emptyDim = [];
+    const monthSet = new Set();
+    for (let i = hdrIdx + 1; i < aoa.length; i++) {
+      const arr = aoa[i]; if (!arr) continue;
+      const isEmpty = arr.every((c) => c == null || String(c).trim() === '');
+      if (isEmpty) continue;
+      const line = i + 1; // 供报告用（1 基）
+      const d = {};
+      DIM_COLS.forEach((c) => { d[c] = (c in map) ? String(arr[map[c]] == null ? '' : arr[map[c]]).trim() : ''; });
+      const pd = parseDateCell(arr[map['日期']]);
+      if (!pd) { badDate.push({ line, raw: String(arr[map['日期']]) }); continue; }
+      ['国家', '店铺', '父品名汇总', 'Listing负责人'].forEach((c) => { if (!d[c]) emptyDim.push({ line, col: c }); });
+      if (!d['父品名汇总']) d['父品名汇总'] = '(未填写)';
+      if (!d['Listing负责人']) d['Listing负责人'] = '(未填写)';
+      const m = {};
+      NUM_COLS.forEach((c) => {
+        if (!(c in map)) { m[c] = 0; return; }
+        const p = parseNumber(arr[map[c]]);
+        if (p.bad) badNum.push({ line, col: c, raw: String(arr[map[c]]) });
+        m[c] = p.v;
+      });
+      const row = { b: batchId, d, ds: pd.ds, de: pd.de, draw: String(arr[map['日期']]), m: m };
+      row.k = rowKey(row);
+      monthSet.add(pd.ds.slice(0, 7));
+      rows.push(row);
+    }
+    return { rows, issues: { unknown, missing, badDate, badNum, emptyDim }, months: Array.from(monthSet).sort() };
+  }
+
+  /* ---------- 5. 透视聚合 ----------
+   * 指标口径（率值均为汇总层「和÷和」，与 Excel 计算字段一致）：
+   *  TotalUnits=Σ销量  TotalSales=Σ销售额  TotalGross=Σ毛利  Margin=Gross/Sales
+   *  Ad=Σ广告费/Σ销售额  Promotion=Σ促销折扣/Σ销售额  Marketing=Σ推广费/Σ销售额
+   *  Warehouse=Σ(月仓储+长期仓储+FBA销毁费+FBA移除费+其他仓储费)/Σ销售额          */
+  const SUM_KEYS = ['销量', '销售额', '毛利', '广告费', '促销折扣', '推广费', '月仓储', '长期仓储', 'FBA销毁费', 'FBA移除费', '其他仓储费'];
+  const MONTH_EN = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+
+  const zeroSums = () => { const o = {}; SUM_KEYS.forEach((k) => { o[k] = 0; }); return o; };
+  const addRow = (o, r) => { SUM_KEYS.forEach((k) => { o[k] += r.m[k] || 0; }); };
+  function metricsOf(s) {
+    const sales = s['销售额'];
+    const rate = (x) => (sales ? x / sales : null);
+    return {
+      units: s['销量'], sales: sales, gross: s['毛利'],
+      margin: rate(s['毛利']), ad: rate(s['广告费']), promo: rate(s['促销折扣']), mkt: rate(s['推广费']),
+      wh: rate(s['月仓储'] + s['长期仓储'] + s['FBA销毁费'] + s['FBA移除费'] + s['其他仓储费'])
+    };
+  }
+
+  /**
+   * filters: { 国家:Set|null, 店铺:Set|null, 负责人:Set|null, 部门:Set|null, 分类:Set|null, years:Set|null, months:Set('YYYY-MM')|null }
+   * granularity: 'year' | 'month' | 'day'
+   * 返回 { tree:[父品名节点…], total:{sums,metrics}, monthly:[{ym,sales,gross}…] }
+   */
+  function aggregate(rows, filters, granularity) {
+    const f = filters || {};
+    const pass = (set, v) => !set || set.size === 0 || set.has(v);
+    const top = new Map(); const total = zeroSums(); const monthly = new Map();
+    for (const r of rows) {
+      if (!pass(f['国家'], r.d['国家'])) continue;
+      if (!pass(f['店铺'], r.d['店铺'])) continue;
+      if (!pass(f['负责人'], r.d['Listing负责人'])) continue;
+      if (!pass(f['部门'], r.d['部门'])) continue;
+      if (!pass(f['分类'], r.d['分类'])) continue;
+      const y = r.ds.slice(0, 4); const ym2 = r.ds.slice(0, 7);
+      if (!pass(f.years, y)) continue;
+      if (!pass(f.months, ym2)) continue;
+      addRow(total, r);
+      let mo = monthly.get(ym2); if (!mo) { mo = zeroSums(); monthly.set(ym2, mo); } addRow(mo, r);
+      const p = r.d['父品名汇总'];
+      let pn = top.get(p); if (!pn) { pn = { sums: zeroSums(), years: new Map() }; top.set(p, pn); }
+      addRow(pn.sums, r);
+      if (granularity === 'year') continue;
+      let yn = pn.years.get(y); if (!yn) { yn = { sums: zeroSums(), months: new Map() }; pn.years.set(y, yn); }
+      addRow(yn.sums, r);
+      let mn = yn.months.get(ym2); if (!mn) { mn = { sums: zeroSums(), days: new Map() }; yn.months.set(ym2, mn); }
+      addRow(mn.sums, r);
+      if (granularity !== 'day') continue;
+      const dk = r.ds + '|' + r.de;
+      let dn = mn.days.get(dk); if (!dn) { dn = { sums: zeroSums(), ds: r.ds, de: r.de }; mn.days.set(dk, dn); }
+      addRow(dn.sums, r);
+    }
+    // year 粒度下也要能给出年小计：重算（year 模式跳过了 years 累计以省时，这里补）
+    if (granularity === 'year') {
+      for (const r of rows) {
+        if (!pass(f['国家'], r.d['国家']) || !pass(f['店铺'], r.d['店铺']) || !pass(f['负责人'], r.d['Listing负责人']) ||
+          !pass(f['部门'], r.d['部门']) || !pass(f['分类'], r.d['分类'])) continue;
+        const y = r.ds.slice(0, 4); const ym2 = r.ds.slice(0, 7);
+        if (!pass(f.years, y) || !pass(f.months, ym2)) continue;
+        const pn = top.get(r.d['父品名汇总']);
+        let yn = pn.years.get(y); if (!yn) { yn = { sums: zeroSums(), months: new Map() }; pn.years.set(y, yn); }
+        addRow(yn.sums, r);
+      }
+    }
+    // 物化为有序数组：父品名按销售额降序，年月日按时间升序
+    const tree = Array.from(top.entries()).map(([name, pn]) => ({
+      name: name,
+      sums: pn.sums, metrics: metricsOf(pn.sums),
+      years: Array.from(pn.years.entries()).sort((a, b) => a[0] < b[0] ? -1 : 1).map(([y, yn]) => ({
+        year: y, sums: yn.sums, metrics: metricsOf(yn.sums),
+        months: Array.from(yn.months.entries()).sort((a, b) => a[0] < b[0] ? -1 : 1).map(([ym2, mn]) => ({
+          ym: ym2, label: MONTH_EN[+ym2.slice(5, 7) - 1], sums: mn.sums, metrics: metricsOf(mn.sums),
+          days: Array.from(mn.days.values()).sort((a, b) => a.ds < b.ds ? -1 : 1).map((dn) => ({
+            ds: dn.ds, de: dn.de, fullMonth: isFullMonth(dn.ds, dn.de), sums: dn.sums, metrics: metricsOf(dn.sums)
+          }))
+        }))
+      }))
+    })).sort((a, b) => b.sums['销售额'] - a.sums['销售额']);
+    const monthlyArr = Array.from(monthly.entries()).sort((a, b) => a[0] < b[0] ? -1 : 1)
+      .map(([ym2, s]) => ({ ym: ym2, sales: s['销售额'], gross: s['毛利'] }));
+    return { tree: tree, total: { sums: total, metrics: metricsOf(total) }, monthly: monthlyArr };
+  }
+
+  /* ---------- 6. 维度取值（供筛选器） ---------- */
+  function dimValues(rows) {
+    const acc = { '国家': new Map(), '店铺': new Map(), '负责人': new Map(), '部门': new Map(), '分类': new Map(), years: new Set(), months: new Set() };
+    const bump = (m, v) => { if (v) m.set(v, (m.get(v) || 0) + 1); };
+    rows.forEach((r) => {
+      bump(acc['国家'], r.d['国家']); bump(acc['店铺'], r.d['店铺']); bump(acc['负责人'], r.d['Listing负责人']);
+      bump(acc['部门'], r.d['部门']); bump(acc['分类'], r.d['分类']);
+      acc.years.add(r.ds.slice(0, 4)); acc.months.add(r.ds.slice(0, 7));
+    });
+    const sortKeys = (m) => Array.from(m.keys()).sort((a, b) => a.localeCompare(b, 'zh-Hans-CN'));
+    return {
+      '国家': sortKeys(acc['国家']), '店铺': sortKeys(acc['店铺']), '负责人': sortKeys(acc['负责人']),
+      '部门': sortKeys(acc['部门']), '分类': sortKeys(acc['分类']),
+      years: Array.from(acc.years).sort(), months: Array.from(acc.months).sort()
+    };
+  }
+
+  return { matchKey, resolveHeader, mapHeaders, parseDateCell, isFullMonth, parseNumber, serialToYMD,
+    buildRows, aggregate, dimValues, rowKey, DIM_COLS, NUM_COLS, REQUIRED, SUM_KEYS, MONTH_EN };
+})();
+if (typeof module !== 'undefined') module.exports = PivotCore;
+
+</script>
+<script>
+var SAMPLE_AOA = [["国家","日期","MSKU","ASIN","父ASIN","店铺","品名","SKU","父品名汇总","Listing\r\n负责人","部门","分类","销量","补（换）货量","多渠道销量","销售额","买家运费","促销折扣","退款金额","退款量","其它收入","FBA库存赔偿","平台费","FBA发货费\r\n（已扣减多渠道发货费）","其他订单费用","月仓储","长期仓储","FBA销毁费","FBA移除费","其他仓储费","广告费","推广费","FBA国际物流运费","调整费","平台其他费","入库配置费(原合仓费)","采购单价","采购成本","头程单价","头程成本","站外测评","毛利"],["美国","2026-01-01~2026-01-31","BRK-10-FXHB-FEN","B083BCTLP5","B0DSC18122","A0041-全站点-丁官秀-主账号-US","BRK10寸-方形-粉色彩色","A1-210C-PIN","10寸方形","李禹三","运营一部","LCD手写板",4175,9,3,517912.56,20376.14,-51654.3,-50038.29,385,0,3790.13,-71944.6,-118623.061871709,0,-4063.23,0,-205.89,0,0,-315121.67,-5179.1256,0,-362.2,0,-12.11,14.25,54135.75,8.27,31417.73,0,-160679.127471709],["美国","2026-01-01~2026-01-31","LCD-CS-BLUE-10-X","B082KFTF41","B0DWJVF81Z","A0002-US","KKD10寸-方形-蓝色彩色","A1-210C-BLU","10寸方形","魏荷芬","运营一部","LCD手写板",3949,14,3,422051.84,14791.73,-15285.31,-51564.35,549,0,5709.06,-62507.38,-109214.811037449,0,-9704.37,0,-3006.45,0,0,-239596.16,-4220.5184,0,-186.13,-4769.07,-77.41,14.2857142857143,48771.4285714286,3.41,11641.74,0,-117992.498008878],["美国","2026-01-01~2026-01-31","OS-85IN-KL-GREEN","B09FZ42BTP","B09M8D62RS","A0010-北美-DINFLY-35-US","OS8.5寸-恐龙-绿色","A6-385C-GRE","8.5寸恐龙","李禹三","运营一部","LCD手写板",3947,15,4,517623.45,18044.3,-13970.94,-68636.01,550,0,2930.17,-77405.07,-107354.683766135,0,-7550.58,0,0,0,0,-230965.35,-5176.2345,0,-104.68,0,-107.58,16,54592,3.27,11157.24,0,-38422.4482661352],["美国","2026-01-01~2026-01-31","KKD02G-SJL","B0C8HWWP4Q","B0DNRKMSH5","A0002-US","KD-KP001K儿童手机-恐龙手机套款蓝色（美式）-可插拔内存卡","KP001RB101","KP001K儿童手机","王昱翔","运营一部","儿童手机",2544,42,7,522727.88,23153.97,-22069.42,-94075.01,529,0,15335.31,-77945.96,-99609.9859192474,0,-4562.05,0,-3007.23,0,0,-93093.37,-5227.2788,0,-1086.74,-8132.13,-91.22,78.23,160919.11,5.39,11087.23,0,-19689.5747192474],["美国","2026-01-01~2026-01-31","LCD-CS-PINK-10-X","B082KFCDBM","B0DWJVF81Z","A0002-US","KKD10寸-方形-粉色彩色","A1-210C-PIN","10寸方形","魏荷芬","运营一部","LCD手写板",2072,8,5,217768.89,8887.55,-7920.15,-28698.64,291,0,3005.03,-17225.14,-58073.2618199326,0,-6223.89,0,-1511.19,0,0,-99477.04,-2177.6889,0,-145.69,-3189.82,-47.74,14.25,25493.25,3.31,5921.59,0,-26443.6207199326],["美国","2026-01-01~2026-01-31","BRK-10-FXHB-LAN","B083BG4MXC","B0DSC18122","A0041-全站点-丁官秀-主账号-US","BRK10寸-方形-蓝色彩色","A1-210C-BLU","10寸方形","李禹三","运营一部","LCD手写板",2027,9,6,209012.86,6578.79,-7878.79,-44830.81,420,0,4077.4,-16503,-51676.5553566158,0,-8569.68,0,0,-430.12,0,-63755.11,-2090.1286,0,-185.42,0,-3.9,14.2857142857143,23085.7142857143,3.44,5559.04,0,-4899.21824233014],["美国","2026-01-01~2026-01-31","TKF-TYBS01001BBC02-BACK","B0B9N694YS","B0B9N4K7K1","A0011-北美-MINITOM-113-US","TKF-BS010曲边画板-8.5寸蓝蓝2PCS","BS01001BBC02","曲边","邝灵渊","运营一部","LCD手写板",1249,3,2,73652.9,2932.3,-2804.88,-3776.96,97,0,675.17,-10972.63,-26815.6705755396,0,-1583.22,0,-504.42,0,0,-28031.76,-736.529,0,0,-1037.02,0,17.89,20662.95,3.18,3672.9,0,-23338.5695755396],["美国","2026-01-01~2026-01-31","BRK-85-2PACK-QBHB","B0B944N6JW","B0DSV69LF3","A0041-全站点-丁官秀-主账号-US","通用8.5寸曲边写字板打孔2pc-蓝粉色","AABQBBP85CK-2PC","曲边","李禹三","运营一部","LCD手写板",1069,13,2,65602.29,2720.32,-5764.31,-7946.42,118,0,710.94,-9274.04,-21776.6878338002,0,-2824.08,0,0,-74.22,0,-28526.68,-656.0229,0,0,0,-2.27,11.1504424778761,10749.0265486726,3.01,2901.64,0,-21461.8472824728],["美国","2026-01-01~2026-01-31","KKD02-DDB-H","B0DFCKK62Q","B0FQV3996S","A0002-US","KD-PP001点读笔-单词书1&2配红色款笔（亚马逊）","PP0011R001","PP001点读笔","王昱翔","运营一部","点读笔",945,10,1,314266.46,13976.04,-23573.18,-51670.66,186,0,5656.44,-45546.14,-38590.9430232558,0,-11720.69,0,-761.51,0,0,-127071.81,-3142.6646,0,-234.78,-4386.9,-39.52,59.61,45840.09,8.61,6621.09,0,-25301.0376232558],["美国","2026-01-01~2026-01-31","LCD-CS-YELLOW-10\"","B082K7QYFJ","B0DWJVF81Z","A0002-US","KKD10寸-方形-黄色彩色","A1-210C-YEL","10寸方形","魏荷芬","运营一部","LCD手写板",873,5,1,85328.69,1787.55,-2712.1,-8766.93,86,0,954.79,-6705.29,-23771.0308695652,0,-1097.36,0,-440.67,0,0,-16122.04,-853.2869,0,-62.4,-232.59,-16.86,14.25,11286,3.35,2653.2,0,13351.2722304348]];
+</script>
+<script>
+/* ================= 应用层：状态 / 存储 / 交互 ================= */
+(function () {
+  'use strict';
+  var C = PivotCore;
+  var $ = function (id) { return document.getElementById(id); };
+  var esc = function (s) {
+    return String(s == null ? '' : s).replace(/[&<>"']/g, function (c) {
+      return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c];
+    });
+  };
+
+  /* ---------- 格式化 ---------- */
+  function fmtInt(n) { return n == null ? '–' : Math.round(n).toLocaleString('zh-CN'); }
+  function fmtMoney(n) { return n == null ? '–' : n.toLocaleString('zh-CN', { minimumFractionDigits: 2, maximumFractionDigits: 2 }); }
+  function fmtPct(x) { return (x == null || !isFinite(x)) ? '–' : (x * 100).toFixed(2) + '%'; }
+  function cls(n) { return (typeof n === 'number' && n < 0) ? ' class="neg"' : ''; }
+  function tdNum(v, f) { return '<td' + cls(v) + '>' + f(v) + '</td>'; }
+  function metricCells(mt) {
+    return tdNum(mt.units, fmtInt) + tdNum(mt.sales, fmtMoney) + tdNum(mt.gross, fmtMoney) +
+      tdNum(mt.margin, fmtPct) + tdNum(mt.ad, fmtPct) + tdNum(mt.promo, fmtPct) +
+      tdNum(mt.mkt, fmtPct) + tdNum(mt.wh, fmtPct);
+  }
+  function dayLabel(d) { return d.ds === d.de ? d.ds : (d.ds + '～' + d.de); }
+
+  /* ---------- 存储层：IndexedDB，失败则内存兜底 ---------- */
+  var DB = (function () {
+    var db = null, mem = false;
+    function open() {
+      return new Promise(function (resolve) {
+        try {
+          if (!window.indexedDB) { mem = true; return resolve(); }
+          var req = indexedDB.open('kokodi_sales_pivot', 1);
+          req.onupgradeneeded = function (e) {
+            var d = e.target.result;
+            if (!d.objectStoreNames.contains('rows')) d.createObjectStore('rows', { keyPath: 'k' });
+            if (!d.objectStoreNames.contains('batches')) d.createObjectStore('batches', { keyPath: 'id' });
+          };
+          req.onsuccess = function (e) { db = e.target.result; resolve(); };
+          req.onerror = function () { mem = true; resolve(); };
+        } catch (err) { mem = true; resolve(); }
+      });
+    }
+    function tx(store, mode, fn) {
+      return new Promise(function (resolve, reject) {
+        if (mem || !db) return resolve();
+        var t = db.transaction(store, mode);
+        fn(t.objectStore(store));
+        t.oncomplete = function () { resolve(); };
+        t.onerror = function (e) { reject(e); };
+      });
+    }
+    function readAll(store) {
+      return new Promise(function (resolve) {
+        if (mem || !db) return resolve([]);
+        var out = [];
+        var t = db.transaction(store, 'readonly');
+        var cur = t.objectStore(store).openCursor();
+        cur.onsuccess = function (e) {
+          var c = e.target.result;
+          if (c) { out.push(c.value); c.continue(); } else resolve(out);
+        };
+        cur.onerror = function () { resolve([]); };
+      });
+    }
+    return {
+      open: open,
+      isMemory: function () { return mem; },
+      loadAll: function () {
+        return Promise.all([readAll('rows'), readAll('batches')]).then(function (r) { return { rows: r[0], batches: r[1] }; });
+      },
+      putRows: function (rows) { return tx('rows', 'readwrite', function (s) { rows.forEach(function (r) { s.put(r); }); }); },
+      delRows: function (keys) { return tx('rows', 'readwrite', function (s) { keys.forEach(function (k) { s.delete(k); }); }); },
+      putBatch: function (b) { return tx('batches', 'readwrite', function (s) { s.put(b); }); },
+      delBatch: function (id) { return tx('batches', 'readwrite', function (s) { s.delete(id); }); },
+      clearAll: function () {
+        return tx('rows', 'readwrite', function (s) { s.clear(); }).then(function () {
+          return tx('batches', 'readwrite', function (s) { s.clear(); });
+        });
+      }
+    };
+  })();
+
+  /* ---------- 全局状态 ---------- */
+  var S = {
+    rows: [], batches: [],
+    f: { '国家': new Set(), '店铺': new Set(), '负责人': new Set(), '部门': new Set(), '分类': new Set(), years: new Set(), months: new Set() },
+    gran: 'month',
+    collapsed: {},          // pathKey -> true
+    pending: null,          // 待入库 { built, dup, overlaps, srcName }
+    page: 1, tab: 'pivot'
+  };
+  var PAGE = 50;
+
+  function toast(msg, warn) {
+    var t = $('toast');
+    t.textContent = msg;
+    t.className = 'toast show' + (warn ? ' warn' : '');
+    clearTimeout(toast._t);
+    toast._t = setTimeout(function () { t.className = 'toast'; }, 3200);
+  }
+
+  /* ---------- 筛选器渲染 ---------- */
+  var DIM_UI = [
+    { key: '国家', label: '国家' }, { key: '店铺', label: '店铺' },
+    { key: '负责人', label: 'Listing 负责人' }, { key: '部门', label: '部门' }, { key: '分类', label: '分类' }
+  ];
+  var expandedGroups = {}; // 超长组的"更多"展开态
+
+  function chipHtml(text, active, dataAttr, extraCls) {
+    return '<button type="button" class="chip' + (active ? ' on' : '') + (extraCls ? ' ' + extraCls : '') + '" ' + dataAttr + '>' + esc(text) + '</button>';
+  }
+
+  function renderFilters() {
+    var dv = C.dimValues(S.rows);
+    // 清理已不存在的选中值
+    DIM_UI.forEach(function (d) {
+      var valid = new Set(dv[d.key]);
+      S.f[d.key] = new Set(Array.from(S.f[d.key]).filter(function (v) { return valid.has(v); }));
+    });
+    S.f.years = new Set(Array.from(S.f.years).filter(function (y) { return dv.years.indexOf(y) >= 0; }));
+    S.f.months = new Set(Array.from(S.f.months).filter(function (m) { return dv.months.indexOf(m) >= 0; }));
+
+    var html = '';
+    DIM_UI.forEach(function (d) {
+      var vals = dv[d.key];
+      if (!vals.length) return;
+      var set = S.f[d.key];
+      var limit = 14;
+      var showAll = expandedGroups[d.key] || vals.length <= limit;
+      var shown = showAll ? vals : vals.slice(0, limit);
+      html += '<div class="fgroup"><span class="flabel">' + esc(d.label) + '</span><div class="chips">';
+      html += chipHtml('全部', set.size === 0, 'data-fdim="' + esc(d.key) + '" data-fval="__ALL__"', 'all');
+      shown.forEach(function (v) {
+        html += chipHtml(v, set.has(v), 'data-fdim="' + esc(d.key) + '" data-fval="' + esc(v) + '"');
+      });
+      if (!showAll) html += chipHtml('+' + (vals.length - limit) + ' 更多', false, 'data-more="' + esc(d.key) + '"', 'more');
+      html += '</div></div>';
+    });
+    $('filterArea').innerHTML = html || '<div class="hint">导入数据后此处出现维度筛选</div>';
+
+    // 日期切片：年 chips + 按年分组的月 chips
+    var sh = '';
+    if (dv.years.length) {
+      sh += '<div class="fgroup"><span class="flabel">年份</span><div class="chips">';
+      sh += chipHtml('全部', S.f.years.size === 0, 'data-year="__ALL__"', 'all');
+      dv.years.forEach(function (y) { sh += chipHtml(y, S.f.years.has(y), 'data-year="' + y + '"'); });
+      sh += '</div></div>';
+      sh += '<div class="fgroup"><span class="flabel">月份</span><div class="chips">';
+      sh += chipHtml('全部', S.f.months.size === 0, 'data-month="__ALL__"', 'all');
+      dv.years.forEach(function (y) {
+        var ms = dv.months.filter(function (m) { return m.slice(0, 4) === y; });
+        if (dv.years.length > 1) sh += '<span class="ytag">' + y + '</span>';
+        ms.forEach(function (m) {
+          sh += chipHtml(+m.slice(5, 7) + '月', S.f.months.has(m), 'data-month="' + m + '"');
+        });
+      });
+      sh += '</div></div>';
+    }
+    $('sliceArea').innerHTML = sh;
+  }
+
+  /* ---------- 透视表渲染 ---------- */
+  function activeFilterDesc(key) {
+    var s = S.f[key];
+    if (!s || s.size === 0) return 'All';
+    return Array.from(s).join('、');
+  }
+
+  function renderPivot() {
+    var hasData = S.rows.length > 0;
+    $('pivotEmpty').style.display = hasData ? 'none' : '';
+    $('pivotBody').style.display = hasData ? '' : 'none';
+    if (!hasData) { $('kpiRow').innerHTML = ''; $('trendBox').innerHTML = ''; return; }
+
+    var agg = C.aggregate(S.rows, S.f, S.gran);
+    renderKpi(agg);
+    renderTrend(agg.monthly);
+    renderTable(agg);
+    S._agg = agg;
+  }
+
+  function renderKpi(agg) {
+    var m = agg.total.metrics;
+    var cards = [
+      ['销量合计', fmtInt(m.units), ''],
+      ['销售额合计', fmtMoney(m.sales), ''],
+      ['毛利合计', fmtMoney(m.gross), m.gross < 0 ? 'neg' : 'pos'],
+      ['毛利率', fmtPct(m.margin), (m.margin != null && m.margin < 0) ? 'neg' : 'pos']
+    ];
+    $('kpiRow').innerHTML = cards.map(function (c) {
+      return '<div class="kpi"><div class="kv ' + c[2] + '">' + c[1] + '</div><div class="kl">' + c[0] + '</div></div>';
+    }).join('');
+  }
+
+  function renderTrend(monthly) {
+    if (!monthly.length) { $('trendBox').innerHTML = ''; return; }
+    var W = Math.max(560, monthly.length * 64), H = 168, padL = 8, padR = 8, padT = 18, padB = 30;
+    var iw = W - padL - padR, ih = H - padT - padB;
+    var maxS = Math.max.apply(null, monthly.map(function (m) { return m.sales; }).concat([1]));
+    var gVals = monthly.map(function (m) { return m.gross; });
+    var gMax = Math.max.apply(null, gVals.concat([0])), gMin = Math.min.apply(null, gVals.concat([0]));
+    var gSpan = (gMax - gMin) || 1;
+    var bw = Math.min(34, iw / monthly.length * 0.55);
+    var x = function (i) { return padL + iw * (i + 0.5) / monthly.length; };
+    var yS = function (v) { return padT + ih * (1 - v / maxS); };
+    var yG = function (v) { return padT + ih * (1 - (v - gMin) / gSpan); };
+    var svg = '<svg viewBox="0 0 ' + W + ' ' + H + '" class="trend" role="img" aria-label="月度销售额与毛利">';
+    svg += '<line x1="' + padL + '" y1="' + (padT + ih) + '" x2="' + (W - padR) + '" y2="' + (padT + ih) + '" class="axis"/>';
+    if (gMin < 0 && gMax > 0) svg += '<line x1="' + padL + '" y1="' + yG(0) + '" x2="' + (W - padR) + '" y2="' + yG(0) + '" class="zero"/>';
+    monthly.forEach(function (m, i) {
+      var bx = x(i) - bw / 2, by = yS(m.sales);
+      svg += '<rect x="' + bx.toFixed(1) + '" y="' + by.toFixed(1) + '" width="' + bw.toFixed(1) + '" height="' + (padT + ih - by).toFixed(1) + '" class="bar"><title>' + m.ym + ' 销售额 ' + fmtMoney(m.sales) + '</title></rect>';
+      svg += '<text x="' + x(i).toFixed(1) + '" y="' + (H - 10) + '" class="xl">' + m.ym.slice(2) + '</text>';
+    });
+    var pts = monthly.map(function (m, i) { return x(i).toFixed(1) + ',' + yG(m.gross).toFixed(1); }).join(' ');
+    svg += '<polyline points="' + pts + '" class="gline"/>';
+    monthly.forEach(function (m, i) {
+      svg += '<circle cx="' + x(i).toFixed(1) + '" cy="' + yG(m.gross).toFixed(1) + '" r="3.2" class="gdot"><title>' + m.ym + ' 毛利 ' + fmtMoney(m.gross) + '</title></circle>';
+    });
+    svg += '</svg>';
+    $('trendBox').innerHTML = '<div class="trendhead"><span><i class="sw bar"></i>销售额</span><span><i class="sw dot"></i>毛利</span></div><div class="trendscroll">' + svg + '</div>';
+  }
+
+  function caret(path, has) {
+    if (!has) return '<span class="caret-slot"></span>';
+    return '<button type="button" class="caret" data-path="' + esc(path) + '">' + (S.collapsed[path] ? '▸' : '▾') + '</button>';
+  }
+
+  function renderTable(agg) {
+    var g = S.gran;
+    var h = '<table class="pivot"><thead><tr>' +
+      '<th class="dim">父品名汇总 / 层级</th>' +
+      '<th>销量<i>TotalUnits</i></th><th>销售额<i>TotalSales</i></th><th>毛利<i>TotalGross</i></th>' +
+      '<th>毛利率<i>Margin</i></th><th>广告占比<i>Ad Rate</i></th><th>促销折扣占比<i>Promotion</i></th>' +
+      '<th>推广费占比<i>Marketing</i></th><th>仓储费占比<i>Warehouse</i></th></tr></thead><tbody>';
+    agg.tree.forEach(function (p) {
+      var pPath = 'p|' + p.name;
+      var pHas = p.years.length > 0;
+      h += '<tr class="lv0"><td class="dim">' + caret(pPath, pHas) + '<span class="nm">' + esc(p.name) + '</span></td>' + metricCells(p.metrics) + '</tr>';
+      if (S.collapsed[pPath]) return;
+      p.years.forEach(function (y) {
+        var yPath = pPath + '|' + y.year;
+        var yHas = g !== 'year' && y.months.length > 0;
+        h += '<tr class="lv1"><td class="dim">' + caret(yPath, yHas) + '<span class="nm">' + y.year + ' 年</span></td>' + metricCells(y.metrics) + '</tr>';
+        if (g === 'year' || S.collapsed[yPath]) return;
+        y.months.forEach(function (m) {
+          var mPath = yPath + '|' + m.ym;
+          var mHas = g === 'day' && m.days.length > 0;
+          h += '<tr class="lv2"><td class="dim">' + caret(mPath, mHas) + '<span class="nm">' + (+m.ym.slice(5, 7)) + ' 月 <i class="en">' + m.label + '</i></span></td>' + metricCells(m.metrics) + '</tr>';
+          if (g !== 'day' || S.collapsed[mPath]) return;
+          m.days.forEach(function (d) {
+            h += '<tr class="lv3"><td class="dim"><span class="caret-slot"></span><span class="nm">' + dayLabel(d) + (d.fullMonth ? ' <em class="tagfull">整月</em>' : '') + '</span></td>' + metricCells(d.metrics) + '</tr>';
+          });
+        });
+      });
+    });
+    h += '<tr class="grand"><td class="dim">总计</td>' + metricCells(agg.total.metrics) + '</tr>';
+    h += '</tbody></table>';
+    $('pivotWrap').innerHTML = h;
+    var fdesc = [];
+    ['国家', '店铺', '负责人'].forEach(function (k) { if (S.f[k].size) fdesc.push(k + '=' + activeFilterDesc(k)); });
+    if (S.f.years.size) fdesc.push('年=' + Array.from(S.f.years).join('、'));
+    if (S.f.months.size) fdesc.push('月=' + Array.from(S.f.months).join('、'));
+    $('pivotScope').textContent = fdesc.length ? '当前口径：' + fdesc.join('；') : '当前口径：全部数据（未加筛选）';
+  }
+
+  /* ---------- 导入 ---------- */
+  function ensureXLSX() {
+    if (typeof XLSX === 'undefined') {
+      $('cdnWarn').style.display = '';
+      return false;
+    }
+    return true;
+  }
+
+  function handleFile(file) {
+    if (/\.(csv|tsv|txt)$/i.test(file.name)) {
+      var fr = new FileReader();
+      fr.onload = function () { previewImport(parseCSV(String(fr.result)), file.name); };
+      fr.readAsText(file, 'utf-8');
+      return;
+    }
+    if (!ensureXLSX()) { toast('表格解析库未加载：可改用「粘贴 CSV」导入', true); return; }
+    var fr2 = new FileReader();
+    fr2.onload = function () {
+      try {
+        var wb = XLSX.read(new Uint8Array(fr2.result), { type: 'array' });
+        var name = wb.SheetNames.indexOf('销售明细') >= 0 ? '销售明细' : wb.SheetNames[0];
+        var aoa = XLSX.utils.sheet_to_json(wb.Sheets[name], { header: 1, raw: true, defval: '' });
+        previewImport(aoa, file.name + '（' + name + '）');
+      } catch (e) { toast('文件解析失败：' + e.message, true); }
+    };
+    fr2.readAsArrayBuffer(file);
+  }
+
+  function parseCSV(text) {
+    text = text.replace(/^\uFEFF/, '');
+    var firstLine = text.split(/\r?\n/, 1)[0] || '';
+    var delim = (firstLine.split('\t').length > firstLine.split(',').length) ? '\t' : ',';
+    var rows = [], row = [], cur = '', inQ = false;
+    for (var i = 0; i < text.length; i++) {
+      var ch = text[i];
+      if (inQ) {
+        if (ch === '"') { if (text[i + 1] === '"') { cur += '"'; i++; } else inQ = false; }
+        else cur += ch;
+      } else if (ch === '"') inQ = true;
+      else if (ch === delim) { row.push(cur); cur = ''; }
+      else if (ch === '\n' || ch === '\r') {
+        if (ch === '\r' && text[i + 1] === '\n') i++;
+        row.push(cur); rows.push(row); row = []; cur = '';
+      } else cur += ch;
+    }
+    if (cur !== '' || row.length) { row.push(cur); rows.push(row); }
+    return rows.filter(function (r) { return r.some(function (c) { return String(c).trim() !== ''; }); });
+  }
+
+  function previewImport(aoa, srcName) {
+    var built = C.buildRows(aoa, '__pending__');
+    var iss = built.issues;
+    var box = $('importReport');
+    if (iss.fatal) {
+      box.innerHTML = '<div class="card danger"><b>无法入库</b><div>' + esc(iss.fatal) + '</div>' +
+        (iss.unknown && iss.unknown.length ? '<div class="sub">未识别列：' + esc(iss.unknown.join('、')) + '</div>' : '') +
+        '<div class="sub">请核对财务模板表头后重试。</div></div>';
+      S.pending = null;
+      return;
+    }
+    var existing = new Set(S.rows.map(function (r) { return r.k; }));
+    var dup = built.rows.filter(function (r) { return existing.has(r.k); });
+    // 期间×店铺 重叠
+    var libCombo = new Set(S.rows.map(function (r) { return r.ds.slice(0, 7) + ' × ' + r.d['店铺']; }));
+    var overlaps = Array.from(new Set(built.rows
+      .map(function (r) { return r.ds.slice(0, 7) + ' × ' + r.d['店铺']; })
+      .filter(function (c) { return libCombo.has(c); }))).sort();
+    S.pending = { built: built, dup: dup, overlaps: overlaps, srcName: srcName };
+
+    function issueList(arr, fmt) {
+      if (!arr.length) return '';
+      var head = arr.slice(0, 8).map(fmt).join('；');
+      return head + (arr.length > 8 ? '；…共 ' + arr.length + ' 处' : '');
+    }
+    var h = '<div class="card">';
+    h += '<div class="cardtitle">校验报告 · ' + esc(srcName) + '</div>';
+    h += '<div class="repgrid">';
+    h += '<div><b>' + built.rows.length + '</b><span>有效明细行</span></div>';
+    h += '<div><b>' + built.months.join('、') + '</b><span>期间覆盖</span></div>';
+    h += '<div><b>' + (C.NUM_COLS.length + C.DIM_COLS.length - iss.missing.length) + ' / ' + (C.NUM_COLS.length + C.DIM_COLS.length) + '</b><span>识别标准列</span></div>';
+    h += '<div><b class="' + (dup.length ? 'warn' : '') + '">' + dup.length + '</b><span>与库中重复行</span></div>';
+    h += '</div>';
+    if (iss.missing.length) h += '<div class="isline">缺失列（按 0 处理）：' + esc(iss.missing.join('、')) + '</div>';
+    if (iss.unknown.length) h += '<div class="isline">未识别列（已忽略）：' + esc(iss.unknown.join('、')) + '</div>';
+    if (iss.badDate.length) h += '<div class="isline bad">日期无法解析（该行剔除）：' + esc(issueList(iss.badDate, function (x) { return '第' + x.line + '行「' + x.raw + '」'; })) + '</div>';
+    if (iss.badNum.length) h += '<div class="isline bad">数值异常（按 0 计）：' + esc(issueList(iss.badNum, function (x) { return '第' + x.line + '行·' + x.col + '「' + x.raw + '」'; })) + '</div>';
+    if (iss.emptyDim.length) h += '<div class="isline">关键维度为空：' + esc(issueList(iss.emptyDim, function (x) { return '第' + x.line + '行·' + x.col; })) + '</div>';
+    if (overlaps.length) h += '<div class="isline warn2">期间重叠提示：库中已存在 ' + esc(overlaps.slice(0, 6).join('；')) + (overlaps.length > 6 ? ' 等 ' + overlaps.length + ' 组' : '') + ' 的数据。若本次为补发/修订，请选「覆盖」。</div>';
+    h += '<div class="strat"><span class="flabel">重复行策略</span>' +
+      '<label><input type="radio" name="dupStrategy" value="skip" checked> 跳过重复行（保留库中原值）</label>' +
+      '<label><input type="radio" name="dupStrategy" value="replace"> 覆盖重复行（以本次文件为准）</label></div>';
+    h += '<div class="strat"><span class="flabel">批次备注</span><input id="noteInput" class="txt" placeholder="例如：2026-02 财务终版" maxlength="60"></div>';
+    h += '<div class="actrow"><button id="btnCommit" class="btn primary">确认入库 ' + built.rows.length + ' 行</button>' +
+      '<button id="btnCancelImport" class="btn ghost">放弃本次</button></div>';
+    h += '</div>';
+    box.innerHTML = h;
+    $('btnCommit').onclick = commitImport;
+    $('btnCancelImport').onclick = function () { S.pending = null; box.innerHTML = ''; };
+  }
+
+  function commitImport() {
+    var p = S.pending;
+    if (!p) return;
+    var strat = (document.querySelector('input[name="dupStrategy"]:checked') || {}).value || 'skip';
+    var note = ($('noteInput') && $('noteInput').value.trim()) || '';
+    var id = 'B' + Date.now().toString(36) + Math.random().toString(36).slice(2, 5);
+    var existing = new Set(S.rows.map(function (r) { return r.k; }));
+    var toAdd = [], replacedKeys = [];
+    p.built.rows.forEach(function (r) {
+      r.b = id;
+      if (existing.has(r.k)) {
+        if (strat === 'replace') { replacedKeys.push(r.k); toAdd.push(r); }
+      } else toAdd.push(r);
+    });
+    if (replacedKeys.length) {
+      var rk = new Set(replacedKeys);
+      S.rows = S.rows.filter(function (r) { return !rk.has(r.k); });
+    }
+    S.rows = S.rows.concat(toAdd);
+    var batch = {
+      id: id, ts: new Date().toISOString(), name: p.srcName, note: note,
+      added: toAdd.length - replacedKeys.length, replaced: replacedKeys.length,
+      skipped: p.dup.length - replacedKeys.length, months: p.built.months
+    };
+    S.batches.push(batch);
+    DB.putRows(toAdd).then(function () { return DB.putBatch(batch); }).catch(function () { });
+    S.pending = null;
+    $('importReport').innerHTML = '<div class="card ok"><b>已入库</b> 新增 ' + batch.added + ' 行' +
+      (batch.replaced ? '，覆盖 ' + batch.replaced + ' 行' : '') +
+      (batch.skipped ? '，跳过重复 ' + batch.skipped + ' 行' : '') +
+      '。<button class="btn link" id="goPivot">去透视分析 →</button></div>';
+    $('goPivot').onclick = function () { switchTab('pivot'); };
+    renderAll();
+    toast('入库完成：' + batch.added + ' 行新增');
+  }
+
+  /* ---------- 批次管理 ---------- */
+  function renderBatches() {
+    if (!S.batches.length) { $('batchList').innerHTML = '<div class="hint">尚无导入批次。每次导入都会在这里留档，可单独撤销。</div>'; return; }
+    var h = '<table class="flat"><thead><tr><th>时间</th><th>来源</th><th>期间</th><th>新增</th><th>覆盖</th><th>跳过</th><th>备注</th><th></th></tr></thead><tbody>';
+    S.batches.slice().sort(function (a, b) { return a.ts < b.ts ? 1 : -1; }).forEach(function (b) {
+      var live = S.rows.filter(function (r) { return r.b === b.id; }).length;
+      h += '<tr><td>' + esc(b.ts.slice(0, 16).replace('T', ' ')) + '</td><td>' + esc(b.name) + '</td><td>' + esc((b.months || []).join('、')) + '</td>' +
+        '<td>' + b.added + '</td><td>' + (b.replaced || 0) + '</td><td>' + (b.skipped || 0) + '</td><td>' + esc(b.note || '') + '</td>' +
+        '<td><button class="btn tiny danger" data-delbatch="' + b.id + '">删除本批（现存 ' + live + ' 行）</button></td></tr>';
+    });
+    h += '</tbody></table>';
+    $('batchList').innerHTML = h;
+  }
+
+  function deleteBatch(id) {
+    var victim = S.rows.filter(function (r) { return r.b === id; });
+    if (!confirm('删除该批次将移除其现存 ' + victim.length + ' 行明细（被后续批次覆盖的行不受影响）。继续？')) return;
+    var keys = victim.map(function (r) { return r.k; });
+    S.rows = S.rows.filter(function (r) { return r.b !== id; });
+    S.batches = S.batches.filter(function (b) { return b.id !== id; });
+    DB.delRows(keys).then(function () { return DB.delBatch(id); }).catch(function () { });
+    renderAll();
+    toast('批次已删除');
+  }
+
+  function wipeAll() {
+    if (!S.rows.length && !S.batches.length) return;
+    if (!confirm('清空全库：' + S.rows.length + ' 行明细与 ' + S.batches.length + ' 个批次都将删除。建议先「备份 JSON」。确认清空？')) return;
+    if (!confirm('再次确认：清空后不可恢复（除非用备份文件）。')) return;
+    S.rows = []; S.batches = []; S.collapsed = {};
+    DB.clearAll().catch(function () { });
+    renderAll();
+    toast('已清空全库', true);
+  }
+
+  /* ---------- 明细浏览 ---------- */
+  function renderBrowse() {
+    var dv = C.dimValues(S.rows);
+    var sel = $('browseMonth');
+    var cur = sel.value;
+    sel.innerHTML = '<option value="">全部月份</option>' + dv.months.map(function (m) { return '<option' + (m === cur ? ' selected' : '') + '>' + m + '</option>'; }).join('');
+    var q = $('browseQ').value.trim().toLowerCase();
+    var mSel = sel.value;
+    var list = S.rows.filter(function (r) {
+      if (mSel && r.ds.slice(0, 7) !== mSel) return false;
+      if (!q) return true;
+      var hay = [r.d['国家'], r.d['店铺'], r.d['父品名汇总'], r.d['品名'], r.d['SKU'], r.d['MSKU'], r.d['ASIN'], r.d['Listing负责人']].join(' ').toLowerCase();
+      return hay.indexOf(q) >= 0;
+    }).sort(function (a, b) { return a.ds === b.ds ? b.m['销售额'] - a.m['销售额'] : (a.ds < b.ds ? 1 : -1); });
+    var pages = Math.max(1, Math.ceil(list.length / PAGE));
+    if (S.page > pages) S.page = pages;
+    var slice = list.slice((S.page - 1) * PAGE, S.page * PAGE);
+    var h = '<table class="flat"><thead><tr><th>日期</th><th>国家</th><th>店铺</th><th>父品名汇总</th><th>品名</th><th>SKU</th><th>负责人</th><th class="r">销量</th><th class="r">销售额</th><th class="r">毛利</th></tr></thead><tbody>';
+    slice.forEach(function (r) {
+      h += '<tr><td>' + esc(r.draw || r.ds) + '</td><td>' + esc(r.d['国家']) + '</td><td>' + esc(r.d['店铺']) + '</td><td>' + esc(r.d['父品名汇总']) + '</td><td class="clip" title="' + esc(r.d['品名']) + '">' + esc(r.d['品名']) + '</td><td>' + esc(r.d['SKU']) + '</td><td>' + esc(r.d['Listing负责人']) + '</td>' +
+        '<td class="r">' + fmtInt(r.m['销量']) + '</td><td class="r">' + fmtMoney(r.m['销售额']) + '</td><td class="r' + (r.m['毛利'] < 0 ? ' neg' : '') + '">' + fmtMoney(r.m['毛利']) + '</td></tr>';
+    });
+    if (!slice.length) h += '<tr><td colspan="10" class="hint">无匹配明细</td></tr>';
+    h += '</tbody></table>';
+    $('browseTable').innerHTML = h;
+    $('browsePager').innerHTML = '共 ' + list.length + ' 行 · 第 ' +
+      '<button class="btn tiny" id="pgPrev"' + (S.page <= 1 ? ' disabled' : '') + '>‹</button> ' + S.page + ' / ' + pages +
+      ' <button class="btn tiny" id="pgNext"' + (S.page >= pages ? ' disabled' : '') + '>›</button> 页';
+    $('pgPrev').onclick = function () { if (S.page > 1) { S.page--; renderBrowse(); } };
+    $('pgNext').onclick = function () { if (S.page < pages) { S.page++; renderBrowse(); } };
+  }
+
+  /* ---------- 备份 / 恢复 ---------- */
+  function download(blobParts, type, filename) {
+    var blob = new Blob(blobParts, { type: type });
+    var a = document.createElement('a');
+    a.href = URL.createObjectURL(blob);
+    a.download = filename;
+    document.body.appendChild(a); a.click();
+    setTimeout(function () { URL.revokeObjectURL(a.href); a.remove(); }, 800);
+  }
+  function stamp() {
+    var d = new Date();
+    var p = function (n) { return (n < 10 ? '0' : '') + n; };
+    return '' + d.getFullYear() + p(d.getMonth() + 1) + p(d.getDate()) + '_' + p(d.getHours()) + p(d.getMinutes());
+  }
+  function backup() {
+    var payload = { app: 'sales-pivot', version: 1, exportedAt: new Date().toISOString(), batches: S.batches, rows: S.rows };
+    download([JSON.stringify(payload)], 'application/json', '销售明细库备份_' + stamp() + '.json');
+    toast('备份已下载（' + S.rows.length + ' 行）');
+  }
+  function restoreFile(file) {
+    var fr = new FileReader();
+    fr.onload = function () {
+      try {
+        var p = JSON.parse(String(fr.result));
+        if (p.app !== 'sales-pivot' || !Array.isArray(p.rows) || !Array.isArray(p.batches)) throw new Error('不是本工具的备份文件');
+        if (!confirm('恢复将替换当前全部数据（现有 ' + S.rows.length + ' 行 → 备份 ' + p.rows.length + ' 行）。继续？')) return;
+        S.rows = p.rows; S.batches = p.batches; S.collapsed = {};
+        DB.clearAll().then(function () { return DB.putRows(S.rows); }).then(function () {
+          return Promise.all(S.batches.map(function (b) { return DB.putBatch(b); }));
+        }).catch(function () { });
+        renderAll();
+        toast('恢复完成：' + S.rows.length + ' 行');
+      } catch (e) { toast('恢复失败：' + e.message, true); }
+    };
+    fr.readAsText(file, 'utf-8');
+  }
+
+  /* ---------- 导出透视 ---------- */
+  function pivotAoa() {
+    var agg = S._agg || C.aggregate(S.rows, S.f, S.gran);
+    var head = [
+      ['国家', activeFilterDesc('国家')], ['店铺', activeFilterDesc('店铺')],
+      ['Listing负责人', activeFilterDesc('负责人')],
+      ['日期切片', (S.f.years.size ? '年=' + Array.from(S.f.years).join('、') + ' ' : '') + (S.f.months.size ? '月=' + Array.from(S.f.months).join('、') : (S.f.years.size ? '' : 'All'))],
+      ['粒度', { year: '年', month: '月', day: '日' }[S.gran]],
+      [],
+      ['父品名汇总', 'Year', 'Month', 'DateColumn', 'TotalUnits 销量', 'TotalSales 销售额', 'TotalGross 毛利', 'Margin 毛利率', 'Ad Sales Rate 广告占比', 'Promotion Sales Rate 促销折扣占比', 'Marketing Cost Sales Rate 推广费占比', 'Warehouse Charges Sales Rate 仓储费占比']
+    ];
+    var rows = [];
+    var M = function (mt) { return [mt.units, mt.sales, mt.gross, mt.margin, mt.ad, mt.promo, mt.mkt, mt.wh]; };
+    agg.tree.forEach(function (p) {
+      var pFirst = true;
+      p.years.forEach(function (y) {
+        var yFirst = true;
+        if (S.gran === 'year') {
+          rows.push([pFirst ? p.name : '', y.year, '', ''].concat(M(y.metrics)));
+          pFirst = false;
+          return;
+        }
+        y.months.forEach(function (m) {
+          if (S.gran === 'day' && m.days.length > 1) {
+            var mFirst = true;
+            m.days.forEach(function (d) {
+              rows.push([pFirst ? p.name : '', yFirst ? y.year : '', mFirst ? m.label : '', dayLabel(d)].concat(M(d.metrics)));
+              pFirst = false; yFirst = false; mFirst = false;
+            });
+            rows.push(['', '', m.label + ' 汇总', ''].concat(M(m.metrics)));
+          } else {
+            var dc = (S.gran === 'day' && m.days.length === 1) ? dayLabel(m.days[0]) : '';
+            rows.push([pFirst ? p.name : '', yFirst ? y.year : '', m.label, dc].concat(M(m.metrics)));
+            pFirst = false; yFirst = false;
+          }
+        });
+        rows.push(['', y.year + ' 汇总', '', ''].concat(M(y.metrics)));
+      });
+      rows.push([p.name + ' 汇总', '', '', ''].concat(M(p.metrics)));
+    });
+    rows.push(['总计', '', '', ''].concat(M(agg.total.metrics)));
+    return { head: head, rows: rows };
+  }
+
+  function exportXlsx() {
+    if (!ensureXLSX()) { toast('表格库未加载，已为你导出 CSV', true); return exportCsv(); }
+    var a = pivotAoa();
+    var aoa = a.head.concat(a.rows);
+    var ws = XLSX.utils.aoa_to_sheet(aoa);
+    var start = a.head.length; // 数据起始行(0基)
+    for (var r = start; r < aoa.length; r++) {
+      for (var c = 4; c <= 11; c++) {
+        var addr = XLSX.utils.encode_cell({ r: r, c: c });
+        if (!ws[addr] || typeof ws[addr].v !== 'number') continue;
+        ws[addr].z = c === 4 ? '#,##0' : (c <= 6 ? '#,##0.00' : '0.00%');
+      }
+    }
+    ws['!cols'] = [{ wch: 16 }, { wch: 8 }, { wch: 12 }, { wch: 22 }, { wch: 10 }, { wch: 14 }, { wch: 14 }, { wch: 9 }, { wch: 9 }, { wch: 9 }, { wch: 9 }, { wch: 9 }];
+    var wb = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(wb, ws, '销售明细数据透视表');
+    XLSX.writeFile(wb, '销售透视_' + stamp() + '.xlsx');
+    toast('已导出 Excel');
+  }
+
+  function exportCsv() {
+    var a = pivotAoa();
+    var fmtRow = function (row, isData) {
+      return row.map(function (v, i) {
+        if (isData && typeof v === 'number') {
+          if (i === 4) return Math.round(v);
+          if (i === 5 || i === 6) return v.toFixed(2);
+          if (i >= 7) return (v * 100).toFixed(2) + '%';
+        }
+        var s = String(v == null ? '' : v);
+        return /[",\n]/.test(s) ? '"' + s.replace(/"/g, '""') + '"' : s;
+      }).join(',');
+    };
+    var lines = a.head.map(function (r) { return fmtRow(r, false); }).concat(a.rows.map(function (r) { return fmtRow(r, true); }));
+    download(['\uFEFF' + lines.join('\r\n')], 'text/csv;charset=utf-8', '销售透视_' + stamp() + '.csv');
+    toast('已导出 CSV');
+  }
+
+  /* ---------- 事件绑定 ---------- */
+  function switchTab(t) {
+    S.tab = t;
+    document.querySelectorAll('.tabbar button').forEach(function (b) { b.classList.toggle('on', b.dataset.tab === t); });
+    document.querySelectorAll('.panel').forEach(function (p) { p.classList.toggle('show', p.id === 'panel-' + t); });
+  }
+
+  function renderAll() {
+    renderFilters();
+    renderPivot();
+    renderBatches();
+    renderBrowse();
+    $('dataCount').textContent = S.rows.length ? S.rows.length + ' 行 · ' + S.batches.length + ' 批' : '空库';
+  }
+
+  function bind() {
+    document.querySelectorAll('.tabbar button').forEach(function (b) {
+      b.onclick = function () { switchTab(b.dataset.tab); };
+    });
+    // 筛选与切片（事件委托）
+    document.body.addEventListener('click', function (e) {
+      var t = e.target.closest ? e.target.closest('button') : null;
+      if (!t) return;
+      if (t.dataset.fdim) {
+        var set = S.f[t.dataset.fdim];
+        if (t.dataset.fval === '__ALL__') set.clear();
+        else if (set.has(t.dataset.fval)) set.delete(t.dataset.fval);
+        else set.add(t.dataset.fval);
+        renderFilters(); renderPivot();
+      } else if (t.dataset.more) {
+        expandedGroups[t.dataset.more] = true; renderFilters();
+      } else if (t.dataset.year) {
+        if (t.dataset.year === '__ALL__') S.f.years.clear();
+        else if (S.f.years.has(t.dataset.year)) S.f.years.delete(t.dataset.year);
+        else S.f.years.add(t.dataset.year);
+        renderFilters(); renderPivot();
+      } else if (t.dataset.month) {
+        if (t.dataset.month === '__ALL__') S.f.months.clear();
+        else if (S.f.months.has(t.dataset.month)) S.f.months.delete(t.dataset.month);
+        else S.f.months.add(t.dataset.month);
+        renderFilters(); renderPivot();
+      } else if (t.dataset.path) {
+        if (S.collapsed[t.dataset.path]) delete S.collapsed[t.dataset.path];
+        else S.collapsed[t.dataset.path] = true;
+        renderPivot();
+      } else if (t.dataset.delbatch) {
+        deleteBatch(t.dataset.delbatch);
+      }
+    });
+    // 粒度
+    document.querySelectorAll('#granSeg button').forEach(function (b) {
+      b.onclick = function () {
+        S.gran = b.dataset.g;
+        document.querySelectorAll('#granSeg button').forEach(function (x) { x.classList.toggle('on', x === b); });
+        renderPivot();
+      };
+    });
+    $('btnExpandAll').onclick = function () { S.collapsed = {}; renderPivot(); };
+    $('btnCollapseAll').onclick = function () {
+      S.collapsed = {};
+      (S._agg ? S._agg.tree : []).forEach(function (p) { S.collapsed['p|' + p.name] = true; });
+      renderPivot();
+    };
+    $('btnExportX').onclick = exportXlsx;
+    $('btnExportC').onclick = exportCsv;
+    // 导入
+    var dz = $('dropZone');
+    dz.onclick = function () { $('fileInput').click(); };
+    $('fileInput').onchange = function (e) { if (e.target.files[0]) handleFile(e.target.files[0]); e.target.value = ''; };
+    ['dragover', 'dragenter'].forEach(function (ev) { dz.addEventListener(ev, function (e) { e.preventDefault(); dz.classList.add('drag'); }); });
+    ['dragleave', 'drop'].forEach(function (ev) { dz.addEventListener(ev, function (e) { e.preventDefault(); dz.classList.remove('drag'); }); });
+    dz.addEventListener('drop', function (e) {
+      var f = e.dataTransfer && e.dataTransfer.files && e.dataTransfer.files[0];
+      if (f) handleFile(f);
+    });
+    $('btnParsePaste').onclick = function () {
+      var txt = $('pasteArea').value;
+      if (!txt.trim()) { toast('粘贴区为空', true); return; }
+      previewImport(parseCSV(txt), '粘贴数据');
+    };
+    $('btnDemo').onclick = function () {
+      previewImport(SAMPLE_AOA, '内置示例（本文件模板 10 行）');
+      switchTab('import');
+    };
+    $('btnDemo2').onclick = $('btnDemo').onclick;
+    // 批次
+    $('btnWipe').onclick = wipeAll;
+    // 备份恢复
+    $('btnBackup').onclick = backup;
+    $('btnRestore').onclick = function () { $('restoreInput').click(); };
+    $('restoreInput').onchange = function (e) { if (e.target.files[0]) restoreFile(e.target.files[0]); e.target.value = ''; };
+    // 明细浏览
+    $('browseQ').oninput = function () { S.page = 1; renderBrowse(); };
+    $('browseMonth').onchange = function () { S.page = 1; renderBrowse(); };
+    // 口径说明
+    $('btnGauge').onclick = function () { $('gaugeModal').classList.add('show'); };
+    $('gaugeClose').onclick = function () { $('gaugeModal').classList.remove('show'); };
+    $('gaugeModal').addEventListener('click', function (e) { if (e.target === $('gaugeModal')) $('gaugeModal').classList.remove('show'); });
+  }
+
+  /* ---------- 启动 ---------- */
+  DB.open().then(function () {
+    return DB.loadAll();
+  }).then(function (d) {
+    S.rows = d.rows || [];
+    S.batches = d.batches || [];
+    if (DB.isMemory()) {
+      $('storageBadge').textContent = '仅内存运行 · 关闭页面即丢失（请部署到本地或 GitHub Pages 获得持久化）';
+      $('storageBadge').classList.add('warn');
+    } else {
+      $('storageBadge').textContent = '本地持久化 · IndexedDB';
+      if (navigator.storage && navigator.storage.persist) navigator.storage.persist().catch(function () { });
+    }
+    bind();
+    renderAll();
+    switchTab(S.rows.length ? 'pivot' : 'pivot');
+  });
+})();
+
+</script>

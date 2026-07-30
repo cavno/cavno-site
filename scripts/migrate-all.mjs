@@ -30,17 +30,17 @@ const PLAN = [
   [L('Investing/CreditExpansion'), 'investing', 'cases', 'app'],
   [L('Investing/jane-street-viz'), 'investing', 'cases', 'app'],
   // ---- Reading & Thinking：集合根 ----
-  [L('Reading_and_Thinking/Books'), 'reading_thinking', 'books', 'root'],
-  [L('Reading_and_Thinking/Philosophy'), 'reading_thinking', 'philosophy', 'root'],
-  [L('Reading_and_Thinking/Thinking'), 'reading_thinking', 'thinking', 'root'],
-  [L('Reading_and_Thinking/Mathematics'), 'reading_thinking', 'math', 'root'],
+  [L('Reading_and_Thinking/Books'), 'reading', 'books', 'root'],
+  [L('Reading_and_Thinking/Philosophy'), 'reading', 'philosophy', 'root'],
+  [L('Reading_and_Thinking/Thinking'), 'reading', 'thinking', 'root'],
+  [L('Reading_and_Thinking/Mathematics'), 'reading', 'math', 'root'],
   // ---- Life & Skills ----
-  [L('Life_Style_and_Skills/Driving'), 'life_skills', 'driving', 'root'],
-  [L('Life_Style_and_Skills/School'), 'life_skills', 'school', 'root'],
-  [L('Life_Style_and_Skills/房地产'), 'life_skills', 'house', 'root'],
-  [L('Life_Style_and_Skills/中国'), 'life_skills', 'china', 'root'],
-  [L('Life_Style_and_Skills/育儿'), 'life_skills', 'family', 'root'],
-  [L('Life_Style_and_Skills/报单'), 'life_skills', 'orders', 'app'],
+  [L('Life_Style_and_Skills/Driving'), 'life', 'driving', 'root'],
+  [L('Life_Style_and_Skills/School'), 'life', 'school', 'root'],
+  [L('Life_Style_and_Skills/房地产'), 'life', 'house', 'root'],
+  [L('Life_Style_and_Skills/中国'), 'life', 'china', 'root'],
+  [L('Life_Style_and_Skills/育儿'), 'life', 'family', 'root'],
+  [L('Life_Style_and_Skills/报单'), 'life', 'orders', 'app'],
   // ---- Working ----
   [L('Working/Amazon_Tools'), 'working', 'amazon', 'root'],
 ];

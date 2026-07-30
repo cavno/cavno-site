@@ -52,10 +52,15 @@ const TOKEN_MAP = [
   [/#FDF9EE\b/gi, 'var(--card)'],
   [/#F1EFE8\b/gi, 'var(--card)'],
   [/#FAF6EC\b/gi, 'var(--card)'],
+  [/#FFFDF6\b/gi, 'var(--card)'],
+  [/#FFFEF9\b/gi, 'var(--card)'],
   // 旧深色分区（比旧底更深）→ 新燕麦
   [/#E8DDC6\b/gi, 'var(--panel)'],
   [/#F6EFDC\b/gi, 'var(--panel)'],
   [/#EFE6CF\b/gi, 'var(--panel)'],
+  [/#F7F0DD\b/gi, 'var(--panel)'],
+  [/#F6EEDA\b/gi, 'var(--panel)'],
+  [/#EFE4C9\b/gi, 'var(--panel)'],
   // 墨色族 → 石板黑
   [/#1C1916\b/gi, 'var(--ink)'],
   [/#1F1F1C\b/gi, 'var(--ink)'],
@@ -64,10 +69,15 @@ const TOKEN_MAP = [
   [/#2B2B2B\b/gi, 'var(--ink)'],
   [/#333333\b/gi, 'var(--ink)'],
   [/#333\b/gi, 'var(--ink)'],
+  [/#4B443A\b/gi, 'var(--ink)'],
   // 次级灰 → 新次级
   [/#5F5E5A\b/gi, 'var(--ink-2)'],
   [/#6E6253\b/gi, 'var(--ink-2)'],
   [/#6B6A64\b/gi, 'var(--ink-2)'],
+  [/#7A6F5F\b/gi, 'var(--ink-2)'],
+  // 旧发丝线 → 新发丝线
+  [/#DCCFB2\b/gi, 'var(--line)'],
+  [/#E9DFC8\b/gi, 'var(--line)'],
 ];
 
 const PROJ_RE = /(^|[\\/])(\.git|node_modules)([\\/]|$)|(wxamp|wxapps|miniprogram|miniapp|weapp|linuxserver|winserver)/;
