@@ -98,7 +98,14 @@
       <span class="seg" id="perfGranSeg">
         <button data-g="day" class="on">日</button><button data-g="week">周</button><button data-g="month">月</button>
       </span>
-      <span class="flabel" style="min-width:auto">国家</span><span class="pfc-row" id="perfCountryChips"></span>
+      <span class="flabel" style="min-width:auto">国家</span>
+      <span class="mdrop" id="perfCountryDrop">
+        <button type="button" class="mdrop-btn" id="perfCountryBtn">全部国家</button>
+        <div class="mdrop-panel" hidden>
+          <div class="mdrop-list" id="perfCountryList"></div>
+          <div class="mdrop-foot"><button type="button" class="btn tiny" data-mact="all">全选</button><button type="button" class="btn tiny ghost" data-mact="clear">清空（=全部）</button></div>
+        </div>
+      </span>
       <span class="flabel" style="min-width:auto">ASIN</span>
       <span class="mdrop" id="perfAsinDrop">
         <button type="button" class="mdrop-btn" id="perfAsinBtn">全部 ASIN</button>
@@ -1602,11 +1609,7 @@ var SAMPLE_PERF_AOA = (function () {
     var cList = Object.keys(cSum).sort(function (a, b) { return cSum[b] - cSum[a]; });
     if (S.pf.countries === null) S.pf.countries = cList.length ? [cList[0]] : [];
     S.pf.countries = S.pf.countries.filter(function (c) { return cList.indexOf(c) >= 0; });
-    var chips = '<button type="button" class="pfc' + (S.pf.countries.length ? '' : ' on') + '" data-c="">全部</button>';
-    cList.forEach(function (c) {
-      chips += '<button type="button" class="pfc' + (S.pf.countries.indexOf(c) >= 0 ? ' on' : '') + '" data-c="' + esc(c) + '">' + esc(c) + '</button>';
-    });
-    $('perfCountryChips').innerHTML = chips;
+    renderCountryDrop(cList);
 
     var agg = C.aggPerf(S.perfRows, { gran: S.pf.gran, countries: S.pf.countries });
     S._perfAgg = agg;
@@ -1637,6 +1640,14 @@ var SAMPLE_PERF_AOA = (function () {
     $('perfNote').textContent = '口径：所有指标在当前筛选（国家×ASIN×期间）子集上先求和再相除；本期锚定所选范围内最近的流量非零期（' + pfFmtPk(anchor, S.pf.gran) + '）；各期环比参照真实相邻期' + (S.pf.gran === 'day' ? '，KPI 另给上周同日' : '') +
       (lagTail ? '。最近 ' + lagTail + ' 期流量为 0（流量报表通常滞后 1～2 天，属正常）' : '') +
       (S.pf.countries.length !== 1 ? '。多国/全部时金额为跨币种相加，仅作量级参考' : '') + '。';
+  }
+  function renderCountryDrop(cList) {
+    $('perfCountryList').innerHTML = cList.map(function (c) {
+      var on = S.pf.countries.indexOf(c) >= 0;
+      return '<label class="mdrop-it"><input type="checkbox" data-mc="' + esc(c) + '"' + (on ? ' checked' : '') + '> <b>' + esc(c) + '</b></label>';
+    }).join('');
+    $('perfCountryBtn').textContent = S.pf.countries.length ? '国家已选 ' + S.pf.countries.length : '全部国家';
+    $('perfCountryBtn').classList.toggle('has', S.pf.countries.length > 0);
   }
   function renderAsinDrop(agg) {
     var q = ($('perfAsinQ').value || '').trim().toLowerCase();
@@ -2177,18 +2188,7 @@ var SAMPLE_PERF_AOA = (function () {
     $('btnPerfDemo').onclick = perfDemo;
     $('btnPerfDemoEmpty').onclick = perfDemo;
     // ASIN 趋势控件（多选）
-    $('perfCountryChips').addEventListener('click', function (e) {
-      var b = e.target.closest ? e.target.closest('button[data-c]') : null;
-      if (!b) return;
-      var c = b.dataset.c;
-      if (c === '') S.pf.countries = [];
-      else {
-        var i = S.pf.countries.indexOf(c);
-        if (i >= 0) S.pf.countries.splice(i, 1); else S.pf.countries.push(c);
-      }
-      S.pf.periods = []; renderPerf();
-    });
-    function wireDrop(rootId, listId, dataKey, arrGet) {
+    function wireDrop(rootId, listId, dataKey, arrGet, after) {
       var root = $(rootId), panel = root.querySelector('.mdrop-panel');
       root.querySelector('.mdrop-btn').addEventListener('click', function () {
         var h = panel.hidden; document.querySelectorAll('.mdrop-panel').forEach(function (p) { p.hidden = true; });
@@ -2201,15 +2201,18 @@ var SAMPLE_PERF_AOA = (function () {
         var arr = arrGet(), i = arr.indexOf(v);
         if (e.target.checked) { if (i < 0) arr.push(v); }
         else if (i >= 0) arr.splice(i, 1);
+        if (after) after();
         renderPerf();
       });
-      panel.querySelector('[data-mact="clear"]').addEventListener('click', function () { arrGet().length = 0; renderPerf(); });
+      panel.querySelector('[data-mact="clear"]').addEventListener('click', function () { arrGet().length = 0; if (after) after(); renderPerf(); });
       panel.querySelector('[data-mact="all"]').addEventListener('click', function () {
         var arr = arrGet(); arr.length = 0;
         $(listId).querySelectorAll('input[type="checkbox"]').forEach(function (cb) { arr.push(cb.dataset[dataKey]); });
+        if (after) after();
         renderPerf();
       });
     }
+    wireDrop('perfCountryDrop', 'perfCountryList', 'mc', function () { return S.pf.countries; }, function () { S.pf.periods = []; });
     wireDrop('perfAsinDrop', 'perfAsinList', 'masin', function () { return S.pf.asins; });
     wireDrop('perfPeriodDrop', 'perfPeriodList', 'mpk', function () { return S.pf.periods; });
     $('perfAsinQ').addEventListener('input', function () { if (S._perfAgg) renderAsinDrop(S._perfAgg); });
