@@ -98,9 +98,24 @@
       <span class="seg" id="perfGranSeg">
         <button data-g="day" class="on">日</button><button data-g="week">周</button><button data-g="month">月</button>
       </span>
-      <span class="flabel" style="min-width:auto">国家</span><select id="perfCountry" class="txt" style="width:auto"></select>
-      <span class="flabel" style="min-width:auto">ASIN</span><select id="perfAsin" class="txt" style="width:auto;max-width:300px"></select>
-      <span class="flabel" style="min-width:auto">统计截止</span><select id="perfAnchor" class="txt" style="width:auto"></select>
+      <span class="flabel" style="min-width:auto">国家</span><span class="pfc-row" id="perfCountryChips"></span>
+      <span class="flabel" style="min-width:auto">ASIN</span>
+      <span class="mdrop" id="perfAsinDrop">
+        <button type="button" class="mdrop-btn" id="perfAsinBtn">全部 ASIN</button>
+        <div class="mdrop-panel" hidden>
+          <input class="txt mdrop-q" id="perfAsinQ" placeholder="搜索 ASIN / 品名…">
+          <div class="mdrop-list" id="perfAsinList"></div>
+          <div class="mdrop-foot"><button type="button" class="btn tiny" data-mact="all">全选筛选结果</button><button type="button" class="btn tiny ghost" data-mact="clear">清空（=全部）</button></div>
+        </div>
+      </span>
+      <span class="flabel" style="min-width:auto">期间</span>
+      <span class="mdrop" id="perfPeriodDrop">
+        <button type="button" class="mdrop-btn" id="perfPeriodBtn">全部期间</button>
+        <div class="mdrop-panel" hidden>
+          <div class="mdrop-list" id="perfPeriodList"></div>
+          <div class="mdrop-foot"><button type="button" class="btn tiny" data-mact="all">全选</button><button type="button" class="btn tiny ghost" data-mact="clear">清空（=全部）</button></div>
+        </div>
+      </span>
       <span class="spacer"></span>
       <button class="btn ghost" id="btnPerfCsv">导出 CSV</button>
     </div>
@@ -730,10 +745,13 @@ const PivotCore = (() => {
   function ppDelta(cur, prev) { return (cur == null || prev == null) ? null : cur - prev; }
   /* rows(+country筛) → { periods[], overall:{pk→m}, asins:[{asin,name,pasin,series:{pk→m},sum}] } */
   function aggPerf(rows, opt) {
-    var gran = (opt && opt.gran) || 'day', country = (opt && opt.country) || '';
+    var gran = (opt && opt.gran) || 'day';
+    var cs = (opt && opt.countries) || ((opt && opt.country) ? [opt.country] : []);
+    var cset = null;
+    if (cs.length) { cset = {}; cs.forEach(function (c) { cset[c] = 1; }); }
     var overall = {}, byA = {}, pSet = {};
     rows.forEach(function (r) {
-      if (country && r.country !== country) return;
+      if (cset && cset[r.country] !== 1) return;
       var pk = perfPeriodKey(r.ds, gran); pSet[pk] = 1;
       if (!overall[pk]) overall[pk] = perfZero();
       perfAdd(overall[pk], r.m);
@@ -747,11 +765,25 @@ const PivotCore = (() => {
       .sort(function (x, y) { return (y.sum.sess - x.sum.sess) || (y.sum.spend - x.sum.spend); });
     return { periods: Object.keys(pSet).sort(), overall: overall, asins: asins };
   }
+  /* 多 ASIN 合并：对所选集合逐期求和（比率随后由 perfRates 在和上重算） */
+  function perfSumScope(asins, sel) {
+    var set = null;
+    if (sel && sel.length) { set = {}; sel.forEach(function (a) { set[a] = 1; }); }
+    var out = {};
+    asins.forEach(function (a) {
+      if (set && set[a.asin] !== 1) return;
+      Object.keys(a.series).forEach(function (pk) {
+        if (!out[pk]) out[pk] = perfZero();
+        perfAdd(out[pk], a.series[pk]);
+      });
+    });
+    return out;
+  }
   /*PERF-CORE-END*/
 
   return { matchKey, resolveHeader, mapHeaders, parseDateCell, isFullMonth, parseNumber, serialToYMD,
     buildRows, aggregate, dimValues, rowKey, parsePlanYM, buildPlanRows, buildCompare,
-    buildPerfRows, aggPerf, perfRates, perfPeriodKey, perfPrevKey, perfLastWeekKey, perfDateAdd, pctDelta, ppDelta, PERF_METRICS, DIM_COLS, NUM_COLS, REQUIRED, SUM_KEYS, MONTH_EN };
+    buildPerfRows, aggPerf, perfRates, perfSumScope, perfPeriodKey, perfPrevKey, perfLastWeekKey, perfDateAdd, pctDelta, ppDelta, PERF_METRICS, DIM_COLS, NUM_COLS, REQUIRED, SUM_KEYS, MONTH_EN };
 })();
 if (typeof module !== 'undefined') module.exports = PivotCore;
 
@@ -916,7 +948,7 @@ var SAMPLE_PERF_AOA = (function () {
     cmp: { batch: '', mode: 'owner', gran: 'month', country: '', collapsed: {} },
     planPending: null,
     perfRows: [], perfBatches: [],
-    pf: { gran: 'day', country: null, asin: '', anchor: '' },
+    pf: { gran: 'day', countries: null, asins: [], periods: [], open: {} },
     perfPending: null,
     f: { '国家': new Set(), '店铺': new Set(), '负责人': new Set(), '部门': new Set(), '分类': new Set(), years: new Set(), months: new Set() },
     gran: 'month',
@@ -1268,7 +1300,7 @@ var SAMPLE_PERF_AOA = (function () {
     if (!confirm('再次确认：清空后不可恢复（除非用备份文件）。')) return;
     S.rows = []; S.batches = []; S.collapsed = {};
     S.plans = []; S.planBatches = []; S.cmp.batch = ''; S.cmp.collapsed = {};
-    S.perfRows = []; S.perfBatches = []; S.pf = { gran: 'day', country: null, asin: '', anchor: '' };
+    S.perfRows = []; S.perfBatches = []; S.pf = { gran: 'day', countries: null, asins: [], periods: [], open: {} };
     DB.clearAll().catch(function () { });
     renderAll();
     toast('已清空全库', true);
@@ -1530,7 +1562,7 @@ var SAMPLE_PERF_AOA = (function () {
   }
 
 
-  /* ---------- ASIN 趋势：渲染 ---------- */
+  /* ---------- ASIN 趋势：渲染（透视同款层级表 + 多选筛选） ---------- */
   function pfFmtPk(pk, gran) { return gran === 'month' ? pk : (gran === 'week' ? pk.slice(5) + '周' : pk.slice(5)); }
   function pfDeltaHtml(label, delta, isPP, goodUp) {
     if (delta == null) return '<span class="pf-delta na">' + label + ' –</span>';
@@ -1538,60 +1570,63 @@ var SAMPLE_PERF_AOA = (function () {
     var txt = (up ? '▲' : '▼') + (isPP ? Math.abs(delta * 100).toFixed(2) + 'pp' : Math.abs(delta * 100).toFixed(1) + '%');
     return '<span class="pf-delta ' + (delta === 0 ? 'na' : (good ? 'up' : 'down')) + '">' + label + ' ' + txt + '</span>';
   }
-  function pfScope(agg) {
-    if (S.pf.asin) {
-      var a = null;
-      agg.asins.forEach(function (x) { if (x.asin === S.pf.asin) a = x; });
-      if (a) return { label: a.asin + ' · ' + (a.name || ''), series: a.series };
+  var PF_Z = function () { return { sess: 0, pv: 0, ord: 0, units: 0, sales: 0, imp: 0, clk: 0, spend: 0, adsales: 0, adord: 0 }; };
+  function pfDisplayPeriods(agg) {
+    if (!S.pf.periods.length) return agg.periods;
+    var set = {}; S.pf.periods.forEach(function (p) { set[p] = 1; });
+    return agg.periods.filter(function (p) { return set[p] === 1; });
+  }
+  function pfScopeSeries(agg) { return C.perfSumScope(agg.asins, S.pf.asins); }
+  function pfScopeLabel(agg) {
+    if (!S.pf.asins.length) return '全部 ASIN';
+    if (S.pf.asins.length === 1) {
+      var a1 = null; agg.asins.forEach(function (x) { if (x.asin === S.pf.asins[0]) a1 = x; });
+      return S.pf.asins[0] + (a1 && a1.name ? ' · ' + a1.name : '');
     }
-    return { label: '全部 ASIN 汇总', series: agg.overall };
+    return '已选 ' + S.pf.asins.length + ' 个 ASIN 合计';
+  }
+  function pfAnchor(agg, scope, disp) {
+    var pool = disp.length ? disp : agg.periods;
+    for (var i = pool.length - 1; i >= 0; i--) {
+      if ((scope[pool[i]] || PF_Z()).sess > 0) return pool[i];
+    }
+    return pool[pool.length - 1] || '';
   }
   function renderPerf() {
     var has = S.perfRows.length > 0;
     $('perfEmpty').style.display = has ? 'none' : '';
     $('perfBody').style.display = has ? '' : 'none';
     if (!has) return;
-    // 国家：默认取流量最大的站点，避免跨币种相加
     var cSum = {};
     S.perfRows.forEach(function (r) { if (r.country) cSum[r.country] = (cSum[r.country] || 0) + r.m.sess + r.m.clk; });
     var cList = Object.keys(cSum).sort(function (a, b) { return cSum[b] - cSum[a]; });
-    if (S.pf.country === null) S.pf.country = cList[0] || '';
-    if (S.pf.country && cList.indexOf(S.pf.country) < 0) S.pf.country = cList[0] || '';
-    $('perfCountry').innerHTML = '<option value="">全部（金额混币仅参考）</option>' + cList.map(function (c) {
-      return '<option' + (c === S.pf.country ? ' selected' : '') + '>' + esc(c) + '</option>';
-    }).join('');
-    var agg = C.aggPerf(S.perfRows, { gran: S.pf.gran, country: S.pf.country });
+    if (S.pf.countries === null) S.pf.countries = cList.length ? [cList[0]] : [];
+    S.pf.countries = S.pf.countries.filter(function (c) { return cList.indexOf(c) >= 0; });
+    var chips = '<button type="button" class="pfc' + (S.pf.countries.length ? '' : ' on') + '" data-c="">全部</button>';
+    cList.forEach(function (c) {
+      chips += '<button type="button" class="pfc' + (S.pf.countries.indexOf(c) >= 0 ? ' on' : '') + '" data-c="' + esc(c) + '">' + esc(c) + '</button>';
+    });
+    $('perfCountryChips').innerHTML = chips;
+
+    var agg = C.aggPerf(S.perfRows, { gran: S.pf.gran, countries: S.pf.countries });
     S._perfAgg = agg;
     if (!agg.periods.length) {
       $('perfKpi').innerHTML = ''; $('perfCharts').innerHTML = '';
       $('perfWrap').innerHTML = '<div class="hint">当前筛选下没有数据。</div>'; $('perfNote').textContent = '';
       return;
     }
-    // ASIN 下拉（按流量排序，上限 300）
-    var opts = '<option value="">全部 ASIN 汇总</option>';
-    agg.asins.slice(0, 300).forEach(function (a) {
-      opts += '<option value="' + esc(a.asin) + '"' + (a.asin === S.pf.asin ? ' selected' : '') + '>' +
-        esc(a.asin + (a.name ? ' · ' + a.name.slice(0, 16) : '')) + '</option>';
-    });
-    if (S.pf.asin && !agg.asins.some(function (a) { return a.asin === S.pf.asin; })) S.pf.asin = '';
-    $('perfAsin').innerHTML = opts;
-    // 统计截止：默认最近一个流量非零的期（流量报表滞后 1～2 天）
-    if (agg.periods.indexOf(S.pf.anchor) < 0) {
-      var pick = '';
-      for (var i = agg.periods.length - 1; i >= 0; i--) {
-        var pk = agg.periods[i];
-        if ((agg.overall[pk] || {}).sess > 0) { pick = pk; break; }
-      }
-      S.pf.anchor = pick || agg.periods[agg.periods.length - 1];
-    }
-    $('perfAnchor').innerHTML = agg.periods.slice().reverse().map(function (pk) {
-      return '<option value="' + pk + '"' + (pk === S.pf.anchor ? ' selected' : '') + '>' + pfFmtPk(pk, S.pf.gran) + '</option>';
-    }).join('');
+    S.pf.asins = S.pf.asins.filter(function (a) { return agg.asins.some(function (x) { return x.asin === a; }); });
+    S.pf.periods = S.pf.periods.filter(function (p) { return agg.periods.indexOf(p) >= 0; });
+    renderAsinDrop(agg); renderPeriodDrop(agg);
     document.querySelectorAll('#perfGranSeg button').forEach(function (b) { b.classList.toggle('on', b.dataset.g === S.pf.gran); });
-    var sc = pfScope(agg);
-    renderPerfKpi(sc);
-    renderPerfCharts(agg, sc);
-    renderPerfTable(agg);
+
+    var disp = pfDisplayPeriods(agg);
+    var scope = pfScopeSeries(agg);
+    var anchor = pfAnchor(agg, scope, disp);
+    S._pfCtx = { agg: agg, disp: disp, scope: scope, anchor: anchor };
+    renderPerfKpi(scope, anchor);
+    renderPerfCharts(agg, scope, disp);
+    renderPerfTable(agg, scope, disp, anchor);
     var lagTail = (function () {
       var n = 0;
       for (var i = agg.periods.length - 1; i >= 0; i--) {
@@ -1599,15 +1634,36 @@ var SAMPLE_PERF_AOA = (function () {
       }
       return n;
     })();
-    $('perfNote').textContent = '口径：比率先求和再相除；环比 = 相邻上一期' + (S.pf.gran === 'day' ? '，另给上周同日对比' : '') +
-      (lagTail ? '。最近 ' + lagTail + ' 期流量为 0（亚马逊流量报表通常滞后 1～2 天，属正常），「统计截止」已自动取最近的流量非零期' : '') +
-      (S.pf.country === '' ? '。国家=全部时金额为跨币种相加，仅作量级参考' : '') + '。';
+    $('perfNote').textContent = '口径：所有指标在当前筛选（国家×ASIN×期间）子集上先求和再相除；本期锚定所选范围内最近的流量非零期（' + pfFmtPk(anchor, S.pf.gran) + '）；各期环比参照真实相邻期' + (S.pf.gran === 'day' ? '，KPI 另给上周同日' : '') +
+      (lagTail ? '。最近 ' + lagTail + ' 期流量为 0（流量报表通常滞后 1～2 天，属正常）' : '') +
+      (S.pf.countries.length !== 1 ? '。多国/全部时金额为跨币种相加，仅作量级参考' : '') + '。';
   }
-  function renderPerfKpi(sc) {
-    var z = { sess: 0, pv: 0, ord: 0, units: 0, sales: 0, imp: 0, clk: 0, spend: 0, adsales: 0, adord: 0 };
-    var cur = sc.series[S.pf.anchor] || z;
-    var prev = sc.series[C.perfPrevKey(S.pf.anchor, S.pf.gran)] || null;
-    var lw = S.pf.gran === 'day' ? (sc.series[C.perfLastWeekKey(S.pf.anchor)] || null) : null;
+  function renderAsinDrop(agg) {
+    var q = ($('perfAsinQ').value || '').trim().toLowerCase();
+    var list = agg.asins.filter(function (a) {
+      if (!q) return true;
+      return (a.asin + ' ' + (a.name || '')).toLowerCase().indexOf(q) >= 0;
+    }).slice(0, 400);
+    $('perfAsinList').innerHTML = list.map(function (a) {
+      var on = S.pf.asins.indexOf(a.asin) >= 0;
+      return '<label class="mdrop-it"><input type="checkbox" data-masin="' + esc(a.asin) + '"' + (on ? ' checked' : '') + '> ' +
+        '<b>' + esc(a.asin) + '</b><i>' + esc((a.name || '').slice(0, 22)) + '</i></label>';
+    }).join('') || '<div class="hint" style="padding:8px">无匹配</div>';
+    $('perfAsinBtn').textContent = S.pf.asins.length ? 'ASIN 已选 ' + S.pf.asins.length : '全部 ASIN';
+    $('perfAsinBtn').classList.toggle('has', S.pf.asins.length > 0);
+  }
+  function renderPeriodDrop(agg) {
+    $('perfPeriodList').innerHTML = agg.periods.slice().reverse().map(function (pk) {
+      var on = S.pf.periods.indexOf(pk) >= 0;
+      return '<label class="mdrop-it"><input type="checkbox" data-mpk="' + esc(pk) + '"' + (on ? ' checked' : '') + '> <b>' + pfFmtPk(pk, S.pf.gran) + '</b></label>';
+    }).join('');
+    $('perfPeriodBtn').textContent = S.pf.periods.length ? '期间已选 ' + S.pf.periods.length : '全部期间';
+    $('perfPeriodBtn').classList.toggle('has', S.pf.periods.length > 0);
+  }
+  function renderPerfKpi(scope, anchor) {
+    var cur = scope[anchor] || PF_Z();
+    var prev = scope[C.perfPrevKey(anchor, S.pf.gran)] || null;
+    var lw = S.pf.gran === 'day' ? (scope[C.perfLastWeekKey(anchor)] || null) : null;
     var rc = C.perfRates(cur), rp = prev ? C.perfRates(prev) : null, rl = lw ? C.perfRates(lw) : null;
     function badges(get, isPP, goodUp) {
       var h = pfDeltaHtml('环比', prev ? (isPP ? C.ppDelta(get(rc, cur), get(rp, prev)) : C.pctDelta(get(rc, cur), get(rp, prev))) : null, isPP, goodUp);
@@ -1630,7 +1686,7 @@ var SAMPLE_PERF_AOA = (function () {
     var n = periods.length;
     var W = Math.max(560, n * 54), H = 158, padL = 8, padR = 8, padT = 16, padB = 30;
     var iw = W - padL - padR, ih = H - padT - padB;
-    var z = function (pk) { return series[pk] || { sess: 0, pv: 0, ord: 0, units: 0, sales: 0, imp: 0, clk: 0, spend: 0, adsales: 0, adord: 0 }; };
+    var z = function (pk) { return series[pk] || PF_Z(); };
     var bars = periods.map(function (pk) { return z(pk)[barKey] || 0; });
     var lines = periods.map(function (pk) { return rateOf(C.perfRates(z(pk)), z(pk)); });
     var maxB = Math.max.apply(null, bars.concat([1]));
@@ -1661,64 +1717,80 @@ var SAMPLE_PERF_AOA = (function () {
     svg += '</svg>';
     return '<div class="trendhead"><span><i class="sw bar"></i>' + barLb + '</span><span><i class="sw dot"></i>' + lineLb + '</span></div><div class="trendscroll">' + svg + '</div>';
   }
-  function renderPerfCharts(agg, sc) {
+  function renderPerfCharts(agg, scope, disp) {
     var g = S.pf.gran;
-    var h = '<div class="pf-scopeline">趋势对象：' + esc(sc.label) + '</div>';
-    h += perfChartSvg(agg.periods, sc.series, 'sess', function (r) { return r.cvr; }, 'Sessions', 'CVR', fmtPct, g);
-    h += perfChartSvg(agg.periods, sc.series, 'clk', function (r) { return r.ctr; }, '广告点击', 'CTR', fmtPct, g);
-    h += perfChartSvg(agg.periods, sc.series, 'spend', function (r) { return r.acos; }, '广告花费', 'ACOS', fmtPct, g);
+    var h = '<div class="pf-scopeline">趋势对象：' + esc(pfScopeLabel(agg)) + ' · ' + disp.length + ' 期</div>';
+    h += perfChartSvg(disp, scope, 'sess', function (r) { return r.cvr; }, 'Sessions', 'CVR', fmtPct, g);
+    h += perfChartSvg(disp, scope, 'clk', function (r) { return r.ctr; }, '广告点击', 'CTR', fmtPct, g);
+    h += perfChartSvg(disp, scope, 'spend', function (r) { return r.acos; }, '广告花费', 'ACOS', fmtPct, g);
     $('perfCharts').innerHTML = h;
   }
-  function pfCellCnt(cur, prev, goodUp) {
-    return '<td class="r">' + fmtInt(cur) + ' ' + pfDeltaHtml('', prev == null ? null : C.pctDelta(cur, prev), false, goodUp) + '</td>';
+  function pfCells(curM, prevM) {
+    var rc = C.perfRates(curM), rp = prevM ? C.perfRates(prevM) : null;
+    var cnt = function (c, p, gu) { return '<td>' + fmtInt(c) + ' ' + pfDeltaHtml('', p == null ? null : C.pctDelta(c, p), false, gu) + '</td>'; };
+    var rate = function (c, p, gu) { return '<td>' + fmtPct(c) + ' ' + pfDeltaHtml('', p === undefined ? null : C.ppDelta(c, p), true, gu) + '</td>'; };
+    return cnt(curM.sess, prevM ? prevM.sess : null, true) +
+      rate(rc.cvr, rp ? rp.cvr : undefined, true) +
+      cnt(curM.clk, prevM ? prevM.clk : null, true) +
+      rate(rc.ctr, rp ? rp.ctr : undefined, true) +
+      '<td>' + fmtMoney(curM.spend) + ' ' + pfDeltaHtml('', prevM ? C.pctDelta(curM.spend, prevM.spend) : null, false, false) + '</td>' +
+      '<td>' + fmtInt(curM.adord) + '</td>' +
+      rate(rc.acos, rp ? rp.acos : undefined, false);
   }
-  function pfCellRate(cur, prev, goodUp) {
-    return '<td class="r">' + fmtPct(cur) + ' ' + pfDeltaHtml('', prev === undefined ? null : C.ppDelta(cur, prev), true, goodUp) + '</td>';
-  }
-  function renderPerfTable(agg) {
-    var pk = S.pf.anchor, pv = C.perfPrevKey(pk, S.pf.gran);
-    var z = { sess: 0, pv: 0, ord: 0, units: 0, sales: 0, imp: 0, clk: 0, spend: 0, adsales: 0, adord: 0 };
-    var rows = agg.asins.slice().sort(function (a, b) {
-      return ((b.series[pk] || z).sess - (a.series[pk] || z).sess) || ((b.series[pk] || z).spend - (a.series[pk] || z).spend);
-    });
-    var CAP = 100, cut = rows.length > CAP;
-    var h = '<table class="flat pftab"><thead><tr><th>ASIN · 品名</th><th class="r">Sessions</th><th class="r">CVR</th>' +
-      '<th class="r">点击</th><th class="r">CTR</th><th class="r">广告花费</th><th class="r">广告订单</th><th class="r">ACOS</th></tr></thead><tbody>';
-    function lineOf(label, curM, prevM, asin, sel) {
-      var rc = C.perfRates(curM), rp = prevM ? C.perfRates(prevM) : null;
-      return '<tr' + (asin ? ' data-pfasin="' + esc(asin) + '" class="pfrow' + (sel ? ' sel' : '') + '"' : ' class="grand"') + '>' +
-        '<td class="clip" title="' + esc(label) + '">' + esc(label) + '</td>' +
-        pfCellCnt(curM.sess, prevM ? prevM.sess : null, true) +
-        pfCellRate(rc.cvr, rp ? rp.cvr : undefined, true) +
-        pfCellCnt(curM.clk, prevM ? prevM.clk : null, true) +
-        pfCellRate(rc.ctr, rp ? rp.ctr : undefined, true) +
-        '<td class="r">' + fmtMoney(curM.spend) + ' ' + pfDeltaHtml('', prevM ? C.pctDelta(curM.spend, prevM.spend) : null, false, false) + '</td>' +
-        '<td class="r">' + fmtInt(curM.adord) + '</td>' +
-        pfCellRate(rc.acos, rp ? rp.acos : undefined, false) + '</tr>';
+  function renderPerfTable(agg, scope, disp, anchor) {
+    var prevA = C.perfPrevKey(anchor, S.pf.gran);
+    var selSet = null;
+    if (S.pf.asins.length) { selSet = {}; S.pf.asins.forEach(function (a) { selSet[a] = 1; }); }
+    var rows = agg.asins.filter(function (a) { return !selSet || selSet[a.asin] === 1; });
+    if (!selSet) {
+      rows = rows.slice().sort(function (a, b) {
+        return ((b.series[anchor] || PF_Z()).sess - (a.series[anchor] || PF_Z()).sess) || (b.sum.sess - a.sum.sess);
+      });
     }
-    rows.slice(0, CAP).forEach(function (a) {
-      h += lineOf(a.asin + (a.name ? ' · ' + a.name : ''), a.series[pk] || z, a.series[pv] || null, a.asin, a.asin === S.pf.asin);
+    var CAP = 100, cut = !selSet && rows.length > CAP;
+    if (!selSet) rows = rows.slice(0, CAP);
+    var h = '<table class="pivot pftab"><thead><tr><th class="dim">ASIN · 品名（本期 ' + pfFmtPk(anchor, S.pf.gran) + '）</th>' +
+      '<th>Sessions</th><th>CVR</th><th>点击</th><th>CTR</th><th>广告花费</th><th>广告订单</th><th>ACOS</th></tr></thead><tbody>';
+    rows.forEach(function (a) {
+      var open = S.pf.open[a.asin] === true;
+      h += '<tr class="lv0 pfrow" data-pfasin="' + esc(a.asin) + '"><td class="dim">' +
+        '<button type="button" class="caret" data-pfx="' + esc(a.asin) + '">' + (open ? '▾' : '▸') + '</button>' +
+        '<span class="nm">' + esc(a.asin) + (a.name ? ' <i class="en">' + esc(a.name.slice(0, 24)) + '</i>' : '') + '</span></td>' +
+        pfCells(a.series[anchor] || PF_Z(), a.series[prevA] || null) + '</tr>';
+      if (open) {
+        disp.forEach(function (pk) {
+          h += '<tr class="lv2"><td class="dim"><span class="caret-slot"></span><span class="nm">' + pfFmtPk(pk, S.pf.gran) + '</span></td>' +
+            pfCells(a.series[pk] || PF_Z(), a.series[C.perfPrevKey(pk, S.pf.gran)] || null) + '</tr>';
+        });
+      }
     });
-    h += lineOf('总计 · 全部 ASIN', agg.overall[pk] || z, agg.overall[pv] || null, '', false);
+    h += '<tr class="grand"><td class="dim">总计 · 当前筛选（' + pfFmtPk(anchor, S.pf.gran) + '）</td>' +
+      pfCells(scope[anchor] || PF_Z(), scope[prevA] || null) + '</tr>';
     h += '</tbody></table>';
-    if (cut) h += '<div class="hint">按 Sessions 仅展示前 ' + CAP + ' 个 ASIN（共 ' + rows.length + '），其余请用上方 ASIN 筛选或导出 CSV 查看。</div>';
     $('perfWrap').innerHTML = h;
+    if (cut) $('perfWrap').innerHTML += '<div class="hint">未勾选 ASIN 时按本期 Sessions 仅展示前 ' + CAP + ' 个（共 ' + agg.asins.length + '），可用 ASIN 勾选或导出 CSV 查看全部。</div>';
   }
   function exportPerfCsv() {
-    var agg = S._perfAgg; if (!agg) return;
-    var pk = S.pf.anchor, pv = C.perfPrevKey(pk, S.pf.gran);
-    var z = { sess: 0, pv: 0, ord: 0, units: 0, sales: 0, imp: 0, clk: 0, spend: 0, adsales: 0, adord: 0 };
+    var ctx = S._pfCtx; if (!ctx) return;
+    var agg = ctx.agg, disp = ctx.disp, anchor = ctx.anchor, scope = ctx.scope;
+    var prevOf = function (pk) { return C.perfPrevKey(pk, S.pf.gran); };
     var pct = function (x) { return x == null ? '' : (x * 100).toFixed(2) + '%'; };
     var pp = function (x) { return x == null ? '' : (x * 100).toFixed(2) + 'pp'; };
     var out = [['ASIN', '品名', '期', 'Sessions', 'Sessions环比', 'CVR', 'CVR环比pp', '点击', '点击环比', 'CTR', 'CTR环比pp', '广告花费', '花费环比', '广告订单', 'ACOS', 'ACOS环比pp']];
-    function push(label, name, curM, prevM) {
+    function push(label, name, pk, curM, prevM) {
       var rc = C.perfRates(curM), rp = prevM ? C.perfRates(prevM) : { cvr: null, ctr: null, acos: null };
       out.push([label, name, pk, Math.round(curM.sess), prevM ? pct(C.pctDelta(curM.sess, prevM.sess)) : '', pct(rc.cvr), pp(C.ppDelta(rc.cvr, rp.cvr)),
         Math.round(curM.clk), prevM ? pct(C.pctDelta(curM.clk, prevM.clk)) : '', pct(rc.ctr), pp(C.ppDelta(rc.ctr, rp.ctr)),
         curM.spend.toFixed(2), prevM ? pct(C.pctDelta(curM.spend, prevM.spend)) : '', Math.round(curM.adord), pct(rc.acos), pp(C.ppDelta(rc.acos, rp.acos))]);
     }
-    push('__ALL__', '全部汇总', agg.overall[pk] || z, agg.overall[pv] || null);
-    agg.asins.forEach(function (a) { push(a.asin, a.name || '', a.series[pk] || z, a.series[pv] || null); });
+    var selSet = null;
+    if (S.pf.asins.length) { selSet = {}; S.pf.asins.forEach(function (a) { selSet[a] = 1; }); }
+    agg.asins.forEach(function (a) {
+      if (selSet && selSet[a.asin] !== 1) return;
+      push(a.asin, a.name || '', anchor + '(本期)', a.series[anchor] || PF_Z(), a.series[prevOf(anchor)] || null);
+      disp.forEach(function (pk) { push(a.asin, a.name || '', pk, a.series[pk] || PF_Z(), a.series[prevOf(pk)] || null); });
+    });
+    push('__TOTAL__', '总计·当前筛选', anchor, scope[anchor] || PF_Z(), scope[prevOf(anchor)] || null);
     var lines = out.map(function (r) {
       return r.map(function (v) { var t = String(v == null ? '' : v); return /[",\n]/.test(t) ? '"' + t.replace(/"/g, '""') + '"' : t; }).join(',');
     });
@@ -1794,7 +1866,7 @@ var SAMPLE_PERF_AOA = (function () {
       asins: p.built.asinCount };
     S.perfBatches.push(batch);
     DB.putPerf(toAdd).then(function () { return DB.putPerfBatch(batch); }).catch(function () { });
-    S.perfPending = null; S.pf.anchor = '';
+    S.perfPending = null; S.pf.periods = [];
     $('perfReport').innerHTML = '<div class="card ok"><b>表现数据已入库</b> 新增 ' + batch.added + ' 行' +
       (batch.replaced ? '，覆盖 ' + batch.replaced + ' 行' : '') + (batch.skipped ? '，跳过 ' + batch.skipped + ' 行' : '') +
       '。<button class="btn link" id="goPerf">去 ASIN 趋势 →</button></div>';
@@ -1854,7 +1926,7 @@ var SAMPLE_PERF_AOA = (function () {
         S.planBatches = Array.isArray(p.planBatches) ? p.planBatches : [];
         S.perfRows = Array.isArray(p.perf) ? p.perf : [];
         S.perfBatches = Array.isArray(p.perfBatches) ? p.perfBatches : [];
-        S.cmp.batch = ''; S.cmp.collapsed = {}; S.pf.anchor = ''; S.pf.country = null; S.pf.asin = '';
+        S.cmp.batch = ''; S.cmp.collapsed = {}; S.pf = { gran: S.pf.gran, countries: null, asins: [], periods: [], open: {} };
         DB.clearAll().then(function () { return DB.putRows(S.rows); }).then(function () {
           return Promise.all(S.batches.map(function (b) { return DB.putBatch(b); }));
         }).then(function () { return DB.putPlans(S.plans); }).then(function () {
@@ -2013,6 +2085,10 @@ var SAMPLE_PERF_AOA = (function () {
         if (S._cmp) renderCmpTable(S._cmp);
       } else if (t.dataset.delperfbatch) {
         deletePerfBatch(t.dataset.delperfbatch);
+      } else if (t.dataset.pfx) {
+        if (S.pf.open[t.dataset.pfx]) delete S.pf.open[t.dataset.pfx];
+        else S.pf.open[t.dataset.pfx] = true;
+        renderPerf();
       }
     });
     // 粒度
@@ -2060,13 +2136,15 @@ var SAMPLE_PERF_AOA = (function () {
     // 明细浏览
     $('browseQ').oninput = function () { S.page = 1; renderBrowse(); };
     $('browseMonth').onchange = function () { S.page = 1; renderBrowse(); };
-    // 表现表格行点击 → 聚焦该 ASIN
+    // 表现表格行点击 → 切换该 ASIN 勾选（caret 负责展开）
     $('perfWrap').addEventListener('click', function (e) {
+      if (e.target.closest && e.target.closest('[data-pfx]')) return;
       var tr = e.target.closest ? e.target.closest('tr[data-pfasin]') : null;
       if (!tr) return;
-      S.pf.asin = (S.pf.asin === tr.dataset.pfasin) ? '' : tr.dataset.pfasin;
+      var a = tr.dataset.pfasin, i = S.pf.asins.indexOf(a);
+      if (i >= 0) S.pf.asins.splice(i, 1); else S.pf.asins.push(a);
       renderPerf();
-    });
+        });
     // 规划导入
     var planDemo = function () { previewPlanImport(SAMPLE_PLAN_AOA, '内置示例规划（2026 两个月）'); switchTab('import'); };
     var pdz = $('planDrop');
@@ -2098,13 +2176,51 @@ var SAMPLE_PERF_AOA = (function () {
     fdz.addEventListener('drop', function (e) { var f = e.dataTransfer && e.dataTransfer.files && e.dataTransfer.files[0]; if (f) handlePerfFile(f); });
     $('btnPerfDemo').onclick = perfDemo;
     $('btnPerfDemoEmpty').onclick = perfDemo;
-    // ASIN 趋势控件
-    $('perfCountry').onchange = function () { S.pf.country = this.value; S.pf.asin = ''; S.pf.anchor = ''; renderPerf(); };
-    $('perfAsin').onchange = function () { S.pf.asin = this.value; renderPerf(); };
-    $('perfAnchor').onchange = function () { S.pf.anchor = this.value; renderPerf(); };
-    document.querySelectorAll('#perfGranSeg button').forEach(function (b) {
-      b.onclick = function () { S.pf.gran = b.dataset.g; S.pf.anchor = ''; renderPerf(); };
+    // ASIN 趋势控件（多选）
+    $('perfCountryChips').addEventListener('click', function (e) {
+      var b = e.target.closest ? e.target.closest('button[data-c]') : null;
+      if (!b) return;
+      var c = b.dataset.c;
+      if (c === '') S.pf.countries = [];
+      else {
+        var i = S.pf.countries.indexOf(c);
+        if (i >= 0) S.pf.countries.splice(i, 1); else S.pf.countries.push(c);
+      }
+      S.pf.periods = []; renderPerf();
     });
+    function wireDrop(rootId, listId, dataKey, arrGet) {
+      var root = $(rootId), panel = root.querySelector('.mdrop-panel');
+      root.querySelector('.mdrop-btn').addEventListener('click', function () {
+        var h = panel.hidden; document.querySelectorAll('.mdrop-panel').forEach(function (p) { p.hidden = true; });
+        panel.hidden = !h;
+      });
+      panel.addEventListener('click', function (e) { e.stopPropagation(); });
+      $(listId).addEventListener('change', function (e) {
+        var v = e.target && e.target.dataset && e.target.dataset[dataKey];
+        if (!v) return;
+        var arr = arrGet(), i = arr.indexOf(v);
+        if (e.target.checked) { if (i < 0) arr.push(v); }
+        else if (i >= 0) arr.splice(i, 1);
+        renderPerf();
+      });
+      panel.querySelector('[data-mact="clear"]').addEventListener('click', function () { arrGet().length = 0; renderPerf(); });
+      panel.querySelector('[data-mact="all"]').addEventListener('click', function () {
+        var arr = arrGet(); arr.length = 0;
+        $(listId).querySelectorAll('input[type="checkbox"]').forEach(function (cb) { arr.push(cb.dataset[dataKey]); });
+        renderPerf();
+      });
+    }
+    wireDrop('perfAsinDrop', 'perfAsinList', 'masin', function () { return S.pf.asins; });
+    wireDrop('perfPeriodDrop', 'perfPeriodList', 'mpk', function () { return S.pf.periods; });
+    $('perfAsinQ').addEventListener('input', function () { if (S._perfAgg) renderAsinDrop(S._perfAgg); });
+    document.addEventListener('click', function (e) {
+      if (e.target.closest && e.target.closest('.mdrop')) return;
+      document.querySelectorAll('.mdrop-panel').forEach(function (p) { p.hidden = true; });
+    });
+    document.querySelectorAll('#perfGranSeg button').forEach(function (b) {
+      b.onclick = function () { S.pf.gran = b.dataset.g; S.pf.periods = []; S.pf.open = {}; renderPerf(); };
+    });
+    $('btnPerfCsv').onclick = exportPerfCsv;
     $('btnPerfCsv').onclick = exportPerfCsv;
     // 口径说明
     $('btnGauge').onclick = function () { $('gaugeModal').classList.add('show'); };

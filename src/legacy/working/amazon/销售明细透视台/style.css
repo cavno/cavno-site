@@ -75,3 +75,28 @@
 /* ---------- 冻结末行：总计吸附滚动视口底部（透视/目标对比/ASIN趋势） ---------- */
 .lp .tablewrap tr.grand td{position:sticky;bottom:0;z-index:2;border-top:none;
   box-shadow:0 -1px 0 var(--teal),0 -3px 0 var(--teal)}
+
+/* ---------- ASIN 趋势 · 多选控件 ---------- */
+.lp .pfc-row{display:inline-flex;gap:4px;flex-wrap:wrap;vertical-align:middle}
+.lp .pfc{border:1px solid var(--line);background:var(--card);border-radius:999px;padding:4px 11px;
+  font-size:12px;color:var(--muted);cursor:pointer}
+.lp .pfc:hover{border-color:var(--teal)}
+.lp .pfc.on{background:var(--teal);border-color:var(--teal);color:#fff}
+.lp .mdrop{position:relative;display:inline-block}
+.lp .mdrop-btn{border:1px solid var(--line);background:var(--card);border-radius:4px;padding:6px 26px 6px 10px;
+  font-size:12.5px;cursor:pointer;position:relative}
+.lp .mdrop-btn::after{content:"▾";position:absolute;right:9px;top:50%;transform:translateY(-50%);font-size:10px;color:var(--muted)}
+.lp .mdrop-btn.has{border-color:var(--teal);color:var(--teal-d,#1F6F6B);background:var(--tealsoft)}
+.lp .mdrop-panel{position:absolute;left:0;top:calc(100% + 6px);z-index:50;width:290px;background:var(--card);
+  border:1px solid var(--line);border-radius:8px;box-shadow:0 10px 26px rgba(43,38,32,.14);padding:8px}
+.lp .mdrop-q{width:100%;margin-bottom:6px}
+.lp .mdrop-list{max-height:280px;overflow:auto;display:flex;flex-direction:column}
+.lp .mdrop-it{display:flex;gap:8px;align-items:center;padding:5px 6px;border-radius:4px;cursor:pointer;font-size:12.5px}
+.lp .mdrop-it:hover{background:var(--panel)}
+.lp .mdrop-it b{font-weight:600}
+.lp .mdrop-it i{font-style:normal;color:var(--muted);font-size:11.5px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.lp .mdrop-foot{display:flex;gap:8px;justify-content:flex-end;margin-top:6px;padding-top:6px;border-top:1px solid var(--line2)}
+.lp table.pivot.pftab td{white-space:nowrap}
+.lp table.pivot.pftab td.dim{min-width:250px}
+.lp .pftab .pfrow{cursor:pointer}
+.lp .pftab .pf-delta{margin-left:4px}
