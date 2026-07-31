@@ -214,7 +214,7 @@
       <tr><td>头程成本占比 First-leg</td><td>Σ 头程成本 ÷ Σ 销售额（源表为正值，占比亦为正）</td></tr>
       <tr><td colspan="2" style="background:var(--panel);font-weight:600">目标对比（年度规划 × 销售明细）</td></tr>
       <tr><td>匹配键</td><td>人员按「负责人 = Listing负责人」精确匹配；产品优先按「父ASIN」匹配，规划中无 ASIN 的新品仅在目标侧展示</td></tr>
-      <tr><td>达成率</td><td>实际 ÷ 目标（销量、销售额）；毛利以「差额 = 实际 − 目标」呈现，规避正负号下比率失真</td></tr>
+      <tr><td>达成率</td><td>实际 ÷ 目标（销量、销售额、毛利）。毛利另给「差额 = 实际 − 目标」；目标为负（计划亏损）时毛利达成率照算但颜色按「实际 ≥ 目标」判定——负值域比率易误读，建议以差额为准</td></tr>
       <tr><td>广告口径</td><td>明细广告费为负号支出，对比时取绝对值；广告占比两侧均为 |广告费| ÷ 销售额</td></tr>
       <tr><td>币种假设</td><td>规划金额为 RMB；默认销售明细亦为人民币口径（领星 RMB 导出）。若明细为店铺本币，请先统一币种再对比</td></tr>
       <tr><td colspan="2" style="background:var(--panel);font-weight:600">ASIN 趋势（产品表现日报）</td></tr>
@@ -1355,12 +1355,25 @@ var SAMPLE_PERF_AOA = (function () {
     return '<td class="ach' + cl + '"><span class="abar"><i style="width:' + w.toFixed(1) + '%"></i></span>' +
       fmtAch(a) + (a > 1 ? '<b class="ov">▲</b>' : '') + '</td>';
   }
+  function achCellG(act, tgt) {
+    if (!tgt) return '<td class="ach"><span class="na">–</span></td>';
+    var a = act / tgt;
+    if (tgt > 0) {
+      var w = Math.max(0, Math.min(1, a)) * 100;
+      var cl = a >= 1 ? ' hi' : (a < 0.7 ? ' lo' : '');
+      return '<td class="ach' + cl + '"><span class="abar"><i style="width:' + w.toFixed(1) + '%"></i></span>' +
+        fmtAch(a) + (a > 1 ? '<b class="ov">▲</b>' : '') + '</td>';
+    }
+    var good = act >= tgt;
+    return '<td class="ach ' + (good ? 'hi' : 'lo') + '" title="目标为负（计划亏损）：达成率＝实际÷目标；颜色按 实际≥目标 判定——' +
+      (good ? '亏损小于计划' : '亏损大于计划') + '。负值域比率易误读，建议以差额为准">' + fmtAch(a) + '</td>';
+  }
   function cmpCells(T, A) {
     var dg = A.g - T.g;
     var tAd = T.s ? T.ad / T.s : null, aAd = A.s ? A.ad / A.s : null;
     return tdNum(T.u, fmtInt) + tdNum(A.u, fmtInt) + achCell(A.u, T.u) +
       tdNum(T.s, fmtMoney) + tdNum(A.s, fmtMoney) + achCell(A.s, T.s) +
-      tdNum(T.g, fmtMoney) + tdNum(A.g, fmtMoney) +
+      tdNum(T.g, fmtMoney) + tdNum(A.g, fmtMoney) + achCellG(A.g, T.g) +
       '<td class="' + (dg < 0 ? 'neg' : 'okv') + '">' + (dg >= 0 ? '+' : '') + fmtMoney(dg) + '</td>' +
       '<td>' + fmtPct(tAd) + '</td>' +
       '<td class="' + (aAd != null && tAd != null && aAd > tAd ? 'neg' : '') + '">' + fmtPct(aAd) + '</td>';
@@ -1424,7 +1437,7 @@ var SAMPLE_PERF_AOA = (function () {
     var h = '<table class="pivot cmp"><thead><tr><th class="dim">' + dimName + '</th>' +
       '<th>目标销量</th><th>实际销量</th><th>达成</th>' +
       '<th>目标销售额</th><th>实际销售额</th><th>达成</th>' +
-      '<th>目标毛利</th><th>实际毛利</th><th>差额</th>' +
+      '<th>目标毛利</th><th>实际毛利</th><th>达成</th><th>差额</th>' +
       '<th>目标广告占比</th><th>实际广告占比</th></tr></thead><tbody>';
     function caretC(path, has) {
       if (!has) return '<span class="caret-slot"></span>';
@@ -1467,9 +1480,9 @@ var SAMPLE_PERF_AOA = (function () {
     var line = function (l1, l2, ym, T, A) {
       var au = T.u ? A.u / T.u : null, as = T.s ? A.s / T.s : null;
       return [l1, l2, ym, Math.round(T.u), Math.round(A.u), pct(au), T.s.toFixed(2), A.s.toFixed(2), pct(as),
-        T.g.toFixed(2), A.g.toFixed(2), (A.g - T.g).toFixed(2), pct(T.s ? T.ad / T.s : null), pct(A.s ? A.ad / A.s : null)];
+        T.g.toFixed(2), A.g.toFixed(2), pct(T.g ? A.g / T.g : null), (A.g - T.g).toFixed(2), pct(T.s ? T.ad / T.s : null), pct(A.s ? A.ad / A.s : null)];
     };
-    var out = [['维度一', '维度二', '月份', '目标销量', '实际销量', '销量达成', '目标销售额', '实际销售额', '销售额达成', '目标毛利', '实际毛利', '毛利差额', '目标广告占比', '实际广告占比']];
+    var out = [['维度一', '维度二', '月份', '目标销量', '实际销量', '销量达成', '目标销售额', '实际销售额', '销售额达成', '目标毛利', '实际毛利', '毛利达成', '毛利差额', '目标广告占比', '实际广告占比']];
     res.nodes.forEach(function (n) {
       out.push(line(n.label + (n.sub ? '(' + n.sub + ')' : ''), '', '', n.tgt, n.act));
       var kids = n.childList && n.childList.length;
