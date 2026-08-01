@@ -28,7 +28,11 @@ const isSub = (slug: string, sub: string) => norm.startsWith(`/${slug}/${sub}/`)
   <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@500;600;700&display=swap" rel="stylesheet" />
+  <!-- 非阻塞加载：fonts.googleapis.com 在大陆不可达，阻塞式 <link> 会拖住首屏渲染。
+       取不到时回落到本机 Songti SC / PingFang SC（见 --serif / --sans 字体栈），中文照常显示。 -->
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@500;600;700&display=swap"
+        rel="stylesheet" media="print" onload="this.media='all';this.onload=null" />
+  <noscript><link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@500;600;700&display=swap" rel="stylesheet" /></noscript>
 </head>
 <body>
 

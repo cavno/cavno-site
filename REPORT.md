@@ -81,3 +81,13 @@
 
 ## 2026-07-30 · 增量七：目标对比补毛利达成列
 - 在「实际毛利」与「差额」之间新增「达成」列（实际毛利÷目标毛利），共享渲染器一处改动覆盖全部层级行与总计，CSV 同步。负值域口径：目标为正走标准达成率（进度条/≥100%▲/<70%红）；目标为负（计划亏损）时比率照算、颜色改按「实际≥目标」判定并附悬停口径说明——负值域比率易误读，差额列保留为可靠读数；口径说明弹窗同步更新。
+
+## 2026-07-31 · 移动端"样式全丢"故障根治
+- 症状：iPhone 微信/Firefox 打开 cavno.org，首次正常、再次打开整页无样式（默认蓝链、UA 灰按钮、SVG 箭头膨胀），换 Chrome 又正常。
+- 诊断：**非浏览器兼容问题，是整张样式表未加载**。证据：截图中移动端抽屉整段裸露在文档流（`.cv-drawer` 的 fixed+平移未生效），说明骨架级规则也没应用，而非个别新语法降级。成因两条叠加：① 构建产物把 CSS 拆成 69 个带哈希外链，`public/` 无任何缓存头，微信 X5/WKWebView 激进缓存 HTML —— 每次重新部署哈希轮换后，缓存里的旧 HTML 请求已不存在的 `/_astro/<旧哈希>.css` 得到 404；② Cloudflare 大陆链路不稳，外链 CSS 本身存在取不到的概率。
+- 修复（消除故障类别而非打补丁）：
+  1. `public/_headers`：HTML `max-age=0, must-revalidate`（旧 HTML 不再被长期复用）、`/_astro/*` 一年 immutable、shell.js 5 分钟 + CORS。
+  2. `build.inlineStylesheets: 'always'`：样式随 HTML 内联，全站零本站外链 CSS（`/_astro/*.css` 文件数归零）——外链不存在，就不可能 404 或弱网取不到；同时省去一次阻塞式往返。代价：首页 gzip 约 8KB→9KB 量级，最重的透视台页 HTML 176KB（gzip 约 38KB），可接受。
+  3. Google Fonts 改为非阻塞（`media="print" onload`+`<noscript>`）：该域在大陆不可达，原阻塞式 `<link>` 会拖住首屏；取不到时回落本机 Songti SC / PingFang SC，中文照常。
+  4. 顺带修正 `astro.config.mjs` 的 `site` 由 `cavno.pages.dev` → `cavno.org`（长期挂账项；shell.js 内嵌地址随之更正，旧 GitHub 站点导航条不再指向错误主机）。
+- 注意：已被污染的手机缓存需一次强制刷新（微信：右上角「…」→ 刷新，或清理微信存储中的浏览器缓存）才会取到新 HTML；此后由 must-revalidate 保证不再复发。
