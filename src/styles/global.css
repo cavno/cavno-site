@@ -30,9 +30,16 @@ code:where(:not(.lp *)){font-family:var(--mono);font-size:.88em;background:var(-
 
 /* ---------- 顶部导航 ---------- */
 /* 旧页（含 .lp 内容区）上顶栏不吸顶：旧页普遍自带 sticky/fixed 顶部元素（top:0），
-   站点吸顶顶栏(z-index:60)会将其压在底下，破坏原版效果（如驾驶新手页的顺序轴数字）。
+   站点吸顶顶栏会将其压在底下，破坏原版效果（如驾驶新手页的顺序轴数字）。
+   用 relative 而非 static：同样留在文档流（滚动即离场，不遮挡旧页吸顶元素），
+   但保留层叠参与资格——static 会使 z-index 完全失效，导致下拉菜单被旧页定位元素盖住。
+   层级按需抬升：常态 60（与非旧页一致），仅在 hover/focus-within 时抬到 10000
+   —— 高于旧页语料中的最高值 9999，保证下拉菜单永远在最上层；不交互时则让位给
+   旧页自带的顶部固定条（全站 9 页），两边各得其所。
    :has 不支持的旧浏览器维持吸顶现状，属渐进降级。 */
-body:has(.lp) .cv-site-head{position:static}
+body:has(.lp) .cv-site-head{position:relative;z-index:60}
+body:has(.lp) .cv-site-head:hover,
+body:has(.lp) .cv-site-head:focus-within{z-index:10000}
 .cv-site-head{position:sticky;top:0;z-index:60;background:rgba(250,249,245,.9);
   -webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px);
   border-bottom:1px solid transparent;transition:border-color .25s}
