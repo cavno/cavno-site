@@ -95,3 +95,7 @@
 .lp table.pivot.pftab td.dim{min-width:250px}
 .lp .pftab .pfrow{cursor:pointer}
 .lp .pftab .pf-delta{margin-left:4px}
+
+/* ---------- 分区小标题：编号 + 来源/去向副题 ---------- */
+.lp .subhead.first{margin-top:2px;padding-top:0;border-top:none}
+.lp .subhead small{display:block;margin-top:3px;font-size:12px;font-weight:400;color:var(--muted);letter-spacing:0}

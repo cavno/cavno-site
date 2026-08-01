@@ -26,10 +26,10 @@
 <!-- ============ 透视分析 ============ -->
 <section class="panel show" id="panel-pivot">
   <div id="pivotEmpty" class="empty" style="display:none">
-    <h3>库中还没有明细数据</h3>
-    <p>把财务发来的《销售明细》月度表逐月导入，即可在这里做跨月透视。</p>
+    <h3>还没有销售明细数据</h3>
+    <p>在「数据导入 → ① 销售明细」逐月导入财务的《销售明细》，即可在这里做跨月透视。</p>
     <div class="actrow">
-      <button class="btn primary" id="btnDemo">载入内置示例（10 行）</button>
+      <button class="btn primary" id="btnDemo">载入示例：销售明细</button>
     </div>
   </div>
   <div id="pivotBody">
@@ -57,11 +57,11 @@
 <!-- ============ 目标对比 ============ -->
 <section class="panel" id="panel-compare">
   <div id="cmpEmpty" class="empty" style="display:none">
-    <h3>目标对比需要两份数据</h3>
+    <h3>目标对比需要两类数据</h3>
     <p id="cmpEmptyMsg"></p>
     <div class="actrow">
-      <button class="btn primary" id="btnCmpDemoRows">载入示例明细</button>
-      <button class="btn" id="btnCmpDemoPlan">载入示例规划</button>
+      <button class="btn primary" id="btnCmpDemoRows">载入示例：销售明细</button>
+      <button class="btn" id="btnCmpDemoPlan">载入示例：年度目标规划</button>
     </div>
   </div>
   <div id="cmpBody" style="display:none">
@@ -88,9 +88,9 @@
 <!-- ============ ASIN 趋势 ============ -->
 <section class="panel" id="panel-perf">
   <div id="perfEmpty" class="empty" style="display:none">
-    <h3>还没有产品表现数据</h3>
-    <p>在「数据导入」页下方导入领星《产品表现ASIN》按日导出的报告（可多次导入累积成连续序列），或先载入内置示例感受交互。</p>
-    <div class="actrow"><button class="btn primary" id="btnPerfDemoEmpty">载入示例表现数据</button></div>
+    <h3>还没有产品表现（ASIN 日报）数据</h3>
+    <p>在「数据导入 → ③ 产品表现（ASIN 日报）」导入领星按日导出的报告（可多次导入累积成连续序列），或先载入示例感受交互。</p>
+    <div class="actrow"><button class="btn primary" id="btnPerfDemoEmpty">载入示例：产品表现</button></div>
   </div>
   <div id="perfBody" style="display:none">
     <div class="toolrow" style="margin-top:0">
@@ -135,8 +135,9 @@
 
 <!-- ============ 数据导入 ============ -->
 <section class="panel" id="panel-import">
+  <h4 class="subhead first">① 销售明细 <small>来源：财务月度导出 · 用于「透视分析」「明细浏览」，并作为「目标对比」的实际侧</small></h4>
   <div class="dropzone" id="dropZone">
-    点击选择或拖入财务《销售明细》文件（.xlsx / .csv）
+    点击选择或拖入《销售明细》文件（.xlsx / .csv）
     <div class="sub">系统自动归一列名、解析日期区间、清洗数值格式，入库前给出校验报告与重复检测</div>
   </div>
   <input type="file" id="fileInput" accept=".xlsx,.xls,.xlsm,.csv,.tsv,.txt" hidden>
@@ -147,41 +148,42 @@
     <textarea id="pasteArea" placeholder="国家	日期	MSKU	…（从 Excel 直接 Ctrl+C / Ctrl+V）"></textarea>
     <div class="actrow" style="margin-top:8px">
       <button class="btn" id="btnParsePaste">解析粘贴内容</button>
-      <button class="btn ghost" id="btnDemo2">载入内置示例</button>
+      <button class="btn ghost" id="btnDemo2">载入示例：销售明细</button>
     </div>
   </div>
   <div id="importReport"></div>
 
-  <h4 class="subhead">年度目标规划</h4>
+  <h4 class="subhead">② 年度目标规划 <small>来源：销售部门年初提交汇总 · 用于「目标对比」的目标侧</small></h4>
   <div class="dropzone" id="planDrop">
     点击选择或拖入《年度目标规划》文件（.xlsx / .csv）
     <div class="sub">行式月度拆解：月份(YYYYMM) / 负责人 / 父ASIN / 父体名称 / 销量 / 销售额RMB / 毛利额RMB / 广告费金额RMB；同一年度可多次导入为不同批次（版本并存，对比时按批次选择）</div>
   </div>
   <input type="file" id="planFile" accept=".xlsx,.xls,.xlsm,.csv,.tsv,.txt" hidden>
-  <div class="actrow"><button class="btn ghost" id="btnPlanDemo">载入内置示例规划</button></div>
+  <div class="actrow"><button class="btn ghost" id="btnPlanDemo">载入示例：年度目标规划</button></div>
   <div id="planReport"></div>
 
-  <h4 class="subhead">产品表现（ASIN 日报）</h4>
+  <h4 class="subhead">③ 产品表现（ASIN 日报） <small>来源：领星 ERP 导出 · 用于「ASIN 趋势」</small></h4>
   <div class="dropzone" id="perfDrop">
-    点击选择或拖入领星《产品表现ASIN》导出文件（.xlsx / .csv）
-    <div class="sub">按日导出、ASIN 维度；识别 日期 / ASIN / 店铺 / 国家 / Sessions / PV / 订单量 / 展示 / 点击 / 广告花费 / 广告销售额 / 广告订单量 等列，其余列自动忽略；可多次导入累积为连续时间序列</div>
+    点击选择或拖入《产品表现（ASIN 日报）》文件（.xlsx / .csv）
+    <div class="sub">领星 ERP →「产品表现」按 ASIN 导出（文件名形如「产品表现ASIN_起止日期_全部广告」）；识别 日期 / ASIN / 店铺 / 国家 / Sessions / PV / 订单量 / 展示 / 点击 / 广告花费 / 广告销售额 / 广告订单量 等列，其余列自动忽略；可多次导入累积为连续时间序列</div>
   </div>
   <input type="file" id="perfFile" accept=".xlsx,.xls,.xlsm,.csv,.tsv,.txt" hidden>
-  <div class="actrow"><button class="btn ghost" id="btnPerfDemo">载入内置示例表现</button></div>
+  <div class="actrow"><button class="btn ghost" id="btnPerfDemo">载入示例：产品表现</button></div>
   <div id="perfReport"></div>
 </section>
 
 <!-- ============ 批次管理 ============ -->
 <section class="panel" id="panel-batches">
   <div class="toolrow" style="margin-top:0">
-    <span class="hint" style="padding:0">每次导入为一个批次；某月数据导错时，删掉该批次重新导入即可，不影响其他月份。</span>
+    <span class="hint" style="padding:0">三类数据各自独立成批次。导错了删掉对应批次重新导入即可，三者互不影响。</span>
     <span class="spacer"></span>
     <button class="btn danger tiny" id="btnWipe">清空全库</button>
   </div>
+  <h4 class="subhead first">① 销售明细批次</h4>
   <div id="batchList"></div>
-  <h4 class="subhead">规划批次</h4>
+  <h4 class="subhead">② 年度目标规划批次</h4>
   <div id="planBatchList"></div>
-  <h4 class="subhead">表现批次</h4>
+  <h4 class="subhead">③ 产品表现批次</h4>
   <div id="perfBatchList"></div>
 </section>
 
@@ -1215,7 +1217,7 @@ var SAMPLE_PERF_AOA = (function () {
       return head + (arr.length > 8 ? '；…共 ' + arr.length + ' 处' : '');
     }
     var h = '<div class="card">';
-    h += '<div class="cardtitle">校验报告 · ' + esc(srcName) + '</div>';
+    h += '<div class="cardtitle">销售明细校验 · ' + esc(srcName) + '</div>';
     h += '<div class="repgrid">';
     h += '<div><b>' + built.rows.length + '</b><span>有效明细行</span></div>';
     h += '<div><b>' + built.months.join('、') + '</b><span>期间覆盖</span></div>';
@@ -1273,12 +1275,12 @@ var SAMPLE_PERF_AOA = (function () {
       '。<button class="btn link" id="goPivot">去透视分析 →</button></div>';
     $('goPivot').onclick = function () { switchTab('pivot'); };
     renderAll();
-    toast('入库完成：' + batch.added + ' 行新增');
+    toast('销售明细入库完成：' + batch.added + ' 行新增');
   }
 
   /* ---------- 批次管理 ---------- */
   function renderBatches() {
-    if (!S.batches.length) { $('batchList').innerHTML = '<div class="hint">尚无导入批次。每次导入都会在这里留档，可单独撤销。</div>'; return; }
+    if (!S.batches.length) { $('batchList').innerHTML = '<div class="hint">尚无销售明细批次。每次导入都会在这里留档，可单独撤销。</div>'; return; }
     var h = '<table class="flat"><thead><tr><th>时间</th><th>来源</th><th>期间</th><th>新增</th><th>覆盖</th><th>跳过</th><th>备注</th><th></th></tr></thead><tbody>';
     S.batches.slice().sort(function (a, b) { return a.ts < b.ts ? 1 : -1; }).forEach(function (b) {
       var live = S.rows.filter(function (r) { return r.b === b.id; }).length;
@@ -1292,13 +1294,13 @@ var SAMPLE_PERF_AOA = (function () {
 
   function deleteBatch(id) {
     var victim = S.rows.filter(function (r) { return r.b === id; });
-    if (!confirm('删除该批次将移除其现存 ' + victim.length + ' 行明细（被后续批次覆盖的行不受影响）。继续？')) return;
+    if (!confirm('删除该销售明细批次将移除其现存 ' + victim.length + ' 行明细（被后续批次覆盖的行不受影响）。继续？')) return;
     var keys = victim.map(function (r) { return r.k; });
     S.rows = S.rows.filter(function (r) { return r.b !== id; });
     S.batches = S.batches.filter(function (b) { return b.id !== id; });
     DB.delRows(keys).then(function () { return DB.delBatch(id); }).catch(function () { });
     renderAll();
-    toast('批次已删除');
+    toast('销售明细批次已删除');
   }
 
   function wipeAll() {
@@ -1389,8 +1391,8 @@ var SAMPLE_PERF_AOA = (function () {
     $('cmpEmpty').style.display = ok ? 'none' : '';
     $('cmpBody').style.display = ok ? '' : 'none';
     if (!ok) {
-      $('cmpEmptyMsg').textContent = !hasPlan && !hasRows ? '需要「销售明细」与「年度规划」各至少一个批次，均可在「数据导入」页导入或载入示例。'
-        : (!hasPlan ? '已有销售明细，还差「年度规划」批次（数据导入页下方）。' : '已有年度规划，还差「销售明细」批次。');
+      $('cmpEmptyMsg').textContent = !hasPlan && !hasRows ? '需要「① 销售明细」与「② 年度目标规划」各至少一个批次，均可在「数据导入」页导入或载入示例。'
+        : (!hasPlan ? '已有销售明细，还差「② 年度目标规划」批次（数据导入页第二段）。' : '已有年度目标规划，还差「① 销售明细」批次（数据导入页第一段）。');
       return;
     }
     var pbs = S.planBatches.slice().sort(function (a, b) { return a.ts < b.ts ? 1 : -1; });
@@ -1532,7 +1534,7 @@ var SAMPLE_PERF_AOA = (function () {
     }
     S.planPending = { built: built, srcName: srcName };
     var sameYear = S.planBatches.filter(function (b) { return (b.years || []).some(function (y) { return built.years.indexOf(y) >= 0; }); });
-    var h = '<div class="card"><div class="cardtitle">规划校验 · ' + esc(srcName) + '</div><div class="repgrid">';
+    var h = '<div class="card"><div class="cardtitle">年度目标规划校验 · ' + esc(srcName) + '</div><div class="repgrid">';
     h += '<div><b>' + built.rows.length + '</b><span>目标行（合并后）</span></div>';
     h += '<div><b>' + built.years.join('、') + '</b><span>年度</span></div>';
     h += '<div><b>' + built.months.length + '</b><span>覆盖月份数</span></div>';
@@ -1556,13 +1558,13 @@ var SAMPLE_PERF_AOA = (function () {
     S.planBatches.push(batch);
     DB.putPlans(rows).then(function () { return DB.putPlanBatch(batch); }).catch(function () { });
     S.planPending = null; S.cmp.batch = id; S.cmp.collapsed = {};
-    $('planReport').innerHTML = '<div class="card ok"><b>规划已入库</b> ' + rows.length + ' 行目标（' + batch.years.join('、') + ' 年度）。<button class="btn link" id="goCmp">去目标对比 →</button></div>';
+    $('planReport').innerHTML = '<div class="card ok"><b>年度目标规划已入库</b> ' + rows.length + ' 行目标（' + batch.years.join('、') + ' 年度）。<button class="btn link" id="goCmp">去「目标对比」→</button></div>';
     $('goCmp').onclick = function () { switchTab('compare'); };
     renderAll();
-    toast('规划入库完成');
+    toast('年度目标规划入库完成');
   }
   function renderPlanBatches() {
-    if (!S.planBatches.length) { $('planBatchList').innerHTML = '<div class="hint">尚无规划批次。在「数据导入」页下方导入《年度目标规划》。</div>'; return; }
+    if (!S.planBatches.length) { $('planBatchList').innerHTML = '<div class="hint">尚无年度目标规划批次。在「数据导入 → ② 年度目标规划」导入。</div>'; return; }
     var h = '<table class="flat"><thead><tr><th>时间</th><th>来源</th><th>年度</th><th>覆盖月份</th><th>目标行</th><th>负责人</th><th>备注</th><th></th></tr></thead><tbody>';
     S.planBatches.slice().sort(function (a, b) { return a.ts < b.ts ? 1 : -1; }).forEach(function (b) {
       h += '<tr><td>' + esc(b.ts.slice(0, 16).replace('T', ' ')) + '</td><td>' + esc(b.name) + '</td><td>' + esc((b.years || []).join('、')) + '</td>' +
@@ -1573,12 +1575,12 @@ var SAMPLE_PERF_AOA = (function () {
   }
   function deletePlanBatch(id) {
     var victim = S.plans.filter(function (r) { return r.b === id; });
-    if (!confirm('删除该规划批次（' + victim.length + ' 行目标）？不影响销售明细。')) return;
+    if (!confirm('删除该年度目标规划批次（' + victim.length + ' 行目标）？不影响销售明细。')) return;
     S.plans = S.plans.filter(function (r) { return r.b !== id; });
     S.planBatches = S.planBatches.filter(function (b) { return b.id !== id; });
     DB.delPlans(victim.map(function (r) { return r.k; })).then(function () { return DB.delPlanBatch(id); }).catch(function () { });
     renderAll();
-    toast('规划批次已删除');
+    toast('年度目标规划批次已删除');
   }
 
 
@@ -1851,7 +1853,7 @@ var SAMPLE_PERF_AOA = (function () {
     var existing = new Set(S.perfRows.map(function (r) { return r.k; }));
     var dup = built.rows.filter(function (r) { return existing.has(r.k); });
     S.perfPending = { built: built, dup: dup, srcName: srcName };
-    var h = '<div class="card"><div class="cardtitle">表现校验 · ' + esc(srcName) + '</div><div class="repgrid">';
+    var h = '<div class="card"><div class="cardtitle">产品表现校验 · ' + esc(srcName) + '</div><div class="repgrid">';
     h += '<div><b>' + built.rows.length + '</b><span>有效 ASIN·日 行</span></div>';
     h += '<div><b>' + built.dates[0] + ' ~ ' + built.dates[built.dates.length - 1] + '</b><span>覆盖 ' + built.dates.length + ' 天</span></div>';
     h += '<div><b>' + built.asinCount + '</b><span>ASIN 数（' + built.countries.length + ' 个国家）</span></div>';
@@ -1891,15 +1893,15 @@ var SAMPLE_PERF_AOA = (function () {
     S.perfBatches.push(batch);
     DB.putPerf(toAdd).then(function () { return DB.putPerfBatch(batch); }).catch(function () { });
     S.perfPending = null; S.pf.periods = [];
-    $('perfReport').innerHTML = '<div class="card ok"><b>表现数据已入库</b> 新增 ' + batch.added + ' 行' +
+    $('perfReport').innerHTML = '<div class="card ok"><b>产品表现已入库</b> 新增 ' + batch.added + ' 行' +
       (batch.replaced ? '，覆盖 ' + batch.replaced + ' 行' : '') + (batch.skipped ? '，跳过 ' + batch.skipped + ' 行' : '') +
-      '。<button class="btn link" id="goPerf">去 ASIN 趋势 →</button></div>';
+      '。<button class="btn link" id="goPerf">去「ASIN 趋势」→</button></div>';
     $('goPerf').onclick = function () { switchTab('perf'); };
     renderAll();
-    toast('表现入库完成');
+    toast('产品表现入库完成');
   }
   function renderPerfBatches() {
-    if (!S.perfBatches.length) { $('perfBatchList').innerHTML = '<div class="hint">尚无表现批次。在「数据导入」页下方导入《产品表现ASIN》日报。</div>'; return; }
+    if (!S.perfBatches.length) { $('perfBatchList').innerHTML = '<div class="hint">尚无产品表现批次。在「数据导入 → ③ 产品表现（ASIN 日报）」导入。</div>'; return; }
     var h = '<table class="flat"><thead><tr><th>时间</th><th>来源</th><th>日期范围</th><th>天数</th><th>新增</th><th>覆盖</th><th>跳过</th><th>ASIN</th><th>备注</th><th></th></tr></thead><tbody>';
     S.perfBatches.slice().sort(function (a, b) { return a.ts < b.ts ? 1 : -1; }).forEach(function (b) {
       var live = S.perfRows.filter(function (r) { return r.b === b.id; }).length;
@@ -1911,12 +1913,12 @@ var SAMPLE_PERF_AOA = (function () {
   }
   function deletePerfBatch(id) {
     var victim = S.perfRows.filter(function (r) { return r.b === id; });
-    if (!confirm('删除该表现批次将移除其现存 ' + victim.length + ' 行（被后续批次覆盖的行不受影响）。继续？')) return;
+    if (!confirm('删除该产品表现批次将移除其现存 ' + victim.length + ' 行（被后续批次覆盖的行不受影响）。继续？')) return;
     S.perfRows = S.perfRows.filter(function (r) { return r.b !== id; });
     S.perfBatches = S.perfBatches.filter(function (b) { return b.id !== id; });
     DB.delPerf(victim.map(function (r) { return r.k; })).then(function () { return DB.delPerfBatch(id); }).catch(function () { });
     renderAll();
-    toast('表现批次已删除');
+    toast('产品表现批次已删除');
   }
 
   /* ---------- 备份 / 恢复 ---------- */
@@ -2063,9 +2065,11 @@ var SAMPLE_PERF_AOA = (function () {
     renderBrowse();
     renderCompare();
     renderPerf();
-    var dc = S.rows.length ? S.rows.length + ' 行 · ' + S.batches.length + ' 批' : '空库';
-    if (S.plans.length) dc += ' · 规划 ' + S.plans.length + ' 行';
-    if (S.perfRows.length) dc += ' · 表现 ' + S.perfRows.length + ' 行';
+    var seg = [];
+    if (S.rows.length) seg.push('明细 ' + S.rows.length + ' 行');
+    if (S.plans.length) seg.push('规划 ' + S.plans.length + ' 行');
+    if (S.perfRows.length) seg.push('表现 ' + S.perfRows.length + ' 行');
+    var dc = seg.length ? seg.join(' · ') : '空库';
     $('dataCount').textContent = dc;
   }
 
@@ -2147,7 +2151,7 @@ var SAMPLE_PERF_AOA = (function () {
       previewImport(parseCSV(txt), '粘贴数据');
     };
     $('btnDemo').onclick = function () {
-      previewImport(SAMPLE_AOA, '内置示例（本文件模板 10 行）');
+      previewImport(SAMPLE_AOA, '示例：销售明细（10 行）');
       switchTab('import');
     };
     $('btnDemo2').onclick = $('btnDemo').onclick;
@@ -2170,7 +2174,7 @@ var SAMPLE_PERF_AOA = (function () {
       renderPerf();
         });
     // 规划导入
-    var planDemo = function () { previewPlanImport(SAMPLE_PLAN_AOA, '内置示例规划（2026 两个月）'); switchTab('import'); };
+    var planDemo = function () { previewPlanImport(SAMPLE_PLAN_AOA, '示例：年度目标规划（2026 · 两个月）'); switchTab('import'); };
     var pdz = $('planDrop');
     pdz.onclick = function () { $('planFile').click(); };
     $('planFile').onchange = function (e) { if (e.target.files[0]) handlePlanFile(e.target.files[0]); e.target.value = ''; };
@@ -2191,7 +2195,7 @@ var SAMPLE_PERF_AOA = (function () {
     });
     $('btnCmpCsv').onclick = exportCompareCsv;
     // 表现导入
-    var perfDemo = function () { previewPerfImport(SAMPLE_PERF_AOA, '内置示例表现（3 ASIN × 14 天）'); switchTab('import'); };
+    var perfDemo = function () { previewPerfImport(SAMPLE_PERF_AOA, '示例：产品表现（3 ASIN × 14 天）'); switchTab('import'); };
     var fdz = $('perfDrop');
     fdz.onclick = function () { $('perfFile').click(); };
     $('perfFile').onchange = function (e) { if (e.target.files[0]) handlePerfFile(e.target.files[0]); e.target.value = ''; };
