@@ -1,7 +1,8 @@
 <div class="topbar">
   <div class="topbar-in">
     <div class="brand" data-go="#/">西哲考察 · 前六讲</div>
-    <nav class="tnav">
+    <nav class="tnav" id="tnav">
+      <span data-go="#/">总览</span>
       <span data-go="#/thread">脉络</span>
       <span data-go="#/atlas/concepts">谱系</span>
       <span data-go="#/atlas/dual">张力</span>
@@ -10,7 +11,10 @@
   </div>
 </div>
 
-<main id="app"></main>
+<div class="shell">
+  <aside class="rail" id="rail" aria-label="全课导航"></aside>
+  <main id="app"></main>
+</div>
 
 <button class="btt" id="btt" aria-label="回到顶部">↑</button>
 
@@ -188,8 +192,46 @@ function route(){
   document.title = title;
   window.scrollTo(0,0);
 }
-window.addEventListener('hashchange', route);
-route();
+/* ---- 桌面侧栏：六讲 + 四张总表，随路由高亮 ---- */
+const RAIL_EXTRA = [['#/thread','思想脉络'],['#/atlas/concepts','概念谱系'],
+                    ['#/atlas/dual','张力总表'],['#/figures','人物长廊']];
+function buildRail(){
+  const rail = document.getElementById('rail');
+  if(!rail) return;
+  let h = '<div class="rail-grp">讲次</div>';
+  h += '<div class="rail-a clk" data-go="#/" data-key="#/"><i>00</i>总览</div>';
+  D.LECTURES.forEach(l=>{
+    h += '<div class="rail-a clk" data-go="#/lecture/'+l.id+'" data-key="#/lecture/'+l.id+'">'
+       + '<i>'+String(l.id).padStart(2,'0')+'</i>'+l.title+'</div>';
+  });
+  h += '<div class="rail-grp">总表</div>';
+  RAIL_EXTRA.forEach(function(x){
+    h += '<div class="rail-a clk" data-go="'+x[0]+'" data-key="'+x[0]+'"><i>·</i>'+x[1]+'</div>';
+  });
+  rail.innerHTML = h;
+}
+function syncNav(){
+  const cur = location.hash || '#/';
+  document.querySelectorAll('#rail .rail-a').forEach(function(a){
+    a.classList.toggle('on', a.getAttribute('data-key') === cur);
+  });
+  document.querySelectorAll('#tnav span').forEach(function(sp){
+    sp.classList.toggle('on', sp.getAttribute('data-go') === cur);
+  });
+}
+/* ---- 阅读进度：顶栏底缘细线 ---- */
+function readProgress(){
+  const h = document.documentElement;
+  const max = h.scrollHeight - h.clientHeight;
+  const pct = max > 40 ? Math.min(100, (h.scrollTop / max) * 100) : 0;
+  const lp = document.querySelector('.lp');
+  if(lp) lp.style.setProperty('--read', pct.toFixed(1) + '%');
+}
+buildRail();
+window.addEventListener('hashchange', function(){ route(); syncNav(); readProgress(); });
+window.addEventListener('scroll', readProgress, {passive:true});
+window.addEventListener('resize', readProgress, {passive:true});
+route(); syncNav(); readProgress();
 
 /* ============ 交互 ============ */
 document.addEventListener('click', e=>{
