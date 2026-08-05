@@ -1,3 +1,17 @@
+<div class="bk-shell">
+<nav class="bk-toc" aria-label="全书目录">
+  <div class="bk-brand">置身事内</div>
+  <div class="bk-brand-sub">地方政府与经济发展</div>
+  <ol class="bk-list">
+    <li class="bk-item" data-sec="spine"><a class="bk-l1" href="#spine"><i>01</i>全书主脉：一条因果长链</a></li>
+    <li class="bk-item" data-sec="timeline"><a class="bk-l1" href="#timeline"><i>02</i>发生顺序：制度演进时间轴（1980–2020）</a></li>
+    <li class="bk-item" data-sec="part1"><a class="bk-l1" href="#part1"><i>03</i>上篇 · 微观机制：地方政府如何驱动经济</a><ul class="bk-sub"><li><a class="bk-l2" href="#ch1">ch1</a></li><li><a class="bk-l2" href="#ch2">ch2</a></li><li><a class="bk-l2" href="#ch3">ch3</a></li><li><a class="bk-l2" href="#ch4">ch4</a></li></ul></li>
+    <li class="bk-item" data-sec="part2"><a class="bk-l1" href="#part2"><i>04</i>下篇 · 宏观现象：微观模式的三重后果</a><ul class="bk-sub"><li><a class="bk-l2" href="#ch5">ch5</a></li><li><a class="bk-l2" href="#ch6">ch6</a></li><li><a class="bk-l2" href="#ch7">ch7</a></li><li><a class="bk-l2" href="#ch8">ch8</a></li></ul></li>
+    <li class="bk-item" data-sec="matrix"><a class="bk-l1" href="#matrix"><i>05</i>总对照：三大特点 × 优点 × 代价 × 改革</a></li>
+    <li class="bk-item" data-sec="method"><a class="bk-l1" href="#method"><i>06</i>贯穿全书的四个方法论支点</a></li>
+  </ol>
+</nav>
+<div class="bk-main">
 <header class="hero">
   <div class="wrap">
     <div class="eyebrow">读书笔记 · 全书结构重述</div>
@@ -10,7 +24,7 @@
   </div>
 </header>
 
-<nav class="toc">
+<nav class="bk-hidewide toc">
   <div class="wrap">
     <a href="#spine">主脉因果链</a>
     <a href="#timeline">制度时间轴</a>
@@ -414,5 +428,59 @@
   }
   document.addEventListener("scroll",onScroll,{passive:true});
   onScroll();
+})();
+</script>
+</div>
+</div>
+
+<script>
+(function () {
+  var toc = document.querySelector('.bk-toc');
+  if (!toc || !('IntersectionObserver' in window)) return;
+  var items = Array.prototype.slice.call(toc.querySelectorAll('.bk-item'));
+  var byId = {};
+  items.forEach(function (li) { byId[li.getAttribute('data-sec')] = li; });
+  var subs = Array.prototype.slice.call(toc.querySelectorAll('a.bk-l2'));
+  function setActive(id) {
+    items.forEach(function (li) { li.classList.toggle('on', li.getAttribute('data-sec') === id); });
+    var cur = byId[id];
+    if (cur) {
+      var r = cur.getBoundingClientRect(), t = toc.getBoundingClientRect();
+      if (r.top < t.top + 8 || r.bottom > t.bottom - 8) {
+        toc.scrollTop += r.top - t.top - t.height / 3;
+      }
+    }
+  }
+  /* 章级：取最靠近视口上沿的可见节 */
+  var visible = {};
+  var io = new IntersectionObserver(function (es) {
+    es.forEach(function (e) {
+      var id = e.target.getAttribute('id');
+      if (e.isIntersecting) visible[id] = e.boundingClientRect.top;
+      else delete visible[id];
+    });
+    var ks = Object.keys(visible);
+    if (!ks.length) return;
+    ks.sort(function (a, b) { return Math.abs(visible[a]) - Math.abs(visible[b]); });
+    setActive(ks[0]);
+  }, { rootMargin: '-12% 0px -70% 0px', threshold: 0 });
+  items.forEach(function (li) {
+    var el = document.getElementById(li.getAttribute('data-sec'));
+    if (el) io.observe(el);
+  });
+  /* 节级高亮 */
+  var io2 = new IntersectionObserver(function (es) {
+    es.forEach(function (e) {
+      var a = toc.querySelector('a.bk-l2[href="#' + encodeURIComponent(e.target.id) + '"]');
+      if (!a) return;
+      if (e.isIntersecting) { subs.forEach(function (x) { x.classList.remove('on'); }); a.classList.add('on'); }
+    });
+  }, { rootMargin: '-14% 0px -74% 0px', threshold: 0 });
+  subs.forEach(function (a) {
+    var id = decodeURIComponent(a.getAttribute('href').slice(1));
+    var el = document.getElementById(id);
+    if (el) io2.observe(el);
+  });
+  if (items.length) setActive(items[0].getAttribute('data-sec'));
 })();
 </script>
