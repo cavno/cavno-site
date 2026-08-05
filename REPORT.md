@@ -117,3 +117,11 @@
 - 新增 `functions/_middleware.js` 规范主机名守卫：把 `*.pages.dev` 等非规范主机 308 跳回 cavno.org。**这是 Access 方案的必要补丁**——Access 应用只能绑在自有域名上，Pages 自带的 `pages.dev` 不在账户区域内、Access 规则管不到，不堵即成绕过口（官方无一键关闭开关，文档建议的替代是 Bulk Redirect）。
 - 新增 `docs/ACCESS-SETUP.md` 保姆级攻略：先决条件自查 → 开通 Zero Trust → 手动添加 One-time PIN（新组织不再自动带）→ 创建 Self-hosted 应用 → Allow 策略绑邮箱 → 六条验证清单 → 日常维护 → 边界声明 → 排错对照表。
 - 关键技术要点（据 Cloudflare 官方文档核实）：应用 Path 必须填 `working` 而非 `working/*`——后者只覆盖子路径、不覆盖 `/working` 本身；填 `working` 时子路径经策略继承一并受保护。文档同时给出"若深层页未被拦"的补救（增建 `working/*` 应用）。
+
+## 2026-08-06 · 移除站内全部 GitHub 外链
+- 自指来源（已删/改写）：外壳导航栏 GitHub 按钮、页脚 GitHub 链接（`github.com/cavno` ×2）；《认知操作系统》正文指向 `cavno.github.io/.../悖论图谱/` 的绝对地址改写为站内路由（内容已在站内，改写优于删除，交叉引用保持可用）；《圣经》页脚「查看源码 → github.com」整条移除（该链接暗示源码公开）。
+- 第三方数据源（已删）：层叠地图 `life/china/cengdie/app.js` 原有三级备援中的两个 GitHub 系回退源（`cdn.jsdelivr.net/gh/longwosion/...` 与 `raw.githubusercontent.com/longwosion/...`）全部移除，现仅走阿里云 DATAV 主源。**副作用：该源不可用时省界将加载失败**，一行即可恢复。
+- 保留：《悖论图谱》正文 5 处 "GitHub" 纯文本提及（讨论开源商业模式与微软-OpenAI 平台战略，与本人无关且非链接）。
+- 终检：产物中 href/src 型 GitHub 链接 0、完整 GitHub/jsdelivr-gh URL 0、`cavno.github.io` 0。
+- 过程教训：清理回退源时先删了 `GH1/GH2` 常量声明、后续正则又误命中同一行，导致引用一度悬空（会使地图 ReferenceError）；末尾断言拦下未写盘，随后按行精确清理并通过 `node --check`。
+- **重要提醒（已当面告知用户）**：删站内链接 ≠ 隐藏出处。cavno.github.io 四个旧站若仍在线，内容与新站高度重合，搜任一特色句即可关联；公开仓库本身亦暴露全部源码与提交历史。真正有效的动作在 GitHub 一侧（仓库转私有 / 关闭 Pages / 清理搜索引擎索引），且 `scripts/gen-shell.mjs` 生成的跨域导航条会主动建立 cavno.github.io → cavno.org 的关联，与此目标相悖。

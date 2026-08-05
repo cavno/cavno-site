@@ -517,10 +517,10 @@
     });
   });
 
-  // ============================ 数据加载（沿用 v2 三级备援） ============================
+  // ============================ 数据加载（单一数据源） ============================
   const DATAV = "https://geo.datav.aliyun.com/areas_v3/bound/";
-  const GH1 = "https://cdn.jsdelivr.net/gh/longwosion/geojson-map-china@master/";
-  const GH2 = "https://raw.githubusercontent.com/longwosion/geojson-map-china/master/";
+  /* 原有两个 GitHub 系回退源（jsdelivr/gh 与 raw.githubusercontent）已按要求移除，
+     地图数据现仅走阿里云 DATAV 主源；若该源不可用，边界将加载失败。 */
 
   async function tryFetch(urls) {
     for (const u of urls) {
@@ -544,7 +544,7 @@
   const DIRECT = ["北京","天津","上海","重庆","台湾","香港","澳门"];
 
   async function loadBase() {
-    const data = await tryFetch([DATAV + "100000_full.json", GH1 + "china.json", GH2 + "china.json"]);
+    const data = await tryFetch([DATAV + "100000_full.json"]);
     if (!data || !data.features) throw new Error("base failed");
     provFeatures = data.features.filter(f => f.properties && f.properties.name);
   }
@@ -553,9 +553,7 @@
     let done = 0, realLoaded = 0;
     await Promise.all(PROVS.map(async ([adcode, code2, name]) => {
       const data = await tryFetch([
-        `${DATAV}${adcode}_full.json`,
-        `${GH1}geometryProvince/${code2}.json`,
-        `${GH2}geometryProvince/${code2}.json`
+        `${DATAV}${adcode}_full.json`
       ]);
       if (data && data.features && data.features.length) {
         realLoaded++;
