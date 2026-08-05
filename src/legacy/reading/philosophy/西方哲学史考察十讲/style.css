@@ -1,7 +1,7 @@
 .lp{
   --parchment:var(--paper); --paper:#faf5ea; 
   --terra:#a73e2c; --gold:#b8893a; --gold-dk:#8a6420;
-  --aegean:#1d4e5f; --wine:#7e2a38; --teal:#3f7e6b; --teal-dk:#2e6455;
+  --aegean:#1d4e5f; --wine:#7e2a38; --teal:#3f7e6b; --teal-dk:#2e6455; --indigo:#4f4578; --indigo-dk:#3e3660;
   --muted:#6f6452; --faint:#8a7a5e; --ghost:#a89878; --body2:#463d30; --body3:#5d5346;
 }.lp *{margin:0;padding:0;box-sizing:border-box}.lp{scroll-behavior:smooth}.lp{background:var(--parchment);color:var(--ink);
   font-family:'Songti SC','STSong','Noto Serif SC','Source Han Serif SC','SimSun',serif;
@@ -50,3 +50,7 @@
   font-size:17px;cursor:pointer;box-shadow:0 4px 14px rgba(28,25,22,.28);z-index:60;border:none}.lp .btt.show{display:flex}@media(min-width:700px){.lp .hero-title{font-size:36px}.lp .lhead-title{font-size:33px}.lp .vs-pair{grid-template-columns:1fr 1fr}.lp .wrap{padding-top:34px}
 }@media(max-width:420px){.lp .tnav{gap:10px;font-size:12px}.lp .brand{font-size:14px}
 }
+
+
+/* 第六讲 · 德国古典哲学配色 */
+.lp .ac-indigo{color:var(--indigo-dk)}.lp .ac-bg-indigo{background:var(--indigo)}.lp .bd-indigo{border-left-color:var(--indigo)}.lp .bg-indigo{background:var(--indigo)}.lp .dt-indigo{background:var(--indigo)}.lp .fb-indigo{background:var(--indigo)}.lp .sd-indigo{background:var(--indigo)}.lp .sp-indigo{background:var(--indigo)}.lp .sr-indigo{color:var(--indigo-dk)}.lp .lec-card.ac-indigo{border-left-color:var(--indigo)}
