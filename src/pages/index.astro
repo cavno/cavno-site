@@ -14,7 +14,8 @@ for (const s of nav.sections) counts[s.slug] = items.filter((i) => i.data.sectio
 const ym = (d?: Date) =>
   d ? `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}` : '——';
 const latest = ym(items[0]?.data.date);
-const recent = items.slice(0, 6);
+// 首页不展示 Working 条目：其标题本身即含工作信息（板块内容另受口令门保护）
+const recent = items.filter((i) => i.data.section !== 'working').slice(0, 6);
 
 const tagFor = (sectionSlug: string, subSlug: string) => {
   const s = nav.sections.find((x) => x.slug === sectionSlug);

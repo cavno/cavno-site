@@ -104,3 +104,19 @@ GitHub Pages 不支持服务端 301。把 `scripts/redirect-template.html` 复�
 ## 附：npm 镜像问题
 
 若 `npm install` 在 `registry.npmmirror.com` 上遇到个别包 404（镜像同步滞后），任选其一：浏览器打开 `https://npmmirror.com/sync/<包名>` 触发同步后重试；或本次直连官方源 `npm install --registry=https://registry.npmjs.org`。云端 Cloudflare 构建直连官方源，不受影响。
+
+## 6. Working 板块的访问控制
+
+采用 **Cloudflare Access（Zero Trust）**：鉴权在 Cloudflare 边缘完成，未通过验证时
+`/working/**` 的页面 HTML 根本不会下发。**仓库内不含任何口令或密钥**，防护完全由
+Cloudflare 后台配置承载。
+
+- 配置步骤见 **[docs/ACCESS-SETUP.md](docs/ACCESS-SETUP.md)**（含验证清单与排错表）。
+- 关键点：Access 应用的 Path 填 `working`（**不要填 `working/*`**，后者不覆盖 `/working` 本身）。
+- 站点侧配套两处：
+  - `functions/_middleware.js` —— 把 `*.pages.dev` 等非规范主机 308 跳回 `cavno.org`。
+    Access 只能绑在你自有域名上，管不到 Pages 自带的 `pages.dev`，不堵会形成绕过口。
+  - `/working/**` 页面输出 `noindex, nofollow`；首页「最近更新」不列出 Working 条目
+    （标题本身即含工作信息）。
+
+> ⚠️ 防护不在代码里：若迁离 Cloudflare 或误删 Access 应用，`/working/` 会立刻恢复公开。

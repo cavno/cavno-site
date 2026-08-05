@@ -17,6 +17,10 @@ const _p = Astro.url.pathname;
 const norm = _p.endsWith('/') ? _p : _p + '/';
 const isSec = (slug: string) => norm.startsWith(`/${slug}/`);
 const isSub = (slug: string, sub: string) => norm.startsWith(`/${slug}/${sub}/`);
+
+/* Working 板块由 Cloudflare Access（Zero Trust）在边缘鉴权，仓库内不含任何口令。
+   此处仅额外声明不被搜索引擎收录，作为纵深防御（见 docs/ACCESS-SETUP.md）。 */
+const restricted = norm.startsWith('/working/');
 ---
 <!DOCTYPE html>
 <html lang="zh-CN">
@@ -33,6 +37,7 @@ const isSub = (slug: string, sub: string) => norm.startsWith(`/${slug}/${sub}/`)
   <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@500;600;700&display=swap"
         rel="stylesheet" media="print" onload="this.media='all';this.onload=null" />
   <noscript><link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@500;600;700&display=swap" rel="stylesheet" /></noscript>
+  {restricted && <meta name="robots" content="noindex, nofollow" />}
 </head>
 <body>
 
@@ -95,7 +100,6 @@ const isSub = (slug: string, sub: string) => norm.startsWith(`/${slug}/${sub}/`)
 <main id="cvMain">
   <slot />
 </main>
-
 <footer class="cv-site-foot">
   <div class="cv-foot-in">
     <div class="cv-foot-grid">

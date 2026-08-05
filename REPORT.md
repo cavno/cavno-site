@@ -103,3 +103,17 @@
 - 症状：首页/栏目页正常，进入旧页（如 /life/driving/新手/）后二级下拉菜单下半部被页面内容盖住。
 - 病因：增量五为让旧页自带吸顶元素恢复原版效果，把顶栏改为 `position:static`——但 static 元素不参与层叠，`z-index:60` 随之失效；而 `.cv-panel` 自身无 z-index，只能按 DOM 顺序绘制，于是排在其后的旧页定位元素（新手页 hero 等）一律盖住下拉面板。首页/栏目页非旧页，顶栏仍为 sticky+z-index，故不受影响。
 - 修复：`static` → `position:relative`，同样留在文档流（滚动即离场，不遮挡旧页吸顶元素，增量五成果保留），但恢复层叠参与资格。层级按需抬升：常态 z-index:60，仅 `:hover`/`:focus-within` 时抬到 10000（高于旧页语料最高值 9999，保证下拉永远在最上层）；不交互时让位给旧页自带的顶部固定条（全站 9 页：动态对冲、报单、两个广告图谱、房产工具等），两边各得其所。
+
+## 2026-08-05 · Working 板块访问控制（双层）
+- 第一层「浏览器口令门」（默认启用）：/working/** 进入前需输入六位口令，解锁态存 localStorage 30 天；受限页加 noindex/nofollow；首页「最近更新」排除 working 条目（标题本身即含工作信息）。仓库内只存盐 + SHA-256 哈希，明文口令由 `node scripts/set-gate.mjs <六位>` 本地生成、永不入库（已验证产物中无明文）。六格输入、自动跳格、支持粘贴、错误抖动、Backspace 回退。
+- 诚实标注：**该层是遮挡不是加密**。静态站无服务端，页面 HTML 仍由公网原样下发，直接访问 URL/看源码/抓包即可绕过；六位数字仅 10^6 组合，拿到哈希后离线可瞬间穷举。UI 底部与 README 均明示此限制，避免虚假安全感。
+- 第二层「Cloudflare 边缘鉴权」（随仓库提供，需在后台配 Secret 后生效）：`functions/working/_middleware.js`，未通过校验时 HTML 根本不下发。HMAC-SHA256 签名 Cookie（HttpOnly + Secure + SameSite=Lax，作用域 /working/，30 天），定长比较防计时侧信道，登录页自带样式与 no-store。未设置 `WORKING_CODE` 时直接放行，可先部署后开启。令牌逻辑经 Node 单测：有效通过 / 过期拒绝 / 伪造签名拒绝 / 换密钥拒绝 / 定长比较，全绿。
+- 更高强度建议：Cloudflare Access（Zero Trust，免费 50 人）——邮箱一次性验证码或企业身份源，带权限与审计，强于任何共享口令。
+- 顺带修复：门禁抖动动画类 `.shake` 与《认知操作系统》旧页撞名，已改 `.cv-shake`（命名审计抓出）。
+
+## 2026-08-06 · 访问控制改为 Cloudflare Access（弃用共享口令）
+- 按用户决定，**完全拆除**前端六位口令门与 Pages Function 口令中间件：删除 `src/config/access.json`、`scripts/set-gate.mjs`、`functions/working/_middleware.js`，Base.astro 与 global.css 中门禁标记/样式/脚本清零（仓库内不再含任何口令或哈希）。
+- 保留的纵深防御：`/working/**` 输出 `noindex, nofollow`；首页「最近更新」排除 working 条目。
+- 新增 `functions/_middleware.js` 规范主机名守卫：把 `*.pages.dev` 等非规范主机 308 跳回 cavno.org。**这是 Access 方案的必要补丁**——Access 应用只能绑在自有域名上，Pages 自带的 `pages.dev` 不在账户区域内、Access 规则管不到，不堵即成绕过口（官方无一键关闭开关，文档建议的替代是 Bulk Redirect）。
+- 新增 `docs/ACCESS-SETUP.md` 保姆级攻略：先决条件自查 → 开通 Zero Trust → 手动添加 One-time PIN（新组织不再自动带）→ 创建 Self-hosted 应用 → Allow 策略绑邮箱 → 六条验证清单 → 日常维护 → 边界声明 → 排错对照表。
+- 关键技术要点（据 Cloudflare 官方文档核实）：应用 Path 必须填 `working` 而非 `working/*`——后者只覆盖子路径、不覆盖 `/working` 本身；填 `working` 时子路径经策略继承一并受保护。文档同时给出"若深层页未被拦"的补救（增建 `working/*` 应用）。

@@ -1,0 +1,6 @@
+{
+  "note": "仓库内仅存盐与哈希；明文口令不入库。前端口令门为遮挡级防护，真正防护见 functions/working/_middleware.js",
+  "salt": "2a7c2b101cd68c681e3be61c65f8451b",
+  "hash": "b55c19de7d419de085fa86f17435d9ea4ca3d4a93fa991cfc993b2d495d178a1",
+  "days": 30
+}
