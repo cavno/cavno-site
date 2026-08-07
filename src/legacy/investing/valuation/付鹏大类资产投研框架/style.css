@@ -157,3 +157,48 @@
   .lp .bk-shell{display:block}
   .lp .bk-toc{display:none}
 }
+
+/* ---------- 原创示意图 ---------- */
+.lp .fig{margin:24px 0;background:var(--paper);border:1px solid var(--rule);border-radius:14px;
+  padding:20px 18px 14px;overflow:hidden}
+.lp .fig svg{display:block;width:100%;height:auto}
+.lp .fig figcaption{margin-top:14px;padding-top:12px;border-top:1px dashed var(--rule);
+  font-size:.8rem;line-height:1.85;color:var(--muted)}
+/* SVG 内文字：统一字族与层级 */
+.lp .fig svg text{font-family:var(--sans);fill:var(--ink)}
+.lp .fig svg .ax{font-size:12px;fill:var(--muted)}
+.lp .fig svg .seg{font-size:13px;font-weight:600;fill:var(--ink-soft)}
+.lp .fig svg .lbl{font-size:14px;font-weight:700}
+.lp .fig svg .sm{font-size:11.5px;fill:var(--muted)}
+.lp .fig svg .sm2{font-size:12px;fill:var(--ink-soft)}
+.lp .fig svg .sm3{font-size:12.5px;fill:var(--ink-soft)}
+.lp .fig svg .gr{fill:var(--teal-dk)}
+.lp .fig svg .rd{fill:var(--terra)}
+.lp .fig svg .bl{fill:var(--aegean)}
+.lp .fig svg .node{font-size:16px;font-weight:700}
+.lp .fig svg .dbt{font-size:12.5px;font-weight:700;fill:var(--terra)}
+.lp .fig svg .risk{font-size:12px;fill:var(--aegean)}
+.lp .fig svg .edge{font-size:11.5px;fill:var(--gold-dk)}
+.lp .fig svg .hdr{font-size:13px;font-weight:600;fill:#f3ebda}
+.lp .fig svg .foot{font-size:12.5px;fill:var(--ink-soft)}
+.lp .fig svg .rn{font-size:12px;font-weight:700;fill:#f3ebda;font-family:var(--mono)}
+.lp .fig svg .rt{font-size:12px;fill:var(--ink-soft)}
+.lp .fig svg .ctr{font-size:20px;font-weight:700;letter-spacing:.14em;fill:var(--ink)}
+.lp .fig svg .ctrs{font-size:11.5px;fill:var(--muted)}
+.lp .fig svg .cn{font-size:19px;font-weight:700;fill:#f3ebda}
+.lp .fig svg .cn2{font-size:20px;font-weight:700;fill:#f3ebda;letter-spacing:.1em}
+.lp .fig svg .cn3{font-size:17px;font-weight:700;fill:#f3ebda}
+.lp .fig svg .cns{font-size:11.5px;fill:rgba(243,235,218,.72)}
+.lp .fig svg .cns2{font-size:12px;fill:var(--muted)}
+.lp .fig svg .cap{font-family:var(--mono);font-size:12px;letter-spacing:.3em;fill:var(--terra)}
+.lp .fig svg .cap2{font-size:13.5px;font-weight:700;fill:var(--terra)}
+.lp .fig svg .cap3{font-size:12px;fill:var(--muted)}
+.lp .fig svg .rr{font-size:15px;font-weight:700}
+.lp .fig svg .vt{font-size:13px;font-weight:700}
+.lp .fig svg .vd{font-size:13px;font-weight:600}
+.lp .fig svg .vs{font-size:11.5px;fill:var(--muted)}
+.lp .fig svg .op{font-size:24px;font-weight:700;fill:var(--gold)}
+@media (max-width:600px){
+  .lp .fig{padding:14px 10px 10px}
+  .lp .fig svg .rt,.lp .fig svg .sm{font-size:13px}
+}
