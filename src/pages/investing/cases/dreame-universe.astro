@@ -1,0 +1,18 @@
+---
+import Base from '../../../layouts/Base.astro';
+import body from '../../../legacy/investing/cases/dreame-universe/body.html?raw';
+import '../../../legacy/investing/cases/dreame-universe/style.css';
+const meta = { title: '追觅宇宙：俞浩控制的 955 家公司', description: '追觅从清洁电器扩张到造车、机器人、卫星、产业基金与上市平台的生态网络研究。' };
+---
+<Base title={`${meta.title} · Cavno`} description={meta.description}>
+  <section class="cv-page-head du-page-head"><div class="cv-wrap">
+    <div class="cv-eyebrow">Investing · Cases</div>
+    <h1 class="cv-page-title">追觅宇宙：俞浩控制的 955 家公司</h1>
+    <p class="cv-lede">从清洁电器到造车、机器人、卫星、产业基金与上市平台，拆解八年扩张形成的追觅生态网络。</p>
+    <a class="cv-crumb-back" href="/investing/cases/">← 返回案例研究</a>
+  </div></section>
+  <article class="lp du-article"><Fragment set:html={body} /></article>
+  <script is:inline src="https://cdn.jsdelivr.net/npm/echarts@5.5.0/dist/echarts.min.js"></script>
+  <script>import '../../../legacy/investing/cases/dreame-universe/script.js';</script>
+</Base>
+

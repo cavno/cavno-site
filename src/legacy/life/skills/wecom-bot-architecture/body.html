@@ -1,0 +1,361 @@
+<header class="hero">
+  <div class="wrap">
+    <div class="hero-meta">
+      <span class="chip">运行 <b>53 天</b></span>
+      <span class="chip">消息留档 <b>17,488</b> 条</span>
+      <span class="chip">智能体处理 <b>12,846</b> 条</span>
+      <span class="chip">好友自动通过 <b>265</b> 人</span>
+      <span class="chip link"><a href="/life/skills/private-domain-dashboard/">运营数据看板 →</a></span>
+    </div>
+  </div>
+</header>
+
+<main class="wrap">
+
+  <!-- 01 总览 -->
+  <section id="overview">
+    <div class="sec-eyebrow">01 · Overview</div>
+    <h2>全景：一条回调流水线，加一排定时任务</h2>
+    <p class="sec-lede">核心思路一句话：<b>企微的每一条消息都会以 HTTPS 回调的形式打到我的服务器</b>，
+      一个常驻进程负责收下、留档、分发；智能问答、日报、加好友都是这条流水线上的分支。</p>
+    <div class="arch">
+      <div class="arch-layer">
+        <div class="arch-tag">消息源</div>
+        <div class="arch-body dim">
+          <span class="node">企微群聊<small>多个业务群</small></span>
+          <span class="flow-x">+</span>
+          <span class="node">私聊 1v1<small>客户咨询</small></span>
+          <span class="flow-x">+</span>
+          <span class="node">好友申请<small>事件回调</small></span>
+        </div>
+      </div>
+      <div class="arch-down"><span>│ 第三方协议托管平台把企微消息转成 HTTPS 回调 ↓</span></div>
+      <div class="arch-layer">
+        <div class="arch-tag">入口层</div>
+        <div class="arch-body">
+          <span class="node">TLS 接入<small>Caddy · 自动证书</small></span>
+          <span class="flow-x">→</span>
+          <span class="node hot">receiver 常驻进程<small>鉴权校验 · 白名单</small></span>
+          <span class="flow-x">→</span>
+          <span class="node">全量留档 callbacks.log<small>唯一的原始数据资产</small></span>
+        </div>
+      </div>
+      <div class="arch-down"><span>│ 回 200 之后起线程异步处理，绝不阻塞回调 ↓</span></div>
+      <div class="arch-layer">
+        <div class="arch-tag">编排层</div>
+        <div class="arch-body">
+          <span class="node hot">分诊 + 上下文解析<small>Claude Sonnet · 一次调用出全部判定</small></span>
+          <span class="flow-x">→</span>
+          <span class="node">本地知识库检索<small>本人原话 + 博客蒸馏</small></span>
+          <span class="flow-x">→</span>
+          <span class="node">联网补时效<small>Perplexity Sonar</small></span>
+          <span class="flow-x">→</span>
+          <span class="node hot">作答<small>Claude Opus · 本人口语腔</small></span>
+        </div>
+      </div>
+      <div class="arch-down"><span>│ 企微发送 API：@提问人 + 微信原生引用，分条发送 ↓</span></div>
+      <div class="arch-layer">
+        <div class="arch-tag">旁路</div>
+        <div class="arch-body dim">
+          <span class="node">群日报<small>每天 05:00 · HTML 长图</small></span>
+          <span class="node">知识库增量<small>每天 05:30</small></span>
+          <span class="node">链路健康探测<small>每 5 分钟</small></span>
+          <span class="node">克隆音保活<small>每天 04:30</small></span>
+        </div>
+        <div class="arch-note">旁路全部是 systemd timer 拉起的一次性脚本，和常驻进程共享同一份留档与状态文件。
+          问答不经过 Claude Code——是进程内直接调 LLM API，这样单条延迟稳定在秒级。</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 02 设计原则 -->
+  <section id="principles">
+    <div class="sec-eyebrow">02 · Principles</div>
+    <h2>先立规矩，再写代码</h2>
+    <p class="sec-lede">这套系统迭代了两个多月，功能一直在加，但底下这五条从第一天定下后没变过——
+      它们比任何一段代码都值得抄。</p>
+    <div class="cards">
+      <div class="card"><span class="no">P1</span><h3>纯标准库，零框架</h3>
+        <p>整个系统是 Python 标准库 + SQLite，<b>没有 Web 框架、没有消息队列、没有构建步骤</b>。
+          一台最小配置的云主机就能跑。规模没到之前，每引入一个依赖都是在给未来的自己埋运维债。</p></div>
+      <div class="card"><span class="no">P2</span><h3>先留档，再谈功能</h3>
+        <p>每条回调先原样落盘再处理。这份日志后来长出了<b>上下文理解、群日报、运营看板、知识库</b>四个功能——
+          当时一个都没想到。原始数据是资产，功能是利息。</p></div>
+      <div class="card"><span class="no">P3</span><h3>该松则松，该紧则紧</h3>
+        <p>功能性环节全部 <b>fail-open</b>：知识库挂了、联网挂了，问答降级照常跑。
+          涉及敏感话题、对外承诺的环节全部 <b>fail-close</b>：判定字段缺失就当命中，宁可不说。</p></div>
+      <div class="card"><span class="no">P4</span><h3>状态即文件</h3>
+        <p>去重库、对话线程、日报水位，全是 SQLite 单文件和水位小文件。<b>迁移服务器＝把文件拷走</b>。
+          换来的代价是这些文件必须当资产管——丢了就会重复发日报、重复加好友。</p></div>
+      <div class="card"><span class="no">P5</span><h3>人机边界画清楚</h3>
+        <p>本人手动回复某个客户后，机器人对<b>这个客户</b>自动闭嘴一段时间（滑动窗口）；
+          知识库里涉及报价、服务承诺的条目默认不放行——<b>机器人可以答题，不可以替我许诺</b>。</p></div>
+      <div class="card"><span class="no">P6</span><h3>监控独立于被监控者</h3>
+        <p>LLM 链路每 5 分钟被探测一次，连续失败就<b>私聊我本人告警</b>——告警消息走企微通道，
+          不经过被监控的 LLM 链路。用会坏的东西报告它自己坏了，等于没有监控。</p></div>
+    </div>
+  </section>
+
+  <!-- 03 问答闸门链 -->
+  <section id="pipeline">
+    <div class="sec-eyebrow">03 · The Pipeline</div>
+    <h2>群问答的闸门链：大部分消息的正确处理是「闭嘴」</h2>
+    <p class="sec-lede">群里 90% 的消息不该机器人接话。所以问答链路的主体不是「怎么答」，
+      而是一串<b>决定不答</b>的闸门——消息要连过七道闸，才轮得到生成答案。</p>
+    <div class="pipe-scroll"><div class="pipe">
+      <div class="gate"><span class="g-no">G1</span><div class="g-t">去重 / 方向</div><div class="g-d">消息 ID 落库去重；自己发的消息直接跳过，防自环</div></div>
+      <div class="gate llm"><span class="g-no">G2</span><div class="g-t">分诊 + 解析</div><div class="g-d">一次 LLM 调用同时判定：是不是问题、是否追问、补全代词、剪出相关上下文</div></div>
+      <div class="gate block"><span class="g-no">G3</span><div class="g-t">主题闸</div><div class="g-d">只答 AI / 技术主题；生活闲聊静默（@ 与私聊豁免）</div></div>
+      <div class="gate block"><span class="g-no">G4</span><div class="g-t">敏感闸</div><div class="g-d">敏感话题固定话术婉拒，不让模型现编——现编本身就会泄信息</div></div>
+      <div class="gate"><span class="g-no">G5</span><div class="g-t">知识库注入</div><div class="g-d">检索「我自己说过的话」带日期注入，权威口径优先</div></div>
+      <div class="gate"><span class="g-no">G6</span><div class="g-t">联网补时效</div><div class="g-d">模型知识过期的部分交给搜索，冲突以联网为准</div></div>
+      <div class="gate llm"><span class="g-no">G7</span><div class="g-t">作答 + 分条</div><div class="g-d">按本人真实发言校准的口语腔，拆成 ≤3 条短气泡，@ 提问人 + 原生引用</div></div>
+    </div></div>
+    <p class="pipe-cap">橙色＝拦截型闸门（fail-close），蓝色＝LLM 调用。G2 与 G7 之间的所有判定共享 G2 那一次调用的输出，全链路只有两次大模型调用。</p>
+
+    <div class="decisions">
+      <div class="card"><span class="no">关键决策 · 语气</span><h3>像我，而不是像客服</h3>
+        <p>回答的说话风格不是拍脑袋写 prompt，是拿<b>我本人在群里的真实发言</b>校准出来的：
+          逗号多、句号少、允许口头语。改风格后必须跑<b>固定用例的实测探针</b>——
+          读 prompt 觉得没问题和真的没问题，是两回事。</p></div>
+      <div class="card"><span class="no">关键决策 · 追问</span><h3>机器人听不见自己</h3>
+        <p>回调平台不回显机器人经 API 发出的消息，于是「你是 Win 还是 Mac？」——「我是win」这种接话，
+          分诊器根本不知道在回什么。解法是<b>把机器人的上一条答案存下来，喂回给分诊器</b>，
+          再配上限次数的对话窗口，聊得起来也收得住。</p></div>
+      <div class="card"><span class="no">关键决策 · 防雷同</span><h3>同一个人，别复读</h3>
+        <p>同人短时间连续提问时，把机器人最近几条旧回答喂回去，明确要求「换角度、更深入、别复读」。
+          防复读不靠温度参数，靠<b>让模型看见自己说过什么</b>。</p></div>
+    </div>
+  </section>
+
+  <!-- 04 模块 -->
+  <section id="modules">
+    <div class="sec-eyebrow">04 · Modules</div>
+    <h2>六个模块，共用一条数据底座</h2>
+    <p class="sec-lede">每个模块都是独立脚本，靠同一份留档日志和几个 SQLite 文件协作——没有模块间调用，坏一个不连坐。</p>
+    <div class="mods">
+      <div class="mod"><div class="m-h"><h3>群日报</h3><span class="m-when">每天 05:00</span></div>
+        <p>取近 24 小时群消息，LLM 归纳出话题、金句、求助与回应，渲染成<b>HTML 长图</b>发回各群。
+          水位文件记住上次截止点，服务重启不会重发。</p></div>
+      <div class="mod"><div class="m-h"><h3>好友自动通过</h3><span class="m-when">事件触发</span></div>
+        <p>好友申请事件 → 自动通过 → <b>自动邀请进群 → 发欢迎语</b>，一气呵成。
+          去重库保证一个人只处理一次，失败会解除标记允许重试。</p></div>
+      <div class="mod"><div class="m-h"><h3>本地知识库</h3><span class="m-when">每天 05:30 增量</span></div>
+        <p>两个来源：我在企微<b>手敲的回复</b>（LLM 蒸馏成问答对）和<b>博客文章</b>（每篇提炼要点、带期号与链接）。
+          答题前检索注入，机器人先说「我的口径」，答不到再谈通识。</p></div>
+      <div class="mod"><div class="m-h"><h3>能力画像问卷</h3><span class="m-when">独立服务</span></div>
+        <p>群友能力问卷，微信扫码/一键登录，答完生成能力徽章。
+          反注水靠「多轴证据 ≥2 根支撑」——单轴吹得再高也折价。</p></div>
+      <div class="mod"><div class="m-h"><h3>链路健康监控</h3><span class="m-when">每 5 分钟</span></div>
+        <p>定时探测 LLM 链路，<b>连续 3 次失败</b>才告警（防抖动误报），恢复后再报一次平安。
+          告警通道与被监控链路完全独立。</p></div>
+      <div class="mod"><div class="m-h"><h3>彩虹屁语音</h3><span class="m-when">关键词触发</span></div>
+        <p>群里说「夸夸」，LLM 根据那个人的近期发言写一段针对性夸赞，用<b>我的克隆音</b>合成语音发进群。
+          纯属好玩，但它是群里传播度最高的功能。</p></div>
+    </div>
+  </section>
+
+  <!-- 05 经验 -->
+  <section id="lessons">
+    <div class="sec-eyebrow">05 · Lessons</div>
+    <h2>踩过的坑，比架构图值钱</h2>
+    <p class="sec-lede">下面这些结论每一条都对应一次真实故障或一次返工。如果你只带走一部分内容，带走这段。</p>
+    <div class="lessons">
+      <div class="lesson"><div>
+        <h3>别把判定押在平台的字段格式上</h3>
+        <p>回调平台改过一次消息类型的编码方式，凡是按 <span class="mono-inline">msgType</span> 精确值判断「这条是不是我本人发的」的逻辑当场全崩。
+          后来一律改成<b>恒等式判定</b>：发送者 ID 等于账号主 ID 就是本人。字段格式是别人的，恒等关系才是你的。</p>
+      </div></div>
+      <div class="lesson"><div>
+        <h3>让 LLM 输出中文长文时，别用 JSON</h3>
+        <p>结构化输出里一旦含中文长正文（引号密集），模型抄写时不转义，JSON 解析大面积失败——实测三篇坏两篇。
+          改成<b>逐行键值的行格式</b>后零失败，还有个额外好处：输出被截断时前面的字段照样能用，JSON 则整条作废。</p>
+      </div></div>
+      <div class="lesson"><div>
+        <h3>知识的时效性没法在入库时解决</h3>
+        <p>「当时没问题」的回答不能当「现在没问题」讲。正解是<b>每条知识带日期入库</b>，
+          分成长期有效 / 时点信息 / 易变信息三档，检索注入时把日期一起给模型、让它自己把时间差说清楚——
+          「这是我上个月验证过的情况，建议以最新实测为准」。</p>
+      </div></div>
+      <div class="lesson"><div>
+        <h3>「敏感」不只是泄密，还有替你许诺</h3>
+        <p>知识库敏感清单第一版只盯着报价、渠道这类「泄露信息」，漏了一整类：
+          <b>机器人替我做出的服务承诺</b>。它说出口，兑现压力都在我身上。
+          这类条目默认不放行，放行必须人工逐条来。</p>
+      </div></div>
+      <div class="lesson"><div>
+        <h3>改判定类 prompt，必须跑对照组</h3>
+        <p>LLM 判定本身有噪声：同一版 prompt 跑两遍，边缘字段也会有出入。
+          不先测<b>自一致性基线</b>就对比新旧版本，会把模型噪声当成你改出来的回归——或者反过来，把回归当噪声放过去。</p>
+      </div></div>
+      <div class="lesson"><div>
+        <h3>验证从用户视角发起，别信中间状态</h3>
+        <p>「服务日志说发送成功」和「群里真的收到了」之间隔着好几层。每个功能上线的最后一步都是
+          <b>真实端到端</b>：真群发一条、真手机看一眼。同理，「配置看着对」不等于「运行时在用这份配置」——
+          验证要在真实运行时做。</p>
+      </div></div>
+      <div class="lesson"><div>
+        <h3>凡是「花钱或有副作用」的调用，失败了不许盲目重试</h3>
+        <p>发消息、加好友、买资源这类操作，「结果未知」时重试可能造成重复动作。
+          先查副作用有没有发生（按 ID 做差集），确认没发生再重试。<b>幂等性不是库给你的，是你设计出来的。</b></p>
+      </div></div>
+    </div>
+  </section>
+
+  <!-- 06 技术栈 -->
+  <section id="stack">
+    <div class="sec-eyebrow">06 · Stack</div>
+    <h2>用了什么，各自管什么</h2>
+    <div class="stack">
+      <div class="stk"><div class="s-k">运行时</div><div class="s-v">Python 标准库</div>
+        <div class="s-d">无框架无依赖（仅语音链路引入 ffmpeg / pilk）</div></div>
+      <div class="stk"><div class="s-k">数据</div><div class="s-v">SQLite + 追加日志</div>
+        <div class="s-d">去重 / 线程 / 知识库各一个单文件库</div></div>
+      <div class="stk"><div class="s-k">调度</div><div class="s-v">systemd service + timer</div>
+        <div class="s-d">常驻 2 个服务，定时 4 个 timer，独立系统用户运行</div></div>
+      <div class="stk"><div class="s-k">入口</div><div class="s-v">Caddy</div>
+        <div class="s-d">TLS 自动证书，请求只进本机回环端口</div></div>
+      <div class="stk"><div class="s-k">企微接入</div><div class="s-v">第三方托管接口</div>
+        <div class="s-d">负责收消息回调、调发送接口，个人主体可接入</div></div>
+      <div class="stk"><div class="s-k">分诊 / 解析</div><div class="s-v">Claude Sonnet</div>
+        <div class="s-d">一次调用输出全部判定字段，省钱且一致</div></div>
+      <div class="stk"><div class="s-k">作答</div><div class="s-v">Claude Opus</div>
+        <div class="s-d">口径与语气的主力，值得用最好的模型</div></div>
+      <div class="stk"><div class="s-k">视觉 / 联网</div><div class="s-v">Gemini Flash · Sonar</div>
+        <div class="s-d">群图转文字描述；时效性问题联网检索</div></div>
+    </div>
+  </section>
+
+  <!-- 07 服务器运行形态 -->
+  <section id="runtime">
+    <div class="sec-eyebrow">07 · Runtime</div>
+    <h2>服务器怎么配：一台小主机，跑成系统服务</h2>
+    <p class="sec-lede">没有集群、没有容器编排。一台最小规格的云主机就够（2 核 2G，<b>不需要 GPU</b>——模型全在云端 API），
+      每个模块跑成 systemd 服务。这一层越「无聊」，系统越稳。</p>
+    <div class="cards">
+      <div class="card"><span class="no">R1</span><h3>独立低权限用户</h3>
+        <p>服务跑在专用系统用户下，<b>不用 root</b>，也不和机器上其他业务共用身份。
+          文件权限跟着收紧：密钥文件只有属主可读，数据文件组外不可见。</p></div>
+      <div class="card"><span class="no">R2</span><h3>密钥只活在一个文件里</h3>
+        <p>所有密钥集中在一份 <span class="mono-inline">.env</span>（chmod 600），代码零硬编码，仓库里只有留空的 example。
+          踩过的坑：<b>「谁来读这份文件」比文件本身更重要</b>——每个 unit 都要显式声明 EnvironmentFile，
+          少一个就会静默落回代码默认值。</p></div>
+      <div class="card"><span class="no">R3</span><h3>三道安全底线</h3>
+        <p>回调入口校验鉴权头，陌生请求一律 200 空应答不暴露信息；<b>发送动作有白名单兜底</b>——
+          就算上层逻辑写错，消息也发不到不该发的人；服务只监听本机回环，对外只有 443。</p></div>
+    </div>
+    <pre><i># /etc/systemd/system/bot.service —— 常驻服务的骨架，timer 同理</i>
+[Unit]
+Description=bot receiver
+After=network-online.target
+
+[Service]
+<b>User=botuser</b>                          <i># 独立低权限用户，不用 root</i>
+WorkingDirectory=/opt/bot/app
+<b>EnvironmentFile=/opt/bot/app/.env</b>     <i># 密钥只在这份文件里，chmod 600</i>
+ExecStart=/opt/bot/venv/bin/python receiver.py
+Restart=always
+
+[Install]
+WantedBy=multi-user.target
+
+<i># 定时模块各配一个 .timer：OnCalendar=*-*-* 05:00 + Persistent=true（停机错过自动补跑）</i></pre>
+    <p class="pipe-cap">另一件比配置更重要的事：去重库、对话线程、日报水位这些<b>状态文件是资产</b>——
+      迁移服务器时和 .env 一起带走；丢了它们，机器人会重复发日报、重复加好友。定期备份。</p>
+  </section>
+
+  <!-- 08 知识库 -->
+  <section id="kb">
+    <div class="sec-eyebrow">08 · Knowledge Base</div>
+    <h2>知识库怎么搭：让机器人先说「我的口径」</h2>
+    <p class="sec-lede">通用大模型答得了通识，答不了「你怎么看」。知识库解决的就是这件事——把我说过的话变成机器人的第一优先级。
+      <b>没有向量库、没有 embedding 服务</b>：几百条的量级，一张 SQLite 表加关键词打分就够了。</p>
+    <div class="cards">
+      <div class="card"><span class="no">源 1</span><h3>我手敲的回复</h3>
+        <p>从留档日志重建会话，抽出「客户问 + 我答」的段落，LLM 逐段蒸馏成问答对——
+          寒暄、约时间、私事直接丢弃（丢弃率约六成，正常）。机器人经接口发的消息不会出现在留档里，
+          所以<b>「这条是我本人说的」这个判据天然干净</b>。</p></div>
+      <div class="card"><span class="no">源 2</span><h3>我的博客文章</h3>
+        <p>按站点地图逐篇抓正文，每篇蒸馏几条要点，<b>带期号和原文链接</b>入库。
+          机器人答题时能说出「我第 X 期专门讲过，链接在这」——回答本身就在引流。</p></div>
+    </div>
+    <pre><i>-- 一张表就是全部（SQLite，字段示意，按你的场景增删）</i>
+knowledge(
+  question   TEXT,     <i>-- 归一后的问法</i>
+  answer     TEXT,     <i>-- 以「我」的口径给出的答案</i>
+  keywords   TEXT,     <i>-- 检索用关键词</i>
+  <b>said_on    TEXT</b>,     <i>-- 这句话是什么时候说的：时效判断的根</i>
+  <b>temporal   TEXT</b>,     <i>-- evergreen / dated / volatile 三态</i>
+  <b>sensitive  INTEGER</b>,  <i>-- 默认 1＝不放行，人工审核后置 0</i>
+  source     TEXT      <i>-- reply 手敲回复 / blog 博客蒸馏</i>
+)</pre>
+    <div class="decisions">
+      <div class="card"><span class="no">检索</span><h3>打分，不做向量</h3>
+        <p>中文按 2-gram 重叠度对问法和关键词打分，取最相关的几条、低于阈值一条都不注入。
+          几百条量级上，向量库是过度工程——<b>先让检索跑起来，等库真的大了再升级</b>。</p></div>
+      <div class="card"><span class="no">注入</span><h3>日期跟着知识走</h3>
+        <p>每条带着日期进 prompt；时点信息和易变信息<b>一律注明「这是当时的状态」</b>，
+          让模型自己把时间差说清楚，而不是把旧口径当成现状讲。</p></div>
+      <div class="card"><span class="no">运维</span><h3>增量 + 人工把关</h3>
+        <p>每天一次定时增量（新回复 + 新文章）；敏感条目默认不放行，放行必须人工逐条审。
+          整条链 fail-open：<b>知识库挂了，问答降级照常跑</b>。</p></div>
+    </div>
+  </section>
+
+  <!-- 09 和你的 CC 一起搭 -->
+  <section id="build">
+    <div class="sec-eyebrow">09 · Build Your Own</div>
+    <h2>把这页丢给你的 Claude Code</h2>
+    <p class="sec-lede">这套系统就是我和 Claude Code 一起从零写出来的——你也可以。
+      但别让它照抄这页：我的取舍长在我的场景上。让它先问清你的场景，再设计你的版本。</p>
+    <div class="cc-box">
+      <h3>起手可以这样聊（按顺序）</h3>
+      <ol>
+        <li><b>定范围</b>：「我有 N 个群 / 主要是私聊咨询，我想让机器人做什么、绝对不做什么？」——先写下不做什么。</li>
+        <li><b>选接入</b>：「帮我调研个人可用的企微/微信消息回调方案，对比合规风险和稳定性。」</li>
+        <li><b>搭底座</b>：「先只做两件事：收回调全量落盘 + 一个能手动触发的回显。跑通再谈智能。」</li>
+        <li><b>加闸门</b>：「参考这页的闸门链（先判『该不该答』再谈『怎么答』），按我的群设计闸门顺序。」</li>
+        <li><b>立红线</b>：「哪些话题固定话术拒答？机器人能不能谈价格、做承诺？人工接管怎么触发？」</li>
+        <li><b>再谈锦上添花</b>：日报、知识库、语音，都是流水线跑稳之后的分支。</li>
+      </ol>
+    </div>
+    <div class="notice">这一页刻意省略了运维细节、凭据管理和完整配置——不是藏私，是这些东西
+      照抄必坏：它们和服务器环境、账号形态、业务边界强耦合。把「思路」拿走，让你的 CC 长出「实现」。</div>
+  </section>
+
+  <!-- 08 扩展阅读 -->
+  <section id="reading">
+    <div class="sec-eyebrow">10 · Further Reading</div>
+    <h2>扩展阅读</h2>
+    <div class="reads">
+      <div class="read"><a href="https://doc.qiweapi.com/" target="_blank" rel="noopener">企微协议接入 · 开发文档</a>
+        <span>我用的第三方托管平台：回调事件与发送接口的参考</span></div>
+      <div class="read"><a href="https://docs.claude.com/" target="_blank" rel="noopener">Claude API 文档</a>
+        <span>分诊与作答用的模型；Messages API 与提示词设计</span></div>
+      <div class="read"><a href="https://openrouter.ai/" target="_blank" rel="noopener">OpenRouter</a>
+        <span>多模型聚合网关：一个接口调 Claude / Gemini / Sonar</span></div>
+      <div class="read"><a href="https://docs.perplexity.ai/" target="_blank" rel="noopener">Perplexity Sonar</a>
+        <span>联网检索模型：给答案补时效的那一环</span></div>
+      <div class="read"><a href="https://www.freedesktop.org/software/systemd/man/latest/systemd.timer.html" target="_blank" rel="noopener">systemd.timer</a>
+        <span>定时任务不用 cron 用 timer：日志、依赖、防重叠都省心</span></div>
+      <div class="read"><a href="https://sqlite.org/" target="_blank" rel="noopener">SQLite</a>
+        <span>单文件数据库：这套系统全部状态的家</span></div>
+      <div class="read"><a href="https://caddyserver.com/" target="_blank" rel="noopener">Caddy</a>
+        <span>自动 HTTPS 的 Web 服务器，配置只有几行</span></div>
+      <div class="read"><a href="https://xntj.tv" target="_blank" rel="noopener">xntj.tv · 张拼拼的博客</a>
+        <span>73 期实战记录——知识库的第二个来源就是它</span></div>
+      <div class="read"><a href="/life/skills/private-domain-dashboard/">私域运营数据看板</a>
+        <span>这套系统跑出来的真实数据：消息、分层、线索与商机</span></div>
+    </div>
+  </section>
+
+</main>
+
+<footer>
+  <div class="wrap">
+    <p><b>关于这页</b> · 分享性质，非教程；架构与数据均为真实线上系统（截至 2026-08-04），
+      凭据、服务器信息与完整配置已刻意省略。文中「CC」指 Claude Code。
+      想聊这套系统，来博客 xntj.tv 找我，或让把这页发给你的人拉你进群。</p>
+  </div>
+</footer>
+

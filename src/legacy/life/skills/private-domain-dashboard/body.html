@@ -1,0 +1,152 @@
+<div class="wrap">
+  <header class="top">
+    <div class="top-meta">
+      <span class="pill"><span class="dot-live"></span>真实数据 · 截止 <span class="tnum" id="genday">—</span></span>
+      <span class="pill mono">运行 <b class="tnum" style="color:var(--ink)" id="spanDays">—</b> 天 · <span class="tnum" id="spanRange">—</span></span>
+      <span class="pill mono">对外分享版 · 昵称已脱敏</span>
+    </div>
+  </header>
+
+  <!-- KPI -->
+  <section id="kpi" style="margin-top:0">
+    <div class="grid kpis" id="kpiRow"></div>
+  </section>
+
+  <!-- 关键结论 -->
+  <section id="takeaway">
+    <div class="sec-head"><span class="n mono">00</span><h2>关键结论</h2>
+      <span class="hint">先看四句话，再看数据</span></div>
+    <div class="grid insights" id="insights"></div>
+  </section>
+
+  <!-- 活跃趋势 -->
+  <section id="trend">
+    <div class="sec-head"><span class="n mono">01</span><h2>活跃趋势</h2>
+      <span class="hint">每日消息量 · 月度节奏 · 时段分布 · 星期×时段热力</span></div>
+    <div class="grid" style="grid-template-columns:1fr">
+      <div class="card pad-lg">
+        <div class="card-t"><h3>每日消息量</h3><span class="sub" id="dailySub">—</span></div>
+        <svg class="chart" id="lineDay" viewBox="0 0 900 260" preserveAspectRatio="none" role="img" aria-label="每日消息量趋势"></svg>
+        <div class="legend"><span class="lg"><i class="ln" style="background:var(--accent)"></i>每日消息</span>
+          <span class="lg"><i class="ln" style="background:var(--s8)"></i>7 日均线</span></div>
+      </div>
+    </div>
+    <div class="grid two" style="margin-top:16px">
+      <div class="card pad-lg">
+        <div class="card-t"><h3>月度节奏</h3><span class="sub">日均消息 · 每月新好友</span></div>
+        <div class="rank" id="monthly"></div>
+        <div class="grid tworow" style="margin-top:14px">
+          <div class="callout"><span class="cl">日均消息增速</span><span class="big tnum" id="moGrowth">—</span><span class="cd" id="moGrowthD">—</span></div>
+          <div class="callout"><span class="cl">峰值单日</span><span class="big tnum" id="peakDay">—</span><span class="cd" id="peakDayD">—</span></div>
+        </div>
+      </div>
+      <div class="card pad-lg">
+        <div class="card-t"><h3>时段分布（0–23 时）</h3><span class="sub" id="hourSub">—</span></div>
+        <svg class="chart" id="barHour" viewBox="0 0 560 220" preserveAspectRatio="none" role="img" aria-label="24小时消息分布"></svg>
+      </div>
+    </div>
+    <div class="grid two" style="margin-top:16px">
+      <div class="card pad-lg">
+        <div class="card-t"><h3>星期 × 时段 热力图</h3><span class="sub">颜色越深＝该时段消息越密</span></div>
+        <div class="heat-wrap"><div class="heat" id="heat"></div></div>
+        <div class="legend" id="heatLeg"></div>
+      </div>
+      <div class="card pad-lg">
+        <div class="card-t"><h3>按星期活跃</h3><span class="sub" id="weekSub">—</span></div>
+        <svg class="chart" id="barWeek" viewBox="0 0 340 220" preserveAspectRatio="none" role="img" aria-label="按星期活跃"></svg>
+      </div>
+    </div>
+  </section>
+
+  <!-- 社群构成 -->
+  <section id="compose">
+    <div class="sec-head"><span class="n mono">02</span><h2>社群构成</h2>
+      <span class="hint">成员规模 · 参与率 · 潜水/活跃 · 头部集中度</span></div>
+    <div class="grid groups" id="groups"></div>
+  </section>
+
+  <!-- 用户分层 -->
+  <section id="segment">
+    <div class="sec-head"><span class="n mono">03</span><h2>用户分层与画像</h2>
+      <span class="hint">发言活跃度分层 · 二八法则 · 新增/流失 · 头部贡献者</span></div>
+    <div class="grid two">
+      <div class="card pad-lg">
+        <div class="card-t"><h3>活跃度分层</h3><span class="sub" id="tiersSub">—</span></div>
+        <div class="rank" id="tiers"></div>
+        <div class="grid tworow" style="margin-top:14px">
+          <div class="callout"><span class="cl">典型用户（中位）</span><span class="big tnum" id="median">—</span><span class="cd" id="medianD">—</span></div>
+          <div class="callout"><span class="cl">头部集中度</span><span class="big tnum" id="pareto">—</span><span class="cd" id="paretoD">—</span></div>
+        </div>
+      </div>
+      <div class="card pad-lg flexcol">
+        <div class="card-t"><h3>成长与留存</h3><span class="sub">近 14 天口径</span></div>
+        <svg class="chart" id="flow" viewBox="0 0 380 120" preserveAspectRatio="none" role="img" aria-label="新增流失"></svg>
+        <div class="grid three">
+          <div class="callout"><span class="cl">新增发言人</span><span class="big tnum" style="color:var(--good-ink)" id="new14">—</span><span class="cd">14 天内首次开口</span></div>
+          <div class="callout"><span class="cl">持续活跃</span><span class="big tnum" id="ret">—</span><span class="cd">近期仍在发言</span></div>
+          <div class="callout"><span class="cl">转沉默</span><span class="big tnum" style="color:var(--muted)" id="churn">—</span><span class="cd">14 天未再发言</span></div>
+        </div>
+      </div>
+    </div>
+    <div class="grid" style="grid-template-columns:1fr;margin-top:16px">
+      <div class="card pad-lg">
+        <div class="card-t"><h3>头部贡献者 Top 11</h3><span class="sub">跨群累计发言 · 昵称脱敏 · 张拼拼为运营者本人</span></div>
+        <div class="rank" id="topList"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- AI 表现 -->
+  <section id="ai">
+    <div class="sec-head"><span class="n mono">04</span><h2>AI 智能体表现</h2>
+      <span class="hint">自动问答 · 意图分布 · 自动化动作</span></div>
+    <div class="grid two">
+      <div class="card pad-lg">
+        <div class="card-t"><h3>自动问答量（近 7 天）</h3><span class="sub">累计已处理消息 <b class="mono" style="color:var(--ink)" id="seenTot">—</b></span></div>
+        <svg class="chart" id="qaLine" viewBox="0 0 520 170" preserveAspectRatio="none" role="img" aria-label="近7天问答量"></svg>
+        <div class="legend"><span class="lg" id="qaRoomLeg">—</span></div>
+      </div>
+      <div class="card pad-lg">
+        <div class="card-t"><h3>问题意图分布</h3><span class="sub">对真实问答+私信文本分类</span></div>
+        <div class="rank" id="intent"></div>
+      </div>
+    </div>
+    <div class="grid two" style="margin-top:16px">
+      <div class="card pad-lg">
+        <div class="card-t"><h3>自动化动作</h3><span class="sub">好友自动通过 · 图片视觉 · 人工接管</span></div>
+        <div class="grid three" style="margin-bottom:14px">
+          <div class="callout"><span class="cl">累计自动通过好友</span><span class="big tnum" style="color:var(--accent)" id="frTot">—</span><span class="cd">收到申请即自动通过并邀请入群</span></div>
+          <div class="callout"><span class="cl">图片视觉识别</span><span class="big tnum" id="imgTot">—</span><span class="cd">群内图片自动转文字理解</span></div>
+          <div class="callout"><span class="cl">私聊人工接管</span><span class="big tnum" id="tkTot">—</span><span class="cd">本人接手客户 · 期间暂停自动回复</span></div>
+        </div>
+        <svg class="chart" id="frArea" viewBox="0 0 500 130" preserveAspectRatio="none" role="img" aria-label="好友累计增长"></svg>
+      </div>
+      <div class="card pad-lg">
+        <div class="card-t"><h3>高频提问用户 Top 10</h3><span class="sub">近 7 天 · 最依赖智能体的活跃学习者</span></div>
+        <div class="rank" id="askers"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 商机 -->
+  <section id="biz">
+    <div class="sec-head"><span class="n mono">05</span><h2>潜在商业机会</h2>
+      <span class="hint">从真实私信与问答里读出的需求与漏斗缺口</span></div>
+    <div class="grid ops" id="ops"></div>
+    <div class="grid" style="grid-template-columns:1fr;margin-top:16px">
+      <div class="card pad-lg">
+        <div class="card-t"><h3>高意向私信线索 Top 12</h3><span class="sub">客户主动私信条数排序 · 化名展示 · 意图为文本自动归类</span></div>
+        <div style="overflow-x:auto">
+          <table class="tbl" id="leads"></table>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <footer class="foot">
+    <div><b>数据口径</b> · 来源＝企微智能体服务端留档 <span class="mono">callbacks.log</span>（全量群消息与私信，按消息ID去重）＋ <span class="mono">qa_seen.db</span>（问答/接管/图片视觉）＋ <span class="mono">friend_seen.db</span>（自动通过好友）。群成员数经名册接口获取。仅统计两个主力群与私信，测试群/沉寂群全部剔除。</div>
+    <div class="method"><b>注意</b> · 「近 7 天问答」为滚动窗口口径，其余为运行至今累计；意图分布与线索意图为对真实文本的关键词归类，属线索非结论；张拼拼＝运营者本人参与，计入头部贡献。<b>隐私</b> · 本页为对外分享版：全部群友/客户昵称已脱敏（首字＋＊＊或化名），私信内容仅聚合统计、不展示原文。生成于 <span class="mono" id="genfull">—</span>。</div>
+  </footer>
+</div>
+
+<div class="tip" id="tip"></div>

@@ -1,0 +1,17 @@
+---
+import Base from '../../../layouts/Base.astro';
+import body from '../../../legacy/life/skills/tech-glossary/body.html?raw';
+import '../../../legacy/life/skills/tech-glossary/style.css';
+const meta = { title: 'Vibecoder 技术名词入门词典', description: '把 122 个高频技术名词翻成大白话，覆盖网络、部署、编程、AI、安全与第三方服务。' };
+---
+<Base title={`${meta.title} · Cavno`} description={meta.description}>
+  <section class="cv-page-head tg-page-head"><div class="cv-wrap">
+    <div class="cv-eyebrow">Life & Skills · Skills</div>
+    <h1 class="cv-page-title">Vibecoder 技术名词入门词典</h1>
+    <p class="cv-lede">用生活比喻讲清 122 个高频技术名词：它有什么用、什么时候会遇到，以及新手最常踩的坑。</p>
+    <a class="cv-crumb-back" href="/life/skills/">← 返回技能工具</a>
+  </div></section>
+  <article class="lp tg-article"><Fragment set:html={body} /></article>
+  <script>import '../../../legacy/life/skills/tech-glossary/script.js';</script>
+</Base>
+
