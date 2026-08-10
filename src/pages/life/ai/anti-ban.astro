@@ -1,0 +1,24 @@
+---
+import Base from '../../../layouts/Base.astro';
+import body from '../../../legacy/life/ai/anti-ban/body.html?raw';
+import '../../../legacy/life/ai/anti-ban/style.css';
+
+const meta = {
+  title: '不养号也不被封 · 四个干净',
+  description: '围绕网络出口、浏览器环境、域名邮箱和付款方式整理的 Claude Code 账号环境经验稿。',
+};
+---
+<Base title={`${meta.title} · Cavno`} description={meta.description}>
+  <section class="cv-page-head ab-page-head">
+    <div class="cv-wrap">
+      <div class="cv-eyebrow">Life & Skills · AI</div>
+      <h1 class="cv-page-title">不养号也不被封，四个干净就够了。</h1>
+      <p class="cv-lede">从 15 次封号测试中归纳出的四项身份环境基线：网络出口、浏览器环境、域名邮箱与付款方式。</p>
+      <a class="cv-crumb-back" href="/life/ai/">← 返回 AI 栏目</a>
+    </div>
+  </section>
+
+  <article class="lp ab-article">
+    <Fragment set:html={body} />
+  </article>
+</Base>
