@@ -3,6 +3,14 @@ import Base from '../layouts/Base.astro';
 import ItemCard from '../components/ItemCard.astro';
 import nav from '../content/nav.json';
 import { getCollection } from 'astro:content';
+import { makeBodyLookup } from '../lib/content-presentation';
+
+const legacyBodies = import.meta.glob('../legacy/**/body.html', {
+  query: '?raw',
+  import: 'default',
+  eager: true,
+});
+const bodyByHref = makeBodyLookup(legacyBodies);
 
 export function getStaticPaths() {
   const paths: { params: { path: string }; props: { sectionSlug: string; subSlug: string | null } }[] = [];
@@ -96,6 +104,10 @@ const desc = (sub?.desc || section.desc) ?? '';
                 summary={i.data.summary}
                 tag={tagFor(i.data.subsection)}
                 date={ym(i.data.date)}
+                tags={i.data.tags}
+                section={i.data.section}
+                subsection={i.data.subsection}
+                body={bodyByHref[i.data.href] ?? ''}
               />
             ))}
           </div>

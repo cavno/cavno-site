@@ -3,6 +3,14 @@ import Base from '../layouts/Base.astro';
 import ItemCard from '../components/ItemCard.astro';
 import nav from '../content/nav.json';
 import { getCollection } from 'astro:content';
+import { makeBodyLookup } from '../lib/content-presentation';
+
+const legacyBodies = import.meta.glob('../legacy/**/body.html', {
+  query: '?raw',
+  import: 'default',
+  eager: true,
+});
+const bodyByHref = makeBodyLookup(legacyBodies);
 
 const items = (await getCollection('items')).sort(
   (a, b) => b.data.date.getTime() - a.data.date.getTime()
@@ -33,6 +41,7 @@ const tagFor = (sectionSlug: string, subSlug: string) => {
       <p class="cv-lede">投资、阅读与思考、生活与技能、工作工具——原先分布在四个 GitHub Pages 仓库的静态页面，全部重构为站内原生页面：同一域名、同一套设计系统贯穿到底。静态构建，托管于 Cloudflare。</p>
       <div class="cv-cta-row">
         <a class="cv-btn cv-btn-ink" href="#recent">浏览最近更新</a>
+        <a class="cv-btn cv-btn-line" href="#search">搜索全站</a>
         <a class="cv-btn cv-btn-line" href="#boards">查看站点结构</a>
       </div>
     </div>
@@ -50,6 +59,35 @@ const tagFor = (sectionSlug: string, subSlug: string) => {
       ))}
       <div class="cv-ic-foot">UPDATED {latest} · 共 {total} 项 · 由内容集合自动统计</div>
     </aside>
+  </div>
+</section>
+
+<section class="cv-search" id="search" aria-labelledby="cvSearchTitle">
+  <div class="cv-wrap">
+    <div class="cv-search-head">
+      <div>
+        <div class="cv-eyebrow">Site Search · 全站检索</div>
+        <h2 id="cvSearchTitle">搜索全部公开内容</h2>
+      </div>
+      <p>覆盖标题、摘要、标签与文章正文；新内容上线后自动进入索引。</p>
+    </div>
+
+    <form class="cv-search-form" id="cvSearchForm" role="search">
+      <span class="cv-search-icon" aria-hidden="true"></span>
+      <label class="cv-sr-only" for="cvSearchInput">搜索全站公开内容</label>
+      <input
+        id="cvSearchInput"
+        type="search"
+        name="q"
+        autocomplete="off"
+        placeholder="搜索标题、关键词、标签或正文内容"
+        aria-describedby="cvSearchStatus"
+        aria-controls="cvSearchResults"
+      />
+      <button type="submit">搜索</button>
+    </form>
+    <div class="cv-search-status" id="cvSearchStatus" aria-live="polite">输入关键词开始搜索</div>
+    <div class="cv-search-results" id="cvSearchResults" role="list" hidden></div>
   </div>
 </section>
 
@@ -103,6 +141,10 @@ const tagFor = (sectionSlug: string, subSlug: string) => {
             summary={i.data.summary}
             tag={tagFor(i.data.section, i.data.subsection)}
             date={ym(i.data.date)}
+            tags={i.data.tags}
+            section={i.data.section}
+            subsection={i.data.subsection}
+            body={bodyByHref[i.data.href] ?? ''}
           />
         ))
       ) : (
@@ -111,5 +153,164 @@ const tagFor = (sectionSlug: string, subSlug: string) => {
     </div>
   </div>
 </section>
+
+<script>
+  interface SearchEntry {
+    href: string;
+    title: string;
+    summary: string;
+    tags: string[];
+    sectionLabel: string;
+    subsectionLabel: string;
+    date: string;
+    cover: { hue: number; variant: number; serial: string };
+    text: string;
+    _search?: string;
+  }
+
+  const form = document.getElementById('cvSearchForm') as HTMLFormElement | null;
+  const input = document.getElementById('cvSearchInput') as HTMLInputElement | null;
+  const status = document.getElementById('cvSearchStatus');
+  const results = document.getElementById('cvSearchResults');
+  let index: SearchEntry[] | null = null;
+  let loading: Promise<SearchEntry[]> | null = null;
+  let timer = 0;
+
+  const normalise = (value: string) => value
+    .normalize('NFKC')
+    .toLocaleLowerCase('zh-CN')
+    .replace(/[^\p{Letter}\p{Number}+#.\-]+/gu, ' ')
+    .trim();
+
+  const loadIndex = async () => {
+    if (index) return index;
+    if (!loading) {
+      status && (status.textContent = '正在载入全站索引…');
+      input?.setAttribute('aria-busy', 'true');
+      loading = fetch('/search-index.json')
+        .then((response) => {
+          if (!response.ok) throw new Error(`HTTP ${response.status}`);
+          return response.json();
+        })
+        .then((payload) => {
+          index = (payload.items || []).map((entry: SearchEntry) => ({
+            ...entry,
+            _search: normalise(entry.text),
+          }));
+          return index;
+        })
+        .finally(() => input?.removeAttribute('aria-busy'));
+    }
+    return loading;
+  };
+
+  const scoreEntry = (entry: SearchEntry, terms: string[]) => {
+    const haystack = entry._search || '';
+    if (!terms.every((term) => haystack.includes(term))) return -1;
+    const title = normalise(entry.title);
+    const summary = normalise(entry.summary);
+    const tags = normalise(entry.tags.join(' '));
+    let score = 0;
+    for (const term of terms) {
+      if (title === term) score += 32;
+      else if (title.includes(term)) score += 16;
+      if (tags.includes(term)) score += 9;
+      if (summary.includes(term)) score += 5;
+      score += Math.min(4, (haystack.split(term).length - 1));
+    }
+    return score;
+  };
+
+  const resultNode = (entry: SearchEntry) => {
+    const link = document.createElement('a');
+    link.className = 'cv-search-result';
+    link.href = entry.href;
+    link.setAttribute('role', 'listitem');
+
+    const thumb = document.createElement('span');
+    thumb.className = `cv-search-thumb cv-cover-v${entry.cover.variant}`;
+    thumb.style.setProperty('--cv-cover-h', String(entry.cover.hue));
+    thumb.setAttribute('aria-hidden', 'true');
+    const thumbCode = document.createElement('b');
+    thumbCode.textContent = `CV/${entry.cover.serial}`;
+    thumb.appendChild(thumbCode);
+
+    const copy = document.createElement('span');
+    copy.className = 'cv-search-copy';
+    const meta = document.createElement('span');
+    meta.className = 'cv-search-meta';
+    meta.textContent = `${entry.sectionLabel} · ${entry.subsectionLabel}`;
+    const title = document.createElement('strong');
+    title.textContent = entry.title;
+    const summary = document.createElement('span');
+    summary.className = 'cv-search-summary';
+    summary.textContent = entry.summary;
+    copy.append(meta, title, summary);
+
+    const date = document.createElement('time');
+    date.className = 'cv-search-date';
+    date.dateTime = entry.date;
+    date.textContent = entry.date.replaceAll('-', '.');
+    link.append(thumb, copy, date);
+    return link;
+  };
+
+  const search = async () => {
+    if (!input || !results || !status) return;
+    const query = input.value.trim();
+    const url = new URL(location.href);
+    if (query) url.searchParams.set('q', query);
+    else url.searchParams.delete('q');
+    history.replaceState(null, '', url);
+
+    if (!query) {
+      results.replaceChildren();
+      results.hidden = true;
+      status.textContent = '输入关键词开始搜索';
+      return;
+    }
+
+    try {
+      const entries = await loadIndex();
+      const terms = normalise(query).split(/\s+/).filter(Boolean);
+      const matched = entries
+        .map((entry) => ({ entry, score: scoreEntry(entry, terms) }))
+        .filter((result) => result.score >= 0)
+        .sort((a, b) => b.score - a.score || b.entry.date.localeCompare(a.entry.date))
+        .slice(0, 24);
+
+      results.replaceChildren(...matched.map(({ entry }) => resultNode(entry)));
+      results.hidden = false;
+      status.textContent = matched.length
+        ? `找到 ${matched.length} 条结果${matched.length === 24 ? '（显示前 24 条）' : ''}`
+        : `没有找到“${query}”相关内容`;
+    } catch {
+      results.hidden = true;
+      status.textContent = '搜索索引载入失败，请刷新页面后重试';
+    }
+  };
+
+  form?.addEventListener('submit', (event) => {
+    event.preventDefault();
+    window.clearTimeout(timer);
+    void search();
+  });
+  input?.addEventListener('input', () => {
+    window.clearTimeout(timer);
+    timer = window.setTimeout(() => void search(), 180);
+  });
+  input?.addEventListener('keydown', (event) => {
+    if (event.key === 'Escape') {
+      input.value = '';
+      void search();
+    }
+  });
+
+  const initialQuery = new URL(location.href).searchParams.get('q');
+  if (input && initialQuery) {
+    input.value = initialQuery;
+    void search();
+  }
+</script>
 
 </Base>

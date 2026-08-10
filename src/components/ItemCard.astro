@@ -1,16 +1,54 @@
 ---
+import { derivePresentation } from '../lib/content-presentation';
+
 interface Props {
   href: string;
   title: string;
   summary?: string;
   tag: string;
   date: string;
+  tags?: string[];
+  section?: string;
+  subsection?: string;
+  body?: string;
 }
-const { href, title, summary = '', tag, date } = Astro.props;
+const {
+  href,
+  title,
+  summary = '',
+  tag,
+  date,
+  tags = [],
+  section = '',
+  subsection = '',
+  body = '',
+} = Astro.props;
 const external = /^https?:\/\//.test(href);
+const cover = derivePresentation({ title, summary, tags, section, subsection, body });
 ---
 <a class="cv-item" href={href} target={external ? '_blank' : undefined} rel={external ? 'noopener' : undefined}>
-  <div class="cv-item-meta"><span class="cv-tag">{tag}</span><span class="cv-date">{date}</span></div>
-  <h3>{title}</h3>
-  {summary && <p>{summary}</p>}
+  <div
+    class={`cv-auto-cover cv-cover-v${cover.variant}`}
+    style={`--cv-cover-h:${cover.hue};`}
+    aria-hidden="true"
+  >
+    <div class="cv-cover-top">
+      <span>{tag}</span>
+      <span>CV / {cover.serial}</span>
+    </div>
+    <div class="cv-cover-copy">
+      <strong>{cover.title}</strong>
+      <span>{cover.summary}</span>
+    </div>
+    {cover.keywords.length > 0 && (
+      <div class="cv-cover-keys">
+        {cover.keywords.map((keyword) => <span>{keyword}</span>)}
+      </div>
+    )}
+  </div>
+  <div class="cv-item-body">
+    <div class="cv-item-meta"><span class="cv-tag">{tag}</span><span class="cv-date">{date}</span></div>
+    <h3>{title}</h3>
+    {cover.summary && <p>{cover.summary}</p>}
+  </div>
 </a>
