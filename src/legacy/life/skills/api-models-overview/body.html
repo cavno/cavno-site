@@ -1,0 +1,339 @@
+<div class="am-shell">
+  <section class="am-overview" aria-label="清单概览">
+    <div class="am-overview-kicker">API MODEL MATRIX · 核实于 2026-06-04</div>
+    <p>从 PDF 文本层与版式坐标逆向还原，覆盖当前工作流通过 API 接入的文本推理、图像生成、语音合成和数字人/视频服务。</p>
+    <div class="am-stats">
+      <div><strong>14</strong><span>接入模型 / 服务</span></div>
+      <div><strong>4</strong><span>能力类别</span></div>
+      <div><strong>9</strong><span>厂商 / 平台</span></div>
+      <div><strong>8<small>/9</small></strong><span>价格官方已核实</span></div>
+    </div>
+  </section>
+
+  <nav class="am-index" aria-label="模型分类">
+    <a href="#am-text"><span>01</span>文本 LLM</a>
+    <a href="#am-image"><span>02</span>图像生成</a>
+    <a href="#am-voice"><span>03</span>语音 TTS</a>
+    <a href="#am-video"><span>04</span>数字人 / 视频</a>
+  </nav>
+
+  <section class="am-section" id="am-text">
+    <header class="am-section-head">
+      <div><span class="am-no">01</span><h2>文本 LLM · 推理与对话</h2></div>
+      <span>4 项</span>
+    </header>
+    <div class="am-columns" aria-hidden="true"><span>模型 / 厂商</span><span>特点 · 价值 · 场景</span><span>价格 · 申请</span></div>
+    <div class="am-cards">
+      <article class="am-card">
+        <div class="am-model">
+          <h3>Claude <small>（Anthropic）</small></h3>
+          <code>Opus 4.8 · Sonnet 4.6</code>
+          <span class="am-vendor">官方直连</span>
+          <span class="am-status main">主力</span>
+        </div>
+        <div class="am-value">
+          <p>当前<strong>推理质量天花板</strong>，Agentic 编码与复杂多步任务最稳，工具调用可靠。Sonnet 享 1M 长上下文。</p>
+          <div class="am-tags"><span>推理最强</span><span>Agentic 编码</span><span>长上下文 1M</span><span>工具调用稳</span></div>
+          <p class="am-scene"><b>场景</b> Claude Code 核心引擎、复杂编码与多步推理</p>
+        </div>
+        <div class="am-price">
+          <strong>$5<small> / $25</small></strong>
+          <p>Opus 4.8 输入 / 输出（每百万 token）</p>
+          <p>Sonnet 4.6 $3 / $15；缓存读取 0.1×；Batch 5 折</p>
+          <a href="https://console.anthropic.com/" target="_blank" rel="noopener">console.anthropic.com ↗</a>
+        </div>
+      </article>
+
+      <article class="am-card">
+        <div class="am-model">
+          <h3>OpenRouter</h3>
+          <code>LLM 聚合路由</code>
+          <span class="am-vendor">300+ 模型统一网关</span>
+          <span class="am-status main">主力</span>
+        </div>
+        <div class="am-value">
+          <p>一个 Key 统一访问 <strong>300+ 跨厂商模型</strong>，自动故障转移与负载均衡，切换零成本，不被单一厂商锁定。</p>
+          <div class="am-tags"><span>300+ 模型</span><span>一个 Key</span><span>自动容灾</span><span>不锁厂商</span></div>
+          <p class="am-scene"><b>场景</b> 多模型统一调度、对话与内容生成的中转层</p>
+        </div>
+        <div class="am-price">
+          <strong class="words">原价透传<small> 不加价</small></strong>
+          <p>充值收 5.5% 手续费；BYOK 每月前 100 万次免费，之后 5%</p>
+          <a href="https://openrouter.ai/" target="_blank" rel="noopener">openrouter.ai ↗</a>
+        </div>
+      </article>
+
+      <article class="am-card">
+        <div class="am-model">
+          <h3>Gemini Flash <small>（Google）</small></h3>
+          <code>2.5 / 3.x Flash</code>
+          <span class="am-vendor">Google AI Studio</span>
+          <span class="am-status main">主力</span>
+        </div>
+        <div class="am-value">
+          <p>高性价比多模态模型，<strong>原生支持文件上传与视频分析</strong>，超大上下文。适合大批量、低延迟的理解类任务。</p>
+          <div class="am-tags"><span>多模态</span><span>视频分析</span><span>超大上下文</span><span>便宜</span></div>
+          <p class="am-scene"><b>场景</b> 视频内容分析、大批量文本理解与分类</p>
+        </div>
+        <div class="am-price">
+          <strong>$0.30<small> / $2.50</small></strong>
+          <p>2.5 Flash 输入 / 输出（每百万 token）</p>
+          <p>3.5 Flash $1.50 / $9；Flash-Lite 低至 $0.10 / $0.40</p>
+          <a href="https://aistudio.google.com/" target="_blank" rel="noopener">aistudio.google.com ↗</a>
+        </div>
+      </article>
+
+      <article class="am-card">
+        <div class="am-model">
+          <h3>Qwen3 <small>（SiliconFlow）</small></h3>
+          <code>Qwen3.5 系列</code>
+          <span class="am-vendor">硅基流动 · 国内直连</span>
+          <span class="am-status main">主力</span>
+        </div>
+        <div class="am-value">
+          <p>国内直连的开源 Qwen3 托管推理，单价极低、低延迟，适合高频小任务。新账号含免费额度。</p>
+          <div class="am-tags"><span>国内直连</span><span>单价极低</span><span>低延迟</span><span>开源模型</span></div>
+          <p class="am-scene"><b>场景</b> 意图分类、关键词抽取等高频轻量任务</p>
+        </div>
+        <div class="am-price">
+          <strong>¥0.40<small> 起 / 百万 token</small></strong>
+          <p>输入 ¥0.40–1.20（0–128k 档）</p>
+          <p>输出 ¥3.20–7.20；长上下文档约 2.5–4×</p>
+          <a href="https://siliconflow.cn/" target="_blank" rel="noopener">siliconflow.cn ↗</a>
+        </div>
+      </article>
+    </div>
+  </section>
+
+  <section class="am-section" id="am-image">
+    <header class="am-section-head">
+      <div><span class="am-no">02</span><h2>图像生成 · 文生图与编辑</h2></div>
+      <span>6 项</span>
+    </header>
+    <div class="am-columns" aria-hidden="true"><span>模型 / 厂商</span><span>特点 · 价值 · 场景</span><span>价格 · 申请</span></div>
+    <div class="am-cards">
+      <article class="am-card">
+        <div class="am-model">
+          <h3>Gemini 3 Pro Image</h3>
+          <code>gemini-3-pro-image-preview</code>
+          <span class="am-vendor">Google · nano-banana-pro</span>
+          <span class="am-status main">主力</span>
+        </div>
+        <div class="am-value">
+          <p><strong>原生 4K + 最高保真度</strong>，多参考图严格一致性，中文文字渲染最佳。40s 出 4K 不需 upscale。</p>
+          <div class="am-tags"><span>原生 4K</span><span>多参考图一致</span><span>中文文字准</span><span>色彩还原强</span></div>
+          <p class="am-scene"><b>场景</b> 商业级成片、4K 电商产品图、隐形模特</p>
+        </div>
+        <div class="am-price">
+          <strong>≈$0.13<small> / 张（1–2K）</small></strong>
+          <p>4K 约 $0.24/张；输入 $2、图像输出 $120（每百万 token）；Batch 半价</p>
+          <a href="https://aistudio.google.com/" target="_blank" rel="noopener">aistudio.google.com ↗</a>
+        </div>
+      </article>
+
+      <article class="am-card">
+        <div class="am-model">
+          <h3>Gemini 3.1 Flash Image</h3>
+          <code>gemini-3.1-flash-image-preview</code>
+          <span class="am-vendor">Google · nano-banana 2</span>
+          <span class="am-status main">主力</span>
+        </div>
+        <div class="am-value">
+          <p>1024 原生分辨率，<strong>快且便宜</strong>，中文渲染好。Pro 版的轻量替身，用于不追 4K 的高频出图。</p>
+          <div class="am-tags"><span>快</span><span>便宜</span><span>中文好</span><span>1024 原生</span></div>
+          <p class="am-scene"><b>场景</b> 中文 slogan 配图、内容快稿迭代</p>
+        </div>
+        <div class="am-price">
+          <strong>≈$0.045<small> / 张起</small></strong>
+          <p>$0.045（0.5K）→ $0.151（4K）按分辨率</p>
+          <p>输入 $0.50、图像输出 $60（每百万 token）</p>
+          <a href="https://aistudio.google.com/" target="_blank" rel="noopener">aistudio.google.com ↗</a>
+        </div>
+      </article>
+
+      <article class="am-card">
+        <div class="am-model">
+          <h3>gpt-image-2 <small>（OpenAI）</small></h3>
+          <code>gpt-image-2</code>
+          <span class="am-vendor">OpenAI 官方直连</span>
+          <span class="am-status main">主力</span>
+        </div>
+        <div class="am-value">
+          <p><strong>指令跟随与图像编辑最强</strong>：保留原图主体换场景、重建光影逻辑。edits 最多 16 张参考图。</p>
+          <div class="am-tags"><span>编辑最强</span><span>产品一致性</span><span>光影逻辑</span><span>16 张参考图</span></div>
+          <p class="am-scene"><b>场景</b> 产品换场景、风格迁移、角色跨镜一致性</p>
+        </div>
+        <div class="am-price">
+          <strong>≈$0.05<small> / 张（1024² 中）</small></strong>
+          <p>低 $0.006 · 高 $0.21；图像输入 $8、输出 $30（每百万 token）；Batch 5 折</p>
+          <a href="https://platform.openai.com/" target="_blank" rel="noopener">platform.openai.com ↗</a>
+        </div>
+      </article>
+
+      <article class="am-card">
+        <div class="am-model">
+          <h3>即梦 Seedream 4.0</h3>
+          <code>doubao-seedream-4-0</code>
+          <span class="am-vendor">火山方舟 Ark · 国内直连</span>
+          <span class="am-status available">可用</span>
+        </div>
+        <div class="am-value">
+          <p><strong>中文理解与文字渲染强</strong>，多图融合（最多 10 张）、序列图（最多 15 张）。国内直连、单张成本最低。</p>
+          <div class="am-tags"><span>中文准</span><span>多图融合 10</span><span>序列图 15</span><span>国内最便宜</span></div>
+          <p class="am-scene"><b>场景</b> 中文商业素材、批量风格统一配图</p>
+        </div>
+        <div class="am-price">
+          <strong>¥0.20<small> / 张</small></strong>
+          <p>按输出图片计费（RMB）</p>
+          <p>商业素材务必走 API，不用 Web UI</p>
+          <a href="https://console.volcengine.com/ark" target="_blank" rel="noopener">console.volcengine.com/ark ↗</a>
+        </div>
+      </article>
+
+      <article class="am-card">
+        <div class="am-model">
+          <h3>fal.ai</h3>
+          <code>FLUX / Seedream / Nano Banana</code>
+          <span class="am-vendor">多模型聚合平台</span>
+          <span class="am-status standby">备用 · 余额耗尽</span>
+        </div>
+        <div class="am-value">
+          <p>一个 API 聚合多家开源/托管图像视频模型（含 Recraft 矢量化），按产出计费，排队与服务端错误不收费。</p>
+          <div class="am-tags"><span>多模型聚合</span><span>矢量化</span><span>按产出计费</span><span>错误不收费</span></div>
+          <p class="am-scene"><b>场景</b> 跨模型快速试验、矢量 logo、备用通道</p>
+        </div>
+        <div class="am-price">
+          <strong>$0.03<small> / 张起</small></strong>
+          <p>Seedream V4 $0.03 · Nano Banana $0.0398 · FLUX Kontext Pro $0.04/张</p>
+          <a href="https://fal.ai/pricing" target="_blank" rel="noopener">fal.ai/pricing ↗</a>
+        </div>
+      </article>
+
+      <article class="am-card">
+        <div class="am-model">
+          <h3>可灵 Kling</h3>
+          <code>Kling · Kolors 可图</code>
+          <span class="am-vendor">快手可灵开放平台</span>
+          <span class="am-status paused">暂停 · 无余额</span>
+        </div>
+        <div class="am-value">
+          <p><strong>视频生成业界领先</strong>（运动幅度 / 时长），图像生成（可图 Kolors）中英文字渲染强，面向 B2B 集成。</p>
+          <div class="am-tags"><span>视频运动强</span><span>长时长</span><span>中英文字准</span><span>B2B</span></div>
+          <p class="am-scene"><b>场景</b> 高动态视频生成（图像为辅）</p>
+        </div>
+        <div class="am-price">
+          <strong>$1<small> = 66 积分</small></strong>
+          <p>≈$0.015/积分；视频 9–16 积分/秒</p>
+          <p>图像单价未公开核实（站点拦截抓取）</p>
+          <a href="https://klingai.com/global/dev" target="_blank" rel="noopener">klingai.com/global/dev ↗</a>
+        </div>
+      </article>
+    </div>
+  </section>
+
+  <section class="am-section" id="am-voice">
+    <header class="am-section-head">
+      <div><span class="am-no">03</span><h2>语音 TTS · 合成与克隆</h2></div>
+      <span>2 项</span>
+    </header>
+    <div class="am-columns" aria-hidden="true"><span>模型 / 厂商</span><span>特点 · 价值 · 场景</span><span>价格 · 申请</span></div>
+    <div class="am-cards">
+      <article class="am-card">
+        <div class="am-model">
+          <h3>MiniMax TTS</h3>
+          <code>speech-2.8-hd</code>
+          <span class="am-vendor">MiniMax · 国内直连</span>
+          <span class="am-status main">主力</span>
+        </div>
+        <div class="am-value">
+          <p><strong>高拟真、情感丰富的中文 TTS</strong>，当前最高质量档。支持音色克隆、timber 混音与跨语种。</p>
+          <div class="am-tags"><span>最高拟真</span><span>音色克隆</span><span>混音</span><span>跨语种</span></div>
+          <p class="am-scene"><b>场景</b> 微信语音回复、视频号口播、数字人配音</p>
+        </div>
+        <div class="am-price">
+          <strong>¥3.5<small> / 万字符</small></strong>
+          <p>turbo 档 ¥2/万字符；按输入字符计，1 汉字 = 2 字符</p>
+          <a href="https://platform.minimaxi.com/" target="_blank" rel="noopener">platform.minimaxi.com ↗</a>
+        </div>
+      </article>
+
+      <article class="am-card">
+        <div class="am-model">
+          <h3>Qwen3-TTS <small>（阿里云百炼）</small></h3>
+          <code>qwen3-tts-flash · cosyvoice-v3-plus</code>
+          <span class="am-vendor">DashScope · 国内直连</span>
+          <span class="am-status moving">迁移中</span>
+        </div>
+        <div class="am-value">
+          <p><strong>17 种方言 + 10 种外语</strong>，音色克隆 1 年有效（MiniMax 仅 7 天），自然语言情绪控制。单价低于 MiniMax。</p>
+          <div class="am-tags"><span>17 方言</span><span>克隆 1 年</span><span>情绪控制</span><span>更便宜</span></div>
+          <p class="am-scene"><b>场景</b> 微信语音（已上线）、视频号口播替换中</p>
+        </div>
+        <div class="am-price">
+          <strong>¥0.115<small> / 万字符</small></strong>
+          <p>qwen3-tts-flash 国内价；音色复刻 $0.01/个</p>
+          <a href="https://bailian.console.aliyun.com/" target="_blank" rel="noopener">bailian.console.aliyun.com ↗</a>
+        </div>
+      </article>
+    </div>
+  </section>
+
+  <section class="am-section" id="am-video">
+    <header class="am-section-head">
+      <div><span class="am-no">04</span><h2>数字人 / 视频 · 生成</h2></div>
+      <span>2 项</span>
+    </header>
+    <div class="am-columns" aria-hidden="true"><span>模型 / 厂商</span><span>特点 · 价值 · 场景</span><span>价格 · 申请</span></div>
+    <div class="am-cards">
+      <article class="am-card">
+        <div class="am-model">
+          <h3>石榴数字人</h3>
+          <code>16ai · createByAudioFile</code>
+          <span class="am-vendor">向量方程科技</span>
+          <span class="am-status available">可用</span>
+        </div>
+        <div class="am-value">
+          <p><strong>一站式数字人</strong>：声音合成 + 形象训练（照片/视频建模）+ 音频驱动视频生成。覆盖广告、医疗、教育等行业。</p>
+          <div class="am-tags"><span>一站式</span><span>音频驱动</span><span>照片建模</span><span>多行业</span></div>
+          <p class="am-scene"><b>场景</b> 数字人口播视频（TTS 出音 → 驱动形象）</p>
+        </div>
+        <div class="am-price">
+          <strong>¥6<small> / 分钟</small></strong>
+          <p>数字人视频生成 ¥6 / 分钟</p>
+          <a href="https://api.16ai.vip/" target="_blank" rel="noopener">api.16ai.vip ↗</a>
+        </div>
+      </article>
+
+      <article class="am-card">
+        <div class="am-model">
+          <h3>即梦视频 Seedance</h3>
+          <code>doubao-seedance-1.0-pro / fast / lite</code>
+          <span class="am-vendor">火山方舟 Ark · 国内直连</span>
+          <span class="am-status available">可用</span>
+        </div>
+        <div class="am-value">
+          <p><strong>文生 / 图生视频</strong>。1.0-pro 高画质，pro-fast 提速 3 倍、降价 72% 量产，lite 入门档。国内直连。</p>
+          <div class="am-tags"><span>文生/图生视频</span><span>高画质 pro</span><span>量产 fast</span><span>国内直连</span></div>
+          <p class="am-scene"><b>场景</b> 短剧、水墨漫剧、视频号批量出片</p>
+        </div>
+        <div class="am-price">
+          <strong>¥3.67<small> / 5s 1080p</small></strong>
+          <p>1.0-pro ¥15/百万 token；pro-fast ≈¥1.03/5s；离线 Batch 5 折</p>
+          <a href="https://console.volcengine.com/ark" target="_blank" rel="noopener">console.volcengine.com/ark ↗</a>
+        </div>
+      </article>
+    </div>
+  </section>
+
+  <aside class="am-legend">
+    <div><span class="am-status main">主力</span><span class="am-status available">可用</span> 当前在用</div>
+    <div><span class="am-status moving">迁移中</span> 逐步替换</div>
+    <div><span class="am-status standby">备用</span><span class="am-status paused">暂停</span> 余额或额度问题</div>
+  </aside>
+
+  <footer class="am-note">
+    <p><strong>价格说明</strong> · 上表价格于 2026-06-04 核实自各厂商官方定价页，单位与币种以原页面为准（USD / RMB 混用，已标注）。除可灵图像单价（站点拦截抓取）外，其余均锚定官方页面。</p>
+    <p>价格随官方政策动态调整，实际计费以下单时官网为准。缓存、Batch、长上下文等折扣档详见各官方文档。</p>
+  </footer>
+</div>
+
