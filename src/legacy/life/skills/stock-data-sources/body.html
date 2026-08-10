@@ -1,0 +1,885 @@
+<svg style="position:absolute;width:0;height:0;overflow:hidden" aria-hidden="true">
+  <symbol id="i-bolt" viewBox="0 0 24 24"><path d="M13 2 4 14h6l-1 8 9-12h-6l1-8Z"/></symbol>
+  <symbol id="i-clock" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3.5 2"/></symbol>
+  <symbol id="i-hourglass" viewBox="0 0 24 24"><path d="M7 3h10M7 21h10M8 3v4l4 5 4-5V3M8 21v-4l4-5 4 5v4"/></symbol>
+  <symbol id="i-calendar" viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M3 10h18M8 3v4M16 3v4"/></symbol>
+  <symbol id="i-coin" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 7v10M9.5 9.5h3.2a2 2 0 0 1 0 4H9.5M9.5 13.5h3.4"/></symbol>
+  <symbol id="i-shield" viewBox="0 0 24 24"><path d="M12 3l7 3v5c0 4.5-3 8-7 10-4-2-7-5.5-7-10V6l7-3Z"/><path d="m9 12 2 2 4-4"/></symbol>
+  <symbol id="i-terminal" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="m7 9 3 3-3 3M13 15h4"/></symbol>
+  <symbol id="i-plug" viewBox="0 0 24 24"><path d="M9 3v5M15 3v5M6 8h12v3a6 6 0 0 1-12 0V8ZM12 17v4"/></symbol>
+  <symbol id="i-book" viewBox="0 0 24 24"><path d="M4 5a2 2 0 0 1 2-2h12v18H6a2 2 0 0 1-2-2V5Z"/><path d="M8 3v18M11 8h4"/></symbol>
+  <symbol id="i-layers" viewBox="0 0 24 24"><path d="m12 3 8 4.5-8 4.5-8-4.5L12 3Z"/><path d="m4 12 8 4.5 8-4.5M4 16.5 12 21l8-4.5"/></symbol>
+  <symbol id="i-target" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="5"/><circle cx="12" cy="12" r="1.4"/></symbol>
+  <symbol id="i-alert" viewBox="0 0 24 24"><path d="M12 4l9 16H3l9-16Z"/><path d="M12 10v4M12 17.5v.5"/></symbol>
+  <symbol id="i-check" viewBox="0 0 24 24"><path d="m4 12.5 5 5L20 6.5" stroke-width="2.4"/></symbol>
+  <symbol id="i-cross" viewBox="0 0 24 24"><path d="m6 6 12 12M18 6 6 18" stroke-width="2"/></symbol>
+  <symbol id="i-chart" viewBox="0 0 24 24"><path d="M4 20V4M4 20h16"/><path d="M8 16v-4M12.5 16V8M17 16v-6"/></symbol>
+  <symbol id="i-grid" viewBox="0 0 24 24"><rect x="3" y="3" width="8" height="8" rx="1.5"/><rect x="13" y="3" width="8" height="8" rx="1.5"/><rect x="3" y="13" width="8" height="8" rx="1.5"/><rect x="13" y="13" width="8" height="8" rx="1.5"/></symbol>
+  <symbol id="i-route" viewBox="0 0 24 24"><circle cx="6" cy="5" r="2.5"/><circle cx="18" cy="19" r="2.5"/><path d="M6 7.5V13a4 4 0 0 0 4 4h5.5"/></symbol>
+  <symbol id="i-search" viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="m16.5 16.5 4 4"/></symbol>
+  <symbol id="i-link" viewBox="0 0 24 24"><path d="M9.5 14.5 14.5 9.5"/><path d="M11 7l1.5-1.5a4 4 0 0 1 5.7 5.7L16.5 13M13 17l-1.5 1.5a4 4 0 0 1-5.7-5.7L7.5 11"/></symbol>
+  <symbol id="i-scale" viewBox="0 0 24 24"><path d="M12 4v16M6 8h12M8 8l-3 6h6L8 8ZM16 8l-3 6h6l-3-6Z"/></symbol>
+</svg>
+
+<div class="wrap">
+
+<header class="sd-overview" aria-label="核心指标">
+  <div class="stats">
+    <div class="card stat">
+      <div class="top"><svg class="ico ico-lg"><use href="#i-bolt"/></svg>零成本档</div>
+      <div class="n">¥0<small>A 股秒级 + 港股实时价</small></div>
+      <div class="l">腾讯／新浪／东财直连，秒级时间戳 + 五档；港股实时价走新浪 rt_ 前缀（盘中亲验与墙钟同秒）</div>
+    </div>
+    <div class="card stat">
+      <div class="top"><svg class="ico ico-lg"><use href="#i-coin"/></svg>实时最低价</div>
+      <div class="n">$99<small>/月起</small></div>
+      <div class="l">美股全交易所实时（SIP）：Alpaca Algo Trader Plus</div>
+    </div>
+    <div class="card stat">
+      <div class="top"><svg class="ico ico-lg"><use href="#i-chart"/></svg>tick 级</div>
+      <div class="n">$199<small>/月</small></div>
+      <div class="l">美股实时 + 20 年历史：Massive Stocks Advanced</div>
+    </div>
+    <div class="card stat">
+      <div class="top"><svg class="ico ico-lg"><use href="#i-shield"/></svg>终端档</div>
+      <div class="n">3.98<small>万元/年</small></div>
+      <div class="l">Wind 单账号年费（2023 报道），iFinD 约其 50–70%</div>
+    </div>
+  </div>
+</header>
+
+<section>
+  <div class="sec-head">
+    <p class="kicker">01 · 定位图</p>
+    <h2><svg class="ico ico-h2"><use href="#i-grid"/></svg>甜点区在左上：¥0 拿秒级，$99 买实时</h2>
+    <p>横轴是月成本，纵轴是延迟等级。<strong>左上象限（便宜且快）才是要抢的位置</strong>，右下（贵还慢）永远不选。券商模式单独标出——它不卖 API 订阅，成本绑在账户等级上。</p>
+  </div>
+  <div class="card chart">
+    <svg class="fig" viewBox="0 0 880 540" role="img" aria-label="成本与延迟定位矩阵">
+      <!-- 象限底色 -->
+      <rect x="70" y="50" width="380" height="215" fill="rgba(47,122,90,.10)" rx="6"/>
+      <rect x="450" y="50" width="360" height="215" fill="rgba(57,103,156,.08)" rx="6"/>
+      <rect x="70" y="265" width="380" height="205" fill="rgba(34,34,31,.045)" rx="6"/>
+      <rect x="450" y="265" width="360" height="205" fill="rgba(168,114,47,.08)" rx="6"/>
+      <text x="88" y="72" font-size="13" fill="#2f7a5a" font-weight="600">甜点区 · 便宜且快</text>
+      <text x="795" y="72" font-size="13" fill="#39679c" font-weight="600" text-anchor="end">贵但快 · 值不值看需求</text>
+      <text x="88" y="459" font-size="13" fill="#7d7d76" font-weight="600">免费但慢 · 只做复盘</text>
+      <text x="795" y="459" font-size="13" fill="#a8722f" font-weight="600" text-anchor="end">贵还慢 · 别买</text>
+
+      <!-- 轴 -->
+      <path d="M70 470 H810" stroke="rgba(34,34,31,.28)" stroke-width="1.4" fill="none"/>
+      <path d="M70 50 V470" stroke="rgba(34,34,31,.28)" stroke-width="1.4" fill="none"/>
+      <text x="440" y="512" font-size="14" fill="#4a4a45" text-anchor="middle" font-weight="600">月成本 →</text>
+      <text x="24" y="260" font-size="14" fill="#4a4a45" text-anchor="middle" font-weight="600" transform="rotate(-90 24 260)">延迟越低 ↑</text>
+      <!-- X 刻度 -->
+      <g font-size="12.5" fill="#7d7d76" text-anchor="middle">
+        <text x="105" y="490">¥0</text><text x="250" y="490">$29</text><text x="430" y="490">$99</text>
+        <text x="570" y="490">$199</text><text x="700" y="490">$329</text><text x="790" y="490">万元/年</text>
+      </g>
+      <!-- Y 刻度 -->
+      <g font-size="12.5" fill="#7d7d76" text-anchor="end">
+        <text x="62" y="88">tick</text><text x="62" y="180">秒级</text><text x="62" y="310">15 分钟</text><text x="62" y="430">T+1</text>
+      </g>
+      <g stroke="rgba(34,34,31,.09)" stroke-dasharray="3 5">
+        <path d="M70 84 H810"/><path d="M70 176 H810"/><path d="M70 306 H810"/><path d="M70 426 H810"/>
+      </g>
+
+      <!-- 数据点：绿=推荐 蓝=备选 灰=受限 -->
+      <g font-size="13" fill="#22221f">
+        <circle cx="105" cy="176" r="9" fill="#2f7a5a"/><text x="120" y="181" font-weight="600">直连三源（腾讯/新浪/东财）</text>
+        <circle cx="118" cy="120" r="6.5" fill="#39679c"/><text x="131" y="125">Finnhub 免费 · TD Basic</text>
+        <circle cx="105" cy="426" r="6.5" fill="#8a8a82"/><text x="118" y="431" fill="#4a4a45">baostock / CnStock（免费 MCP）</text>
+        <circle cx="150" cy="360" r="6.5" fill="#8a8a82"/><text x="163" y="365" fill="#4a4a45">AKShare（爬虫聚合）</text>
+        <circle cx="200" cy="84" r="9" fill="#2f7a5a"/><text x="215" y="89" font-weight="600">券商模式：长桥 CLI / 富途 OpenD</text>
+        <circle cx="250" cy="306" r="6.5" fill="#39679c"/><text x="263" y="311">Massive Starter $29</text>
+        <circle cx="252" cy="150" r="6.5" fill="#39679c"/><text x="265" y="155">TD Grow $29</text>
+        <circle cx="240" cy="426" r="6.5" fill="#39679c"/><text x="253" y="431">EODHD All World $19.99</text>
+        <circle cx="340" cy="330" r="6.5" fill="#39679c"/><text x="353" y="335">Alpha Vantage $49.99（仍延迟）</text>
+        <circle cx="430" cy="104" r="10" fill="#2f7a5a"/><text x="446" y="109" font-weight="600">Alpaca Plus $99 · 全美实时</text>
+        <circle cx="455" cy="176" r="8" fill="#2f7a5a"/><text x="470" y="181" font-weight="600">EODHD ALL-IN-ONE $99.99（含 MCP）</text>
+        <circle cx="570" cy="84" r="10" fill="#2f7a5a"/><text x="586" y="89" font-weight="600">Massive Advanced $199 · tick</text>
+        <circle cx="700" cy="130" r="6.5" fill="#39679c"/><text x="713" y="135">TD Ultra $329</text>
+        <circle cx="790" cy="150" r="6.5" fill="#8a8a82"/><text x="783" y="185" fill="#4a4a45" text-anchor="end">Wind / iFinD 终端</text>
+      </g>
+    </svg>
+    <div class="legend">
+      <span><i class="dotk" style="background:#2f7a5a"></i>推荐</span>
+      <span><i class="dotk" style="background:#39679c"></i>备选</span>
+      <span><i class="dotk" style="background:#8a8a82"></i>受限 / 有边界</span>
+      <span>点越大＝越推荐 · TD＝Twelve Data</span>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="sec-head">
+    <p class="kicker">02 · 架构图</p>
+    <h2><svg class="ico ico-h2"><use href="#i-layers"/></svg>三层分工：实时走通道，分析走 MCP</h2>
+    <p>长桥官方自己把这套分工写了出来——<strong>实时行情与账户数据走 CLI 或 MCP，13 个 Skills 里的分析类能力挂在 MCP 上</strong>；它还专门做了 <code>longbridge-terminal</code>，自称 AI-native CLI、支持 <code>--format json</code>。这张图就是答案。</p>
+  </div>
+  <div class="card chart">
+    <svg class="fig" viewBox="0 0 900 372" role="img" aria-label="Agent 与三层接入形态及数据源关系图">
+      <defs>
+        <marker id="ar" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto">
+          <path d="M0 1 L9 5 L0 9 z" fill="rgba(34,34,31,.42)"/>
+        </marker>
+        <marker id="arg" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto">
+          <path d="M0 1 L9 5 L0 9 z" fill="#2f7a5a"/>
+        </marker>
+      </defs>
+
+      <!-- Agent -->
+      <rect x="18" y="148" width="118" height="72" rx="12" fill="rgba(255,255,255,.85)" stroke="rgba(34,34,31,.22)"/>
+      <text x="77" y="180" font-size="15" font-weight="650" fill="#22221f" text-anchor="middle">AI Agent</text>
+      <text x="77" y="200" font-size="12" fill="#7d7d76" text-anchor="middle">Claude Code 等</text>
+
+      <!-- 三层 -->
+      <rect x="212" y="42" width="240" height="76" rx="11" fill="rgba(47,122,90,.13)" stroke="#2f7a5a"/>
+      <text x="232" y="70" font-size="15" font-weight="650" fill="#2f7a5a">通道层 · CLI / 直连 API</text>
+      <text x="232" y="92" font-size="12.5" fill="#4a4a45">tick–秒级 · 上下文成本近零</text>
+      <text x="232" y="109" font-size="12" fill="#7d7d76">五档/十档 · 逐笔 · 经纪队列 · 盘后价</text>
+
+      <rect x="212" y="146" width="240" height="76" rx="11" fill="rgba(57,103,156,.11)" stroke="#39679c"/>
+      <text x="232" y="174" font-size="15" font-weight="650" fill="#39679c">方法层 · Skills</text>
+      <text x="232" y="196" font-size="12.5" fill="#4a4a45">本身不产生数据</text>
+      <text x="232" y="213" font-size="12" fill="#7d7d76">技术分析 · 缠论 · 希腊字母 · 因子</text>
+
+      <rect x="212" y="250" width="240" height="76" rx="11" fill="rgba(34,34,31,.07)" stroke="rgba(34,34,31,.3)"/>
+      <text x="232" y="278" font-size="15" font-weight="650" fill="#22221f">查询层 · MCP</text>
+      <text x="232" y="300" font-size="12.5" fill="#4a4a45">免费档多为 15 分钟或 T+1</text>
+      <text x="232" y="317" font-size="12" fill="#7d7d76">财报 · 一致预期 · 股东 · 宏观</text>
+
+      <!-- Agent 到三层 -->
+      <g fill="none" stroke="rgba(34,34,31,.42)" stroke-width="1.5" marker-end="url(#ar)">
+        <path d="M136 168 C175 168 175 80 208 80"/>
+        <path d="M136 184 H208"/>
+        <path d="M136 200 C175 200 175 288 208 288"/>
+      </g>
+
+      <!-- Skills 借道（虚线） -->
+      <g fill="none" stroke="#39679c" stroke-width="1.4" stroke-dasharray="4 4" marker-end="url(#ar)">
+        <path d="M332 146 V122"/>
+        <path d="M332 222 V246"/>
+      </g>
+      <text x="344" y="138" font-size="11.5" fill="#39679c">借道取数</text>
+
+      <!-- 数据源 -->
+      <rect x="536" y="42" width="342" height="284" rx="12" fill="rgba(255,255,255,.6)" stroke="rgba(34,34,31,.16)"/>
+      <text x="556" y="70" font-size="13" font-weight="650" fill="#7d7d76" letter-spacing=".05em">数据源</text>
+
+      <rect x="556" y="84" width="302" height="62" rx="9" fill="rgba(47,122,90,.12)"/>
+      <text x="574" y="108" font-size="14" font-weight="600" fill="#22221f">券商网关（富途 OpenD / 长桥）</text>
+      <text x="574" y="130" font-size="12.5" fill="#2f7a5a">tick 级 · 有交易所授权 · 可下单</text>
+
+      <rect x="556" y="158" width="302" height="62" rx="9" fill="rgba(47,122,90,.08)"/>
+      <text x="574" y="182" font-size="14" font-weight="600" fill="#22221f">公开行情接口（腾讯/新浪/东财）</text>
+      <text x="574" y="204" font-size="12.5" fill="#2f7a5a">秒级 · 免费 · 无授权无 SLA</text>
+
+      <rect x="556" y="232" width="302" height="76" rx="9" fill="rgba(34,34,31,.06)"/>
+      <text x="574" y="256" font-size="14" font-weight="600" fill="#22221f">数据商 REST（AV / EODHD / Massive…）</text>
+      <text x="574" y="278" font-size="12.5" fill="#4a4a45">延迟按订阅档位：EOD → 15 分钟 → 实时</text>
+      <text x="574" y="296" font-size="12" fill="#7d7d76">爬虫库（AKShare）上游也在这一层</text>
+
+      <!-- 通道层 → 券商网关/公开接口 -->
+      <g fill="none" stroke="#2f7a5a" stroke-width="1.6" marker-end="url(#arg)">
+        <path d="M452 70 C500 70 505 112 552 112"/>
+        <path d="M452 96 C500 96 505 186 552 186"/>
+      </g>
+      <!-- MCP → 数据商 -->
+      <g fill="none" stroke="rgba(34,34,31,.42)" stroke-width="1.5" marker-end="url(#ar)">
+        <path d="M452 288 C500 288 505 268 552 268"/>
+      </g>
+    </svg>
+    <p class="cap" style="margin-top:14px">读法：同一家产品在不同形态下延迟不同。装一堆分析 Skills 却连着 T+1 的源，结论照样是旧的——实时性由最右边那一列决定。</p>
+  </div>
+</section>
+
+<section>
+  <div class="sec-head">
+    <p class="kicker">03 · 决策树</p>
+    <h2><svg class="ico ico-h2"><use href="#i-route"/></svg>三个问题定方案，直接带月成本</h2>
+  </div>
+  <div class="card chart">
+    <svg class="fig" viewBox="0 0 900 400" role="img" aria-label="选型决策树">
+      <g fill="none" stroke="rgba(34,34,31,.32)" stroke-width="1.5">
+        <path d="M148 200 H186 M186 200 V72 H222"/>
+        <path d="M186 200 H222"/>
+        <path d="M186 200 V330 H222"/>
+        <path d="M406 72 H440 M440 72 V36 H478 M440 72 V112 H478"/>
+        <path d="M406 200 H440 M440 200 V164 H478 M440 200 V240 H478"/>
+        <path d="M406 330 H478"/>
+      </g>
+
+      <rect x="20" y="172" width="128" height="56" rx="10" fill="rgba(255,255,255,.85)" stroke="rgba(34,34,31,.24)"/>
+      <text x="84" y="198" font-size="14.5" font-weight="650" fill="#22221f" text-anchor="middle">你做哪个市场？</text>
+      <text x="84" y="216" font-size="11.5" fill="#7d7d76" text-anchor="middle">先分市场，再分延迟</text>
+
+      <rect x="222" y="46" width="184" height="52" rx="10" fill="rgba(47,122,90,.11)" stroke="#2f7a5a"/>
+      <text x="314" y="70" font-size="14" font-weight="600" fill="#22221f" text-anchor="middle">A 股 · 要盘中实时吗？</text>
+      <text x="314" y="88" font-size="11.5" fill="#7d7d76" text-anchor="middle">这一刀决定花不花钱</text>
+
+      <rect x="222" y="174" width="184" height="52" rx="10" fill="rgba(57,103,156,.11)" stroke="#39679c"/>
+      <text x="314" y="198" font-size="14" font-weight="600" fill="#22221f" text-anchor="middle">美股 · 要 tick / 期权吗？</text>
+      <text x="314" y="216" font-size="11.5" fill="#7d7d76" text-anchor="middle">差价 $100/月</text>
+
+      <rect x="222" y="304" width="184" height="52" rx="10" fill="rgba(34,34,31,.07)" stroke="rgba(34,34,31,.3)"/>
+      <text x="314" y="328" font-size="14" font-weight="600" fill="#22221f" text-anchor="middle">港股 / 多市场 + 下单</text>
+      <text x="314" y="346" font-size="11.5" fill="#7d7d76" text-anchor="middle">走券商，不买 API 订阅</text>
+
+      <g font-size="13.5">
+        <rect x="478" y="12" width="400" height="48" rx="9" fill="rgba(47,122,90,.16)"/>
+        <text x="498" y="32" font-weight="650" fill="#22221f">要 → 直连三源 curl（腾讯 + 新浪 + 东财）</text>
+        <text x="498" y="50" font-size="12.5" fill="#2f7a5a">¥0/月 · 秒级 + 五档 · 三源交叉校验</text>
+
+        <rect x="478" y="88" width="400" height="48" rx="9" fill="rgba(57,103,156,.13)"/>
+        <text x="498" y="108" font-weight="650" fill="#22221f">不要 → Tushare 官方 MCP（258 工具）</text>
+        <text x="498" y="126" font-size="12.5" fill="#39679c">积分制 ※≈200–500 元 · 财报/股东/宏观最全</text>
+
+        <rect x="478" y="140" width="400" height="48" rx="9" fill="rgba(47,122,90,.16)"/>
+        <text x="498" y="160" font-weight="650" fill="#22221f">要 → Massive Advanced（自建 MCP，3 工具）</text>
+        <text x="498" y="178" font-size="12.5" fill="#2f7a5a">$199/月 · tick + 20 年历史 · 年付省 20%</text>
+
+        <rect x="478" y="216" width="400" height="48" rx="9" fill="rgba(47,122,90,.16)"/>
+        <text x="498" y="236" font-weight="650" fill="#22221f">不要 → Alpaca Algo Trader Plus</text>
+        <text x="498" y="254" font-size="12.5" fill="#2f7a5a">$99/月 · 全美交易所实时（SIP）· 自带模拟盘</text>
+
+        <rect x="478" y="306" width="400" height="48" rx="9" fill="rgba(47,122,90,.16)"/>
+        <text x="498" y="326" font-weight="650" fill="#22221f">longbridge-terminal CLI 或 富途 OpenD</text>
+        <text x="498" y="344" font-size="12.5" fill="#2f7a5a">券商模式 · tick + 十档/逐笔 · 先确认行情权限</text>
+      </g>
+    </svg>
+  </div>
+</section>
+
+<section>
+  <div class="sec-head">
+    <p class="kicker">04 · 价格阶梯</p>
+    <h2><svg class="ico ico-h2"><use href="#i-coin"/></svg>每一档钱，换到的是什么</h2>
+    <p>价格为官网月付价（2026-07-25 核），年付通常另有折扣。条形长度表示相对价格量级。</p>
+  </div>
+  <div class="card chart">
+    <div class="tiers">
+      <div class="tier p0">
+        <div class="price">
+          <div class="pv"><svg class="ico ico-lg" style="color:var(--win)"><use href="#i-bolt"/></svg>¥0</div>
+          <div class="bar" style="width:6%"></div>
+          <div class="pu">零成本</div>
+        </div>
+        <div class="got">
+          <b>A 股：秒级可用。</b>腾讯 <code>qt.gtimg.cn</code>／新浪 <code>hq.sinajs.cn</code>／东财 <code>push2</code> 直连，五档盘口 + 秒级时间戳；baostock／CnStock／AKShare 提供 T+1 与历史。<br>
+          <b>美股：基础报价可用。</b>Finnhub 免费档 60 次/分含实时美股报价（二手口径）；Twelve Data Basic 8 credits/分、800 次/天含实时美股；Massive Basic 5 次/分但只有 EOD。<br>
+          <span class="no">拿不到：</span>十档／逐笔／经纪队列、交易所授权、SLA。
+        </div>
+      </div>
+      <div class="tier p1">
+        <div class="price">
+          <div class="pv"><svg class="ico ico-lg" style="color:var(--win)"><use href="#i-calendar"/></svg>$19–29</div>
+          <div class="bar" style="width:14%"></div>
+          <div class="pu">每月 · 历史与广度</div>
+        </div>
+        <div class="got">
+          EODHD All World $19.99（全球 EOD，10 万次/天）／All World Extended $29.99（加分钟级 + 15 分钟延迟 live）；Massive Stocks Starter $29（美股 15 分钟延迟、<b>无限调用</b>、5 年历史）；Twelve Data Grow $29。<br>
+          <span class="no">拿不到：</span>美股实时；EODHD 这两档<b>不含 MCP</b>。
+        </div>
+      </div>
+      <div class="tier p2">
+        <div class="price">
+          <div class="pv"><svg class="ico ico-lg" style="color:var(--alt)"><use href="#i-target"/></svg>$79–99</div>
+          <div class="bar" style="width:34%"></div>
+          <div class="pu">每月 · 实时门槛</div>
+        </div>
+        <div class="got">
+          <b>Alpaca Algo Trader Plus $99 = 全美交易所实时（SIP）+ 无限调用</b>，本次核到的美股实时最低价；EODHD ALL-IN-ONE $99.99 是<b>唯一在功能列表里写含 MCP Server</b> 的档；Massive Developer $79（仍 15 分钟延迟，10 年历史）；Alpha Vantage 150 次/分 $99.99；Twelve Data Pro $99。
+        </div>
+      </div>
+      <div class="tier p3">
+        <div class="price">
+          <div class="pv"><svg class="ico ico-lg" style="color:var(--warn)"><use href="#i-chart"/></svg>$149–329</div>
+          <div class="bar" style="width:62%"></div>
+          <div class="pu">每月 · tick 与高频</div>
+        </div>
+        <div class="got">
+          Massive Stocks Advanced $199＝<b>美股实时 + 20 年历史</b>（限非专业用户）；Alpha Vantage 300／600／1200 次/分＝$149.99／$199.99／$249.99（<b>买的是频次不是实时</b>）；Twelve Data Ultra $329（全市场实时 + WebSocket）。
+        </div>
+      </div>
+      <div class="tier p4">
+        <div class="price">
+          <div class="pv"><svg class="ico ico-lg"><use href="#i-shield"/></svg>万元级</div>
+          <div class="bar" style="width:100%"></div>
+          <div class="pu">每年 · 终端与机构</div>
+        </div>
+        <div class="got">
+          Wind 单账号 39,800 元/年（2023 年报道，买得多单价降至约 24,540 元）；同花顺 iFinD 约为 Wind 的 50–70%，折算约 2–2.8 万元/年；FactSet、S&amp;P Global 为机构报价、不公开。换到的是授权、SLA、可对外引用的口径。
+        </div>
+      </div>
+    </div>
+    <p class="cap" style="margin-top:16px">券商是另一种计价模型：不卖 API 订阅，行情随账户等级与行情卡走——见第 06 节的口径冲突提示。</p>
+  </div>
+</section>
+
+<section>
+  <div class="sec-head">
+    <p class="kicker">05 · 主横评表</p>
+    <h2><svg class="ico ico-h2"><use href="#i-scale"/></svg>一张表按月成本从低到高排</h2>
+    <p>每行末尾是一句话结论。<span class="tag t-win">赢家</span> 该预算档首选 · <span class="tag t-alt">备选</span> 有条件更优 · <span class="tag t-warn">留意</span> 有明确边界 · <span class="tag t-lim">受限</span> 硬门槛或信息缺口</p>
+  </div>
+  <div class="tbl-wrap card">
+    <table>
+      <caption>全方案总表 · 价格为官网月付价（2026-07-25 核实），标 ※ 为二手源待核</caption>
+      <thead><tr>
+        <th>方案</th><th>形态</th><th>月成本</th><th>延迟</th><th>市场</th><th>授权</th><th>盘口深度</th><th>下单</th><th>一句话结论</th>
+      </tr></thead>
+      <tbody>
+        <tr>
+          <td class="name">腾讯 qt.gtimg.cn<span class="sub">公开接口</span></td>
+          <td>curl 直连</td><td class="price-cell free">¥0</td>
+          <td><span class="lat fast"><svg class="ico"><use href="#i-bolt"/></svg>秒级</span></td>
+          <td>A/港/美</td><td><svg class="ico ng" style="width:17px;height:17px"><use href="#i-cross"/></svg></td><td>五档</td>
+          <td><svg class="ico ng" style="width:17px;height:17px"><use href="#i-cross"/></svg></td>
+          <td class="oneline">字段最全的零成本源，免 Referer；A 股秒级，港/美为延迟档（盘中亲验滞后 15 分 03 秒） <span class="tag t-win">赢家</span></td>
+        </tr>
+        <tr>
+          <td class="name">新浪 hq.sinajs.cn<span class="sub">须带 Referer</span></td>
+          <td>curl 直连</td><td class="price-cell free">¥0</td>
+          <td><span class="lat fast"><svg class="ico"><use href="#i-bolt"/></svg>秒级</span></td>
+          <td>A/港/美</td><td><svg class="ico ng" style="width:17px;height:17px"><use href="#i-cross"/></svg></td><td>五档（A 股）</td>
+          <td><svg class="ico ng" style="width:17px;height:17px"><use href="#i-cross"/></svg></td>
+          <td class="oneline">美股盘后价 + 港股实时价（<code>rt_</code> 前缀，盘中亲验 0 延迟）都只有它免费给 <span class="tag t-win">赢家</span></td>
+        </tr>
+        <tr>
+          <td class="name">东财 push2<span class="sub">代号字段制</span></td>
+          <td>curl → JSON</td><td class="price-cell free">¥0</td>
+          <td><span class="lat fast"><svg class="ico"><use href="#i-bolt"/></svg>秒级</span></td>
+          <td>A/港/美</td><td><svg class="ico ng" style="width:17px;height:17px"><use href="#i-cross"/></svg></td><td>五档</td>
+          <td><svg class="ico ng" style="width:17px;height:17px"><use href="#i-cross"/></svg></td>
+          <td class="oneline">返回 JSON 带 Unix 时间戳，脚本化最省事 <span class="tag t-alt">备选</span></td>
+        </tr>
+        <tr>
+          <td class="name">baostock 系 MCP<span class="sub">a-share-mcp，41 工具</span></td>
+          <td>MCP 自建</td><td class="price-cell free">¥0</td>
+          <td><span class="lat slow"><svg class="ico"><use href="#i-calendar"/></svg>T+1</span></td>
+          <td>A 股</td><td><svg class="ico ng" style="width:17px;height:17px"><use href="#i-cross"/></svg></td><td class="ng">无</td>
+          <td><svg class="ico ng" style="width:17px;height:17px"><use href="#i-cross"/></svg></td>
+          <td class="oneline">财报与历史够用，日线要等 17:30，绝不能盯盘 <span class="tag t-warn">留意</span></td>
+        </tr>
+        <tr>
+          <td class="name">CnStock 公开端点<span class="sub">3 工具</span></td>
+          <td>MCP 托管</td><td class="price-cell free">¥0</td>
+          <td><span class="lat slow"><svg class="ico"><use href="#i-calendar"/></svg>T+1</span></td>
+          <td>沪深主板</td><td><svg class="ico ng" style="width:17px;height:17px"><use href="#i-cross"/></svg></td><td class="ng">无</td>
+          <td><svg class="ico ng" style="width:17px;height:17px"><use href="#i-cross"/></svg></td>
+          <td class="oneline">零配置试水，但查询流向第三方主机 <span class="tag t-warn">留意</span></td>
+        </tr>
+        <tr>
+          <td class="name">AKShare / efinance</td>
+          <td>Python 库</td><td class="price-cell free">¥0</td>
+          <td><span class="lat mid"><svg class="ico"><use href="#i-hourglass"/></svg>秒级–T+1</span></td>
+          <td>全品类</td><td><svg class="ico ng" style="width:17px;height:17px"><use href="#i-cross"/></svg></td><td>视源</td>
+          <td><svg class="ico ng" style="width:17px;height:17px"><use href="#i-cross"/></svg></td>
+          <td class="oneline">爬虫聚合，可指定复权；源站改版即失效 <span class="tag t-warn">留意</span></td>
+        </tr>
+        <tr>
+          <td class="name">Finnhub<span class="sub">仅社区 MCP</span></td>
+          <td>API + 社区 MCP</td><td class="price-cell">¥0 起 <span class="ng">※$11.99–99.99</span></td>
+          <td><span class="lat fast"><svg class="ico"><use href="#i-bolt"/></svg>实时（免费档）</span></td>
+          <td>美股 + 全球</td><td><svg class="ico ok" style="width:17px;height:17px"><use href="#i-check"/></svg></td><td class="ng">无</td>
+          <td><svg class="ico ng" style="width:17px;height:17px"><use href="#i-cross"/></svg></td>
+          <td class="oneline">免费档 60 次/分含实时美股报价，性价比高；官方不出 MCP，免费档仅个人用途 <span class="tag t-alt">备选</span></td>
+        </tr>
+        <tr>
+          <td class="name">Tiingo<span class="sub">REST API</span></td>
+          <td>API</td><td class="price-cell">$0 / <strong>30</strong></td>
+          <td><span class="lat mid"><svg class="ico"><use href="#i-clock"/></svg>EOD–IEX 实时</span></td>
+          <td>美股 + 全球</td><td><svg class="ico ok" style="width:17px;height:17px"><use href="#i-check"/></svg></td><td class="ng">无</td>
+          <td><svg class="ico ng" style="width:17px;height:17px"><use href="#i-cross"/></svg></td>
+          <td class="oneline">免费档 30+ 年日线历史（50 次/时·500 标的/月·仅个人用途）；Power $30 加 IEX 实时 + 万次/时 <span class="tag t-win">历史赢家</span></td>
+        </tr>
+        <tr>
+          <td class="name">Twelve Data 官方 MCP</td>
+          <td>MCP 托管</td><td class="price-cell">$0 / 29 / 99 / 329</td>
+          <td><span class="lat fast"><svg class="ico"><use href="#i-bolt"/></svg>实时（美股免费档）</span></td>
+          <td>50+ 国</td><td><svg class="ico ok" style="width:17px;height:17px"><use href="#i-check"/></svg></td><td class="ng">无</td>
+          <td><svg class="ico ng" style="width:17px;height:17px"><use href="#i-cross"/></svg></td>
+          <td class="oneline">免费档就给实时美股，欧洲实时要 Pro $99 <span class="tag t-alt">备选</span></td>
+        </tr>
+        <tr>
+          <td class="name">EODHD 官方 MCP<span class="sub">亲验 86 工具</span></td>
+          <td>MCP 托管/本地</td><td class="price-cell">$0–<strong>99.99</strong><span class="sub">19.99 / 29.99 / 59.99 / 99.99</span></td>
+          <td><span class="lat mid"><svg class="ico"><use href="#i-clock"/></svg>15 分钟–实时</span></td>
+          <td>60+ 交易所</td><td><svg class="ico ok" style="width:17px;height:17px"><use href="#i-check"/></svg></td><td class="ng">无</td>
+          <td><svg class="ico ng" style="width:17px;height:17px"><use href="#i-cross"/></svg></td>
+          <td class="oneline">国际广度最好，<strong>MCP 只在 $99.99 ALL-IN-ONE 档标注包含</strong> <span class="tag t-win">赢家</span></td>
+        </tr>
+        <tr>
+          <td class="name">Alpha Vantage 官方 MCP<span class="sub">80+ 工具，Anthropic 认证</span></td>
+          <td>MCP 托管</td><td class="price-cell">$0–249.99<span class="sub">49.99 / 99.99 / 149.99 / 199.99 / 249.99</span></td>
+          <td><span class="lat mid"><svg class="ico"><use href="#i-clock"/></svg>15 分钟延迟</span></td>
+          <td>美股 + 全球</td><td><svg class="ico ok" style="width:17px;height:17px"><use href="#i-check"/></svg></td><td class="ng">无</td>
+          <td><svg class="ico ng" style="width:17px;height:17px"><use href="#i-cross"/></svg></td>
+          <td class="oneline">接进 Claude 最省事，但免费档仅 25 请求/天、五档涨价买的是频次 <span class="tag t-alt">备选</span></td>
+        </tr>
+        <tr>
+          <td class="name">Alpaca 官方 MCP<span class="sub">50+ 工具</span></td>
+          <td>MCP 自建 + 券商</td><td class="price-cell">$0 / <strong>99</strong></td>
+          <td><span class="lat fast"><svg class="ico"><use href="#i-bolt"/></svg>付费档实时</span></td>
+          <td>美股/期权/加密</td><td><svg class="ico ok" style="width:17px;height:17px"><use href="#i-check"/></svg></td><td>SIP 全交易所</td>
+          <td><svg class="ico ok" style="width:17px;height:17px"><use href="#i-check"/></svg></td>
+          <td class="oneline">美股实时的最低门槛，且自带模拟盘练手 <span class="tag t-win">赢家</span></td>
+        </tr>
+        <tr>
+          <td class="name">Massive（原 Polygon.io）<span class="sub">官方 MCP 3 工具</span></td>
+          <td>MCP 自建</td><td class="price-cell">$0 / 29 / 79 / <strong>199</strong></td>
+          <td><span class="lat fast"><svg class="ico"><use href="#i-bolt"/></svg>$199 档 tick</span></td>
+          <td>美股/期权/期货</td><td><svg class="ico ok" style="width:17px;height:17px"><use href="#i-check"/></svg></td><td>tick 级</td>
+          <td><svg class="ico ng" style="width:17px;height:17px"><use href="#i-cross"/></svg></td>
+          <td class="oneline">$199 档给 tick + 20 年历史，工具设计最省上下文 <span class="tag t-win">赢家</span></td>
+        </tr>
+        <tr>
+          <td class="name">Tushare 官方 MCP<span class="sub">亲验 258 工具</span></td>
+          <td>MCP 托管</td><td class="price-cell">积分制 <span class="ng">※≈200/500 元</span></td>
+          <td><span class="lat slow"><svg class="ico"><use href="#i-calendar"/></svg>多为日频</span></td>
+          <td>A 股 + 基金/期货</td><td><svg class="ico ok" style="width:17px;height:17px"><use href="#i-check"/></svg></td><td class="ng">无</td>
+          <td><svg class="ico ng" style="width:17px;height:17px"><use href="#i-cross"/></svg></td>
+          <td class="oneline">A 股财务面最全，但官方无公开价目表、实时不是强项 <span class="tag t-win">赢家</span></td>
+        </tr>
+        <tr>
+          <td class="name">longbridge-terminal<span class="sub">官方 CLI，949★</span></td>
+          <td>CLI（<code>--format json</code>）</td><td class="price-cell">券商模式</td>
+          <td><span class="lat fast"><svg class="ico"><use href="#i-bolt"/></svg>tick 级</span></td>
+          <td>港/美/A/新</td><td><svg class="ico ok" style="width:17px;height:17px"><use href="#i-check"/></svg></td><td>盘口+经纪队列+逐笔</td>
+          <td><svg class="ico ok" style="width:17px;height:17px"><use href="#i-check"/></svg></td>
+          <td class="oneline">为 Agent 设计的实时通道；行情商店港股 LV2 ※158 港币/月，约富途三分之一 <span class="tag t-win">赢家</span></td>
+        </tr>
+        <tr>
+          <td class="name">富途 OpenD + Skills<span class="sub">本地 TCP 网关</span></td>
+          <td>网关 + Skills</td><td class="price-cell">券商模式<span class="sub">※LV2 约488港币/月</span></td>
+          <td><span class="lat fast"><svg class="ico"><use href="#i-bolt"/></svg>tick 级推送</span></td>
+          <td>港/美/A/日/新</td><td><svg class="ico ok" style="width:17px;height:17px"><use href="#i-check"/></svg></td><td>LV2 十档 + 逐笔</td>
+          <td><svg class="ico ok" style="width:17px;height:17px"><use href="#i-check"/></svg></td>
+          <td class="oneline">深度最好；免费 LV2 活动已中止（07-27 复核），付费行情卡在售、App 行情商城内购 <span class="tag t-warn">留意</span></td>
+        </tr>
+        <tr>
+          <td class="name">OpenBB<span class="sub">CLI 1.4.2 + MCP 200+ 工具</span></td>
+          <td>CLI + MCP</td><td class="price-cell free">开源 ¥0<span class="sub">企业版另议</span></td>
+          <td><span class="lat mid"><svg class="ico"><use href="#i-hourglass"/></svg>取决于所选源</span></td>
+          <td>全球</td><td>视源</td><td>视源</td>
+          <td><svg class="ico ng" style="width:17px;height:17px"><use href="#i-cross"/></svg></td>
+          <td class="oneline">30+ 数据源统一层，接多源时省掉重复适配 <span class="tag t-win">赢家</span></td>
+        </tr>
+        <tr>
+          <td class="name">同花顺 iFinD MCP<span class="sub">~20 工具</span></td>
+          <td>MCP 托管</td><td class="price-cell"><span class="ng">※约 2–2.8 万元/年</span></td>
+          <td><span class="lat fast"><svg class="ico"><use href="#i-shield"/></svg>终端级</span></td>
+          <td>A 股 + 基金 + 宏观</td><td><svg class="ico ok" style="width:17px;height:17px"><use href="#i-check"/></svg></td><td>终端级</td>
+          <td><svg class="ico ng" style="width:17px;height:17px"><use href="#i-cross"/></svg></td>
+          <td class="oneline">唯一把终端级数据做成 MCP 的，需终端授权 <span class="tag t-win">赢家</span></td>
+        </tr>
+        <tr>
+          <td class="name">Wind 万得<span class="sub">无官方 MCP</span></td>
+          <td>本地 Agent / 社区桥</td><td class="price-cell"><span class="ng">※39,800 元/年·单账号</span></td>
+          <td><span class="lat fast"><svg class="ico"><use href="#i-shield"/></svg>终端级</span></td>
+          <td>A 股 + 全球</td><td><svg class="ico ok" style="width:17px;height:17px"><use href="#i-check"/></svg></td><td>终端级</td>
+          <td><svg class="ico ng" style="width:17px;height:17px"><use href="#i-cross"/></svg></td>
+          <td class="oneline">官方走 WindClaw，MCP 只能靠社区桥 WindPy <span class="tag t-lim">受限</span></td>
+        </tr>
+        <tr>
+          <td class="name">FMP 官方 MCP</td>
+          <td>MCP</td><td class="price-cell"><span class="ng">※Professional $149</span></td>
+          <td><span class="lat mid"><svg class="ico"><use href="#i-hourglass"/></svg>视订阅</span></td>
+          <td>全球</td><td><svg class="ico ok" style="width:17px;height:17px"><use href="#i-check"/></svg></td><td class="ng">无</td>
+          <td><svg class="ico ng" style="width:17px;height:17px"><use href="#i-cross"/></svg></td>
+          <td class="oneline">官网文档与托管域名均抓不到，价格与归属未核实 <span class="tag t-lim">信息缺口</span></td>
+        </tr>
+        <tr>
+          <td class="name">FactSet / S&amp;P Global<span class="sub">Bloomberg 不开放</span></td>
+          <td>MCP 企业</td><td class="price-cell"><span class="ng">机构报价</span></td>
+          <td><span class="lat fast"><svg class="ico"><use href="#i-shield"/></svg>实时</span></td>
+          <td>全球</td><td><svg class="ico ok" style="width:17px;height:17px"><use href="#i-check"/></svg></td><td>机构级</td>
+          <td><svg class="ico ng" style="width:17px;height:17px"><use href="#i-cross"/></svg></td>
+          <td class="oneline">授权与审计链条写在合同里，个人用不上 <span class="tag t-alt">机构线</span></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<section>
+  <div class="sec-head">
+    <p class="kicker">06 · 缺口</p>
+    <h2><svg class="ico ico-h2" style="color:var(--warn)"><use href="#i-alert"/></svg>价格缺口与口径冲突：一处已裁决，三处待核</h2>
+    <p>按调研纪律，抓不到就写抓不到，冲突就并列，不替厂商圆场。</p>
+  </div>
+  <div class="card conflict">
+    <h3><svg class="ico ico-lg"><use href="#i-search"/></svg>当前状态</h3>
+    <ul>
+      <li><strong>富途免费 LV2 —— 已裁决（07-27 复核）：免费活动中止，付费一直在售。</strong>帮助中心明示"以往所有免费 LV2 串流报价的活动已中止"；港股 LV2 行情卡在售，第三方口径约 488 港币/月（※以 App 行情商城标价为准）；API 文档"境内认证免费 LV2"按过期口径处理。<b>收费不等于没有——开通与扣费见第 11 节。</b></li>
+      <li><strong>Tushare 没有公开价目表。</strong>官方页只写"付费加入微信专业群送 5000 积分""加入高级用户 QQ 群点击付费 200"，以及"赞助社区获得积分权限，金额随意"。社区口径的 2000 分≈200 元、5000 分≈500 元来自第三方博客，本页已标 ※。</li>
+      <li><strong>FMP 官方 MCP 信息拿不到。</strong>官方文档页被 CloudFront 403 拦截，<code>mcp.financialmodelingprep.com</code> DNS 不通；"Professional $149/月含 MCP"来自二手汇总，未核。</li>
+      <li><strong>EODHD 的 MCP 归属档位有歧义。</strong>订阅页只在 ALL-IN-ONE $99.99 的功能列表里标出 MCP Server，而 MCP 产品页写"Free and paid plans"。本页按订阅页口径记为 $99.99 档，实际以下单页为准。</li>
+    </ul>
+  </div>
+</section>
+
+<section>
+  <div class="sec-head">
+    <p class="kicker">07 · 三层定位</p>
+    <h2><svg class="ico ico-h2"><use href="#i-layers"/></svg>CLI、Skills、MCP 各管什么</h2>
+  </div>
+  <div class="three">
+    <div class="card lane">
+      <span class="badge b-win"><svg class="ico"><use href="#i-terminal"/></svg>通道层</span>
+      <h3>CLI / 直连 API</h3>
+      <p class="ess">进程外执行，Agent 用 Bash 调用，不经包装与缓存。</p>
+      <dl>
+        <dt>实时性上限</dt><dd>tick 级（券商网关）／秒级（免费直连）</dd>
+        <dt>上下文成本</dt><dd>近乎零——不注入工具定义</dd>
+        <dt>字段深度</dt><dd>最全：五档/十档、逐笔、经纪队列、盘后价</dd>
+        <dt>代价</dt><dd>自己拼命令、处理编码与限流</dd>
+      </dl>
+    </div>
+    <div class="card lane">
+      <span class="badge b-alt"><svg class="ico"><use href="#i-book"/></svg>方法层</span>
+      <h3>Skills</h3>
+      <p class="ess">本身<strong>不产生数据</strong>，是按需加载的指令 + 脚本包。</p>
+      <dl>
+        <dt>实时性上限</dt><dd>等于它背后调的通道</dd>
+        <dt>上下文成本</dt><dd>低——按相关性加载</dd>
+        <dt>典型内容</dt><dd>长桥 13 个：技术分析、缠论、艾略特、希腊字母、价值投资、量化因子</dd>
+        <dt>代价</dt><dd>只解决"怎么算"，不解决"数据从哪来"</dd>
+      </dl>
+    </div>
+    <div class="card lane">
+      <span class="badge b-lim"><svg class="ico"><use href="#i-plug"/></svg>查询层</span>
+      <h3>MCP</h3>
+      <p class="ess">把 REST API 包成工具集，适合结构化查询。</p>
+      <dl>
+        <dt>实时性上限</dt><dd>视订阅档；免费档多为 15 分钟或 T+1</dd>
+        <dt>上下文成本</dt><dd>高——Tushare 实测 258 个、长桥 148 个常驻</dd>
+        <dt>强项</dt><dd>财报、一致预期、股东、宏观、机构数据</dd>
+        <dt>代价</dt><dd>多一跳包装；社区实现上游是公开接口</dd>
+      </dl>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="sec-head">
+    <p class="kicker">08 · 实时性</p>
+    <h2><svg class="ico ico-h2"><use href="#i-clock"/></svg>延迟阶梯：先确定要落在哪一档</h2>
+    <p>跨档不是"差一点"，而是根本不能用于该场景。</p>
+  </div>
+  <div class="card chart">
+    <div class="ladder">
+      <div class="rung l1"><div class="lv"><svg class="ico ico-lg" style="color:var(--win)"><use href="#i-bolt"/></svg>tick 级</div><div class="d"><b>券商网关 + CLI，或 $199 档数据商</b>：富途 OpenD 订阅推送、<code>longbridge-terminal</code>、Massive Stocks Advanced $199。有交易所授权，可用于实盘。</div></div>
+      <div class="rung l2"><div class="lv"><svg class="ico ico-lg" style="color:var(--win)"><use href="#i-clock"/></svg>秒级</div><div class="d"><b>免费直连行情接口</b>：腾讯／新浪／东财 push2。亲验带秒级时间戳与五档，盘中约 3 秒粒度；<b>港股实时价用新浪 <code>rt_</code> 前缀</b>（盘中亲验与墙钟同秒，但无盘口）。无授权无 SLA，靠多源交叉校验保准确。</div></div>
+      <div class="rung l3"><div class="lv"><svg class="ico ico-lg" style="color:var(--warn)"><use href="#i-hourglass"/></svg>15 分钟</div><div class="d"><b>数据商入门档</b>：Alpha Vantage 免费与入门档、Massive Starter $29／Developer $79、Alpaca 免费档（REST）。<b>腾讯的港/美股与新浪无前缀港股也在这档</b>（亲验腾讯港股滞后 15 分 03 秒）。适合复盘研究，不适合盯盘。</div></div>
+      <div class="rung l4"><div class="lv"><svg class="ico ico-lg"><use href="#i-calendar"/></svg>T+1</div><div class="d"><b>免费 MCP 与爬虫库</b>：baostock 系（日线 17:30 齐、分钟线次日 11:00）、CnStock、yfinance 系。回测与财报分析可用，绝不进盘中决策链。</div></div>
+    </div>
+    <p class="cap" style="margin-top:16px">注意：同一家产品在不同形态下延迟不同。长桥 CLI 是 tick 级，其 MCP 分析类工具是另一档；富途 Skills 的实时数据全部来自本地 OpenD 网关。</p>
+  </div>
+</section>
+
+<section>
+  <div class="sec-head">
+    <p class="kicker">09 · 准确性</p>
+    <h2><svg class="ico ico-h2"><use href="#i-shield"/></svg>六道闸门，决定拿到的数字能不能信</h2>
+  </div>
+  <div class="gates">
+    <div class="card gate">
+      <div class="n"><svg class="ico ico-lg"><use href="#i-shield"/></svg>闸门 1</div><h3>行情授权等级</h3>
+      <p>盘口深度是买来的授权，不是软件功能。LV2 才有实时逐笔 + 十档 + 经纪队列；免费公开接口只到五档。富途 API 文档称境内认证客户港股免费 LV2、美股推广期免费 LV3——但与行情卡帮助页口径冲突，见第 06 节。</p>
+      <div class="m">规划成本前先确认自己账户的真实权限</div>
+    </div>
+    <div class="card gate">
+      <div class="n"><svg class="ico ico-lg"><use href="#i-chart"/></svg>闸门 2</div><h3>复权处理</h3>
+      <p>不复权价做技术分析、算收益率一定错，除权除息日会出现"假跌停"。AKShare 分时可指定复权，但各源默认口径不同，必须显式声明前复权/后复权。</p>
+      <div class="m">跨源比价前先对齐复权口径</div>
+    </div>
+    <div class="card gate">
+      <div class="n"><svg class="ico ico-lg"><use href="#i-scale"/></svg>闸门 3</div><h3>多源交叉校验</h3>
+      <p>免费源无 SLA，唯一可行的准确性验证是同时打两三个源比对。本次亲验：新浪 1297.410、腾讯 1297.41、东财 f43=129741（÷100）——三源对 600519 完全一致。</p>
+      <div class="m">分歧时以带交易所授权的源为准</div>
+    </div>
+    <div class="card gate">
+      <div class="n"><svg class="ico ico-lg"><use href="#i-layers"/></svg>闸门 4</div><h3>上游稳定性</h3>
+      <p>AKShare 本质是分布式爬虫集合，源站改版即失效；社区 MCP 多数建在同一批公开接口上，故障会一起发生。付费档买到的一部分就是稳定性。</p>
+      <div class="m">生产链路别把免费爬虫当唯一源</div>
+    </div>
+    <div class="card gate">
+      <div class="n"><svg class="ico ico-lg"><use href="#i-hourglass"/></svg>闸门 5</div><h3>限流与配额</h3>
+      <p>Alpha Vantage 免费 25 请求/天；Alpaca 免费档 200 次/分且 WebSocket 限 30 标的；富途每 30 秒最多 60 次快照、订阅额度按资产 100/300/1000/2000；EODHD 各付费档统一 10 万次/天、1000 次/分。超限常返回空值或旧值，比报错更危险。</p>
+      <div class="m">Agent 循环取数必须做退避与空值检查</div>
+    </div>
+    <div class="card gate">
+      <div class="n"><svg class="ico ico-lg"><use href="#i-search"/></svg>闸门 6</div><h3>字段语义</h3>
+      <p>东财 push2 是代号制：<code>f43</code> 价格需 ÷100、<code>f86</code> 是 Unix 行情时间戳、<code>f169/f170</code> 为涨跌额与涨跌幅。搞错含义会静默产出错误结论。</p>
+      <div class="m">用时间戳字段自检新鲜度，别假设"刚拿到就是新的"</div>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="sec-head">
+    <p class="kicker">10 · 可直接用</p>
+    <h2><svg class="ico ico-h2"><use href="#i-terminal"/></svg>五条命令：A 股秒级 + 港股实时 + 全量历史，全零成本</h2>
+    <p>不装包、不起服务，Bash 直接跑；多源同时打就是交叉校验。</p>
+  </div>
+  <div class="card chart">
+    <h3><svg class="ico ico-in"><use href="#i-bolt"/></svg>腾讯 · 字段最全（A 股 80+，含涨跌停价、量比、换手、五档）</h3>
+    <pre><code>curl -s 'https://qt.gtimg.cn/q=sh600519,hk00700,usAAPL' | iconv -f gbk -t utf-8</code></pre>
+    <p class="cap" style="margin-top:10px">亲验：无需 Referer（200），一次请求混查三市场。A 股秒级时间戳；<strong>港/美为延迟档</strong>——07-27 盘中亲验港股时间戳 <code>15:39:55</code> vs 墙钟 <code>15:54:58</code>，滞后 15 分 03 秒。</p>
+
+    <h3 style="margin-top:24px"><svg class="ico ico-in"><use href="#i-clock"/></svg>新浪 · 港股实时价（rt_ 前缀）+ 美股盘后价</h3>
+    <pre><code>curl -s -H 'Referer: https://finance.sina.com.cn' \
+  'https://hq.sinajs.cn/list=sh600519,rt_hk00700,gb_aapl' | iconv -f gbk -t utf-8</code></pre>
+    <p class="cap" style="margin-top:10px">亲验：<strong>不带 Referer 直接 403</strong>。<strong>港股必须带 <code>rt_</code> 前缀</strong>——盘中亲验 <code>rt_hk00700</code> 时间戳 <code>15:54:58</code> 与墙钟同秒（实时）；写成 <code>hk00700</code> 就掉进延迟档（<code>15:33</code>，差 22 分钟）。买卖档字段为 0：免费拿得到实时价格，拿不到盘口。美股给收盘 + 盘后双价。</p>
+
+    <h3 style="margin-top:24px"><svg class="ico ico-in"><use href="#i-plug"/></svg>东方财富 · JSON 结构，适合脚本</h3>
+    <pre><code>curl -s -H 'Referer: https://quote.eastmoney.com/' \
+  'https://push2.eastmoney.com/api/qt/stock/get?secid=1.600519&fields=f43,f57,f58,f86,f169,f170'</code></pre>
+    <p class="cap" style="margin-top:10px">亲验：需带 Referer。<code>secid</code> 前缀 1=沪、0=深、105=纳斯达克、116=港股。</p>
+
+    <h3 style="margin-top:24px"><svg class="ico ico-in"><use href="#i-chart"/></svg>A 股复权日线全历史 · 东财 push2his</h3>
+    <pre><code>curl -s -H 'Referer: https://quote.eastmoney.com/' \
+  'https://push2his.eastmoney.com/api/qt/stock/kline/get?secid=1.600519&fields1=f1&fields2=f51,f53&klt=101&fqt=2&beg=0&end=20500101'</code></pre>
+    <p class="cap" style="margin-top:10px">亲验：一次拉全 600519 自 <strong>2001-08-27</strong> 至今（124KB）。两个坑都亲验过：<strong><code>fqt=1</code> 前复权远端出负价</strong>（茅台 2001 年 −312.47），长周期回测用 <code>fqt=2</code> 后复权；<strong>连打即被限流</strong>（连续重试全 000）——脚本加 3 秒以上间隔、多源互备。</p>
+
+    <h3 style="margin-top:24px"><svg class="ico ico-in"><use href="#i-calendar"/></svg>港股复权日线 · 腾讯 hkfqkline</h3>
+    <pre><code>curl -s 'https://web.ifzq.gtimg.cn/appstock/app/hkfqkline/get?param=hk00700,day,,,320,qfq'</code></pre>
+    <p class="cap" style="margin-top:10px">亲验：200 / 58KB / 320 根，最后一根即当天。另注意：<strong>Stooq 免费 CSV 已上 JS proof-of-work 反爬（失效）</strong>；Yahoo <code>query1</code> 不带浏览器 UA 直接 429，带 UA 后 <code>range=max</code> 可取全历史——能用但无授权，只做原型。</p>
+  </div>
+</section>
+
+<section>
+  <div class="sec-head">
+    <p class="kicker">11 · 开通与扣费</p>
+    <h2><svg class="ico ico-h2"><use href="#i-route"/></svg>付费四张开通卡：多少钱、去哪买、怎么扣</h2>
+    <p>免费档的开通只有一步（注册拿 key：<a href="https://alpaca.markets">Alpaca</a> 免信用卡、<a href="https://www.tiingo.com">Tiingo</a> 注册即用）。下面是四条付费路线的实操，价格标 ※ 为二手源，下单前以官方页为准。</p>
+  </div>
+  <div class="cases">
+
+    <div class="card case">
+      <div class="q"><svg class="ico ico-lg"><use href="#i-book"/></svg>A 股批量 · 第一笔最值的付费</div>
+      <div class="pick">Tushare 积分（200 元档起）</div>
+      <div class="cost"><svg class="ico"><use href="#i-coin"/></svg>※≈¥200–500 一次性 · 年度有效</div>
+      <ul class="ev">
+        <li>① <a href="https://tushare.pro">tushare.pro</a> 注册 → 个人主页复制 token</li>
+        <li>② 「积分获取」页充值：※2000 分≈200 元、5000 分≈500 元（本质年度赞助，官方无价目表）</li>
+        <li>③ 2000 分解锁周月线/财报/基金/期货主力接口；5000 分再开基金持仓、期权日线，频次更高</li>
+        <li>④ 扣费＝支付宝/微信一次性充值，<b>无自动续扣</b>，积分调用不消耗、到期回落</li>
+      </ul>
+      <div class="avoid"><b>先别买：</b>免费直连没被封过 IP、批量需求低——这 200 元是在买稳定性，不是买数据。</div>
+    </div>
+
+    <div class="card case">
+      <div class="q"><svg class="ico ico-lg"><use href="#i-bolt"/></svg>港股盘口 · 最便宜的正规解</div>
+      <div class="pick">长桥行情商店 港股 LV2</div>
+      <div class="cost"><svg class="ico"><use href="#i-coin"/></svg>※158 港币/月（Plus 338 · 美股 L1+ 46）</div>
+      <ul class="ev">
+        <li>① Longbridge App 开户（现有入金 1 万港币送 200 + 免佣活动）</li>
+        <li>② longbridge.com 开发者平台完成<b>开发者认证 + OpenAPI 权限申请</b>——官方原文：接口本身"不额外收取开通或使用费用"</li>
+        <li>③ App 行情商店订阅行情包；OpenAPI／CLI／MCP 的行情权限跟随账户</li>
+        <li>④ 扣费＝连续包月、从证券账户资金扣，可随时退订</li>
+      </ul>
+      <div class="avoid"><b>先别买：</b>只看价格不看盘口——新浪 <code>rt_</code> 免费拿实时价就够，LV2 买的是逐笔/十档/经纪队列。</div>
+    </div>
+
+    <div class="card case">
+      <div class="q"><svg class="ico ico-lg"><use href="#i-layers"/></svg>已在富途生态 · 就地升级</div>
+      <div class="pick">富途行情卡 + OpenD</div>
+      <div class="cost"><svg class="ico"><use href="#i-coin"/></svg>※港股 LV2 约 488 港币/月</div>
+      <ul class="ev">
+        <li>① 牛牛 App 开户 → 「行情商城」购行情卡（免费 LV2 活动已中止，付费在售，另有更贵 SF 全盘档）</li>
+        <li>② 量化跑本地 OpenD 网关，行情权限跟随账户行情卡等级</li>
+        <li>③ 扣费＝App 内按月购卡；美股方向留意限时免费 LV3 活动</li>
+      </ul>
+      <div class="avoid"><b>先别买：</b>单为港股 LV2 新开户——长桥 ※158 港币约为富途三分之一。富途赢在 OpenD 生态与五市场覆盖。</div>
+    </div>
+
+    <div class="card case">
+      <div class="q"><svg class="ico ico-lg"><use href="#i-chart"/></svg>美股 · 按预算上台阶</div>
+      <div class="pick">$29 Massive → $30 Tiingo → $99 Alpaca</div>
+      <div class="cost"><svg class="ico"><use href="#i-coin"/></svg>信用卡月订（Visa/Master）· 年付普遍省 20%</div>
+      <ul class="ev">
+        <li><b>Massive Starter $29</b>：15 分钟延迟 + 5 年历史 + 不限调用——回测党起步</li>
+        <li><b>Tiingo Power $30</b>：IEX 实时 + 10000 次/时 + 全 symbol（仍限内部使用）</li>
+        <li><b>Alpaca Algo Trader Plus $99</b>：全市场 SIP 实时 + OPRA 期权 + 历史无"最近 15 分钟"洞，Dashboard 内订阅</li>
+        <li>同价位 Alpha Vantage（$49.99 起）与 Finnhub（模块制 ※$50/月/类起）无比较优势，仅当已绑定其生态</li>
+      </ul>
+      <div class="avoid"><b>避雷 AllTick：</b>中文"横评"吹免费 5000 次/日并推为首选；官方定价页实为<b>免费 10 个演示品种、10 次/分</b>，全美股 799 USD/月——推荐文按软文看待。</div>
+    </div>
+
+  </div>
+  <p class="cap" style="margin-top:18px"><strong>商用红线：</strong>Tiingo 与 Finnhub 的免费/个人档均限个人或内部使用（Finnhub 退订还须删除其数据）；腾讯/新浪/东财直连无授权，不可进商业产品。要商用走 Massive/Tiingo 商务版、券商 OpenAPI 或 Tushare 企业版，先发邮件谈许可。</p>
+</section>
+
+<section>
+  <div class="sec-head">
+    <p class="kicker">12 · 按预算选</p>
+    <h2><svg class="ico ico-h2"><use href="#i-target"/></svg>五种典型情况，直接给方案和月成本</h2>
+  </div>
+  <div class="cases">
+
+    <div class="card case">
+      <div class="q"><svg class="ico ico-lg"><use href="#i-search"/></svg>A 股 · 盘中要最新价，不想花钱</div>
+      <div class="pick">Bash 直连三源交叉校验</div>
+      <div class="cost"><svg class="ico"><use href="#i-coin"/></svg>¥0 / 月</div>
+      <ul class="ev">
+        <li>亲验三源对 600519 完全一致，时间戳精确到秒，可自证新鲜度与准确性</li>
+        <li>上下文成本近零——不注入工具定义，只有一行命令</li>
+        <li>腾讯免 Referer、新浪必须带 Referer（否则 403）、东财需带 Referer</li>
+      </ul>
+      <div class="avoid"><b>别选它：</b>要十档/逐笔/经纪队列，或做实盘依赖——免费源只给五档且无 SLA。</div>
+    </div>
+
+    <div class="card case">
+      <div class="q"><svg class="ico ico-lg"><use href="#i-bolt"/></svg>美股 · 要真实时，预算越低越好</div>
+      <div class="pick">Alpaca Algo Trader Plus</div>
+      <div class="cost"><svg class="ico"><use href="#i-coin"/></svg>$99 / 月（免费档 $0，但 15 分钟延迟）</div>
+      <ul class="ev">
+        <li>官网口径：免费档 IEX + API 15 分钟延迟 + 200 次/分 + WebSocket 限 30 标的；付费档全美交易所（SIP）、实时、无限调用</li>
+        <li>官方 MCP 50+ 工具，含下单，默认 paper 模拟盘——可以先零成本跑通链路</li>
+        <li>同价位对比：EODHD ALL-IN-ONE $99.99 广度更好但重在 EOD/基本面；Twelve Data Pro $99 的欧洲实时才解锁</li>
+      </ul>
+      <div class="avoid"><b>别选它：</b>要 tick 级与期权全链——那要 Massive Advanced $199。</div>
+    </div>
+
+    <div class="card case">
+      <div class="q"><svg class="ico ico-lg"><use href="#i-chart"/></svg>量化 · tick 级 + 长历史 + 期权</div>
+      <div class="pick">Massive Stocks Advanced（自建 MCP）</div>
+      <div class="cost"><svg class="ico"><use href="#i-coin"/></svg>$199 / 月（年付省 20%）</div>
+      <ul class="ev">
+        <li>官网口径：Advanced 档 = 实时数据 + 20 年以上历史 + 无限调用，标注"Non-pros only"（非专业用户）</li>
+        <li>官方 MCP 只有 3 个复合工具（<code>search_endpoints</code>/<code>call_api</code>/<code>query_data</code>）+ 内存 SQLite + Black-Scholes，长会话最省上下文</li>
+        <li>亲验无公开托管端点（000/404），必须自建；官方自述 experimental</li>
+      </ul>
+      <div class="avoid"><b>别选它：</b>只要 15 分钟延迟——Starter $29 就够，省 $170。</div>
+    </div>
+
+    <div class="card case">
+      <div class="q"><svg class="ico ico-lg"><use href="#i-terminal"/></svg>港美股 · 要盘口深度且要下单</div>
+      <div class="pick">longbridge-terminal CLI 或 富途 OpenD</div>
+      <div class="cost"><svg class="ico"><use href="#i-coin"/></svg>券商模式（无 API 订阅费）</div>
+      <ul class="ev">
+        <li>长桥 CLI 官方自述 AI-native，<code>--format json</code> + shell completion，覆盖 quotes/depth/brokers/trades，Apache-2.0、949 stars</li>
+        <li>富途 LV2 = 实时逐笔 + 十档 + 经纪队列，覆盖港美 A 日新五市场、13 种订单类型，交易须手动确认 + 交易密码</li>
+        <li>成本模型和数据商完全不同：省掉订阅费，但绑定券商账户与资产门槛（富途订阅额度按资产 100–2000）</li>
+      </ul>
+      <div class="avoid"><b>别选它：</b>没有对应券商账户；或不接受本地常驻网关进程。<b>港股 LV2 是买的</b>——免费活动已中止：长桥 ※158 港币/月、富途 ※约 488 港币/月，开通步骤见第 11 节。</div>
+    </div>
+
+    <div class="card case">
+      <div class="q"><svg class="ico ico-lg"><use href="#i-book"/></svg>A 股 · 财报股东宏观要权威可引用</div>
+      <div class="pick">Tushare MCP（实时另接直连源）；预算足则 iFinD</div>
+      <div class="cost"><svg class="ico"><use href="#i-coin"/></svg>Tushare ※≈200–500 元 · iFinD ※约 2–2.8 万元/年</div>
+      <ul class="ev">
+        <li>Tushare 亲验 258 工具，覆盖财报、龙虎榜、北向资金、股权质押、Shibor；官方自划分工：Skills 用于临时查数看盘，MCP 用于批量建模</li>
+        <li>积分是分级门槛不消耗——越高频次越高；但官方无公开价目表，※ 为社区口径</li>
+        <li>要授权级准确性与 SLA 才上 iFinD MCP（四模块 20 余项工具，需终端密钥）；Wind 无官方 MCP，单账号 39,800 元/年（2023 报道）</li>
+      </ul>
+      <div class="avoid"><b>别选它做盘中：</b>Tushare 多为日频，实时性不是它的强项。</div>
+    </div>
+
+  </div>
+</section>
+
+<section>
+  <div class="sec-head">
+    <p class="kicker">13 · 可信度</p>
+    <h2><svg class="ico ico-h2"><use href="#i-check"/></svg>亲验台账</h2>
+    <p>2026-07-25（周六休市）实测；<strong>2026-07-27（周一港股盘中）增补</strong>延迟与历史接口实测。行情接口验可用性、鉴权与时间戳精度；MCP 端点验在线状态与真实工具数；价格逐家开官网订阅页核。</p>
+  </div>
+  <div class="tbl-wrap card">
+    <table>
+      <thead><tr><th>目标</th><th>探测</th><th>结果</th><th>结论</th></tr></thead>
+      <tbody>
+        <tr><td class="name">腾讯 qt.gtimg.cn</td><td>GET 不带 Referer</td><td>200，600519＝1297.41，<code>20260724161433</code>；AAPL <code>16:00:01</code></td><td><span class="tag t-win">可用，免 Referer</span></td></tr>
+        <tr><td class="name">新浪 hq.sinajs.cn</td><td>GET 带/不带 Referer</td><td>带 200（<code>15:34:59</code>＋五档＋盘后 333.80）；不带 <strong>403</strong></td><td><span class="tag t-win">可用，须 Referer</span></td></tr>
+        <tr><td class="name">东财 push2</td><td>GET 带/不带 Referer</td><td>带 200（<code>f43=129741</code>、<code>f86</code> 时间戳）；不带失败</td><td><span class="tag t-win">可用，须 Referer</span></td></tr>
+        <tr><td class="name">三源交叉校验</td><td>同时取 600519</td><td>1297.410 / 1297.41 / 1297.41 完全一致</td><td><span class="tag t-win">准确性通过</span></td></tr>
+        <tr><td class="name">api.tushare.pro/mcp/</td><td>initialize + tools/list</td><td>200，<strong>258</strong> 工具；无 token 调用报「需要提供 token」</td><td><span class="tag t-win">在线</span></td></tr>
+        <tr><td class="name">mcp.eodhd.com/v1/mcp</td><td>initialize + tools/list</td><td>200，<code>3.4.4</code>，<strong>86</strong> 工具（官网写 72）；根路径 404</td><td><span class="tag t-win">在线</span></td></tr>
+        <tr><td class="name">82.156.17.205/cnstock/mcp</td><td>initialize + tools/call</td><td>200，3 工具，返回茅台 <strong>2026-07-24</strong>（即 T+1）</td><td><span class="tag t-warn">可用但非实时</span></td></tr>
+        <tr><td class="name">mcp.alphavantage.co · mcp.twelvedata.com</td><td>initialize</td><td>均 401</td><td><span class="tag t-alt">在线待鉴权</span></td></tr>
+        <tr><td class="name">mcp.longbridge.com/mcp</td><td>initialize 直连/代理</td><td>直连 000、代理 <strong>401</strong></td><td><span class="tag t-alt">在线，本机需代理</span></td></tr>
+        <tr><td class="name">mcp.polygon.io · mcp.massive.com</td><td>initialize</td><td>000 / 404</td><td><span class="tag t-lim">必须自建</span></td></tr>
+        <tr><td class="name">港股延迟 · 三源同刻（07-27 盘中）</td><td>同一秒打新浪/腾讯，对 HK 墙钟</td><td>新浪 <code>rt_hk00700</code> ts <code>15:54:58</code>＝墙钟同秒；无前缀档 <code>15:33</code>（差 22 分）；腾讯 <code>15:39:55</code>（滞后 15 分 03 秒）</td><td><span class="tag t-win">rt_ 实时已证</span></td></tr>
+        <tr><td class="name">东财 push2his 历史（07-26/27）</td><td>GET 全量 + 连续重试</td><td>200·124KB·最早 <strong>2001-08-27</strong>；<code>fqt=1</code> 远端负价（−312.47）；连打即全 000（限流）</td><td><span class="tag t-warn">可用·有限流与复权坑</span></td></tr>
+        <tr><td class="name">腾讯 hkfqkline 港股历史（07-27）</td><td>GET</td><td>200·58KB·320 根，末根为当天</td><td><span class="tag t-win">可用</span></td></tr>
+        <tr><td class="name">Stooq 免费 CSV（07-26）</td><td>GET</td><td>返回 JS proof-of-work 反爬页</td><td><span class="tag t-lim">已失效</span></td></tr>
+        <tr><td class="name">Yahoo query1 chart（07-26）</td><td>GET 带/不带 UA</td><td>不带 UA <strong>429</strong>；带浏览器 UA 200，<code>range=max</code> 全历史可取</td><td><span class="tag t-warn">可用·无授权</span></td></tr>
+        <tr><td class="name" style="white-space:normal">价格：Massive / EODHD / Twelve Data / Alpha Vantage / Alpaca / Tiingo / AllTick</td><td>官网订阅页</td><td>逐档抓到明确数字（Tiingo $0/30、AllTick 免费档 10 次/分·10 演示品种，07-27 增核）</td><td><span class="tag t-win">已核</span></td></tr>
+        <tr><td class="name" style="white-space:normal">价格：Tushare / FMP / Finnhub / 富途行情卡 488 / 长桥行情商店 158·338·46</td><td>官网页 + 搜索</td><td>官方无价目表、页面被拦或仅第三方口径；采二手并标 ※，券商两家以 App 行情商店/商城标价为准</td><td><span class="tag t-lim">信息缺口</span></td></tr>
+        <tr><td class="name">价格：Wind / iFinD</td><td>财经媒体报道</td><td>Wind 单账号 39,800 元/年（2023）；iFinD 约其 50–70%</td><td><span class="tag t-warn">二手·年份旧</span></td></tr>
+        <tr><td class="name">openbb-cli（PyPI）</td><td>PyPI JSON</td><td>1.4.2，Python ≥3.10,&lt;4</td><td><span class="tag t-win">在维护</span></td></tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<section>
+  <div class="sec-head">
+    <p class="kicker">14 · 坑</p>
+    <h2><svg class="ico ico-h2" style="color:var(--warn)"><use href="#i-alert"/></svg>十一个会让「实时准确」落空的地方</h2>
+  </div>
+  <div class="traps">
+    <div class="card trap"><div class="n"><svg class="ico ico-lg"><use href="#i-plug"/></svg>坑 1</div><h3>拿 MCP 当实时通道</h3><p>多数免费 MCP 的上游就是那批公开接口，还多一层缓存包装。要延迟最低就直连或用官方 CLI，MCP 留给财报研报类结构化查询。</p></div>
+    <div class="card trap"><div class="n"><svg class="ico ico-lg"><use href="#i-book"/></svg>坑 2</div><h3>以为 Skills 会带来数据</h3><p>Skills 只是按需加载的指令与脚本，实时性等于它背后调的通道。装一堆分析 Skills 却连着 T+1 源，结论照样是旧的。</p></div>
+    <div class="card trap"><div class="n"><svg class="ico ico-lg"><use href="#i-coin"/></svg>坑 3</div><h3>只看订阅价不看延迟档</h3><p>Massive Starter $29 与 Developer $79 都还是 15 分钟延迟，实时要跳到 Advanced $199；Alpha Vantage 五档涨价买的是频次不是实时。</p></div>
+    <div class="card trap"><div class="n"><svg class="ico ico-lg"><use href="#i-terminal"/></svg>坑 4</div><h3>忽略 Referer 与编码</h3><p>新浪不带 Referer 直接 403；三家返回都是 GBK，不 <code>iconv</code> 会乱码；东财字段是代号制且价格×100。</p></div>
+    <div class="card trap"><div class="n"><svg class="ico ico-lg"><use href="#i-chart"/></svg>坑 5</div><h3>不复权就做技术分析</h3><p>除权除息日出现"假跌停"，收益率全错。跨源比价前先对齐复权口径。</p></div>
+    <div class="card trap"><div class="n"><svg class="ico ico-lg"><use href="#i-hourglass"/></svg>坑 6</div><h3>撞限流拿到旧值</h3><p>超限往往返回空值或缓存值，比报错更危险——用返回的时间戳字段自检。</p></div>
+    <div class="card trap"><div class="n"><svg class="ico ico-lg"><use href="#i-layers"/></svg>坑 7</div><h3>工具数当卖点</h3><p>258 / 148 个工具定义常驻上下文，既烧 token 又提高误选概率。Massive 三工具 + SQL 是相反思路。</p></div>
+    <div class="card trap"><div class="n"><svg class="ico ico-lg"><use href="#i-link"/></svg>坑 8</div><h3>照抄改名前的资料</h3><p>Polygon.io 已于 2025-10-30 改名 Massive；长桥 Skills v2 从 v1 的 127 个合并为 13 个，老教程的技能名已失效。</p></div>
+    <div class="card trap"><div class="n"><svg class="ico ico-lg"><use href="#i-bolt"/></svg>坑 9</div><h3>差一个前缀差 20 分钟</h3><p>新浪同一域名两种档位：<code>rt_hk00700</code> 实时、<code>hk00700</code> 延迟（盘中亲验差 22 分钟）。抄网上代码片段最容易漏掉 <code>rt_</code>，拿延迟价当实时价。</p></div>
+    <div class="card trap"><div class="n"><svg class="ico ico-lg"><use href="#i-chart"/></svg>坑 10</div><h3>免费历史管道会腐烂</h3><p>东财 <code>fqt=1</code> 前复权拉长周期出负价（茅台 2001 年 −312，亲验）；Stooq 免费 CSV 已上 PoW 反爬失效；Yahoo 无浏览器 UA 即 429。免费历史链路要定期年检 + 复权口径显式声明。</p></div>
+    <div class="card trap"><div class="n"><svg class="ico ico-lg"><use href="#i-search"/></svg>坑 11</div><h3>中文「横评」常是软文</h3><p>有评测吹 AllTick"免费 5000 次/日"并推为首选——官方定价页实为免费 10 个演示品种、10 次/分。免费档权益一律以官方 pricing 页为准，横评文章只当线索。</p></div>
+  </div>
+</section>
+
+<section>
+  <div class="sec-head">
+    <p class="kicker">15 · 来源</p>
+    <h2><svg class="ico ico-h2"><use href="#i-link"/></svg>三档分级</h2>
+  </div>
+  <div class="src">
+    <div class="card">
+      <h3><svg class="ico ico-lg"><use href="#i-shield"/></svg>官方一手（含价格页）</h3>
+      <ul>
+        <li><a href="https://massive.com/pricing">Massive 订阅页</a> · <a href="https://eodhd.com/pricing">EODHD 订阅页</a> · <a href="https://twelvedata.com/pricing">Twelve Data 订阅页</a> · <a href="https://www.alphavantage.co/premium/">Alpha Vantage 订阅页</a> · <a href="https://alpaca.markets/data">Alpaca 数据档位</a> · <a href="https://docs.alpaca.markets/us/docs/about-market-data-api">Alpaca 免费 vs 付费文档</a> · <a href="https://www.tiingo.com/about/pricing">Tiingo 订阅页</a> · <a href="https://alltick.co/zh-CN">AllTick 定价页</a> · <a href="https://open.longbridge.com/zh-CN/docs">长桥 OpenAPI 文档（接口免费口径）</a></li>
+        <li><a href="https://github.com/longbridge/longbridge-terminal">longbridge-terminal（官方 CLI）</a> · <a href="https://github.com/longbridge/skills">longbridge/skills</a> · <a href="https://longbridge.com/zh-CN/academy/ai-investing/blog/how-to-install-longbridge-skill-cli-on-claude-code-100206">Claude Code 安装指引</a></li>
+        <li><a href="https://openapi.futunn.com/futu-api-doc/intro/authority.html">富途《权限和限制》</a> · <a href="https://support.futunn.com/topic56">富途《行情卡相关》</a>（两处口径冲突源）· <a href="https://github.com/FutunnOpen/futu-agent-hub">富途 Agent Hub</a></li>
+        <li><a href="https://tushare.pro/document/1?doc_id=463">Tushare MCP 与 Skills 分工</a> · <a href="https://tushare.pro/document/1?doc_id=13">积分获取（无价目表）</a> · <a href="https://tushare.pro/document/1?doc_id=290">积分与频次对应表</a></li>
+        <li><a href="https://github.com/alphavantage/alpha_vantage_mcp">Alpha Vantage MCP</a> · <a href="https://github.com/polygon-io/mcp_polygon">Massive MCP</a> · <a href="https://massive.com/blog/polygon-is-now-massive">改名公告</a> · <a href="https://eodhd.com/financial-apis/mcp-server">EODHD MCP</a></li>
+        <li><a href="https://github.com/OpenBB-finance/OpenBB">OpenBB</a> · <a href="https://stock.10jqka.com.cn/20260312/c675239015.shtml">iFinD MCP 上线</a> · <a href="https://investor.factset.com/news-releases/news-release-details/factset-meets-demand-ai-ready-data-first-announce-mcp-sans">FactSet MCP</a> · <a href="https://www.anthropic.com/news/claude-for-financial-services">Claude for Financial Services</a></li>
+      </ul>
+    </div>
+    <div class="card">
+      <h3><svg class="ico ico-lg"><use href="#i-check"/></svg>亲验（当日实测）</h3>
+      <ul>
+        <li>腾讯／新浪／东财行情接口：可用性、Referer 要求、时间戳精度、三源交叉校验</li>
+        <li>2026-07-27 港股盘中：新浪 <code>rt_</code> 前缀实时 vs 腾讯滞后 15 分 03 秒；东财历史全量/限流/复权负价；腾讯港股 K 线；Stooq 反爬；Yahoo UA/429</li>
+        <li>Tushare／EODHD／CnStock／Alpha Vantage／Twelve Data／Longbridge／Massive MCP 端点：<code>initialize</code> + <code>tools/list</code>（+ 可免鉴权者的 <code>tools/call</code>）</li>
+        <li>PyPI：<code>openbb-cli</code> 1.4.2</li>
+        <li>方法：<code>curl -X POST</code> 发 JSON-RPC，Accept 头须含 <code>text/event-stream</code></li>
+      </ul>
+    </div>
+    <div class="card">
+      <h3><svg class="ico ico-lg"><use href="#i-alert"/></svg>二手 · 已标 ※ 待核</h3>
+      <ul>
+        <li><a href="https://finance.sina.com.cn/wm/2023-09-11/doc-imzmiqth5856632.shtml">Wind 单账号 39,800 元/年（2023 新浪财经）</a> · <a href="https://www.guancha.cn/economy/2024_01_08_721599.shtml">iFinD 约为 Wind 的 50–70%</a></li>
+        <li><a href="https://www.cnblogs.com/tushare/p/11609070.html">Tushare 积分 2000≈200 元 / 5000≈500 元（社区）</a></li>
+        <li><a href="https://site.financialmodelingprep.com/pricing-plans">FMP 计划含 MCP 的说法</a>（官方文档 403 未核）· Finnhub Premium $11.99–99.99（评测站口径）</li>
+        <li><a href="https://www.163.com/dy/article/KNVGRIIP05199NPP.html">三大终端厂商集体官宣</a>（东财 Skills 三包，官方入口未核到）· <a href="https://akshare.akfamily.xyz/data/stock/stock.html">AKShare 文档</a></li>
+        <li>长桥行情商店 158/338/46 港币（火山引擎社区文）· 富途港股 LV2 约 488 港币/月（talkmoney.com.hk）——均以 App 内标价为准 · 推 AllTick"免费 5000 次/日"的横评与官方定价页矛盾，判为软文</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<footer>
+  调研 2026-07-25 · 2026-07-27 港股盘中实测增补 + 开通/扣费攻略 · 价格为官网月付价，※ 标记为二手源待核 · 免费公开行情接口无授权无 SLA，生产链路请用券商网关或商业数据源并保留多源交叉校验
+  <div class="cr">© 2026 张拼拼 (Max Pin) · zpplife@gmail.com · 保留所有权利</div>
+</footer>
+
+</div>

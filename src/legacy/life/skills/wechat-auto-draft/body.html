@@ -1,0 +1,605 @@
+<!-- ============ HERO ============ -->
+<section class="wa-overview" aria-label="文章摘要">
+  <div class="wrap">
+
+    <div class="stats">
+      <div class="stat"><div class="n g">4</div><div class="t">道接口闸门：access_token · 正文图 · 封面素材 · 新增草稿</div></div>
+      <div class="stat"><div class="n">2</div><div class="t">条技术路线：官方 API（无人值守）/ 浏览器 RPA（人需在场）</div></div>
+      <div class="stat"><div class="n g">1</div><div class="t">道硬门槛：<b>发布</b>接口「仅认证」，企业主体 + 已认证才放行</div></div>
+      <div class="stat"><div class="n">≤1<span style="font-size:18px">MB</span></div><div class="t">正文图走 API 的硬上限；封面永久素材 ≤10M；webp 不可上传</div></div>
+    </div>
+
+    <nav class="toc">
+      <h4>目录</h4>
+      <div class="toc-grid">
+        <a href="#s1"><span class="num">01</span> 结论先行</a>
+        <a href="#s2"><span class="num">02</span> 全景架构与数据流</a>
+        <a href="#s3"><span class="num">03</span> 两条技术路线</a>
+        <a href="#s4"><span class="num">04</span> 账号资质硬门槛 ★</a>
+        <a href="#s5"><span class="num">05</span> 草稿箱四闸门</a>
+        <a href="#s6"><span class="num">06</span> 字段与限制速查</a>
+        <a href="#s7"><span class="num">07</span> 内容自动撰写</a>
+        <a href="#s8"><span class="num">08</span> 公众号排版真相</a>
+        <a href="#s9"><span class="num">09</span> 自动配图与封面</a>
+        <a href="#s10"><span class="num">10</span> 图片后处理</a>
+        <a href="#s11"><span class="num">11</span> 现成工具与开源</a>
+        <a href="#s12"><span class="num">12</span> 落地建议</a>
+        <a href="#s13"><span class="num">13</span> 风险与红线</a>
+        <a href="#s14"><span class="num">14</span> 诚实边界 · 待核实</a>
+      </div>
+    </nav>
+  </div>
+</section>
+
+<!-- ============ 01 结论先行 ============ -->
+<section id="s1" class="band">
+  <div class="wrap">
+    <div class="sec-head"><div class="idx">01</div><div><h2>结论先行</h2><div class="sec-sub">先给判断，再展开。这条链路最大的认知陷阱是把它当成"把一段 HTML POST 上去"——真正的难点在闸门与资质，不在写稿。</div></div></div>
+    <div class="grid c2">
+      <div class="card">
+        <span class="tag">可行性</span>
+        <h3>技术成立，轮子齐全</h3>
+        <p class="body muted">官方服务端 API 支持"自动写稿 + 自动配图 + 写入草稿箱"。Python 侧 <code>wechatpy</code> 已封装草稿 / 素材 / 正文图全套接口；全链路成品（wewrite / AIWriteX）也已开源。不需要买任何"AI 写作课"。</p>
+      </div>
+      <div class="card">
+        <span class="tag">承重结论 · 已亲核官方原文</span>
+        <h3>硬门槛在「发布」，不在「草稿」</h3>
+        <p class="body muted">官方文档：<code>draft/add</code>（新增草稿）公众号 / 服务号都 <span class="yes">✔</span>；<code>freepublish/submit</code>（发布）公众号 <span class="cond">仅认证</span>。<b>个人主体订阅号无法微信认证 → 无法用 API 发布。</b>想跑"草稿→发布"全自动，账号必须企业主体 + 已认证。</p>
+      </div>
+      <div class="card">
+        <span class="tag">架构原则</span>
+        <h3>LLM 出结构化中间稿，不出 HTML</h3>
+        <p class="body muted">让 LLM 产出干净 Markdown / JSON 中间稿，把"转微信行内样式 HTML"交给确定性工具（doocs/md、juice）。LLM 不熟微信白名单，手搓 HTML 必然样式失效。生成与排版解耦。</p>
+      </div>
+      <div class="card">
+        <span class="tag">默认策略</span>
+        <h3>只写草稿，不自动发布</h3>
+        <p class="body muted">自动化默认止步于"写入草稿箱"，发布保留人工确认。既规避发布接口的认证门槛与内容合规风险，也给人留一道把关闸——这也是所有认真项目的共识（human-in-the-loop）。</p>
+      </div>
+    </div>
+    <div class="callout" style="margin-top:18px">
+      <h4>一句话落地路径</h4>
+      <p class="body" style="margin:0">LLM 用 <b>CO-STAR 框架 + 防注水硬约束</b>产出干净 Markdown → 排版交 <b>doocs/md / juice</b> 内联成微信 HTML → 配图走 <b>AI 出底图 + Pillow 叠中文字</b> → 正文图换微信图床 URL、封面传永久素材 → 调 <code>draft/add</code> 进草稿箱 → 人工点发布。全程不需要买课。</p>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 02 全景架构 ============ -->
+<section id="s2">
+  <div class="wrap">
+    <div class="sec-head"><div class="idx">02</div><div><h2>全景架构与数据流</h2><div class="sec-sub">六步流水线。每一步都可独立重试——失败时不必从头再来，这也是"输出结构化中间稿"的价值。</div></div></div>
+    <div class="flow">
+      <div class="node"><div class="s">STEP 1</div><strong>素材输入</strong><span>主题 / 原始内容 / 参考文。明确"改写"而非"凭空扩写"。</span></div>
+      <div class="node"><div class="s">STEP 2</div><strong>LLM 写中间稿</strong><span>输出 JSON：标题候选 / 正文 / 配图 prompt / 事实声明 / 来源。</span></div>
+      <div class="node"><div class="s">STEP 3</div><strong>生成配图</strong><span>封面 + 正文插图。AI 出底图，程序叠中文标题。</span></div>
+      <div class="node"><div class="s">STEP 4</div><strong>渲染微信 HTML</strong><span>Markdown→行内样式，交确定性工具，不让 LLM 手搓。</span></div>
+      <div class="node gate"><div class="s">STEP 5 · 闸门</div><strong>上传素材</strong><span>正文图换微信图床 URL；封面传永久素材拿 media_id。</span></div>
+      <div class="node manual"><div class="s">STEP 6 · 人工</div><strong>进草稿箱</strong><span>调 draft/add 写入；人工到后台确认后再发布。</span></div>
+    </div>
+    <div class="grid c2" style="margin-top:18px">
+      <div class="card soft">
+        <h4>推荐中间稿结构（JSON）</h4>
+        <pre><span class="c">// LLM 只产出数据，不碰接口、不拼 HTML</span>
+{
+  <span class="k">"title_candidates"</span>: [<span class="s">"标题1"</span>, <span class="s">"标题2"</span>, …],
+  <span class="k">"selected_title"</span>: <span class="s">"…"</span>,          <span class="c">// ≤32字</span>
+  <span class="k">"author"</span>: <span class="s">"…"</span>,                   <span class="c">// ≤16字</span>
+  <span class="k">"digest"</span>: <span class="s">"…"</span>,                   <span class="c">// ≤128字</span>
+  <span class="k">"sections"</span>: [ {heading, body_md}, … ],
+  <span class="k">"cover_prompt"</span>: <span class="s">"…"</span>,
+  <span class="k">"inline_image_prompts"</span>: [ … ],
+  <span class="k">"fact_claims"</span>: [ {claim, source} ],  <span class="c">// 供核查</span>
+  <span class="k">"source_links"</span>: [ … ],
+  <span class="k">"risk_flags"</span>: [ … ]
+}</pre>
+        <p class="cap">把事实核查、字段裁剪、生图、HTML 渲染、API 调用拆开，任一步失败可单独重试。</p>
+      </div>
+      <div class="card soft">
+        <h4>为什么分六步而非一步</h4>
+        <ul class="li body">
+          <li><b>字段约束前置</b>：标题超 32 字、正文超限，最后才被接口拒会浪费模型与生图成本——在写稿阶段就裁。</li>
+          <li><b>图片是独立子系统</b>：封面走"永久素材"、正文图走"图文消息内图片"，两条不同接口、不同限制，必须分开处理。</li>
+          <li><b>渲染必须确定性</b>：微信 HTML 白名单严格，交给工具而非 LLM。</li>
+          <li><b>发布留人工闸</b>：内容可信 / 版权 / 合规需要人最终把关。</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 03 两条路线 ============ -->
+<section id="s3" class="band">
+  <div class="wrap">
+    <div class="sec-head"><div class="idx">03</div><div><h2>两条技术路线</h2><div class="sec-sub">"怎么把内容送进草稿箱"只有两条路。它们贯穿后面所有工具选型——先认清自己走哪条。</div></div></div>
+    <div class="routes">
+      <div class="route a">
+        <div class="rh"><span class="badge">路线 A</span><h3 style="margin:0">官方 API</h3></div>
+        <p class="muted body">走微信开放的服务端接口 <code>media/uploadimg</code> + <code>material/add_material</code> + <code>draft/add</code>。</p>
+        <ul class="li body">
+          <li><b>合规</b>，可服务端无人值守、定时跑。</li>
+          <li>要求<b>认证账号</b>（发布环节必须企业主体已认证）。</li>
+          <li>要求配 <b>IP 白名单</b>——动态出口 IP 是多数 SaaS 做不到真无人值守的根因。</li>
+        </ul>
+        <p class="cap"><b>适合</b>：有认证企业 / 组织号、想稳定自动化的团队。</p>
+      </div>
+      <div class="route b">
+        <div class="rh"><span class="badge">路线 B</span><h3 style="margin:0">浏览器会话 / RPA</h3></div>
+        <p class="muted body">浏览器插件 / 自动化复用你已登录后台的 cookie，直调 mp 后台<b>内部 Web 接口</b>。</p>
+        <ul class="li warn body">
+          <li><b>绕开</b>认证资质与 IP 白名单。</li>
+          <li><b>人必须在浏览器前</b>，cookie 过期需重新扫码。</li>
+          <li>违反《微信软件许可及服务协议》"自动化操作"条款，有封号与司法风险（见 §13）。</li>
+        </ul>
+        <p class="cap"><b>适合</b>：个人订阅号、低频自用、只存草稿后人工确认。<b>不适合</b>商用 / 高频 / 多账号 / 代客发布。</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 04 账号门槛 ★ ============ -->
+<section id="s4">
+  <div class="wrap narrow">
+    <div class="sec-head"><div class="idx">04</div><div><h2>账号资质硬门槛 <span class="verified">已亲核官方原文</span></h2><div class="sec-sub">整份报告最承重的事实。我用 Googlebot UA 抓取官方页（普通请求被反爬挡 503），逐字核对了"适用范围"表。</div></div></div>
+
+    <div class="tbl-wrap" style="margin-bottom:18px">
+      <table>
+        <thead><tr><th>接口</th><th>作用</th><th class="nowrap">公众号(订阅号)</th><th class="nowrap">服务号</th><th>认证要求</th></tr></thead>
+        <tbody>
+          <tr><td><code>draft/add</code></td><td>新增草稿</td><td class="yes">✔ 可调</td><td class="yes">✔ 可调</td><td>文档层面未限"仅认证"</td></tr>
+          <tr><td><code>material/add_material</code></td><td>上传永久素材（封面）</td><td class="yes">✔ 可调</td><td class="yes">✔ 可调</td><td>无</td></tr>
+          <tr><td><code>media/uploadimg</code></td><td>上传正文图</td><td class="yes">✔ 可调</td><td class="yes">✔ 可调</td><td>无</td></tr>
+          <tr><td><code>freepublish/submit</code></td><td><b>发布</b></td><td class="cond">仅认证</td><td class="yes">✔ 可调</td><td><b>企业主体已认证</b>才放行</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="callout warn">
+      <h4>官方原文（freepublish/submit · §7 适用范围）</h4>
+      <p class="body" style="margin-bottom:6px">"本接口在不同账号类型下的可调用情况：公众号 服务号 — <b>仅认证</b> ✔。"</p>
+      <p class="body" style="margin:0">"<b>仅认证：表示仅允许企业主体已认证账号调用，未认证或不支持认证的账号无法调用。</b>"</p>
+    </div>
+
+    <div class="grid c2" style="margin-top:18px">
+      <div class="card">
+        <h4>这意味着什么</h4>
+        <ul class="li body">
+          <li><b>只写草稿</b>：门槛低，官方标公众号 / 服务号都 ✔。</li>
+          <li><b>草稿→发布全自动</b>：卡在发布接口，<b>账号必须企业主体 + 已微信认证</b>。</li>
+          <li>个人主体订阅号<b>无法微信认证</b> → 落入"不支持认证的账号" → 无法用 API 发布。</li>
+        </ul>
+      </div>
+      <div class="card">
+        <h4>口径冲突（诚实标注）</h4>
+        <p class="body muted" style="margin-bottom:8px">官方"适用范围"表把 <code>draft/add</code> 标 ✔，但微信开放社区有大量实测反馈：<b>未认证 / 个人订阅号调 draft/add 也返回 <code>48001 api unauthorized</code></b>。</p>
+        <p class="body muted" style="margin:0">两者不一致 → <b>以目标账号实际调用返回码为准</b>。有账号就先实调一次定论，别只信文档表格。</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 05 四闸门 ============ -->
+<section id="s5" class="band">
+  <div class="wrap">
+    <div class="sec-head"><div class="idx">05</div><div><h2>草稿箱链路：四道闸门</h2><div class="sec-sub">把一段 HTML 送进草稿箱，至少要过四个接口。顺序不能错——正文图和封面必须先上传换成微信自家资源。</div></div></div>
+    <div class="grid c4" style="counter-reset:fn">
+      <div class="card flow-num">
+        <h3>access_token</h3>
+        <p class="cap" style="margin-bottom:8px"><code>cgi-bin/token</code>(GET) / <code>cgi-bin/stable_token</code>(POST)</p>
+        <ul class="li body">
+          <li>有效期 <b>7200s</b>，需缓存。</li>
+          <li>新项目用 <b>stable_token</b>（官方推荐，平台侧缓存，50万次/天）。</li>
+          <li>必配 <b>IP 白名单</b>，否则 <code>40164</code>。</li>
+        </ul>
+      </div>
+      <div class="card flow-num">
+        <h3>正文图</h3>
+        <p class="cap" style="margin-bottom:8px"><code>cgi-bin/media/uploadimg</code></p>
+        <ul class="li body">
+          <li>返回 <b>mmbiz.qpic.cn</b> 微信图床 URL。</li>
+          <li>仅 <b>jpg/png，&lt;1MB</b>；不占素材配额。</li>
+          <li>正文 <code>&lt;img&gt;</code> 必须用它，<b>外链会被过滤</b>。</li>
+        </ul>
+      </div>
+      <div class="card flow-num">
+        <h3>封面素材</h3>
+        <p class="cap" style="margin-bottom:8px"><code>cgi-bin/material/add_material?type=image</code></p>
+        <ul class="li body">
+          <li>上传<b>永久</b>图片素材，返回 <code>media_id</code>。</li>
+          <li>image：bmp/png/jpeg/jpg/gif，<b>≤10M</b>。</li>
+          <li>该 media_id 即填进 <code>thumb_media_id</code>。</li>
+        </ul>
+      </div>
+      <div class="card flow-num">
+        <h3>新增草稿</h3>
+        <p class="cap" style="margin-bottom:8px"><code>cgi-bin/draft/add</code></p>
+        <ul class="li body">
+          <li>POST <code>articles</code> 数组，返回草稿 <code>media_id</code>。</li>
+          <li>content 支持 HTML、<b>去 JS</b>、外链图被过滤。</li>
+          <li>草稿可在公众平台官网草稿箱查看 / 管理。</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="callout" style="margin-top:18px">
+      <h4>两段图片接口别混 — 这是 RPA / 新手最容易卡的环节</h4>
+      <p class="body" style="margin:0"><b>正文插图</b>走 <code>media/uploadimg</code>（换图床 URL，不占配额）；<b>封面</b>走 <code>material/add_material</code>（永久素材，拿 media_id 当 thumb）。两者格式 / 大小 / 返回值都不同。正文里任何外链图片都会被微信草稿接口直接过滤掉，且微信端对非微信域名图片有 Referer 防盗链屏蔽。</p>
+    </div>
+    <p class="cap" style="margin-top:12px">补充：草稿发布走 <code>freepublish/submit</code>（异步，仅返回任务提交成功，最终结果靠 <code>PUBLISHJOBFINISH</code> 事件回调）——但本方案默认止步草稿，发布交人工。</p>
+  </div>
+</section>
+
+<!-- ============ 06 字段速查 ============ -->
+<section id="s6">
+  <div class="wrap">
+    <div class="sec-head"><div class="idx">06</div><div><h2>字段与限制速查</h2><div class="sec-sub"><code>draft/add</code> 的 articles[] 字段（同页亲核）。在写稿阶段就做约束，别等末端被拒。</div></div></div>
+    <div class="tbl-wrap">
+      <table>
+        <thead><tr><th>字段</th><th>必填</th><th>限制 / 说明</th></tr></thead>
+        <tbody>
+          <tr><td><code>article_type</code></td><td class="muted">否</td><td><code>news</code> 图文消息（默认）/ <code>newspic</code> 图片消息（小绿书，最多 20 图）</td></tr>
+          <tr><td><code>title</code></td><td class="yes">是</td><td>标题，<b>≤32 个字</b></td></tr>
+          <tr><td><code>author</code></td><td class="muted">否</td><td>作者，≤16 个字</td></tr>
+          <tr><td><code>digest</code></td><td class="muted">否</td><td>摘要，≤128 个字；仅单图文有，不填默认抓正文前 54 字</td></tr>
+          <tr><td><code>content</code></td><td class="yes">是</td><td>正文 HTML，<b>&lt;2 万字符、&lt;1M</b>；<b>去 JS</b>；图片 url 必须来自 uploadimg，<b>外部 url 被过滤</b></td></tr>
+          <tr><td><code>content_source_url</code></td><td class="muted">否</td><td>"阅读原文"链接，≤1KB</td></tr>
+          <tr><td><code>thumb_media_id</code></td><td class="cond">news 必填</td><td>封面，<b>必须是永久 MediaID</b></td></tr>
+          <tr><td><code>need_open_comment</code> / <code>only_fans_can_comment</code></td><td class="muted">否</td><td>评论开关 / 仅粉丝可评，0 否 1 是</td></tr>
+          <tr><td><code>pic_crop_235_1</code> / <code>pic_crop_1_1</code></td><td class="muted">否</td><td>封面 2.35:1 / 1:1 裁剪坐标</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="cap" style="margin-top:10px">⚠ 官方同句出现"content 大小不可超过 2kb"与"少于 2 万字符 / 小于 1M"自相矛盾——按 2 万字符 / 1M 写为安全上界，别贴近 2kb 边界。常见错误码：<code>40164</code> IP 白名单 · <code>48001</code> 接口未授权 · <code>40007</code> 无效 media_id · <code>40001</code> token 无效 · <code>45009</code> 超日调用上限。</p>
+  </div>
+</section>
+
+<!-- ============ 07 内容撰写 ============ -->
+<section id="s7" class="band">
+  <div class="wrap">
+    <div class="sec-head"><div class="idx">07</div><div><h2>内容自动撰写</h2><div class="sec-sub">用户核心诉求是"基于素材改写"而非"空洞扩写"。模板是骨架，防注水约束才是从"能写"到"不水"的关键。</div></div></div>
+    <div class="grid c2">
+      <div class="card">
+        <span class="tag">Prompt 框架</span>
+        <h3>CO-STAR（长文首选）</h3>
+        <pre><span class="k">Context</span>   素材是什么 / 写给谁 / 发公众号
+<span class="k">Objective</span> 把素材改写成一篇公众号文章
+<span class="k">Style</span>     模仿谁 / 什么文风
+<span class="k">Tone</span>      正式 / 幽默 / 共情
+<span class="k">Audience</span>  目标读者画像
+<span class="k">Response</span>  标题+导语+小标题正文+CTA</pre>
+        <p class="cap">把"风格 / 语气 / 受众"显式拆开——正是公众号成败的包装层。求快可用更轻的 RTGO（Role/Task/Goal/Objective）。</p>
+      </div>
+      <div class="card">
+        <span class="tag">关键 · 防注水 5 条硬约束</span>
+        <h3>写进 Objective 才有效</h3>
+        <ul class="li body">
+          <li><b>限定信息源</b>：只用所给素材，不引外部知识 / 训练记忆。</li>
+          <li><b>不足留白</b>：资料不够直接标注，禁止脑补。</li>
+          <li><b>逐句溯源</b>：关键结论引用素材原句。</li>
+          <li><b>拒套话</b>：用具体数据 / 案例替代泛泛，删过渡句与形容词堆砌。</li>
+          <li><b>改写非扩写</b>：只重组提炼，宁短勿为凑字数注水。</li>
+        </ul>
+      </div>
+    </div>
+    <div class="grid c3" style="margin-top:16px">
+      <div class="card soft"><h4>文章结构</h4><p class="body muted" style="margin:0">标题(15-30字、含情绪词) → <b>3 秒钩子</b>开头 → 小标题正文（每~300字一钩子，移动端每段≤3行）→ <b>PREP / SCQA</b> 论证骨架 → 开放式 CTA 结尾。</p></div>
+      <div class="card soft"><h4>字数</h4><p class="body muted" style="margin:0"><b>800–2000 字</b>"最佳完读"区间，阅读 3–5 分钟。<span class="cap">（注：该数字溯源到排版工具营销页，方向可信、别当硬科学）</span></p></div>
+      <div class="card soft"><h4>铁律</h4><p class="body muted" style="margin:0"><b>不要让 LLM 手搓微信 HTML。</b>它不熟微信白名单，易用 class/position/@media 导致样式全失效。让它只出 Markdown。</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 08 排版 ============ -->
+<section id="s8">
+  <div class="wrap">
+    <div class="sec-head"><div class="idx">08</div><div><h2>公众号排版真相</h2><div class="sec-sub">把 Markdown 变成"公众号能正确显示"的 HTML，本质是<b>把样式逐条内联到每个标签的 style 属性</b>。这是整个赛道的底层方案。</div></div></div>
+    <div class="grid c2">
+      <div class="card">
+        <h3>微信正文 HTML 白名单</h3>
+        <ul class="li body">
+          <li><b>不支持</b> <code>&lt;style&gt;</code> 标签 / 外部 CSS；<code>class</code> 失效、<code>id</code> 被删除。</li>
+          <li><b>只认行内</b> <code>style</code>，且仅部分属性：font / color / margin / padding / line-height / text-align / border / background-color 等。</li>
+          <li><b>失效</b>：<code>position</code>、<code>@media</code>、<code>@keyframes</code>、<code>%</code> 单位、<code>float</code>。</li>
+          <li>图片必须用微信素材库链接，外链 / Base64 不显示。</li>
+        </ul>
+      </div>
+      <div class="card">
+        <h3>doocs/md 的内联机制 <span class="verified">核到源码</span></h3>
+        <p class="body muted" style="margin-bottom:8px">GitHub <b>12.9k★</b> 的微信 Markdown 编辑器。网上多说"用 juice 内联"——方向对、定位不准：</p>
+        <ul class="li body">
+          <li>核心渲染器输出 <b>class + 部分行内 style</b>。</li>
+          <li>主题系统把 <code>var(--xxx)</code> 解析成实际值。</li>
+          <li><b>复制时</b>由打过补丁的 <code>juice@12.1.1</code> 把 CSS 全部 flatten 进 style 属性 → 粘进微信（剥 style/class/id）后样式存活。</li>
+        </ul>
+      </div>
+    </div>
+    <div class="tbl-wrap" style="margin-top:16px">
+      <table>
+        <thead><tr><th>工具</th><th>形态</th><th>机制 / 定位</th></tr></thead>
+        <tbody>
+          <tr><td><b>doocs/md</b> · 12.9k★</td><td>在线 / 开源核心包</td><td>Markdown→公众号 HTML，patched juice 内联；在线版 md.openwrite.cn</td></tr>
+          <tr><td><b>juice</b>（Automattic）</td><td>JS 库</td><td>通用 CSS 内联器，整个赛道的标准底层</td></tr>
+          <tr><td>mdnice（墨滴）</td><td>在线编辑器</td><td>多主题、免费图床，兼容公众号 / 知乎 / 掘金</td></tr>
+          <tr><td>md2wechat-skill · 2.9k★</td><td>Go CLI / AI Skill</td><td>面向 Agent：写作→去AI痕→排版→配图→推草稿，48 主题</td></tr>
+          <tr><td>秀米 / 135 / 壹伴</td><td>可视化编辑器</td><td>本质同样是行内样式内联，靠拖拽模板而非写 MD</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 09 配图 ============ -->
+<section id="s9" class="band">
+  <div class="wrap">
+    <div class="sec-head"><div class="idx">09</div><div><h2>自动配图与封面</h2><div class="sec-sub">配图拆"封面"和"正文插图"两类。封面要把标题文字嵌进图——这是模型选型与工程路线的关键决策点。</div></div></div>
+
+    <div class="grid c2">
+      <div class="card">
+        <h3>封面规格</h3>
+        <div class="covers">
+          <div class="cv"><div class="box big">900 × 383</div><span class="cap">大图 · <b>2.35:1</b>（高清 1800×766）</span></div>
+          <div class="cv"><div class="box sq">200 × 200</div><span class="cap">小图 · 1:1（次条）</span></div>
+          <div class="cv"><div class="box thumb">500 × 500</div><span class="cap">分享缩略图 · 系统从大图<b>中心截</b></span></div>
+        </div>
+        <p class="cap" style="margin-top:12px">核心信息（标题 / logo）放<b>中央安全区</b>，避免被缩略图裁掉。正文配图宽 900px（常规）/ 1080px（要清晰）。<span class="muted">尺寸来自多个排版工具帮助文档交叉，非单一官方数字文档。</span></p>
+      </div>
+      <div class="card">
+        <h3>配图 pipeline（6 步，每步有坑）</h3>
+        <ul class="li body">
+          <li><b>分段</b>，把"配几张"显式参数化。</li>
+          <li>LLM 把全文<b>压成 3–5 句画面描述</b>再喂出图模型（别把正文直接当 prompt → 物体堆砌）。</li>
+          <li>出图 → <b>裁剪 / 缩放 / 压缩</b>到目标比例与阈值。</li>
+          <li>发布前<b>安全审核</b>：微信明确点名避开名人 / 知名 IP。</li>
+          <li>插回：正文图换微信 URL，封面传永久素材 media_id。</li>
+        </ul>
+        <p class="cap">风格一致性：固定 style reference 图 &gt; 复用 seed + 固定构图 &gt; 纯文字风格后缀。</p>
+      </div>
+    </div>
+
+    <h3 style="margin:24px 0 12px">文生图模型横评（中文字渲染视角，2026-06）</h3>
+    <div class="tbl-wrap">
+      <table>
+        <thead><tr><th>模型 / API</th><th>中文字渲染</th><th>价格(USD/张)</th><th>适合 / 短板</th></tr></thead>
+        <tbody>
+          <tr><td><b>Nano Banana Pro</b><br><span class="cap">gemini-3-pro-image</span></td><td class="yes">最强 ~90-97% 可读</td><td>1K/2K $0.134</td><td>海报 / 信息图 / 4K；最贵、慢、带 SynthID 水印</td></tr>
+          <tr><td><b>Seedream 4.x</b><br><span class="cap">doubao-seedream-4-*</span></td><td class="yes">国风中文审美，原生双语</td><td>¥0.2–0.3（个人可调）</td><td>写实 / 国风 / 4K 秒级；长文书法仍出错别字</td></tr>
+          <tr><td><b>gpt-image-2</b></td><td class="cond">短标题基本无错别字，官方不背书</td><td>1024² $0.053 / 4K ~$0.41</td><td>文字 + 复杂版式、images.edit 强；密集小字仍瑕疵</td></tr>
+          <tr><td>FLUX.2 [pro]</td><td class="no">复杂中文明显失败</td><td>from $0.03/MP</td><td>照片级写实、英文 in-image 强；中文弱</td></tr>
+          <tr><td>SD 3.5</td><td class="no">CJK 乱码</td><td>$0.035–0.065</td><td>开源自部署 + LoRA 生态；需 GPU</td></tr>
+          <tr><td>Midjourney V8</td><td class="no">中文弱，需后期叠字</td><td>订阅 $10–120/月</td><td>顶级美学；<b>无官方 API = 自动化硬伤</b></td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="cap" style="margin-top:8px">第一梯队（中文）：<b>Seedream</b>（国内便宜、个人可调）与 <b>Nano Banana Pro</b>（海外最强中文 + 4K），路线不同。中文渲染百分比是第三方评测，非厂商保证值。所有海外模型输出带 SynthID / C2PA 水印。</p>
+
+    <div class="grid c2" style="margin-top:18px">
+      <div class="card soft">
+        <span class="tag">带字封面 · 核心决策</span>
+        <h3>批量生产走"AI 出底图 + 程序叠字"</h3>
+        <p class="body muted" style="margin-bottom:6px"><b>路线 A（AI 直接出字）</b>：2026 年中文从"不可用"到"单张可用"，但准确率非 100%、长 / 密文本掉字、重抽会变样——不适合"标题一字不差 + 批量"。</p>
+        <p class="body muted" style="margin:0"><b>路线 B（推荐）</b>：AI 出无字底图，Python/Pillow 叠校对过的中文标题——零乱码、完全可控、可复现批量、零额外费。这也是 OpenAI 官方社区给的工作流。</p>
+      </div>
+      <div class="card soft">
+        <h4>Pillow 叠中文字 · 两个必避的坑</h4>
+        <pre><span class="c"># 1. 必须显式加载中文字体，否则豆腐块 □□□</span>
+font = ImageFont.truetype(
+  <span class="s">"C:/Windows/Fonts/msyh.ttc"</span>, 72)
+<span class="c"># 2. 用 textlength 折行 + anchor='mm' 居中</span>
+draw.multiline_text((W/2, H/2), text,
+  font=font, fill=<span class="s">"white"</span>, anchor=<span class="s">"mm"</span>,
+  stroke_width=3, stroke_fill=<span class="s">"black"</span>)  <span class="c"># 白字黑边压任何底图</span></pre>
+        <p class="cap"><code>font.getsize()</code> 在 Pillow 10+ 已删除；Linux 部署须装中文字体 + 绝对路径 + <code>fc-list</code> 验证。本工作台已有 <code>poster-toolkit</code> skill 与 <code>gen_cover_poster.py</code> 可复用。</p>
+      </div>
+    </div>
+
+    <p class="cap" style="margin-top:14px"><b>图库替代</b>：Unsplash（必署名 + 写入文章那刻异步回调 download_location）· Pexels（<code>locale=zh-CN</code> 最省事）· Pixabay（唯一零署名，但第三方上传版权风险转嫁使用者）。三家共同红线：禁止做成"在线图库 / 可批量导出"的检索器；含可识别人脸 / 商标的图须人工复核。</p>
+  </div>
+</section>
+
+<!-- ============ 10 后处理 ============ -->
+<section id="s10">
+  <div class="wrap">
+    <div class="sec-head"><div class="idx">10</div><div><h2>图片后处理</h2><div class="sec-sub">出图模型只出固定尺寸，必须自己裁到目标比例 + 压到平台阈值。手册口径冲突，自动化按 API 硬限走。</div></div></div>
+    <div class="grid c2">
+      <div class="card">
+        <div class="tbl-wrap" style="box-shadow:none; border:none">
+          <table style="min-width:0">
+            <thead><tr><th>项</th><th>值</th></tr></thead>
+            <tbody>
+              <tr><td>正文图（走 API）</td><td><b>jpg/png，&lt;1MB</b></td></tr>
+              <tr><td>正文图（网页编辑器）</td><td>≤10MB（2020 起）</td></tr>
+              <tr><td>封面永久素材</td><td>≤10M，bmp/png/jpeg/jpg/gif</td></tr>
+              <tr><td>webp</td><td class="no">不可上传</td></tr>
+              <tr><td>压缩阈值</td><td>宽 &gt;1080 微信会二次有损压；自己先压到 1080</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p class="cap" style="margin-top:8px">自动化走 API → 正文图按 <b>&lt;1MB</b> 设硬目标；封面按 10M。产物绝不产 webp。</p>
+      </div>
+      <div class="card">
+        <h4>关键代码（Pillow）</h4>
+        <pre><span class="c"># 居中裁到 2.35:1 封面（一行，不变形）</span>
+from PIL import Image, ImageOps
+cover = ImageOps.fit(im, (<span class="k">900</span>, <span class="k">383</span>),
+                     centering=(.5, .5))
+cover.save(<span class="s">"cover.jpg"</span>, quality=<span class="k">88</span>,
+           optimize=<span class="k">True</span>)
+
+<span class="c"># 压到指定 KB：循环降 quality（仅 JPG）</span>
+<span class="c"># 更优：JPG 用 mozjpeg、PNG 用 pngquant+oxipng</span></pre>
+        <p class="cap">格式选择：照片→JPG，图标 / 文字 / 透明→PNG，动图→GIF，webp 不用于上传。</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 11 工具开源 ============ -->
+<section id="s11" class="band">
+  <div class="wrap">
+    <div class="sec-head"><div class="idx">11</div><div><h2>现成工具与开源全景</h2><div class="sec-sub">star 为 2026-06-20 实测值。命名相似 ≠ 同功能，下表已标准确 owner/repo。</div></div></div>
+
+    <h3 style="margin-bottom:10px">低代码 / 工作流平台</h3>
+    <div class="tbl-wrap" style="margin-bottom:22px">
+      <table>
+        <thead><tr><th>平台</th><th>进草稿箱</th><th>门槛</th></tr></thead>
+        <tbody>
+          <tr><td><b>Coze 国内版</b>（扣子）</td><td>官方【微信公众号 API】插件：get_access_token→add_material→add_draft</td><td>云托管免操心 IP，最省配置</td></tr>
+          <tr><td><b>Dify</b></td><td>Marketplace 原生插件 Create Drafts（选 <code>xwang152-jack</code>，<b>别选</b> bikeread 那个纯客服）</td><td>插件文档明写"需账号已认证"</td></tr>
+          <tr><td><b>n8n</b></td><td>社区节点 / HTTP Request 直调；自带 token 缓存</td><td>自托管最灵活，要自配 IP 白名单</td></tr>
+          <tr><td><b>Make</b></td><td>原生 Verified 模块 "Create Drafts"（官方维护）</td><td>海外服务，需考虑访问 api.weixin.qq.com 可达性</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h3 style="margin-bottom:10px">开源 SDK / 全链路项目</h3>
+    <div class="tbl-wrap" style="margin-bottom:22px">
+      <table>
+        <thead><tr><th>项目</th><th>star</th><th>能力</th></tr></thead>
+        <tbody>
+          <tr><td><b>wechatpy</b>（Python）</td><td>4292</td><td><span class="yes">draft + material + uploadimg + freepublish 全有</span>，Python 侧最稳底座</td></tr>
+          <tr><td>werobot（Python）</td><td>4661</td><td>被动消息框架，<span class="no">无 draft 方法</span>，发草稿不能直接满足</td></tr>
+          <tr><td><b>wewrite</b></td><td>2463</td><td>Claude Code Skill：AI 写正文 + 配图 + 官方 API 进草稿，全链路</td></tr>
+          <tr><td><b>AIWriteX</b></td><td>~1200</td><td>独立桌面应用：热搜选题→写→配图→可选自动发布；README 诚实标认证门槛</td></tr>
+          <tr><td>jiji262/wechat-publisher</td><td>102</td><td>全网搜→深度文→6-10 图→官方 API 进草稿（注意另有同名 JS 停更版）</td></tr>
+          <tr><td>Node.js 库</td><td>—</td><td><span class="no">无</span>活跃且覆盖新版 draft 的库，相对 Python 的真实短板</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="grid c2">
+      <div class="card">
+        <h4>第三方编辑器有开放 API 吗？</h4>
+        <p class="body muted" style="margin:0"><b>没有一个</b>对第三方开发者开放"程序化把 HTML 推到任意公众号草稿箱"。壹伴 / 365 是浏览器插件挂后台；135 / 秀米的"开发者接口"方向相反（把编辑器嵌进你的系统 / 把内容 POST 到你的 CMS），<b>不是</b>推进微信草稿箱。唯一真正程序化进草稿箱的是微信官方 <code>draft/add</code>。</p>
+      </div>
+      <div class="card">
+        <h4>RPA：Wechatsync · 5793★</h4>
+        <p class="body muted" style="margin:0">Chrome 扩展，读已登录后台 cookie 直调内部 Web API，<b>绕开认证与 IP 白名单</b>，默认只存草稿 + 人工确认。难点：后台编辑器是 iframe 内 UEditor，样式必须内联、图片必须先传素材库。<b>违反自动化条款</b>，限个人低频自用。</p>
+      </div>
+    </div>
+    <div class="callout warn" style="margin-top:16px">
+      <h4>SaaS 成品：真·无人值守的诚实产品没找到</h4>
+      <p class="body" style="margin:0">有一云AI / 壹伴 / 135 / 快编AI 能"AI 写 + 配图 + 一键进草稿箱"，但多数靠<b>浏览器插件挂后台（需人在场）</b>，不是服务端无人值守。商业 SaaS 官网几乎都<b>不提</b>认证门槛与 IP 白名单，让人误以为任意个人号都能全自动发布。反而开源项目（AIWriteX）最坦白。</p>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 12 落地建议 ============ -->
+<section id="s12">
+  <div class="wrap">
+    <div class="sec-head"><div class="idx">12</div><div><h2>落地建议 — 按你的情况选路径</h2><div class="sec-sub">先认清账号资质和"要不要无人值守"，路径自然清晰。</div></div></div>
+    <div class="tbl-wrap">
+      <table>
+        <thead><tr><th>你的情况</th><th>推荐路径</th></tr></thead>
+        <tbody>
+          <tr><td>有认证企业 / 组织号 + 想服务端无人值守</td><td>官方 API 路线：Coze 国内版插件 / Dify(xwang152-jack) / AIWriteX 自部署，配好 IP 白名单</td></tr>
+          <tr><td>在 Claude Code 工作流里、要全链路成品</td><td><b>wewrite</b>（Skill）或 jiji262/wechat-publisher</td></tr>
+          <tr><td>自己拼、要最稳的 Python 底座</td><td><b>wechatpy</b>（draft+material+uploadimg 全有）+ 上层自接 AI 写作</td></tr>
+          <tr><td>只有个人订阅号、低频自用、能人工点一下</td><td><b>Wechatsync</b>（5793★ 插件）——但清楚它违反协议、限个人低频、只存草稿</td></tr>
+          <tr><td>想最少配置、不碰代码</td><td>135 编辑器 / 有一云AI（接受"插件 + 人在场"）</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="callout" style="margin-top:18px">
+      <h4>建议落地顺序（先跑通再加料）</h4>
+      <div class="pill-row">
+        <span class="pill"><b>阶段一</b> 只发纯文字草稿（打通 token + draft/add）</span>
+        <span class="pill"><b>阶段二</b> 接正文图（uploadimg 换 URL）</span>
+        <span class="pill"><b>阶段三</b> 接封面图（永久素材 + 叠字）</span>
+        <span class="pill"><b>阶段四</b> 选题 / 写作 / 审稿做厚</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 13 风险 ============ -->
+<section id="s13" class="band">
+  <div class="wrap">
+    <div class="sec-head"><div class="idx">13</div><div><h2>风险与红线</h2><div class="sec-sub">主要风险不在"能不能调接口"，而在合规、内容可信、版权与凭据安全。</div></div></div>
+    <div class="grid c3">
+      <div class="card"><span class="tag" style="color:var(--danger);background:var(--danger-wash)">合规</span><h4>RPA 踩协议红线</h4><p class="body muted" style="margin:0">浏览器自动化确定违反《微信软件许可及服务协议》"自动化操作"条款；有群控外挂类司法赔偿判例。低频自用风险低，商用 / 高频 / 多账号显著上升。</p></div>
+      <div class="card"><span class="tag" style="color:var(--danger);background:var(--danger-wash)">割韭菜</span><h4>"AI 一键写爆款日赚上千"</h4><p class="body muted" style="margin:0">大量"学员月入两万"案例被官媒（中新网）查实为<b>伪造 / 盗用截图</b>；几百上千元"AI 写作课"核心是拉人头分销。同等能力已大量开源，<b>无需买课</b>。</p></div>
+      <div class="card"><span class="tag">内容</span><h4>事实可信 + 去 AI 味</h4><p class="body muted" style="margin:0">事实结论必须带来源、生成后做 claim check。"去 AI 味"被普遍当必备步骤，但<b>有效性无客观验证</b>，归为行业惯例、效果存疑。</p></div>
+      <div class="card"><span class="tag">版权</span><h4>配图版权 / 名人 IP</h4><p class="body muted" style="margin:0">含可识别人脸 / 商标 / logo 的图三家图库都要人工复核；微信明确点名生图避开名人 / 知名 IP。</p></div>
+      <div class="card"><span class="tag">凭据</span><h4>token 只在服务端</h4><p class="body muted" style="margin:0">AppSecret / access_token 只在服务端读取，不进前端、不进笔记、不进日志。IP 白名单换服务器记得同步更新。</p></div>
+      <div class="card"><span class="tag">渲染</span><h4>HTML 末端被拒</h4><p class="body muted" style="margin:0">本地先渲染微信安全 HTML（无 JS、无外链图、无超限样式），字段约束在写稿阶段做，避免末端被接口拒掉浪费成本。</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 14 诚实边界 ============ -->
+<section id="s14">
+  <div class="wrap narrow">
+    <div class="sec-head"><div class="idx">14</div><div><h2>诚实边界 · 待核实</h2><div class="sec-sub">承重结论（账号门槛、四闸门链路）已亲核官方原文；以下为本轮未能定论或存在口径冲突的项。</div></div></div>
+    <div class="grid c2">
+      <div class="card soft">
+        <h4 class="accent">已亲自验证</h4>
+        <ul class="li body">
+          <li>draft/add 适用范围 公众号✔ / 服务号✔（官方原文）。</li>
+          <li>freepublish/submit 公众号「仅认证」（官方原文逐字）。</li>
+          <li>articles[] 字段与限制（同页核对）。</li>
+          <li>官方页快照存 <code>sources/wechat-verify/</code> 与前序 <code>sources/wechat-auto-draft/</code>，双重留底。</li>
+        </ul>
+      </div>
+      <div class="card soft">
+        <h4 style="color:var(--warn)">待核实 / 口径冲突</h4>
+        <ul class="li warn body">
+          <li>draft/add 对未认证账号是否真返回 48001（官方✔ vs 社区实测冲突）→ 以实调为准。</li>
+          <li>content "2kb vs 2 万字符"官方自相矛盾。</li>
+          <li>普通 token "2000 次/天"现行确切值（stable_token 是 50 万/天）。</li>
+          <li>封面 900×383 来自排版工具交叉，非单一官方数字文档。</li>
+          <li>中文渲染百分比是第三方评测，非厂商保证值。</li>
+        </ul>
+      </div>
+    </div>
+    <p class="cap" style="margin-top:14px">方法说明：微信开放文档（developers.weixin.qq.com）对 WebFetch / 普通 curl 持续返回 503（反爬 SPA），须用 Googlebot UA + 绕过本地代理才取到服务端渲染正文——调研时别把 503 误判为"页面不存在"。</p>
+  </div>
+</section>
+
+<!-- ============ 资料来源 ============ -->
+<section class="band">
+  <div class="wrap">
+    <div class="sec-head"><div class="idx">＊</div><div><h2>资料来源</h2><div class="sec-sub">官方文档为权威源，已亲核；开源项目均给准确 owner/repo。</div></div></div>
+    <div class="src-grid">
+      <div>
+        <h4>微信官方（已亲核）</h4>
+        <ul class="li dim">
+          <li>新增草稿 draft/add</li>
+          <li>发布 freepublish/submit</li>
+          <li>获取接口调用凭据 token / stable_token</li>
+          <li>上传永久素材 add_material</li>
+          <li>上传图文消息内图片 uploadimg</li>
+          <li>全局返回码 errCode</li>
+        </ul>
+      </div>
+      <div>
+        <h4>排版 / 开源 SDK</h4>
+        <ul class="li dim">
+          <li>github.com/doocs/md</li>
+          <li>github.com/Automattic/juice</li>
+          <li>github.com/wechatpy/wechatpy</li>
+          <li>github.com/oaker-io/wewrite</li>
+          <li>github.com/iniwap/AIWriteX</li>
+          <li>github.com/wechatsync/Wechatsync</li>
+        </ul>
+      </div>
+      <div>
+        <h4>内容方法论 / 配图</h4>
+        <ul class="li dim">
+          <li>CO-STAR 框架（GPT-4 提示工程大赛）</li>
+          <li>woshipm / 数英：防注水 · 爆款标题</li>
+          <li>Gemini / OpenAI Images / Seedream 文档</li>
+          <li>python-pillow（ImageOps.fit / 中文字体）</li>
+          <li>Coze / Dify / Make 公众号集成教程</li>
+          <li>中新网：AI 写作课割韭菜报道</li>
+        </ul>
+      </div>
+    </div>
+    <p class="cap" style="margin-top:16px">本轮调研笔记与官方快照：<code>research/notes/wechat-auto-draft/</code>、<code>research/sources/wechat-verify/</code>。前序工程版报告：<code>outputs/2026-06-20-wechat-auto-draft.html</code>。</p>
+  </div>
+</section>
+
+<footer class="foot">
+  <div class="wrap">
+    <p style="margin:0">调研方法遵循 audit-verification 四步纪律：agent 报告作线索，承重结论（账号资质门槛、接口链路）由本人用 Googlebot UA 抓取官方页逐字核实，并与前序官方快照交叉印证。外部对照（模型 / 工具）采"路线不同、各适场景"措辞，不做吹捧化结论。</p>
+    <p class="cr" style="margin-bottom:0">© 2026 张拼拼 (Max Pin) · 保留所有权利</p>
+  </div>
+</footer>
