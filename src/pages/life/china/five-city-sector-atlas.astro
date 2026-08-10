@@ -1,0 +1,28 @@
+---
+import Base from '../../../layouts/Base.astro';
+import body from '../../../legacy/life/china/five-city-sector-atlas/body.html?raw';
+import '../../../legacy/life/china/five-city-sector-atlas/style.css';
+
+const meta = {
+  title: '深港澳·东京大阪五城枢纽扇区图谱',
+  description: '按深圳、香港、澳门、东京、大阪排序，将五份城市方位图合并为一张可交互的枢纽扇区图谱。',
+};
+---
+<Base title={`${meta.title} · Cavno`} description={meta.description}>
+  <section class="cv-page-head sa-page-head">
+    <div class="cv-wrap">
+      <div class="cv-eyebrow">Life & Skills · China</div>
+      <h1 class="cv-page-title">五城枢纽扇区图谱</h1>
+      <p class="cv-lede">深圳、香港、澳门、东京、大阪：以交通枢纽为圆心，用同一套四向雷达比较城市空间。</p>
+      <a class="cv-crumb-back" href="/life/china/">← 返回中国栏目</a>
+    </div>
+  </section>
+
+  <article class="lp sa-atlas">
+    <Fragment set:html={body} />
+  </article>
+
+  <script>
+    import '../../../legacy/life/china/five-city-sector-atlas/script.js';
+  </script>
+</Base>
