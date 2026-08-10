@@ -5,13 +5,13 @@ import body from '../../../legacy/life/house/楼盘对比/body.html?raw';
 import '../../../legacy/life/house/楼盘对比/style.css';
 
 const meta = {
-  "title": "购房决策 · 八盘对比图表",
-  "description": "布吉六盘 + 坂田四季花城 + 香蜜湖参照 · 按学位、保值、流动性、居住品质、价格、通勤六维对比 · 含十年脆弱度光谱"
+  "title": "购房决策 · 九盘对比图表",
+  "description": "布吉六盘、坂田四季花城、罗湖翠竹与香蜜湖参照的六维对比，并以不折旧含金量和十年脆弱度辅助决策。"
 };
 ---
 <Base title={meta.title + ' · Cavno'} description={meta.description}>
 
-  <section class="cv-page-head">
+  <section class="cv-page-head hp-page-head">
     <div class="cv-wrap">
       <div class="cv-eyebrow">Life & Skills · House</div>
       <h1 class="cv-page-title">{meta.title}</h1>
@@ -20,7 +20,7 @@ const meta = {
     </div>
   </section>
 
-  <article class="lp">
+  <article class="lp hp-article">
     <Fragment set:html={body} />
   </article>
 </Base>
