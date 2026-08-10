@@ -1,0 +1,301 @@
+<div class="ca-wrap">
+  <div class="ca-overview">
+    <div class="ca-overview-copy">
+      <div class="ca-overline">Self-check · 36 items</div>
+      <p><strong>封号善后 8 项 + 日常配置 28 项。</strong>这是一份个人环境自查稿，不是 Anthropic 官方安全指南；平台规则、服务地区与官方支持说明应始终优先。</p>
+    </div>
+    <nav class="ca-jumps" aria-label="文章目录">
+      <a href="#cleanup">封号后清理</a>
+      <a href="#configuration">安全配置</a>
+    </nav>
+  </div>
+
+  <section class="ca-section" id="cleanup">
+<div class="sh reveal"><span class="no">壹</span><h2>如果账号被封了,这台电脑要清什么</h2></div>
+  <div class="sh-rule reveal"></div>
+  <p class="sh-note reveal">一句话:<b>存在软件里的登录信息(登录令牌、缓存、配置文件)清起来又快又干净;真正麻烦的是"浏览器指纹"</b>——网站根据你的显卡、字体、屏幕这些算出的一串识别码,你清 cookie、开无痕、换网络都改不掉它,能认出你好几个月。所以想彻底断掉这层,只能换台电脑;继续用同一台的话,就把其它能换的全换干净。整机重装(抹盘)多半没必要(硬件没变,指纹照旧)。</p>
+  <div class="grid">
+
+    <article class="item reveal">
+      <div class="ih"><span class="idx">清 1</span><span class="loc">Claude Code 数据目录</span></div>
+      <h3>删掉命令行版存的旧账号登录信息</h3>
+      <div class="val"><span class="vv">删 <code>~/.claude/.credentials.json</code> <b>连同所有</b> <code>.credentials.json.bak-*</code> 备份;删掉 <code>~/.claude.json</code>(里面那串账号标识会自动重新生成);清掉缓存文件夹。Mac 还要删钥匙串里的 <code>Claude Code-credentials</code>。</span></div>
+      <p class="why"><b>最容易漏的是那些 <code>.bak</code> 备份</b>——很多人删了正文件,备份里还留着旧号的登录令牌。</p>
+    </article>
+
+    <article class="item reveal">
+      <div class="ih"><span class="idx">清 2</span><span class="loc">Claude 桌面版</span></div>
+      <h3>清掉 Claude 桌面版的登录数据</h3>
+      <div class="val"><span class="vv">清桌面版数据目录里的登录令牌、以及它存的网站数据(Cookies、Local Storage)。<b>重装桌面版没用</b>——数据目录会保留下来。</span></div>
+      <p class="why">桌面版和命令行版各存一份登录信息,只清命令行版会漏掉这一份。</p>
+    </article>
+
+    <article class="item reveal">
+      <div class="ih"><span class="idx">清 3</span><span class="loc">整套注册信息</span></div>
+      <h3>卡、邮箱、手机号整套换掉,不重复用</h3>
+      <div class="val"><span class="vv">被封号用过的<b>卡、邮箱、手机号全部弃用</b>,新号一律换新的。存过 Stripe Link 的卡,去 link.com 把关联删掉。</span></div>
+      <p class="why">卡、邮箱、手机号都是支付和账号系统用来"把新旧号连成一个人"的强线索,留一个就前功尽弃。</p>
+    </article>
+
+    <article class="item reveal">
+      <div class="ih"><span class="idx">清 4</span><span class="loc">上网出口</span></div>
+      <h3>换一个新的上网出口 IP</h3>
+      <div class="val"><span class="vv">被封号用过的那个家庭宽带 IP <b>已经废了</b>,新号必须换一个没被关联过的新出口。</span></div>
+      <p class="why">旧 IP 已经和被封的号绑在一起,新号还用它 = 两个号从同一个 IP 上网 = 一起被封。</p>
+    </article>
+
+    <article class="item reveal">
+      <div class="ih"><span class="idx">清 5</span><span class="loc">浏览器用户资料夹</span></div>
+      <h3>把旧的浏览器资料夹整个删掉</h3>
+      <div class="val"><span class="vv">把登过被封号的那个<b>浏览器用户资料夹整个删掉</b>(登录状态、cookie、缓存全在里面),新号用一个全新的资料夹。</span></div>
+      <p class="why">Claude、Google、支付页的登录状态都存在这个资料夹里,一条条删 cookie 容易漏,直接删文件夹最干净。</p>
+    </article>
+
+    <article class="item reveal">
+      <div class="ih"><span class="idx">清 6</span><span class="loc">浏览器指纹</span></div>
+      <h3>浏览器指纹:同一台电脑换不掉</h3>
+      <div class="val"><span class="vv">用普通 Chrome 的话,这台电脑的浏览器指纹<b>改不了</b>(它由显卡、字体这些硬件决定)。真要换,只能<b>换台电脑</b>。</span></div>
+      <p class="why">这是同一台电脑上<b>唯一清不掉</b>的一层,清 cookie、换资料夹都没用。如果只能继续用这台,就把其它能换的(上网 IP、卡、邮箱、账号、电脑名、系统账户)<b>全换干净</b>——指纹这一层是否被拿去关联并不确定,风险低于那些一定会关联的信息。</p>
+    </article>
+
+    <article class="item reveal">
+      <div class="ih"><span class="idx">清 7</span><span class="loc">电脑系统</span></div>
+      <h3>改电脑名 + 换个系统账户</h3>
+      <div class="val"><span class="vv">改掉电脑的名字(主机名),再<b>新建一个系统账户</b>来跑新号。</span></div>
+      <p class="why">电脑名和你登录电脑用的账户名也能被拿来认人,换掉的代价比整机重装小得多。</p>
+    </article>
+
+    <article class="item reveal">
+      <div class="ih"><span class="idx">清 8</span><span class="loc">整机</span></div>
+      <h3>整机重装 / 换电脑</h3>
+      <div class="val"><span class="vv">最干净但最费事,<b>只有账号特别重要、或同一台电脑反复被封才值得做</b>。</span></div>
+      <p class="why">Claude 没有清不掉的硬件标识、账号标识也能重置,为它整机重装多半是白折腾;而且<b>抹盘也换不掉浏览器指纹</b>(硬件没变)。真要换指纹,是换台电脑(见清 6),不是重装本机。</p>
+    </article>
+
+  </div>
+  </section>
+
+  <section class="ca-section" id="configuration">
+<div class="sh reveal"><span class="no">贰</span><h2>账号安全配置清单</h2></div>
+  <div class="sh-rule reveal"></div>
+  <div class="grid">
+
+    <article class="item reveal">
+      <div class="ih"><span class="idx">01</span><span class="loc">注册 · 付款</span></div>
+      <h3>用对的银行卡</h3>
+      <div class="val"><span class="vv"><b>真实信用卡</b>,或者支持 <b>3-D Secure(付款时银行发的那道验证,简称 3DS)+ 美元结算</b>的虚拟卡。</span></div>
+      <p class="why">不支持这道验证的卡,付款时会被直接拒;非美元卡会触发货币转换和跨境风控。</p>
+    </article>
+
+    <article class="item reveal">
+      <div class="ih"><span class="idx">02</span><span class="loc">注册 · 付款</span></div>
+      <h3>每个账号一套独立的付款信息</h3>
+      <div class="val"><span class="vv">每个账号用<b>不同的卡、姓名、账单地址</b>,彼此不重复,也别只改一点点(比如只换个州)。</span></div>
+      <p class="why">支付系统靠卡号、姓名、地址、邮箱、IP 这些把账号连起来。地址只改零头,恰恰是它专门盯的花招;要区分就整套换。</p>
+    </article>
+
+    <article class="item reveal">
+      <div class="ih"><span class="idx">03</span><span class="loc">付款页的勾选框</span></div>
+      <h3>别把卡存进 Stripe Link</h3>
+      <div class="val"><span class="vv">付款时<b>取消勾选</b>"Save info for faster checkout with Link"(把卡存起来下次快速付款)。</span></div>
+      <p class="why">存了之后,这张卡会跨网站关联;下次验证邮件在别的地方打开,IP 一对不上就触发风控。</p>
+    </article>
+
+    <article class="item reveal">
+      <div class="ih"><span class="idx">04</span><span class="loc">注册全程</span></div>
+      <h3>注册到付款,全程在同一个浏览器里</h3>
+      <div class="val"><span class="vv">注册、登录授权、付款、点验证邮件——<b>全部在同一台电脑的同一个专用 Chrome 里完成</b>。</span></div>
+      <p class="why">中途换环境(比如用手机去点验证邮件),IP 和注册时对不上,就会被当成可疑操作。</p>
+    </article>
+
+    <article class="item reveal">
+      <div class="ih"><span class="idx">05</span><span class="loc">注册用的邮箱</span></div>
+      <h3>用自己域名的邮箱</h3>
+      <div class="val"><span class="vv">每个账号一个<b>自己域名的邮箱</b>;别用 gmail 这类公共邮箱批量注册,也别用一次性临时邮箱。</span></div>
+      <p class="why">邮箱、以及邮箱的域名都是关联线索。多个号的域名也别弄得一看就是同一批开的。</p>
+    </article>
+
+    <article class="item reveal">
+      <div class="ih"><span class="idx">06</span><span class="loc">注册 · 短信验证</span></div>
+      <h3>用美国手机号 / eSIM</h3>
+      <div class="val"><span class="vv">注册验证用<b>美国号码</b>,每个账号号码不同,而且和整体身份对得上。</span></div>
+      <p class="why">网络虚拟号、非美国号是风险信号;号码重复用会直接把账号连起来。</p>
+    </article>
+
+    <article class="item reveal">
+      <div class="ih"><span class="idx">07</span><span class="loc">注册资料整体</span></div>
+      <h3>整套信息看起来像同一个美国人</h3>
+      <div class="val"><span class="vv">邮箱、持卡人姓名、账单地址、时区、手机号<b>拼起来是一个说得通的美国人</b>。</span></div>
+      <p class="why">风控看的是所有信息合不合得上一个人。东拼西凑(美国卡配中国时区配印度号)比单项不完美更致命——<b>前后一致比每项都完美更重要</b>。</p>
+    </article>
+
+    <article class="item reveal">
+      <div class="ih"><span class="idx">08</span><span class="loc">订阅 · 支付方式</span></div>
+      <h3>续费前确认卡还能扣款</h3>
+      <div class="val"><span class="vv">到续费日<b>之前</b>,确认卡没过期、有余额、没被银行拦。</span></div>
+      <p class="why">扣款失败可能<b>直接封号</b>,不只是暂停订阅。</p>
+    </article>
+
+    <article class="item reveal">
+      <div class="ih"><span class="idx">09</span><span class="loc">浏览器用户资料夹</span></div>
+      <h3>一个浏览器只登一个账号</h3>
+      <div class="val"><span class="vv">一个浏览器<b>只登一个 AI 账号</b>;不同账号用不同的浏览器用户资料夹。</span></div>
+      <p class="why">同一个资料夹登过两个号,里面的 cookie 会直接把两个号认成同一个人。</p>
+    </article>
+
+    <article class="item reveal">
+      <div class="ih"><span class="idx">10</span><span class="loc">你的上网出口</span></div>
+      <h3>出口是美国家庭宽带,而且固定不换</h3>
+      <div class="val"><span class="vv">Claude 的流量从<b>美国家庭宽带的 IP</b>(住宅 IP)出去,注册和平时用<b>同一个,长期不换</b>。</span></div>
+      <p class="why">同一个号一会儿从这个 IP、一会儿从那个 IP 冒出来,会被当成一个账号多人共用。机房 IP、卖代理公司的 IP 本身就招风控。</p>
+    </article>
+
+    <article class="item reveal">
+      <div class="ih"><span class="idx">11</span><span class="loc">挑 IP 的时候</span></div>
+      <h3>怎么确认是真家庭宽带 IP</h3>
+      <div class="val"><span class="vv">用 ip-api 这类网站查:hosting / proxy / mobile 三项<b>都得是 false</b>,而且<u>这个 IP 归属的公司要是真实的宽带运营商</u>,不是卖代理的公司。</span></div>
+      <p class="why">只看前面三项不够——卖代理的 IP 也能显示 false,一定要再看它归属哪家公司。</p>
+    </article>
+
+    <article class="item reveal">
+      <div class="ih"><span class="idx">12</span><span class="loc">国内付款时</span></div>
+      <h3>国内支付用普通浏览器</h3>
+      <div class="val"><span class="vv">支付宝 / 微信付款,用<b>另一个普通浏览器</b>(走国内直连),<b>别用</b>登 AI 账号那个走美国代理的专用 Chrome。</span></div>
+      <p class="why">国内收银台走美国代理会打不开、卡在"订单过期"。也别把支付宝、微信加进走代理的名单里。</p>
+    </article>
+
+    <article class="item reveal">
+      <div class="ih"><span class="idx">13</span><span class="loc">Claude Code 的 settings.json</span></div>
+      <h3>Claude Code 的代理:三个都要填</h3>
+      <div class="val"><span class="vv">在 Claude Code 的 <code>settings.json</code> 的 <code>env</code> 里,把 <code>HTTP_PROXY</code>、<code>HTTPS_PROXY</code>、<code>ALL_PROXY</code> <b>三个都指向本机的中转端口</b>(再由本机的中转程序转到美国出口)。</span></div>
+      <p class="why">Claude Code 不同请求读不同变量,只填一个会有请求没走代理漏出去。让它只连本机、由本机程序去连美国,新版也不会连不上。</p>
+    </article>
+
+    <article class="item reveal">
+      <div class="ih"><span class="idx">14</span><span class="loc">Claude Code 的 settings.json</span></div>
+      <h3>NO_PROXY 用对写法</h3>
+      <div class="val"><span class="vv"><code>NO_PROXY</code> 填 <code>127.0.0.1,localhost,*.local</code>。</span></div>
+      <p class="why">Claude Code 底层是 Node,这个设置<b>只认主机名、不认 IP 网段</b>——写成 <code>127.0.0.0/8</code> 永远不生效,要写 <code>127.0.0.1</code>。</p>
+    </article>
+
+    <article class="item reveal">
+      <div class="ih"><span class="idx">15</span><span class="loc">Claude Code 的 settings.json</span></div>
+      <h3>关掉 Claude Code 的自动更新</h3>
+      <div class="val"><span class="vv"><code>env</code> 里加 <code>DISABLE_AUTOUPDATER=1</code>,固定用一个能跑通的稳定版本。</span></div>
+      <p class="why">自动更新中途断掉会把 <code>claude</code> 命令弄坏弄丢;个别新版本在代理下一启动就卡死。升级改成自己挑时间手动升。</p>
+    </article>
+
+    <article class="item reveal">
+      <div class="ih"><span class="idx">16</span><span class="loc">Claude Code 的 settings.json</span></div>
+      <h3>拦住它自动弹浏览器</h3>
+      <div class="val"><span class="vv"><code>env</code> 里把 <code>BROWSER</code> 指向一个空脚本(内容就一行 <code>@echo off</code>)。</span></div>
+      <p class="why">防止 Claude Code 登录授权时自动拉起浏览器——从错误的浏览器打开反而暴露身份。</p>
+    </article>
+
+    <div class="pbar reveal">下面 <b>17–20</b> 是给<b>你专门登 Claude / Google 的那个 Chrome</b> 配的<b>启动参数</b>——就是<b>普通 Chrome 加这几个参数</b>,不用另装什么指纹浏览器。参数加在 Chrome 快捷方式"目标"栏路径的后面。真机 Chrome 配好这几项,检测网站就会看到一个干净、前后一致的美国用户(去 <b>BrowserScan</b> 自测,目标显示 100%、Proxy=No)。下文把它简称"专用 Chrome"。</div>
+
+    <article class="item reveal">
+      <div class="ih"><span class="idx">17</span><span class="loc">Chrome 快捷方式参数</span></div>
+      <h3>代理走 SOCKS5</h3>
+      <div class="val"><span class="vv"><code>--proxy-server=socks5://127.0.0.1:&lt;本机端口&gt;</code>。别用 HTTP 代理,也别用浏览器自动分流(<code>--proxy-pac-url</code>)。</span></div>
+      <p class="why">HTTP 代理握手时会露出"我在用代理"的特征;浏览器自带的自动分流会让一部分网址用本地 DNS,把你真实位置漏出去。SOCKS5 这种底层代理不会。</p>
+    </article>
+
+    <article class="item reveal">
+      <div class="ih"><span class="idx">18</span><span class="loc">Chrome 快捷方式参数</span></div>
+      <h3>网址解析全交给代理那头</h3>
+      <div class="val"><span class="vv"><code>--host-resolver-rules="MAP * ~NOTFOUND , EXCLUDE 127.0.0.1"</code>(本机要跑开发服务,再补 <code>, EXCLUDE localhost</code>)。</span></div>
+      <p class="why">强制所有网址都交给代理那头去解析,浏览器自己不查 DNS,就不会漏出你在哪。</p>
+    </article>
+
+    <article class="item reveal">
+      <div class="ih"><span class="idx">19</span><span class="loc">Chrome 快捷方式参数</span></div>
+      <h3>浏览器语言设成英文(en-US)</h3>
+      <div class="val"><span class="vv"><code>--lang=en-US</code>(Windows);Mac 用 <code>--accept-lang=en-US</code>。</span></div>
+      <p class="why">让浏览器对外说自己是英文,和美国身份对得上。</p>
+      <div class="split">
+        <div class="sp mac"><span class="spk">Mac</span><span class="spv"><code>--lang</code> 在 Mac 不改界面语言;也别用 <code>-AppleLanguages</code>(会被当成网址打开)。</span></div>
+      </div>
+    </article>
+
+    <article class="item reveal">
+      <div class="ih"><span class="idx">20</span><span class="loc">Chrome 快捷方式参数</span></div>
+      <h3>堵住 WebRTC 漏真实 IP</h3>
+      <div class="val"><span class="vv"><code>--force-webrtc-ip-handling-policy=disable_non_proxied_udp</code>。</span></div>
+      <p class="why">WebRTC 这个功能会绕过代理、用 UDP 把你的真实 IP 直接暴露出去,是最常见的漏 IP 口子。</p>
+    </article>
+
+    <article class="item reveal">
+      <div class="ih"><span class="idx">21</span><span class="loc">系统 · 日期和时间</span></div>
+      <h3>时区改成出口 IP 所在的时区</h3>
+      <div class="val"><span class="vv">把系统时区改成出口 IP 对应的美国时区(比如洛杉矶 / 芝加哥 / 纽约)。</span></div>
+      <p class="why">网页读的是系统时区,必须和 IP 的地理位置对上。"美国 IP 配中国时区"一眼就矛盾。这会改任务栏时间,得接受。</p>
+    </article>
+
+    <article class="item reveal">
+      <div class="ih"><span class="idx">22</span><span class="loc">系统 · 隐私设置</span></div>
+      <h3>关掉系统定位</h3>
+      <div class="val"><span class="vv">系统定位服务<b>关闭</b>,浏览器要位置权限时<b>不授权</b>。</span></div>
+      <p class="why">定位会暴露你真实的中国坐标,和美国 IP、美国时区一冲突就露馅。</p>
+      <div class="split">
+        <div class="sp win"><span class="spk">Win</span><span class="spv">设置 › 隐私和安全性 › 定位 → 关</span></div>
+        <div class="sp mac"><span class="spk">Mac</span><span class="spv">系统设置 › 隐私与安全性 › 定位服务 → 关</span></div>
+      </div>
+    </article>
+
+    <article class="item reveal">
+      <div class="ih"><span class="idx">23</span><span class="loc">系统 · 网络</span></div>
+      <h3>关掉 IPv6</h3>
+      <div class="val"><span class="vv">在系统里<b>关掉 IPv6</b>(新一代 IP 协议)。</span></div>
+      <p class="why">代理通常只走老的 IPv4,留着 IPv6 会有请求从它那头直接漏出去,绕过代理暴露真实 IP。</p>
+      <div class="split">
+        <div class="sp win"><span class="spk">Win</span><span class="spv">网络适配器属性里去掉 IPv6 的勾</span></div>
+        <div class="sp mac"><span class="spk">Mac</span><span class="spv"><code>networksetup -setv6off Wi-Fi</code></span></div>
+      </div>
+    </article>
+
+    <article class="item reveal">
+      <div class="ih"><span class="idx">24</span><span class="loc">登录 · 运行</span></div>
+      <h3>在哪台电脑跑 Claude,就在哪台登录</h3>
+      <div class="val"><span class="vv">登录授权和平时跑 Claude,<b>用同一台电脑</b>;别在 A 电脑登录、再把登录信息挪到 B 电脑上用。</span></div>
+      <p class="why">用普通 Chrome 时,浏览器报的系统就是这台电脑的真实系统,天然对得上。但要是在别的电脑登录再挪过来,两台的系统、指纹不一样,后台会看到"同一个号在两台设备",判成账号共用——这个坑不用指纹浏览器就自动避开了。</p>
+    </article>
+
+    <article class="item reveal">
+      <div class="ih"><span class="idx">25</span><span class="loc">Mac · 系统设置</span></div>
+      <h3>Mac 关掉"iCloud 专用代理"</h3>
+      <div class="val"><span class="vv">关闭 <b>iCloud 专用代理(Private Relay)</b>。</span></div>
+      <p class="why">开着它,Mac 的一部分流量会从苹果的中转 IP 出去,和你的家庭宽带出口不是同一个,等于多冒出一个来源。</p>
+    </article>
+
+    <article class="item reveal">
+      <div class="ih"><span class="idx">26</span><span class="loc">Windows 安全中心</span></div>
+      <h3>别让杀毒软件删掉本机的代理程序</h3>
+      <div class="val"><span class="vv">给本机的代理程序在 Defender 里加<b>白名单(文件路径 + 进程都加)</b>;第三方杀软(腾讯管家 / 360 / 火绒)建议卸掉。</span></div>
+      <p class="why">代理程序常被杀毒软件当成可疑软件<b>悄悄删掉</b>,一删本机端口就没了,Claude 全部连不上。</p>
+    </article>
+
+    <article class="item reveal">
+      <div class="ih"><span class="idx">27</span><span class="loc">使用习惯</span></div>
+      <h3>别拿订阅号当接口猛刷</h3>
+      <div class="val"><span class="vv">用量像<b>一个真人开发者</b>,别用脚本自动化、高频狂刷。</span></div>
+      <p class="why">用量从每天一万字突然飙到一次几百万、每分钟开几十个新对话,都是很明确的封号信号。</p>
+    </article>
+
+    <article class="item reveal">
+      <div class="ih"><span class="idx">28</span><span class="loc">本机分流规则</span></div>
+      <h3>做分流的话,别漏这两类网址</h3>
+      <div class="val"><span class="vv">如果你设了"国内网站直连、国外走代理"的分流:①国内流量别绕美国;②<b>Claude 后台上报用的那些网址,也要跟着走美国</b>,和主服务保持一致。</span></div>
+      <p class="why">上报数据从国内直接发、主服务却走美国,后台会看到你这个号来自两个地区,同样被当成账号共用。</p>
+    </article>
+
+  </div>
+
+  </section>
+
+  <aside class="ca-footnote">
+    <div class="mono">Claude 账号安全配置清单 · 单机自查 · 封号善后 8 项 + 配置 28 项 · 2026-07-02</div>
+    <p>每项只写"配成什么 + 在哪儿配 + 为什么",不含操作步骤。清单综合实战经验与 Stripe / Anthropic 官方说明及业界通行做法整理。文中出现的本机地址、端口为通用示例,非敏感信息。</p>
+  </aside>
+
+</div>

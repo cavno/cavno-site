@@ -1,0 +1,24 @@
+---
+import Base from '../../../layouts/Base.astro';
+import body from '../../../legacy/life/ai/claude-account-safety/body.html?raw';
+import '../../../legacy/life/ai/claude-account-safety/style.css';
+
+const meta = {
+  title: 'Claude 账号安全配置清单',
+  description: '面向单机环境的 Claude 账号安全自查清单：封号善后 8 项、日常配置 28 项。',
+};
+---
+<Base title={`${meta.title} · Cavno`} description={meta.description}>
+  <section class="cv-page-head ca-page-head">
+    <div class="cv-wrap">
+      <div class="cv-eyebrow">Life & Skills · AI</div>
+      <h1 class="cv-page-title">在自己这台电脑上，把 Claude 账号配安全。</h1>
+      <p class="cv-lede">每一项只讲三件事：配成什么、在哪儿配、为什么。照着逐条自查即可。</p>
+      <a class="cv-crumb-back" href="/life/ai/">← 返回 AI 栏目</a>
+    </div>
+  </section>
+
+  <article class="lp ca-safety">
+    <Fragment set:html={body} />
+  </article>
+</Base>
