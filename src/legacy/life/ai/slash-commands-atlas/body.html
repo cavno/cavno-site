@@ -1,0 +1,44 @@
+<header class="hero">
+  <div class="wrap">命令行 · 斜杠命令 · 小白友好版</span>
+
+    <div class="stats">
+      <div class="stat"><div class="num c" id="stat-cmd">91</div><div class="lbl">条命令</div></div>
+      <div class="stat"><div class="num" id="stat-cat">11</div><div class="lbl">个分类</div></div>
+      <div class="stat"><div class="num">200<span style="font-size:.5em">字</span></div><div class="lbl">每条白话讲解</div></div>
+      <div class="stat"><div class="num">2026<span style="font-size:.5em">.06</span></div><div class="lbl">数据时点</div></div>
+    </div>
+
+    <div class="primer">
+      <h2><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/></svg>什么是"斜杠命令"？</h2>
+      <p>Claude Code 是一个跑在<b>命令行</b>（就是程序员敲字干活的黑框框）里的 AI 助手。平时你直接打字跟它聊就行；但有些操作不必费口舌解释，敲一个以斜杠 <code>/</code> 开头的暗号就能一键触发——好比微信里输入 <code>/</code> 调出快捷功能，或对智能音箱喊一句固定口令。比如 <code>/clear</code> 清空重来、<code>/model</code> 换个 AI 大脑。下面把这些暗号按用途分好类，逐条讲清。</p>
+    </div>
+  </div>
+</header>
+
+<div class="wrap">
+  <div class="controls">
+    <div class="search">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+      <input id="q" type="text" placeholder="搜命令、别名或关键词，例如：清空 / model / 后台 / 截图…" autocomplete="off">
+    </div>
+    <div class="chips" id="chips"></div>
+  </div>
+
+  <div class="index" id="index"></div>
+</div>
+
+<main class="wrap">
+  <div id="sections"></div>
+  <div class="empty" id="empty">没有匹配的命令，换个关键词试试。</div>
+</main>
+
+<footer>
+  <div class="wrap">
+    <div class="src">
+      数据来源：Claude Code 官方命令参考 <a href="https://code.claude.com/docs/en/commands" target="_blank" rel="noopener">code.claude.com/docs/en/commands</a>（截至 2026 年 6 月）。命令可见性随平台、套餐与环境而异，故此处罗列的注册表大于任一用户实际所见；已折叠别名、剔除 <code style="font-family:var(--mono)">/vim</code>、<code style="font-family:var(--mono)">/pr-comments</code> 等已下线命令。
+    </div>
+    <div class="sig">PinPin Visual Identity<br>研究工作台 · 多智能体并发调研出品</div>
+  </div>
+    <div class="copyright" style="max-width:1180px;margin:26px auto 0;padding:18px 28px 0;border-top:1px solid var(--line);text-align:center;font-size:13px;color:var(--ink-3);font-family:var(--mono);letter-spacing:.02em">© 2026 张拼拼 (Max Pin) · zpplife@gmail.com · 保留所有权利</div>
+</footer>
+

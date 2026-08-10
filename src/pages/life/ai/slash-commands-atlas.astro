@@ -1,0 +1,17 @@
+---
+import Base from '../../../layouts/Base.astro';
+import body from '../../../legacy/life/ai/slash-commands-atlas/body.html?raw';
+import '../../../legacy/life/ai/slash-commands-atlas/style.css';
+const meta = { title: 'Claude Code 斜杠命令全图鉴', description: '按场景归类 Claude Code 斜杠命令，以白话说明用途，并支持即时搜索和分类筛选。' };
+---
+<Base title={`${meta.title} · Cavno`} description={meta.description}>
+  <section class="cv-page-head sc-page-head"><div class="cv-wrap">
+    <div class="cv-eyebrow">Life & Skills · AI</div>
+    <h1 class="cv-page-title">Claude Code 斜杠命令全图鉴</h1>
+    <p class="cv-lede">把每条斜杠命令按用途归类，用生活化的类比讲清楚；页面内可即时搜索和筛选。</p>
+    <a class="cv-crumb-back" href="/life/ai/">← 返回 AI 栏目</a>
+  </div></section>
+  <article class="lp sc-article"><Fragment set:html={body} /></article>
+  <script>import '../../../legacy/life/ai/slash-commands-atlas/script.js';</script>
+</Base>
+

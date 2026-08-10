@@ -1,0 +1,25 @@
+---
+import Base from '../../../layouts/Base.astro';
+import body from '../../../legacy/life/ai/access-truth/body.html?raw';
+import '../../../legacy/life/ai/access-truth/style.css';
+
+const meta = {
+  title: '你的 Claude Code 用对了吗？',
+  description: '官方订阅、官方 API 与中转号池三种 Claude Code 接入方式的能力、成本与风险对比。',
+};
+---
+<Base title={`${meta.title} · Cavno`} description={meta.description}>
+  <section class="cv-page-head at-page-head">
+    <div class="cv-wrap">
+      <div class="cv-eyebrow">Life & Skills · AI</div>
+      <h1 class="cv-page-title">你的 Claude Code 用对了吗？</h1>
+      <p class="cv-lede">官方订阅、官方 API 与中转号池：从工具调用、成本、账号风险到真假模型探针，拆开三种接入方式的真实差异。</p>
+      <a class="cv-crumb-back" href="/life/ai/">← 返回 AI 栏目</a>
+    </div>
+  </section>
+
+  <article class="lp at-article">
+    <Fragment set:html={body} />
+  </article>
+</Base>
+

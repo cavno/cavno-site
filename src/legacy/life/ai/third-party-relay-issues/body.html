@@ -1,0 +1,499 @@
+<div class="page">
+
+  <header>
+    <div class="meta">
+      <span>调研日期 2026-08-02</span>
+      <span>覆盖 26 项已知问题</span>
+      <span>分类：Tool Use / 功能可用性</span>
+    </div>
+  </header>
+
+  <div class="verdict">
+    <div class="eyebrow">一句话结论</div>
+    <p><strong>Claude Code 不是一个通用 LLM 客户端，而是深度耦合 Anthropic API 的专用客户端。</strong>它的系统提示词、工具描述、Beta Headers、缓存与思考字段全部按 Claude 模型能力定制。中转站只要在协议上是"子集"，或后端模型不是 Claude，客户端的一整套优化就失效——这是架构耦合的必然结果，不是所谓"官方投毒"。</p>
+  </div>
+
+  <div class="cause-grid">
+    <div class="cause">
+      <div class="n">根因 A</div>
+      <h3>协议子集</h3>
+      <p>中转站只实现 <code>/v1/messages</code> 的基本字段，对 <code>thinking</code>、<code>cache_control</code>、Beta Headers、<code>server_tool_use</code> 等做 schema 校验后丢弃或直接 400。</p>
+    </div>
+    <div class="cause">
+      <div class="n">根因 B</div>
+      <h3>能力探测错位</h3>
+      <p>客户端靠模型名字符串与 Provider 判断能力。第三方模型名匹配不上 <code>claude-*</code> 规则，能力检测要么全 false、要么误判为 true，两种都出错。</p>
+    </div>
+    <div class="cause">
+      <div class="n">根因 C</div>
+      <h3>模型行为差异</h3>
+      <p>Function Calling 在各家实现差异很大：并行调用、严格 JSON、长参数逐字复现、思考态下能否调工具，都不一致。工具越多，弱模型越容易崩。</p>
+    </div>
+  </div>
+
+  <section>
+    <div class="sec-head">
+      <div class="eyebrow">故障分层</div>
+      <h2>四层故障面，越往下越难自查</h2>
+      <p class="muted">上两层报错明确、一次配对就好；下两层通常不报错，只是"感觉变笨了"。</p>
+    </div>
+    <div class="stack">
+      <div class="layer">
+        <div class="lname">L1 接入层</div>
+        <div class="ldesc">端点协议选错、Base URL 拼出 <code>/v1/v1</code>、model ID 与中转命名不符、shell 里的 <code>export ANTHROPIC_*</code> 优先级压过 settings.json 导致"切了没生效"。</div>
+        <div class="lhit">404 / 401 / 连不上</div>
+      </div>
+      <div class="layer">
+        <div class="lname">L2 协议层</div>
+        <div class="ldesc">缓存、思考、Beta Headers、effort、流式事件类型、stop_reason 语义在转换中丢失或被过滤。</div>
+        <div class="lhit">静默降级</div>
+      </div>
+      <div class="layer">
+        <div class="lname">L3 工具层</div>
+        <div class="ldesc">tool_use 结构、并行调用、tool_use_id 配对、参数 JSON 严格性、服务端工具缺失。</div>
+        <div class="lhit">改文件失败 / 死循环</div>
+      </div>
+      <div class="layer">
+        <div class="lname">L4 运营层</div>
+        <div class="ldesc">限流、掉线、低价分组偷换模型、预充值、代码与对话全量经过第三方服务器。</div>
+        <div class="lhit">不可控风险</div>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <div class="sec-head">
+      <div class="eyebrow">清单一</div>
+      <h2>哪些 Tool Use 会出问题</h2>
+      <p class="muted">按失效机制分组，而不是按工具名罗列——同一类机制坏掉，整组工具一起坏。</p>
+    </div>
+
+    <div class="legend">
+      <span class="pill sev-block">阻断 · 直接报错或完全不可用</span>
+      <span class="pill sev-degrade">降级 · 能跑但静默变差</span>
+      <span class="pill sev-friction">摩擦 · 可用但更贵更慢</span>
+      <span class="pill sev-ok">基本安全</span>
+    </div>
+
+    <div class="group">
+      <div class="group-label"><span>组 1 · 依赖模型逐字精度</span><span>最高频的失败来源</span></div>
+      <div class="items">
+
+        <div class="item">
+          <div class="name"><b>Edit</b><span class="pill sev-block">阻断</span></div>
+          <div class="body">
+            <p>Edit 做的是<strong>精确字符串替换</strong>：<code>old_string</code> 必须与文件内容逐字节一致，不做正则、不做模糊匹配，一个空格或缩进差异就失败。第三方模型在生成长参数时容易"顺手整理"空白、转义引号、把全角标点归一化、丢掉行尾空格。</p>
+            <div class="sym"><b>症状：</b>String to replace not found → 模型重试 → 再次失败 → 反复读文件重试，token 烧光却一行没改。这是接第三方模型后最常见的体感"变笨"。</div>
+          </div>
+        </div>
+
+        <div class="item">
+          <div class="name"><b>Write</b><span class="pill sev-degrade">降级</span></div>
+          <div class="body">
+            <p>整文件写入要求模型一次性输出全部内容。中转站的 <code>max_tokens</code> 上限往往低于官方（尤其按次计费的分组会隐藏单次输出上限），流式细粒度传参时参数不做 JSON 校验，截断即产生非法 JSON。</p>
+            <div class="sym"><b>症状：</b>文件被写成半截 / 结尾缺花括号 / 报 invalid JSON in tool input；<code>stop_reason</code> 若被中转统一成 <code>end_turn</code>，客户端还会以为"写完了"。</div>
+          </div>
+        </div>
+
+        <div class="item">
+          <div class="name"><b>TodoWrite</b><span class="pill sev-degrade">降级</span></div>
+          <div class="body">
+            <p>参数是对象数组 + 严格枚举（status / activeForm）。对嵌套数组 schema 支持弱的模型经常给错结构或漏字段。</p>
+            <div class="sym"><b>症状：</b>校验失败后被丢弃，任务列表不更新；模型失去进度感，长任务中途"忘了自己在干嘛"。</div>
+          </div>
+        </div>
+
+        <div class="item">
+          <div class="name"><b>NotebookEdit</b><span class="pill sev-degrade">降级</span></div>
+          <div class="body">
+            <p>cell_id + 编辑模式的组合语义复杂，弱模型基本靠猜。</p>
+            <div class="sym"><b>症状：</b>插到错误的 cell、覆盖相邻单元格。</div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <div class="group">
+      <div class="group-label"><span>组 2 · 结构性缺失（中转端没有这个能力）</span><span>配置改不好</span></div>
+      <div class="items">
+
+        <div class="item">
+          <div class="name"><b>WebSearch</b><span class="pill sev-block">阻断</span></div>
+          <div class="body">
+            <p>WebSearch 是 <strong>Anthropic 服务端工具</strong>：搜索由 Anthropic 服务器调用搜索引擎完成，客户端只收结果。中转站只做协议转换，没有搜索服务；Bedrock / Vertex 同样不支持。这是判断"你连的是不是官方通道"的最快方法——反代通道只能 Fetch，不能 Search。</p>
+            <div class="sym"><b>症状：</b>工具被隐藏，或模型回答"我无法访问实时网络"；部分中转会返回幻觉搜索结果。</div>
+          </div>
+        </div>
+
+        <div class="item">
+          <div class="name"><b>WebFetch</b><span class="pill sev-degrade">降级</span></div>
+          <div class="body">
+            <p>抓取在本机执行，但正文摘要会调用小模型（<code>claude-haiku-4-5</code>）。中转站若没有这个 model ID，整条链路直接失败。</p>
+            <div class="sym"><b>症状：</b>API Error: model not found；或摘要质量骤降（被路由到不相干的廉价模型）。</div>
+          </div>
+        </div>
+
+        <div class="item">
+          <div class="name"><b>图片 / PDF 输入</b><span class="pill sev-block">阻断</span></div>
+          <div class="body">
+            <p>粘贴截图、读取图片走多模态 content block。纯文本中转或非视觉模型不接受该 block。</p>
+            <div class="sym"><b>症状：</b>400 invalid content block type，或图片被静默丢弃、模型完全没看到你贴的报错截图。</div>
+          </div>
+        </div>
+
+        <div class="item">
+          <div class="name"><b>工具 schema 扩展字段</b><span class="pill sev-degrade">降级</span></div>
+          <div class="body">
+            <p><code>cache_control</code>、<code>defer_loading</code>（工具描述延迟加载）、<code>eager_input_streaming</code> 等字段被严格校验的中转直接拒绝或剥离。</p>
+            <div class="sym"><b>症状：</b>要么 400 unknown field，要么工具描述全量塞进每次请求，上下文迅速膨胀。</div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <div class="group">
+      <div class="group-label"><span>组 3 · 协议转换中丢东西</span><span>OpenAI ⇄ Anthropic 转换层</span></div>
+      <div class="items">
+
+        <div class="item">
+          <div class="name"><b>并行工具调用</b><span class="pill sev-degrade">降级</span></div>
+          <div class="body">
+            <p>Claude Code 大量依赖一轮内并发多个 tool_use（同时读多个文件、并发 Grep）。不少 OpenAI→Anthropic 转换层只透传第一个 tool call。</p>
+            <div class="sym"><b>症状：</b>后续调用被丢弃 → 模型以为读过了却没有内容 → 基于空信息编造结论；或退化为串行，速度慢数倍。</div>
+          </div>
+        </div>
+
+        <div class="item">
+          <div class="name"><b>tool_use_id 配对</b><span class="pill sev-block">阻断</span></div>
+          <div class="body">
+            <p>每个 tool_result 必须回带对应的 <code>tool_use_id</code>。转换过程重写消息时容易错配或丢失，历史一旦不一致就整个会话卡死。</p>
+            <div class="sym"><b>症状：</b>API Error 400 · tool_use ids were found without tool_result blocks；中断一次后无法恢复，只能 <code>/rewind</code> 或重开会话。</div>
+          </div>
+        </div>
+
+        <div class="item">
+          <div class="name"><b>思考态 + 工具调用</b><span class="pill sev-block">阻断</span></div>
+          <div class="body">
+            <p>典型如 DeepSeek：进入 Reasoner 模式后底层不支持 function calling，而历史里又必须携带 thinking 块。Claude Code 的高强度思考提示恰好会触发这个模式。</p>
+            <div class="sym"><b>症状：</b>只要挂了 MCP 或 WebSearch，一发请求就 400；GLM 一类模型则因能力误判被发送 <code>thinking: adaptive</code> 而报错。</div>
+          </div>
+        </div>
+
+        <div class="item">
+          <div class="name"><b>流式事件</b><span class="pill sev-degrade">降级</span></div>
+          <div class="body">
+            <p>缺少 <code>thinking_delta</code> / <code>server_tool_use</code> / <code>input_json_delta</code> 等事件类型。</p>
+            <div class="sym"><b>症状：</b>界面长时间空转、工具参数拼不全、"卡在 tool 调用中间"不动。</div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <div class="group">
+      <div class="group-label"><span>组 4 · 工具规模压垮弱模型</span><span>数量问题，不是协议问题</span></div>
+      <div class="items">
+
+        <div class="item">
+          <div class="name"><b>MCP 工具</b><span class="pill sev-degrade">降级</span></div>
+          <div class="body">
+            <p>MCP 会一次性注入几十个工具定义（名称形如 <code>mcp__server__tool</code>）。工具越多，选择空间越大，弱模型选错工具、编造参数的概率显著上升；schema 体积也直接吃掉上下文和成本。</p>
+            <div class="sym"><b>症状：</b>调用不存在的工具名、参数张冠李戴、或干脆绕过工具自己"想象"结果。</div>
+          </div>
+        </div>
+
+        <div class="item">
+          <div class="name"><b>Task / 子代理</b><span class="pill sev-friction">摩擦</span></div>
+          <div class="body">
+            <p>子代理是"再开一个完整会话"，每个子代理自带全套系统提示与工具。第三方模型往往不理解委派语义，自己动手而不派发；无缓存时成本按 N 倍叠加。</p>
+            <div class="sym"><b>症状：</b>子代理不干活、返回空结果、或并发把额度瞬间打光。</div>
+          </div>
+        </div>
+
+        <div class="item">
+          <div class="name"><b>Skill / 技能调用</b><span class="pill sev-degrade">降级</span></div>
+          <div class="body">
+            <p>技能本质是长指令遵循。第三方模型对"先读 SKILL.md 再执行"这类元指令的服从度低。</p>
+            <div class="sym"><b>症状：</b>技能被无视，或只读了名字就开始瞎编流程。</div>
+          </div>
+        </div>
+
+        <div class="item">
+          <div class="name"><b>Bash / Read / Glob / Grep</b><span class="pill sev-ok">基本安全</span></div>
+          <div class="body">
+            <p>这几个纯本地执行、参数结构简单，是接第三方模型后仍然稳定的部分。剩下的问题只是模型本身写不写得对命令、会不会读超长输出。</p>
+            <div class="sym"><b>注意：</b>Bash 长输出 + 无缓存时，每一轮都要重传全量上下文，成本放大最明显的就是这里。</div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <div class="sec-head">
+      <div class="eyebrow">清单二</div>
+      <h2>哪些功能不能用、不可用、不好用</h2>
+      <p class="muted">工具之外，客户端本身有一整套依赖官方 API 的能力，接第三方后大多数不会报错，只是悄悄消失。</p>
+    </div>
+
+    <div class="group">
+      <div class="group-label"><span>A · 协议特性（多数静默失效）</span><span>不报错，只变差</span></div>
+      <div class="items">
+
+        <div class="item">
+          <div class="name"><b>Prompt Caching</b><span class="pill sev-friction">摩擦</span></div>
+          <div class="body">
+            <p>官方缓存能把 Claude Code 实际成本降 50–70%。中转不支持 <code>cache_control</code> 时，每轮都要重新处理数万 token 的系统提示与工具定义。</p>
+            <div class="sym"><b>后果：</b>成本翻数倍、首字延迟明显变长；返回里没有 <code>cache_read_input_tokens</code>，客户端的缓存命中监控同时失效。</div>
+          </div>
+        </div>
+
+        <div class="item">
+          <div class="name"><b>Extended Thinking</b><span class="pill sev-block">阻断</span></div>
+          <div class="body">
+            <p>思考预算、adaptive thinking、interleaved thinking 都靠专有字段。能力探测还会误判：模型名匹配不上但 Provider 仍被当作 firstParty，于是照发 thinking 字段。</p>
+            <div class="sym"><b>后果：</b>要么参数被过滤、深度思考形同虚设，要么直接 400；<code>ultrathink</code> 一类用法完全无效。</div>
+          </div>
+        </div>
+
+        <div class="item">
+          <div class="name"><b>Beta Headers</b><span class="pill sev-degrade">降级</span></div>
+          <div class="body">
+            <p>客户端会发十余个实验性 header（如 interleaved-thinking、fine-grained-tool-streaming）。第三方端不认识，静默忽略是好结果，返回错误是坏结果。</p>
+            <div class="sym"><b>后果：</b>依赖这些 header 的新特性整体不生效；部分严格中转直接拒绝请求。</div>
+          </div>
+        </div>
+
+        <div class="item">
+          <div class="name"><b>长上下文 / 1M 窗口</b><span class="pill sev-degrade">降级</span></div>
+          <div class="body">
+            <p>中转标称的上下文与实际透传上限常常不一致，逆向与按次计费分组尤其容易隐藏上限，超出部分被服务端悄悄截断。</p>
+            <div class="sym"><b>后果：</b>模型"看不见"前面的文件，却不会告诉你；大重构、多文件分析准确率断崖下跌。</div>
+          </div>
+        </div>
+
+        <div class="item">
+          <div class="name"><b>上下文管理 / 自动压缩</b><span class="pill sev-degrade">降级</span></div>
+          <div class="body">
+            <p>服务端上下文清理不可用，只能靠本地 compact，且压缩本身也由第三方模型执行。</p>
+            <div class="sym"><b>后果：</b><code>/compact</code> 触发更频繁、摘要质量更差，长会话信息丢失加剧。</div>
+          </div>
+        </div>
+
+        <div class="item">
+          <div class="name"><b>stop_reason 语义</b><span class="pill sev-degrade">降级</span></div>
+          <div class="body">
+            <p>逆向类通道的 <code>stop_reason</code>、流式结束标记常与官方不一致。</p>
+            <div class="sym"><b>后果：</b>达到 max_tokens 被当成正常结束，输出被静默截断而客户端不重试。</div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <div class="group">
+      <div class="group-label"><span>B · 客户端功能（界面上就少了东西）</span><span>看得见的缺失</span></div>
+      <div class="items">
+
+        <div class="item">
+          <div class="name"><b>用量与成本统计</b><span class="pill sev-block">阻断</span></div>
+          <div class="body">
+            <p><code>/cost</code>、状态栏 token 计数、上下文占用百分比全部依赖响应里的 usage 字段。中转返回不全或干脆不返回。</p>
+            <div class="sym"><b>后果：</b>数字为 0 或明显失真，无法判断该不该压缩、花了多少钱。</div>
+          </div>
+        </div>
+
+        <div class="item">
+          <div class="name"><b>计划模式 Plan Mode</b><span class="pill sev-degrade">降级</span></div>
+          <div class="body">
+            <p>Plan Mode 会抬高思考预算并依赖 ExitPlanMode 工具的严格流程。思考不可用时退化成普通对话；某些平台还会因思考预算超过输出上限而直接报错。</p>
+            <div class="sym"><b>后果：</b>计划质量下降，或模型不调用 ExitPlanMode，卡在计划模式里出不来。</div>
+          </div>
+        </div>
+
+        <div class="item">
+          <div class="name"><b>后台小模型任务</b><span class="pill sev-degrade">降级</span></div>
+          <div class="body">
+            <p>会话标题生成、命令建议、WebFetch 摘要、部分补全都会调用 haiku 级模型。</p>
+            <div class="sym"><b>后果：</b>中转缺该 model ID 时后台请求持续 404（日志刷屏），或被路由到廉价模型导致质量下降。</div>
+          </div>
+        </div>
+
+        <div class="item">
+          <div class="name"><b>模型切换 / 自动降级</b><span class="pill sev-friction">摩擦</span></div>
+          <div class="body">
+            <p><code>/model</code> 列表与官方模型别名绑定；各中转对同一模型的 ID 命名不统一（<code>claude-sonnet-4-6</code> vs <code>anthropic/claude-sonnet-4.6</code>）。</p>
+            <div class="sym"><b>后果：</b>切换后 404 model not found；官方的限额降级策略也不再生效。</div>
+          </div>
+        </div>
+
+        <div class="item">
+          <div class="name"><b>错误恢复与重试</b><span class="pill sev-degrade">降级</span></div>
+          <div class="body">
+            <p>客户端按官方状态码语义重试。中转把上游超时统一成 502/504、把余额不足返回 402、限流返回 429 的时机也各不相同。</p>
+            <div class="sym"><b>后果：</b>该重试的不重试、不该重试的疯狂重试，长任务中途整体失败。</div>
+          </div>
+        </div>
+
+        <div class="item">
+          <div class="name"><b>CC Switch 自身：无故障转移</b><span class="pill sev-friction">摩擦</span></div>
+          <div class="body">
+            <p>同一时刻只有一个 Provider 处于 Active，不支持自动 failover；shell 里手工 export 的 <code>ANTHROPIC_*</code> 优先级高于 settings.json。</p>
+            <div class="sym"><b>后果：</b>上游挂了要手动切；以及最经典的"切了但没生效"——因为 shell 变量一直在压着。</div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <div class="group">
+      <div class="group-label"><span>C · 运营与安全（技术之外的账）</span><span>影响最长期</span></div>
+      <div class="items">
+
+        <div class="item">
+          <div class="name"><b>代码与对话外流</b><span class="pill sev-block">阻断级风险</span></div>
+          <div class="body">
+            <p>所有请求经中转服务器明文过境，运营方技术上可完整记录对话、代码与密钥。多数中转不公开数据处理政策。</p>
+            <div class="sym"><b>后果：</b>等价于对整个代码库做了一次中间人。含生产密钥、客户数据的仓库不应走这条路。</div>
+          </div>
+        </div>
+
+        <div class="item">
+          <div class="name"><b>API Key 明文落盘</b><span class="pill sev-degrade">风险</span></div>
+          <div class="body">
+            <p>CC Switch 与 settings.json 以明文保存 Key，容易被 git commit、截屏、云盘同步带出去。</p>
+            <div class="sym"><b>缓解：</b>dotfiles 加 .gitignore、Key 放系统 keychain 或用 shell function 动态注入。</div>
+          </div>
+        </div>
+
+        <div class="item">
+          <div class="name"><b>"降智"与偷换模型</b><span class="pill sev-degrade">降级</span></div>
+          <div class="body">
+            <p>低价分组把请求路由到更小的模型或更低的思考档位，返回的 model 字段照旧。价格越低，掉包概率越高。</p>
+            <div class="sym"><b>识别：</b>同一 prompt 在不同分组跑同一套基准任务对比；观察 WebSearch 是否可用可快速区分逆向/反代通道。</div>
+          </div>
+        </div>
+
+        <div class="item">
+          <div class="name"><b>稳定性与账户风险</b><span class="pill sev-friction">摩擦</span></div>
+          <div class="body">
+            <p>逆向、Kiro、Antigravity 类通道随官方策略调整随时失效；预充值余额掌握在运营方手里；共享账号池被限流或封禁会牵连所有用户。</p>
+            <div class="sym"><b>后果：</b>服务中断无 SLA、余额难追回；把官方 Key 交给第三方还可能触发风控。</div>
+          </div>
+        </div>
+
+        <div class="item">
+          <div class="name"><b>版本兼容漂移</b><span class="pill sev-degrade">降级</span></div>
+          <div class="body">
+            <p>Claude Code 迭代很快，新版本引入的新字段/新 Beta 会先于中转适配。社区多次出现"升级后第三方通道工具调用集体报错"。</p>
+            <div class="sym"><b>缓解：</b>接第三方时锁定客户端版本，别开自动更新；升级前先在一个小项目里验证工具调用链路。</div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <div class="note">关于"官方内置中转站黑名单 / 注入信息收集"的说法，目前只见于社区帖子，缺乏可复现的证据，此处仅作存疑记录，不作为结论。可验证的部分是：客户端确实会做 Provider 与模型能力探测，并据此启用或跳过专有字段。</div>
+  </section>
+
+  <section>
+    <div class="sec-head">
+      <div class="eyebrow">怎么自查</div>
+      <h2>五分钟确认你接的通道到底缺什么</h2>
+      <p class="muted">按顺序做，每一步的结论决定下一步——这里的编号是真实的执行序列。</p>
+    </div>
+    <div class="steps">
+
+      <div class="step">
+        <div>
+          <h3>确认协议端点</h3>
+          <p>Claude Code 只发 <code>POST /v1/messages</code>（Anthropic schema）。中转若只有 <code>/v1/chat/completions</code>，两者完全不兼容，需要 Router 之类的转换层。</p>
+          <pre>curl -s $ANTHROPIC_BASE_URL/v1/messages \
+  -H "x-api-key: $KEY" -H "anthropic-version: 2023-06-01" \
+  -d '{"model":"<b>你的模型ID</b>","max_tokens":16,"messages":[{"role":"user","content":"hi"}]}'
+<span class="cm"># 期望：200 且返回体含 content 数组。404 → 检查 BASE_URL 是否已含 /v1（会拼成 /v1/v1）</span></pre>
+        </div>
+      </div>
+
+      <div class="step">
+        <div>
+          <h3>核对 model ID</h3>
+          <p>不要照抄官方文档的模型名，以中转实际列表为准，大小写敏感。</p>
+          <pre>curl -s $ANTHROPIC_BASE_URL/v1/models -H "x-api-key: $KEY"</pre>
+        </div>
+      </div>
+
+      <div class="step">
+        <div>
+          <h3>探测专有字段是否透传</h3>
+          <p>分别带上 <code>thinking</code> 和 <code>cache_control</code> 各发一次，看是被接受、被忽略还是 400。响应 usage 里有没有 <code>cache_creation_input_tokens</code> 是缓存能力的直接证据。</p>
+        </div>
+      </div>
+
+      <div class="step">
+        <div>
+          <h3>用一次真实工具调用做验收</h3>
+          <p>在测试仓库里让它读一个文件 → 精确 Edit 一行 → 再 Grep 验证。这条链路同时覆盖并行调用、tool_use_id 配对和逐字精度三个高危点。再问一句需要联网的问题，看 WebSearch 是否存在。</p>
+        </div>
+      </div>
+
+      <div class="step">
+        <div>
+          <h3>按探测结果显式关闭不支持的能力</h3>
+          <p>与其让客户端发出会被拒绝或被忽略的字段，不如主动关掉——能减少一大批莫名其妙的 400 和空转。</p>
+          <pre><span class="cm"># 仅在上一步确认不支持时才设置；支持的能力不要关</span>
+export DISABLE_PROMPT_CACHING=1
+export DISABLE_INTERLEAVED_THINKING=1
+export CLAUDE_CODE_DISABLE_EXPERIMENTAL_BETAS=1
+<span class="cm"># 清掉残留的手工变量，避免 CC Switch "切了没生效"</span>
+unset ANTHROPIC_AUTH_TOKEN ANTHROPIC_API_KEY ANTHROPIC_BASE_URL</pre>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <section>
+    <div class="sec-head">
+      <div class="eyebrow">怎么用才不别扭</div>
+      <h2>按任务类型分流，而不是全量替换</h2>
+    </div>
+    <div class="picks">
+      <div class="pick">
+        <h3>适合走第三方</h3>
+        <p>单文件问答、写测试、翻译注释、生成样板代码、跑脚本。工具链短、上下文小、不依赖缓存与思考。</p>
+      </div>
+      <div class="pick">
+        <h3>建议留在官方</h3>
+        <p>跨文件重构、长会话调试、需要子代理与 MCP 的编排、任何依赖精确 Edit 的大改动。这些正好踩在全部高危点上。</p>
+      </div>
+      <div class="pick">
+        <h3>通道优先级</h3>
+        <p>官转 / Max 池 &gt; Vertex、Bedrock、Kiro、Antigravity（底层正版，字段有差异）&gt; 逆向与按次计费（能力因站而异，掉包概率最高）。</p>
+      </div>
+      <div class="pick">
+        <h3>工程纪律</h3>
+        <p>锁客户端版本；敏感仓库不走中转；Key 不进 git；把中转当成本优化选项而非唯一通道，保留一个可随时切回的官方 Provider。</p>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    <div class="eyebrow">主要来源</div>
+    <ul>
+      <li><a href="https://ofox.ai/zh/blog/cc-switch-claude-code-third-party-relay-config-guide/">CC Switch 接第三方中转踩坑指南：6 类配置问题拆解 — ofox.ai</a></li>
+      <li><a href="https://blog.csdn.net/SK600/article/details/159726579">Claude Code 源码深度解析：对第三方模型的能力探测与功能降级 — CSDN</a></li>
+      <li><a href="https://www.80aj.com/2026/05/30/claude-api-errors-compatibility/">Claude Code 升级现兼容性问题，第三方 API 调用频现报错 — 80aj</a></li>
+      <li><a href="https://apiranking.com/guides/channel-groups">中转站渠道分组：Max / 逆向 / Kiro / 反重力 / 官转 8 类技术来源 — API Ranking</a></li>
+      <li><a href="https://code.claude.com/docs/zh-TW/tools-reference">Claude Code 工具参考 · 官方文档</a></li>
+      <li><a href="https://platform.claude.com/docs/zh-CN/agents-and-tools/tool-use/troubleshooting-tool-use">工具使用故障排除 · Claude Platform Docs</a></li>
+      <li><a href="https://cloud.tencent.com/developer/article/2624427">对逆向中转 API 说"不！" — 腾讯云开发者社区</a></li>
+      <li><a href="https://zhuanlan.zhihu.com/p/1926960843502883825">使用 Claude Code 中转商的风险 — 知乎</a></li>
+    </ul>
+  </footer>
+
+</div>
+

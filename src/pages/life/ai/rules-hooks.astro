@@ -1,0 +1,16 @@
+---
+import Base from '../../../layouts/Base.astro';
+import body from '../../../legacy/life/ai/rules-hooks/body.html?raw';
+import '../../../legacy/life/ai/rules-hooks/style.css';
+const meta = { title: 'Claude Code Rules & Hooks 完整版', description: '18 条 Rules 与 22 个 Hooks 的 Claude Code 脱敏配置，保留完整规则逻辑与可复用结构。' };
+---
+<Base title={`${meta.title} · Cavno`} description={meta.description}>
+  <section class="cv-page-head rh-page-head"><div class="cv-wrap">
+    <div class="cv-eyebrow">Life & Skills · AI</div>
+    <h1 class="cv-page-title">Claude Code Rules & Hooks 完整版</h1>
+    <p class="cv-lede">EP0019 Harness 配套资料：18 条 Rules、22 个 Hooks，脱敏后完整保留规则逻辑与结构。</p>
+    <a class="cv-crumb-back" href="/life/ai/">← 返回 AI 栏目</a>
+  </div></section>
+  <article class="lp rh-article"><Fragment set:html={body} /></article>
+</Base>
+

@@ -1,0 +1,16 @@
+---
+import Base from '../../../layouts/Base.astro';
+import body from '../../../legacy/life/ai/third-party-relay-issues/body.html?raw';
+import '../../../legacy/life/ai/third-party-relay-issues/style.css';
+const meta = { title: '第三方中转接入 Claude Code：问题全清单', description: '第三方中转与非 Claude 模型接入 Claude Code 时的协议、工具调用和能力降级问题清单。' };
+---
+<Base title={`${meta.title} · Cavno`} description={meta.description}>
+  <section class="cv-page-head tr-page-head"><div class="cv-wrap">
+    <div class="cv-eyebrow">Life & Skills · AI</div>
+    <h1 class="cv-page-title">第三方中转接入 Claude Code：问题全清单</h1>
+    <p class="cv-lede">CC Switch 只解决“切换”，不解决“兼容”：从协议字段、工具调用到模型能力，排查 26 项已知故障。</p>
+    <a class="cv-crumb-back" href="/life/ai/">← 返回 AI 栏目</a>
+  </div></section>
+  <article class="lp tr-article"><Fragment set:html={body} /></article>
+</Base>
+

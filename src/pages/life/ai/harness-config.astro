@@ -1,0 +1,16 @@
+---
+import Base from '../../../layouts/Base.astro';
+import body from '../../../legacy/life/ai/harness-config/body.html?raw';
+import '../../../legacy/life/ai/harness-config/style.css';
+const meta = { title: '一份不完美的 Claude Code 个人配置', description: '从 Rules、Hooks、Skills 到 Memory：一套经过四个月迭代的 Claude Code 个人 Harness 配置。' };
+---
+<Base title={`${meta.title} · Cavno`} description={meta.description}>
+  <section class="cv-page-head hc-page-head"><div class="cv-wrap">
+    <div class="cv-eyebrow">Life & Skills · AI</div>
+    <h1 class="cv-page-title">一份不完美的 Claude Code 个人配置</h1>
+    <p class="cv-lede">把 AI 从“偶尔聪明”变成稳定工作伙伴：四条机制、四层结构，以及真实踩过的坑。</p>
+    <a class="cv-crumb-back" href="/life/ai/">← 返回 AI 栏目</a>
+  </div></section>
+  <article class="lp hc-article"><Fragment set:html={body} /></article>
+</Base>
+

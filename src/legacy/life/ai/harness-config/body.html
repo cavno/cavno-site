@@ -1,0 +1,275 @@
+<div class="container">
+
+<!-- ============ Cover ============ -->
+<header class="cover">
+  <div class="meta">
+    <span><strong>作者</strong>张拼拼 (Max Pin)</span>
+    <span><strong>日期</strong>2026-05-24</span>
+    <span><strong>当前状态</strong>19 rules · 23 hooks · 72 memory</span>
+  </div>
+</header>
+
+<!-- ============ TOC ============ -->
+<nav class="toc">
+  <div class="toc-title">目录</div>
+  <ol>
+    <li><a href="#c1">这是什么 · 为什么需要</a></li>
+    <li><a href="#c2">四个文件夹 + 一座图书馆</a></li>
+    <li><a href="#c3">4 条核心机制</a></li>
+    <li><a href="#c4">实际长什么样</a></li>
+    <li><a href="#c5">真实犯过的错</a></li>
+    <li><a href="#c6">适合谁 · 别照抄</a></li>
+    <li><a href="#c7">这套有半衰期</a></li>
+  </ol>
+</nav>
+
+<!-- ============ 01 ============ -->
+<section class="chap" id="c1">
+  <div class="chap-tag"><span class="num">01</span>这是什么 · 为什么需要</div>
+  <h2>AI 不缺<em>能力</em>，缺<em>判断基准</em></h2>
+
+  <div style="margin: 32px 0; padding: 24px 28px; background: rgba(156, 122, 62, 0.08); border-left: 3px solid var(--accent); border-radius: 0 10px 10px 0;">
+    <p style="margin: 0; font-size: 22px;">
+      <strong>Harness</strong> 原意是马具 —— 套在马身上控制方向和速度的装备。
+      在 AI 里，它指<strong>包裹在 LLM 外面所有"不是模型本身"的东西</strong>：规则、记忆、钩子、配置。
+      让 AI 听话、记得住、能配合。
+    </p>
+  </div>
+
+  <p>
+    用 Claude Code 三个月后，我发现真正的痛点不是 AI 不够聪明 ——
+    而是它<strong>每天给的答案都不太一样</strong>。
+    同一个原则，今天遵守了，明天忘了。结果是我每天都在<strong>重复对齐</strong>。
+  </p>
+  <p>
+    于是我做的不是写更长的提示词，而是给它<strong>搭一套系统</strong>。
+    让它知道什么不能做、什么必须做、什么状态下怎么做。
+  </p>
+
+  <div class="pull">
+    让 AI 稳定的不是更长的提示词<br>
+    是<strong>物理拦截 · 可执行验证 · 主动遗忘</strong>
+  </div>
+</section>
+
+<!-- ============ 02 ============ -->
+<section class="chap" id="c2">
+  <div class="chap-tag"><span class="num">02</span>四个文件夹 + 一座图书馆</div>
+  <h2>互不串门 · <em>各管一摊</em></h2>
+  <p>
+    打个比方：<strong>Rules 是法律</strong>，<strong>Memory 是档案</strong>，
+    <strong>Hooks 是警察</strong>，<strong>Settings 是市政厅</strong>。各管各的，不能混着写。
+  </p>
+  <div class="quad">
+    <div class="qc">
+      <div class="qh">Rules · 法律</div>
+      <div class="qn">行为规则</div>
+      <div class="qd">怎么沟通、怎么改代码、怎么提交。跨项目通用，启动全量加载。当前 19 条。</div>
+    </div>
+    <div class="qc">
+      <div class="qh">Memory · 档案</div>
+      <div class="qn">项目知识</div>
+      <div class="qd">架构、凭据索引、活跃任务、经验沉淀。索引 + 子文件按需加载。当前 72 个。</div>
+    </div>
+    <div class="qc">
+      <div class="qh">Hooks · 警察</div>
+      <div class="qn">生命周期钩子</div>
+      <div class="qd">AI 偏航瞬间硬性拦截或注入。事件触发。当前 23 个。</div>
+    </div>
+    <div class="qc">
+      <div class="qh">Settings · 市政厅</div>
+      <div class="qn">总开关</div>
+      <div class="qd">环境变量、权限、hook 注册。密钥单独放本地配置，不入库。</div>
+    </div>
+  </div>
+  <p>
+    <strong>规则讲该做什么，记忆讲当前状态，钩子在偏航时拉回来</strong>。
+    早期我混着写 —— 每一次都演变成腐烂源。
+  </p>
+
+  <h3>第五层：外部图书馆</h3>
+  <p>
+    四个文件夹都在 <code>~/.claude/</code> 下。但还有一层经常被忽略 ——
+    我在云盘下积累了几十篇<strong>长篇 HTML 笔记</strong>，主题从合同审查方法论、影视分镜实战到演讲材料。
+    我把这层叫<strong>图书馆</strong>。
+  </p>
+  <p>
+    跟 Memory 的区别：Memory 是 LLM 自动加载的短笔记，私密度高；
+    图书馆是<strong>长篇、可读、能分享给客户朋友</strong>的资产，LLM 按需 Read。
+    它是 harness 之外但被 harness 引用的<strong>第五层</strong>。
+  </p>
+</section>
+
+<!-- ============ 03 4 条核心机制 ============ -->
+<section class="chap" id="c3">
+  <div class="chap-tag"><span class="num">03</span>4 条核心机制</div>
+  <h2>不是 framework · <em>是 4 条约束</em></h2>
+  <p>
+    这 4 条是四个月迭代里<strong>反复回归</strong>的判断基准。每条都对应一个失败教训。
+  </p>
+  <div class="tenets">
+    <div class="tenet">
+      <div class="tn">01</div>
+      <div class="tb">
+        <h4>知识分门别类，不混着管</h4>
+        <p>规则不是状态，状态不是偏好，偏好不是凭据。混着管 → 腐烂。</p>
+      </div>
+    </div>
+    <div class="tenet">
+      <div class="tn">02</div>
+      <div class="tb">
+        <h4>可执行性优于描述性</h4>
+        <p>"端口 8801 在跑" 这种话不存，<code>ss -tlnp | grep 8801</code> 这种命令存。能验证的就写成命令。</p>
+      </div>
+    </div>
+    <div class="tenet">
+      <div class="tn">03</div>
+      <div class="tb">
+        <h4>事故凝结为规则</h4>
+        <p>一次性教训写疤痕日志；重复风险加进 rules；LLM 会绕过文字的 → 钩子物理拦截。三级递进。</p>
+      </div>
+    </div>
+    <div class="tenet">
+      <div class="tn">04</div>
+      <div class="tb">
+        <h4>主动遗忘是认知必需</h4>
+        <p>归档保留可追溯，遗忘真删除，二者必须区分。<strong>保留所有信息 = 无法思考</strong>。</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 04 实际长什么样 ============ -->
+<section class="chap" id="c4">
+  <div class="chap-tag"><span class="num">04</span>实际长什么样</div>
+  <h2>讲完概念 · <em>看看实物</em></h2>
+
+  <h3>规则 19 条 · 每条都来自一次具体的痛</h3>
+  <p>不写"应该这样"，只写"<strong>因为出过 X 事故，所以现在必须 Y</strong>"。挑 4 类各举一条：</p>
+
+  <table class="cmp">
+    <tbody>
+      <tr><td><strong>价值观排序</strong></td><td>把"荣誉、卓越、真实、美、效率"5 个价值排出先后。冲突时 AI 自动按这个判断，不再反问我</td></tr>
+      <tr><td><strong>能查就别问</strong></td><td>AI 想问"密码多少 / 端口几号"之前，必须先翻记忆 + 读代码，<strong>实在查不到才能问</strong></td></tr>
+      <tr><td><strong>改动按大小分级</strong></td><td>改一行 → 直接做；改三五个文件 → 改完验证；新功能 → 走完整 7 步流程</td></tr>
+      <tr><td><strong>直播自动脱敏</strong></td><td>打开直播模式时，IP / 密钥 / 邮箱 / 手机号 自动用 &lt;REDACTED&gt; 占位符替代</td></tr>
+    </tbody>
+  </table>
+  <p style="font-size: 20px; color: var(--text-mute);">其他 15 条按类归档：判断类、做事类、风格类、安全类。</p>
+
+  <h3>钩子 23 个 · 在 AI 工作的关键时刻自动触发</h3>
+  <p>文字规则约束不住的时候，钩子直接拦下来 —— <strong>物理拦截</strong>。挑 5 个最有代表性的：</p>
+
+  <table class="cmp">
+    <tbody>
+      <tr><td><strong>启动时抽查记忆</strong></td><td>启动随机挑 3 条"易变记忆"跑验证命令，失败的注入对话让 AI 先校正</td></tr>
+      <tr><td><strong>凭据自动找位置</strong></td><td>我提问含"密钥/密码"时，自动把"密钥都在哪查"的索引贴到上下文，免得 AI 反问</td></tr>
+      <tr><td><strong>危险命令拦截</strong></td><td>rm -rf / git push --force / 改防火墙 等命令<strong>直接阻断不让跑</strong></td></tr>
+      <tr><td><strong>改完文件自动检查</strong></td><td>Python 语法 / TS 类型 / 格式化 / 密钥写错地方 —— 改完立刻报</td></tr>
+      <tr><td><strong>结束时三问写回记忆</strong></td><td>有失败教训吗？有可复用模式吗？有新流程吗？—— 有就写回，下次能用</td></tr>
+    </tbody>
+  </table>
+  <p style="font-size: 20px; color: var(--text-mute);">其他 18 个分布在 9 个生命周期事件：启动、提问、命令前后、改文件、子任务派出、压缩前后、结束。</p>
+
+  <h3>Memory 怎么活下去</h3>
+  <p>
+    Memory 会腐烂 —— 端口换了、服务停了、凭据轮换了。不靠人工巡检，靠<strong>分层 + 探针</strong>：
+  </p>
+  <ul>
+    <li><strong>分层维护频率</strong>：L1 年级 / L2 季度 / L3 周级 + 探针自检</li>
+    <li><strong>探针挂在文件里</strong>：L3 文件必带验证命令，启动随机抽 3 条跑</li>
+    <li><strong>归档双轨</strong>：结项的进 resolved/，废弃的进 deprecated/，真要删的进 _forget/</li>
+    <li><strong>数量上限</strong>：rules ≤ 25 / hooks ≤ 25 / memory ≤ 80。超了先删再加</li>
+  </ul>
+  <p>
+    整理这件事值得有<strong>专门的 session</strong>。我用独立项目 <code>memory-curator</code> 做，
+    跟主工作隔离 —— 避免审计中翻出来的旧引用污染当前任务。
+  </p>
+</section>
+
+<!-- ============ 05 真实犯过的错 ============ -->
+<section class="chap" id="c5">
+  <div class="chap-tag"><span class="num">05</span>真实犯过的错</div>
+  <h2>不是一次想清楚的 · <em>是踩出来的</em></h2>
+
+  <div class="mistake-box bad">
+    <div class="box-title">4 个事故 → 4 条新规则 / hook</div>
+    <ul>
+      <li><strong>密钥写进 memory</strong> → 全部迁出，加 hook 扫明文密钥</li>
+      <li><strong>rules 4 周从 15 涨到 19 没回收</strong> → 加数量上限，超了先删再加</li>
+      <li><strong>调研对照项目没端到端验证</strong> → 加"外部项目身份锚定 + 禁止吹捧措辞"规则</li>
+      <li><strong>抽查探针变成仪式</strong>（抽 3 条单点衰变期望 20 次启动才发现）→ 加分级验证模式</li>
+    </ul>
+  </div>
+</section>
+
+<!-- ============ 06 适合谁 + 别照抄 ============ -->
+<section class="chap" id="c6">
+  <div class="chap-tag"><span class="num">06</span>适合谁 · 别照抄</div>
+  <h2>这套不是给所有人的</h2>
+
+  <div class="mistake-box good">
+    <div class="box-title">适合 · 满足这三条</div>
+    <ul>
+      <li><strong>一个人维护多个项目</strong>（≥ 3 个不同类型同时在跑）</li>
+      <li><strong>能写 shell + 改 settings.json</strong>（不必会写 hook，但要看得懂）</li>
+      <li><strong>Claude Code 用过 ≥ 半年</strong>（知道默认行为的痛点在哪）</li>
+    </ul>
+  </div>
+
+  <div class="mistake-box bad">
+    <div class="box-title">不适合 · 满足任一条</div>
+    <ul>
+      <li><strong>团队协作</strong> —— 这套是个人化的，团队要找重型治理框架</li>
+      <li><strong>刚开始用</strong> —— 先用熟原生功能，遇到痛点再加 hook</li>
+      <li><strong>想找现成模板抄</strong> —— 这是工作日志，不是产品</li>
+    </ul>
+  </div>
+
+  <div class="mistake-box">
+    <div class="box-title">就算适合 · 这几样也别抄</div>
+    <ul>
+      <li><strong>个人代号命名</strong> —— 心智宏是给自己用的，别人套上反而别扭</li>
+      <li><strong>60% 的 hook</strong> —— 多数是在补官方还没做完的事，过几个月会被内化</li>
+      <li><strong>记忆衰变的复杂分层</strong> —— 90% 场景用不上，简单时间戳够了</li>
+    </ul>
+  </div>
+</section>
+
+<!-- ============ 07 半衰期 ============ -->
+<section class="chap" id="c7">
+  <div class="chap-tag"><span class="num">07</span>这套有半衰期</div>
+  <h2>Harness 的<em>使命是被淘汰</em></h2>
+  <p>
+    最后说一件很多人不愿讲的事：<strong>官方一直在迭代</strong>。
+    Claude Code 每个月都在加新能力 —— 6-12 个月前还得我自己写 hook 补的功能，现在已经原生支持。
+  </p>
+  <p>
+    所以这套配置不是终态，是<strong>过渡态</strong>。
+    每次升级我都对照一下自定义 hook，原生功能达到 80% 需求，<strong>立刻删掉自己写的</strong>。
+    Harness 层就是官方进化的补丁 —— 它的使命就是被淘汰。
+  </p>
+  <p>
+    如果你看到这篇文章是 6 个月后，请去对照当前原生能力 ——
+    我列的很多 hook 可能已经不再需要。
+    重要的不是抄具体哪个 hook，是<strong>抄那 4 条核心机制</strong>。
+    <strong>机制比实现长寿</strong>。
+  </p>
+
+  <div class="pull">
+    诚实承认边界<br>比假装普适更可信
+    <em>方法论也有半衰期</em>
+  </div>
+</section>
+
+<!-- ============ Footer ============ -->
+<footer>
+  <div class="fin">END.</div>
+  <p>
+    张拼拼 (Max Pin) · 2026-05-24<br>
+    GitHub: <code>xntj-ai</code> · 配置参考用，不是产品
+  </p>
+</footer>
+
+</div>
+
