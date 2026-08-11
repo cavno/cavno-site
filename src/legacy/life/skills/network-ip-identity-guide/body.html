@@ -1,0 +1,369 @@
+<div class="nip-progress" id="nipProgress"></div>
+<div class="nip-shell" id="guide-top">
+<header class="hero">
+        <div class="eyebrow">A visual field guide to network identity</div>
+        <h1>一个 IP，远不止一个<em>地址</em></h1>
+        <p class="hero-lead">同样是美国公网 IP，网站可能把它识别成家庭宽带、移动网络、企业 ISP、数据中心、VPN 或代理。决定差异的，是网络归属、固定性、共享方式、出口路径、历史信誉，以及它与设备、账户和行为是否一致。</p>
+        <div class="hero-chips" aria-label="主题标签">
+          <span class="chip">VPS / Datacenter</span><span class="chip">Residential</span><span class="chip">ISP IP</span>
+          <span class="chip">Mobile / CGNAT</span><span class="chip">VPN / Proxy</span><span class="chip">IPv4 / IPv6</span>
+          <span class="chip">ASN / BGP</span><span class="chip">JA4 / Fingerprint</span><span class="chip">Risk Model</span>
+        </div>
+        <div class="hero-bottom">
+          <div class="hero-stat"><strong>网络身份</strong><span>IP · ASN · Prefix · 路由 · 信誉</span></div>
+          <div class="hero-stat"><strong>设备身份</strong><span>TLS · 浏览器 · 时区 · WebRTC</span></div>
+          <div class="hero-stat"><strong>长期身份</strong><span>Cookie · 账户 · 支付 · 行为历史</span></div>
+        </div>
+      </header>
+<section class="nip-contents" aria-label="文章目录">
+  <div class="toc-label">Contents · 章节导航</div>
+  <nav class="toc" id="nipToc">
+    <a href="#mental-model"><span>01</span><span>先建立正确模型</span></a>
+    <a href="#classification"><span>02</span><span>IP 分类与谱系</span></a>
+    <a href="#types"><span>03</span><span>主要类型逐一拆解</span></a>
+    <a href="#comparison"><span>04</span><span>类型总对比</span></a>
+    <a href="#routing"><span>05</span><span>IP 不等于线路</span></a>
+    <a href="#detection-chain"><span>06</span><span>平台完整识别链</span></a>
+    <a href="#network-signals"><span>07</span><span>ASN、BGP 与信誉</span></a>
+    <a href="#protocol-signals"><span>08</span><span>DNS、WebRTC、JA4</span></a>
+    <a href="#device-signals"><span>09</span><span>设备、地理与账户</span></a>
+    <a href="#consistency"><span>10</span><span>跨层一致性</span></a>
+    <a href="#risk-model"><span>11</span><span>风险模型</span></a>
+    <a href="#matrix"><span>12</span><span>综合识别矩阵</span></a>
+    <a href="#selection"><span>13</span><span>选择与检查框架</span></a>
+    <a href="#conclusion"><span>14</span><span>核心结论</span></a>
+  </nav>
+  <p class="side-note">本页用于理解网络架构与风控原理。平台判断是概率性的；出现风险信号不等于违规，也不意味着单一信号会直接触发封禁。</p>
+</section>
+
+      <section id="mental-model" data-section>
+        <div class="section-head">
+          <div class="section-no">01 / MODEL</div>
+          <div><h2>先建立正确模型</h2><p>“住宅 IP”“静态 IP”“独享 IP”“VPN”不在同一个分类轴上。一个出口往往是多种属性的组合，而不是单一标签。</p></div>
+        </div>
+        <div class="thesis">最准确的提问不是“这是什么 IP”，而是：<strong>它属于谁、是什么网络、多久变化、由谁共享、如何出口、历史与线路怎样？</strong></div>
+        <div class="grid-3" style="margin-top:16px">
+          <article class="card dimension-card"><span class="num">DIMENSION 01</span><h3>网络归属</h3><p class="muted small">回答“这个地址由哪类网络提供”。</p><div class="pills"><span class="pill">Datacenter</span><span class="pill">ISP</span><span class="pill">Residential</span><span class="pill">Mobile</span><span class="pill">Corporate</span></div></article>
+          <article class="card dimension-card"><span class="num">DIMENSION 02</span><h3>固定性</h3><p class="muted small">回答“同一用户多久保持同一出口”。</p><div class="pills"><span class="pill">Static</span><span class="pill">Dynamic</span><span class="pill">Sticky</span><span class="pill">Rotating</span></div></article>
+          <article class="card dimension-card"><span class="num">DIMENSION 03</span><h3>使用关系</h3><p class="muted small">回答“信誉由一个人还是许多人共同塑造”。</p><div class="pills"><span class="pill">Dedicated</span><span class="pill">Shared</span><span class="pill">CGNAT</span></div></article>
+          <article class="card dimension-card"><span class="num">DIMENSION 04</span><h3>协议版本</h3><p class="muted small">回答“地址空间和识别粒度”。</p><div class="pills"><span class="pill">IPv4 /32</span><span class="pill">IPv6 /64</span><span class="pill">Prefix</span></div></article>
+          <article class="card dimension-card"><span class="num">DIMENSION 05</span><h3>出口方式</h3><p class="muted small">VPN 是隧道，Proxy 是转发；它们本身不规定出口属于哪种网络。</p><div class="pills"><span class="pill">Direct</span><span class="pill">NAT</span><span class="pill">VPN</span><span class="pill">HTTP Proxy</span><span class="pill">SOCKS5</span></div></article>
+          <article class="card dimension-card"><span class="num">DIMENSION 06</span><h3>质量与历史</h3><p class="muted small">身份与性能是两个维度。</p><div class="pills"><span class="pill">Reputation</span><span class="pill">Latency</span><span class="pill">Loss</span><span class="pill">Routing</span><span class="pill">Bandwidth</span></div></article>
+        </div>
+        <div class="callout warn" style="margin-top:16px"><span class="symbol">!</span><div><strong>三个常见误区：</strong>住宅不等于静态，静态不等于独享，VPN 也不是一种 IP 归属。可以存在“住宅 + 动态 + 共享”，也可以存在“数据中心 + 静态 + 独享”。</div></div>
+      </section>
+
+      <section id="classification" data-section>
+        <div class="section-head">
+          <div class="section-no">02 / ATLAS</div>
+          <div><h2>IP 分类与谱系</h2><p>先从网络所有者看“像谁”，再叠加固定性、共享方式、协议与出口技术。</p></div>
+        </div>
+        <div class="hierarchy">
+          <div class="tree-root">公网 Internet 出口</div>
+          <div class="tree-branches">
+            <div class="tree-node"><strong>数据中心网络</strong><span>云厂商 / Hosting ASN</span><div class="tree-leaves"><i>VPS</i><i>Server</i><i>Datacenter Proxy</i><i>商业 VPN 常见</i></div></div>
+            <div class="tree-node"><strong>固定接入 ISP</strong><span>家庭 / 企业 / ISP 地址段</span><div class="tree-leaves"><i>真住宅</i><i>ISP Proxy</i><i>企业专线</i><i>静态或动态</i></div></div>
+            <div class="tree-node"><strong>移动运营商</strong><span>4G / 5G / Mobile ASN</span><div class="tree-leaves"><i>高共享</i><i>CGNAT</i><i>频繁变化</i><i>蜂窝网络</i></div></div>
+          </div>
+        </div>
+        <div class="grid-3" style="margin-top:16px">
+          <div class="card"><div class="card-label">固定性叠加层</div><h3>Static → Sticky → Rotating</h3><p class="muted small"><strong>Static</strong> 可持续数月或数年；<strong>Sticky</strong> 只是从池中临时锁定数分钟至数小时；<strong>Rotating</strong> 可按请求或短周期更换。</p></div>
+          <div class="card"><div class="card-label">共享叠加层</div><h3>Dedicated ↔ Shared</h3><p class="muted small">独享出口的历史主要由自己形成；共享 VPN、代理和 CGNAT 会把多用户活动聚合到一个公网地址，平台需要结合设备与账户区分。</p></div>
+          <div class="card"><div class="card-label">传输叠加层</div><h3>Direct / NAT / VPN / Proxy</h3><p class="muted small">平台最终看到的是出口地址。VPN 通常接管系统级流量；代理常作用于应用或协议层，但 DNS、UDP 或其他应用可能走不同路径。</p></div>
+        </div>
+      </section>
+
+      <section id="types" data-section>
+        <div class="section-head">
+          <div class="section-no">03 / TYPES</div>
+          <div><h2>主要类型逐一拆解</h2><p>同一类型也可能因供应方式和真实拓扑不同而表现不同。商业标签只应作为线索，ASN、Prefix、历史和实际路径更有意义。</p></div>
+        </div>
+        <div class="grid-3">
+          <article class="card type-card" data-code="VPS"><div class="type-icon">D</div><h3>VPS / 数据中心 IP</h3><p class="muted small">虚拟服务器通常获得长期固定公网 IP，Origin ASN 指向云厂商或 Hosting Provider。稳定、便宜、高带宽，但“消费者网页请求从机房出来”在网络层很显眼。</p><div class="type-meta"><div><span>典型 ASN</span><b>Hosting / Cloud</b></div><div><span>固定性</span><b>高</b></div><div><span>适合</span><b>网站、API、远程服务</b></div></div></article>
+          <article class="card type-card" data-code="HOME"><div class="type-icon">H</div><h3>真住宅静态 IP</h3><p class="muted small">家庭或小型企业线路由 ISP 长期分配同一公网地址，兼具住宅网络归属与身份连续性。资源较稀缺；固定并不自动代表“干净”。</p><div class="type-meta"><div><span>典型 ASN</span><b>Residential ISP</b></div><div><span>固定性</span><b>很高</b></div><div><span>关键价值</span><b>长期连续</b></div></div></article>
+          <article class="card type-card" data-code="DHCP"><div class="type-icon">R</div><h3>真住宅动态 IP</h3><p class="muted small">家庭路由器从 ISP 地址池获得 DHCP 租约，地址可能数天、数周或重拨后变化。即使 IP 变了，ASN、区域、设备与 Cookie 往往仍连续。</p><div class="type-meta"><div><span>典型变化</span><b>同 ISP / 同区域</b></div><div><span>固定性</span><b>中</b></div><div><span>身份观感</span><b>自然家庭接入</b></div></div></article>
+          <article class="card type-card" data-code="ISP"><div class="type-icon">I</div><h3>ISP IP / ISP Proxy</h3><p class="muted small">机器可能实际放在机房，但地址登记与路由归属来自 ISP，数据库可能标成 ISP 或 Residential。市场上的“静态住宅代理”很多属于这一类。</p><div class="type-meta"><div><span>物理拓扑</span><b>可能是机房</b></div><div><span>数据库观感</span><b>ISP / 类住宅</b></div><div><span>边界</span><b>不等于真家庭线路</b></div></div></article>
+          <article class="card type-card" data-code="POOL"><div class="type-icon">P</div><h3>住宅代理池</h3><p class="muted small">请求经代理商转发到某个住宅出口。它可被配置成 Sticky Session，也可按请求 Rotating。住宅归属降低网络类型异常，但无法消除历史、账户、设备和行为信号。</p><div class="type-meta"><div><span>Sticky</span><b>暂时锁定</b></div><div><span>Rotating</span><b>短周期切换</b></div><div><span>主要风险</span><b>池污染 / 跳变</b></div></div></article>
+          <article class="card type-card" data-code="5G"><div class="type-icon">M</div><h3>移动 IP / 4G / 5G</h3><p class="muted small">移动运营商通常采用 CGNAT，成百上千终端可能共享一个公网 IPv4，地址也会频繁变化。直接封 IP 容易误伤，因此平台更依赖设备、Cookie、行为与账户。</p><div class="type-meta"><div><span>典型 ASN</span><b>Mobile Carrier</b></div><div><span>共享度</span><b>很高</b></div><div><span>变化</span><b>频繁但有结构</b></div></div></article>
+        </div>
+
+        <div class="grid-2" style="margin-top:16px">
+          <div class="card"><div class="card-label">VPN：隧道，不是归属</div><h3>网站看到的是 VPN Server 的 IP</h3><p class="muted small">商业 VPN 多使用数据中心 IP，但技术上 VPN 出口也可以是住宅、ISP 或移动地址。系统流量通常先进入加密隧道，再由远端服务器访问互联网。</p><div class="mini-flow"><span>设备 / OS</span><i>→</i><span>加密隧道</span><i>→</i><span>VPN Server</span><i>→</i><span>网站</span></div></div>
+          <div class="card"><div class="card-label">Proxy：应用或协议转发</div><h3>HTTP Proxy 与 SOCKS5</h3><p class="muted small">HTTP Proxy 主要处理 HTTP/HTTPS；SOCKS5 能转发更一般的 TCP/UDP。代理可能只作用于浏览器，而系统更新、DNS 或其他应用仍走原网络。</p><div class="mini-flow"><span>浏览器 / App</span><i>→</i><span>Proxy</span><i>→</i><span>网站</span></div></div>
+        </div>
+
+        <div class="grid-2" style="margin-top:16px">
+          <div class="card"><div class="card-label">IPv4 与 NAT</div><h3>稀缺地址催生共享</h3><p class="muted small">IPv4 为 32 位，地址总量约 43 亿。家庭 NAT 把多台设备映射到一个公网 IP；CGNAT 再在运营商层聚合多个家庭或移动终端。路由器 WAN 口若看到 <span class="mono">100.64.0.0/10</span>，往往意味着位于 CGNAT 后。</p></div>
+          <div class="card"><div class="card-label">IPv6 与 Prefix</div><h3>“一个地址 = 一个人”更加失效</h3><p class="muted small">IPv6 为 128 位，一个家庭可能获得 /64 甚至 /56 前缀。设备可使用大量临时地址，所以平台可能把 /64、/48、ASN 与设备身份结合，而不是逐个 IPv6 地址等同于独立用户。</p></div>
+        </div>
+        <div class="callout" style="margin-top:16px"><span class="symbol">↳</span><div><strong>Public 与 Private：</strong><span class="mono">10.0.0.0/8</span>、<span class="mono">172.16.0.0/12</span>、<span class="mono">192.168.0.0/16</span> 是常见 IPv4 私网范围，互联网网站通常只看到 NAT 后的公网出口。IP 地理位置来自注册、路由与数据库推断，并不是 GPS。</div></div>
+      </section>
+
+      <section id="comparison" data-section>
+        <div class="section-head">
+          <div class="section-no">04 / COMPARE</div>
+          <div><h2>各种类型的总对比</h2><p>“真实性”“稳定性”“速度”“价格”和“风控观感”没有统一最优解；同一标签的供应商质量也可能差异巨大。</p></div>
+        </div>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>类型</th><th>常见 ASN / 网络</th><th>固定性</th><th>共享情况</th><th>稳定与性能</th><th>平台初始观感</th><th>典型用途</th></tr></thead>
+            <tbody>
+              <tr><td>VPS</td><td>Hosting / Cloud</td><td><span class="tag teal">很高</span></td><td>常为独享地址</td><td>高</td><td>服务器 / 机房</td><td>网站、API、远程主机</td></tr>
+              <tr><td>Datacenter Proxy</td><td>Hosting</td><td>高</td><td>独享或共享</td><td>高</td><td>机房代理</td><td>稳定转发、公开数据访问</td></tr>
+              <tr><td>ISP Proxy</td><td>ISP 地址段</td><td><span class="tag teal">很高</span></td><td>多为独享或小共享</td><td>高</td><td>ISP / 类住宅</td><td>需要固定网络身份的合规场景</td></tr>
+              <tr><td>真住宅静态</td><td>Residential ISP</td><td><span class="tag teal">很高</span></td><td>通常家庭独享</td><td>高</td><td>家庭宽带</td><td>长期固定接入</td></tr>
+              <tr><td>真住宅动态</td><td>Residential ISP</td><td>中</td><td>一户 / 可能 CGNAT</td><td>高</td><td>自然家庭网络</td><td>日常上网</td></tr>
+              <tr><td>Sticky Residential</td><td>Residential ISP 池</td><td>中低</td><td>节点池</td><td>中</td><td>临时住宅出口</td><td>需要短会话连续性的任务</td></tr>
+              <tr><td>Rotating Residential</td><td>Residential ISP 池</td><td><span class="tag amber">很低</span></td><td>大规模池</td><td>中</td><td>住宅，但历史与跳变重要</td><td>合规的大规模公开网页采集</td></tr>
+              <tr><td>Mobile 4G / 5G</td><td>Mobile ASN</td><td>很低</td><td><span class="tag blue">CGNAT 高共享</span></td><td>中</td><td>真实移动终端群体</td><td>移动网络与 App 测试</td></tr>
+              <tr><td>商业 VPN</td><td>Hosting 居多</td><td>中</td><td><span class="tag rose">常高共享</span></td><td>中高</td><td>已知 VPN / 机房</td><td>隐私、远程办公、加密接入</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="grid-2" style="margin-top:16px">
+          <div class="card"><div class="card-label">像普通终端用户</div><p class="mono small">真实家庭 ≈ 真实移动<br>↓<br>优质 ISP Static<br>↓<br>Residential Proxy<br>↓<br>Datacenter VPS</p><p class="muted small">只是网络观感，不代表绝对安全或整体质量。</p></div>
+          <div class="card"><div class="card-label">长期稳定性</div><p class="mono small">VPS Static ≈ ISP Static ≈ Residential Static<br>↓<br>家庭 Dynamic<br>↓<br>Sticky<br>↓<br>Rotating ≈ Mobile</p><p class="muted small">稳定性高不等于更像住宅；两者是不同维度。</p></div>
+        </div>
+      </section>
+
+      <section id="routing" data-section>
+        <div class="section-head">
+          <div class="section-no">05 / ROUTE</div>
+          <div><h2>IP 不等于线路</h2><p>IP 类型描述网络身份；线路描述数据包怎样跨网络到达出口。两个同城美国 IP，从中国访问时仍可能有完全不同的延迟、丢包和稳定性。</p></div>
+        </div>
+        <div class="grid-2">
+          <div class="card">
+            <div class="card-label">示意路径</div>
+            <div class="route-visual">
+              <div class="route"><span class="route-name">线路 A</span><span class="route-path"><i></i><i></i><i></i><i></i></span><span class="route-metric">CN → HK → JP → LA</span></div>
+              <div class="route"><span class="route-name">线路 B</span><span class="route-path"><i></i><i></i><i></i><i></i></span><span class="route-metric">CN → SH → SJ → LA</span></div>
+            </div>
+            <p class="muted small" style="margin-top:18px">最终地理标签都可能是 Los Angeles，但中间经过的运营商、拥塞点和国际出口不同。</p>
+          </div>
+          <div class="card"><div class="card-label">中国用户常见名称</div><h3>CN2、AS9929、CMI 是骨干与国际路由</h3><p class="muted small">它们影响中国与海外服务器之间“怎么走”，不决定出口是住宅、VPS 还是移动网络。购买时应把 <strong>ASN / 网络类型</strong> 与 <strong>延迟 / 丢包 / 去回程路由 / 带宽</strong> 分开检查。</p></div>
+        </div>
+      </section>
+
+      <section id="detection-chain" data-section>
+        <div class="section-head">
+          <div class="section-no">06 / CHAIN</div>
+          <div><h2>平台看到的完整识别链</h2><p>现代平台不是只问“是不是 VPN”，而是在网络、传输、浏览器、地理、账户和行为之间建立身份图谱，并寻找长期一致性。</p></div>
+        </div>
+        <div class="identity-map" aria-label="平台识别流程图">
+          <div class="flow-node"><b>01 设备</b><span>OS / Browser</span><span>Cookie / Timezone</span><span>WebRTC / Fonts</span></div>
+          <div class="flow-node"><b>02 本地网络</b><span>Router / NAT</span><span>DNS Resolver</span><span>VPN / Proxy</span></div>
+          <div class="flow-node primary"><b>03 公网出口</b><span>Source IP</span><span>ASN / Prefix</span><span>Geo / Reputation</span></div>
+          <div class="flow-node"><b>04 TLS</b><span>ClientHello</span><span>Ciphers / Extensions</span><span>ALPN / JA4</span></div>
+          <div class="flow-node"><b>05 HTTP</b><span>User-Agent</span><span>Client Hints</span><span>Header / H2 / H3</span></div>
+          <div class="flow-node"><b>06 JavaScript</b><span>Canvas / WebGL</span><span>Screen / Locale</span><span>Interaction</span></div>
+          <div class="flow-node"><b>07 账户</b><span>Login History</span><span>Payment / Device</span><span>Behavior Graph</span></div>
+        </div>
+        <div class="grid-2" style="margin-top:16px">
+          <div class="card"><div class="card-label">服务器无需 JavaScript 即可得到</div><p class="mono small">Source IP · ASN · Country<br>TCP / QUIC · TLS / JA4<br>HTTP headers · Request rate<br>Cookie（若随请求发送）</p></div>
+          <div class="card"><div class="card-label">浏览器与历史层进一步补充</div><p class="mono small">Timezone · Screen · Fonts<br>Canvas · WebGL · WebRTC<br>Account graph · Login history<br>Navigation · Timing · Interaction</p></div>
+        </div>
+        <div class="callout good" style="margin-top:16px"><span class="symbol">✓</span><div><strong>最终通常不是一个布尔值：</strong>平台更可能分别计算 Network Risk、Device Consistency、Geo Consistency、Behavior Risk 和 Account Trust，再决定放行、验证、限速、挑战或人工复核。</div></div>
+      </section>
+
+      <section id="network-signals" data-section>
+        <div class="section-head">
+          <div class="section-no">07 / NETWORK</div>
+          <div><h2>ASN、BGP 与 IP Reputation</h2><p>这三者分别回答“属于哪个网络”“地址段由谁宣告、怎样到达”“这个出口过去发生过什么”。</p></div>
+        </div>
+        <div class="grid-3">
+          <article class="card signal-card"><div class="signal-id">SIGNAL / ASN</div><h3>ASN：你属于哪个网络</h3><p class="muted small">平台由 IP 找到 Prefix，再看 Origin ASN 与组织名称。Hosting ASN 会让 VPS 很快显现；Residential 或 Mobile ASN 则更像真实终端接入。</p><ul><li>相对客观的网络归属事实</li><li>可用于允许、阻断或挑战规则</li><li>异常不等于违规：企业 VPN、云桌面也会从机房出来</li></ul></article>
+          <article class="card signal-card"><div class="signal-id">SIGNAL / BGP</div><h3>BGP：谁在宣告这段地址</h3><p class="muted small">BGP 交换跨自治系统的可达性，路由包含 Origin AS、AS_PATH 等信息。它提供 Prefix 与路由证据，但没有“Residential = true”字段。</p><ul><li>Prefix → Origin ASN → 网络身份</li><li>AS_PATH 描述自治系统路径</li><li>住宅 / VPN 分类仍需数据库与观测补充</li></ul></article>
+          <article class="card signal-card"><div class="signal-id">SIGNAL / REPUTATION</div><h3>IP Reputation：出口的信用档案</h3><p class="muted small">平台和数据供应商根据垃圾邮件、扫描、撞库、Bot、失败登录、账号数量、请求速度和历史代理活动形成风险画像。</p><ul><li>“纯净 IP”是商业语言，不是标准字段</li><li>共享出口容易被他人活动污染</li><li>住宅 ASN 也可能被识别为 Known Proxy</li></ul></article>
+        </div>
+
+        <div class="grid-2" style="margin-top:16px">
+          <div class="card"><div class="card-label">从地址到网络身份</div><div class="codebox">Source IP  104.x.x.x
+     ↓
+BGP Prefix  104.x.x.0/24
+     ↓
+Origin ASN  ASxxxxx
+     ↓
+Organization / Network owner
+     ↓
+Hosting · ISP · Mobile · Corporate
+     +
+历史流量与供应商数据库
+     ↓
+VPN / Proxy / Residential 概率</div></div>
+          <div class="card"><div class="card-label">Velocity：共享 VPN 的典型信号</div><h3>同一出口在短时间连接大量账户</h3><p class="muted small">一个公共 VPN 节点可能服务数千用户。即使平台不知道节点品牌，也能观察同一 IP 的账号数量、注册速度、失败率和国家来源分布。速度与规模异常会显著提高风险。</p><div class="callout danger" style="margin-top:15px"><span class="symbol">×</span><div class="small"><strong>住宅代理也不自动安全：</strong>如果同一住宅出口被数百客户反复使用，它在平台自己的历史图谱中仍可能成为已知代理。</div></div></div>
+        </div>
+      </section>
+
+      <section id="protocol-signals" data-section>
+        <div class="section-head">
+          <div class="section-no">08 / PROTOCOL</div>
+          <div><h2>DNS、WebRTC、TLS / JA4</h2><p>这些信号经常被营销文章夸大。它们真正有价值的地方，多数是观察网络路径与客户端声明是否一致，而不是单独“抓到真实 IP”。</p></div>
+        </div>
+        <div class="layers">
+          <div class="layer"><strong>DNS</strong><span>域名由哪个递归解析器查询；权威 DNS 可观察解析路径</span><small>网络路径信号</small></div>
+          <div class="layer"><strong>WebRTC / ICE</strong><span>Host、Server-reflexive、Relay candidates；受浏览器与隐私策略影响</span><small>路径一致性信号</small></div>
+          <div class="layer"><strong>TLS ClientHello</strong><span>版本、密码套件、Extensions、ALPN 等组合</span><small>传输指纹</small></div>
+          <div class="layer"><strong>HTTP</strong><span>User-Agent、Client Hints、Header 结构、H2 / H3 行为</span><small>声明与实现特征</small></div>
+        </div>
+
+        <div class="grid-2" style="margin-top:16px">
+          <article class="card"><div class="card-label">DNS：能看到什么</div><h3>网站通常不能直接读取系统 DNS 地址</h3><p class="muted small">普通 HTTPS 请求中没有“My DNS Server”字段。但平台若控制动态子域和权威 DNS，可把 HTTP 访问与向其权威服务器发起查询的递归 Resolver 关联。ECS 有时还会携带客户端网络前缀的一部分。</p><p class="muted small">DoH 加密的是客户端到 Resolver 的传输，并不意味着权威 DNS 看不到 Resolver 的查询；ODoH 则进一步尝试分离客户端身份与查询内容。</p></article>
+          <article class="card"><div class="card-label">WebRTC：边界</div><h3>今天已不能简单说“必然泄露真实 IP”</h3><p class="muted small">ICE 可能生成本地 Host、STUN 得到的 Server-reflexive 与 TURN Relay candidate。现代浏览器可以过滤候选地址，并用 mDNS 隐藏本地私网 IP。</p><p class="muted small">真正的风控价值是：HTTPS 出口与 WebRTC 观察到的网络路径是否矛盾。可见内容取决于浏览器、VPN 实现、代理方式、WebRTC 配置和路由。</p></article>
+          <article class="card"><div class="card-label">TLS / JA4：是什么</div><h3>在 HTTP 之前，客户端已经有“说话口音”</h3><p class="muted small">TLS ClientHello 的版本、密码套件、扩展、ALPN 与顺序组合具有实现规律。JA3 / JA4 将这些特征归一化成便于聚合分析的指纹；JA4 对现代 TLS 的随机化与协议表达进行了改进。</p><p class="muted small">它识别的是客户端连接特征，不是电脑的永久身份证，也不是 VPN detector。</p></article>
+          <article class="card"><div class="card-label">跨层矛盾</div><h3>UA 说 Chrome，TLS 却不像 Chrome</h3><p class="muted small">如果 User-Agent 声称是常规 Chrome，但 TLS / HTTP2 特征来自脚本库、自动化框架或中间代理，平台会得到 Cross-layer inconsistency。VPN 往往只改变网络出口，不一定改变本地浏览器 TLS；终止 TLS 的代理则可能改变它。</p><div class="mini-flow"><span>UA 声明</span><i>↔</i><span>TLS / JA4</span><i>↔</i><span>HTTP 行为</span></div></article>
+        </div>
+        <div class="callout warn" style="margin-top:16px"><span class="symbol">!</span><div><strong>准确边界：</strong>JA4 不直接判断 VPS / VPN / 住宅；WebRTC 也不是万能的真实 IP 探测器。它们主要帮助平台判断“这个客户端是否像它声称的那样，以及各网络路径是否协调”。</div></div>
+      </section>
+
+      <section id="device-signals" data-section>
+        <div class="section-head">
+          <div class="section-no">09 / IDENTITY</div>
+          <div><h2>浏览器、地理、账户与行为</h2><p>当出口越来越像普通住宅，判断重点就会从网络类型转向设备连续性、地理合理性、账户履历与操作模式。</p></div>
+        </div>
+        <div class="grid-3">
+          <article class="card signal-card"><div class="signal-id">DEVICE / BROWSER</div><h3>浏览器指纹</h3><ul><li>OS、浏览器、版本、屏幕、色深、触控</li><li>字体、Canvas、WebGL、GPU、Audio</li><li>语言、时区、硬件并发、内存等</li></ul><p class="muted small">重点并非每项都独一无二，而是组合是否稳定、自然、与 UA / TLS 声明相符。</p></article>
+          <article class="card signal-card"><div class="signal-id">GEO / CONTEXT</div><h3>时区与地理</h3><ul><li>IP Country / Region / City：粗粒度推断</li><li>Timezone 与 Locale：便宜但非决定性</li><li>浏览器 Geolocation：需用户授权，信息量更高</li></ul><p class="muted small">旅游、出差、留学和企业 VPN 都会造成合理偏差，因此平台通常累积多项证据。</p></article>
+          <article class="card signal-card"><div class="signal-id">ACCOUNT / HISTORY</div><h3>Cookie 与账户历史</h3><ul><li>设备是否见过、Cookie 是否长期存在</li><li>登录国家、ASN、支付与安全事件</li><li>账户年龄、账号—设备—IP 关系图谱</li></ul><p class="muted small">一个三年老账号的长期履历，通常比一次“看起来很完美”的住宅 IP 更有解释力。</p></article>
+          <article class="card signal-card"><div class="signal-id">BEHAVIOR / VELOCITY</div><h3>行为与节奏</h3><ul><li>点击、键入、滚动、页面停留</li><li>请求速度、导航顺序、失败率</li><li>短时间多账户、多地区跳变</li></ul><p class="muted small">Bot 检测更关注自动化与请求模式；账户反欺诈更关注是否本人。</p></article>
+          <article class="card signal-card"><div class="signal-id">CANVAS / WEBGL</div><h3>渲染特征</h3><p class="muted small">同一图形在不同 OS、字体、GPU 与驱动上可能产生细微差异。Canvas 和 WebGL 可作为设备组合的一部分，但会受浏览器防追踪、随机化与更新影响。</p><ul><li>适合做聚类与一致性比较</li><li>不是不可变的硬件序列号</li></ul></article>
+          <article class="card signal-card"><div class="signal-id">PURPOSE / MODEL</div><h3>不同系统，不同重点</h3><ul><li>Bot：TLS、JS、Header、交互、速度</li><li>账户安全：设备、Cookie、历史、支付</li><li>内容地域：IP、ASN、代理库、Geo</li></ul><p class="muted small">同一个 VPN，在流媒体、银行、社交平台和普通网站面对的是不同检测目标。</p></article>
+        </div>
+        <div class="passport" style="margin-top:16px">
+          <div class="passport-item"><b>IP</b><span>你从哪个网络出口“入境”</span></div>
+          <div class="passport-item"><b>ASN</b><span>出口属于哪家网络</span></div>
+          <div class="passport-item"><b>Reputation</b><span>这个出口过去的信用记录</span></div>
+          <div class="passport-item"><b>TLS / JA4</b><span>客户端建立连接时的“口音”</span></div>
+          <div class="passport-item"><b>Fingerprint</b><span>设备与浏览器的特征组合</span></div>
+          <div class="passport-item"><b>Cookie / History</b><span>过去留下的身份证明与履历</span></div>
+          <div class="passport-item"><b>Timezone / Geo</b><span>环境报告的时间与位置背景</span></div>
+          <div class="passport-item"><b>Behavior</b><span>操作节奏是否像真实且连续的人</span></div>
+        </div>
+      </section>
+
+      <section id="consistency" data-section>
+        <div class="section-head">
+          <div class="section-no">10 / CONSISTENCY</div>
+          <div><h2>跨层一致性才是核心</h2><p>平台真正比较的是：网络看起来是谁、设备声称是谁、历史上又是谁——这些线索能否组成一个合理的长期轨迹。</p></div>
+        </div>
+        <div class="compare-scene">
+          <article class="scene good">
+            <div class="scene-title"><h3>高度协调的环境</h3><span class="score">CONSISTENT</span></div>
+            <dl><dt>IP / ASN</dt><dd>Los Angeles / Comcast</dd><dt>Network</dt><dd>Residential</dd><dt>Timezone</dt><dd>America/Los_Angeles</dd><dt>DNS / WebRTC</dt><dd>没有明显路径矛盾</dd><dt>Browser / TLS</dt><dd>Chrome / Windows 特征相符</dd><dt>Cookie</dt><dd>长期存在</dd><dt>Account</dt><dd>历史主要在 California</dd><dt>Behavior</dt><dd>正常节奏</dd></dl>
+          </article>
+          <div class="versus">VS</div>
+          <article class="scene bad">
+            <div class="scene-title"><h3>跨层冲突的环境</h3><span class="score">MISMATCH</span></div>
+            <dl><dt>IP / ASN</dt><dd>Los Angeles / Residential ISP</dd><dt>Timezone</dt><dd>Asia/Shanghai</dd><dt>DNS / WebRTC</dt><dd>另一国家或网络特征</dd><dt>Browser / TLS</dt><dd>UA 声明与连接特征不符</dd><dt>Fingerprint</dt><dd>多项组合异常</dd><dt>Cookie</dt><dd>全新</dd><dt>Account</dt><dd>过去 3 年都在深圳</dd><dt>Travel</dt><dd>15 分钟跨越深圳与洛杉矶</dd></dl>
+          </article>
+        </div>
+        <div class="callout" style="margin-top:16px"><span class="symbol">≈</span><div><strong>真实家庭动态 IP 为什么通常没事？</strong>地址虽然变化，但常保留同一个 ISP、ASN、区域、相近 Prefix、设备与 Cookie。它表现为“IP 变了，网络身份仍连续”，而不是在短时间跨州、跨运营商随机跳变。</div></div>
+        <div class="callout warn" style="margin-top:12px"><span class="symbol">!</span><div><strong>语言不是风险本身：</strong>California IP + zh-CN 完全可能是正常用户。真正重要的是多项变量是否同时偏离账户自身的长期基线。</div></div>
+      </section>
+
+      <section id="risk-model" data-section>
+        <div class="section-head">
+          <div class="section-no">11 / RISK</div>
+          <div><h2>风险模型：从信号到决策</h2><p>现代风控通常是评分、概率和上下文模型，而不是一条“检测到 VPN 就封禁”的简单规则。</p></div>
+        </div>
+        <div class="formula"><div class="formula-main">Risk = f( N, D, T, G, A, B, H )</div><div class="formula-note">Network · Device · Transport · Geography · Account · Behavior · History</div></div>
+        <div class="grid-2" style="margin-top:16px">
+          <div class="card"><div class="card-label">变量拆解</div><div class="codebox">N = IP · ASN · BGP · ISP · Reputation · DNS
+D = OS · Browser · Screen · GPU · Canvas · Fonts
+T = TLS · JA4 · HTTP/2 · HTTP/3
+G = IP Geo · Timezone · Locale · Geolocation
+A = Cookie · Login history · Payment · Account age
+B = Click · Typing · Velocity · Navigation · Timing
+H = IP history · Device graph · Previous risk events</div></div>
+          <div class="card"><div class="card-label">概念示例：多维评分</div><div class="risk-bars"><div class="risk-row"><span>Network Trust</span><div class="bar"><i style="--v:68%"></i></div><b>68</b></div><div class="risk-row"><span>Device Consistency</span><div class="bar"><i style="--v:82%"></i></div><b>82</b></div><div class="risk-row"><span>Geo Consistency</span><div class="bar"><i style="--v:44%"></i></div><b>44</b></div><div class="risk-row"><span>Behavior Trust</span><div class="bar"><i style="--v:61%"></i></div><b>61</b></div><div class="risk-row"><span>Account Trust</span><div class="bar"><i style="--v:91%"></i></div><b>91</b></div></div><p class="muted small" style="margin-top:17px">仅作理解模型的示意，不代表任何平台的真实权重。</p></div>
+        </div>
+        <div class="grid-3" style="margin-top:16px">
+          <div class="card"><div class="card-label">Bot Detection</div><h3>是不是自动化</h3><p class="muted small">TLS / JA4、JS 指纹、Header、交互、请求速度和导航规律通常更重要。</p></div>
+          <div class="card"><div class="card-label">Account Fraud</div><h3>是不是账户本人</h3><p class="muted small">设备、Cookie、登录历史、密码事件、支付、国家与行为连续性通常更重要。</p></div>
+          <div class="card"><div class="card-label">Geo / Content Policy</div><h3>从哪里访问</h3><p class="muted small">IP、ASN、VPN / Proxy 数据库与粗粒度地理位置往往是主要依据。</p></div>
+        </div>
+      </section>
+
+      <section id="matrix" data-section>
+        <div class="section-head">
+          <div class="section-no">12 / MATRIX</div>
+          <div><h2>综合识别矩阵</h2><p>矩阵表示某类信号对区分网络来源的相对帮助。强度不是固定权重，也不意味着单独即可定性。</p></div>
+        </div>
+        <div class="legend"><span><i class="dot s4"></i>很强</span><span><i class="dot s3"></i>强</span><span><i class="dot s2"></i>中等 / 视环境</span><span><i class="dot s1"></i>弱或间接</span></div>
+        <div class="table-wrap">
+          <table class="matrix">
+            <thead><tr><th>检测信号</th><th>VPS</th><th>商业 VPN</th><th>数据中心 Proxy</th><th>住宅 Proxy</th><th>真住宅</th></tr></thead>
+            <tbody>
+              <tr><td>ASN</td><td><span class="strength s4" title="很强"></span></td><td><span class="strength s3"></span></td><td><span class="strength s4"></span></td><td><span class="strength s1"></span></td><td><span class="strength s1"></span></td></tr>
+              <tr><td>BGP / Prefix</td><td><span class="strength s3"></span></td><td><span class="strength s3"></span></td><td><span class="strength s3"></span></td><td><span class="strength s1"></span></td><td><span class="strength s1"></span></td></tr>
+              <tr><td>IP Reputation</td><td><span class="strength s2"></span></td><td><span class="strength s4"></span></td><td><span class="strength s3"></span></td><td><span class="strength s2"></span></td><td><span class="strength s1"></span></td></tr>
+              <tr><td>共享度 / Velocity</td><td><span class="strength s1"></span></td><td><span class="strength s4"></span></td><td><span class="strength s3"></span></td><td><span class="strength s3"></span></td><td><span class="strength s1"></span></td></tr>
+              <tr><td>DNS 一致性</td><td><span class="strength s2"></span></td><td><span class="strength s2"></span></td><td><span class="strength s2"></span></td><td><span class="strength s2"></span></td><td><span class="strength s1"></span></td></tr>
+              <tr><td>WebRTC</td><td><span class="strength s2"></span></td><td><span class="strength s2"></span></td><td><span class="strength s2"></span></td><td><span class="strength s2"></span></td><td><span class="strength s1"></span></td></tr>
+              <tr><td>TLS / JA4</td><td><span class="strength s1"></span></td><td><span class="strength s1"></span></td><td><span class="strength s1"></span></td><td><span class="strength s1"></span></td><td><span class="strength s1"></span></td></tr>
+              <tr><td>浏览器指纹</td><td><span class="strength s2"></span></td><td><span class="strength s2"></span></td><td><span class="strength s2"></span></td><td><span class="strength s4"></span></td><td><span class="strength s1"></span></td></tr>
+              <tr><td>Geo / Timezone</td><td><span class="strength s2"></span></td><td><span class="strength s2"></span></td><td><span class="strength s2"></span></td><td><span class="strength s3"></span></td><td><span class="strength s1"></span></td></tr>
+              <tr><td>账户历史</td><td><span class="strength s4"></span></td><td><span class="strength s4"></span></td><td><span class="strength s4"></span></td><td><span class="strength s4"></span></td><td><span class="strength s4"></span></td></tr>
+              <tr><td>行为模型</td><td><span class="strength s4"></span></td><td><span class="strength s4"></span></td><td><span class="strength s4"></span></td><td><span class="strength s4"></span></td><td><span class="strength s4"></span></td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="grid-2" style="margin-top:16px">
+          <div class="callout"><span class="symbol">1</span><div><strong>VPS 最容易：</strong>Hosting ASN 与 Prefix 本身已提供很强的机房证据。</div></div>
+          <div class="callout"><span class="symbol">2</span><div><strong>商业 VPN 次之：</strong>Hosting 归属、已知节点、高共享与历史信誉相互印证。</div></div>
+          <div class="callout"><span class="symbol">3</span><div><strong>住宅代理更难：</strong>ASN 层像普通用户，需要依靠历史、速度、设备、地理和账户图谱。</div></div>
+          <div class="callout"><span class="symbol">4</span><div><strong>真住宅静态最接近自然出口：</strong>但只解决网络身份层，并不替代设备与账户一致性。</div></div>
+        </div>
+      </section>
+
+      <section id="selection" data-section>
+        <div class="section-head">
+          <div class="section-no">13 / CHOOSE</div>
+          <div><h2>选择与检查框架</h2><p>没有“最好”的 IP，只有与合法用途、身份连续性、性能和预算更匹配的组合。</p></div>
+        </div>
+        <div class="decision">
+          <article class="card"><span class="use">网站 / API</span><h3>优先 VPS</h3><p class="muted small">固定 IP、带宽、稳定性、成本和可管理性通常比住宅观感更重要。</p></article>
+          <article class="card"><span class="use">远程办公</span><h3>企业 VPN / VPS + VPN</h3><p class="muted small">重点是加密、访问控制、固定出口与审计，而不是伪装成住宅用户。</p></article>
+          <article class="card"><span class="use">长期固定接入</span><h3>Static + Dedicated</h3><p class="muted small">住宅静态或 ISP Static 注重连续性；同时检查归属、信誉与实际拓扑。</p></article>
+          <article class="card"><span class="use">移动环境测试</span><h3>真实 Mobile IP</h3><p class="muted small">测试 4G / 5G、CGNAT、蜂窝延迟和运营商策略时，应使用真实移动网络。</p></article>
+        </div>
+        <div class="card" style="margin-top:16px">
+          <div class="card-label">看任何 IP 服务时，依次问六个问题</div>
+          <div class="grid-3">
+            <div><h4>01 属于谁？</h4><p class="muted small">ASN、Prefix、Organization、RIR 登记是谁？</p></div>
+            <div><h4>02 是什么网络？</h4><p class="muted small">Datacenter、ISP、Residential、Mobile 还是 Corporate？</p></div>
+            <div><h4>03 多久变化？</h4><p class="muted small">Static、DHCP Dynamic、Sticky 还是按请求 Rotating？</p></div>
+            <div><h4>04 谁在使用？</h4><p class="muted small">Dedicated、少量共享、大池共享还是 CGNAT？</p></div>
+            <div><h4>05 历史怎样？</h4><p class="muted small">Abuse、Spam、Bot、Proxy、账号关联与平台自身历史。</p></div>
+            <div><h4>06 线路怎样？</h4><p class="muted small">Latency、Packet Loss、Routing、Bandwidth、去回程是否稳定。</p></div>
+          </div>
+        </div>
+        <div class="callout warn" style="margin-top:16px"><span class="symbol">§</span><div><strong>合规提醒：</strong>大规模网页访问应遵守目标网站条款、robots 规则、访问频率限制、隐私与数据保护要求。理解检测机制不应被用于规避平台安全控制。</div></div>
+      </section>
+
+      <section id="conclusion" data-section>
+        <div class="section-head">
+          <div class="section-no">14 / ESSENCE</div>
+          <div><h2>核心结论</h2><p>把 IP 当作“网络身份证”很有帮助，但一张身份证从来不是一个人的全部。</p></div>
+        </div>
+        <div class="conclusion">
+          <div class="conclusion-grid">
+            <div>
+              <div class="card-label">一句话总括</div>
+              <h3>平台识别的不是一个地址，而是一套能否互相解释的身份轨迹。</h3>
+              <p class="muted">VPS 像“从办公楼或数据中心出现”；住宅静态像“长期住在同一地址”；住宅动态像“仍在同一社区，但门牌偶尔变化”；轮换住宅像“不断换不同家庭出口”；移动 IP 像“在运营商网络中移动，并与许多人共享出口”。</p>
+            </div>
+            <div class="takeaways">
+              <div class="takeaway">住宅、静态、独享是三个独立属性，不能互相替代。</div>
+              <div class="takeaway">ASN 与 BGP 揭示网络归属，但“住宅 / 代理”仍需额外分类与历史观测。</div>
+              <div class="takeaway">IP Reputation 是动态信用记录；共享出口会放大历史污染。</div>
+              <div class="takeaway">DNS、WebRTC、JA4 和指纹主要用于交叉验证，不是万能探测器。</div>
+              <div class="takeaway">住宅 IP 只优化网络身份层，无法抹去设备、账户、地理和行为矛盾。</div>
+              <div class="takeaway">最终决策来自跨层一致性、长期基线与平台具体风险目标。</div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <footer class="footer"><div>网络 IP 身份图谱 · 单文件可视化指南</div><span>纯 HTML / CSS / JavaScript · 无外部依赖 · 可离线打开</span></footer>
+<button class="back-top" id="nipBackTop" aria-label="返回文章顶部">↑</button>
+</div>
