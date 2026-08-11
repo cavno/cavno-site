@@ -51,6 +51,7 @@ export const GET: APIRoute = async () => {
           hue: presentation.hue,
           variant: presentation.variant,
           serial: presentation.serial,
+          motif: presentation.motif,
         },
         text: [
           item.data.title,

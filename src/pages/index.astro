@@ -163,7 +163,7 @@ const tagFor = (sectionSlug: string, subSlug: string) => {
     sectionLabel: string;
     subsectionLabel: string;
     date: string;
-    cover: { hue: number; variant: number; serial: string };
+    cover: { hue: number; variant: number; serial: string; motif: string };
     text: string;
     _search?: string;
   }
@@ -228,12 +228,19 @@ const tagFor = (sectionSlug: string, subSlug: string) => {
     link.setAttribute('role', 'listitem');
 
     const thumb = document.createElement('span');
-    thumb.className = `cv-search-thumb cv-cover-v${entry.cover.variant}`;
+    thumb.className = `cv-search-thumb cv-cover-v${entry.cover.variant} cv-cover-motif-${entry.cover.motif}`;
     thumb.style.setProperty('--cv-cover-h', String(entry.cover.hue));
     thumb.setAttribute('aria-hidden', 'true');
+    const thumbArt = document.createElement('span');
+    thumbArt.className = `cv-cover-art cv-art-${entry.cover.motif}`;
+    for (const part of ['a', 'b', 'c', 'd', 'e']) {
+      const shape = document.createElement('i');
+      shape.className = `cv-art-${part}`;
+      thumbArt.appendChild(shape);
+    }
     const thumbCode = document.createElement('b');
     thumbCode.textContent = `CV/${entry.cover.serial}`;
-    thumb.appendChild(thumbCode);
+    thumb.append(thumbArt, thumbCode);
 
     const copy = document.createElement('span');
     copy.className = 'cv-search-copy';

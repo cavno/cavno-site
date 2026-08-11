@@ -28,13 +28,20 @@ const cover = derivePresentation({ title, summary, tags, section, subsection, bo
 ---
 <a class="cv-item" href={href} target={external ? '_blank' : undefined} rel={external ? 'noopener' : undefined}>
   <div
-    class={`cv-auto-cover cv-cover-v${cover.variant}`}
+    class={`cv-auto-cover cv-cover-v${cover.variant} cv-cover-motif-${cover.motif}`}
     style={`--cv-cover-h:${cover.hue};`}
     aria-hidden="true"
   >
+    <div class={`cv-cover-art cv-art-${cover.motif}`}>
+      <i class="cv-art-a"></i>
+      <i class="cv-art-b"></i>
+      <i class="cv-art-c"></i>
+      <i class="cv-art-d"></i>
+      <i class="cv-art-e"></i>
+    </div>
     <div class="cv-cover-top">
       <span>{tag}</span>
-      <span>CV / {cover.serial}</span>
+      <span>{cover.motifLabel} / {cover.serial}</span>
     </div>
     <div class="cv-cover-copy">
       <strong>{cover.title}</strong>
