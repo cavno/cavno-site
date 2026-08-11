@@ -24,7 +24,7 @@
 .am-article .am-stats strong{font-family:var(--serif);font-size:34px;font-weight:600;color:var(--am-green);line-height:1}
 .am-article .am-stats strong small{font-size:.55em}
 .am-article .am-stats span{font-family:var(--mono);font-size:10px;color:var(--am-muted)}
-.am-article .am-index{position:sticky;top:64px;z-index:20;display:flex;gap:8px;flex-wrap:wrap;padding:14px 0;margin-bottom:14px;background:color-mix(in srgb,var(--paper) 90%,transparent);backdrop-filter:blur(16px);border-bottom:1px solid var(--am-line)}
+.am-article .am-index{position:static;display:flex;gap:8px;flex-wrap:wrap;padding:14px 0;margin-bottom:14px;background:transparent;border-bottom:1px solid var(--am-line)}
 .am-article .am-index a{display:inline-flex;gap:8px;align-items:center;padding:7px 12px;border:1px solid var(--am-line);border-radius:999px;background:#fff;color:var(--am-text);font-size:13px;text-decoration:none}
 .am-article .am-index a:hover{color:var(--am-green);border-color:rgba(31,102,93,.35)}
 .am-article .am-index a span{font-family:var(--mono);font-size:10px;color:var(--am-green)}
@@ -76,9 +76,8 @@
   .am-article .am-price a{margin-top:2px}
 }
 @media(max-width:520px){
-  .am-article .am-index{top:56px;flex-wrap:nowrap;overflow-x:auto}
+  .am-article .am-index{flex-wrap:nowrap;overflow-x:auto}
   .am-article .am-index a{flex:0 0 auto}
   .am-article .am-section{padding-top:44px}
   .am-article .am-section-head>div{align-items:flex-start}
 }
-
