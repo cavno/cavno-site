@@ -158,4 +158,4 @@
 - `scripts/url-slugs.mjs` 是唯一映射源。
 - `scripts/convert.mjs` 会复用页面 slug 映射。
 - `scripts/migrate.mjs` 会拒绝未登记的非 ASCII 资源名称，防止乱码 URL 回归。
-- 旧中文页面路径由 404 页读取 `src/data/legacy-route-redirects.json` 后兼容跳转。
+- 站点只发布新的英文路由；旧中文路径不提供兼容跳转。

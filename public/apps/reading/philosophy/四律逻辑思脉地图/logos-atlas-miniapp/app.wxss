@@ -1,3 +1,0 @@
-/* 全局样式 */
-page{ -webkit-font-smoothing:antialiased; }
-view, text{ box-sizing:border-box; }

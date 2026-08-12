@@ -23,7 +23,6 @@ const SKIP_DIRS = new Set(['.git', 'dist', 'node_modules']);
 const GENERATED_TEXT_FILES = new Set([
   'docs/url-slug-migration.md',
   'scripts/url-slugs.mjs',
-  'src/data/legacy-route-redirects.json',
 ]);
 const posix = (value) => value.split(path.sep).join('/');
 
@@ -184,7 +183,7 @@ async function renamePublicEntries() {
   }
 }
 
-function legacyRedirects() {
+function routeMigrationMap() {
   return Object.fromEntries(ROUTE_MIGRATIONS
     .map(({ section, subsection, from, to }) => [
       `/${section}/${subsection}/${from}/`,
@@ -203,7 +202,7 @@ function migrationMarkdown() {
     '',
     '| 旧路径 | 新路径 |',
     '| --- | --- |',
-    ...Object.entries(legacyRedirects()).map(([from, to]) => `| \`${from}\` | \`${to}\` |`),
+    ...Object.entries(routeMigrationMap()).map(([from, to]) => `| \`${from}\` | \`${to}\` |`),
     '',
     '## Public path segments and files',
     '',
@@ -218,20 +217,16 @@ function migrationMarkdown() {
     '- `scripts/url-slugs.mjs` 是唯一映射源。',
     '- `scripts/convert.mjs` 会复用页面 slug 映射。',
     '- `scripts/migrate.mjs` 会拒绝未登记的非 ASCII 资源名称，防止乱码 URL 回归。',
-    '- 旧中文页面路径由 404 页读取 `src/data/legacy-route-redirects.json` 后兼容跳转。',
+    '- 站点只发布新的英文路由；旧中文路径不提供兼容跳转。',
     '',
   ];
   return lines.join('\n');
 }
 
 async function writeGeneratedFiles() {
-  const redirectFile = path.join(ROOT, 'src/data/legacy-route-redirects.json');
   const docsFile = path.join(ROOT, 'docs/url-slug-migration.md');
-  console.log(`${APPLY ? 'write' : '[dry] write'} ${posix(path.relative(ROOT, redirectFile))}`);
   console.log(`${APPLY ? 'write' : '[dry] write'} ${posix(path.relative(ROOT, docsFile))}`);
   if (!APPLY) return;
-  await fs.mkdir(path.dirname(redirectFile), { recursive: true });
-  await fs.writeFile(redirectFile, `${JSON.stringify(legacyRedirects(), null, 2)}\n`, 'utf8');
   await fs.writeFile(docsFile, migrationMarkdown(), 'utf8');
 }
 
