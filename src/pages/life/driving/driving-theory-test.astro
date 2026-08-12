@@ -1,0 +1,26 @@
+---
+// 由 scripts/convert.mjs 生成，可自由手工精修
+import Base from '../../../layouts/Base.astro';
+import body from '../../../legacy/life/driving/driving-theory-test/body.html?raw';
+import '../../../legacy/life/driving/driving-theory-test/style.css';
+
+const meta = {
+  "title": "科目一核心知识点速查 · 肖肖3小时精华课整理",
+  "description": ""
+};
+---
+<Base title={meta.title + ' · Cavno'} description={meta.description}>
+
+  <section class="cv-page-head">
+    <div class="cv-wrap">
+      <div class="cv-eyebrow">Life & Skills · Driving</div>
+      <h1 class="cv-page-title">{meta.title}</h1>
+      
+      <a class="cv-crumb-back" href="/life/driving/">← 返回驾驶栏目</a>
+    </div>
+  </section>
+
+  <article class="lp">
+    <Fragment set:html={body} />
+  </article>
+</Base>

@@ -1,0 +1,26 @@
+---
+// 由 scripts/convert.mjs 生成，可自由手工精修
+import Base from '../../../layouts/Base.astro';
+import body from '../../../legacy/reading/thinking/cognitive-operating-system-four-generation-matrix/body.html?raw';
+import '../../../legacy/reading/thinking/cognitive-operating-system-four-generation-matrix/style.css';
+
+const meta = {
+  "title": "认知操作系统 · 四代矩阵 · 二十七系统 × 四版本",
+  "description": ""
+};
+---
+<Base title={meta.title + ' · Cavno'} description={meta.description}>
+
+  <section class="cv-page-head">
+    <div class="cv-wrap">
+      <div class="cv-eyebrow">Reading & Thinking · Thinking</div>
+      <h1 class="cv-page-title">{meta.title}</h1>
+      
+      <a class="cv-crumb-back" href="/reading/thinking/">← 返回思考栏目</a>
+    </div>
+  </section>
+
+  <article class="lp">
+    <Fragment set:html={body} />
+  </article>
+</Base>

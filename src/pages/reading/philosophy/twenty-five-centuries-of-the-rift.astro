@@ -1,0 +1,26 @@
+---
+// 由 scripts/convert.mjs 生成，可自由手工精修
+import Base from '../../../layouts/Base.astro';
+import body from '../../../legacy/reading/philosophy/twenty-five-centuries-of-the-rift/body.html?raw';
+import '../../../legacy/reading/philosophy/twenty-five-centuries-of-the-rift/style.css';
+
+const meta = {
+  "title": "裂缝的两千五百年 · 二元悖论视角下的西方哲学史",
+  "description": "以主客二元与悖论为轴的西方哲学史交互地图——裂缝、跳跃与悬置的两千五百年。"
+};
+---
+<Base title={meta.title + ' · Cavno'} description={meta.description}>
+
+  <section class="cv-page-head">
+    <div class="cv-wrap">
+      <div class="cv-eyebrow">Reading & Thinking · Philosophy</div>
+      <h1 class="cv-page-title">{meta.title}</h1>
+      <p class="cv-lede">{meta.description}</p>
+      <a class="cv-crumb-back" href="/reading/philosophy/">← 返回哲学栏目</a>
+    </div>
+  </section>
+
+  <article class="lp">
+    <Fragment set:html={body} />
+  </article>
+</Base>

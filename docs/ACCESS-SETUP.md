@@ -111,7 +111,7 @@
 | 1 | `https://cavno.org/` | ✅ 正常显示首页，**不要求登录** |
 | 2 | `https://cavno.org/working/` | 🔒 跳转到 Cloudflare 登录页 |
 | 3 | `https://cavno.org/working/amazon/` | 🔒 同样要求登录 |
-| 4 | `https://cavno.org/working/amazon/销售明细透视台/` | 🔒 同样要求登录（**这条最关键，验证深层路径是否被继承保护**） |
+| 4 | `https://cavno.org/working/amazon/sales-detail-pivot-dashboard/` | 🔒 同样要求登录（**这条最关键，验证深层路径是否被继承保护**） |
 | 5 | 输入邮箱 → 收验证码 → 登录 | ✅ 正常进入工具页，功能一切如常 |
 | 6 | `https://cavno.pages.dev/working/` | ↪️ 应 308 跳回 `cavno.org`，再被 Access 拦下 |
 

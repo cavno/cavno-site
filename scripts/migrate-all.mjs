@@ -22,9 +22,9 @@ const PLAN = [
   [L('Investing/MaxPain'), 'investing', 'options', 'app'],
   [L('Investing/gamma-atlas'), 'investing', 'options', 'app'],
   [L('Investing/gamma-profile'), 'investing', 'options', 'app'],
-  [L('Investing/动态Gamma敞口图'), 'investing', 'options', 'app'],
-  [L('Investing/动态对冲'), 'investing', 'options', 'app'],
-  [L('Investing/期权波动率与定价'), 'investing', 'options', 'app'],
+  [L('Investing/dynamic-gamma-exposure-chart'), 'investing', 'options', 'app'],
+  [L('Investing/dynamic-hedging'), 'investing', 'options', 'app'],
+  [L('Investing/option-volatility-pricing'), 'investing', 'options', 'app'],
   [L('Investing/tbill_margin_schwab_vs_ibkr'), 'investing', 'options', 'app'],
   [L('Investing/value_investing'), 'investing', 'valuation', 'app'],
   [L('Investing/CreditExpansion'), 'investing', 'cases', 'app'],
@@ -40,7 +40,7 @@ const PLAN = [
   [L('Life_Style_and_Skills/房地产'), 'life', 'house', 'root'],
   [L('Life_Style_and_Skills/中国'), 'life', 'china', 'root'],
   [L('Life_Style_and_Skills/育儿'), 'life', 'family', 'root'],
-  [L('Life_Style_and_Skills/报单'), 'life', 'orders', 'app'],
+  [L('Life_Style_and_Skills/order-management'), 'life', 'orders', 'app'],
   // ---- Working ----
   [L('Working/Amazon_Tools'), 'working', 'amazon', 'root'],
 ];

@@ -1,0 +1,26 @@
+---
+// 由 scripts/convert.mjs 生成，可自由手工精修
+import Base from '../../../layouts/Base.astro';
+import body from '../../../legacy/reading/books/debt-the-first-5000-years/body.html?raw';
+import '../../../legacy/reading/books/debt-the-first-5000-years/style.css';
+
+const meta = {
+  "title": "债:5000年债务史 · 内在逻辑重构",
+  "description": ""
+};
+---
+<Base title={meta.title + ' · Cavno'} description={meta.description}>
+
+  <section class="cv-page-head">
+    <div class="cv-wrap">
+      <div class="cv-eyebrow">Reading & Thinking · Books</div>
+      <h1 class="cv-page-title">{meta.title}</h1>
+      
+      <a class="cv-crumb-back" href="/reading/books/">← 返回书籍视察栏目</a>
+    </div>
+  </section>
+
+  <article class="lp">
+    <Fragment set:html={body} />
+  </article>
+</Base>

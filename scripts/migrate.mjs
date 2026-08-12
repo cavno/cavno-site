@@ -30,6 +30,7 @@ import { promises as fs } from 'node:fs';
 import path from 'node:path';
 import process from 'node:process';
 import { fileURLToPath } from 'node:url';
+import { toAsciiPath } from './url-slugs.mjs';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const ROOT = path.resolve(__dirname, '..');
@@ -106,10 +107,15 @@ console.log(`\n迁移: ${SRC}`);
 console.log(`  → 文件目的地: public/apps/${section}${subsection ? '/' + subsection : ''}/`);
 console.log(`  → 条目目的地: src/content/items/${DRY ? '   [试运行，不写入]' : ''}\n`);
 
-// 1) 整树拷贝（跳过 .git / node_modules 等）
+// 1) 整树拷贝，并把公开资源路径规范为 ASCII。
 if (!DRY) {
   await fs.mkdir(DEST, { recursive: true });
-  await fs.cp(SRC, DEST, { recursive: true, filter: (s) => !SKIP_RE.test(s) });
+  for await (const source of walk(SRC)) {
+    const relative = toAsciiPath(path.relative(SRC, source));
+    const target = path.join(DEST, ...relative.split('/'));
+    await fs.mkdir(path.dirname(target), { recursive: true });
+    await fs.copyFile(source, target);
+  }
 }
 
 // 2) 为每个 .html 生成条目元数据（在源树上扫描，路径映射到目的地）
@@ -120,6 +126,7 @@ for await (const file of walk(SRC)) {
   if (!/\.html?$/i.test(file)) continue;
   const rel = path.relative(SRC, file);
   const relPosix = rel.split(path.sep).join('/');
+  const publicRelPosix = toAsciiPath(relPosix);
   const base = path.basename(file).toLowerCase();
 
   const st = await fs.stat(file);
@@ -131,8 +138,8 @@ for await (const file of walk(SRC)) {
   const { title, desc } = extract(html);
   const name = title || path.basename(file, path.extname(file));
 
-  const href = ['/apps', section, subsection, relPosix].filter(Boolean).join('/').replace(/ /g, '%20');
-  const mdName = [section, subsection, slugify(relPosix)].filter(Boolean).join('-') + '.md';
+  const href = ['/apps', section, subsection, publicRelPosix].filter(Boolean).join('/');
+  const mdName = [section, subsection, slugify(publicRelPosix)].filter(Boolean).join('-') + '.md';
   const mdPath = path.join(ITEMS_DIR, mdName);
   const date = st.mtime.toISOString().slice(0, 10);
 

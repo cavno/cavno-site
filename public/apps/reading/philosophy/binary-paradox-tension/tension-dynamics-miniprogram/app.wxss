@@ -1,0 +1,152 @@
+/* ============================================================
+   全局设计系统  ——  宣纸 · 水墨 · 朱砂
+   颜色用 CSS 变量，挂在根容器 .page-root 上，便于明暗主题切换
+   ============================================================ */
+
+page {
+  background: #F4F0E8;
+}
+
+/* 浅色（宣纸） */
+.page-root {
+  --bg:        #F4F0E8;
+  --bg-2:      #EFEAE0;
+  --card:      #FBF9F4;
+  --card-2:    #F6F2E9;
+  --ink:       #221F1A;
+  --ink-soft:  #5C5448;
+  --ink-faint: #978E80;
+  --line:      #E4DDD0;
+  --line-soft: #EDE7DB;
+  --accent:    #8C3B2E;   /* 朱砂 */
+  --accent-2:  #3C5A63;   /* 黛青 */
+  --seal:      #A6483C;
+  --shadow:    rgba(60, 48, 30, 0.06);
+
+  --c-phil:    #43586B;   /* 哲学根本 · 靛蓝 */
+  --c-sci:     #4E6B57;   /* 科学之眼 · 松绿 */
+  --c-real:    #9A4A3A;   /* 存在与现实 · 赤陶 */
+
+  min-height: 100vh;
+  background: var(--bg);
+  color: var(--ink);
+  font-family: -apple-system, BlinkMacSystemFont, "PingFang SC", "Helvetica Neue", "Microsoft YaHei", sans-serif;
+}
+
+/* 深色（夜读） */
+.page-root.theme-dark {
+  --bg:        #15140F;
+  --bg-2:      #1B1A14;
+  --card:      #1E1C16;
+  --card-2:    #232118;
+  --ink:       #E7E1D3;
+  --ink-soft:  #A89F8D;
+  --ink-faint: #6E6757;
+  --line:      #2C2A21;
+  --line-soft: #262419;
+  --accent:    #C76A53;
+  --accent-2:  #6FA0AC;
+  --seal:      #C76A53;
+  --shadow:    rgba(0, 0, 0, 0.3);
+
+  --c-phil:    #7E94A8;
+  --c-sci:     #7FA188;
+  --c-real:    #C77D6B;
+
+  background: var(--bg);
+  color: var(--ink);
+}
+
+/* 衬线字体：标题、母题、诗化收束 */
+.serif {
+  font-family: "Songti SC", "STSong", "SimSun", Georgia, "Times New Roman", serif;
+}
+
+/* ---------- 自定义导航栏 ---------- */
+.nav {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 100;
+  transition: background-color .25s ease, border-color .25s ease;
+  border-bottom: 1rpx solid transparent;
+}
+.nav.nav-solid {
+  background: var(--bg);
+  border-bottom: 1rpx solid var(--line);
+}
+.nav-inner {
+  display: flex;
+  align-items: center;
+  position: relative;
+}
+.nav-back {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  padding: 0 24rpx 0 28rpx;
+}
+.nav-back .ic {
+  width: 20rpx;
+  height: 20rpx;
+  border-left: 4rpx solid var(--ink);
+  border-bottom: 4rpx solid var(--ink);
+  transform: rotate(45deg);
+}
+.nav-title {
+  flex: 1;
+  font-size: 30rpx;
+  font-weight: 600;
+  color: var(--ink);
+  opacity: 0;
+  transform: translateY(6rpx);
+  transition: opacity .25s ease, transform .25s ease;
+  letter-spacing: 1rpx;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  padding-right: 24rpx;
+}
+.nav-title.show {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* ---------- 通用：印章式母题 ---------- */
+.seal {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-family: "Songti SC", "STSong", serif;
+  color: #fff;
+  background: var(--seal);
+  border-radius: 8rpx;
+  letter-spacing: 4rpx;
+}
+
+/* ---------- 通用：分类标签 ---------- */
+.tag {
+  display: inline-block;
+  font-size: 22rpx;
+  letter-spacing: 2rpx;
+  padding: 4rpx 14rpx;
+  border-radius: 999rpx;
+  border: 1rpx solid currentColor;
+  opacity: .85;
+}
+
+/* 细横线 */
+.hairline {
+  height: 1rpx;
+  background: var(--line);
+}
+
+/* 可点击态 */
+.tap {
+  transition: opacity .15s ease, transform .15s ease;
+}
+.tap:active {
+  opacity: .6;
+}

@@ -269,7 +269,7 @@ body.in-tool .toolonly{display:inline-block}
 
 <noscript><div style="padding:24px;font-family:serif">
   本页导航需要 JavaScript。可直接访问各篇：
-  <a href="./古今数学思想/index.html">古今数学思想 · 四代诊断</a>
+  <a href="./history-of-mathematical-thought/index.html">古今数学思想 · 四代诊断</a>
 </div></noscript>
 
 <script>
@@ -277,7 +277,7 @@ body.in-tool .toolonly{display:inline-block}
    如何新增一个页面（无需改动本文件其余任何部分）：
    1. 把新页面放到 Mathematics/ 下的一个子目录，例如  Mathematics/某某/index.html
    2. 在下面的 TOOLS 数组里追加一条：
-        {slug:"unique-id", src:"./某某/index.html", fn:"短标签", name:"标题",
+        {slug:"unique-id", src:"./example/index.html", fn:"短标签", name:"标题",
          sub:"副标题（建议取自该页自身的 H1/副标题，原文照录）", group:0}
       · slug 唯一即可（英文/数字/连字符），用于地址栏 #/slug
       · group 是它所属分区的序号，对应下面 GROUPS 的下标（0 起）
@@ -291,7 +291,7 @@ const GROUPS = [
  // 例：再开一个分区 → {title:"…", ga:"#BC4B33", gd:"#9A3A26", gw:"#F3DED5", note:"…"}
 ];
 const TOOLS = [
- {slug:"guijin", src:"./古今数学思想/index.html", fn:"四代诊断", name:"古今数学思想 · 四代诊断",
+ {slug:"guijin", src:"./history-of-mathematical-thought/index.html", fn:"四代诊断", name:"古今数学思想 · 四代诊断",
   sub:"数学思想的演化史——以《古今数学思想》为标本，将 51 章落进「认知操作系统」的六格版本轴：从封闭、耗散到分层、生态；无穷作为一枚母悖论，六副账本、零次结清。这是唯一亲手签署自己诊断书的系统。",
   group:0}
  // ↑ 后续新增页面在此处继续追加，注意每条之间用逗号分隔

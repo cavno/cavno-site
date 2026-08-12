@@ -1,0 +1,49 @@
+<view class="page-root {{rootClass}}">
+
+  <view class="nav {{navSolid ? 'nav-solid' : ''}}" style="padding-top:{{statusBarHeight}}px;">
+    <view class="nav-inner" style="height:{{navBarHeight}}px;">
+      <view class="nav-back tap" bindtap="goBack"><view class="ic"></view></view>
+      <text class="nav-title {{navSolid ? 'show' : ''}}">关于这套框架</text>
+    </view>
+  </view>
+
+  <scroll-view scroll-y="true" class="ab-scroll" style="padding-top:{{statusBarHeight + navBarHeight}}px;" enable-back-to-top="true">
+
+    <view class="ab-hero">
+      <view class="ab-eyebrow">阅读说明</view>
+      <view class="ab-title serif">二元悖论的张力\n作为系统的动力</view>
+      <view class="ab-lead">一种统一的分析视角：任何复杂系统的演化，都可以理解为一对（或多对）无法消解的矛盾之间的持续协商。矛盾不是等待被解决的障碍，而是系统持续运动、不断生成新形态的引擎。</view>
+    </view>
+
+    <view class="ab-section">
+      <view class="ab-h serif"><text class="ab-num">壹</text>母悖论</view>
+      <view class="ab-p">每一篇分析都从一个<text class="em">母悖论</text>开始——该领域最根本、最无法回避的一对张力。它不能被某一方"战胜"：完全偏向任何一极，都会摧毁这个领域之所以成立的根据。母悖论是后续一切张力的总根源。</view>
+    </view>
+
+    <view class="ab-section">
+      <view class="ab-h serif"><text class="ab-num">贰</text>九重张力</view>
+      <view class="ab-p">母悖论在历史与结构中展开为一系列具体的<text class="em">子张力</text>——通常九重。每一重都呈现为正题与反题的对峙，再经由具体的思想者、流派、时代去回应。它们不被消解，只是以越来越精细的形式反复出现。</view>
+    </view>
+
+    <view class="ab-section">
+      <view class="ab-h serif"><text class="ab-num">叁</text>元结论</view>
+      <view class="ab-p">最后以<text class="em">元结论</text>收束：把全部张力并置，看清这个领域的工作为何永远无法"完成"——因为它必须用它正在审视的能力去审视自身。这种循环不是失败，而是它作为人类活动的本质条件。</view>
+    </view>
+
+    <view class="ab-quote">
+      <view class="ab-quote-seal serif">未济，亨</view>
+      <view class="ab-quote-text">《周易》六十四卦，以「乾」之创造始，以「未济」之未完成终。未济，亨——工作永远不会完成，但通过持续的工作，通达。这是贯穿全部十二篇的母题。</view>
+    </view>
+
+    <view class="ab-section">
+      <view class="ab-h serif"><text class="ab-num">肆</text>如何阅读</view>
+      <view class="ab-p">每篇约一至四万字，是可以反复重读的长文。阅读页右下角可<text class="em">调节字号</text>、<text class="em">切换日间／夜读</text>、并通过<text class="em">目录</text>在母悖论、各重张力与元结论之间跳转。顶部细线显示阅读进度。</view>
+    </view>
+
+    <view class="ab-foot">
+      <view class="ab-foot-seal serif">未济，亨</view>
+      <view class="ab-foot-line">十二篇 · 张力作为系统的动力</view>
+    </view>
+    <view style="height:60rpx;"></view>
+  </scroll-view>
+</view>

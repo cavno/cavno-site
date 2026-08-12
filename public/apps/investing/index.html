@@ -287,7 +287,7 @@ body.in-tool .toolonly{display:inline-block}
 <noscript><div style="padding:24px;font-family:serif">
   本页导航需要 JavaScript。可直接访问各工作台：
   <a href="./index.html">GOOGL · Gamma Profile</a> ·
-  <a href="./动态Gamma敞口图/index.html">GOOGL Gamma 敞口 · 动态视图</a> ·
+  <a href="./dynamic-gamma-exposure-chart/index.html">GOOGL Gamma 敞口 · 动态视图</a> ·
   <a href="./gamma-atlas/index.html">Gamma 敞口结构图谱</a> ·
   <a href="./options/index.html">Gamma &amp; Delta Squeeze 动态演示</a> ·
   <a href="./MaxPain/index.html">期权最大痛点 · Max Pain</a> ·
@@ -304,7 +304,7 @@ body.in-tool .toolonly{display:inline-block}
 const TOOLS = [
  {slug:"gamma-profile", src:"./gamma-profile/index.html", fn:"SPOTGAMMA 框架", name:"GOOGL · Gamma Profile",
   sub:"数据基于 2026/05/15 GOOGL Gamma 敞口截图的视觉重构估值，采用 SpotGamma 公开框架的术语与方法论：Call Wall / Put Wall · Gamma Flip (HVL) · Net Gamma Profile by Strike · Vanna / Charm Exposure · Regime。非 SpotGamma 官方产品。"},
- {slug:"dynamic-gex", src:"./动态Gamma敞口图/index.html", fn:"动态交互图", name:"GOOGL Gamma 敞口 · 动态视图",
+ {slug:"dynamic-gex", src:"./dynamic-gamma-exposure-chart/index.html", fn:"动态交互图", name:"GOOGL Gamma 敞口 · 动态视图",
   sub:"2026/05/15 截面：拖动模拟价位，观察做市商对冲行为在「压制波动」与「放大波动」两种模式之间的切换。"},
  {slug:"gamma-atlas", src:"./gamma-atlas/index.html", fn:"14 种博弈格局", name:"Gamma 敞口结构图谱",
   sub:"Gamma 敞口不预测涨跌，它揭示的是「庄家被绑在哪里」。这本图谱拆解 14 种典型结构——从火箭点火到塔式雪崩，从零 Gamma 狙击到双墙 Pinning——用图样、机制和触发条件三个维度，让你看清每种结构背后的对冲博弈。"},
@@ -324,9 +324,9 @@ const TOOLS = [
   sub:"家庭 · 民间金融 · 公司 · 银行 · 金融市场 · 国家六个领域，五十二个典型场景。每个场景在抵押品强度 / 杠杆 / 反身性三轴上打分，合成脆弱度坐标，定位它在对冲 → 投机 → 庞氏谱系上的位置。案例集可切换：当代 ↔《金瓶梅》↔《大明王朝 1566》↔ 恒大。"},
  {slug:"jane-street", src:"./jane-street-viz/index.html", fn:"SEBI 调查可视化", name:"Jane Street 策略拆解",
   sub:"Jane Street 操纵 BANKNIFTY / NIFTY 指数：策略拆解。基于 SEBI 临时禁令 WTM/AN/MRD/MRD-SEC-3/31516/2025-26（2025-07-03 印度证券交易委员会发布）。"},
- {slug:"vol-pricing", src:"./期权波动率与定价/index.html", fn:"NATENBERG 第2版", name:"期权波动率与定价 · 核心概念与内在逻辑",
+ {slug:"vol-pricing", src:"./option-volatility-pricing/index.html", fn:"NATENBERG 第2版", name:"期权波动率与定价 · 核心概念与内在逻辑",
   sub:"以 Natenberg《期权波动率与定价》第2版为底本的十四命题链逻辑重构：从无套利与期望收益、波动率这个唯一的未知数，到希腊字母、动态对冲、价差与合成套利、BSM 与二项式模型，再到波动率倾斜与「波动率成为资产」。"},
- {slug:"dynamic-hedging", src:"./动态对冲/index.html", fn:"TALEB 互动导读", name:"动态对冲 · 核心概念与内在逻辑",
+ {slug:"dynamic-hedging", src:"./dynamic-hedging/index.html", fn:"TALEB 互动导读", name:"动态对冲 · 核心概念与内在逻辑",
   sub:"依 Taleb《动态对冲：管理普通期权与奇异期权》中译本文字稿整理的互动版：把对冲与风险管理从科学的神坛上降级成一门手艺——一条九环逻辑主线、四十余个互相勾连的概念、二十五条风险管理规则。中心命题：期权复制不是无风险头寸，离散对冲下损益是随机变量。"},
  {slug:"value-investing", src:"./value_investing/index.html", fn:"GRAHAM → BUFFETT 2E", name:"价值投资 · 从格雷厄姆到巴菲特的头号投资法则",
   sub:"《价值投资》第2版（Graham→Buffett & Beyond）的逻辑全图：从定义/前提/证据、三来源估值（资产价值·EPV·增长价值）、护城河与特许经营估值，到四个案例算例、研究策略、风险管理与组合构建、十一位投资者画像。"},

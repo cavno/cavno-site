@@ -32,6 +32,7 @@ import { promises as fs } from 'node:fs';
 import path from 'node:path';
 import process from 'node:process';
 import { fileURLToPath } from 'node:url';
+import { englishSlugFor, toAsciiPath } from './url-slugs.mjs';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const ROOT = path.resolve(__dirname, '..');
@@ -253,7 +254,7 @@ async function rewriteRefs(text, pageDir, srcRoot, slugByFile, assetOut, report,
       if (slug) return routeOf(slug) + r.suffix;
       report.unlinked.push(raw); return raw;
     }
-    const relRoot = posix(path.relative(srcRoot, r.abs));
+    const relRoot = toAsciiPath(posix(path.relative(srcRoot, r.abs)));
     if (relRoot.startsWith('..')) { report.escaped.push(raw); return raw; }
     const dest = path.join(assetOut, relRoot);
     jobs.push([r.abs, dest, ok.size]);
@@ -282,7 +283,9 @@ async function rewriteRefs(text, pageDir, srcRoot, slugByFile, assetOut, report,
 }
 
 /* ---------- 主流程 ---------- */
-const { units, srcRoot, rootMode } = await discover();
+const discovered = await discover();
+const units = discovered.units.map((unit) => ({ ...unit, slug: englishSlugFor(unit.slug) }));
+const { srcRoot, rootMode } = discovered;
 if (!units.length) { console.log('没有可转换的页面。'); process.exit(0); }
 
 const slugByFile = new Map(units.map((u) => [posix(path.relative(srcRoot, u.file)), u.slug]));

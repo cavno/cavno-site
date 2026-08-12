@@ -7,7 +7,9 @@
     "dev": "node scripts/gen-shell.mjs && astro dev",
     "build": "node scripts/gen-shell.mjs && astro build",
     "preview": "astro preview",
-    "shell": "node scripts/gen-shell.mjs"
+    "shell": "node scripts/gen-shell.mjs",
+    "migrate:urls": "node scripts/migrate-url-slugs.mjs --apply",
+    "audit:urls": "node scripts/audit-url-paths.mjs"
   },
   "dependencies": {
     "astro": "^5.0.0"

@@ -1,0 +1,204 @@
+/* 付鹏 · 大类资产投研框架 —— 课程内在逻辑重构
+   排版遵循站内既定主张：阅读级字号用系统无衬线，标题级用宋体族，书志级用等宽 */
+.lp{
+  --parchment:#faf6ee; --paper:#fffdf8;
+  --rule:rgba(28,25,22,.12); --rule-2:rgba(28,25,22,.2);
+  --ink-soft:#544b3e; --muted:#645a48; --faint:#7b6d56; --ghost:#8d7f66;
+  --terra:#a23a29; --gold:#a97f2e; --gold-dk:#7d5a1c;
+  --teal:#2f6d5e; --teal-dk:#245448; --aegean:#1b4a5a;
+  --sans:-apple-system,BlinkMacSystemFont,"PingFang SC","HarmonyOS Sans SC","MiSans",
+         "Source Han Sans SC","Noto Sans SC","Microsoft YaHei",system-ui,sans-serif;
+  --serif:"Noto Serif SC","Source Han Serif SC","Songti SC","STSong",Georgia,serif;
+  --mono:ui-monospace,SFMono-Regular,"JetBrains Mono",Menlo,Consolas,monospace;
+  background:var(--parchment);color:var(--ink);
+  font-family:var(--sans);font-size:clamp(1rem,.955rem+.19vw,1.09rem);line-height:1.9;
+  -webkit-font-smoothing:antialiased}
+.lp *{box-sizing:border-box}
+.lp .wrap{width:min(100% - 40px,44rem);margin:0 auto;padding:0 0 90px}
+
+/* ---------- 页头 ---------- */
+.lp .hero{background:linear-gradient(180deg,#f6f0e2,var(--parchment));
+  border-bottom:1px solid var(--rule);padding:44px 0 38px;margin-bottom:12px}
+.lp .hero .wrap{padding-bottom:0}
+.lp .eyebrow{font-family:var(--mono);font-size:.7rem;letter-spacing:.2em;color:var(--terra)}
+.lp .booktitle{font-family:var(--serif);font-size:clamp(1.7rem,1.2rem+2.2vw,2.5rem);
+  font-weight:700;line-height:1.35;letter-spacing:.03em;margin:12px 0 0}
+.lp .booktitle .thin{font-weight:400;font-size:.6em;color:var(--muted);letter-spacing:.04em}
+.lp .subtitle{margin-top:10px;font-family:var(--mono);font-size:.74rem;color:var(--faint);letter-spacing:.05em}
+.lp .lede{margin-top:20px;font-size:1rem;line-height:2.05;color:var(--ink-soft)}
+.lp .metaline{margin-top:16px;padding-top:12px;border-top:1px dashed var(--rule);
+  font-size:.76rem;color:var(--ghost);line-height:1.8}
+
+/* ---------- 章节 ---------- */
+.lp section{padding-top:14px}
+.lp h2{font-family:var(--serif);font-size:clamp(1.35rem,1.1rem+1vw,1.7rem);font-weight:700;
+  letter-spacing:.03em;line-height:1.45;margin:46px 0 6px;padding-bottom:10px;
+  border-bottom:2px solid var(--ink);scroll-margin-top:20px}
+.lp h3.sub{font-family:var(--serif);font-size:1.12rem;font-weight:700;letter-spacing:.02em;
+  margin:32px 0 8px;color:var(--teal-dk);scroll-margin-top:20px}
+.lp h3.sub::before{content:"—— ";color:var(--gold);font-weight:400}
+.lp p{margin:12px 0}
+.lp b{font-weight:600;color:var(--ink)}
+.lp i{font-style:normal;color:var(--muted)}
+
+/* ---------- 一页总览 ---------- */
+.lp .tldr{background:var(--paper);border:1px solid var(--rule);border-radius:14px;
+  padding:6px 22px;margin-top:16px}
+.lp .tldr-row{display:flex;gap:16px;padding:14px 0;border-bottom:1px dashed var(--rule)}
+.lp .tldr-row:last-child{border-bottom:none}
+.lp .tldr-row .k{flex:0 0 74px;font-family:var(--mono);font-size:.72rem;letter-spacing:.1em;
+  color:var(--terra);padding-top:5px}
+.lp .tldr-row .v{flex:1;min-width:0;font-size:.92rem;line-height:1.95;color:var(--ink-soft)}
+
+/* ---------- 卡片 ---------- */
+.lp .cards{display:grid;gap:12px;margin:18px 0}
+@media(min-width:720px){.lp .cards{grid-template-columns:1fr 1fr}
+  .lp .cards.three{grid-template-columns:repeat(3,1fr)}}
+.lp .card{background:var(--paper);border:1px solid var(--rule);border-left:4px solid var(--teal);
+  border-radius:11px;padding:16px 18px}
+.lp .card.warn{border-left-color:var(--terra)}
+.lp .card h4{font-family:var(--serif);font-size:1rem;font-weight:700;margin-bottom:6px}
+.lp .card p{margin:0;font-size:.87rem;line-height:1.9;color:var(--ink-soft)}
+
+/* ---------- 三段曲线 ---------- */
+.lp .stage{display:grid;gap:12px;margin:18px 0}
+@media(min-width:760px){.lp .stage{grid-template-columns:repeat(3,1fr)}}
+.lp .st{background:var(--paper);border:1px solid var(--rule);border-radius:11px;padding:16px 18px;
+  position:relative}
+.lp .st .no{display:inline-block;font-family:var(--serif);font-size:.78rem;color:#fff;
+  background:var(--gold);border-radius:5px;padding:1px 8px;margin-right:8px;letter-spacing:.08em}
+.lp .st b{font-family:var(--serif);font-size:1.04rem}
+.lp .st p{margin:8px 0 0;font-size:.86rem;line-height:1.9;color:var(--ink-soft)}
+
+/* ---------- 引语 / 重点 / 注 ---------- */
+.lp .quote-in{background:var(--ink);color:#f3ebda;border-radius:12px;padding:18px 22px;
+  font-family:var(--serif);font-size:1rem;line-height:1.95;margin:20px 0}
+.lp .key{background:rgba(169,127,46,.11);border-left:4px solid var(--gold);border-radius:8px;
+  padding:14px 18px;font-size:.92rem;line-height:1.95;color:#54421d;margin:18px 0}
+.lp .note{font-size:.86rem;line-height:1.9;color:var(--muted);
+  border-left:2px solid var(--rule-2);padding-left:14px;margin:16px 0}
+.lp .aside{font-size:.86rem;line-height:1.9;color:var(--muted);
+  background:var(--paper);border:1px dashed var(--rule-2);border-radius:10px;padding:12px 16px;margin:16px 0}
+.lp .disclaim{font-family:var(--mono);font-size:.74rem;line-height:1.9;color:var(--terra);
+  border:1px solid var(--terra);border-radius:8px;padding:10px 14px;margin:14px 0 4px}
+
+/* ---------- 有序列表 ---------- */
+.lp ol.steps{counter-reset:st;list-style:none;margin:16px 0;padding:0}
+.lp ol.steps li{counter-increment:st;position:relative;padding-left:36px;margin-bottom:14px;
+  font-size:.94rem;line-height:1.95;color:var(--ink-soft)}
+.lp ol.steps li::before{content:counter(st);position:absolute;left:0;top:5px;
+  width:23px;height:23px;border-radius:50%;background:var(--ink);color:var(--gold);
+  font-family:var(--mono);font-size:.72rem;display:flex;align-items:center;justify-content:center}
+.lp ol.steps.big li{font-size:.98rem;margin-bottom:20px}
+.lp ul.tight{margin:14px 0;padding-left:20px}
+.lp ul.tight li{margin-bottom:9px;font-size:.92rem;line-height:1.95;color:var(--ink-soft)}
+.lp ol.oneline{counter-reset:ol;list-style:none;margin:16px 0;padding:0}
+.lp ol.oneline li{counter-increment:ol;position:relative;padding:11px 0 11px 40px;
+  border-bottom:1px dashed var(--rule);font-size:.93rem;line-height:1.85;color:var(--ink-soft)}
+.lp ol.oneline li:last-child{border-bottom:none}
+.lp ol.oneline li::before{content:counter(ol,decimal-leading-zero);position:absolute;left:0;top:12px;
+  font-family:var(--mono);font-size:.72rem;color:var(--terra)}
+
+/* ---------- 表格 ---------- */
+.lp table.cmp{width:100%;border-collapse:collapse;margin:18px 0;font-size:.88rem;
+  background:var(--paper);border:1px solid var(--rule);border-radius:10px;overflow:hidden}
+.lp table.cmp th{background:var(--ink);color:#f3ebda;font-weight:600;text-align:left;
+  padding:10px 14px;font-size:.84rem;letter-spacing:.03em}
+.lp table.cmp td{padding:11px 14px;border-top:1px solid var(--rule);line-height:1.85;
+  color:var(--ink-soft);vertical-align:top}
+.lp table.cmp td:first-child{font-weight:600;color:var(--ink);white-space:nowrap}
+.lp table.cmp td.hi{color:var(--teal-dk);font-weight:700}
+.lp table.cmp td.mid{color:var(--gold-dk);font-weight:700}
+.lp table.cmp td.lo{color:var(--terra);font-weight:700}
+
+/* ---------- 流程 / 循环 / 波动率 ---------- */
+.lp .flow{display:flex;flex-wrap:wrap;align-items:center;gap:6px;margin:18px 0;
+  background:var(--paper);border:1px solid var(--rule);border-radius:12px;padding:16px}
+.lp .flow span{background:rgba(47,109,94,.09);border:1px solid rgba(47,109,94,.25);
+  border-radius:999px;padding:5px 12px;font-size:.8rem;line-height:1.6;color:var(--teal-dk)}
+.lp .flow i{color:var(--gold);font-size:.8rem}
+.lp .loop{display:flex;flex-wrap:wrap;align-items:center;gap:8px;margin:16px 0}
+.lp .loop span{background:var(--ink);color:#f3ebda;border-radius:8px;padding:6px 14px;font-size:.85rem}
+.lp .loop i{color:var(--gold)}
+.lp .binary{display:flex;flex-wrap:wrap;gap:6px;margin:16px 0}
+.lp .binary span{border-radius:6px;padding:5px 14px;font-size:.82rem;font-family:var(--mono);letter-spacing:.04em}
+.lp .binary .lo{background:rgba(47,109,94,.13);color:var(--teal-dk)}
+.lp .binary .hi{background:rgba(162,58,41,.13);color:var(--terra)}
+
+/* ---------- 页脚 ---------- */
+.lp .pgfoot{margin-top:56px;padding-top:20px;border-top:1px solid var(--rule)}
+.lp .pgfoot p{font-size:.78rem;line-height:1.95;color:var(--ghost)}
+
+/* ---------- 目录—大纲侧栏（与书籍页同款） ---------- */
+.lp .bk-shell{display:flex;align-items:flex-start;max-width:1280px;margin:0 auto}
+.lp .bk-main{flex:1;min-width:0}
+.lp .bk-toc{width:250px;flex:0 0 250px;position:sticky;top:0;align-self:flex-start;
+  height:100vh;overflow-y:auto;padding:34px 14px 48px 22px;border-right:1px solid var(--rule);
+  scrollbar-width:thin}
+.lp .bk-toc::-webkit-scrollbar{width:5px}
+.lp .bk-toc::-webkit-scrollbar-thumb{background:rgba(28,25,22,.16);border-radius:3px}
+.lp .bk-brand{font-family:var(--serif);font-size:1rem;font-weight:700;letter-spacing:.04em;line-height:1.5}
+.lp .bk-brand-sub{margin-top:4px;font-family:var(--mono);font-size:.68rem;letter-spacing:.05em;
+  color:var(--terra);margin-bottom:16px}
+.lp ol.bk-list{list-style:none;margin:0;padding:0}
+.lp .bk-toc a{display:block;text-decoration:none;border:none}
+.lp a.bk-l1{display:flex;gap:9px;align-items:baseline;font-size:.83rem;line-height:1.55;
+  padding:6px 9px;border-left:2px solid transparent;color:var(--ink-soft);transition:.15s}
+.lp a.bk-l1 i{font-family:var(--mono);font-size:.64rem;opacity:.6;flex:0 0 auto;color:var(--ghost)}
+.lp a.bk-l1:hover{color:var(--ink)}
+.lp .bk-item.on>a.bk-l1{color:var(--teal-dk);font-weight:700;border-left-color:var(--terra);
+  background:rgba(47,109,94,.07)}
+.lp ul.bk-sub{list-style:none;margin:0;padding:0 0 4px;display:none}
+.lp .bk-item.on ul.bk-sub{display:block}
+.lp a.bk-l2{font-size:.77rem;line-height:1.5;padding:4px 9px 4px 30px;color:var(--muted);opacity:.85}
+.lp a.bk-l2:hover{opacity:1;color:var(--ink)}
+.lp a.bk-l2.on{color:var(--terra);opacity:1}
+@media (max-width:1080px){
+  .lp .bk-shell{display:block}
+  .lp .bk-toc{display:none}
+}
+
+/* ---------- 原创示意图 ---------- */
+.lp .fig{margin:24px 0;background:var(--paper);border:1px solid var(--rule);border-radius:14px;
+  padding:20px 18px 14px;overflow:hidden}
+.lp .fig svg{display:block;width:100%;height:auto}
+.lp .fig figcaption{margin-top:14px;padding-top:12px;border-top:1px dashed var(--rule);
+  font-size:.8rem;line-height:1.85;color:var(--muted)}
+/* SVG 内文字：统一字族与层级 */
+.lp .fig svg text{font-family:var(--sans);fill:var(--ink)}
+.lp .fig svg .ax{font-size:12px;fill:var(--muted)}
+.lp .fig svg .seg{font-size:13px;font-weight:600;fill:var(--ink-soft)}
+.lp .fig svg .lbl{font-size:14px;font-weight:700}
+.lp .fig svg .sm{font-size:11.5px;fill:var(--muted)}
+.lp .fig svg .sm2{font-size:12px;fill:var(--ink-soft)}
+.lp .fig svg .sm3{font-size:12.5px;fill:var(--ink-soft)}
+.lp .fig svg .gr{fill:var(--teal-dk)}
+.lp .fig svg .rd{fill:var(--terra)}
+.lp .fig svg .bl{fill:var(--aegean)}
+.lp .fig svg .node{font-size:16px;font-weight:700}
+.lp .fig svg .dbt{font-size:12.5px;font-weight:700;fill:var(--terra)}
+.lp .fig svg .risk{font-size:12px;fill:var(--aegean)}
+.lp .fig svg .edge{font-size:11.5px;fill:var(--gold-dk)}
+.lp .fig svg .hdr{font-size:13px;font-weight:600;fill:#f3ebda}
+.lp .fig svg .foot{font-size:12.5px;fill:var(--ink-soft)}
+.lp .fig svg .rn{font-size:12px;font-weight:700;fill:#f3ebda;font-family:var(--mono)}
+.lp .fig svg .rt{font-size:12px;fill:var(--ink-soft)}
+.lp .fig svg .ctr{font-size:20px;font-weight:700;letter-spacing:.14em;fill:var(--ink)}
+.lp .fig svg .ctrs{font-size:11.5px;fill:var(--muted)}
+.lp .fig svg .cn{font-size:19px;font-weight:700;fill:#f3ebda}
+.lp .fig svg .cn2{font-size:20px;font-weight:700;fill:#f3ebda;letter-spacing:.1em}
+.lp .fig svg .cn3{font-size:17px;font-weight:700;fill:#f3ebda}
+.lp .fig svg .cns{font-size:11.5px;fill:rgba(243,235,218,.72)}
+.lp .fig svg .cns2{font-size:12px;fill:var(--muted)}
+.lp .fig svg .cap{font-family:var(--mono);font-size:12px;letter-spacing:.3em;fill:var(--terra)}
+.lp .fig svg .cap2{font-size:13.5px;font-weight:700;fill:var(--terra)}
+.lp .fig svg .cap3{font-size:12px;fill:var(--muted)}
+.lp .fig svg .rr{font-size:15px;font-weight:700}
+.lp .fig svg .vt{font-size:13px;font-weight:700}
+.lp .fig svg .vd{font-size:13px;font-weight:600}
+.lp .fig svg .vs{font-size:11.5px;fill:var(--muted)}
+.lp .fig svg .op{font-size:24px;font-weight:700;fill:var(--gold)}
+@media (max-width:600px){
+  .lp .fig{padding:14px 10px 10px}
+  .lp .fig svg .rt,.lp .fig svg .sm{font-size:13px}
+}

@@ -1,7 +1,15 @@
 ---
 import Base from '../layouts/Base.astro';
+import legacyRouteRedirects from '../data/legacy-route-redirects.json';
 ---
 <Base title="404 · Cavno">
+  <script is:inline define:vars={{ legacyRouteRedirects }}>
+    try {
+      const pathname = decodeURI(window.location.pathname).replace(/\/+$/, '/') || '/';
+      const target = legacyRouteRedirects[pathname];
+      if (target) window.location.replace(target + window.location.search + window.location.hash);
+    } catch {}
+  </script>
   <div class="cv-notfound">
     <div>
       <h1>404</h1>

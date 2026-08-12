@@ -1,0 +1,23 @@
+---
+import Base from '../../../layouts/Base.astro';
+import body from '../../../legacy/investing/valuation/fu-peng-macro-asset-research-framework/body.html?raw';
+import '../../../legacy/investing/valuation/fu-peng-macro-asset-research-framework/style.css';
+
+const meta = {
+  title: '付鹏 · 大类资产投研框架',
+  description: '华尔街见闻大师课全 35 讲的内在逻辑重构：三大核心问题、全球三级分工、利率为内核的资产传导、四类资产打法与策略维度，附编者分析与评价。'
+};
+---
+<Base title={meta.title + ' · Cavno'} description={meta.description}>
+  <section class="cv-page-head">
+    <div class="cv-wrap">
+      <div class="cv-eyebrow">Investing · Valuation</div>
+      <h1 class="cv-page-title">{meta.title}</h1>
+      <p class="cv-lede">{meta.description}</p>
+      <a class="cv-crumb-back" href="/investing/valuation/">← 返回估值栏目</a>
+    </div>
+  </section>
+  <article class="lp">
+    <Fragment set:html={body} />
+  </article>
+</Base>

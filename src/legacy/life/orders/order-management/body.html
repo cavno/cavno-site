@@ -1,0 +1,471 @@
+<div id="app"></div>
+<div id="modal"></div>
+<div class="toastw" id="toastw"></div>
+<script>
+/* ============ 报单管理系统 · 统一后台(用户 + 管理员同一入口,按角色出菜单) ============
+   纯静态单文件;数据存 localStorage(不可用则内存兜底);生产化:将 DB/load/save 与领域函数替换为 REST API。 */
+
+/* ---------- 线性图标 ---------- */
+const IC={
+ dash:'<rect x="3.5" y="3.5" width="7" height="7" rx="1.6"/><rect x="13.5" y="3.5" width="7" height="7" rx="1.6"/><rect x="3.5" y="13.5" width="7" height="7" rx="1.6"/><rect x="13.5" y="13.5" width="7" height="7" rx="1.6"/>',
+ act:'<path d="M4 9.5v5h3l6 4v-13l-6 4H4z"/><path d="M16.5 9.5a4.2 4.2 0 010 5.2"/>',
+ list:'<path d="M8.5 6.5h12M8.5 12h12M8.5 17.5h12"/><circle cx="4.2" cy="6.5" r="1.1"/><circle cx="4.2" cy="12" r="1.1"/><circle cx="4.2" cy="17.5" r="1.1"/>',
+ todo:'<circle cx="12" cy="12" r="8.4"/><path d="M12 7.6V12l3.1 2"/>',
+ coin:'<circle cx="12" cy="12" r="8.4"/><path d="M8.8 8.8l3.2 3.4 3.2-3.4M12 12.2V17M9.2 14.6h5.6"/>',
+ bell:'<path d="M18 15.5H6c1.5-1.4 2.1-3 2.1-5.4a3.9 3.9 0 117.8 0c0 2.4.6 4 2.1 5.4z"/><path d="M10.3 18.3a1.8 1.8 0 003.4 0"/>',
+ gear:'<path d="M4 7.5h9M17.5 7.5H20M4 16.5h4M12.5 16.5H20"/><circle cx="15.2" cy="7.5" r="2.2"/><circle cx="10.2" cy="16.5" r="2.2"/>',
+ follow:'<circle cx="10.6" cy="10.6" r="6.1"/><path d="M15.2 15.2L20 20"/>',
+ review:'<rect x="4" y="4" width="16" height="16" rx="3.2"/><path d="M8.4 12.4l2.6 2.6 4.6-5.2"/>',
+ pay:'<rect x="3.5" y="6" width="17" height="12.5" rx="2.6"/><path d="M3.5 10.2h17M7 14.8h4.2"/>',
+ fin:'<path d="M5.5 19v-8M11.5 19V5M17.5 19v-5.5"/><path d="M3.5 19h17"/>',
+ shield:'<path d="M12 3.6l7 2.7v5.1c0 4.2-2.9 6.6-7 8.6-4.1-2-7-4.4-7-8.6V6.3z"/><path d="M9.2 12l2 2.1 3.6-4"/>',
+ log:'<rect x="5" y="3.6" width="14" height="16.8" rx="2.6"/><path d="M9 8.2h6M9 12h6M9 15.8h3.6"/>',
+ users:'<circle cx="9" cy="9.2" r="3.1"/><path d="M3.6 18.8c.8-2.9 2.8-4.4 5.4-4.4s4.6 1.5 5.4 4.4"/><circle cx="16.6" cy="10" r="2.5"/><path d="M15.7 14.6c2.6.3 4.1 1.7 4.8 4.2"/>',
+ out:'<path d="M9.5 4.5h-3a2 2 0 00-2 2v11a2 2 0 002 2h3"/><path d="M15 8.2l4 3.8-4 3.8M19 12H9.5"/>',
+ back:'<path d="M14.5 5.8L8.2 12l6.3 6.2"/>',
+ menu:'<path d="M4 7h16M4 12h16M4 17h16"/>',
+ plus:'<path d="M12 5.5v13M5.5 12h13"/>',
+ dl:'<path d="M12 4.5v9.5m0 0l-3.8-3.8M12 14l3.8-3.8"/><path d="M5 19h14"/>',
+ up:'<path d="M12 15.5V6m0 0L8.2 9.8M12 6l3.8 3.8"/><path d="M5 19h14"/>',
+ eye:'<path d="M3.2 12S6.7 6.2 12 6.2 20.8 12 20.8 12 17.3 17.8 12 17.8 3.2 12 3.2 12z"/><circle cx="12" cy="12" r="2.5"/>',
+ img:'<rect x="4" y="5" width="16" height="14" rx="2.6"/><circle cx="9" cy="10" r="1.6"/><path d="M5.2 17l4.6-4.2 3.4 3 2.4-2 3.2 3.4"/>',
+ alert:'<path d="M12 4.2l8.8 15.2H3.2z"/><path d="M12 10.2v4.2M12 17v.3"/>'};
+const ico=(n,s)=>'<svg viewBox="0 0 24 24" '+(s?'width="'+s+'" height="'+s+'"':'')+' fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">'+(IC[n]||'')+'</svg>';
+
+/* ---------- 常量 ---------- */
+const LS_KEY='bd_p0_v2', SES_KEY='bd_p0_ses_v2';
+const MATS=['尾款图','物流单号','评价图','完成图'];
+const STATUSES=['已报单','已跟单','已丢单','尾款图待传','物流单号待传','评价图待传','完成图待传','返款待审核','返款已审核通过','返款未审核通过','已返款'];
+const STC={'已报单':'#C7B98F','已跟单':'#9FCBB8','尾款图待传':'#DBB65E','物流单号待传':'#DBB65E','评价图待传':'#DBB65E','完成图待传':'#DBB65E','返款待审核':'#7FB9A2','返款已审核通过':'#4E8E77','已返款':'#33604F','已丢单':'#C96A54','返款未审核通过':'#B0492F'};
+const REJECTS=['截图不全','金额不符','未用券','备注错误','使用返利软件','其他'];
+const VIOTYPES=['申请保价','随意退款','使用返利软件','串ID/批量地址','其他'];
+const ADMIN={acc:'admin',pwd:'admin123'};
+const NOTICE9=['下单后请及时报单,逾期不予结算。','报单截图必须为完整长图,需露出:收货地址、店铺名、商品、用券情况、实付款金额、订单号、下单时间。','活动要求备注的,截图必须露出备注内容。','使用专属券+备注的项目,提交前自行核对用券、备注、订单号、金额四项是否正确;不用券、无备注、备注错误均不予结算。','使用购物金的项目,购物金实付款必须露出。','禁止使用任何返利软件。','所有订单不可申请保价;申请保价不予结算,已返款的须退回。','禁止随意退款、串ID及批量地址下单。','任何违反上述要求的情况,已发放的返款将被追回。'].join('\n');
+
+/* ---------- 存储层与工具(生产化时替换为 API) ---------- */
+const store=(()=>{try{localStorage.setItem('__t','1');localStorage.removeItem('__t');return localStorage}catch(e){const m={};return{getItem:k=>(k in m?m[k]:null),setItem:(k,v)=>{m[k]=String(v)},removeItem:k=>{delete m[k]}}}})();
+let DB=null;
+function save(){try{store.setItem(LS_KEY,JSON.stringify(DB))}catch(e){toast('浏览器存储空间不足:截图过大或数据过多,请在设置中重置数据','err')}}
+function load(){const raw=store.getItem(LS_KEY);if(raw){try{DB=JSON.parse(raw)}catch(e){DB=null}}if(!DB)DB=seed();save()}
+function getSes(){try{return JSON.parse(store.getItem(SES_KEY)||'null')}catch(e){return null}}
+function setSes(s){s?store.setItem(SES_KEY,JSON.stringify(s)):store.removeItem(SES_KEY)}
+const $=s=>document.querySelector(s);
+const uid=()=>Math.random().toString(36).slice(2,10);
+const now=()=>Date.now();
+const D=864e5,H=36e5;
+const pad=n=>String(n).padStart(2,'0');
+const fmt=t=>{if(!t)return'—';const d=new Date(t);return (d.getMonth()+1)+'-'+pad(d.getDate())+' '+pad(d.getHours())+':'+pad(d.getMinutes())};
+const fmtD=t=>{const d=new Date(t);return d.getFullYear()+'-'+pad(d.getMonth()+1)+'-'+pad(d.getDate())};
+const yuan=n=>'¥'+(+n||0).toFixed(2);
+const pct=n=>((+n||0)*100).toFixed(1)+'%';
+const esc=s=>String(s==null?'':s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const maskP=p=>p?String(p).replace(/^(\d{3})\d{4}(\d{4})$/,'$1****$2'):'';
+const maskA=a=>{a=String(a||'');return a.length>6?a.slice(0,3)+'****'+a.slice(-3):a};
+function stCls(s){if(s==='已返款'||s==='返款已审核通过')return's-ok';if(s==='已丢单'||s==='返款未审核通过')return's-bad';if((s||'').endsWith('待传'))return's-gold';if(s==='返款待审核'||s==='已跟单')return's-teal';return's-ink'}
+const chip=s=>'<span class="pill '+stCls(s)+'"><i></i>'+esc(s)+'</span>';
+function toast(msg,type){const w=$('#toastw');const d=document.createElement('div');d.className='toast'+(type==='err'?' err':'');d.textContent=msg;w.appendChild(d);setTimeout(()=>d.remove(),2600)}
+function modal(html){$('#modal').innerHTML='<div class="mask" onclick="if(event.target===this)A.closeM()"><div class="box">'+html+'</div></div>'}
+function closeM(){$('#modal').innerHTML=''}
+function dlFile(name,content,type){const b=new Blob([content],{type:type||'text/plain'});const a=document.createElement('a');a.href=URL.createObjectURL(b);a.download=name;a.click();setTimeout(()=>URL.revokeObjectURL(a.href),4000)}
+function dlCSV(name,rows){dlFile(name,'\ufeff'+rows.map(r=>r.map(c=>'"'+String(c==null?'':c).replace(/"/g,'""')+'"').join(',')).join('\n'),'text/csv')}
+const emptyBox=(t,icn)=>'<div class="empty">'+ico(icn||'list')+esc(t)+'</div>';
+
+/* ---------- 领域查询 ---------- */
+const actOf=r=>DB.activities.find(a=>a.id===r.actId);
+const usrOf=id=>DB.users.find(u=>u.id===id);
+const repOf=id=>DB.reports.find(r=>r.id===id);
+function curUser(){const s=getSes();return s&&s.role==='user'?usrOf(s.uid):null}
+function isAdmin(){const s=getSes();return!!(s&&s.role==='admin')}
+function nextCode(){DB.seq.report++;const d=new Date();return'BD'+String(d.getFullYear()).slice(2)+pad(d.getMonth()+1)+pad(d.getDate())+'-'+String(DB.seq.report).padStart(4,'0')}
+function defRebate(r,a){if(!a)return 0;const v=a.rebateType==='pct'?Math.min(r.amount*a.rebateVal/100,(+a.rebateCap||1e9)):+a.rebateVal;return Math.round(v*100)/100}
+function pendingMat(r,a){for(const m of(a&&a.materials||[])){if(!(r.materials&&r.materials[m]&&r.materials[m].v))return m}return null}
+function unreadN(u){return DB.notices.filter(n=>n.userId===u.id&&!n.read).length}
+function todosOf(u){const rs=DB.reports.filter(r=>r.userId===u.id);return{gates:rs.filter(r=>r.status.endsWith('待传')),rej:rs.filter(r=>r.status==='返款未审核通过'),appeal:rs.filter(r=>r.status==='已丢单'&&r.appeal&&!r.appeal.used)}}
+function notify(userId,reportId,type,content){DB.notices.unshift({id:uid(),userId,reportId,type,content,read:false,at:now()})}
+function oplog(op,action,detail){DB.oplogs.unshift({at:now(),op,action,detail:detail||''})}
+
+/* ---------- 状态机核心(PRD §4) ---------- */
+function setStatus(r,to,op,note){const from=r.status||null;r.status=to;r.logs.push({from,to,op,note:note||'',at:now()});oplog(op,'状态 '+(from||'新建')+' → '+to,r.code+(note?' · '+note:''))}
+function advanceAfterFollow(r,op){const a=actOf(r);setStatus(r,'已跟单',op||'管理员','渠道核对命中');const m=pendingMat(r,a);setStatus(r,m?m+'待传':'返款待审核','系统',m?'素材闸门:待传 '+m:'素材齐/无素材要求');notify(r.userId,r.id,'跟单','报单 '+r.code+' 已跟单'+(m?',请补传:'+m:',已进入返款审核'))}
+function markLost(r,op,note){setStatus(r,'已丢单',op||'管理员',note||'渠道核对不到');notify(r.userId,r.id,'丢单','报单 '+r.code+' 已丢单('+(note||'渠道核对不到')+'),可在订单详情申诉一次')}
+function submitMaterial(r,m,val){r.materials=r.materials||{};r.materials[m]={v:val,at:now()};const a=actOf(r);const nx=pendingMat(r,a);setStatus(r,nx?nx+'待传':'返款待审核','用户','完成:'+m)}
+function approve(r,amount,op){r.rebate=Math.round((+amount)*100)/100;setStatus(r,'返款已审核通过',op||'管理员','返款 '+yuan(r.rebate));notify(r.userId,r.id,'审核','报单 '+r.code+' 审核通过,返款 '+yuan(r.rebate)+',待打款')}
+function reject(r,reason,op){r.rejectReason=reason;setStatus(r,'返款未审核通过',op||'管理员',reason);notify(r.userId,r.id,'驳回','报单 '+r.code+' 审核未通过:'+reason+'。请修改后重新提交')}
+
+/* ---------- 财务与收益口径(PRD §6.5 / §5.6) ---------- */
+function finOf(a){const rs=DB.reports.filter(r=>r.actId===a.id);const followed=rs.filter(r=>r.logs.some(l=>l.to==='已跟单'));const lost=rs.filter(r=>r.status==='已丢单');const paidRs=rs.filter(r=>r.status==='已返款');const paidSum=paidRs.reduce((s,r)=>s+(+r.rebate||0),0);const claws=DB.clawbacks.filter(c=>rs.some(r=>r.id===c.reportId));const back=claws.filter(c=>c.status==='已追回').reduce((s,c)=>s+(+c.amount||0),0);const bad=claws.filter(c=>c.status==='坏账').reduce((s,c)=>s+(+c.amount||0),0);const way=rs.filter(r=>r.status==='返款已审核通过').reduce((s,r)=>s+(+r.rebate||0),0)+rs.filter(r=>r.status==='返款待审核').reduce((s,r)=>s+defRebate(r,a),0);const rejN=rs.reduce((s,r)=>s+r.logs.filter(l=>l.to==='返款未审核通过').length,0);const audN=rs.reduce((s,r)=>s+r.logs.filter(l=>l.from==='返款待审核'&&(l.to==='返款已审核通过'||l.to==='返款未审核通过')).length,0);const income=+a.incomeTotal||0;const net=income-(paidSum-back);return{total:rs.length,eff:followed.length,lost:lost.length,lostRate:rs.length?lost.length/rs.length:0,rejRate:audN?rejN/audN:0,paidSum,way,back,bad,income,net,per:followed.length?net/followed.length:0,roi:paidSum?net/paidSum:0}}
+function incomeOf(u){const rs=DB.reports.filter(r=>r.userId===u.id);const done=rs.filter(r=>r.status==='已返款');const d0=new Date();const mS=new Date(d0.getFullYear(),d0.getMonth(),1).getTime();return{done:done.reduce((s,r)=>s+(+r.rebate||0),0),month:done.filter(r=>r.paidAt>=mS).reduce((s,r)=>s+(+r.rebate||0),0),way:rs.filter(r=>r.status==='返款已审核通过').reduce((s,r)=>s+(+r.rebate||0),0)+rs.filter(r=>r.status==='返款待审核').reduce((s,r)=>s+defRebate(r,actOf(r)),0),rs}}
+
+/* ---------- 批量单号解析(PRD §5.4) ---------- */
+function parseOrderNos(text){const raw=String(text||'').split(/[\s,;，；、|]+/).map(s=>s.trim()).filter(Boolean);const seen=new Set(),ok=[],bad=[];for(const t of raw){if(seen.has(t))continue;seen.add(t);if(/^[A-Za-z0-9\-_]{6,32}$/.test(t)&&!/[\u4e00-\u9fff]/.test(t))ok.push(t);else bad.push(t)}return{ok:ok.slice(0,500),bad,over:Math.max(0,ok.length-500)}}
+
+/* ---------- 截图自动拼图(PRD §5.3) ---------- */
+function readImg(file){return new Promise((res,rej)=>{const fr=new FileReader();fr.onload=()=>{const im=new Image();im.onload=()=>res(im);im.onerror=rej;im.src=fr.result};fr.onerror=rej;fr.readAsDataURL(file)})}
+async function stitchFiles(files,W,q){W=W||640;q=q||0.62;const imgs=[];for(const f of files)imgs.push(await readImg(f));const c=document.createElement('canvas');c.width=W;c.height=imgs.reduce((s,im)=>s+Math.max(1,Math.round(im.height*W/im.width)),0);const g=c.getContext('2d');g.fillStyle='#fff';g.fillRect(0,0,c.width,c.height);let y=0;for(const im of imgs){const h=Math.max(1,Math.round(im.height*W/im.width));g.drawImage(im,0,y,W,h);y+=h}let d=c.toDataURL('image/jpeg',q);if(d.length>900*1024)d=c.toDataURL('image/jpeg',0.4);if(d.length>1500*1024){const c2=document.createElement('canvas');const k=480/W;c2.width=480;c2.height=Math.round(c.height*k);c2.getContext('2d').drawImage(c,0,0,c2.width,c2.height);d=c2.toDataURL('image/jpeg',0.4)}return d}
+
+/* ---------- 标注版示例图(纯 SVG,零存储成本) ---------- */
+function exampleSVG(a){const gw=a&&a.useGouwujin;const rows=[];let y=96;function row(label,val,anno,bold){rows.push('<text x="20" y="'+(y+17)+'" class="s">'+esc(label)+'</text><text x="120" y="'+(y+17)+'" class="t"'+(bold?' font-weight="bold" fill="#BC4B33"':'')+'>'+esc(val)+'</text><rect x="10" y="'+y+'" width="340" height="26" class="r"/><text x="352" y="'+(y+16)+'" class="lb" text-anchor="end">'+esc(anno)+'</text>');y+=34}
+row('店铺',''+(a&&a.shop||'××旗舰店'),'② 店铺名');row('商品',(a&&a.product||'示例商品'),'③ 商品');row('优惠','专属券 '+(a&&a.couponInfo?a.couponInfo:'—'),'④ 用券情况');if(gw)row('购物金','抵扣后实付需露出','⑤ 购物金实付');row('实付款',yuan(a&&a.refPrice||99),(gw?'⑥':'⑤')+' 实付款金额',true);row('订单编号','2026071012345678901',(gw?'⑦':'⑥')+' 订单号');row('下单时间','2026-07-10 10:20:33',(gw?'⑧':'⑦')+' 下单时间');row('备注',(a&&a.remarkTpl?a.remarkTpl:'按活动要求'),(gw?'⑨':'⑧')+' 备注必须露出');
+const hgt=y+66;return'<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 360 '+hgt+'" style="width:100%;background:#fff;border-radius:10px;border:1px solid #E7DBBB"><text x="16" y="24" class="t" font-weight="bold">订单详情(报单示例)</text><rect x="10" y="36" width="340" height="46" rx="6" fill="#F7F4EC"/><text x="20" y="54" class="t">周** 138****0001</text><text x="20" y="72" class="s">广东省深圳市龙岗区 ××花园 ×栋×单元</text><rect x="8" y="34" width="344" height="50" class="r"/><text x="352" y="48" class="lb" text-anchor="end">① 收货地址</text>'+rows.join('')+'<text x="16" y="'+(hgt-38)+'" class="s">要求:红框要素必须完整露出;多屏内容请连续截图,</text><text x="16" y="'+(hgt-20)+'" class="s">系统会自动纵向拼接为一张长图。</text></svg>'}
+const PH='data:image/svg+xml;utf8,'+encodeURIComponent('<svg xmlns="http://www.w3.org/2000/svg" width="320" height="460"><rect width="320" height="460" fill="#F7F4EC"/><rect x="14" y="14" width="292" height="432" fill="none" stroke="#DACDA6" stroke-dasharray="5 4"/><text x="160" y="220" font-size="15" text-anchor="middle" fill="#7C7360" font-family="serif">订单截图(演示占位)</text><text x="160" y="248" font-size="12" text-anchor="middle" fill="#B08A3E" font-family="serif">真实使用时为用户上传拼接长图</text></svg>');
+
+/* ---------- 演示种子数据 ---------- */
+function seed(){const t=now();
+const users=[
+ {id:'u1',phone:'13800000001',pwd:'123456',wechat:'demo_user',alipayAcc:'demo01@example.com',alipayName:'周一',status:'正常',createdAt:t-30*D},
+ {id:'u2',phone:'13800000002',pwd:'123456',wechat:'wx_xiaoli',alipayAcc:'demo02@example.com',alipayName:'李二',status:'正常',createdAt:t-22*D}];
+const acts=[
+ {id:'a1',name:'7·10 写字板高返场',platform:'天猫',shop:'示例旗舰店',product:'儿童LCD写字板 10寸 护眼款',refPrice:89,startAt:t-3*D,endAt:t+4*D,rebateType:'fixed',rebateVal:35,rebateCap:0,materials:['物流单号','评价图','完成图'],couponInfo:'专属券「AB35」',remarkTpl:'KD710',useGouwujin:false,notice:NOTICE9,incomeTotal:3000,status:'进行中',createdAt:t-3*D},
+ {id:'a2',name:'夏季新品尝鲜(免素材)',platform:'京东',shop:'示例京东自营',product:'写字板 8.5寸 彩虹笔迹',refPrice:59,startAt:t-2*D,endAt:t+9*D,rebateType:'pct',rebateVal:40,rebateCap:50,materials:[],couponInfo:'',remarkTpl:'',useGouwujin:false,notice:NOTICE9,incomeTotal:800,status:'进行中',createdAt:t-2*D},
+ {id:'a3',name:'6·18 预售场(已结束)',platform:'天猫',shop:'示例旗舰店',product:'写字板 12寸 双面款',refPrice:129,startAt:t-25*D,endAt:t-12*D,rebateType:'fixed',rebateVal:42,rebateCap:0,materials:['尾款图','物流单号','评价图','完成图'],couponInfo:'专属券「KD618」',remarkTpl:'KD618',useGouwujin:true,notice:NOTICE9,incomeTotal:5200,status:'已结束',createdAt:t-25*D}];
+function L(steps){const logs=[];let prev=null;steps.forEach(s=>{logs.push({from:prev,to:s[0],op:s[1],note:s[2]||'',at:s[3]});prev=s[0]});return logs}
+function W(id,us){const u=us.find(x=>x.id===id);return u?u.wechat:''}
+function R(o){return{id:o.id,code:o.code,userId:o.u,actId:o.a,orderNo:o.no,amount:o.amt,wechat:W(o.u,users),remark:o.rm||'',img:PH,imgCount:2,status:o.logs[o.logs.length-1].to,rejectReason:o.rj||'',rebate:o.rb||0,materials:o.mt||{},batchId:o.bi||'',violation:!!o.vi,appeal:o.ap||null,createdAt:o.logs[0].at,paidAt:o.pd||0,logs:o.logs}}
+const reports=[
+ R({id:'r1',code:'BD260709-0001',u:'u1',a:'a1',no:'2026070912345678901',amt:89,rm:'KD710',logs:L([['已报单','用户','',t-26*H]])}),
+ R({id:'r2',code:'BD260708-0002',u:'u2',a:'a1',no:'2026070812345678902',amt:89,rm:'KD710',ap:{txt:'券码已核销,请复查渠道后台',at:t-30*H,used:false},logs:L([['已报单','用户','',t-2*D],['已丢单','管理员','渠道核对不到',t-40*H]])}),
+ R({id:'r3',code:'BD260708-0003',u:'u1',a:'a1',no:'2026070812345678903',amt:89,rm:'KD710',logs:L([['已报单','用户','',t-2*D],['已跟单','管理员','渠道核对命中',t-42*H],['物流单号待传','系统','素材闸门:待传 物流单号',t-42*H]])}),
+ R({id:'r4',code:'BD260707-0004',u:'u1',a:'a1',no:'2026070712345678904',amt:89,rm:'KD710',mt:{'物流单号':{v:'SF1234567890123',at:t-30*H}},logs:L([['已报单','用户','',t-3*D],['已跟单','管理员','渠道核对命中',t-60*H],['物流单号待传','系统','素材闸门',t-60*H],['评价图待传','用户','完成:物流单号',t-30*H]])}),
+ R({id:'r5',code:'BD260622-0005',u:'u2',a:'a3',no:'2026062212345678905',amt:129,rm:'KD618',mt:{'尾款图':{v:PH,at:t-16*D},'物流单号':{v:'YT9876543210987',at:t-15*D},'评价图':{v:PH,at:t-14*D}},logs:L([['已报单','用户','',t-18*D],['已跟单','管理员','',t-17*D],['尾款图待传','系统','',t-17*D],['物流单号待传','用户','完成:尾款图',t-16*D],['评价图待传','用户','完成:物流单号',t-15*D],['完成图待传','用户','完成:评价图',t-14*D]])}),
+ R({id:'r6',code:'BD260709-0006',u:'u1',a:'a2',no:'JD26070987654321',amt:59,logs:L([['已报单','用户','',t-20*H],['已跟单','管理员','渠道核对命中',t-8*H],['返款待审核','系统','素材齐/无素材要求',t-8*H]])}),
+ R({id:'r7',code:'BD260707-0007',u:'u2',a:'a1',no:'2026070712345678907',amt:79,rm:'KD710',rj:'金额不符',mt:{'物流单号':{v:'JD0001112223334',at:t-50*H},'评价图':{v:PH,at:t-46*H},'完成图':{v:PH,at:t-45*H}},logs:L([['已报单','用户','',t-3*D],['已跟单','管理员','',t-60*H],['物流单号待传','系统','',t-60*H],['评价图待传','用户','完成:物流单号',t-50*H],['完成图待传','用户','完成:评价图',t-46*H],['返款待审核','用户','完成:完成图',t-45*H],['返款未审核通过','管理员','金额不符',t-20*H]])}),
+ R({id:'r8',code:'BD260706-0008',u:'u1',a:'a1',no:'2026070612345678908',amt:89,rm:'KD710',rb:35,mt:{'物流单号':{v:'ZTO7778889990001',at:t-4*D},'评价图':{v:PH,at:t-3*D},'完成图':{v:PH,at:t-3*D}},logs:L([['已报单','用户','',t-5*D],['已跟单','管理员','',t-4*D],['物流单号待传','系统','',t-4*D],['评价图待传','用户','完成:物流单号',t-4*D],['完成图待传','用户','完成:评价图',t-3*D],['返款待审核','用户','完成:完成图',t-3*D],['返款已审核通过','管理员','返款 ¥35.00',t-30*H]])}),
+ R({id:'r9',code:'BD260703-0009',u:'u1',a:'a1',no:'2026070312345678909',amt:89,rm:'KD710',rb:35,bi:'b1',pd:t-4*D,mt:{'物流单号':{v:'SF5556667778889',at:t-6*D},'评价图':{v:PH,at:t-5*D},'完成图':{v:PH,at:t-5*D}},logs:L([['已报单','用户','',t-7*D],['已跟单','管理员','',t-6*D],['物流单号待传','系统','',t-6*D],['评价图待传','用户','完成:物流单号',t-6*D],['完成图待传','用户','完成:评价图',t-5*D],['返款待审核','用户','完成:完成图',t-5*D],['返款已审核通过','管理员','返款 ¥35.00',t-5*D],['已返款','管理员','批次 PB-0001',t-4*D]])}),
+ R({id:'r10',code:'BD260620-0010',u:'u2',a:'a3',no:'2026062012345678910',amt:129,rm:'KD618',rb:42,bi:'b1',pd:t-10*D,vi:true,mt:{'尾款图':{v:PH,at:t-19*D},'物流单号':{v:'YT1112223334445',at:t-18*D},'评价图':{v:PH,at:t-17*D},'完成图':{v:PH,at:t-17*D}},logs:L([['已报单','用户','',t-20*D],['已跟单','管理员','',t-19*D],['尾款图待传','系统','',t-19*D],['物流单号待传','用户','完成:尾款图',t-19*D],['评价图待传','用户','完成:物流单号',t-18*D],['完成图待传','用户','完成:评价图',t-17*D],['返款待审核','用户','完成:完成图',t-17*D],['返款已审核通过','管理员','返款 ¥42.00',t-11*D],['已返款','管理员','批次 PB-0001',t-10*D]])}),
+ R({id:'r11',code:'BD260709-0011',u:'u2',a:'a1',no:'2026070912345678911',amt:89,rm:'KD710',mt:{'物流单号':{v:'STO2223334445556',at:t-12*H},'评价图':{v:PH,at:t-10*H},'完成图':{v:PH,at:t-9*H}},logs:L([['已报单','用户','',t-30*H],['已跟单','管理员','',t-14*H],['物流单号待传','系统','',t-14*H],['评价图待传','用户','完成:物流单号',t-12*H],['完成图待传','用户','完成:评价图',t-10*H],['返款待审核','用户','完成:完成图',t-9*H]])}),
+ R({id:'r12',code:'BD260621-0012',u:'u1',a:'a3',no:'2026062112345678912',amt:129,rm:'KD618',logs:L([['已报单','用户','',t-19*D],['已跟单','管理员','',t-18*D],['尾款图待传','系统','素材闸门:待传 尾款图',t-18*D]])})];
+const batches=[{id:'b1',code:'PB-0001',ids:['r9','r10'],count:2,total:77,status:'已打款',createdAt:t-11*D,paidAt:t-10*D,operator:'管理员'}];
+const clawbacks=[{id:'c1',reportId:'r10',amount:42,status:'待追回',reason:'申请保价',at:t-6*D}];
+const notices=[
+ {id:uid(),userId:'u1',reportId:'r9',type:'打款',content:'报单 BD260703-0009 已打款 ¥35.00,请查收支付宝',read:true,at:t-4*D},
+ {id:uid(),userId:'u1',reportId:'r3',type:'跟单',content:'报单 BD260708-0003 已跟单,请补传:物流单号',read:false,at:t-42*H},
+ {id:uid(),userId:'u2',reportId:'r7',type:'驳回',content:'报单 BD260707-0007 审核未通过:金额不符。请修改后重新提交',read:false,at:t-20*H},
+ {id:uid(),userId:'u2',reportId:'r10',type:'追回',content:'报单 BD260620-0010 判定违规(申请保价),返款 ¥42.00 须退回',read:false,at:t-6*D}];
+const oplogs=[
+ {at:t-6*D,op:'管理员',action:'判定违规并建追回单',detail:'BD260620-0010 · 申请保价 ¥42.00'},
+ {at:t-10*D,op:'管理员',action:'打款批次完成',detail:'PB-0001 · 2 笔 ¥77.00'},
+ {at:t-20*H,op:'管理员',action:'状态 返款待审核 → 返款未审核通过',detail:'BD260707-0007 · 金额不符'}];
+return{users,activities:acts,reports,batches,clawbacks,notices,oplogs,seq:{report:12,batch:1}}}
+
+/* ---------- 统一路由与外壳 ---------- */
+function render(html){$('#app').innerHTML=html;try{window.scrollTo(0,0)}catch(e){}}
+function go(h){location.hash='#/'+h}
+const TMP={img:null,imgN:0,newFor:'',rimg:null,of:{st:'',act:'',kw:''},nos:null,actTab:'进行中',rf:'',lf:''};
+const PAGES={
+ 'home':{t:'工作台',v:()=>isAdmin()?vADash():vUDash()},
+ 'acts':{t:'活动大厅',user:1,v:()=>vActs()},
+ 'act':{t:'活动详情',back:1,v:p=>vAct(p[1])},
+ 'new':{t:'提交报单',user:1,back:1,v:p=>vNew(p[1])},
+ 'orders':{t:'我的报单',user:1,v:()=>vOrders()},
+ 'order':{t:'报单详情',back:1,v:p=>vOrder(p[1])},
+ 'todo':{t:'待处理事项',user:1,v:()=>vTodo()},
+ 'income':{t:'我的收益',user:1,v:()=>vIncome()},
+ 'notify':{t:'消息通知',user:1,v:()=>vNotify()},
+ 'settings':{t:'设置',v:()=>vSettings()},
+ 'm/acts':{t:'活动管理',admin:1,v:()=>vAActs()},
+ 'm/actedit':{t:'活动配置',admin:1,back:1,v:p=>vAActEdit(p[2])},
+ 'm/follow':{t:'跟单管理',admin:1,v:()=>vAFollow()},
+ 'm/review':{t:'审核工作台',admin:1,v:()=>vAReview()},
+ 'm/rev':{t:'报单审核',admin:1,back:1,v:p=>vARev(p[2])},
+ 'm/pay':{t:'打款登记',admin:1,v:()=>vAPay()},
+ 'm/fin':{t:'财务核算',admin:1,v:()=>vAFin()},
+ 'm/claw':{t:'违规与追回',admin:1,v:()=>vAClaw()},
+ 'm/logs':{t:'操作日志',admin:1,v:()=>vALogs()},
+ 'm/users':{t:'用户管理',admin:1,v:()=>vAUsers()}};
+function route(){closeM();document.body.classList.remove('navopen');
+ const h=(location.hash||'#/').replace(/^#\/?/,'');const p=h.split('/').filter(Boolean);const s=getSes();
+ if(!s)return render(p[0]==='reg'?vReg():vLogin());
+ let key=p[0]||'home';
+ if(key==='login'||key==='reg')return go('home');
+ if(key==='m')key='m/'+(p[1]||'acts');
+ const pg=PAGES[key]||PAGES.home;
+ if(pg.admin&&!isAdmin())return go('home');
+ if(pg.user&&isAdmin())return go('home');
+ const mkey=({'act':'acts','new':'acts','order':isAdmin()?'':'orders','m/rev':'m/review','m/actedit':'m/acts'})[key]!==undefined?({'act':'acts','new':'acts','order':isAdmin()?'':'orders','m/rev':'m/review','m/actedit':'m/acts'})[key]:key;
+ render(shell(mkey,pg,pg.v(p)))}
+function menuFor(){if(isAdmin())return[['grp','运 营'],['home','工作台','dash'],['m/acts','活动管理','act'],['m/follow','跟单管理','follow'],['m/review','审核工作台','review'],['m/pay','打款登记','pay'],['grp','经 营'],['m/fin','财务核算','fin'],['m/claw','违规与追回','shield'],['grp','系 统'],['m/logs','操作日志','log'],['m/users','用户管理','users'],['settings','设置','gear']];
+ const u=curUser();const td=todosOf(u);const tdN=td.gates.length+td.rej.length;const nN=unreadN(u);
+ return[['grp','报 单'],['home','工作台','dash'],['acts','活动大厅','act'],['orders','我的报单','list'],['todo','待处理','todo',tdN],['grp','账 户'],['income','我的收益','coin'],['notify','消息通知','bell',nN],['settings','设置','gear']]}
+function shell(mkey,pg,body){const u=curUser();const name=isAdmin()?'管理员':(u?u.wechat:'');
+ const menu=menuFor().map(m=>m[0]==='grp'?'<div class="grp">'+m[1]+'</div>':'<a href="#/'+m[0]+'" class="'+(mkey===m[0]?'on':'')+'">'+ico(m[2])+'<span>'+m[1]+'</span>'+(m[3]?'<span class="bdg">'+m[3]+'</span>':'')+'</a>').join('');
+ const qk=isAdmin()?'<div class="qk"><a href="#/m/review">待审核 <b>'+DB.reports.filter(r=>r.status==='返款待审核').length+'</b></a><a href="#/m/pay">待打款 <b>'+DB.reports.filter(r=>r.status==='返款已审核通过'&&!r.batchId).length+'</b></a><a href="#/m/claw">待追回 <b>'+DB.clawbacks.filter(c=>c.status==='待追回').length+'</b></a></div>':'';
+ const bell=(!isAdmin()&&u)?'<a class="iconbtn" href="#/notify" title="通知">'+ico('bell')+(unreadN(u)?'<span class="bdg">'+unreadN(u)+'</span>':'')+'</a>':'';
+ return '<div class="wrap"><div class="backdrop" onclick="A.nav(0)"></div><aside class="sidebar"><div class="sb-h"><div class="seal">报<br>单</div><div><b>报单管理系统</b><span class="mini">P0 · 统一后台</span></div></div><nav class="nav">'+menu+'</nav><div class="sb-f"><div class="ava">'+esc((name||'?').slice(0,1))+'</div><div class="who"><b>'+esc(name)+'</b><span class="mini">'+(isAdmin()?'管理员':'下游用户')+'</span></div><button class="out" title="退出登录" onclick="A.logout()">'+ico('out')+'</button></div></aside><div class="main"><header class="top"><button class="iconbtn menubtn" onclick="A.nav(1)">'+ico('menu')+'</button>'+(pg.back?'<button class="iconbtn" onclick="history.back()">'+ico('back')+'</button>':'')+'<h1>'+esc(pg.t)+'</h1>'+qk+bell+'<span class="rolechip">'+(isAdmin()?'管理员':'下游用户')+'</span></header><div class="content">'+body+'</div></div></div>'}
+const statCard=(icn,n,l,tone)=>'<div class="stat"><div class="ic '+(tone||'')+'">'+ico(icn)+'</div><div class="n'+(tone==='terra'?' bad':'')+'">'+n+'</div><div class="l">'+esc(l)+'</div></div>';
+function actPill(a){const m={'进行中':'s-teal','已结束':'s-ink','草稿':'s-gold'};return '<span class="pill '+(m[a.status]||'s-ink')+'"><i></i>'+esc(a.status)+'</span>'}
+function rebateTxt(a){return a.rebateType==='pct'?('实付 '+a.rebateVal+'%'+(a.rebateCap?'(封顶 '+yuan(a.rebateCap)+')':'')):('固定 '+yuan(a.rebateVal))}
+
+/* ---------- 登录 / 注册(统一入口) ---------- */
+function vLogin(){return '<div class="login"><div class="lgc"><div class="brand"><div class="seal">报<br>单</div><div><b>报单管理系统</b><span class="mini">活动分发 · 报单审核 · 返款核算</span></div></div><div class="card"><div class="f"><label>账号(用户填手机号,管理员为 admin)</label><input id="lacc" value="13800000001"></div><div class="f"><label>密码</label><input id="lpwd" type="password" value="123456" onkeydown="if(event.key===&quot;Enter&quot;)A.login()"></div><button class="btn pri blk" onclick="A.login()">登 录</button><div style="text-align:center;margin-top:12px" class="mini">还没有账号?<a href="#/reg">注册下游用户</a></div><div class="note">演示账号 —— 用户:13800000001 / 123456;管理员:admin / admin123。数据仅存本机浏览器,请勿填写真实支付宝与常用密码。</div></div><div class="mini" style="text-align:center;margin-top:12px">P0 演示原型 · 单文件静态部署 · 用户与管理员共用同一后台</div></div></div>'}
+function vReg(){return '<div class="login"><div class="lgc"><div class="brand"><div class="seal">报<br>单</div><div><b>注册下游用户</b><span class="mini">绑定微信号与支付宝收款账号</span></div></div><div class="card"><div class="f"><label>手机号</label><input id="rphone" inputmode="numeric" placeholder="11 位手机号"></div><div class="f"><label>短信验证码(演示码 123456)</label><input id="rcode" inputmode="numeric" placeholder="123456"></div><div class="f"><label>设置密码(≥6 位)</label><input id="rpwd" type="password"></div><div class="f"><label>微信号</label><input id="rwx" placeholder="报单与群内身份核对用"></div><div class="f"><label>支付宝收款账号</label><input id="rali" placeholder="返款打款账户(演示请勿填真实)"></div><div class="f"><label>支付宝实名姓名</label><input id="raln" placeholder="须与支付宝实名一致"></div><label class="ck"><input type="checkbox" id="ragree">我已阅读并同意 <a href="javascript:void 0" onclick="A.showNotice()">《报单须知》</a> 与用户协议</label><button class="btn pri blk" onclick="A.reg()">注册并登录</button><div style="text-align:center;margin-top:12px" class="mini"><a href="#/">← 返回登录</a></div></div></div></div>'}
+
+/* ---------- 工作台(按角色) ---------- */
+function aCardMini(a){return '<div class="acard"><div class="rowline"><span class="nm">'+esc(a.name)+'</span>'+actPill(a)+'</div><div class="mini">'+esc(a.platform+' · '+a.shop)+' · '+esc(a.product)+'</div><div class="rowline" style="margin-top:2px"><span class="mini">返款 <b style="color:var(--teal)">'+rebateTxt(a)+'</b> · 截止 '+fmtD(a.endAt)+'</span><span style="display:flex;gap:8px"><a class="btn sm" href="#/act/'+a.id+'">详情</a>'+(a.status==='进行中'&&!isAdmin()?'<a class="btn sm pri" href="#/new/'+a.id+'">报单</a>':'')+'</span></div></div>'}
+function vUDash(){const u=curUser();const inc=incomeOf(u);const td=todosOf(u);const tdN=td.gates.length+td.rej.length+td.appeal.length;
+ const hh=new Date().getHours();const greet=hh<6?'夜深了':hh<12?'早上好':hh<18?'下午好':'晚上好';
+ const ongoing=DB.activities.filter(a=>a.status==='进行中').slice(0,3);
+ const recent=DB.reports.filter(r=>r.userId===u.id).sort((a,b)=>b.createdAt-a.createdAt).slice(0,5);
+ return '<h2 style="margin:0 0 14px;font-size:19px">'+greet+','+esc(u.wechat)+'</h2>'
+ +'<div class="stats">'+statCard('coin',yuan(inc.done),'累计已返款')+statCard('todo',yuan(inc.way),'在途待返(含预估)','gold')+statCard('fin',yuan(inc.month),'本月已返款')+statCard('alert',String(tdN),'待处理事项',tdN?'terra':'')+'</div>'
+ +'<div class="grid2"><div class="card"><h3>进行中的活动</h3>'+(ongoing.length?'<div style="display:grid;gap:12px">'+ongoing.map(aCardMini).join('')+'</div>':emptyBox('暂无进行中活动','act'))+'</div>'
+ +'<div class="card"><h3>最近报单</h3>'+(recent.length?recent.map(r=>'<a href="#/order/'+r.id+'" style="display:flex;justify-content:space-between;gap:8px;padding:9px 2px;border-bottom:1px solid var(--line2);color:var(--ink);font-size:13px;align-items:center"><span class="num">'+esc(r.code)+'</span>'+chip(r.status)+'</a>').join('')+'<div style="margin-top:14px"><a class="btn sm" href="#/orders">'+ico('list')+'全部报单</a></div>':emptyBox('还没有报单,去活动大厅看看','list'))+'</div></div>'}
+function distBar(){const segs=STATUSES.map(s=>({s,n:DB.reports.filter(r=>r.status===s).length})).filter(x=>x.n);
+ return '<div class="distbar">'+segs.map(x=>'<i style="display:block;flex:'+x.n+' 1 0;min-width:3px;background:'+STC[x.s]+'"></i>').join('')+'</div><div class="legend">'+segs.map(x=>'<span><i style="background:'+STC[x.s]+'"></i>'+x.s+' '+x.n+'</span>').join('')+'</div>'}
+function vADash(){const cnt=s=>DB.reports.filter(r=>r.status===s).length;const kb=Math.round(JSON.stringify(DB).length/1024);
+ return '<div class="stats">'+statCard('list',String(DB.reports.length),'报单总数')+statCard('follow',String(cnt('已报单')),'待跟单','gold')+statCard('review',String(cnt('返款待审核')),'待审核','gold')+statCard('pay',String(DB.reports.filter(r=>r.status==='返款已审核通过'&&!r.batchId).length),'待打款')+statCard('shield',String(DB.clawbacks.filter(c=>c.status==='待追回').length),'待追回',DB.clawbacks.some(c=>c.status==='待追回')?'terra':'')+statCard('users',String(DB.users.length),'注册用户')+'</div>'
+ +'<div class="card"><h3>报单状态分布</h3>'+distBar()+'</div>'
+ +'<div class="grid2"><div class="card"><h3>快捷入口</h3><div class="frow" style="margin:2px 0"><a class="btn" href="#/m/follow">'+ico('follow')+'去跟单</a><a class="btn" href="#/m/review">'+ico('review')+'去审核</a><a class="btn" href="#/m/pay">'+ico('pay')+'去打款</a><a class="btn" href="#/m/acts">'+ico('plus')+'建活动</a></div><div class="note" style="margin-bottom:0">流程:已报单 → 跟单核对 → 素材闸门(按活动配置)→ 返款待审核 → 审核通过 → 打款批次 → 已返款;违规走「违规与追回」。本机数据占用 '+kb+' KB。</div></div>'
+ +'<div class="card"><h3>最近操作</h3>'+(DB.oplogs.length?DB.oplogs.slice(0,6).map(l=>'<div style="display:flex;gap:10px;padding:8px 2px;border-bottom:1px solid var(--line2);font-size:12.5px"><span class="mini num" style="flex:none">'+fmt(l.at)+'</span><span style="min-width:0">'+esc(l.action)+' <span class="mini">'+esc(l.detail)+'</span></span></div>').join('')+'<div style="margin-top:14px"><a class="btn sm" href="#/m/logs">'+ico('log')+'全部日志</a></div>':emptyBox('暂无操作','log'))+'</div></div>'}
+
+/* ---------- 活动大厅 / 详情 / 报单 ---------- */
+function vActs(){const tab=TMP.actTab;const list=DB.activities.filter(a=>a.status!=='草稿'&&(tab==='进行中'?a.status==='进行中':a.status==='已结束'));
+ return '<div class="frow" style="margin-top:0">'+['进行中','已结束'].map(t=>'<button class="btn sm'+(tab===t?' pri':'')+'" style="flex:none" onclick="A.actTab(\''+t+'\')">'+t+'</button>').join('')+'<span class="mini">活动分享链接即详情页地址,微信群内点开直达</span></div>'
+ +(list.length?'<div class="agrid">'+list.map(aCardMini).join('')+'</div>':emptyBox('暂无'+tab+'活动','act'))}
+function vAct(id){const a=DB.activities.find(x=>x.id===id);if(!a)return emptyBox('活动不存在','act');
+ const kv=[['平台 / 店铺',a.platform+' · '+a.shop],['商品',a.product],['参考实付',yuan(a.refPrice)],['返款规则',rebateTxt(a)],['专属券',a.couponInfo||'无'],['指定备注',a.remarkTpl||'无要求'],['购物金',a.useGouwujin?'使用购物金,实付需露出':'不涉及'],['补传素材',a.materials.length?a.materials.join(' → '):'无'],['活动时间',fmtD(a.startAt)+' ~ '+fmtD(a.endAt)]];
+ return '<div class="grid2"><div class="card"><div class="rowline" style="margin-bottom:8px"><h3 style="margin:0;font-size:16.5px">'+esc(a.name)+'</h3>'+actPill(a)+'</div>'+kv.map(k=>'<div class="kv"><b>'+k[0]+'</b><span>'+esc(k[1])+'</span></div>').join('')
+ +'<div class="frow" style="margin-bottom:0"><button class="btn" onclick="A.showExample(\''+a.id+'\')">'+ico('img')+'报单示例</button><button class="btn" onclick="A.copyShare()">'+ico('up')+'复制分享链接</button>'+(a.status==='进行中'&&!isAdmin()?'<a class="btn pri" href="#/new/'+a.id+'">'+ico('plus')+'立即报单</a>':'')+(isAdmin()?'<a class="btn" href="#/m/actedit/'+a.id+'">编辑活动</a>':'')+'</div></div>'
+ +'<div class="card"><h3>报单须知</h3><ol style="padding-left:20px;font-size:13px;margin:0;color:#4d4636">'+a.notice.split('\n').map(l=>'<li style="margin:6px 0">'+esc(l)+'</li>').join('')+'</ol></div></div>'}
+function vNew(actId){const a=DB.activities.find(x=>x.id===actId);const u=curUser();if(!a)return emptyBox('活动不存在','act');
+ if(a.status!=='进行中')return emptyBox('活动已结束,不可报单','act');
+ if(TMP.newFor!==actId){TMP.newFor=actId;TMP.img=null;TMP.imgN=0}
+ const cks=['已使用专属券(如活动要求)','已按要求填写备注','订单号与金额已逐字核对','未使用任何返利软件','承诺不申请保价、不随意退款'];
+ return '<div class="card"><div class="rowline"><div><b class="serif" style="font-size:15.5px">'+esc(a.name)+'</b><div class="mini">'+rebateTxt(a)+(a.remarkTpl?' · 指定备注 '+esc(a.remarkTpl):'')+(a.couponInfo?' · '+esc(a.couponInfo):'')+'</div></div><button class="btn sm" onclick="A.showExample(\''+a.id+'\')">'+ico('img')+'查看示例</button></div></div>'
+ +'<div class="grid2"><div><div class="card"><h3><span class="no">01</span>订单信息</h3>'
+ +'<div class="f"><label>订单号</label><input id="nno" placeholder="从订单详情复制,提交即全局查重" onblur="A.hintNo(this,\''+a.id+'\')"><div id="hno"></div></div>'
+ +'<div class="f"><label>实付金额(元)</label><input id="namt" inputmode="decimal" onblur="A.hintAmt(this,\''+a.id+'\')"><div id="hamt"></div></div>'
+ +'<div class="f"><label>微信号</label><input id="nwx" value="'+esc(u.wechat)+'"></div>'
+ +'<div class="f" style="margin-bottom:0"><label>备注'+(a.remarkTpl?'(本活动必填)':'(本活动无要求)')+'</label><input id="nrm" placeholder="'+esc(a.remarkTpl||'无')+'" onblur="A.hintRm(this,\''+a.id+'\')"><div id="hrm"></div></div></div>'
+ +'<div class="card"><h3><span class="no">02</span>订单截图</h3><div class="f" style="margin-bottom:6px"><input type="file" multiple accept="image/*" onchange="A.pickImgs(this)"></div><div id="imgPrev">'+(TMP.img?'<img class="imgv" src="'+TMP.img+'" onclick="A.zoom(this.src)">':'<div class="mini">1–9 张,自动纵向拼接为长图;需露出:地址、店铺、商品、用券、实付、订单号、下单时间'+(a.remarkTpl?'、备注':'')+(a.useGouwujin?'、购物金实付':'')+'</div>')+'</div></div></div>'
+ +'<div><div class="card"><h3><span class="no">03</span>提交前自检</h3>'+cks.map(c=>'<label class="ck"><input type="checkbox" class="ckq">'+c+'</label>').join('')+'<button class="btn pri blk" style="margin-top:12px" onclick="A.submitReport(\''+a.id+'\')">提交报单</button><div class="mini" style="text-align:center;margin-top:10px">提交即表示已阅读并遵守活动报单须知</div></div></div></div>'}
+
+/* ---------- 我的报单(查询 + 批量单号) ---------- */
+function filteredReports(u){let rs=DB.reports.filter(r=>r.userId===u.id);const f=TMP.of;
+ if(TMP.nos)rs=rs.filter(r=>TMP.nos.includes(r.orderNo));
+ if(f.st)rs=rs.filter(r=>r.status===f.st);
+ if(f.act)rs=rs.filter(r=>r.actId===f.act);
+ if(f.kw)rs=rs.filter(r=>r.orderNo.includes(f.kw)||r.code.includes(f.kw));
+ return rs.sort((x,y)=>y.createdAt-x.createdAt)}
+function vOrders(){const u=curUser();const rs=filteredReports(u);
+ return '<div class="frow" style="margin-top:0"><select style="max-width:170px" onchange="A.setOF(\'st\',this.value)"><option value="">全部状态</option>'+STATUSES.map(s=>'<option '+(TMP.of.st===s?'selected':'')+'>'+s+'</option>').join('')+'</select><select style="max-width:220px" onchange="A.setOF(\'act\',this.value)"><option value="">全部活动</option>'+DB.activities.map(a=>'<option value="'+a.id+'" '+(TMP.of.act===a.id?'selected':'')+'>'+esc(a.name)+'</option>').join('')+'</select><input placeholder="订单号 / 报单编号搜索" value="'+esc(TMP.of.kw)+'" onchange="A.setOF(\'kw\',this.value)"><button class="btn" style="flex:none" onclick="A.batchModal()">'+ico('list')+'批量单号查询</button><button class="btn" style="flex:none" onclick="A.expOrders()">'+ico('dl')+'导出</button></div>'
+ +(TMP.nos?'<div class="hint" style="margin:0 0 12px">已按批量单号过滤 '+TMP.nos.length+' 个 <a href="javascript:void 0" onclick="A.clearNos()">清除</a></div>':'')
+ +(rs.length?'<div class="tbw"><table class="tb"><tr><th>报单编号</th><th>订单号</th><th>活动</th><th class="num">实付</th><th class="num">返款</th><th>状态</th><th>报单时间</th><th></th></tr>'+rs.map(r=>'<tr><td class="num">'+esc(r.code)+'</td><td class="num">'+esc(r.orderNo)+'</td><td>'+esc((actOf(r)||{}).name||'')+'</td><td class="num">'+yuan(r.amount)+'</td><td class="num">'+(r.rebate?yuan(r.rebate):'—')+'</td><td>'+chip(r.status)+'</td><td class="mini num">'+fmt(r.createdAt)+'</td><td><a class="btn sm" href="#/order/'+r.id+'">详情</a></td></tr>').join('')+'</table></div>':emptyBox('没有符合条件的报单','list'))}
+function vBatchModal(){return '<h3>批量订单号查询</h3><p class="mini" style="margin-top:-6px">可将 Excel 中整列单号直接复制粘贴,支持换行、逗号、分号、空格混排;自动解析、去重并忽略无效项(单次上限 500)。</p><textarea id="bnos" style="min-height:130px" oninput="A.prevNos()" placeholder="2026070912345678901&#10;2026070812345678902&#10;..."></textarea><div id="bprev" class="mini" style="margin:10px 0">解析结果将显示在这里</div><div class="frow" style="margin-bottom:0"><button class="btn pri" onclick="A.applyNos()">确定查询</button><button class="btn" onclick="A.closeM()">取消</button></div>'}
+
+/* ---------- 报单详情(用户可操作 / 管理员可查看) ---------- */
+function matRow(r,a,m){const done=r.materials&&r.materials[m]&&r.materials[m].v;const own=!isAdmin()&&curUser()&&r.userId===curUser().id;const cur=pendingMat(r,a)===m&&r.status===m+'待传';
+ if(done){const v=r.materials[m];const isImg=String(v.v).startsWith('data:');return '<div class="kv"><b>'+m+'</b><span>✓ 已提交 <span class="mini">'+fmt(v.at)+'</span>'+(m==='物流单号'?' · <span class="num">'+esc(v.v)+'</span>':'')+(isImg?' <button class="btn sm" onclick="A.zoomMat(\''+r.id+'\',\''+m+'\')">'+ico('eye')+'查看</button>':'')+'</span></div>'}
+ if(cur&&own){if(m==='物流单号')return '<div class="kv"><b>'+m+'</b><span><div class="frow" style="margin:0"><input id="mtxt" placeholder="填写快递单号" style="max-width:240px"><button class="btn sm pri" style="flex:none" onclick="A.matText(\''+r.id+'\')">提交</button></div></span></div>';
+  return '<div class="kv"><b>'+m+'</b><span><input type="file" multiple accept="image/*" onchange="A.matImg(this,\''+r.id+'\',\''+m+'\')"><span class="mini">选择后自动拼接并提交</span></span></div>'}
+ return '<div class="kv"><b>'+m+'</b><span class="mini">'+(cur?'待用户上传':(r.logs.some(l=>l.to==='已跟单')?'等待前项完成':'待跟单后开放'))+'</span></div>'}
+function vOrder(id){const r=repOf(id);const u=curUser();if(!r||(!isAdmin()&&(!u||r.userId!==u.id)))return emptyBox('订单不存在或无权查看','list');
+ const a=actOf(r);const own=!isAdmin();const ru=usrOf(r.userId);
+ let left='<div class="card"><div class="rowline" style="margin-bottom:8px"><b class="serif num" style="font-size:15.5px">'+esc(r.code)+'</b>'+chip(r.status)+'</div>'
+ +[['订单号',r.orderNo],['活动',a?a.name:''],['实付金额',yuan(r.amount)],['返款金额',r.rebate?yuan(r.rebate):'待审核确定'],['微信号',r.wechat],['备注',r.remark||'—'],['报单时间',fmt(r.createdAt)]].concat(isAdmin()?[['用户',(ru?ru.wechat+' · '+maskP(ru.phone):'')],['支付宝',(ru?ru.alipayAcc+' · '+ru.alipayName:'')]]:[]).map(k=>'<div class="kv"><b>'+k[0]+'</b><span>'+esc(k[1])+'</span></div>').join('')
+ +(isAdmin()?'<div class="frow" style="margin-bottom:0">'+(r.status==='返款待审核'?'<a class="btn sm pri" href="#/m/rev/'+r.id+'">'+ico('review')+'去审核</a>':'')+(!r.violation?'<button class="btn sm dan" onclick="A.vioModal(\''+r.id+'\')">'+ico('shield')+'判定违规</button>':'<span class="pill s-bad"><i></i>已判定违规</span>')+'</div>':'')+'</div>';
+ if(r.status==='返款未审核通过')left+='<div class="warnb"><b>审核未通过:</b>'+esc(r.rejectReason||'')+'</div>'+(own&&!r.violation?'<div class="card"><h3>整改后重新提交</h3><div class="f"><label>实付金额</label><input id="ramt" value="'+r.amount+'"></div><div class="f"><label>备注</label><input id="rrm" value="'+esc(r.remark)+'"></div><div class="f"><label>重新上传截图(可选,不选则保留原图)</label><input type="file" multiple accept="image/*" onchange="A.pickR(this)"></div><button class="btn pri blk" onclick="A.resubmit(\''+r.id+'\')">重新提交审核</button></div>':'');
+ if(r.status==='已丢单'&&own){if(!r.appeal)left+='<div class="card"><h3>丢单申诉(限一次)</h3><textarea id="aptxt" placeholder="说明订单有效的依据,如下单时间、券码使用记录等"></textarea><button class="btn blk" style="margin-top:10px" onclick="A.appeal(\''+r.id+'\')">提交申诉</button></div>';
+  else if(!r.appeal.used)left+='<div class="note">申诉已提交('+fmt(r.appeal.at)+'),等待管理员核实。</div>';
+  else left+='<div class="note">申诉已处理,结果见状态与通知。</div>'}
+ if(a&&a.materials.length)left+='<div class="card"><h3>素材补传 <span class="mini" style="font-weight:400">'+a.materials.join(' → ')+'</span></h3>'+a.materials.map(m=>matRow(r,a,m)).join('')+'</div>';
+ let right='<div class="card"><h3>报单截图</h3><img class="imgv" src="'+r.img+'" onclick="A.zoom(this.src)" alt="报单截图"></div>'
+ +'<div class="card"><h3>状态时间线</h3><div class="tl">'+r.logs.map(l=>'<div class="it'+((l.to==='已丢单'||l.to==='返款未审核通过')?' bad':'')+'"><b>'+esc(l.to)+'</b> <span class="mini">'+esc(l.op)+(l.note?' · '+esc(l.note):'')+'</span><div class="tm">'+fmt(l.at)+'</div></div>').join('')+'</div></div>';
+ return '<div class="grid2"><div>'+left+'</div><div>'+right+'</div></div>'}
+
+/* ---------- 待处理 / 收益 / 通知 / 设置 ---------- */
+function vTodo(){const u=curUser();const td=todosOf(u);
+ const grp=(title,rs,tip)=>rs.length?'<div class="card"><h3>'+title+'('+rs.length+')</h3>'+rs.map(r=>'<a href="#/order/'+r.id+'" style="display:flex;justify-content:space-between;align-items:center;gap:8px;padding:9px 2px;border-bottom:1px solid var(--line2);color:var(--ink);font-size:13px"><span><span class="num">'+esc(r.code)+'</span> <span class="mini">'+esc(tip(r))+'</span></span>'+chip(r.status)+'</a>').join('')+'</div>':'';
+ const h=grp('待补传素材',td.gates,r=>'当前需上传:'+r.status.replace('待传',''))+grp('驳回待整改',td.rej,r=>'原因:'+(r.rejectReason||'—'))+grp('申诉进行中',td.appeal,r=>'等待管理员核实');
+ return h||emptyBox('没有待处理事项,一身轻松','todo')}
+function vIncome(){const u=curUser();const inc=incomeOf(u);const byAct={};inc.rs.forEach(r=>{const a=actOf(r);const k=a?a.name:'—';byAct[k]=byAct[k]||{n:0,paid:0};byAct[k].n++;if(r.status==='已返款')byAct[k].paid+=(+r.rebate||0)});
+ return '<div class="stats">'+statCard('coin',yuan(inc.done),'累计已返款')+statCard('todo',yuan(inc.way),'在途待返(含预估)','gold')+statCard('fin',yuan(inc.month),'本月已返款')+'</div>'
+ +'<div class="tbw"><table class="tb"><tr><th>活动</th><th class="num">报单数</th><th class="num">已返款</th></tr>'+Object.keys(byAct).map(k=>'<tr><td>'+esc(k)+'</td><td class="num">'+byAct[k].n+'</td><td class="num">'+yuan(byAct[k].paid)+'</td></tr>').join('')+'</table></div>'
+ +'<p class="mini">口径:累计已返款为状态「已返款」合计;在途 = 已审核通过未打款实额 + 待审核按活动规则预估。</p>'}
+function vNotify(){const u=curUser();const ns=DB.notices.filter(n=>n.userId===u.id);
+ return (ns.length?ns.map(n=>'<div class="card" style="cursor:pointer;padding:14px 18px;'+(n.read?'opacity:.65':'')+'" onclick="A.openN(\''+n.id+'\')"><div class="rowline"><span class="pill '+(n.type==='驳回'||n.type==='追回'||n.type==='违规'||n.type==='丢单'?'s-bad':'s-teal')+'"><i></i>'+esc(n.type)+(n.read?'':' · 新')+'</span><span class="mini num">'+fmt(n.at)+'</span></div><div style="font-size:13.5px;margin-top:6px">'+esc(n.content)+'</div></div>').join(''):emptyBox('暂无通知','bell'))}
+function vSettings(){const u=curUser();
+ const sec1=isAdmin()?'<div class="card"><h3>账号安全</h3><p class="mini" style="margin:0">演示版管理员账号固定为 admin / admin123;生产版接入独立管理员体系与操作权限分级(审核员角色为 P2)。</p></div>'
+ :'<div class="card"><h3>账号安全</h3><div class="kv"><b>微信号</b><span>'+esc(u.wechat)+'</span></div><div class="kv"><b>手机</b><span>'+maskP(u.phone)+'</span></div><div class="kv"><b>支付宝</b><span>'+maskA(u.alipayAcc)+'('+esc(u.alipayName)+')<span class="mini"> · 换绑需人工审核(P1),审核期打款冻结</span></span></div><div class="grid2" style="margin-top:12px"><div class="f"><label>原密码</label><input id="p0" type="password"></div><div></div><div class="f"><label>新密码(≥6 位)</label><input id="p1" type="password"></div><div class="f"><label>确认新密码</label><input id="p2" type="password"></div></div><button class="btn pri" onclick="A.chgPwd()">确认修改密码</button></div>';
+ return sec1+'<div class="card"><h3>数据备份(演示)</h3><p class="mini" style="margin-top:0">数据保存在当前浏览器 localStorage,清缓存即消失;可导出 JSON 备份或迁移。</p><div class="frow" style="margin-bottom:0"><button class="btn" onclick="A.exportData()">'+ico('dl')+'导出数据 JSON</button><label class="btn" style="cursor:pointer">'+ico('up')+'导入数据<input type="file" accept=".json" style="display:none" onchange="A.importData(this)"></label><button class="btn dan" onclick="A.resetData()">重置演示数据</button></div></div>'
+ +'<div class="card"><h3>关于本原型</h3><p class="mini" style="margin:0">按《报单管理系统 PRD v1.0》实现的 P0 演示原型:用户与管理员共用同一后台,按角色出菜单;单文件静态部署(GitHub Pages / 本地直开);生产化将数据层替换为 REST API(Node.js + MySQL,PRD §8)。请勿填写真实支付宝与常用密码。</p></div>'}
+
+/* ---------- 管理:活动管理 ---------- */
+function vAActs(){return '<div class="rowline" style="margin-bottom:12px"><span class="mini">活动配置即业务规则:返款、素材闸门、须知与财务口径均由此驱动</span><a class="btn pri sm" href="#/m/actedit/new">'+ico('plus')+'新建活动</a></div>'
+ +'<div class="tbw"><table class="tb"><tr><th>活动</th><th>平台 / 店铺</th><th>返款规则</th><th>素材要求</th><th>起止</th><th class="num">渠道收入</th><th class="num">报单</th><th>状态</th><th>操作</th></tr>'
+ +DB.activities.map(a=>{const n=DB.reports.filter(r=>r.actId===a.id).length;return '<tr><td><a href="#/act/'+a.id+'" style="color:var(--ink);font-weight:600">'+esc(a.name)+'</a></td><td>'+esc(a.platform)+'<div class="mini">'+esc(a.shop)+'</div></td><td>'+rebateTxt(a)+'</td><td class="mini">'+(a.materials.length?a.materials.join(' → '):'无')+'</td><td class="mini num">'+fmtD(a.startAt)+'<br>'+fmtD(a.endAt)+'</td><td class="num">'+yuan(a.incomeTotal)+'</td><td class="num">'+n+'</td><td>'+actPill(a)+'</td><td style="white-space:nowrap"><a class="btn sm" href="#/m/actedit/'+a.id+'">编辑</a> '+(a.status==='进行中'?'<button class="btn sm dan" onclick="A.actEnd(\''+a.id+'\')">结束</button>':(a.status==='草稿'?'<button class="btn sm pri" onclick="A.actOn(\''+a.id+'\')">上线</button>':''))+'</td></tr>'}).join('')+'</table></div>'}
+function vAActEdit(id){const isNew=!id||id==='new';const a=isNew?{name:'',platform:'天猫',shop:'',product:'',refPrice:'',startAt:now(),endAt:now()+7*D,rebateType:'fixed',rebateVal:'',rebateCap:'',materials:[],couponInfo:'',remarkTpl:'',useGouwujin:false,notice:NOTICE9,incomeTotal:0,status:'草稿'}:DB.activities.find(x=>x.id===id);
+ if(!a)return emptyBox('活动不存在','act');
+ const dt=t=>{const d=new Date(t);return d.getFullYear()+'-'+pad(d.getMonth()+1)+'-'+pad(d.getDate())};
+ return '<div class="grid2"><div><div class="card"><h3><span class="no">01</span>基本信息</h3>'
+ +'<div class="f"><label>活动名称</label><input id="ename" value="'+esc(a.name)+'"></div>'
+ +'<div class="grid2"><div class="f"><label>平台</label><select id="eplat">'+['天猫','淘宝','京东','拼多多','抖音','其他'].map(p=>'<option '+(a.platform===p?'selected':'')+'>'+p+'</option>').join('')+'</select></div><div class="f"><label>店铺</label><input id="eshop" value="'+esc(a.shop)+'"></div></div>'
+ +'<div class="f"><label>商品</label><input id="eprod" value="'+esc(a.product)+'"></div>'
+ +'<div class="grid2"><div class="f"><label>参考实付价(元)</label><input id="eref" value="'+esc(a.refPrice)+'"></div><div class="f"><label>状态</label><select id="estt">'+['草稿','进行中','已结束'].map(s=>'<option '+(a.status===s?'selected':'')+'>'+s+'</option>').join('')+'</select></div></div>'
+ +'<div class="grid2"><div class="f"><label>开始日期</label><input id="est" type="date" value="'+dt(a.startAt)+'"></div><div class="f"><label>结束日期</label><input id="eet" type="date" value="'+dt(a.endAt)+'"></div></div></div>'
+ +'<div class="card"><h3><span class="no">02</span>返款与下单要求</h3>'
+ +'<div class="grid2"><div class="f"><label>返款类型</label><select id="erty"><option value="fixed" '+(a.rebateType==='fixed'?'selected':'')+'>固定金额</option><option value="pct" '+(a.rebateType==='pct'?'selected':'')+'>实付比例 %</option></select></div><div class="f"><label>返款值(元 或 %)</label><input id="erv" value="'+esc(a.rebateVal)+'"></div></div>'
+ +'<div class="grid2"><div class="f"><label>比例封顶(元,可空)</label><input id="ecap" value="'+esc(a.rebateCap||'')+'"></div><div class="f"><label>专属券信息</label><input id="ecp" value="'+esc(a.couponInfo)+'"></div></div>'
+ +'<div class="f"><label>指定备注模板</label><input id="erm" value="'+esc(a.remarkTpl)+'"></div>'
+ +'<label class="ck"><input type="checkbox" id="egw" '+(a.useGouwujin?'checked':'')+'>使用购物金(要求截图露出购物金实付)</label></div></div>'
+ +'<div><div class="card"><h3><span class="no">03</span>素材闸门与财务</h3>'
+ +'<div class="f"><label>素材要求(固定顺序 尾款图→物流单号→评价图→完成图 取子集;自定义排序 P1)</label>'+MATS.map(m=>'<label class="ck" style="display:inline-block;margin:4px 16px 4px 0"><input type="checkbox" class="emat" value="'+m+'" '+(a.materials.includes(m)?'checked':'')+'>'+m+'</label>').join('')+'</div>'
+ +'<div class="f"><label>渠道结算收入(P0 手工录入总额,用于财务核算)</label><input id="einc" value="'+esc(a.incomeTotal)+'"></div></div>'
+ +'<div class="card"><h3><span class="no">04</span>报单须知(每行一条)</h3><textarea id="entc" style="min-height:190px">'+esc(a.notice)+'</textarea></div>'
+ +'<div class="frow"><button class="btn pri" onclick="A.saveAct(\''+(isNew?'new':a.id)+'\')">保存活动</button><a class="btn" href="#/m/acts">返回列表</a><button class="btn" onclick="A.showExample(\''+(isNew?'':a.id)+'\')">'+ico('img')+'预览示例图</button></div></div></div>'}
+
+/* ---------- 管理:跟单 ---------- */
+function vAFollow(){const pool=DB.reports.filter(r=>r.status==='已报单').sort((a,b)=>a.createdAt-b.createdAt);
+ const appeals=DB.reports.filter(r=>r.status==='已丢单'&&r.appeal&&!r.appeal.used);
+ return '<p class="mini" style="margin-top:0">在渠道后台核对报单是否存在:命中 → 已跟单(自动进入素材闸门或返款待审核);核对不到 → 已丢单。结算表 Excel 导入自动匹配为 P1。</p>'
+ +'<div class="frow"><button class="btn pri sm" style="flex:none" onclick="A.follow()">'+ico('review')+'标记已跟单</button><button class="btn dan sm" style="flex:none" onclick="A.lost()">标记已丢单</button><span class="mini">勾选后操作,支持多选</span></div>'
+ +(pool.length?'<div class="tbw"><table class="tb"><tr><th></th><th>报单编号</th><th>订单号</th><th>活动</th><th>用户</th><th class="num">实付</th><th>报单时间</th></tr>'+pool.map(r=>{const u=usrOf(r.userId);return '<tr><td><input type="checkbox" class="ckfw" value="'+r.id+'"></td><td class="num"><a href="#/order/'+r.id+'">'+esc(r.code)+'</a></td><td class="num">'+esc(r.orderNo)+'</td><td>'+esc((actOf(r)||{}).name||'')+'</td><td>'+esc(u?u.wechat:'')+'</td><td class="num">'+yuan(r.amount)+'</td><td class="mini num">'+fmt(r.createdAt)+'</td></tr>'}).join('')+'</table></div>':emptyBox('没有待跟单的报单','follow'))
+ +'<div class="card"><h3>丢单申诉('+appeals.length+')</h3>'+(appeals.length?appeals.map(r=>'<div style="padding:10px 0;border-bottom:1px solid var(--line2)"><div class="rowline"><span><a class="num" href="#/order/'+r.id+'">'+esc(r.code)+'</a> <span class="mini num">'+esc(r.orderNo)+'</span></span><span class="mini num">'+fmt(r.appeal.at)+'</span></div><div class="mini" style="margin:4px 0 8px">申诉理由:'+esc(r.appeal.txt||'—')+'</div><div class="frow" style="margin:0"><button class="btn sm pri" style="flex:none" onclick="A.appealOk(\''+r.id+'\')">申诉通过(改回已报单)</button><button class="btn sm dan" style="flex:none" onclick="A.appealNo(\''+r.id+'\')">驳回申诉</button></div></div>').join(''):'<p class="mini" style="margin:0">暂无申诉</p>')+'</div>'}
+
+/* ---------- 管理:审核 ---------- */
+function vAReview(){let pool=DB.reports.filter(r=>r.status==='返款待审核');if(TMP.rf)pool=pool.filter(r=>r.actId===TMP.rf);pool.sort((a,b)=>a.createdAt-b.createdAt);
+ return '<div class="frow" style="margin-top:0"><select style="max-width:250px" onchange="A.setRF(this.value)"><option value="">全部活动</option>'+DB.activities.map(a=>'<option value="'+a.id+'" '+(TMP.rf===a.id?'selected':'')+'>'+esc(a.name)+'</option>').join('')+'</select><button class="btn sm" style="flex:none" onclick="A.batchApprove()">批量通过(默认金额)</button></div>'
+ +(pool.length?'<div class="tbw"><table class="tb"><tr><th></th><th>报单编号</th><th>订单号</th><th>活动</th><th>用户</th><th class="num">实付</th><th class="num">默认返款</th><th>提交时间</th><th></th></tr>'+pool.map(r=>{const a=actOf(r);const u=usrOf(r.userId);return '<tr><td><input type="checkbox" class="ckrev" value="'+r.id+'"></td><td class="num">'+esc(r.code)+'</td><td class="num">'+esc(r.orderNo)+'</td><td>'+esc(a?a.name:'')+'</td><td>'+esc(u?u.wechat:'')+'</td><td class="num">'+yuan(r.amount)+'</td><td class="num">'+yuan(defRebate(r,a))+'</td><td class="mini num">'+fmt(r.logs[r.logs.length-1].at)+'</td><td><a class="btn sm pri" href="#/m/rev/'+r.id+'">审核</a></td></tr>'}).join('')+'</table></div>':emptyBox('审核队列为空','review'))}
+function riskPanel(r){const a=actOf(r);const u=usrOf(r.userId);const t7=now()-7*D;
+ const sameAli=DB.reports.filter(x=>x.id!==r.id&&x.createdAt>t7&&usrOf(x.userId)&&u&&usrOf(x.userId).alipayAcc===u.alipayAcc).length;
+ const sameWx=DB.reports.filter(x=>x.id!==r.id&&x.createdAt>t7&&x.wechat===r.wechat).length;
+ const dev=a&&a.refPrice?Math.abs(r.amount-a.refPrice)/a.refPrice:0;
+ const items=['订单号全局唯一(提交时已查重)','同支付宝近 7 日其他报单:'+sameAli+' 笔'+(sameAli>=3?' ⚠':''),'同微信号近 7 日其他报单:'+sameWx+' 笔'+(sameWx>=3?' ⚠':''),(a&&a.refPrice?('金额偏离参考价 '+pct(dev)+(dev>0.3?' ⚠ 请核对':'')):'未配置参考价'),'渠道结算匹配:未接入(P1 导入结算表后自动比对)'];
+ return '<div class="hint" style="margin:12px 0"><b>校验提示</b><br>'+items.map(esc).join('<br>')+'</div>'}
+function vARev(id){const r=repOf(id);if(!r)return emptyBox('报单不存在','review');const a=actOf(r);const u=usrOf(r.userId);
+ if(r.status!=='返款待审核')return '<div class="empty">'+ico('review')+'该单当前状态为「'+esc(r.status)+'」,不在审核队列。<div style="margin-top:10px"><a class="btn sm" href="#/m/review">返回队列</a></div></div>';
+ const nxt=DB.reports.find(x=>x.id!==r.id&&x.status==='返款待审核');
+ return '<div class="grid2"><div class="card"><h3>报单长图 <span class="mini" style="font-weight:400">点击放大</span></h3><img class="imgv" src="'+r.img+'" onclick="A.zoom(this.src)"></div>'
+ +'<div><div class="card"><h3>'+esc(r.code)+'</h3>'
+ +[['活动',(a?a.name:'')+' · '+rebateTxt(a||{})],['订单号',r.orderNo],['实付金额',yuan(r.amount)],['微信号',r.wechat+'(注册绑定:'+(u?u.wechat:'')+')'],['备注',r.remark||'—'],['要求备注',a&&a.remarkTpl?a.remarkTpl:'无'],['支付宝',(u?u.alipayAcc+' · '+u.alipayName:'')],['报单时间',fmt(r.createdAt)]].map(k=>'<div class="kv"><b>'+k[0]+'</b><span>'+esc(k[1])+'</span></div>').join('')
+ +riskPanel(r)
+ +(a&&a.materials.length?'<div class="kv"><b>素材</b><span>'+a.materials.map(m=>{const v=r.materials&&r.materials[m];if(!v)return m+':缺';return m+':✓'+(m==='物流单号'?'(<span class="num">'+esc(v.v)+'</span>)':' <button class="btn sm" onclick="A.zoomMat(\''+r.id+'\',\''+m+'\')">'+ico('eye')+'看</button>')}).join(' · ')+'</span></div>':'')+'</div>'
+ +'<div class="card"><h3>裁定</h3><div class="f"><label>返款金额(默认按活动规则,可单笔覆盖)</label><input id="vamt" value="'+defRebate(r,a)+'"></div>'
+ +'<div class="frow"><button class="btn pri" onclick="A.doApprove(\''+r.id+'\')">'+ico('review')+'通过</button>'+(nxt?'<a class="btn sm" style="flex:none" href="#/m/rev/'+nxt.id+'">下一单 ›</a>':'')+'</div>'
+ +'<div class="f" style="margin-top:14px"><label>驳回原因</label><div class="frow" style="margin:0"><select id="vrs" style="max-width:170px">'+REJECTS.map(x=>'<option>'+x+'</option>').join('')+'</select><input id="vrx" placeholder="补充说明(选填)"></div></div>'
+ +'<div class="frow" style="margin-bottom:0"><button class="btn dan" onclick="A.doReject(\''+r.id+'\')">不通过</button><button class="btn dan sm" style="flex:none" onclick="A.vioModal(\''+r.id+'\')">'+ico('shield')+'判定违规</button></div></div></div></div>'}
+
+/* ---------- 管理:打款 / 财务 / 追回 / 日志 / 用户 ---------- */
+function vAPay(){const pool=DB.reports.filter(r=>r.status==='返款已审核通过'&&!r.batchId);
+ return '<p class="mini" style="margin-top:0">流程:勾选 → 生成打款批次 → 导出 CSV(支付宝批量转账格式)→ 线下打款 → 标记已打款,系统置「已返款」并通知用户。</p>'
+ +'<div class="frow"><button class="btn pri sm" style="flex:none" onclick="A.mkBatch()">'+ico('pay')+'生成打款批次</button></div>'
+ +(pool.length?'<div class="tbw"><table class="tb"><tr><th></th><th>报单编号</th><th>用户 / 微信</th><th>支付宝账号</th><th>姓名</th><th class="num">返款金额</th></tr>'+pool.map(r=>{const u=usrOf(r.userId);return '<tr><td><input type="checkbox" class="ckpay" value="'+r.id+'" checked></td><td class="num"><a href="#/order/'+r.id+'">'+esc(r.code)+'</a></td><td>'+esc(u?u.wechat:'')+'</td><td>'+esc(u?u.alipayAcc:'')+'</td><td>'+esc(u?u.alipayName:'')+'</td><td class="num">'+yuan(r.rebate)+'</td></tr>'}).join('')+'</table></div>':emptyBox('打款池为空(需先审核通过)','pay'))
+ +'<div class="card"><h3>批次记录</h3>'+(DB.batches.length?'<div class="tbw" style="margin:0"><table class="tb"><tr><th>批次号</th><th class="num">笔数</th><th class="num">合计</th><th>状态</th><th>创建</th><th>操作</th></tr>'+DB.batches.map(b=>'<tr><td class="num">'+esc(b.code)+'</td><td class="num">'+b.count+'</td><td class="num">'+yuan(b.total)+'</td><td>'+(b.status==='已打款'?'<span class="pill s-ok"><i></i>已打款</span>':'<span class="pill s-gold"><i></i>待打款</span>')+'</td><td class="mini num">'+fmt(b.createdAt)+'</td><td style="white-space:nowrap"><button class="btn sm" onclick="A.batchCSV(\''+b.id+'\')">导出CSV</button> '+(b.status==='待打款'?'<button class="btn sm pri" onclick="A.payDone(\''+b.id+'\')">标记已打款</button>':'')+'</td></tr>').join('')+'</table></div>':'<p class="mini" style="margin:0">暂无批次</p>')+'</div>'}
+function vAFin(){return '<div class="note" style="margin-top:0">口径(PRD §6.5):净收益 = 渠道结算收入 −(累计已返款 − 累计追回);渠道收入 P0 为活动配置页手工录入总额,P1 支持结算表按单导入。坏账单列不重复扣减。</div>'
+ +'<div class="frow"><button class="btn sm" style="flex:none" onclick="A.finCSV()">'+ico('dl')+'导出报表</button></div>'
+ +'<div class="tbw"><table class="tb" style="min-width:960px"><tr><th>活动</th><th class="num">报单</th><th class="num">有效单</th><th class="num">丢单率</th><th class="num">驳回率</th><th class="num">渠道收入</th><th class="num">已返款</th><th class="num">在途待返</th><th class="num">已追回</th><th class="num">坏账</th><th class="num">净收益</th><th class="num">单均净收益</th><th class="num">ROI</th></tr>'
+ +DB.activities.map(a=>{const f=finOf(a);const neg=f.net<0;return '<tr'+(neg?' style="background:var(--terra-t)"':'')+'><td>'+esc(a.name)+'</td><td class="num">'+f.total+'</td><td class="num">'+f.eff+'</td><td class="num">'+pct(f.lostRate)+'</td><td class="num">'+pct(f.rejRate)+'</td><td class="num">'+yuan(f.income)+'</td><td class="num">'+yuan(f.paidSum)+'</td><td class="num">'+yuan(f.way)+'</td><td class="num">'+yuan(f.back)+'</td><td class="num">'+yuan(f.bad)+'</td><td class="num" style="font-weight:700;color:'+(neg?'var(--terra)':'var(--teal-d)')+'">'+yuan(f.net)+'</td><td class="num">'+yuan(f.per)+'</td><td class="num">'+pct(f.roi)+'</td></tr>'}).join('')+'</table></div>'}
+function vAClaw(){const led=DB.clawbacks;
+ return '<p class="mini" style="margin-top:0">按报单编号或订单号定位后判定违规:未返款 → 置「返款未审核通过·违规」;已返款 → 生成追回单。对应须知第 6–9 条(返利软件、保价、退款、串ID)。</p>'
+ +'<div class="frow"><input id="cq" placeholder="输入报单编号或订单号" style="max-width:300px"><button class="btn sm" style="flex:none" onclick="A.findVio()">'+ico('follow')+'查找</button></div><div id="cres"></div>'
+ +'<div class="card"><h3>追回台账</h3>'+(led.length?'<div class="tbw" style="margin:0"><table class="tb"><tr><th>报单</th><th class="num">金额</th><th>违规原因</th><th>状态</th><th>创建</th><th>操作</th></tr>'+led.map(c=>{const r=repOf(c.reportId);return '<tr><td class="num"><a href="#/order/'+(r?r.id:'')+'">'+esc(r?r.code:'')+'</a></td><td class="num">'+yuan(c.amount)+'</td><td>'+esc(c.reason)+'</td><td>'+(c.status==='已追回'?'<span class="pill s-ok"><i></i>已追回</span>':c.status==='坏账'?'<span class="pill s-bad"><i></i>坏账</span>':'<span class="pill s-gold"><i></i>待追回</span>')+'</td><td class="mini num">'+fmt(c.at)+'</td><td style="white-space:nowrap">'+(c.status==='待追回'?'<button class="btn sm pri" onclick="A.clawDone(\''+c.id+'\')">已追回</button> <button class="btn sm dan" onclick="A.clawBad(\''+c.id+'\')">计坏账</button>':'—')+'</td></tr>'}).join('')+'</table></div>':'<p class="mini" style="margin:0">台账为空</p>')+'</div>'
+ +'<div class="stats">'+statCard('coin',yuan(led.filter(c=>c.status==='已追回').reduce((s,c)=>s+c.amount,0)),'累计已追回')+statCard('alert',yuan(led.filter(c=>c.status==='坏账').reduce((s,c)=>s+c.amount,0)),'累计坏账','terra')+'</div>'}
+function vALogs(){const kw=TMP.lf;let ls=DB.oplogs;if(kw)ls=ls.filter(l=>(l.action+l.detail+l.op).includes(kw));
+ return '<div class="frow" style="margin-top:0"><input placeholder="按编号 / 动作 / 操作人过滤" value="'+esc(kw)+'" onchange="A.setLF(this.value)" style="max-width:300px"></div>'
+ +'<div class="tbw"><table class="tb"><tr><th>时间</th><th>操作人</th><th>动作</th><th>明细</th></tr>'+ls.slice(0,200).map(l=>'<tr><td class="mini num">'+fmt(l.at)+'</td><td>'+esc(l.op)+'</td><td>'+esc(l.action)+'</td><td class="mini">'+esc(l.detail)+'</td></tr>').join('')+'</table></div><p class="mini">仅展示最近 200 条;全部状态流转同时留存于各报单时间线。</p>'}
+function vAUsers(){return '<div class="tbw" style="margin-top:0"><table class="tb"><tr><th>微信号</th><th>手机</th><th>支付宝</th><th class="num">报单数</th><th class="num">已返款</th><th>状态</th><th>操作</th></tr>'+DB.users.map(u=>{const rs=DB.reports.filter(r=>r.userId===u.id);const paid=rs.filter(r=>r.status==='已返款').reduce((s,r)=>s+(+r.rebate||0),0);return '<tr><td>'+esc(u.wechat)+'</td><td class="num">'+maskP(u.phone)+'</td><td>'+esc(u.alipayAcc)+' · '+esc(u.alipayName)+'</td><td class="num">'+rs.length+'</td><td class="num">'+yuan(paid)+'</td><td>'+(u.status==='正常'?'<span class="pill s-teal"><i></i>正常</span>':'<span class="pill s-bad"><i></i>禁用</span>')+'</td><td><button class="btn sm '+(u.status==='正常'?'dan':'pri')+'" onclick="A.toggleUser(\''+u.id+'\')">'+(u.status==='正常'?'禁用':'启用')+'</button></td></tr>'}).join('')+'</table></div><p class="mini">禁用后无法登录与报单;黑名单(微信号/支付宝/手机号维度)为 P1。</p>'}
+
+/* ---------- 交互动作 ---------- */
+const A={
+go,closeM,
+nav(v){document.body.classList[v?'add':'remove']('navopen')},
+actTab(t){TMP.actTab=t;route()},
+zoom(src){modal('<img src="'+src+'" style="width:100%;border-radius:8px"><div style="text-align:center;margin-top:10px"><button class="btn sm" onclick="A.closeM()">关闭</button></div>')},
+zoomMat(id,m){const r=repOf(id);const v=r&&r.materials&&r.materials[m];if(!v)return;if(String(v.v).startsWith('data:'))A.zoom(v.v);else toast(m+':'+v.v)},
+exportData(){dlFile('baodan-data-'+fmtD(now())+'.json',JSON.stringify(DB,null,1),'application/json');toast('已导出 JSON')},
+importData(inp){const f=inp.files&&inp.files[0];if(!f)return;const fr=new FileReader();fr.onload=()=>{try{const o=JSON.parse(fr.result);if(!o.users||!o.reports)throw 0;DB=o;save();toast('导入成功');route()}catch(e){toast('文件格式不正确','err')}};fr.readAsText(f);inp.value=''},
+resetData(){if(!confirm('重置为初始演示数据?当前数据将被清空。'))return;store.removeItem(LS_KEY);DB=seed();save();toast('已重置演示数据');route()},
+/* 账号 */
+login(){const acc=$('#lacc').value.trim(),pw=$('#lpwd').value;
+ if(acc===ADMIN.acc){if(pw!==ADMIN.pwd)return toast('管理员密码不正确','err');setSes({role:'admin'});toast('管理员已登录');return go('home')}
+ const u=DB.users.find(x=>x.phone===acc&&x.pwd===pw);if(!u)return toast('账号或密码不正确','err');if(u.status==='禁用')return toast('账号已被禁用,请联系管理员','err');
+ setSes({role:'user',uid:u.id});toast('欢迎回来,'+u.wechat);go('home')},
+reg(){const p=$('#rphone').value.trim(),c=$('#rcode').value.trim(),w=$('#rpwd').value,wx=$('#rwx').value.trim(),al=$('#rali').value.trim(),an=$('#raln').value.trim();
+ if(!/^1\d{10}$/.test(p))return toast('手机号格式不正确','err');
+ if(DB.users.some(u=>u.phone===p))return toast('该手机号已注册,请直接登录','err');
+ if(c!=='123456')return toast('验证码不正确(演示码 123456)','err');
+ if(w.length<6)return toast('密码至少 6 位','err');
+ if(!wx)return toast('请填写微信号','err');
+ if(DB.users.some(u=>u.wechat===wx))toast('提示:该微信号已被绑定过,提交后将由管理员人工核实');
+ if(!al||!an)return toast('请填写支付宝账号与实名姓名','err');
+ if(!$('#ragree').checked)return toast('请先阅读并勾选《报单须知》','err');
+ const u={id:uid(),phone:p,pwd:w,wechat:wx,alipayAcc:al,alipayName:an,status:'正常',createdAt:now()};DB.users.push(u);oplog('系统','用户注册',wx);save();setSes({role:'user',uid:u.id});toast('注册成功');go('home')},
+showNotice(){modal('<h3>报单须知(默认模板)</h3><ol style="padding-left:20px;font-size:13px">'+NOTICE9.split('\n').map(l=>'<li style="margin:6px 0">'+esc(l)+'</li>').join('')+'</ol><button class="btn sm" onclick="A.closeM()">关闭</button>')},
+logout(){setSes(null);toast('已退出');location.hash='#/';route()},
+chgPwd(){const u=curUser();if($('#p0').value!==u.pwd)return toast('原密码不正确','err');const n=$('#p1').value;if(n.length<6)return toast('新密码至少 6 位','err');if(n!==$('#p2').value)return toast('两次输入不一致','err');u.pwd=n;oplog('用户','修改密码',u.wechat);save();toast('密码已修改');route()},
+/* 报单 */
+showExample(id){const a=DB.activities.find(x=>x.id===id);modal('<h3>报单示例(要素标注)</h3>'+exampleSVG(a||{})+'<div style="margin-top:10px;text-align:center"><button class="btn sm" onclick="A.closeM()">我已了解</button></div>')},
+copyShare(){const t=location.href;if(navigator.clipboard&&navigator.clipboard.writeText){navigator.clipboard.writeText(t).then(()=>toast('分享链接已复制'),()=>prompt('手动复制链接:',t))}else prompt('手动复制链接:',t)},
+hintNo(inp,actId){const a=DB.activities.find(x=>x.id===actId);const v=inp.value.trim();let h='';
+ if(v){if(DB.reports.some(r=>r.orderNo===v))h='该订单号已报单,重复提交将被拦截';
+ else if(!/^[A-Za-z0-9\-_]{6,32}$/.test(v))h='格式疑似有误:仅限 6–32 位字母数字';
+ else if(a&&(a.platform==='天猫'||a.platform==='淘宝')&&!/^\d{16,22}$/.test(v))h='淘系订单号通常为 16–22 位纯数字,请核对'}
+ $('#hno').innerHTML=h?'<div class="hint">'+esc(h)+'</div>':''},
+hintAmt(inp,actId){const a=DB.activities.find(x=>x.id===actId);const v=+inp.value;let h='';if(a&&a.refPrice&&v>0){const dev=Math.abs(v-a.refPrice)/a.refPrice;if(dev>0.3)h='金额偏离参考价 '+pct(dev)+',请确认无误(不拦截)'}$('#hamt').innerHTML=h?'<div class="hint">'+esc(h)+'</div>':''},
+hintRm(inp,actId){const a=DB.activities.find(x=>x.id===actId);const v=inp.value.trim();let h='';if(a&&a.remarkTpl&&v&&!v.includes(a.remarkTpl))h='与指定备注「'+a.remarkTpl+'」不一致,请核对';$('#hrm').innerHTML=h?'<div class="hint">'+esc(h)+'</div>':''},
+async pickImgs(inp){const fs=Array.from(inp.files||[]);if(!fs.length)return;if(fs.length>9)return toast('最多 9 张','err');toast('正在拼接 '+fs.length+' 张截图…');
+ try{TMP.img=await stitchFiles(fs);TMP.imgN=fs.length;$('#imgPrev').innerHTML='<img class="imgv" src="'+TMP.img+'" onclick="A.zoom(this.src)"><div class="mini" style="margin-top:6px">已拼接 '+fs.length+' 张,点击可预览;重新选择将覆盖</div>'}catch(e){toast('拼接失败,请重试或减少图片数量','err')}},
+submitReport(actId){const a=DB.activities.find(x=>x.id===actId);const u=curUser();if(!a||a.status!=='进行中')return toast('活动不在进行中','err');
+ const no=$('#nno').value.trim(),amt=+$('#namt').value,wx=$('#nwx').value.trim(),rm=$('#nrm').value.trim();
+ if(!/^[A-Za-z0-9\-_]{6,32}$/.test(no))return toast('订单号格式不正确','err');
+ if(DB.reports.some(r=>r.orderNo===no))return toast('该订单号已报单,禁止重复提交','err');
+ if(!(amt>0))return toast('请填写正确的实付金额','err');
+ if(!wx)return toast('请填写微信号','err');
+ if(wx!==u.wechat&&!confirm('微信号与注册绑定('+u.wechat+')不一致,确认继续?'))return;
+ if(a.remarkTpl&&!rm)return toast('本活动要求填写备注','err');
+ if(!TMP.img)return toast('请上传订单截图','err');
+ const cks=document.querySelectorAll('.ckq');for(const c of cks)if(!c.checked)return toast('请逐项完成提交前自检','err');
+ const r={id:uid(),code:nextCode(),userId:u.id,actId:a.id,orderNo:no,amount:Math.round(amt*100)/100,wechat:wx,remark:rm,img:TMP.img,imgCount:TMP.imgN,status:'',rejectReason:'',rebate:0,materials:{},batchId:'',violation:false,appeal:null,createdAt:now(),paidAt:0,logs:[]};
+ setStatus(r,'已报单','用户');DB.reports.push(r);save();TMP.img=null;TMP.imgN=0;TMP.newFor='';toast('报单成功:'+r.code);go('order/'+r.id)},
+setOF(k,v){TMP.of[k]=v;route()},
+batchModal(){modal(vBatchModal())},
+prevNos(){const p=parseOrderNos($('#bnos').value);$('#bprev').innerHTML='解析出 <b>'+p.ok.length+'</b> 个有效单号'+(p.bad.length?',忽略 '+p.bad.length+' 个无效项':'')+(p.over?';超出上限 500,已截断 '+p.over+' 个':'')},
+applyNos(){const p=parseOrderNos($('#bnos').value);if(!p.ok.length)return toast('未解析到有效单号','err');TMP.nos=p.ok;closeM();toast('已按 '+p.ok.length+' 个单号过滤');route()},
+clearNos(){TMP.nos=null;route()},
+expOrders(){const u=curUser();const rs=filteredReports(u);dlCSV('我的报单-'+fmtD(now())+'.csv',[['报单编号','订单号','活动','实付','返款','状态','报单时间']].concat(rs.map(r=>[r.code,r.orderNo,(actOf(r)||{}).name||'',r.amount,r.rebate||'',r.status,fmtD(r.createdAt)])));toast('已导出 '+rs.length+' 条')},
+matText(id){const r=repOf(id);const v=($('#mtxt').value||'').trim();if(!/^[A-Za-z0-9]{8,24}$/.test(v))return toast('快递单号格式疑似有误(8–24 位字母数字)','err');submitMaterial(r,'物流单号',v);save();toast('物流单号已提交');route()},
+async matImg(inp,id,m){const fs=Array.from(inp.files||[]);if(!fs.length)return;if(fs.length>9)return toast('最多 9 张','err');toast('正在拼接并提交…');try{const d=await stitchFiles(fs);const r=repOf(id);submitMaterial(r,m,d);save();toast(m+' 已提交');route()}catch(e){toast('处理失败,请重试','err')}},
+async pickR(inp){const fs=Array.from(inp.files||[]);if(!fs.length)return;try{TMP.rimg=await stitchFiles(fs);toast('新截图已拼接,提交时生效')}catch(e){toast('拼接失败','err')}},
+resubmit(id){const r=repOf(id);const amt=+$('#ramt').value,rm=$('#rrm').value.trim();if(!(amt>0))return toast('金额不正确','err');const a=actOf(r);if(a&&a.remarkTpl&&!rm)return toast('本活动要求填写备注','err');r.amount=Math.round(amt*100)/100;r.remark=rm;if(TMP.rimg){r.img=TMP.rimg;TMP.rimg=null}r.rejectReason='';setStatus(r,'返款待审核','用户','整改重提');save();toast('已重新提交审核');route()},
+appeal(id){const r=repOf(id);const t=($('#aptxt').value||'').trim();if(!t)return toast('请填写申诉理由','err');r.appeal={txt:t,at:now(),used:false};oplog('用户','丢单申诉',r.code);save();toast('申诉已提交');route()},
+openN(id){const n=DB.notices.find(x=>x.id===id);if(!n)return;n.read=true;save();if(n.reportId&&repOf(n.reportId))go('order/'+n.reportId);else route()},
+/* 管理 */
+actOn(id){const a=DB.activities.find(x=>x.id===id);a.status='进行中';oplog('管理员','活动上线',a.name);save();route()},
+actEnd(id){const a=DB.activities.find(x=>x.id===id);if(!confirm('结束活动「'+a.name+'」?结束后不可新增报单。'))return;a.status='已结束';oplog('管理员','活动结束',a.name);save();route()},
+saveAct(id){const g=i=>$('#'+i).value;const name=g('ename').trim();if(!name)return toast('请填写活动名称','err');
+ const st=new Date(g('est')).getTime(),et=new Date(g('eet')).getTime()+D-1;if(!(st>0&&et>st))return toast('起止日期不正确','err');
+ const rv=+g('erv');if(!(rv>0))return toast('返款值必须大于 0','err');
+ const mats=MATS.filter(m=>Array.from(document.querySelectorAll('.emat:checked')).some(c=>c.value===m));
+ const o={name,platform:g('eplat'),shop:g('eshop').trim(),product:g('eprod').trim(),refPrice:+g('eref')||0,startAt:st,endAt:et,rebateType:g('erty'),rebateVal:rv,rebateCap:+g('ecap')||0,materials:mats,couponInfo:g('ecp').trim(),remarkTpl:g('erm').trim(),useGouwujin:$('#egw').checked,notice:g('entc').trim()||NOTICE9,incomeTotal:+g('einc')||0,status:g('estt')};
+ if(id==='new'){o.id=uid();o.createdAt=now();DB.activities.unshift(o);oplog('管理员','新建活动',o.name)}else{const a=DB.activities.find(x=>x.id===id);Object.assign(a,o);oplog('管理员','编辑活动',a.name)}
+ save();toast('活动已保存');go('m/acts')},
+follow(){const ids=Array.from(document.querySelectorAll('.ckfw:checked')).map(c=>c.value);if(!ids.length)return toast('请先勾选报单','err');ids.forEach(id=>advanceAfterFollow(repOf(id),'管理员'));save();toast('已跟单 '+ids.length+' 笔');route()},
+lost(){const ids=Array.from(document.querySelectorAll('.ckfw:checked')).map(c=>c.value);if(!ids.length)return toast('请先勾选报单','err');if(!confirm('确认将 '+ids.length+' 笔标记为已丢单?'))return;ids.forEach(id=>markLost(repOf(id),'管理员'));save();toast('已标记丢单 '+ids.length+' 笔');route()},
+appealOk(id){const r=repOf(id);setStatus(r,'已报单','管理员','申诉通过');r.appeal.used=true;notify(r.userId,r.id,'申诉','报单 '+r.code+' 申诉通过,已重新进入跟单核对');save();toast('已改回已报单');route()},
+appealNo(id){const r=repOf(id);r.appeal.used=true;oplog('管理员','驳回申诉',r.code);notify(r.userId,r.id,'申诉','报单 '+r.code+' 申诉未通过,维持已丢单');save();toast('已驳回申诉');route()},
+setRF(v){TMP.rf=v;route()},
+batchApprove(){const ids=Array.from(document.querySelectorAll('.ckrev:checked')).map(c=>c.value);if(!ids.length)return toast('请先勾选','err');let sum=0;ids.forEach(id=>{const r=repOf(id);const amt=defRebate(r,actOf(r));approve(r,amt);sum+=amt});save();toast('批量通过 '+ids.length+' 笔,合计 '+yuan(sum));route()},
+doApprove(id){const r=repOf(id);const amt=+$('#vamt').value;if(!(amt>0))return toast('返款金额不正确','err');approve(r,amt);save();toast('已通过:'+yuan(amt));go('m/review')},
+doReject(id){const r=repOf(id);const reason=$('#vrs').value+(($('#vrx').value||'').trim()?':'+$('#vrx').value.trim():'');reject(r,reason);save();toast('已驳回');go('m/review')},
+vioModal(id){modal('<h3>判定违规</h3><div class="f"><label>违规类型</label><select id="vio">'+VIOTYPES.map(x=>'<option>'+x+'</option>').join('')+'</select></div><div class="f"><label>补充说明(选填)</label><input id="viox"></div><p class="mini">未返款:置「返款未审核通过·违规」不予结算;已返款:生成追回单进入台账。</p><div class="frow" style="margin-bottom:0"><button class="btn dan pri" onclick="A.doVio(\''+id+'\')">确认判定</button><button class="btn" onclick="A.closeM()">取消</button></div>')},
+doVio(id){const r=repOf(id);const reason=$('#vio').value+(($('#viox').value||'').trim()?':'+$('#viox').value.trim():'');r.violation=true;
+ if(r.status==='已返款'){DB.clawbacks.unshift({id:uid(),reportId:r.id,amount:+r.rebate||0,status:'待追回',reason,at:now()});oplog('管理员','判定违规并建追回单',r.code+' · '+reason+' '+yuan(r.rebate));notify(r.userId,r.id,'追回','报单 '+r.code+' 判定违规('+reason+'),返款 '+yuan(r.rebate)+' 须退回')}
+ else{r.rejectReason='违规:'+reason;setStatus(r,'返款未审核通过','管理员','违规:'+reason);notify(r.userId,r.id,'违规','报单 '+r.code+' 判定违规('+reason+'),不予结算')}
+ closeM();save();toast('已判定违规');route()},
+mkBatch(){const ids=Array.from(document.querySelectorAll('.ckpay:checked')).map(c=>c.value);if(!ids.length)return toast('请先勾选','err');DB.seq.batch++;const total=ids.reduce((s,id)=>s+(+repOf(id).rebate||0),0);const b={id:uid(),code:'PB-'+String(DB.seq.batch).padStart(4,'0'),ids,count:ids.length,total:Math.round(total*100)/100,status:'待打款',createdAt:now(),paidAt:0,operator:'管理员'};ids.forEach(id=>{repOf(id).batchId=b.id});DB.batches.unshift(b);oplog('管理员','生成打款批次',b.code+' · '+b.count+' 笔 '+yuan(b.total));save();toast('批次 '+b.code+' 已生成,可导出 CSV');route()},
+batchCSV(bid){const b=DB.batches.find(x=>x.id===bid);dlCSV(b.code+'.csv',[['支付宝账号','姓名','金额','备注(报单编号)']].concat(b.ids.map(id=>{const r=repOf(id),u=usrOf(r.userId);return[u.alipayAcc,u.alipayName,(+r.rebate).toFixed(2),r.code]})));toast('已导出 '+b.code)},
+payDone(bid){const b=DB.batches.find(x=>x.id===bid);if(!confirm('确认批次 '+b.code+' 已完成线下打款?'))return;b.status='已打款';b.paidAt=now();b.ids.forEach(id=>{const r=repOf(id);if(r&&r.status==='返款已审核通过'){setStatus(r,'已返款','管理员','批次 '+b.code);r.paidAt=now();notify(r.userId,r.id,'打款','报单 '+r.code+' 已打款 '+yuan(r.rebate)+',请查收支付宝')}});oplog('管理员','打款批次完成',b.code);save();toast('批次已完成,相关报单置「已返款」');route()},
+finCSV(){dlCSV('活动财务核算-'+fmtD(now())+'.csv',[['活动','报单','有效单','丢单率','驳回率','渠道收入','已返款','在途待返','已追回','坏账','净收益','单均净收益','ROI']].concat(DB.activities.map(a=>{const f=finOf(a);return[a.name,f.total,f.eff,pct(f.lostRate),pct(f.rejRate),f.income.toFixed(2),f.paidSum.toFixed(2),f.way.toFixed(2),f.back.toFixed(2),f.bad.toFixed(2),f.net.toFixed(2),f.per.toFixed(2),pct(f.roi)]})));toast('报表已导出')},
+findVio(){const q=($('#cq').value||'').trim();const r=DB.reports.find(x=>x.code===q||x.orderNo===q);
+ $('#cres').innerHTML=r?'<div class="card"><div class="rowline"><b class="num">'+esc(r.code)+'</b>'+chip(r.status)+'</div><div class="mini" style="margin-top:4px">单号 <span class="num">'+esc(r.orderNo)+'</span> · '+esc((actOf(r)||{}).name||'')+' · 用户 '+esc((usrOf(r.userId)||{}).wechat||'')+' · 返款 '+yuan(r.rebate)+(r.violation?' · <b style="color:var(--terra)">已判定违规</b>':'')+'</div>'+(r.violation?'':'<div style="margin-top:8px"><button class="btn sm dan" onclick="A.vioModal(\''+r.id+'\')">判定违规</button> <a class="btn sm" href="#/order/'+r.id+'">详情</a></div>')+'</div>':emptyBox('未找到该报单','follow')},
+clawDone(id){const c=DB.clawbacks.find(x=>x.id===id);c.status='已追回';oplog('管理员','追回完成',(repOf(c.reportId)||{}).code+' '+yuan(c.amount));save();toast('已登记追回');route()},
+clawBad(id){const c=DB.clawbacks.find(x=>x.id===id);if(!confirm('确认计为坏账?将计入活动成本。'))return;c.status='坏账';oplog('管理员','追回计坏账',(repOf(c.reportId)||{}).code+' '+yuan(c.amount));save();toast('已计坏账');route()},
+setLF(v){TMP.lf=v;route()},
+toggleUser(id){const u=usrOf(id);u.status=u.status==='正常'?'禁用':'正常';oplog('管理员',u.status==='禁用'?'禁用用户':'启用用户',u.wechat);save();toast(u.wechat+' 已'+u.status);route()}
+};
+window.A=A;
+
+/* ---------- 启动 ---------- */
+window.addEventListener('hashchange',route);
+load();route();
+window.__bd={get DB(){return DB},save,load,seed,setStatus,advanceAfterFollow,markLost,submitMaterial,approve,reject,parseOrderNos,defRebate,finOf,incomeOf,pendingMat,A};
+</script>
