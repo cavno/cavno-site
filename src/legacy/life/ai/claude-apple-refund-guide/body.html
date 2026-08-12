@@ -1,0 +1,305 @@
+<div class="refund-guide" id="refund-guide-top">
+<div class="refund-toolbar" aria-label="文章工具栏">
+  <nav class="nav" id="refundNav" aria-label="章节导航">
+    <a href="#conclusion">结论</a><a href="#flow">链路</a><a href="#steps">步骤</a>
+    <a href="#status">分支</a><a href="#script">话术</a><a href="#materials">材料</a>
+  </nav>
+  <button class="print-button" id="refundPrint" type="button" aria-label="打印页面或另存为 PDF">打印 / PDF</button>
+</div>
+<div class="hero">
+      <div class="hero-inner">
+        <div>
+          <p class="eyebrow">App Store 订阅 · 退款行动手册</p>
+          <h1>Claude × Apple<br>退款怎么拿回来</h1>
+          <p class="hero-lead">服务商已终止访问并两次写明“最近一笔付款已退款”，但 Apple 余额未到账。这里把责任主体、证据和每一步操作放进一张清晰路线图。</p>
+          <div class="hero-actions">
+            <a class="button button-primary" href="https://reportaproblem.apple.com/" target="_blank" rel="noopener noreferrer">前往 Apple 正式退款入口 ↗</a>
+            <a class="button button-secondary" href="#steps">查看 6 步行动顺序</a>
+          </div>
+        </div>
+        <aside class="case-card" aria-label="本案摘要">
+          <span class="case-label">本案金额</span>
+          <div class="case-value">US$124.99</div>
+          <dl class="case-list">
+            <div class="case-row"><dt>购买方式</dt><dd>iPhone · App Store</dd></div>
+            <div class="case-row"><dt>资金来源</dt><dd>Apple 礼品卡余额</dd></div>
+            <div class="case-row"><dt>目标去向</dt><dd>Apple Account Balance</dd></div>
+            <div class="case-row"><dt>处理主体</dt><dd>Apple 退款审核</dd></div>
+          </dl>
+        </aside>
+      </div>
+    </div>
+
+    <div class="content">
+      <div class="summary-strip" aria-label="顶部摘要">
+        <article class="summary-item">
+          <span class="summary-index">01</span>
+          <div><strong>先查余额与购买记录</strong><p>退款若已成功，礼品卡支付通常回到 Apple Account Balance，而不是银行卡或原礼品卡。</p></div>
+        </article>
+        <article class="summary-item">
+          <span class="summary-index">02</span>
+          <div><strong>必须有正式 Refund Claim</strong><p>一次普通客服聊天不等于已提交退款；以 Report a Problem 内的状态为准。</p></div>
+        </article>
+        <article class="summary-item">
+          <span class="summary-index">03</span>
+          <div><strong>被拒就要求人工复核</strong><p>定位为 App Store 交易退款，要求 App Store / Media Services Billing 升级处理。</p></div>
+        </article>
+      </div>
+
+      <section id="conclusion" aria-labelledby="conclusion-title">
+        <div class="section-heading">
+          <div><p class="kicker">Core conclusion</p><h2 id="conclusion-title">核心结论</h2></div>
+          <p class="section-note">把问题从“Claude 技术支持”改写为“Apple App Store 交易退款”，才能进入正确的处理队列。</p>
+        </div>
+        <div class="verdict">
+          <div class="verdict-icon" aria-hidden="true">✓</div>
+          <div>
+            <h3>Apple 控制这笔退款的审核与资金回退</h3>
+            <p>因为 Claude Max 是经由 iOS App Store 购买，Anthropic 官方说明其<strong>未处理该笔付款</strong>，iOS 退款需联系 Apple。你的诉求应是：请 Apple 对“服务已被终止、服务商已明确承诺退款”的 App Store 交易进行审核。<strong>是否最终批准仍由 Apple 判断</strong>，但处理入口和资金控制方已经明确。</p>
+          </div>
+        </div>
+      </section>
+
+      <section id="flow" aria-labelledby="flow-title">
+        <div class="section-heading">
+          <div><p class="kicker">Money flow</p><h2 id="flow-title">退款链路图</h2></div>
+          <p class="section-note">付款与退款都在 Apple 的交易体系里完成；Anthropic 的通知是你向 Apple 申请退款的重要证据。</p>
+        </div>
+        <div class="flow-panel">
+          <div class="flow" role="img" aria-label="Apple 礼品卡充值到 Apple 账户余额，再购买 Claude Max；服务被终止后，由 Apple 审核并退回 Apple 账户余额">
+            <div class="flow-node"><span class="node-tag">资金来源</span><strong>Apple Gift Card</strong><small>礼品卡先兑换，不直接向 Claude 付款</small></div>
+            <div class="flow-arrow" aria-hidden="true">→</div>
+            <div class="flow-node"><span class="node-tag">付款账户</span><strong>Apple Account Balance</strong><small>余额扣除 US$124.99</small></div>
+            <div class="flow-arrow" aria-hidden="true">→</div>
+            <div class="flow-node"><span class="node-tag">App Store 交易</span><strong>Claude Max</strong><small>iOS 应用内订阅</small></div>
+            <div class="flow-arrow" aria-hidden="true">→</div>
+            <div class="flow-node emphasis"><span class="node-tag">退款终点</span><strong>Apple Account Balance</strong><small>Apple 批准后，商店余额最多约 48 小时显示</small></div>
+          </div>
+          <p class="flow-caption"><strong>关键：</strong>不是“Anthropic → 银行卡”，也不是“重新激活原礼品卡”。正式路径是 Apple 审核 App Store 交易，再把金额退回原付款方式对应的 Apple 账户余额。</p>
+        </div>
+      </section>
+
+      <section id="evidence" aria-labelledby="evidence-title">
+        <div class="section-heading">
+          <div><p class="kicker">Evidence chain</p><h2 id="evidence-title">三层证据链</h2></div>
+          <p class="section-note">前两项证明“服务商已经承诺退款”，第三项证明“iOS 付款和退款应由 Apple 处理”。</p>
+        </div>
+        <div class="evidence-grid">
+          <article class="card evidence-card">
+            <div class="evidence-top"><span class="evidence-number">1</span><span class="pill">服务商承诺</span></div>
+            <h3>第一次账户被暂停页面</h3>
+            <p>明确说明订阅已取消，最近一次付款将全额退款。</p>
+            <blockquote class="quote">“...cancelled your subscription and refunded your most recent payment in full.”</blockquote>
+          </article>
+          <article class="card evidence-card">
+            <div class="evidence-top"><span class="evidence-number">2</span><span class="pill">再次确认</span></div>
+            <h3>申诉被驳回后的页面</h3>
+            <p>再次声明账户被暂停时已取消订阅，最后一笔付款已退款。</p>
+            <blockquote class="quote">“...your last payment was refunded.”</blockquote>
+          </article>
+          <article class="card evidence-card">
+            <div class="evidence-top"><span class="evidence-number">3</span><span class="pill">责任入口</span></div>
+            <h3>Anthropic 官方 iOS 退款说明</h3>
+            <p>通过 Claude for iOS 购买即从 Apple App Store 发起；Anthropic 未处理付款，需联系 Apple Support 申请退款。</p>
+            <a class="source-link" href="https://support.claude.com/en/articles/12386328-requesting-a-refund-for-a-paid-claude-plan" target="_blank" rel="noopener noreferrer">查看 Anthropic 官方说明 ↗</a>
+          </article>
+        </div>
+      </section>
+
+      <section id="steps" aria-labelledby="steps-title">
+        <div class="section-heading">
+          <div><p class="kicker">Action plan</p><h2 id="steps-title">按这个顺序操作</h2></div>
+          <p class="section-note">先确认钱和订单，再确认有没有正式申请。不要一开始就重复联系普通技术客服。</p>
+        </div>
+        <div class="steps">
+          <article class="step">
+            <span class="step-number">1</span>
+            <div><h3>查看 Apple 账户余额</h3><p>打开 App Store，点右上角头像，确认 Apple Account Balance 是否已增加 US$124.99。不要只查银行卡或原礼品卡。</p></div>
+            <div class="step-action"><strong>判断标准</strong>余额已回：资金问题基本解决；未回：继续下一步。</div>
+          </article>
+          <article class="step">
+            <span class="step-number">2</span>
+            <div><h3>找到 Claude 的购买记录</h3><p>App Store → 头像 → Purchase History，搜索 Claude、金额或 Order ID，保存订单页面截图与 Apple 收据。</p></div>
+            <div class="step-action"><strong>必须记录</strong>日期、金额、Order ID / Document No.、购买所用 Apple Account。</div>
+          </article>
+          <article class="step">
+            <span class="step-number">3</span>
+            <div><h3>检查正式退款状态</h3><p>登录 reportaproblem.apple.com，查看是否存在 Check Status of Claims，以及 Claude 订单显示的状态。</p></div>
+            <div class="step-action"><strong>注意</strong>此前一次客服聊天不一定创建了正式 Refund Claim。</div>
+          </article>
+          <article class="step">
+            <span class="step-number">4</span>
+            <div><h3>若未申请，立即提交退款</h3><p>选择 Request a refund → 选择与事实最接近的原因 → 选择 Claude / Claude Max → Submit。</p></div>
+            <div class="step-action"><strong>事实表述</strong>服务商主动终止服务，已付订阅无法使用，并两次确认最近付款会全额退款。</div>
+          </article>
+          <article class="step">
+            <span class="step-number">5</span>
+            <div><h3>若 Pending，等 24–48 小时</h3><p>Apple 官方提示一般在 24–48 小时内更新申请结果；已提交时，电话或聊天通常不会加快审核。</p></div>
+            <div class="step-action"><strong>正确动作</strong>在 Report a Problem 页面继续监控状态。</div>
+          </article>
+          <article class="step">
+            <span class="step-number">6</span>
+            <div><h3>若被拒或无法申请，要求人工复核</h3><p>联系 Apple Support，明确这是 App Store transaction refund issue，不是 Claude 技术支持问题；要求升级至 App Store / Media Services Billing。</p></div>
+            <div class="step-action"><strong>关键词</strong>manual refund review · Media Services Billing escalation</div>
+          </article>
+        </div>
+        <div class="reason-guide"><strong>退款理由：</strong>具体选项可能因地区和页面版本不同。选择最符合事实的 “My purchase does not work as expected” 或 “Other” 一类理由。不要选择“未经授权购买”或“忘记取消”，因为这两种说法与事实不符。</div>
+      </section>
+
+      <section id="status" aria-labelledby="status-title">
+        <div class="section-heading">
+          <div><p class="kicker">Decision table</p><h2 id="status-title">状态分支表</h2></div>
+          <p class="section-note">先定位自己在哪个状态，再执行对应动作；这是避免被两边反复转介的关键。</p>
+        </div>
+        <div class="status-picker">
+          <span class="status-picker-label">你的页面现在显示什么？</span>
+          <div class="status-buttons" role="group" aria-label="选择退款状态">
+            <button class="status-button" type="button" data-status="none" aria-pressed="false">没有申请记录</button>
+            <button class="status-button" type="button" data-status="pending" aria-pressed="false">Pending</button>
+            <button class="status-button" type="button" data-status="approved" aria-pressed="false">Approved</button>
+            <button class="status-button" type="button" data-status="denied" aria-pressed="false">Denied</button>
+            <button class="status-button" type="button" data-status="unavailable" aria-pressed="false">无法选择该订单</button>
+          </div>
+          <div class="status-result" aria-live="polite">选择上方状态，立即查看下一步。</div>
+        </div>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>Apple 状态</th><th>代表什么</th><th>下一步</th><th>何时升级</th></tr></thead>
+            <tbody>
+              <tr data-row="none"><td><span class="state">没有 Claim</span></td><td>此前沟通可能只是普通客服咨询。</td><td>立即在 Report a Problem 提交正式退款申请。</td><td>订单不出现或无法提交时联系 Billing。</td></tr>
+              <tr data-row="pending"><td><span class="state pending">Pending</span></td><td>Apple 正在审核。</td><td>等待 24–48 小时并在线查看状态。</td><td>超过正常窗口仍无更新，再联系 Apple。</td></tr>
+              <tr data-row="approved"><td><span class="state approved">Approved</span></td><td>Apple 已批准退款。</td><td>查看 Apple Account Balance；商店余额最多约 48 小时显示。</td><td>批准后超过 48 小时仍未到账时联系 Apple。</td></tr>
+              <tr data-row="denied"><td><span class="state denied">Denied</span></td><td>自动或初次审核未批准。</td><td>携带完整证据，要求 App Store 交易人工复核。</td><td>立即要求 Media Services Billing escalation。</td></tr>
+              <tr data-row="unavailable"><td><span class="state unavailable">订单不可申请</span></td><td>系统入口无法覆盖该订单或账户。</td><td>保存页面截图与 Order ID，联系 Apple Billing 人工处理。</td><td>立即升级，不再找普通 App 技术支持。</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <section id="script" aria-labelledby="script-title">
+        <div class="section-heading">
+          <div><p class="kicker">Conversation script</p><h2 id="script-title">Apple 沟通话术</h2></div>
+          <p class="section-note">少讲封号原因，只讲交易事实、服务中止、退款承诺、余额未到账与所需升级路径。</p>
+        </div>
+        <div class="script-layout">
+          <article class="card script-card">
+            <div class="script-header"><strong>完整英文模板 · 首次陈述</strong><button class="copy-button" type="button" data-copy="main-script">复制话术</button></div>
+            <pre class="script-body" id="main-script">I purchased a Claude Max subscription for $124.99 through Apple using my Apple Account balance.
+
+Anthropic terminated my access to the service and explicitly confirmed twice that my most recent subscription payment would be refunded in full.
+
+Anthropic's official refund guidance states that subscriptions purchased through Claude for iOS were started through the Apple App Store. Anthropic did not process the payment and directs customers to Apple Support to request a refund.
+
+I have not received the refund in my Apple Account balance.
+
+I'm not asking for technical support for Claude. I'm asking Apple to review the App Store transaction and process the promised refund.
+
+Could you please escalate this to App Store Billing / Media Services for a manual refund review?</pre>
+          </article>
+          <aside class="talk-points" aria-label="沟通重点">
+            <article class="card talk-point"><h3>先定性</h3><p>“This is an App Store transaction refund issue.”</p></article>
+            <article class="card talk-point"><h3>排除错误队列</h3><p>“I'm not asking for technical support for Claude.”</p></article>
+            <article class="card talk-point"><h3>明确请求</h3><p>“Please escalate this for a manual refund review.”</p></article>
+            <article class="card talk-point"><h3>不要展开</h3><p>无需争论 Anthropic 为什么封号；Apple 需要审核的是交易与退款证据。</p></article>
+          </aside>
+        </div>
+        <article class="card script-card mini-script">
+          <div class="script-header"><strong>如果 Apple 再次让你找 Anthropic</strong><button class="copy-button" type="button" data-copy="counter-script">复制回应</button></div>
+          <pre class="script-body" id="counter-script">Anthropic's official Help Center states that if a Claude subscription was purchased through Claude for iOS, it was started through the Apple App Store. Anthropic did not process the payment and directs the customer to Apple Support to request a refund.
+
+So Anthropic is explicitly directing me back to Apple. Could you please escalate this to App Store / Media Services Billing instead of referring me back to the developer?</pre>
+        </article>
+      </section>
+
+      <section id="materials" aria-labelledby="materials-title">
+        <div class="section-heading">
+          <div><p class="kicker">Evidence pack</p><h2 id="materials-title">材料清单</h2></div>
+          <p class="section-note">勾选状态只保存在这台设备的浏览器中；页面不会上传任何个人信息。</p>
+        </div>
+        <div class="materials-panel">
+          <aside class="card progress-card">
+            <h3>证据包完成度</h3>
+            <p>建议六项备齐后再发起人工复核。</p>
+            <div class="progress-value"><span id="progress-count">0</span>/6</div>
+            <div class="progress-track" aria-hidden="true"><div class="progress-bar" id="progress-bar"></div></div>
+          </aside>
+          <div class="card checklist">
+            <label class="check-item"><input type="checkbox" data-check="receipt"><span><strong>Apple 购买凭证</strong><span>Claude Max、日期、US$124.99、Order ID / Document No.、Apple Account。</span></span></label>
+            <label class="check-item"><input type="checkbox" data-check="history"><span><strong>Purchase History 截图</strong><span>完整显示 Claude US$124.99 的那笔交易。</span></span></label>
+            <label class="check-item"><input type="checkbox" data-check="hold"><span><strong>第一次暂停页面截图</strong><span>圈出 “refunded your most recent payment in full”。</span></span></label>
+            <label class="check-item"><input type="checkbox" data-check="appeal"><span><strong>申诉驳回后的截图</strong><span>圈出 “your last payment was refunded”。</span></span></label>
+            <label class="check-item"><input type="checkbox" data-check="policy"><span><strong>Anthropic iOS 退款政策</strong><span>保存官方页面或截图，证明付款由 App Store 发起。</span></span></label>
+            <label class="check-item"><input type="checkbox" data-check="balance"><span><strong>当前 Apple 余额截图</strong><span>证明退款尚未进入 Apple Account Balance。</span></span></label>
+          </div>
+        </div>
+      </section>
+
+      <section id="destination" aria-labelledby="destination-title">
+        <div class="section-heading">
+          <div><p class="kicker">Refund destination</p><h2 id="destination-title">退款会去哪里</h2></div>
+          <p class="section-note">Apple 官方说明，批准的退款退回购买时使用的同一付款方式；Store credit 最多约 48 小时显示。</p>
+        </div>
+        <div class="destination-grid">
+          <article class="card route-card">
+            <span class="route-label original">原付款路径</span>
+            <div class="route"><span>礼品卡</span><b>→</b><span>Apple 余额</span><b>→</b><span>Claude Max</span></div>
+            <p>礼品卡已经兑换成 Apple 账户余额，随后由余额支付 App Store 订阅。</p>
+          </article>
+          <article class="card route-card">
+            <span class="route-label refund">正确退款路径</span>
+            <div class="route"><span>Apple 批准退款</span><b>→</b><span>Apple 余额</span></div>
+            <p>通常不会退到银行卡，也不会恢复成一张可重新兑换的原礼品卡；目标是 Apple Account Balance。</p>
+          </article>
+        </div>
+      </section>
+
+      <section id="judgement" aria-labelledby="judgement-title">
+        <div class="section-heading">
+          <div><p class="kicker">Key judgement</p><h2 id="judgement-title">关键判断与结论</h2></div>
+          <p class="section-note">解释为什么 Anthropic 页面写着“refunded”，但 Apple 余额可能仍没有变化。</p>
+        </div>
+        <div class="judgement-grid">
+          <article class="card judgement-main">
+            <h3>很可能是“系统文案已标记”，但 Apple 交易尚未完成冲正</h3>
+            <p>Anthropic 对 App Store 付款没有直接退款能力。因此，封号系统可能把订阅标记为已取消、应退款或显示通用退款文案，却没有让 Apple 的 StoreKit 交易实际进入退款完成状态。</p>
+            <div class="logic-chain" aria-label="推断链">
+              <div class="logic-box"><strong>Claude 账户系统</strong>显示 cancellation / refund 文案</div>
+              <div class="logic-arrow">→</div>
+              <div class="logic-box"><strong>Apple 交易系统</strong>尚无正式 Claim 或未批准</div>
+              <div class="logic-arrow">→</div>
+              <div class="logic-box"><strong>实际结果</strong>Apple Account Balance 未增加</div>
+            </div>
+          </article>
+          <aside class="card judgement-side">
+            <h3>这是推断，不是后台确认</h3>
+            <p>上述判断来自两家公司公开规则与当前现象的组合，并不等于已经看到了你这笔交易的后台记录。<strong>最终以 Report a Problem 的 Claim 状态、Apple 的审核结果和余额变化为准。</strong></p>
+          </aside>
+        </div>
+        <div class="final-callout">
+          <h3>最终行动判断</h3>
+          <p>不要再围绕“到底谁负责”在两家公司之间往返。<strong>Apple 负责审核和执行 App Store 退款；Anthropic 的两次退款承诺与官方 iOS 退款说明，是你要求 Apple 正式审核、必要时人工复核的核心证据。</strong></p>
+        </div>
+      </section>
+
+      <section id="sources" aria-labelledby="sources-title">
+        <div class="section-heading">
+          <div><p class="kicker">Official references</p><h2 id="sources-title">官方入口与依据</h2></div>
+          <p class="section-note">以下链接均为官方页面。政策和页面文案可能更新，请以打开时显示的最新内容为准。</p>
+        </div>
+        <div class="references">
+          <a class="reference-link" href="https://reportaproblem.apple.com/" target="_blank" rel="noopener noreferrer"><span><strong>Apple · Report a Problem</strong><small>提交退款与查看 Claim</small></span><b>↗</b></a>
+          <a class="reference-link" href="https://support.apple.com/en-us/118223" target="_blank" rel="noopener noreferrer"><span><strong>Apple · 申请退款说明</strong><small>Request a refund 官方流程</small></span><b>↗</b></a>
+          <a class="reference-link" href="https://support.apple.com/en-us/118224" target="_blank" rel="noopener noreferrer"><span><strong>Apple · 查询退款状态</strong><small>24–48 小时与退款到账说明</small></span><b>↗</b></a>
+          <a class="reference-link" href="https://support.apple.com/en-us/118212" target="_blank" rel="noopener noreferrer"><span><strong>Apple · 查看购买记录</strong><small>Purchase History 查询路径</small></span><b>↗</b></a>
+          <a class="reference-link" href="https://support.claude.com/en/articles/12386328-requesting-a-refund-for-a-paid-claude-plan" target="_blank" rel="noopener noreferrer"><span><strong>Anthropic · 付费计划退款</strong><small>Claude for iOS 需联系 Apple</small></span><b>↗</b></a>
+          <a class="reference-link" href="https://support.claude.com/en/articles/8325618-paid-plan-billing-faqs" target="_blank" rel="noopener noreferrer"><span><strong>Anthropic · 付费账单 FAQ</strong><small>App Store 付款由对应商店处理</small></span><b>↗</b></a>
+        </div>
+      </section>
+
+      <footer>
+        <span>信息核对日期：2026-08-12 · 本页为操作建议，不代表 Apple 的退款批准保证。</span>
+        <span>单文件离线页面 · 不上传数据 · 可直接打印</span>
+      </footer>
+    </div>
+<div class="toast" id="refundToast" role="status" aria-live="polite"></div>
+</div>

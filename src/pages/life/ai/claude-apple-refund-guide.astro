@@ -1,0 +1,29 @@
+---
+import Base from '../../../layouts/Base.astro';
+import body from '../../../legacy/life/ai/claude-apple-refund-guide/body.html?raw';
+import '../../../legacy/life/ai/claude-apple-refund-guide/style.css';
+
+const meta = {
+  title: 'Claude × Apple 退款行动指南',
+  description: 'Claude iOS 订阅被终止后的 Apple App Store 退款操作指南：证据链、状态分支、沟通话术与材料清单。',
+};
+---
+
+<Base title={`${meta.title} · Cavno`} description={meta.description}>
+  <section class="cv-page-head refund-page-head">
+    <div class="cv-wrap">
+      <div class="cv-eyebrow">Life &amp; Skills · AI</div>
+      <h1 class="cv-page-title">Claude × Apple 退款行动指南</h1>
+      <p class="cv-lede">梳理 App Store 订阅退款的责任主体、证据链、状态分支、沟通话术与材料准备。</p>
+      <a class="cv-crumb-back" href="/life/ai/">← 返回 AI 工具</a>
+    </div>
+  </section>
+
+  <article class="lp refund-article">
+    <Fragment set:html={body} />
+  </article>
+
+  <script>
+    import '../../../legacy/life/ai/claude-apple-refund-guide/script.js';
+  </script>
+</Base>
