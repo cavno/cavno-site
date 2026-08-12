@@ -63,16 +63,18 @@ function replaceEvery(value, from, to) {
   return value.split(from).join(to);
 }
 
-function encodedVariants(value) {
-  return new Set([value, encodeURI(value), encodeURIComponent(value)]);
-}
-
 function replacePair(value, from, to) {
-  const fromVariants = [...encodedVariants(from)];
-  const toVariants = [...encodedVariants(to)];
   let out = value;
-  for (let index = 0; index < fromVariants.length; index++) {
-    out = replaceEvery(out, fromVariants[index], toVariants[index]);
+  // Preserve the encoding style of the source reference. In particular,
+  // encodeURI keeps path separators as '/', while encodeURIComponent turns
+  // them into '%2F'. Deduplicating these variants breaks the index alignment
+  // when the ASCII target's raw and encodeURI forms are identical.
+  for (const [fromVariant, toVariant] of [
+    [from, to],
+    [encodeURI(from), encodeURI(to)],
+    [encodeURIComponent(from), encodeURIComponent(to)],
+  ]) {
+    out = replaceEvery(out, fromVariant, toVariant);
   }
   return out;
 }
