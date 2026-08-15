@@ -26,7 +26,13 @@ const {
 const external = /^https?:\/\//.test(href);
 const cover = derivePresentation({ title, summary, tags, section, subsection, body });
 ---
-<a class="cv-item" href={href} target={external ? '_blank' : undefined} rel={external ? 'noopener' : undefined}>
+<a
+  class="cv-item"
+  href={href}
+  target={external ? '_blank' : undefined}
+  rel={external ? 'noopener' : undefined}
+  aria-label={title}
+>
   <div
     class={`cv-auto-cover cv-cover-v${cover.variant} cv-cover-motif-${cover.motif}`}
     style={`--cv-cover-h:${cover.hue};`}
@@ -39,23 +45,13 @@ const cover = derivePresentation({ title, summary, tags, section, subsection, bo
       <i class="cv-art-d"></i>
       <i class="cv-art-e"></i>
     </div>
-    <div class="cv-cover-top">
-      <span>{tag}</span>
-      <span>{cover.motifLabel} / {cover.serial}</span>
-    </div>
-    <div class="cv-cover-copy">
+    <div class="cv-cover-title">
       <strong>{cover.title}</strong>
-      <span>{cover.summary}</span>
     </div>
-    {cover.keywords.length > 0 && (
-      <div class="cv-cover-keys">
-        {cover.keywords.map((keyword) => <span>{keyword}</span>)}
-      </div>
-    )}
   </div>
   <div class="cv-item-body">
     <div class="cv-item-meta"><span class="cv-tag">{tag}</span><span class="cv-date">{date}</span></div>
-    <h3>{title}</h3>
+    <h3 class="cv-item-title">{title}</h3>
     {cover.summary && <p>{cover.summary}</p>}
   </div>
 </a>
