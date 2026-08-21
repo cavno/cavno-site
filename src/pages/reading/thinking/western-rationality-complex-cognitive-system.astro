@@ -1,0 +1,26 @@
+---
+// 由 scripts/convert.mjs 生成，可自由手工精修
+import Base from '../../../layouts/Base.astro';
+import body from '../../../legacy/reading/thinking/western-rationality-complex-cognitive-system/body.html?raw';
+import '../../../legacy/reading/thinking/western-rationality-complex-cognitive-system/style.css';
+
+const meta = {
+  "title": "西方理性：一个不断升级的复杂认知系统",
+  "description": "将系统科学的七个阶段与西方理性史逐层对照，呈现二者从机械结构到网络计算与反身认知的同构关系。"
+};
+---
+<Base title={meta.title + ' · Cavno'} description={meta.description}>
+
+  <section class="cv-page-head">
+    <div class="cv-wrap">
+      <div class="cv-eyebrow">Reading & Thinking · Thinking</div>
+      <h1 class="cv-page-title">{meta.title}</h1>
+      <p class="cv-lede">{meta.description}</p>
+      <a class="cv-crumb-back" href="/reading/thinking/">← 返回思考栏目</a>
+    </div>
+  </section>
+
+  <article class="lp">
+    <Fragment set:html={body} />
+  </article>
+</Base>
