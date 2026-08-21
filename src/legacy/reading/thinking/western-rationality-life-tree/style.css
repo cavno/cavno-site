@@ -75,4 +75,73 @@
     }@media (max-width:430px){.lp .hero-principles{ grid-template-columns:1fr; }.lp .cycle-steps, .lp .metabolism-flow, .lp .concept-grid{ grid-template-columns:1fr; }.lp .metabolism-step::after{ display:none !important; }.lp .material-card{ grid-template-columns:1fr; }.lp .stress-number{ font-size:48px; }
     }@media (prefers-reduced-motion:reduce){.lp{ scroll-behavior:auto; }.lp *, .lp *::before, .lp *::after{ transition:none !important; animation:none !important; } }@media print{.lp{ --bg:#fff;--paper:#fff;--paper-2:#f5f4ef;--ink:#111;--muted:#444;--line:#bbb; }.lp::before, .lp .topbar, .lp .reading-progress, .lp .tree-toolbar, .lp .simulator{ display:none !important; }.lp section{ padding:38px 0; break-inside:avoid; }.lp .hero{ min-height:auto; -webkit-print-color-adjust:exact; print-color-adjust:exact; }.lp .tree-scroll, .lp .ai-visual, .lp .forest-visual{ overflow:visible; }.lp .life-tree-svg, .lp .ai-visual svg, .lp .forest-svg{ min-width:0; }.lp .branch-group{ opacity:1 !important; }
     }
+
+/* ---------- 完整演化谱系：树干式纵向阅读 ---------- */
+.lp .lineage-key{display:flex;flex-wrap:wrap;gap:9px 18px;margin:-12px 0 26px;padding:14px 18px;border:1px solid var(--line);border-radius:14px;background:var(--paper)}
+.lp .lineage-key span{display:inline-flex;align-items:center;gap:7px;color:var(--muted);font-size:12px}
+.lp .lineage-key i{width:10px;height:10px;border-radius:50%;background:var(--forest-2);box-shadow:0 0 0 3px color-mix(in srgb,var(--forest-2) 13%,transparent)}
+.lp .lineage-key .key-stress{background:var(--danger);box-shadow:0 0 0 3px var(--danger-soft)}
+.lp .lineage-key .key-release{background:var(--dynamic);box-shadow:0 0 0 3px var(--dynamic-soft)}
+.lp .lineage-key .key-legacy{background:var(--evolution);box-shadow:0 0 0 3px var(--evolution-soft)}
+.lp .lineage-road{position:relative;display:grid;gap:16px;padding:8px 0}
+.lp .lineage-road::before{content:"";position:absolute;left:202px;top:0;bottom:0;width:8px;border-radius:999px;background:linear-gradient(180deg,var(--soil),var(--forest-2) 34%,var(--dynamic) 60%,var(--feedback) 82%,var(--reflexive));opacity:.34}
+.lp .lineage-stage{--stage-accent:var(--forest-2);position:relative;display:grid;grid-template-columns:185px minmax(0,1fr);gap:38px;padding:0 0 0 0}
+.lp .lineage-stage::before{content:"";position:absolute;left:194px;top:34px;z-index:2;width:18px;height:18px;border:5px solid var(--paper);border-radius:50%;background:var(--stage-accent);box-shadow:0 0 0 1px color-mix(in srgb,var(--stage-accent) 62%,var(--line))}
+.lp .lineage-stage::after{content:"";position:absolute;left:212px;top:42px;width:25px;height:2px;background:color-mix(in srgb,var(--stage-accent) 54%,var(--line))}
+.lp .stage-meta{padding:21px 0 18px;text-align:right}
+.lp .stage-index{display:block;color:var(--stage-accent);font-family:Georgia,serif;font-size:28px;line-height:1}
+.lp .stage-era{display:block;margin:7px 0 5px;color:var(--muted);font-family:var(--mono);font-size:10px;letter-spacing:.07em;text-transform:uppercase}
+.lp .stage-meta>b{display:block;font-family:var(--serif);font-size:15px;line-height:1.4}
+.lp .stage-body{padding:25px 28px 23px;border:1px solid var(--line);border-left:4px solid var(--stage-accent);border-radius:0 var(--radius) var(--radius) 0;background:var(--paper);box-shadow:var(--shadow-small)}
+.lp .stage-body h3{margin-bottom:13px;font-size:clamp(21px,2.3vw,27px)}
+.lp .stage-body p{margin-bottom:12px;color:var(--muted);font-size:14px;line-height:1.86}
+.lp .stage-body p:last-child{margin-bottom:0}
+.lp .stage-body em{color:var(--stage-accent)}
+.lp .stage-formula{margin:16px 0;padding:14px 16px;border-radius:10px;background:color-mix(in srgb,var(--stage-accent) 9%,var(--paper-2));color:var(--ink);font-family:"Cambria Math",Cambria,Georgia,serif;font-size:15px;text-align:center;overflow-wrap:anywhere}
+.lp .stage-dynamics{display:grid;grid-template-columns:repeat(3,1fr);gap:9px;margin-top:17px}
+.lp .stage-dynamics>div{padding:13px;border-top:2px solid var(--stage-accent);background:var(--paper-2)}
+.lp .stage-dynamics b{display:block;margin-bottom:5px;color:var(--stage-accent);font-size:12px}
+.lp .stage-dynamics span{display:block;color:var(--muted);font-size:11px;line-height:1.62}
+.lp .branch-pair{display:grid;grid-template-columns:1fr 1fr;gap:11px;margin:16px 0}
+.lp .branch-pair>div{position:relative;padding:18px;border:1px solid var(--line);border-top:3px solid var(--stage-accent);border-radius:12px;background:var(--paper-2)}
+.lp .branch-pair>div:nth-child(2){border-top-color:var(--dynamic)}
+.lp .branch-label{display:block;margin-bottom:7px;color:var(--stage-accent);font-family:var(--mono);font-size:10px;font-weight:800;letter-spacing:.11em;text-transform:uppercase}
+.lp .branch-pair>div:nth-child(2) .branch-label{color:var(--dynamic)}
+.lp .branch-pair b{display:block;font-family:var(--serif);font-size:17px}
+.lp .branch-pair p{margin:8px 0 0;font-size:12px;line-height:1.72}
+.lp .stage-bridge{margin-top:13px!important;padding:13px 15px;border-left:3px solid var(--sap);background:var(--paper-2)}
+.lp .root-stage{--stage-accent:var(--soil)}
+.lp .bifurcate-stage{--stage-accent:var(--sap)}
+.lp .closure-stage{--stage-accent:var(--formal)}
+.lp .graft-stage{--stage-accent:var(--moss)}
+.lp .generative-stage{--stage-accent:var(--dynamic)}
+.lp .reflexive-stage{--stage-accent:var(--reflexive)}
+.lp .evolution-stage{--stage-accent:var(--evolution)}
+.lp .pruning-stage{--stage-accent:var(--formal)}
+.lp .feedback-stage{--stage-accent:var(--feedback)}
+.lp .crown-stage{--stage-accent:var(--sap)}
+.lp .crown-stage .stage-body{background:linear-gradient(135deg,var(--paper),color-mix(in srgb,var(--evolution-soft) 62%,var(--paper)))}
+
+@media (max-width:760px){
+  .lp .lineage-key{margin-top:0;padding:12px 14px}
+  .lp .lineage-road{gap:19px;padding-left:18px}
+  .lp .lineage-road::before{left:5px;width:5px}
+  .lp .lineage-stage{grid-template-columns:1fr;gap:7px}
+  .lp .lineage-stage::before{left:-21px;top:17px;width:15px;height:15px;border-width:4px}
+  .lp .lineage-stage::after{display:none}
+  .lp .stage-meta{padding:0;text-align:left}
+  .lp .stage-index{display:inline-block;margin-right:8px;font-size:22px;vertical-align:middle}
+  .lp .stage-era{display:inline-block;margin:0;font-size:9px;vertical-align:middle}
+  .lp .stage-meta>b{margin-top:3px;font-size:13px}
+  .lp .stage-body{padding:20px 18px;border-left-width:3px}
+  .lp .stage-body h3{font-size:22px}
+  .lp .stage-body p{font-size:13px;line-height:1.78}
+  .lp .stage-dynamics,.lp .branch-pair{grid-template-columns:1fr}
+  .lp .stage-formula{font-size:13px;text-align:left}
+}
+
+@media print{
+  .lp .lineage-stage{break-inside:avoid}
+  .lp .lineage-road::before{background:#999}
+}
   
