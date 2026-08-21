@@ -1,0 +1,26 @@
+---
+// 由 scripts/convert.mjs 生成，可自由手工精修
+import Base from '../../../layouts/Base.astro';
+import body from '../../../legacy/reading/thinking/systems-theory-development-roadmap/body.html?raw';
+import '../../../legacy/reading/thinking/systems-theory-development-roadmap/style.css';
+
+const meta = {
+  "title": "系统论发展的总体路线图",
+  "description": "从一般系统理论到复杂适应系统，梳理人类理解复杂世界方式的演化，以及整体、反馈、自组织、涌现与网络之间的逻辑关系。"
+};
+---
+<Base title={meta.title + ' · Cavno'} description={meta.description}>
+
+  <section class="cv-page-head">
+    <div class="cv-wrap">
+      <div class="cv-eyebrow">Reading & Thinking · Thinking</div>
+      <h1 class="cv-page-title">{meta.title}</h1>
+      <p class="cv-lede">{meta.description}</p>
+      <a class="cv-crumb-back" href="/reading/thinking/">← 返回思考栏目</a>
+    </div>
+  </section>
+
+  <article class="lp">
+    <Fragment set:html={body} />
+  </article>
+</Base>
