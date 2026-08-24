@@ -33,7 +33,7 @@
       "en": "Reading & Thinking",
       "zh": "阅读与思考",
       "short": "Reading",
-      "desc": "全书视察、哲学史讲义、思考图谱与数学基础。",
+      "desc": "全书视察、哲学与神学史讲义、思考图谱及数学基础。",
       "planned": false,
       "subsections": [
         {
@@ -47,6 +47,12 @@
           "en": "Philosophy",
           "zh": "哲学",
           "desc": "西方哲学史十讲、二元对立史"
+        },
+        {
+          "slug": "theology",
+          "en": "Theology",
+          "zh": "神学",
+          "desc": "神学传统、历史分化与意义系统演化"
         },
         {
           "slug": "thinking",
