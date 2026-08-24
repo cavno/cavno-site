@@ -1,0 +1,26 @@
+---
+// 由 scripts/convert.mjs 生成，可自由手工精修
+import Base from '../../../layouts/Base.astro';
+import body from '../../../legacy/working/training/ai-training-agency-transformation/body.html?raw';
+import '../../../legacy/working/training/ai-training-agency-transformation/style.css';
+
+const meta = {
+  "title": "企业培训代理公司的 AI 转型路径",
+  "description": "面向企业培训课程代理商，从客户识别、销售转化、私域经营、直播运营到 AI 陪练产品化，构建数据贯通、人机协同的持续增长体系。"
+};
+---
+<Base title={meta.title + ' · Cavno'} description={meta.description}>
+
+  <section class="cv-page-head">
+    <div class="cv-wrap">
+      <div class="cv-eyebrow">Working · Training</div>
+      <h1 class="cv-page-title">{meta.title}</h1>
+      <p class="cv-lede">{meta.description}</p>
+      <a class="cv-crumb-back" href="/working/training/">← 返回企业培训栏目</a>
+    </div>
+  </section>
+
+  <article class="lp">
+    <Fragment set:html={body} />
+  </article>
+</Base>

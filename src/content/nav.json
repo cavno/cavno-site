@@ -131,7 +131,7 @@
       "en": "Working",
       "zh": "工作",
       "short": "Working",
-      "desc": "亚马逊运营操作系统：关键词、预测、尽调、投放、资产。",
+      "desc": "企业培训转型、亚马逊运营与工作方法。",
       "planned": false,
       "subsections": [
         {
@@ -139,6 +139,12 @@
           "en": "Amazon Tools",
           "zh": "亚马逊工具",
           "desc": "关键词 · 预测 · 尽调 · 投放 · 资产，五件套控制台"
+        },
+        {
+          "slug": "training",
+          "en": "Training",
+          "zh": "企业培训",
+          "desc": "AI 转型、销售增长与组织能力建设"
         }
       ]
     }
