@@ -1,0 +1,1140 @@
+---
+import Base from '../../../layouts/Base.astro';
+import '../../../styles/growth-os.css';
+
+const meta = {
+  title: '企业培训 AI 增长操作系统',
+  description: '把客户识别、销售转化、私域经营、直播运营、AI 陪练与内容资产连接到同一条数据主线的可操作一体化工作台。',
+};
+---
+<Base title={meta.title + ' · Cavno'} description={meta.description}>
+  <section class="cv-page-head">
+    <div class="cv-wrap">
+      <div class="cv-eyebrow">Working · Training · Growth OS</div>
+      <h1 class="cv-page-title">{meta.title}</h1>
+      <p class="cv-lede">{meta.description}</p>
+      <div class="cv-page-links">
+        <a class="cv-crumb-back" href="/working/training/">← 返回企业培训栏目</a>
+        <a class="cv-crumb-back" href="/working/training/ai-training-agency-transformation/">查看转型方法 →</a>
+      </div>
+    </div>
+  </section>
+
+  <article class="growth-os" id="growth-os-root">
+    <a class="gos-skip" href="#gos-workspace">跳到工作区</a>
+
+    <div class="gos-app">
+      <header class="gos-topbar">
+        <button class="gos-icon-button gos-menu-button" id="gos-menu-button" type="button" aria-label="打开模块导航" aria-controls="gos-sidebar" aria-expanded="false">☰</button>
+        <div class="gos-brand">
+          <span class="gos-brand-mark" aria-hidden="true">G</span>
+          <span><strong>Growth OS</strong><small>企业培训增长工作台</small></span>
+        </div>
+        <label class="gos-global-search" for="gos-global-search">
+          <span>搜索</span>
+          <input id="gos-global-search" type="search" autocomplete="off" placeholder="客户、行业、需求或负责人" />
+          <span class="gos-search-hint">⌘ K</span>
+          <span class="gos-search-results" id="gos-search-results" hidden></span>
+        </label>
+        <div class="gos-top-actions" aria-label="数据操作">
+          <span class="gos-mode-badge" id="gos-storage-badge">本机演示数据</span>
+          <button class="gos-button ghost" id="gos-import-button" type="button">导入</button>
+          <button class="gos-button ghost" id="gos-export-button" type="button">导出</button>
+          <button class="gos-button primary" id="gos-new-customer" type="button">＋ 新建客户</button>
+        </div>
+      </header>
+
+      <div class="gos-layout">
+        <aside class="gos-sidebar" id="gos-sidebar" aria-label="工作台模块" tabindex="-1">
+          <nav class="gos-nav">
+            <p>经营闭环</p>
+            <button type="button" data-view="overview" aria-current="page"><span aria-hidden="true">◫</span><strong>经营驾驶舱</strong><em id="gos-count-overview">实时</em></button>
+            <button type="button" data-view="radar"><span aria-hidden="true">◎</span><strong>客户雷达</strong><em id="gos-count-radar">0</em></button>
+            <button type="button" data-view="sales"><span aria-hidden="true">↗</span><strong>销售管道</strong><em id="gos-count-sales">0</em></button>
+            <button type="button" data-view="nurture"><span aria-hidden="true">◇</span><strong>私域经营</strong><em id="gos-count-nurture">0</em></button>
+            <button type="button" data-view="live"><span aria-hidden="true">◉</span><strong>直播运营</strong><em id="gos-count-live">0</em></button>
+            <button type="button" data-view="coaching"><span aria-hidden="true">△</span><strong>AI 陪练</strong><em id="gos-count-coaching">0</em></button>
+            <p>系统资产</p>
+            <button type="button" data-view="assets"><span aria-hidden="true">▤</span><strong>资产中心</strong><em id="gos-count-assets">0</em></button>
+            <button type="button" data-view="governance"><span aria-hidden="true">⌁</span><strong>集成与治理</strong><em>边界</em></button>
+          </nav>
+          <div class="gos-sidebar-note">
+            <strong>统一数据主线</strong>
+            <span>customer_id 贯通信号、商机、触达、直播、交付与复购。</span>
+          </div>
+        </aside>
+
+        <div class="gos-workspace" id="gos-workspace" role="region" aria-label="AI 增长操作系统工作区" tabindex="-1">
+          <noscript>
+            <div class="gos-noscript"><strong>此工作台需要 JavaScript 才能操作。</strong><span>你仍可返回转型方法页阅读完整业务框架。</span></div>
+          </noscript>
+
+          <section class="gos-panel" id="gos-panel-overview" data-panel="overview" aria-labelledby="gos-overview-title">
+            <div class="gos-panel-head">
+              <div><span class="gos-eyebrow">COMMAND CENTER</span><h2 id="gos-overview-title">经营驾驶舱</h2><p>指标全部从共享业务数据实时计算；任何模块的动作都会回写到客户 360° 记录。</p></div>
+              <div class="gos-panel-actions"><button class="gos-button secondary" type="button" data-view="radar">查看高意向客户</button><button class="gos-button primary" type="button" data-open-add>录入新线索</button></div>
+            </div>
+
+            <div class="gos-boundary-banner" role="note">
+              <span class="gos-boundary-icon" aria-hidden="true">i</span>
+              <div><strong>当前为可操作的浏览器本地 MVP</strong><p>数据只保存在这台设备，不连接真实 CRM、企业微信、直播平台或大模型；可用 JSON 导入/导出完整业务数据。生产化接入点集中在“集成与治理”。</p></div>
+            </div>
+
+            <div class="gos-kpis" id="gos-kpis" aria-label="实时经营指标"></div>
+
+            <div class="gos-data-spine" aria-label="一体化数据链路">
+              <div class="gos-section-label"><span>一条数据主线</span><strong>从信号到复购，每一步都留下可复用记录</strong></div>
+              <div class="gos-loop" id="gos-growth-loop"></div>
+            </div>
+
+            <div class="gos-dashboard-grid">
+              <section class="gos-surface gos-priority-panel" aria-labelledby="gos-priority-title">
+                <div class="gos-surface-head"><div><span class="gos-eyebrow">NEXT BEST ACTION</span><h3 id="gos-priority-title">今日优先动作</h3></div><button class="gos-text-button" type="button" data-view="sales">进入销售管道 →</button></div>
+                <div id="gos-priority-list"></div>
+              </section>
+              <section class="gos-surface" aria-labelledby="gos-quality-title">
+                <div class="gos-surface-head"><div><span class="gos-eyebrow">DATA READINESS</span><h3 id="gos-quality-title">数据可用度</h3></div></div>
+                <div id="gos-quality"></div>
+              </section>
+              <section class="gos-surface gos-wide" aria-labelledby="gos-timeline-title">
+                <div class="gos-surface-head"><div><span class="gos-eyebrow">SHARED ACTIVITY STREAM</span><h3 id="gos-timeline-title">跨模块活动流</h3></div><button class="gos-text-button" type="button" data-view="governance">查看完整审计 →</button></div>
+                <div class="gos-timeline" id="gos-timeline"></div>
+              </section>
+            </div>
+          </section>
+
+          <section class="gos-panel" id="gos-panel-radar" data-panel="radar" aria-labelledby="gos-radar-title" hidden>
+            <div class="gos-panel-head">
+              <div><span class="gos-eyebrow">CUSTOMER RADAR</span><h2 id="gos-radar-title">客户识别与可解释评分</h2><p>把合规信号组织成客户画像；评分只用于辅助排序，最终由人工确认。</p></div>
+              <div class="gos-panel-actions"><button class="gos-button primary" type="button" data-open-add>＋ 新建客户</button></div>
+            </div>
+            <div class="gos-toolbar">
+              <label>搜索客户<input id="gos-radar-search" type="search" placeholder="名称、行业、需求、标签" /></label>
+              <label>意向区间<select id="gos-radar-score"><option value="all">全部评分</option><option value="high">高意向 ≥ 75</option><option value="medium">培育中 50–74</option><option value="low">待核验 &lt; 50</option></select></label>
+              <span class="gos-toolbar-note">评分依据：需求匹配、购买时机、可触达性与信息完整度</span>
+            </div>
+            <div class="gos-table-wrap" id="gos-radar-table"></div>
+          </section>
+
+          <section class="gos-panel" id="gos-panel-sales" data-panel="sales" aria-labelledby="gos-sales-title" hidden>
+            <div class="gos-panel-head">
+              <div><span class="gos-eyebrow">HUMAN-IN-THE-LOOP SALES</span><h2 id="gos-sales-title">销售转化管道</h2><p>规则建议下一步动作，销售负责人确认后再推进阶段；所有变化写入统一活动流。</p></div>
+              <div class="gos-panel-actions"><button class="gos-button secondary" type="button" data-view="radar">从雷达选客户</button></div>
+            </div>
+            <div class="gos-pipeline-summary" id="gos-pipeline-summary"></div>
+            <div class="gos-pipeline" id="gos-sales-pipeline" aria-label="销售阶段看板"></div>
+          </section>
+
+          <section class="gos-panel" id="gos-panel-nurture" data-panel="nurture" aria-labelledby="gos-nurture-title" hidden>
+            <div class="gos-panel-head">
+              <div><span class="gos-eyebrow">PRIVATE DOMAIN OPERATIONS</span><h2 id="gos-nurture-title">私域经营与内容触达</h2><p>客户分层、内容资产与触达任务共用同一客户记录；本 MVP 只创建待人工确认任务，不实际发送消息。</p></div>
+            </div>
+            <div class="gos-two-col">
+              <section class="gos-surface" aria-labelledby="gos-touch-title">
+                <div class="gos-surface-head"><div><span class="gos-eyebrow">CREATE TOUCH</span><h3 id="gos-touch-title">创建合规触达任务</h3></div></div>
+                <form class="gos-form" id="gos-touch-form">
+                  <label>目标客户<select id="gos-touch-customer" name="customerId" required></select></label>
+                  <label>复用内容资产<select id="gos-touch-asset" name="assetId" required></select></label>
+                  <label>触达目的<textarea name="purpose" maxlength="240" required placeholder="例如：发送制造业销售训练案例，并邀请参加需求诊断会"></textarea></label>
+                  <label class="gos-check"><input name="confirmed" type="checkbox" required /><span>我已确认客户授权、沟通渠道和退出机制</span></label>
+                  <button class="gos-button primary" type="submit">生成待办，不自动发送</button>
+                </form>
+              </section>
+              <section class="gos-surface" aria-labelledby="gos-campaign-title">
+                <div class="gos-surface-head"><div><span class="gos-eyebrow">NURTURE PROGRAMS</span><h3 id="gos-campaign-title">培育计划</h3></div></div>
+                <div id="gos-campaigns"></div>
+              </section>
+            </div>
+          </section>
+
+          <section class="gos-panel" id="gos-panel-live" data-panel="live" aria-labelledby="gos-live-title" hidden>
+            <div class="gos-panel-head">
+              <div><span class="gos-eyebrow">LIVE OPERATIONS</span><h2 id="gos-live-title">直播前、中、后转化链</h2><p>主题、报名、观看和高意向信号回到同一客户池；会后分流需人工确认才写入销售任务。</p></div>
+            </div>
+            <div class="gos-live-grid" id="gos-live-events"></div>
+          </section>
+
+          <section class="gos-panel" id="gos-panel-coaching" data-panel="coaching" aria-labelledby="gos-coaching-title" hidden>
+            <div class="gos-panel-head">
+              <div><span class="gos-eyebrow">AI COACHING PRODUCT</span><h2 id="gos-coaching-title">AI 陪练与交付数据</h2><p>用规则评分演示课程知识如何进入岗位训练；结果关联客户、学习者、场景与知识资产。</p></div>
+            </div>
+            <div class="gos-two-col coaching">
+              <section class="gos-surface" aria-labelledby="gos-session-title">
+                <div class="gos-surface-head"><div><span class="gos-eyebrow">PRACTICE SESSION</span><h3 id="gos-session-title">完成一次销售陪练</h3></div><span class="gos-rule-badge">规则评分演示</span></div>
+                <form class="gos-form" id="gos-coaching-form">
+                  <label>所属客户<select id="gos-coaching-customer" name="customerId" required></select></label>
+                  <label>学习者或团队<input name="learner" maxlength="80" required value="销售一组" /></label>
+                  <label>训练场景<select name="scenario"><option>价格异议处理</option><option>需求诊断</option><option>价值呈现</option><option>成交推进</option></select></label>
+                  <div class="gos-scenario"><span>客户提出：</span><strong>“你们的方案不错，但价格必须再降 20%。”</strong></div>
+                  <label>你的回答<textarea name="answer" minlength="20" maxlength="1200" required placeholder="请先追问背景，再说明价值与下一步……"></textarea></label>
+                  <button class="gos-button primary" type="submit">提交并生成演示评分</button>
+                </form>
+              </section>
+              <section class="gos-surface" aria-labelledby="gos-results-title">
+                <div class="gos-surface-head"><div><span class="gos-eyebrow">DELIVERY DATA</span><h3 id="gos-results-title">最近训练结果</h3></div></div>
+                <div id="gos-coaching-results"></div>
+              </section>
+            </div>
+          </section>
+
+          <section class="gos-panel" id="gos-panel-assets" data-panel="assets" aria-labelledby="gos-assets-title" hidden>
+            <div class="gos-panel-head">
+              <div><span class="gos-eyebrow">REUSABLE SYSTEM ASSETS</span><h2 id="gos-assets-title">内容与交付资产中心</h2><p>课程、案例、话术、直播脚本和评分标准都以版本化资产被复用，并记录使用次数。</p></div>
+            </div>
+            <div class="gos-two-col assets">
+              <section class="gos-surface" aria-labelledby="gos-library-title">
+                <div class="gos-surface-head"><div><span class="gos-eyebrow">LIBRARY</span><h3 id="gos-library-title">资产库</h3></div><label class="gos-inline-filter">类型<select id="gos-asset-filter"><option value="all">全部</option><option value="case">案例</option><option value="course">课程</option><option value="script">话术/脚本</option><option value="rubric">评分标准</option><option value="knowledge">知识</option></select></label></div>
+                <div id="gos-assets-list"></div>
+              </section>
+              <section class="gos-surface" aria-labelledby="gos-new-asset-title">
+                <div class="gos-surface-head"><div><span class="gos-eyebrow">NEW ASSET</span><h3 id="gos-new-asset-title">沉淀新资产</h3></div></div>
+                <form class="gos-form" id="gos-asset-form">
+                  <label>资产名称<input name="title" maxlength="120" required placeholder="例如：制造业销售新人首单案例" /></label>
+                  <label>类型<select name="type"><option value="case">案例</option><option value="course">课程</option><option value="script">话术/脚本</option><option value="rubric">评分标准</option><option value="knowledge">知识</option></select></label>
+                  <label>标签<input name="tags" maxlength="160" placeholder="制造业, 销售新人, 首单" /></label>
+                  <label>内容摘要<textarea name="summary" maxlength="600" required></textarea></label>
+                  <label class="gos-check"><input name="authorized" type="checkbox" required /><span>已确认课程、案例和对话内容可被授权使用</span></label>
+                  <button class="gos-button primary" type="submit">保存为可复用资产</button>
+                </form>
+              </section>
+            </div>
+          </section>
+
+          <section class="gos-panel" id="gos-panel-governance" data-panel="governance" aria-labelledby="gos-governance-title" hidden>
+            <div class="gos-panel-head">
+              <div><span class="gos-eyebrow">INTEGRATION & GOVERNANCE</span><h2 id="gos-governance-title">生产接入与数据治理</h2><p>演示能力与生产能力明确分层；所有外部执行、评分和自动化都保留权限、审计与人工接管。</p></div>
+              <div class="gos-panel-actions"><button class="gos-button ghost" id="gos-reset-button" type="button">恢复演示数据</button><button class="gos-button danger" id="gos-clear-button" type="button">清空本机业务数据</button></div>
+            </div>
+            <div class="gos-integration-grid" id="gos-integrations"></div>
+            <div class="gos-two-col governance">
+              <section class="gos-surface" aria-labelledby="gos-model-title">
+                <div class="gos-surface-head"><div><span class="gos-eyebrow">SHARED DATA MODEL</span><h3 id="gos-model-title">共享数据实体</h3></div></div>
+                <div class="gos-entity-map">
+                  <span class="core">客户 customer_id</span><span>信号</span><span>商机</span><span>任务</span><span>触达</span><span>直播</span><span>训练</span><span>内容资产 asset_id</span>
+                </div>
+                <ul class="gos-governance-list">
+                  <li><strong>合规：</strong>合法来源、目的限制、最小必要、保存期限与退出机制。</li>
+                  <li><strong>权限：</strong>生产环境需角色权限、租户隔离、字段级访问与审批。</li>
+                  <li><strong>AI：</strong>知识授权、引用溯源、效果评测、提示注入与泄漏防护。</li>
+                  <li><strong>人机协作：</strong>AI 只建议；高影响销售、触达与员工评价由人工确认。</li>
+                </ul>
+              </section>
+              <section class="gos-surface" aria-labelledby="gos-audit-title">
+                <div class="gos-surface-head"><div><span class="gos-eyebrow">AUDIT LOG</span><h3 id="gos-audit-title">本机活动审计</h3></div></div>
+                <div class="gos-audit" id="gos-audit-log"></div>
+              </section>
+            </div>
+          </section>
+        </div>
+      </div>
+    </div>
+
+    <dialog class="gos-dialog" id="gos-add-dialog" aria-labelledby="gos-add-title">
+      <form class="gos-dialog-form" id="gos-add-form">
+        <div class="gos-dialog-head"><div><span class="gos-eyebrow">NEW CUSTOMER</span><h2 id="gos-add-title">录入客户与需求信号</h2></div><button type="button" class="gos-dialog-close" data-close-dialog aria-label="关闭">×</button></div>
+        <div class="gos-form-grid">
+          <label>企业名称<input name="name" maxlength="100" required /></label>
+          <label>行业<input name="industry" maxlength="80" required /></label>
+          <label>企业规模（人）<input name="size" type="number" min="1" max="1000000" required /></label>
+          <label>负责人<input name="owner" maxlength="60" required /></label>
+          <label>联系人<input name="contact" maxlength="80" /></label>
+          <label>信号来源<select name="source"><option value="公开信号">公开信号</option><option value="直播">直播</option><option value="转介绍">转介绍</option><option value="官网咨询">官网咨询</option><option value="活动">活动</option></select></label>
+          <label class="wide">需求信号<textarea name="signal" maxlength="280" required placeholder="例如：近期招聘 50 名销售，计划在 60 天内完成新人上岗"></textarea></label>
+          <label class="wide">推测需求<textarea name="need" maxlength="280" required placeholder="例如：销售新人训练与管理者带教"></textarea></label>
+          <label>初始评分（0–100）<input name="score" type="number" min="0" max="100" value="60" required /></label>
+          <label>数据处理状态<select name="consent"><option value="needs-review">待合规核验</option><option value="confirmed">已确认可处理</option></select></label>
+        </div>
+        <p class="gos-form-help">请勿录入真实敏感个人信息。评分是人工可覆盖的排序参考，不是事实判断。</p>
+        <div class="gos-dialog-actions"><button class="gos-button ghost" type="button" data-close-dialog>取消</button><button class="gos-button primary" type="submit">保存到客户雷达</button></div>
+      </form>
+    </dialog>
+
+    <dialog class="gos-dialog customer" id="gos-customer-dialog" aria-labelledby="gos-customer-dialog-title">
+      <div id="gos-customer-dialog-content"><h2 id="gos-customer-dialog-title" class="gos-visually-hidden">客户 360°</h2></div>
+    </dialog>
+
+    <input id="gos-import-input" type="file" accept="application/json,.json" aria-label="导入 Growth OS JSON 数据文件" hidden />
+    <div class="gos-toast" id="gos-toast" role="status" aria-live="polite" aria-atomic="true" hidden></div>
+
+    <script is:inline>
+      (() => {
+        const root = document.currentScript?.closest('.growth-os');
+        if (!root || root.dataset.initialized === 'true') return;
+        root.dataset.initialized = 'true';
+
+        const STORAGE_KEY = 'cavno:working:training:ai-growth-os:v1';
+        const SCHEMA_VERSION = 1;
+        const MAX_IMPORT_BYTES = 2 * 1024 * 1024;
+        const views = ['overview', 'radar', 'sales', 'nurture', 'live', 'coaching', 'assets', 'governance'];
+        const stageOrder = ['radar', 'qualified', 'discovery', 'proposal', 'won'];
+        const stageMeta = {
+          radar: ['待识别', '雷达'],
+          qualified: ['已确认', '销售'],
+          discovery: ['需求诊断', '销售'],
+          proposal: ['方案评估', '销售'],
+          won: ['已成交', '交付'],
+        };
+        const moduleMeta = {
+          radar: ['客户雷达', '识别'], sales: ['销售管道', '转化'], nurture: ['私域经营', '触达'],
+          live: ['直播运营', '直播'], coaching: ['AI 陪练', '交付'], assets: ['资产中心', '资产'], system: ['系统', '治理'],
+        };
+        const assetTypeMeta = { case: '案例', course: '课程', script: '话术/脚本', rubric: '评分标准', knowledge: '知识' };
+
+        const DEMO_STATE = {
+          updatedAt: '2026-08-25T03:30:00.000Z',
+          customers: [
+            { id:'cus-qiming', name:'启明精密制造（示例）', industry:'制造业', size:620, contact:'李总', owner:'周宁', stage:'proposal', score:88, source:'直播', signal:'新建华南销售团队并招聘 60 名销售', need:'新人首单训练与一线经理带教', tags:['制造业','销售扩张','高意向'], consent:'confirmed', lastTouch:'2026-08-25', nextAction:'确认 60 天训练方案与采购决策链', value:180000 },
+            { id:'cus-yunhe', name:'云合软件（示例）', industry:'企业软件', size:340, contact:'陈经理', owner:'林琪', stage:'discovery', score:76, source:'官网咨询', signal:'产品线升级，客户成功团队需要统一续费方法', need:'客户成功续费训练与经理复盘', tags:['SaaS','续费','需诊断'], consent:'confirmed', lastTouch:'2026-08-24', nextAction:'安排客户成功负责人需求诊断', value:120000 },
+            { id:'cus-haichuan', name:'海川零售（示例）', industry:'零售', size:980, contact:'王女士', owner:'林琪', stage:'qualified', score:69, source:'转介绍', signal:'区域店长梯队扩张，门店服务标准不一致', need:'店长训练营与服务场景陪练', tags:['零售','店长','培育中'], consent:'confirmed', lastTouch:'2026-08-22', nextAction:'发送同行案例并确认参训规模', value:96000 },
+            { id:'cus-xingtu', name:'星途物流（示例）', industry:'物流', size:450, contact:'待确认', owner:'周宁', stage:'radar', score:57, source:'公开信号', signal:'近期密集招聘区域销售经理', need:'销售管理与新人上岗', tags:['物流','招聘信号','待核验'], consent:'needs-review', lastTouch:'2026-08-21', nextAction:'核验数据来源与采购角色', value:0 },
+            { id:'cus-muyuan', name:'牧原医疗器械（示例）', industry:'医疗器械', size:260, contact:'赵总监', owner:'唐澄', stage:'won', score:91, source:'活动', signal:'新产品上市，需要全国渠道统一价值表达', need:'渠道销售训练、AI 陪练与季度复训', tags:['医疗','已成交','续费机会'], consent:'confirmed', lastTouch:'2026-08-25', nextAction:'复盘首期训练数据并制定季度陪练计划', value:240000 },
+          ],
+          tasks: [
+            { id:'tsk-001', customerId:'cus-qiming', type:'sales', title:'确认采购决策链与 60 天见效指标', due:'2026-08-26', owner:'周宁', status:'open' },
+            { id:'tsk-002', customerId:'cus-yunhe', type:'sales', title:'完成客户成功续费能力诊断', due:'2026-08-27', owner:'林琪', status:'open' },
+            { id:'tsk-003', customerId:'cus-haichuan', type:'nurture', title:'发送零售店长训练同行案例', due:'2026-08-28', owner:'林琪', status:'open' },
+            { id:'tsk-004', customerId:'cus-muyuan', type:'coaching', title:'复盘首期 AI 陪练薄弱项', due:'2026-08-29', owner:'唐澄', status:'open' },
+            { id:'tsk-005', customerId:'cus-qiming', type:'live', title:'整理直播高意向问题摘要', due:'2026-08-25', owner:'周宁', status:'done' },
+          ],
+          activities: [
+            { id:'act-001', customerId:'cus-qiming', module:'live', text:'参加“制造业销售新人 60 天首单”直播并提出采购周期问题', time:'2026-08-25T02:40:00.000Z', assetId:'ast-live-script' },
+            { id:'act-002', customerId:'cus-qiming', module:'sales', text:'销售确认高意向，推进至方案评估', time:'2026-08-25T03:00:00.000Z', assetId:null },
+            { id:'act-003', customerId:'cus-muyuan', module:'coaching', text:'完成“价格异议处理”陪练，综合得分 78', time:'2026-08-24T09:30:00.000Z', assetId:'ast-price-rubric' },
+            { id:'act-004', customerId:'cus-yunhe', module:'nurture', text:'查看 SaaS 续费案例并预约需求诊断', time:'2026-08-24T06:20:00.000Z', assetId:'ast-saas-case' },
+            { id:'act-005', customerId:'cus-haichuan', module:'radar', text:'通过转介绍进入客户雷达，完成人工信息核验', time:'2026-08-23T04:10:00.000Z', assetId:null },
+          ],
+          assets: [
+            { id:'ast-manufacturing-case', type:'case', title:'制造业销售新人 60 天首单案例', summary:'从岗位任务、经理带教到首单复盘的完整案例。', status:'ready', uses:14, owner:'内容组', tags:['制造业','销售新人','首单'] },
+            { id:'ast-saas-case', type:'case', title:'SaaS 客户成功续费复盘案例', summary:'围绕健康度、价值证明和续费推进的案例。', status:'ready', uses:9, owner:'内容组', tags:['SaaS','客户成功','续费'] },
+            { id:'ast-live-script', type:'script', title:'制造业销售训练直播脚本', summary:'含开场、诊断问题、案例与会后转化节点。', status:'ready', uses:7, owner:'直播组', tags:['直播','制造业','获客'] },
+            { id:'ast-price-rubric', type:'rubric', title:'价格异议处理评分标准 v1.3', summary:'评估追问、价值塑造、证据与下一步推进。', status:'ready', uses:23, owner:'产品组', tags:['陪练','销售','评分'] },
+            { id:'ast-course-core', type:'course', title:'顾问式销售训练营', summary:'需求诊断、价值呈现、异议处理与成交推进。', status:'ready', uses:18, owner:'课程组', tags:['课程','顾问式销售'] },
+            { id:'ast-faq', type:'knowledge', title:'课程、交付与采购 FAQ', summary:'供销售顾问和陪练系统引用的审核知识库。', status:'review', uses:5, owner:'知识运营', tags:['FAQ','RAG','待审核'] },
+          ],
+          campaigns: [
+            { id:'cmp-manufacturing', name:'制造业销售扩张培育计划', segment:'制造业 · 销售扩张 · 已确认可触达', status:'running', assetId:'ast-manufacturing-case', customerIds:['cus-qiming'], sent:12, engaged:7, qualified:3, nextRun:'2026-08-27' },
+            { id:'cmp-renewal', name:'客户成功续费主题培育', segment:'SaaS · 续费增长 · 经理层', status:'draft', assetId:'ast-saas-case', customerIds:['cus-yunhe'], sent:0, engaged:0, qualified:0, nextRun:'2026-08-30' },
+          ],
+          liveEvents: [
+            { id:'live-manufacturing', title:'制造业销售新人如何在 60 天内完成首单', date:'2026-08-25', status:'followup', registrations:184, attended:96, highIntent:17, converted:8, assetId:'ast-live-script', customerIds:['cus-qiming','cus-xingtu'], followupDone:false },
+            { id:'live-manager', title:'从店长经验到可复制服务标准', date:'2026-09-03', status:'planned', registrations:63, attended:0, highIntent:0, converted:0, assetId:'ast-live-script', customerIds:['cus-haichuan'], followupDone:false },
+          ],
+          coaching: [
+            { id:'coach-001', customerId:'cus-muyuan', learner:'渠道销售一组', scenario:'价格异议处理', score:78, dimensions:{ discovery:72, value:81, advance:80 }, date:'2026-08-24', assetId:'ast-price-rubric', note:'能说明价值，但需要先追问降价背后的审批标准。' },
+            { id:'coach-002', customerId:'cus-muyuan', learner:'渠道销售二组', scenario:'价值呈现', score:71, dimensions:{ discovery:68, value:76, advance:69 }, date:'2026-08-23', assetId:'ast-price-rubric', note:'建议把产品优势改写为客户业务结果。' },
+          ],
+        };
+
+        const $ = (selector) => root.querySelector(selector);
+        const $$ = (selector) => [...root.querySelectorAll(selector)];
+        const clone = (value) => typeof structuredClone === 'function'
+          ? structuredClone(value)
+          : JSON.parse(JSON.stringify(value));
+        const escapeHtml = (value) => String(value ?? '').replace(/[&<>"']/g, (char) => ({
+          '&':'&amp;', '<':'&lt;', '>':'&gt;', '"':'&quot;', "'":'&#39;',
+        })[char]);
+        const today = () => new Date().toISOString().slice(0, 10);
+        const nowIso = () => new Date().toISOString();
+        const formatDate = (value) => {
+          const date = new Date(value);
+          return Number.isNaN(date.valueOf()) ? '日期待定' : new Intl.DateTimeFormat('zh-CN', { month:'short', day:'numeric' }).format(date);
+        };
+        const formatDateTime = (value) => {
+          const date = new Date(value);
+          return Number.isNaN(date.valueOf()) ? '时间待定' : new Intl.DateTimeFormat('zh-CN', { month:'short', day:'numeric', hour:'2-digit', minute:'2-digit' }).format(date);
+        };
+        const formatMoney = (value) => `¥${new Intl.NumberFormat('zh-CN', { maximumFractionDigits:0 }).format(Number(value) || 0)}`;
+        const makeId = (prefix) => {
+          const token = globalThis.crypto?.randomUUID
+            ? globalThis.crypto.randomUUID().slice(0, 8)
+            : `${Date.now().toString(36)}${Math.random().toString(36).slice(2, 6)}`;
+          return `${prefix}-${token}`;
+        };
+        const blankState = () => ({ updatedAt:nowIso(), customers:[], tasks:[], activities:[], assets:[], campaigns:[], liveEvents:[], coaching:[] });
+
+        const assert = (condition, message) => { if (!condition) throw new Error(message); };
+        const isPlainObject = (value) => value && typeof value === 'object' && !Array.isArray(value) && Object.getPrototypeOf(value) === Object.prototype;
+        const assertKeys = (object, allowed, label) => {
+          for (const key of Object.keys(object)) assert(allowed.includes(key), `${label} 含未知字段：${key}`);
+        };
+        const inspectJsonSafety = (value, depth = 0) => {
+          assert(depth <= 12, 'JSON 嵌套过深');
+          if (typeof value === 'string') assert(value.length <= 10000, 'JSON 中存在过长文本');
+          if (Array.isArray(value)) {
+            assert(value.length <= 5000, 'JSON 数组过大');
+            value.forEach((item) => inspectJsonSafety(item, depth + 1));
+          } else if (value && typeof value === 'object') {
+            for (const key of Object.keys(value)) {
+              assert(!['__proto__', 'prototype', 'constructor'].includes(key), `JSON 含危险字段：${key}`);
+              inspectJsonSafety(value[key], depth + 1);
+            }
+          }
+        };
+        const isId = (value) => typeof value === 'string' && /^[a-z0-9][a-z0-9-]{1,79}$/.test(value);
+        const isDate = (value) => typeof value === 'string' && Number.isFinite(Date.parse(value));
+        const isShortText = (value, max = 5000) => typeof value === 'string' && value.length <= max;
+        const uniqueIds = (items, label) => {
+          const ids = items.map((item) => item.id);
+          assert(new Set(ids).size === ids.length, `${label} 存在重复 ID`);
+        };
+        const validateData = (data) => {
+          inspectJsonSafety(data);
+          assert(isPlainObject(data), 'data 必须是对象');
+          assertKeys(data, ['updatedAt','customers','tasks','activities','assets','campaigns','liveEvents','coaching'], 'data');
+          assert(isDate(data.updatedAt), 'updatedAt 不是有效时间');
+          for (const key of ['customers','tasks','activities','assets','campaigns','liveEvents','coaching']) assert(Array.isArray(data[key]), `${key} 必须是数组`);
+          assert(data.customers.length <= 2000, '客户数量超过 2000 条上限');
+          assert(data.activities.length <= 10000, '活动记录超过 10000 条上限');
+
+          data.customers.forEach((item, index) => {
+            assert(isPlainObject(item), `customers[${index}] 必须是对象`);
+            assertKeys(item, ['id','name','industry','size','contact','owner','stage','score','source','signal','need','tags','consent','lastTouch','nextAction','value'], `customers[${index}]`);
+            assert(isId(item.id) && isShortText(item.name,100) && item.name.length > 0, `customers[${index}] 基础字段无效`);
+            assert(isShortText(item.industry,80) && isShortText(item.contact,80) && isShortText(item.owner,60), `customers[${index}] 文本字段无效`);
+            assert(Number.isInteger(item.size) && item.size >= 1 && item.size <= 1000000, `customers[${index}].size 无效`);
+            assert(stageOrder.includes(item.stage), `customers[${index}].stage 无效`);
+            assert(Number.isFinite(item.score) && item.score >= 0 && item.score <= 100, `customers[${index}].score 无效`);
+            assert(isShortText(item.source,80) && isShortText(item.signal,500) && isShortText(item.need,500), `customers[${index}] 业务文本无效`);
+            assert(Array.isArray(item.tags) && item.tags.length <= 20 && item.tags.every((tag) => isShortText(tag,50)), `customers[${index}].tags 无效`);
+            assert(['confirmed','needs-review','revoked'].includes(item.consent), `customers[${index}].consent 无效`);
+            assert(/^\d{4}-\d{2}-\d{2}$/.test(item.lastTouch), `customers[${index}].lastTouch 无效`);
+            assert(isShortText(item.nextAction,500) && Number.isFinite(item.value) && item.value >= 0, `customers[${index}] 下一步或金额无效`);
+          });
+          uniqueIds(data.customers, '客户');
+          const customerIds = new Set(data.customers.map((item) => item.id));
+
+          data.assets.forEach((item, index) => {
+            assert(isPlainObject(item), `assets[${index}] 必须是对象`);
+            assertKeys(item, ['id','type','title','summary','status','uses','owner','tags'], `assets[${index}]`);
+            assert(isId(item.id) && Object.keys(assetTypeMeta).includes(item.type), `assets[${index}] ID 或类型无效`);
+            assert(isShortText(item.title,120) && item.title.length > 0 && isShortText(item.summary,1000) && isShortText(item.owner,80), `assets[${index}] 文本无效`);
+            assert(['ready','review'].includes(item.status) && Number.isInteger(item.uses) && item.uses >= 0, `assets[${index}] 状态无效`);
+            assert(Array.isArray(item.tags) && item.tags.length <= 20 && item.tags.every((tag) => isShortText(tag,50)), `assets[${index}].tags 无效`);
+          });
+          uniqueIds(data.assets, '资产');
+          const assetIds = new Set(data.assets.map((item) => item.id));
+
+          data.tasks.forEach((item, index) => {
+            assertKeys(item, ['id','customerId','type','title','due','owner','status'], `tasks[${index}]`);
+            assert(isId(item.id) && customerIds.has(item.customerId), `tasks[${index}] 客户关联无效`);
+            assert(['sales','nurture','live','coaching','renewal'].includes(item.type) && isShortText(item.title,300), `tasks[${index}] 内容无效`);
+            assert(/^\d{4}-\d{2}-\d{2}$/.test(item.due) && isShortText(item.owner,60) && ['open','done'].includes(item.status), `tasks[${index}] 状态无效`);
+          });
+          uniqueIds(data.tasks, '任务');
+
+          data.activities.forEach((item, index) => {
+            assertKeys(item, ['id','customerId','module','text','time','assetId'], `activities[${index}]`);
+            assert(isId(item.id) && customerIds.has(item.customerId), `activities[${index}] 客户关联无效`);
+            assert(Object.keys(moduleMeta).includes(item.module) && isShortText(item.text,1000) && isDate(item.time), `activities[${index}] 内容无效`);
+            assert(item.assetId === null || assetIds.has(item.assetId), `activities[${index}] 资产关联无效`);
+          });
+          uniqueIds(data.activities, '活动');
+
+          data.campaigns.forEach((item, index) => {
+            assertKeys(item, ['id','name','segment','status','assetId','customerIds','sent','engaged','qualified','nextRun'], `campaigns[${index}]`);
+            assert(isId(item.id) && isShortText(item.name,120) && isShortText(item.segment,300), `campaigns[${index}] 基础字段无效`);
+            assert(['running','draft','paused'].includes(item.status) && assetIds.has(item.assetId), `campaigns[${index}] 状态或资产无效`);
+            assert(Array.isArray(item.customerIds) && item.customerIds.every((id) => customerIds.has(id)), `campaigns[${index}] 客户关联无效`);
+            assert(['sent','engaged','qualified'].every((key) => Number.isInteger(item[key]) && item[key] >= 0), `campaigns[${index}] 指标无效`);
+            assert(/^\d{4}-\d{2}-\d{2}$/.test(item.nextRun), `campaigns[${index}].nextRun 无效`);
+          });
+          uniqueIds(data.campaigns, '培育计划');
+
+          data.liveEvents.forEach((item, index) => {
+            assertKeys(item, ['id','title','date','status','registrations','attended','highIntent','converted','assetId','customerIds','followupDone'], `liveEvents[${index}]`);
+            assert(isId(item.id) && isShortText(item.title,160) && /^\d{4}-\d{2}-\d{2}$/.test(item.date), `liveEvents[${index}] 基础字段无效`);
+            assert(['planned','followup','completed'].includes(item.status) && assetIds.has(item.assetId), `liveEvents[${index}] 状态或资产无效`);
+            assert(['registrations','attended','highIntent','converted'].every((key) => Number.isInteger(item[key]) && item[key] >= 0), `liveEvents[${index}] 指标无效`);
+            assert(Array.isArray(item.customerIds) && item.customerIds.every((id) => customerIds.has(id)) && typeof item.followupDone === 'boolean', `liveEvents[${index}] 客户关联无效`);
+          });
+          uniqueIds(data.liveEvents, '直播');
+
+          data.coaching.forEach((item, index) => {
+            assertKeys(item, ['id','customerId','learner','scenario','score','dimensions','date','assetId','note'], `coaching[${index}]`);
+            assert(isId(item.id) && customerIds.has(item.customerId) && assetIds.has(item.assetId), `coaching[${index}] 关联无效`);
+            assert(isShortText(item.learner,80) && isShortText(item.scenario,100) && Number.isFinite(item.score) && item.score >= 0 && item.score <= 100, `coaching[${index}] 内容无效`);
+            assert(isPlainObject(item.dimensions), `coaching[${index}].dimensions 无效`);
+            assertKeys(item.dimensions, ['discovery','value','advance'], `coaching[${index}].dimensions`);
+            assert(Object.values(item.dimensions).every((score) => Number.isFinite(score) && score >= 0 && score <= 100), `coaching[${index}] 分项得分无效`);
+            assert(/^\d{4}-\d{2}-\d{2}$/.test(item.date) && isShortText(item.note,800), `coaching[${index}] 日期或反馈无效`);
+          });
+          uniqueIds(data.coaching, '陪练记录');
+          return clone(data);
+        };
+
+        const storageBadge = $('#gos-storage-badge');
+        let storageAvailable = true;
+        const setStorageBadge = (label, warning = false) => {
+          storageBadge.textContent = label;
+          storageBadge.classList.toggle('warning', warning);
+        };
+        const loadState = () => {
+          try {
+            const raw = localStorage.getItem(STORAGE_KEY);
+            if (!raw) return clone(DEMO_STATE);
+            try {
+              return validateData(JSON.parse(raw));
+            } catch (error) {
+              console.warn('Growth OS discarded invalid local data:', error);
+              localStorage.removeItem(STORAGE_KEY);
+              setStorageBadge('已恢复安全演示数据', true);
+              return clone(DEMO_STATE);
+            }
+          } catch (error) {
+            console.warn('Growth OS storage unavailable:', error);
+            storageAvailable = false;
+            setStorageBadge('内存演示 · 不会保存', true);
+            return clone(DEMO_STATE);
+          }
+        };
+        let state = loadState();
+        const saveState = () => {
+          state.updatedAt = nowIso();
+          if (!storageAvailable) return;
+          try {
+            validateData(state);
+            localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+            setStorageBadge('本机演示数据');
+          } catch (error) {
+            console.warn('Growth OS save failed:', error);
+            storageAvailable = false;
+            setStorageBadge('内存演示 · 不会保存', true);
+          }
+        };
+
+        const addActivity = (customerId, module, text, assetId = null) => {
+          state.activities.unshift({ id:makeId('act'), customerId, module, text, time:nowIso(), assetId });
+        };
+        const addTask = (customerId, type, title, owner, due = today()) => {
+          const duplicate = state.tasks.find((task) => task.customerId === customerId && task.type === type && task.title === title && task.status === 'open');
+          if (duplicate) return duplicate;
+          const task = { id:makeId('tsk'), customerId, type, title, due, owner, status:'open' };
+          state.tasks.unshift(task);
+          return task;
+        };
+        const customerById = (id) => state.customers.find((item) => item.id === id);
+        const assetById = (id) => state.assets.find((item) => item.id === id);
+        const average = (values) => values.length ? Math.round(values.reduce((sum, value) => sum + value, 0) / values.length) : 0;
+        let toastTimer;
+        const showToast = (message, kind = 'success') => {
+          const toast = $('#gos-toast');
+          toast.textContent = message;
+          toast.dataset.kind = kind;
+          toast.hidden = false;
+          clearTimeout(toastTimer);
+          toastTimer = setTimeout(() => { toast.hidden = true; }, 3600);
+        };
+
+        const scoreBand = (score) => score >= 75 ? 'high' : score >= 50 ? 'medium' : 'low';
+        const scoreReason = (customer) => {
+          const evidence = customer.score >= 75 ? '强需求信号 + 明确角色/时机' : customer.score >= 50 ? '存在匹配信号，仍需补全预算或角色' : '信息不足，建议先核验来源和需求';
+          return `${evidence}；当前分数 ${customer.score}，可人工覆盖。`;
+        };
+        const emptyMarkup = (title, text, action = '') => `<div class="gos-empty"><strong>${escapeHtml(title)}</strong><span>${escapeHtml(text)}</span>${action}</div>`;
+        const renderCounts = () => {
+          const openSales = state.customers.filter((item) => ['qualified','discovery','proposal'].includes(item.stage)).length;
+          $('#gos-count-radar').textContent = String(state.customers.filter((item) => item.stage === 'radar').length);
+          $('#gos-count-sales').textContent = String(openSales);
+          $('#gos-count-nurture').textContent = String(state.campaigns.filter((item) => item.status === 'running').length);
+          $('#gos-count-live').textContent = String(state.liveEvents.filter((item) => item.status !== 'completed').length);
+          $('#gos-count-coaching').textContent = String(state.coaching.length);
+          $('#gos-count-assets').textContent = String(state.assets.length);
+        };
+
+        const renderOverview = () => {
+          const highIntent = state.customers.filter((item) => item.score >= 75).length;
+          const pipelineValue = state.customers.filter((item) => ['qualified','discovery','proposal'].includes(item.stage)).reduce((sum, item) => sum + item.value, 0);
+          const openTasks = state.tasks.filter((item) => item.status === 'open').length;
+          const coachingAverage = average(state.coaching.map((item) => item.score));
+          const kpis = [
+            ['客户主档', state.customers.length, '跨模块共用同一 customer_id', 'customers'],
+            ['高意向客户', highIntent, '评分 ≥ 75，均需人工复核', 'intent'],
+            ['在手商机', formatMoney(pipelineValue), '已确认至方案评估阶段', 'pipeline'],
+            ['开放任务', openTasks, '销售、触达、直播与交付共用', 'tasks'],
+            ['陪练均分', state.coaching.length ? `${coachingAverage} 分` : '—', `${state.coaching.length} 次训练记录`, 'coaching'],
+            ['可复用资产', state.assets.filter((item) => item.status === 'ready').length, '已审核的课程、案例与量表', 'assets'],
+          ];
+          $('#gos-kpis').innerHTML = kpis.map(([label, value, note, tone]) => `<article class="gos-kpi ${tone}"><span>${escapeHtml(label)}</span><strong>${escapeHtml(value)}</strong><small>${escapeHtml(note)}</small></article>`).join('');
+
+          const loop = [
+            ['radar','01','客户识别',state.customers.length,'客户主档'],
+            ['sales','02','销售转化',state.customers.filter((item) => item.stage !== 'radar').length,'已接管'],
+            ['nurture','03','私域经营',new Set(state.campaigns.flatMap((item) => item.customerIds)).size,'在培育'],
+            ['live','04','直播运营',state.liveEvents.reduce((sum, item) => sum + item.highIntent, 0),'高意向信号'],
+            ['coaching','05','AI 陪练',state.coaching.length,'交付记录'],
+            ['assets','06','资产沉淀',state.assets.length,'可复用资产'],
+            ['governance','07','复购反馈',state.tasks.filter((item) => item.type === 'renewal' && item.status === 'open').length,'续费任务'],
+          ];
+          $('#gos-growth-loop').innerHTML = loop.map(([view, no, label, value, unit], index) => `<button type="button" data-view="${view}"><small>${no}</small><strong>${escapeHtml(label)}</strong><span><b>${value}</b> ${escapeHtml(unit)}</span>${index < loop.length - 1 ? '<i aria-hidden="true">→</i>' : ''}</button>`).join('');
+
+          const priorityTasks = state.tasks.filter((task) => task.status === 'open').sort((a, b) => a.due.localeCompare(b.due)).slice(0, 6);
+          $('#gos-priority-list').innerHTML = priorityTasks.length ? priorityTasks.map((task) => {
+            const customer = customerById(task.customerId);
+            return `<div class="gos-priority-item"><button class="gos-task-check" type="button" data-toggle-task="${escapeHtml(task.id)}" aria-label="标记完成：${escapeHtml(task.title)}">○</button><button class="gos-priority-copy" type="button" data-open-customer="${escapeHtml(task.customerId)}"><strong>${escapeHtml(task.title)}</strong><span>${escapeHtml(customer?.name || '客户已删除')} · ${escapeHtml(task.owner)} · ${escapeHtml(formatDate(task.due))}</span></button><em>${escapeHtml(moduleMeta[task.type]?.[1] || task.type)}</em></div>`;
+          }).join('') : emptyMarkup('今天没有开放任务', '从客户雷达或直播分流创建下一步动作。', '<button class="gos-text-button" type="button" data-view="radar">查看客户雷达 →</button>');
+
+          const total = Math.max(1, state.customers.length);
+          const quality = [
+            ['负责人完整', state.customers.filter((item) => item.owner.trim()).length / total],
+            ['下一步完整', state.customers.filter((item) => item.nextAction.trim()).length / total],
+            ['处理状态确认', state.customers.filter((item) => item.consent === 'confirmed').length / total],
+            ['知识资产已审核', state.assets.length ? state.assets.filter((item) => item.status === 'ready').length / state.assets.length : 0],
+          ];
+          $('#gos-quality').innerHTML = quality.map(([label, ratio]) => `<div class="gos-quality-row"><span>${escapeHtml(label)}</span><div class="gos-meter"><i style="width:${Math.round(ratio * 100)}%"></i></div><strong>${Math.round(ratio * 100)}%</strong></div>`).join('') + '<p class="gos-quality-note">本指标衡量数据能否支持下一步动作，不代表业务成效。</p>';
+
+          renderTimeline($('#gos-timeline'), state.activities.slice(0, 7));
+        };
+
+        const renderTimeline = (container, activities) => {
+          container.innerHTML = activities.length ? activities.map((activity) => {
+            const customer = customerById(activity.customerId);
+            const meta = moduleMeta[activity.module] || [activity.module, activity.module];
+            return `<article class="gos-timeline-item"><span class="gos-module-dot ${escapeHtml(activity.module)}" aria-hidden="true"></span><div><button type="button" data-open-customer="${escapeHtml(activity.customerId)}">${escapeHtml(customer?.name || '客户已删除')}</button><p>${escapeHtml(activity.text)}</p><small>${escapeHtml(meta[0])} · ${escapeHtml(formatDateTime(activity.time))}${activity.assetId && assetById(activity.assetId) ? ` · 资产：${escapeHtml(assetById(activity.assetId).title)}` : ''}</small></div></article>`;
+          }).join('') : emptyMarkup('还没有活动记录', '完成一次客户推进、触达或陪练后会在这里形成统一时间线。');
+        };
+
+        const renderRadar = () => {
+          const query = ($('#gos-radar-search').value || '').trim().toLowerCase();
+          const band = $('#gos-radar-score').value;
+          const list = state.customers.filter((customer) => {
+            const haystack = [customer.name, customer.industry, customer.need, customer.signal, customer.owner, ...customer.tags].join(' ').toLowerCase();
+            return (!query || haystack.includes(query)) && (band === 'all' || scoreBand(customer.score) === band);
+          }).sort((a, b) => b.score - a.score);
+          if (!list.length) {
+            $('#gos-radar-table').innerHTML = emptyMarkup('没有匹配的客户', '调整搜索条件，或录入新的需求信号。', '<button class="gos-button secondary" type="button" data-open-add>＋ 新建客户</button>');
+            return;
+          }
+          $('#gos-radar-table').innerHTML = `<table class="gos-table"><caption>${list.length} 条客户记录；评分为可解释、可人工覆盖的排序参考</caption><thead><tr><th>企业与信号</th><th>负责人</th><th>阶段</th><th>评分与依据</th><th>下一步</th><th>操作</th></tr></thead><tbody>${list.map((customer) => `<tr><td data-label="企业与信号"><button class="gos-customer-name" type="button" data-open-customer="${escapeHtml(customer.id)}">${escapeHtml(customer.name)}</button><span>${escapeHtml(customer.industry)} · ${customer.size} 人 · ${escapeHtml(customer.source)}</span><small>${escapeHtml(customer.signal)}</small></td><td data-label="负责人"><strong>${escapeHtml(customer.owner)}</strong><span>${escapeHtml(customer.contact)}</span></td><td data-label="阶段"><span class="gos-stage ${escapeHtml(customer.stage)}">${escapeHtml(stageMeta[customer.stage][0])}</span><small>${customer.consent === 'confirmed' ? '处理状态已确认' : '待合规核验'}</small></td><td data-label="评分与依据"><span class="gos-score ${scoreBand(customer.score)}"><b>${customer.score}</b>/100</span><small>${escapeHtml(scoreReason(customer))}</small></td><td data-label="下一步"><span>${escapeHtml(customer.nextAction)}</span><small>最近触达 ${escapeHtml(formatDate(customer.lastTouch))}</small></td><td data-label="操作"><div class="gos-row-actions"><button type="button" class="gos-button tiny ghost" data-open-customer="${escapeHtml(customer.id)}">360°</button>${customer.stage === 'radar' ? `<button type="button" class="gos-button tiny primary" data-advance="${escapeHtml(customer.id)}">人工确认</button>` : ''}</div></td></tr>`).join('')}</tbody></table>`;
+        };
+
+        const renderSales = () => {
+          const active = state.customers.filter((item) => ['qualified','discovery','proposal'].includes(item.stage));
+          const won = state.customers.filter((item) => item.stage === 'won');
+          $('#gos-pipeline-summary').innerHTML = `<span><small>在手商机</small><strong>${active.length}</strong></span><span><small>在手金额</small><strong>${formatMoney(active.reduce((sum, item) => sum + item.value, 0))}</strong></span><span><small>已成交客户</small><strong>${won.length}</strong></span><span><small>需人工确认</small><strong>${active.filter((item) => item.consent !== 'confirmed').length}</strong></span>`;
+          const columns = ['qualified','discovery','proposal','won'];
+          $('#gos-sales-pipeline').innerHTML = columns.map((stage) => {
+            const customers = state.customers.filter((item) => item.stage === stage).sort((a, b) => b.score - a.score);
+            return `<section class="gos-pipeline-column" aria-label="${escapeHtml(stageMeta[stage][0])}"><header><span>${escapeHtml(stageMeta[stage][0])}</span><strong>${customers.length}</strong></header><div>${customers.length ? customers.map((customer) => `<article class="gos-deal-card"><button class="gos-deal-title" type="button" data-open-customer="${escapeHtml(customer.id)}">${escapeHtml(customer.name)}</button><span>${escapeHtml(customer.need)}</span><div class="gos-deal-meta"><b>${formatMoney(customer.value)}</b><em>意向 ${customer.score}</em></div><p><small>下一步</small>${escapeHtml(customer.nextAction)}</p><footer><span>${escapeHtml(customer.owner)}</span><div><button type="button" class="gos-text-button" data-nurture="${escapeHtml(customer.id)}">加入培育</button>${stage !== 'won' ? `<button type="button" class="gos-button tiny primary" data-advance="${escapeHtml(customer.id)}">推进阶段</button>` : `<button type="button" class="gos-button tiny secondary" data-view="coaching">查看交付</button>`}</div></footer></article>`).join('') : emptyMarkup('暂无客户', '从前一阶段推进后会自动出现在这里。')}</div></section>`;
+          }).join('');
+        };
+
+        const renderCustomerOptions = () => {
+          const customers = state.customers.slice().sort((a, b) => a.name.localeCompare(b.name, 'zh-CN'));
+          const assets = state.assets.filter((item) => item.status === 'ready').sort((a, b) => a.title.localeCompare(b.title, 'zh-CN'));
+          const customerOptions = customers.map((item) => `<option value="${escapeHtml(item.id)}">${escapeHtml(item.name)} · ${escapeHtml(stageMeta[item.stage][0])}</option>`).join('');
+          const assetOptions = assets.map((item) => `<option value="${escapeHtml(item.id)}">${escapeHtml(assetTypeMeta[item.type])} · ${escapeHtml(item.title)}</option>`).join('');
+          $('#gos-touch-customer').innerHTML = customerOptions || '<option value="">暂无客户</option>';
+          $('#gos-coaching-customer').innerHTML = customerOptions || '<option value="">暂无客户</option>';
+          $('#gos-touch-asset').innerHTML = assetOptions || '<option value="">暂无已审核资产</option>';
+          $('#gos-touch-form').querySelector('button[type="submit"]').disabled = !customers.length || !assets.length;
+          $('#gos-coaching-form').querySelector('button[type="submit"]').disabled = !customers.length || !state.assets.some((item) => item.type === 'rubric' && item.status === 'ready');
+        };
+
+        const renderCampaigns = () => {
+          $('#gos-campaigns').innerHTML = state.campaigns.length ? state.campaigns.map((campaign) => {
+            const asset = assetById(campaign.assetId);
+            const members = campaign.customerIds.map(customerById).filter(Boolean);
+            return `<article class="gos-campaign-card"><header><span class="gos-status ${escapeHtml(campaign.status)}">${campaign.status === 'running' ? '运行中' : campaign.status === 'draft' ? '草稿' : '已暂停'}</span><small>下次运行 ${escapeHtml(formatDate(campaign.nextRun))}</small></header><h4>${escapeHtml(campaign.name)}</h4><p>${escapeHtml(campaign.segment)}</p><div class="gos-campaign-asset"><span>复用资产</span><strong>${escapeHtml(asset?.title || '资产已删除')}</strong></div><div class="gos-campaign-metrics"><span><b>${campaign.customerIds.length}</b>成员</span><span><b>${campaign.sent}</b>触达</span><span><b>${campaign.engaged}</b>互动</span><span><b>${campaign.qualified}</b>转商机</span></div><div class="gos-chip-row">${members.map((item) => `<button type="button" data-open-customer="${escapeHtml(item.id)}">${escapeHtml(item.name)}</button>`).join('') || '<span>暂无成员</span>'}</div></article>`;
+          }).join('') : emptyMarkup('还没有培育计划', '创建一次合规触达任务时，系统会建立默认培育计划。');
+        };
+
+        const renderLive = () => {
+          $('#gos-live-events').innerHTML = state.liveEvents.length ? state.liveEvents.map((event) => {
+            const asset = assetById(event.assetId);
+            const customers = event.customerIds.map(customerById).filter(Boolean);
+            const rate = event.attended ? Math.round(event.highIntent / event.attended * 100) : 0;
+            const action = event.status === 'planned'
+              ? `<button class="gos-button secondary" type="button" data-complete-live="${escapeHtml(event.id)}">模拟直播结束</button>`
+              : event.followupDone
+                ? '<button class="gos-button ghost" type="button" disabled>已完成会后分流</button>'
+                : `<button class="gos-button primary" type="button" data-live-followup="${escapeHtml(event.id)}">人工确认会后分流</button>`;
+            return `<article class="gos-live-card"><header><span class="gos-status ${escapeHtml(event.status)}">${event.status === 'planned' ? '直播前' : event.followupDone ? '已闭环' : '待会后分流'}</span><time datetime="${escapeHtml(event.date)}">${escapeHtml(formatDate(event.date))}</time></header><h3>${escapeHtml(event.title)}</h3><p>脚本资产：${escapeHtml(asset?.title || '资产已删除')}</p><div class="gos-live-metrics"><span><b>${event.registrations}</b>报名</span><span><b>${event.attended}</b>观看</span><span><b>${event.highIntent}</b>高意向</span><span><b>${rate}%</b>高意向率</span></div><div class="gos-live-flow"><span>报名</span><i>→</i><span>观看</span><i>→</i><span>提问/点击</span><i>→</i><span>人工确认</span><i>→</i><span>销售任务</span></div><div class="gos-linked-customers"><small>已识别客户</small>${customers.map((item) => `<button type="button" data-open-customer="${escapeHtml(item.id)}">${escapeHtml(item.name)}</button>`).join('') || '<span>暂无可识别客户</span>'}</div><footer>${action}<small>不会向任何外部系统发送数据</small></footer></article>`;
+          }).join('') : emptyMarkup('还没有直播场次', '生产环境可从直播平台 webhook 同步场次和参与事件。');
+        };
+
+        const renderCoaching = () => {
+          const list = state.coaching.slice().sort((a, b) => b.date.localeCompare(a.date));
+          $('#gos-coaching-results').innerHTML = list.length ? list.slice(0, 8).map((session) => {
+            const customer = customerById(session.customerId);
+            const asset = assetById(session.assetId);
+            return `<article class="gos-coaching-result"><header><div><button type="button" data-open-customer="${escapeHtml(session.customerId)}">${escapeHtml(customer?.name || '客户已删除')}</button><span>${escapeHtml(session.learner)} · ${escapeHtml(session.scenario)}</span></div><strong>${session.score}</strong></header><div class="gos-dimension"><span>需求挖掘</span><i><b style="width:${session.dimensions.discovery}%"></b></i><em>${session.dimensions.discovery}</em></div><div class="gos-dimension"><span>价值塑造</span><i><b style="width:${session.dimensions.value}%"></b></i><em>${session.dimensions.value}</em></div><div class="gos-dimension"><span>成交推进</span><i><b style="width:${session.dimensions.advance}%"></b></i><em>${session.dimensions.advance}</em></div><p>${escapeHtml(session.note)}</p><small>量表：${escapeHtml(asset?.title || '资产已删除')} · ${escapeHtml(formatDate(session.date))} · 待人工复核</small></article>`;
+          }).join('') : emptyMarkup('还没有陪练记录', '提交左侧演练后，评分与反馈会进入客户交付时间线。');
+        };
+
+        const renderAssets = () => {
+          const filter = $('#gos-asset-filter').value;
+          const list = state.assets.filter((item) => filter === 'all' || item.type === filter).sort((a, b) => b.uses - a.uses);
+          $('#gos-assets-list').innerHTML = list.length ? list.map((asset) => `<article class="gos-asset-card"><span class="gos-asset-type ${escapeHtml(asset.type)}">${escapeHtml(assetTypeMeta[asset.type])}</span><div><h4>${escapeHtml(asset.title)}</h4><p>${escapeHtml(asset.summary)}</p><div class="gos-chip-row">${asset.tags.map((tag) => `<span>${escapeHtml(tag)}</span>`).join('')}</div><small>负责人：${escapeHtml(asset.owner)} · ${asset.status === 'ready' ? '已审核' : '待审核'} · 已复用 ${asset.uses} 次</small></div><button class="gos-button tiny ghost" type="button" data-use-asset="${escapeHtml(asset.id)}">记录一次复用</button></article>`).join('') : emptyMarkup('没有匹配的资产', '调整类型筛选，或在右侧沉淀新资产。');
+        };
+
+        const renderGovernance = () => {
+          const integrations = [
+            ['共享客户与事件数据','已启用','本机演示状态','connected'],
+            ['CRM / SCRM','未连接','生产需官方 API、幂等与字段映射','pending'],
+            ['企业微信','未连接','生产需授权、退订与人工审批','pending'],
+            ['直播平台','演示数据','生产需 webhook、身份合并与重试','demo'],
+            ['真实 LLM / RAG','规则演示','生产需模型评测、引用与安全防护','demo'],
+            ['持久数据库与权限','未连接','生产需服务端、RBAC、租户隔离与审计','pending'],
+          ];
+          $('#gos-integrations').innerHTML = integrations.map(([name, status, note, tone]) => `<article class="gos-integration ${tone}"><span aria-hidden="true"></span><div><strong>${escapeHtml(name)}</strong><p>${escapeHtml(note)}</p></div><em>${escapeHtml(status)}</em></article>`).join('');
+          renderTimeline($('#gos-audit-log'), state.activities.slice(0, 30));
+        };
+
+        const suggestedAction = (customer) => {
+          if (customer.consent !== 'confirmed') return { title:'先完成数据与触达合规核验', reason:'当前处理状态尚未确认，不应进入自动培育或外部联系。', type:'sales' };
+          if (customer.stage === 'radar') return { title:'人工核验需求信号并确认采购角色', reason:`评分 ${customer.score}；依据为“${customer.signal}”。`, type:'sales' };
+          if (customer.stage === 'qualified') return { title:'安排 30 分钟需求诊断', reason:`已确认客户匹配，当前需求为“${customer.need}”。`, type:'sales' };
+          if (customer.stage === 'discovery') return { title:'用已审核案例形成一页式方案', reason:'诊断阶段需要把业务问题、对象、指标和决策链转成方案证据。', type:'sales' };
+          if (customer.stage === 'proposal') return { title:'确认采购决策链、试点范围与成功指标', reason:`在手金额 ${formatMoney(customer.value)}；进入成交前应明确试点边界。`, type:'sales' };
+          return { title:'复盘陪练活跃与能力变化，创建续费任务', reason:`已有 ${state.coaching.filter((item) => item.customerId === customer.id).length} 条交付记录；建议由客户成功负责人复核。`, type:'renewal' };
+        };
+
+        const renderCustomerDialog = (customerId) => {
+          const customer = customerById(customerId);
+          if (!customer) return;
+          const activities = state.activities.filter((item) => item.customerId === customerId).sort((a, b) => b.time.localeCompare(a.time));
+          const tasks = state.tasks.filter((item) => item.customerId === customerId);
+          const campaigns = state.campaigns.filter((item) => item.customerIds.includes(customerId));
+          const liveEvents = state.liveEvents.filter((item) => item.customerIds.includes(customerId));
+          const coaching = state.coaching.filter((item) => item.customerId === customerId);
+          const suggestion = suggestedAction(customer);
+          const stageOptions = stageOrder.map((stage) => `<option value="${stage}" ${stage === customer.stage ? 'selected' : ''}>${escapeHtml(stageMeta[stage][0])}</option>`).join('');
+          $('#gos-customer-dialog-content').innerHTML = `<div class="gos-dialog-head sticky"><div><span class="gos-eyebrow">CUSTOMER 360° · ${escapeHtml(customer.id)}</span><h2 id="gos-customer-dialog-title">${escapeHtml(customer.name)}</h2><p>${escapeHtml(customer.industry)} · ${customer.size} 人 · 负责人 ${escapeHtml(customer.owner)}</p></div><button type="button" class="gos-dialog-close" data-close-dialog aria-label="关闭">×</button></div><div class="gos-customer-overview"><span><small>当前阶段</small><strong>${escapeHtml(stageMeta[customer.stage][0])}</strong></span><span><small>意向评分</small><strong>${customer.score}/100</strong></span><span><small>商机金额</small><strong>${formatMoney(customer.value)}</strong></span><span><small>关联记录</small><strong>${activities.length + tasks.length + coaching.length}</strong></span></div><div class="gos-customer-grid"><section><div class="gos-dialog-section-head"><span class="gos-eyebrow">PROFILE</span><h3>客户主档</h3></div><form class="gos-form gos-customer-edit" data-edit-customer="${escapeHtml(customer.id)}"><div class="gos-form-grid"><label>企业名称<input name="name" maxlength="100" required value="${escapeHtml(customer.name)}" /></label><label>负责人<input name="owner" maxlength="60" required value="${escapeHtml(customer.owner)}" /></label><label>阶段<select name="stage">${stageOptions}</select></label><label>人工评分<input name="score" type="number" min="0" max="100" required value="${customer.score}" /></label><label>商机金额<input name="value" type="number" min="0" max="1000000000" value="${customer.value}" /></label><label>处理状态<select name="consent"><option value="confirmed" ${customer.consent === 'confirmed' ? 'selected' : ''}>已确认可处理</option><option value="needs-review" ${customer.consent === 'needs-review' ? 'selected' : ''}>待合规核验</option><option value="revoked" ${customer.consent === 'revoked' ? 'selected' : ''}>已撤回/退订</option></select></label><label class="wide">需求<textarea name="need" maxlength="500" required>${escapeHtml(customer.need)}</textarea></label><label class="wide">下一步<textarea name="nextAction" maxlength="500" required>${escapeHtml(customer.nextAction)}</textarea></label><label class="wide">标签<input name="tags" maxlength="400" value="${escapeHtml(customer.tags.join(', '))}" /></label></div><button class="gos-button primary" type="submit">保存主档</button></form><div class="gos-suggestion"><span class="gos-rule-badge">规则建议 v1.0 · 待人工确认</span><h3>${escapeHtml(suggestion.title)}</h3><p>${escapeHtml(suggestion.reason)} 来源：客户信号、阶段与当前业务记录。</p><button class="gos-button secondary" type="button" data-apply-suggestion="${escapeHtml(customer.id)}">确认并创建任务</button></div></section><aside><div class="gos-dialog-section-head"><span class="gos-eyebrow">LINKED RECORDS</span><h3>跨模块关联</h3></div><div class="gos-linked-summary"><span><b>${campaigns.length}</b>培育计划</span><span><b>${liveEvents.length}</b>直播</span><span><b>${coaching.length}</b>陪练</span><span><b>${tasks.filter((item) => item.status === 'open').length}</b>开放任务</span></div><div class="gos-dialog-section-head small"><span class="gos-eyebrow">TIMELINE</span><h3>统一时间线</h3></div><div class="gos-timeline compact" id="gos-dialog-timeline"></div></aside></div><div class="gos-dialog-danger"><button class="gos-text-button danger" type="button" data-delete-customer="${escapeHtml(customer.id)}">删除此演示客户及其关联记录</button><button class="gos-button ghost" type="button" data-close-dialog>关闭</button></div>`;
+          renderTimeline($('#gos-dialog-timeline'), activities);
+        };
+
+        const renderAll = () => {
+          renderCounts();
+          renderOverview();
+          renderRadar();
+          renderSales();
+          renderCustomerOptions();
+          renderCampaigns();
+          renderLive();
+          renderCoaching();
+          renderAssets();
+          renderGovernance();
+        };
+
+        let currentView = 'overview';
+        const closeMobileNav = (restoreFocus = false) => {
+          root.classList.remove('nav-open');
+          const button = $('#gos-menu-button');
+          button.setAttribute('aria-expanded', 'false');
+          button.setAttribute('aria-label', '打开模块导航');
+          if (restoreFocus) button.focus();
+        };
+        const switchView = (view, focusWorkspace = false) => {
+          if (!views.includes(view)) return;
+          currentView = view;
+          $$('[data-panel]').forEach((panel) => { panel.hidden = panel.dataset.panel !== view; });
+          $$('.gos-nav [data-view]').forEach((button) => {
+            if (button.dataset.view === view) button.setAttribute('aria-current', 'page');
+            else button.removeAttribute('aria-current');
+          });
+          root.dataset.view = view;
+          closeMobileNav();
+          if (focusWorkspace) $('#gos-workspace').focus({ preventScroll:true });
+        };
+
+        const addDialog = $('#gos-add-dialog');
+        const customerDialog = $('#gos-customer-dialog');
+        const openAddDialog = () => {
+          $('#gos-add-form').reset();
+          addDialog.showModal();
+          addDialog.querySelector('input[name="name"]').focus();
+        };
+        const openCustomerDialog = (customerId) => {
+          if (!customerById(customerId)) return;
+          renderCustomerDialog(customerId);
+          customerDialog.dataset.customerId = customerId;
+          customerDialog.showModal();
+          customerDialog.querySelector('.gos-dialog-close')?.focus();
+        };
+        const closeDialog = (dialog) => {
+          if (dialog?.open) dialog.close();
+        };
+        const commit = (message) => {
+          saveState();
+          renderAll();
+          if (customerDialog.open && customerDialog.dataset.customerId && customerById(customerDialog.dataset.customerId)) renderCustomerDialog(customerDialog.dataset.customerId);
+          showToast(message);
+        };
+
+        root.addEventListener('click', (event) => {
+          const target = event.target.closest('button, [data-open-customer]');
+          if (!target || !root.contains(target)) return;
+
+          if (target.dataset.view) {
+            switchView(target.dataset.view, true);
+            return;
+          }
+          if (target.matches('[data-open-add]') || target.id === 'gos-new-customer') {
+            openAddDialog();
+            return;
+          }
+          if (target.dataset.openCustomer) {
+            $('#gos-search-results').hidden = true;
+            openCustomerDialog(target.dataset.openCustomer);
+            return;
+          }
+          if (target.matches('[data-close-dialog]')) {
+            closeDialog(target.closest('dialog'));
+            return;
+          }
+          if (target.id === 'gos-menu-button') {
+            const open = root.classList.toggle('nav-open');
+            target.setAttribute('aria-expanded', String(open));
+            target.setAttribute('aria-label', open ? '关闭模块导航' : '打开模块导航');
+            if (open) $('#gos-sidebar').focus({ preventScroll:true });
+            return;
+          }
+          if (target.dataset.toggleTask) {
+            const task = state.tasks.find((item) => item.id === target.dataset.toggleTask);
+            if (!task) return;
+            task.status = task.status === 'open' ? 'done' : 'open';
+            addActivity(task.customerId, moduleMeta[task.type] ? task.type : 'system', `${task.status === 'done' ? '完成' : '重新打开'}任务：${task.title}`);
+            commit(task.status === 'done' ? '任务已完成并写入客户时间线' : '任务已重新打开');
+            return;
+          }
+          if (target.dataset.advance) {
+            const customer = customerById(target.dataset.advance);
+            if (!customer) return;
+            if (customer.consent !== 'confirmed') {
+              openCustomerDialog(customer.id);
+              showToast('请先在客户 360° 中完成数据处理与触达状态核验', 'warning');
+              return;
+            }
+            const index = stageOrder.indexOf(customer.stage);
+            if (index < 0 || index === stageOrder.length - 1) return;
+            const previous = customer.stage;
+            customer.stage = stageOrder[index + 1];
+            customer.lastTouch = today();
+            const next = suggestedAction(customer);
+            customer.nextAction = next.title;
+            addActivity(customer.id, 'sales', `人工确认阶段从“${stageMeta[previous][0]}”推进至“${stageMeta[customer.stage][0]}”`);
+            if (customer.stage === 'won') {
+              addTask(customer.id, 'coaching', '创建首期 AI 陪练计划并确认评分量表', customer.owner);
+              addActivity(customer.id, 'coaching', '成交后创建交付与 AI 陪练启动任务');
+            }
+            commit(`已推进至“${stageMeta[customer.stage][0]}”`);
+            return;
+          }
+          if (target.dataset.nurture) {
+            const customer = customerById(target.dataset.nurture);
+            if (!customer) return;
+            if (customer.consent !== 'confirmed') {
+              openCustomerDialog(customer.id);
+              showToast('客户尚未确认可触达，未创建培育任务', 'warning');
+              return;
+            }
+            const asset = state.assets.find((item) => item.status === 'ready' && item.type === 'case') || state.assets.find((item) => item.status === 'ready');
+            if (!asset) {
+              switchView('assets', true);
+              showToast('请先准备一条已审核内容资产', 'warning');
+              return;
+            }
+            let campaign = state.campaigns.find((item) => item.status === 'running' && item.assetId === asset.id);
+            if (!campaign) {
+              campaign = { id:makeId('cmp'), name:'人工确认培育计划', segment:'已确认可触达客户', status:'running', assetId:asset.id, customerIds:[], sent:0, engaged:0, qualified:0, nextRun:today() };
+              state.campaigns.unshift(campaign);
+            }
+            if (!campaign.customerIds.includes(customer.id)) campaign.customerIds.push(customer.id);
+            asset.uses += 1;
+            addTask(customer.id, 'nurture', `人工发送：${asset.title}`, customer.owner);
+            addActivity(customer.id, 'nurture', `加入“${campaign.name}”，复用资产“${asset.title}”；仅创建待办，未自动发送`, asset.id);
+            commit('已加入培育计划，并创建人工触达待办');
+            return;
+          }
+          if (target.dataset.completeLive) {
+            const live = state.liveEvents.find((item) => item.id === target.dataset.completeLive);
+            if (!live || live.status !== 'planned') return;
+            live.status = 'followup';
+            live.attended = Math.max(live.attended, Math.round(live.registrations * .58));
+            live.highIntent = Math.max(live.highIntent, Math.max(1, Math.round(live.attended * .14)));
+            for (const customerId of live.customerIds) addActivity(customerId, 'live', `完成直播“${live.title}”，形成待人工确认的观看与互动信号`, live.assetId);
+            commit('直播结束数据已进入待分流队列');
+            return;
+          }
+          if (target.dataset.liveFollowup) {
+            const live = state.liveEvents.find((item) => item.id === target.dataset.liveFollowup);
+            if (!live || live.followupDone) return;
+            if (!window.confirm('确认将已识别客户写入销售待办？此演示不会向任何外部系统发送消息。')) return;
+            live.followupDone = true;
+            live.status = 'completed';
+            live.converted = Math.max(live.converted, live.customerIds.length);
+            for (const customerId of live.customerIds) {
+              const customer = customerById(customerId);
+              if (!customer) continue;
+              customer.lastTouch = today();
+              if (customer.consent === 'confirmed' && customer.stage === 'radar') customer.stage = 'qualified';
+              customer.score = Math.min(100, customer.score + 6);
+              const title = customer.consent === 'confirmed' ? `跟进直播高意向问题：${live.title}` : '先核验数据处理状态，再决定是否跟进直播信号';
+              addTask(customer.id, 'live', title, customer.owner);
+              addActivity(customer.id, 'live', `人工确认直播会后分流；评分更新为 ${customer.score}，未执行自动触达`, live.assetId);
+            }
+            const asset = assetById(live.assetId);
+            if (asset) asset.uses += 1;
+            commit('会后分流完成：客户、任务和资产使用记录已联动更新');
+            return;
+          }
+          if (target.dataset.useAsset) {
+            const asset = assetById(target.dataset.useAsset);
+            if (!asset) return;
+            asset.uses += 1;
+            commit(`已记录“${asset.title}”的一次复用`);
+            return;
+          }
+          if (target.dataset.applySuggestion) {
+            const customer = customerById(target.dataset.applySuggestion);
+            if (!customer) return;
+            const suggestion = suggestedAction(customer);
+            addTask(customer.id, suggestion.type, suggestion.title, customer.owner);
+            customer.nextAction = suggestion.title;
+            addActivity(customer.id, suggestion.type === 'renewal' ? 'coaching' : 'sales', `人工采纳规则建议：${suggestion.title}`);
+            commit('建议已由人工确认并写入任务');
+            return;
+          }
+          if (target.dataset.deleteCustomer) {
+            const customer = customerById(target.dataset.deleteCustomer);
+            if (!customer || !window.confirm(`删除“${customer.name}”及其任务、活动和陪练记录？此操作仅影响当前浏览器演示数据。`)) return;
+            state.customers = state.customers.filter((item) => item.id !== customer.id);
+            state.tasks = state.tasks.filter((item) => item.customerId !== customer.id);
+            state.activities = state.activities.filter((item) => item.customerId !== customer.id);
+            state.coaching = state.coaching.filter((item) => item.customerId !== customer.id);
+            state.campaigns.forEach((item) => { item.customerIds = item.customerIds.filter((id) => id !== customer.id); });
+            state.liveEvents.forEach((item) => { item.customerIds = item.customerIds.filter((id) => id !== customer.id); });
+            closeDialog(customerDialog);
+            customerDialog.dataset.customerId = '';
+            commit('客户及其关联演示记录已删除');
+            return;
+          }
+          if (target.id === 'gos-export-button') {
+            const payload = { schemaVersion:SCHEMA_VERSION, exportedAt:nowIso(), data:clone(state) };
+            const blob = new Blob([JSON.stringify(payload, null, 2)], { type:'application/json' });
+            const url = URL.createObjectURL(blob);
+            const link = root.ownerDocument.createElement('a');
+            link.href = url;
+            link.download = `cavno-ai-growth-os-${today()}.json`;
+            link.click();
+            setTimeout(() => URL.revokeObjectURL(url), 0);
+            showToast('完整业务数据已导出为 JSON');
+            return;
+          }
+          if (target.id === 'gos-import-button') {
+            $('#gos-import-input').click();
+            return;
+          }
+          if (target.id === 'gos-reset-button') {
+            if (!window.confirm('恢复固定演示数据并覆盖当前本机内容？')) return;
+            state = clone(DEMO_STATE);
+            closeDialog(customerDialog);
+            commit('已恢复固定演示数据');
+            return;
+          }
+          if (target.id === 'gos-clear-button') {
+            if (!window.confirm('清空当前浏览器中的全部业务实体？导出后再清空可以保留备份。')) return;
+            state = blankState();
+            closeDialog(customerDialog);
+            commit('本机业务实体已清空');
+          }
+        });
+
+        root.addEventListener('submit', (event) => {
+          event.preventDefault();
+          const form = event.target;
+          const values = new FormData(form);
+
+          if (form.id === 'gos-add-form') {
+            const customer = {
+              id:makeId('cus'),
+              name:String(values.get('name') || '').trim(),
+              industry:String(values.get('industry') || '').trim(),
+              size:Number(values.get('size')),
+              contact:String(values.get('contact') || '').trim() || '待确认',
+              owner:String(values.get('owner') || '').trim(),
+              stage:'radar',
+              score:Number(values.get('score')),
+              source:String(values.get('source') || '手工录入'),
+              signal:String(values.get('signal') || '').trim(),
+              need:String(values.get('need') || '').trim(),
+              tags:[String(values.get('industry') || '').trim(), '新线索'].filter(Boolean),
+              consent:String(values.get('consent') || 'needs-review'),
+              lastTouch:today(),
+              nextAction:'人工核验信号来源、采购角色与需求时机',
+              value:0,
+            };
+            try {
+              const test = clone(state);
+              test.customers.push(customer);
+              test.updatedAt = nowIso();
+              validateData(test);
+            } catch (error) {
+              showToast(error.message || '客户数据无效', 'error');
+              return;
+            }
+            state.customers.unshift(customer);
+            addActivity(customer.id, 'radar', `录入需求信号：${customer.signal}`);
+            closeDialog(addDialog);
+            commit('客户已进入雷达，并建立统一 customer_id');
+            switchView('radar');
+            return;
+          }
+
+          if (form.matches('[data-edit-customer]')) {
+            const customer = customerById(form.dataset.editCustomer);
+            if (!customer) return;
+            const previousStage = customer.stage;
+            customer.name = String(values.get('name') || '').trim();
+            customer.owner = String(values.get('owner') || '').trim();
+            customer.stage = String(values.get('stage'));
+            customer.score = Number(values.get('score'));
+            customer.value = Number(values.get('value')) || 0;
+            customer.consent = String(values.get('consent'));
+            customer.need = String(values.get('need') || '').trim();
+            customer.nextAction = String(values.get('nextAction') || '').trim();
+            customer.tags = String(values.get('tags') || '').split(/[,，]/).map((item) => item.trim()).filter(Boolean).slice(0, 20);
+            customer.lastTouch = today();
+            if (customer.consent !== 'confirmed') state.campaigns.forEach((item) => { item.customerIds = item.customerIds.filter((id) => id !== customer.id); });
+            addActivity(customer.id, 'system', `人工更新客户主档${previousStage !== customer.stage ? `，阶段改为“${stageMeta[customer.stage][0]}”` : ''}`);
+            commit('客户主档已更新，所有模块同步生效');
+            return;
+          }
+
+          if (form.id === 'gos-touch-form') {
+            const customer = customerById(String(values.get('customerId')));
+            const asset = assetById(String(values.get('assetId')));
+            const purpose = String(values.get('purpose') || '').trim();
+            if (!customer || !asset) { showToast('请选择有效客户和内容资产', 'error'); return; }
+            if (customer.consent !== 'confirmed') { showToast('该客户尚未确认可触达，未创建任务', 'warning'); openCustomerDialog(customer.id); return; }
+            let campaign = state.campaigns.find((item) => item.status === 'running' && item.assetId === asset.id);
+            if (!campaign) {
+              campaign = { id:makeId('cmp'), name:`${asset.title}培育计划`, segment:'人工选择 · 已确认可触达', status:'running', assetId:asset.id, customerIds:[], sent:0, engaged:0, qualified:0, nextRun:today() };
+              state.campaigns.unshift(campaign);
+            }
+            if (!campaign.customerIds.includes(customer.id)) campaign.customerIds.push(customer.id);
+            asset.uses += 1;
+            addTask(customer.id, 'nurture', purpose, customer.owner);
+            addActivity(customer.id, 'nurture', `创建人工触达待办并引用“${asset.title}”：${purpose}`, asset.id);
+            form.reset();
+            commit('触达待办已创建；系统未发送任何外部消息');
+            return;
+          }
+
+          if (form.id === 'gos-coaching-form') {
+            const customer = customerById(String(values.get('customerId')));
+            const rubric = state.assets.find((item) => item.type === 'rubric' && item.status === 'ready');
+            const answer = String(values.get('answer') || '').trim();
+            if (!customer || !rubric) { showToast('缺少客户或已审核评分量表', 'error'); return; }
+            const keywordScore = (keywords) => Math.min(28, keywords.filter((word) => answer.includes(word)).length * 7);
+            const lengthScore = Math.min(22, Math.round(answer.length / 12));
+            const discovery = Math.min(95, 45 + lengthScore + keywordScore(['追问','原因','标准','目标','为什么']));
+            const value = Math.min(95, 43 + lengthScore + keywordScore(['价值','影响','成本','结果','周期']));
+            const advance = Math.min(95, 42 + lengthScore + keywordScore(['下一步','确认','安排','试点','会议']));
+            const score = average([discovery, value, advance]);
+            const lowest = [['需求挖掘',discovery],['价值塑造',value],['成交推进',advance]].sort((a,b) => a[1] - b[1])[0][0];
+            const note = `规则评分显示“${lowest}”是当前优先改进项。建议加入可验证证据，并明确由客户确认的下一步。`;
+            state.coaching.unshift({ id:makeId('coach'), customerId:customer.id, learner:String(values.get('learner') || '').trim(), scenario:String(values.get('scenario')), score, dimensions:{ discovery, value, advance }, date:today(), assetId:rubric.id, note });
+            rubric.uses += 1;
+            addActivity(customer.id, 'coaching', `完成“${String(values.get('scenario'))}”规则陪练，综合得分 ${score}；结果待人工复核`, rubric.id);
+            const customerSessions = state.coaching.filter((item) => item.customerId === customer.id).length;
+            if (customer.stage === 'won' && customerSessions >= 3) addTask(customer.id, 'renewal', '复盘陪练活跃与能力变化，评估下一周期方案', customer.owner);
+            form.reset();
+            form.querySelector('input[name="learner"]').value = '销售一组';
+            commit('陪练结果已关联客户、量表与交付时间线');
+            return;
+          }
+
+          if (form.id === 'gos-asset-form') {
+            const tags = String(values.get('tags') || '').split(/[,，]/).map((item) => item.trim()).filter(Boolean).slice(0, 20);
+            const asset = { id:makeId('ast'), type:String(values.get('type')), title:String(values.get('title') || '').trim(), summary:String(values.get('summary') || '').trim(), status:'review', uses:0, owner:'当前用户', tags };
+            const test = clone(state);
+            test.assets.push(asset);
+            test.updatedAt = nowIso();
+            try { validateData(test); } catch (error) { showToast(error.message || '资产数据无效', 'error'); return; }
+            state.assets.unshift(asset);
+            form.reset();
+            commit('新资产已进入待审核状态，审核前不会被自动推荐');
+          }
+        });
+
+        const validateEnvelope = (payload) => {
+          inspectJsonSafety(payload);
+          assert(isPlainObject(payload), '导入文件顶层必须是对象');
+          assertKeys(payload, ['schemaVersion','exportedAt','data'], '导入文件');
+          assert(payload.schemaVersion === SCHEMA_VERSION, `不支持的数据版本：${payload.schemaVersion}`);
+          assert(isDate(payload.exportedAt), 'exportedAt 不是有效时间');
+          return validateData(payload.data);
+        };
+
+        $('#gos-import-input').addEventListener('change', async (event) => {
+          const input = event.currentTarget;
+          const file = input.files?.[0];
+          input.value = '';
+          if (!file) return;
+          if (file.size > MAX_IMPORT_BYTES) { showToast('导入失败：JSON 文件不得超过 2 MB', 'error'); return; }
+          if (file.type && file.type !== 'application/json' && !file.name.toLowerCase().endsWith('.json')) { showToast('导入失败：请选择 JSON 文件', 'error'); return; }
+          try {
+            const text = await file.text();
+            assert(text.trim().length > 0, '文件为空');
+            const nextState = validateEnvelope(JSON.parse(text));
+            const summary = `客户 ${nextState.customers.length} 条、活动 ${nextState.activities.length} 条、资产 ${nextState.assets.length} 条。`;
+            if (!window.confirm(`导入将完整覆盖当前本机演示数据。\n${summary}\n是否继续？`)) return;
+            state = nextState;
+            closeDialog(customerDialog);
+            saveState();
+            renderAll();
+            switchView('overview');
+            showToast('JSON 已完整校验并原子替换当前数据');
+          } catch (error) {
+            showToast(`导入失败：${error instanceof SyntaxError ? 'JSON 格式损坏' : error.message || '数据结构无效'}`, 'error');
+          }
+        });
+
+        const renderGlobalSearch = () => {
+          const input = $('#gos-global-search');
+          const results = $('#gos-search-results');
+          const query = input.value.trim().toLowerCase();
+          if (!query) { results.hidden = true; results.innerHTML = ''; return; }
+          const matches = state.customers.filter((customer) => [customer.name, customer.industry, customer.need, customer.owner, ...customer.tags].join(' ').toLowerCase().includes(query)).slice(0, 6);
+          results.innerHTML = matches.length ? matches.map((customer) => `<button type="button" data-open-customer="${escapeHtml(customer.id)}"><strong>${escapeHtml(customer.name)}</strong><span>${escapeHtml(customer.industry)} · ${escapeHtml(customer.owner)} · ${escapeHtml(stageMeta[customer.stage][0])}</span></button>`).join('') : '<span class="gos-search-empty">没有匹配客户</span>';
+          results.hidden = false;
+        };
+
+        $('#gos-global-search').addEventListener('input', renderGlobalSearch);
+        $('#gos-global-search').addEventListener('keydown', (event) => {
+          if (event.key === 'Enter') {
+            const first = $('#gos-search-results [data-open-customer]');
+            if (first) { event.preventDefault(); first.click(); }
+          }
+          if (event.key === 'Escape') { $('#gos-search-results').hidden = true; event.currentTarget.blur(); }
+        });
+        $('#gos-radar-search').addEventListener('input', renderRadar);
+        $('#gos-radar-score').addEventListener('change', renderRadar);
+        $('#gos-asset-filter').addEventListener('change', renderAssets);
+
+        for (const dialog of [addDialog, customerDialog]) {
+          dialog.addEventListener('click', (event) => {
+            if (event.target === dialog) dialog.close();
+          });
+        }
+
+        document.addEventListener('keydown', (event) => {
+          if ((event.metaKey || event.ctrlKey) && event.key.toLowerCase() === 'k') {
+            event.preventDefault();
+            $('#gos-global-search').focus();
+          }
+          if (event.key === 'Escape' && root.classList.contains('nav-open')) closeMobileNav(true);
+        });
+
+        saveState();
+        renderAll();
+        switchView('overview');
+      })();
+    </script>
+  </article>
+
+  <style>
+    .cv-page-links{display:flex;flex-wrap:wrap;gap:8px 20px}
+  </style>
+</Base>
