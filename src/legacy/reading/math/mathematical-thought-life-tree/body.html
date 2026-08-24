@@ -1,0 +1,379 @@
+<script>
+  (() => {
+    const page = document.currentScript.closest('.lp');
+    let savedTheme = '';
+    try { savedTheme = localStorage.getItem('cavno:math-life-tree-theme') || ''; } catch (_) {}
+    page.dataset.theme = savedTheme === 'dark' ? 'dark' : 'light';
+    page.classList.add('js');
+  })();
+</script>
+<a class="skip-link" href="#math-life-tree-main">跳到正文</a>
+  <div class="progress" aria-hidden="true"></div>
+  <header class="topbar">
+    <div class="brand"><strong>Cavno · Mathematics</strong><span>Systems · Life Tree</span></div>
+    <div class="top-actions">
+      <span class="chapter-indicator" aria-hidden="true">导论 · 数学作为系统</span>
+      <button class="icon-button" id="math-life-tree-theme-toggle" type="button" aria-label="切换明暗主题" aria-pressed="false" title="切换明暗主题">◐</button>
+    </div>
+  </header>
+
+  <section class="hero" aria-labelledby="page-title">
+    <div class="hero-inner">
+      <div class="eyebrow">A systems history of mathematical thought</div>
+      <h2 class="hero-title" id="page-title">数学思想的<em>生命树</em></h2>
+      <div class="hero-grid">
+        <p class="lead">从“发现数量秩序”到“构造复杂结构”——数学并非公式的累积，而是人类文明中持续提升抽象层级、信息压缩能力与自我生成能力的形式化复杂系统。</p>
+        <div class="hero-meta" aria-label="文档概览">
+          <div><b>09</b><span>历史阶段</span></div>
+          <div><b>06</b><span>系统范式</span></div>
+          <div><b>07</b><span>抽象跃迁</span></div>
+          <div><b>∞</b><span>生成空间</span></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="article-main" id="math-life-tree-main" role="region" tabindex="-1" aria-label="专题正文">
+    <section class="section reveal" id="contents" data-title="阅读地图">
+      <div class="section-head">
+        <div class="section-no">00 / Index</div>
+        <div class="section-title">
+          <span class="kicker">Reading architecture</span>
+          <h2>三条线，一部数学思想史</h2>
+          <p>纵向看历史阶段，横向看系统范式，向内看数学如何逐层把“对象”转化为“产生结构的规则”。</p>
+        </div>
+      </div>
+      <aside class="method-note">
+        <strong>四套刻度如何对应</strong>
+        <p>九阶段是历史节点，六范式是系统类型，七级路径描述抽象对象的转换，八种身份用于综合回望。它们是彼此投影的分析坐标，不是一一对应的分期，也不是单线进步等级。</p>
+      </aside>
+      <nav class="toc-grid" aria-label="章节目录">
+        <a class="toc-link" href="#model"><b>01</b><span>数学作为复杂文化系统</span></a>
+        <a class="toc-link" href="#path"><b>02</b><span>七级核心演化路径</span></a>
+        <a class="toc-link" href="#tree"><b>03</b><span>数学思想生命树</span></a>
+        <a class="toc-link" href="#six"><b>04</b><span>系统论六阶段映射</span></a>
+        <a class="toc-link" href="#history"><b>05</b><span>九阶段历史时间轴</span></a>
+        <a class="toc-link" href="#closure"><b>06</b><span>从封闭证明到开放生成</span></a>
+        <a class="toc-link" href="#cross"><b>07</b><span>哲学 × 系统论 × 数学</span></a>
+        <a class="toc-link" href="#formulas"><b>08</b><span>核心公式与概念</span></a>
+        <a class="toc-link" href="#summary"><b>09</b><span>统一模型与最终命题</span></a>
+      </nav>
+    </section>
+
+    <section class="section reveal" id="model" data-title="数学作为复杂文化系统">
+      <div class="section-head">
+        <div class="section-no">01 / Model</div>
+        <div class="section-title">
+          <span class="kicker">Not a catalogue, but a living system</span>
+          <h2>数学不是知识仓库，而是表达能力不断扩张的系统</h2>
+          <p>传统数学史告诉我们“谁发明了什么”；系统论追问的则是：数学为何从测量工具变成抽象结构科学，又为何在基础危机之后转向计算、复杂性与学习。</p>
+        </div>
+      </div>
+
+      <div class="statement">
+        <p>数学发展的核心动力，不是简单积累知识，而是持续<strong>扩展系统表达能力</strong>：把更多对象、关系、变化与可能世界纳入同一套可操作的形式语言。</p>
+      </div>
+      <div class="formula-main" role="region" tabindex="0" aria-label="数学系统总体模型，可横向滚动">
+        <code>S = (Object, Relation, Rule, Structure, Meta-system)</code>
+        <small>对象 · 关系 · 规则 · 结构 · 元系统</small>
+      </div>
+      <div class="system-grid">
+        <article class="system-card"><div class="symbol">M</div><h3>物质基础</h3><p>文明、文字、计数媒介、印刷、大学、计算工具与计算机。</p></article>
+        <article class="system-card"><div class="symbol">E</div><h3>能量输入</h3><p>生存需要、天文测量、科学需求、战争工程、逻辑危机与技术革命。</p></article>
+        <article class="system-card"><div class="symbol">I</div><h3>信息结构</h3><p>定义、公理、符号、定理、证明、算法与模型参数。</p></article>
+        <article class="system-card"><div class="symbol">↻</div><h3>反馈机制</h3><p>证明、反例、悖论、计算实验、误差函数与经验数据。</p></article>
+        <article class="system-card"><div class="symbol">∂</div><h3>系统边界</h3><p>什么可被定义、证明、计算、预测，以及哪些对象被承认为数学对象。</p></article>
+      </div>
+    </section>
+
+    <section class="section reveal" id="path" data-title="核心演化路径">
+      <div class="section-head">
+        <div class="section-no">02 / Deep path</div>
+        <div class="section-title">
+          <span class="kicker">The ascent to the meta-level</span>
+          <h2>研究不断上移到生成对象的元层级</h2>
+          <p>古代研究对象本身，近代研究对象之间的关系，现代研究关系结构，当代进一步研究生成结构的规则：不是对象变少，而是描述层级不断上移。</p>
+        </div>
+      </div>
+      <div class="path" aria-label="对象到生成的演化路径">
+        <div class="path-step"><b>对象</b><span>数、长度、面积<br>“世界有多少？”</span></div>
+        <div class="path-step"><b>结构</b><span>几何形式、公理秩序<br>“为何必然？”</span></div>
+        <div class="path-step"><b>关系</b><span>变量、运算、对称性<br>“如何表达？”</span></div>
+        <div class="path-step"><b>变化</b><span>导数、积分、状态<br>“如何演化？”</span></div>
+        <div class="path-step"><b>抽象</b><span>群、环、域、空间<br>“何者同构？”</span></div>
+        <div class="path-step"><b>自反</b><span>形式系统审视自身<br>“边界何在？”</span></div>
+        <div class="path-step"><b>生成</b><span>学习、模拟、涌现<br>“如何创造？”</span></div>
+      </div>
+    </section>
+
+    <section class="section reveal" id="tree" data-title="数学思想生命树">
+      <div class="section-head">
+        <div class="section-no">03 / Life tree</div>
+        <div class="section-title">
+          <span class="kicker">A self-abstracting organism</span>
+          <h2>数学是一棵自我抽象化的生命树</h2>
+          <p>每一次危机并不只是摧毁旧系统，它也把旧对象转化为新系统的材料：几何成为代数对象，公理成为可选择的规则，证明成为可计算的过程。</p>
+        </div>
+      </div>
+      <div class="tree-shell" role="group" aria-label="数学从数量根系生长至计算智能的生命树">
+        <div class="tree-root"><small>ROOT · MEASUREMENT</small><strong>数量计算系统</strong></div>
+        <div class="tree-row"><article class="tree-node"><h3>几何形式系统</h3><p>从“会算”转向“为何必然”，证明建立高秩序闭合结构。</p></article><span class="tree-dot"></span></div>
+        <div class="tree-row"><article class="tree-node"><h3>符号代数系统</h3><p>未知量成为对象，空间与数量在符号关系中相互翻译。</p></article><span class="tree-dot"></span></div>
+        <div class="tree-row"><article class="tree-node"><h3>动态变化系统</h3><p>时间进入数学；规则不再只推出结论，也生成轨迹。</p></article><span class="tree-dot"></span></div>
+        <div class="tree-row"><article class="tree-node"><h3>抽象结构系统</h3><p>从研究“东西”转向研究保持不变的关系与变换。</p></article><span class="tree-dot"></span></div>
+        <div class="tree-row"><article class="tree-node"><h3>形式自反系统</h3><p>数学把自身编码为对象，并发现完备性与可计算性的边界。</p></article><span class="tree-dot"></span></div>
+        <div class="tree-row"><article class="tree-node"><h3>复杂生成系统</h3><p>简单局部规则、非线性反馈与迭代产生不可约的整体形态。</p></article><span class="tree-dot"></span></div>
+        <div class="tree-crown"><strong>网络计算智能系统</strong><span>关系成为基础，模型从数据中学习函数，数学开始构造“能产生新结构的系统”。</span></div>
+      </div>
+    </section>
+
+    <section class="section reveal" id="six" data-title="系统论六阶段映射">
+      <div class="section-head">
+        <div class="section-no">04 / Six systems</div>
+        <div class="section-title">
+          <span class="kicker">Six paradigms, one expanding grammar</span>
+          <h2>系统论六阶段，映射数学的六次范式升级</h2>
+          <p>阶段不是彼此替代，而是层层嵌套：计算仍在，证明仍在，结构仍在；新的范式把旧能力重新组织到更高层级。</p>
+        </div>
+      </div>
+      <div class="six-grid">
+        <article class="six-card"><span class="tag">MECHANICAL / OBJECT</span><h3>机械—对象系统</h3><p>对象明确、规则局部、目标实用；数学依附测量与计算。</p><code>Object → Number</code></article>
+        <article class="six-card"><span class="tag">STRUCTURAL</span><h3>结构系统</h3><p>定义、公理与演绎关系构成封闭整体，真理表现为必然推论。</p><code>Axioms → Theorems</code></article>
+        <article class="six-card"><span class="tag">FORMAL / CONTROL</span><h3>形式控制系统</h3><p>符号规则协调不同分支；算法与形式语言使推理可操作。</p><code>(Σ, A, R)</code></article>
+        <article class="six-card"><span class="tag">SELF-ORGANIZING</span><h3>自组织生成系统</h3><p>局部变化通过迭代累积成整体，动态规律产生历史轨迹。</p><code>x(t+1)=F(x(t))</code></article>
+        <article class="six-card"><span class="tag">NONLINEAR / COMPLEX</span><h3>非线性复杂系统</h3><p>确定不等于可预测；分岔、混沌、分形与涌现进入核心。</p><code>δx(t)=δx(0)e<sup>λt</sup></code></article>
+        <article class="six-card"><span class="tag">NETWORK / COMPUTATION</span><h3>网络计算系统</h3><p>节点关系、概率优化与学习算法共同生成适应性模型。</p><code>G=(V,E) · f<sub>θ</sub>(x)</code></article>
+      </div>
+    </section>
+
+    <section class="section" id="history" data-title="九阶段历史时间轴">
+      <div class="section-head reveal">
+        <div class="section-no">05 / Timeline</div>
+        <div class="section-title">
+          <span class="kicker">From measure to machine learning</span>
+          <h2>九个阶段：数学如何一次次改写自身边界</h2>
+          <p>这不是线性的“进步阶梯”，而是旧系统在新问题压力下发生分叉、重组与升维的历史。</p>
+        </div>
+      </div>
+
+      <div class="timeline">
+        <article class="era reveal" id="era-1">
+          <div class="era-date">约前3000<br>—前500</div><div class="era-marker"></div>
+          <div class="era-card">
+            <div class="era-top"><div><span class="era-index">STAGE 01 · MEASUREMENT</span><h3>数量系统：测量世界</h3></div><p class="era-question">核心问题：世界有多少？</p></div>
+            <div class="era-body"><div><p>数学首先是生存世界的测量工具。数量、长度、面积、容积与天文周期是主要对象；规则与具体任务紧密绑定。</p><ul><li>土地、税收、贸易与历法提供持续的能量输入。</li><li>计算程序有效，却尚未形成独立的证明系统。</li><li>抽象度低，但完成了从物到数的第一次信息压缩。</li></ul><div class="people"><span class="person">古埃及</span><span class="person">巴比伦</span><span class="person">中国早期数学</span></div></div><div><div class="change-box"><b>SYSTEM SHIFT</b><p>现实对象 → 抽象数量 → 计算规则</p></div><div class="mini-formula">Area = a × b<br>Object → Number</div></div></div>
+          </div>
+        </article>
+
+        <article class="era reveal" id="era-2">
+          <div class="era-date">前6世纪<br>—前3世纪</div><div class="era-marker"></div>
+          <div class="era-card">
+            <div class="era-top"><div><span class="era-index">STAGE 02 · PROOF</span><h3>希腊形式系统：证明必然</h3></div><p class="era-question">核心问题：为什么必然如此？</p></div>
+            <div class="era-body"><div><p>毕达哥拉斯把数理解为宇宙秩序；柏拉图把数学对象提升到独立形式；欧几里得则把定义、公理、证明与定理组织成第一个高度闭合的演绎系统。</p><ul><li>数学从“怎么算”转向“为何必然”。</li><li>证明成为最关键的反馈与验证机制。</li><li>高秩序带来稳定性，也带来边界刚性。</li></ul><div class="people"><span class="person">毕达哥拉斯</span><span class="person">柏拉图</span><span class="person">欧几里得</span></div></div><div><div class="change-box"><b>SYSTEM SHIFT</b><p>经验计算 → 抽象形式 → 封闭证明</p></div><div class="mini-formula">Reality = Number<br>Axioms + Logic → Theorems</div></div></div>
+          </div>
+        </article>
+
+        <article class="era reveal" id="era-3">
+          <div class="era-date">16—17<br>世纪</div><div class="era-marker"></div>
+          <div class="era-card">
+            <div class="era-top"><div><span class="era-index">STAGE 03 · SYMBOL</span><h3>代数符号系统：关系可操作</h3></div><p class="era-question">核心问题：关系如何表达？</p></div>
+            <div class="era-body"><div><p>韦达推动系统符号代数，笛卡尔用坐标把几何翻译成代数。未知量本身成为数学对象，不同分支通过符号语言互相转换。</p><ul><li>符号压缩具体数值，生成一类问题的共同形式。</li><li>解析几何完成空间结构与代数关系的接口化。</li><li>数学从对象中心转向关系中心。</li></ul><div class="people"><span class="person">韦达</span><span class="person">笛卡尔</span></div></div><div><div class="change-box"><b>SYSTEM SHIFT</b><p>图形对象 → 符号关系 → 分支融合</p></div><div class="mini-formula">x² + 2x + 1 = 0<br>Geometry ≅ Algebra</div></div></div>
+          </div>
+        </article>
+
+        <article class="era reveal" id="era-4">
+          <div class="era-date">17—18<br>世纪</div><div class="era-marker"></div>
+          <div class="era-card">
+            <div class="era-top"><div><span class="era-index">STAGE 04 · DYNAMICS</span><h3>微积分动态系统：生成轨迹</h3></div><p class="era-question">核心问题：变化如何产生？</p></div>
+            <div class="era-body"><div><p>牛顿与莱布尼茨让时间与变化率进入数学核心。牛顿把数学变成物理世界的状态模型；莱布尼茨以 <i>∫</i> 与 <i>d/dx</i> 建立可推广的计算语言。</p><ul><li>数学从静态结构转向动态过程。</li><li>局部变化可以经积分累积为整体。</li><li>规律不只证明命题，也从初始条件生成未来。</li></ul><div class="people"><span class="person">牛顿</span><span class="person">莱布尼茨</span><span class="person">欧拉</span><span class="person">拉格朗日</span></div></div><div><div class="change-box"><b>SYSTEM SHIFT</b><p>World as proof → World as process</p></div><div class="mini-formula">dx/dt<br>State(t+1)=F(State(t))<br>Global = ∫ Local</div></div></div>
+          </div>
+        </article>
+
+        <article class="era reveal" id="era-5">
+          <div class="era-date">19<br>世纪</div><div class="era-marker"></div>
+          <div class="era-card">
+            <div class="era-top"><div><span class="era-index">STAGE 05 · STRUCTURE</span><h3>结构数学：创造可能世界</h3></div><p class="era-question">核心问题：不同对象共享什么结构？</p></div>
+            <div class="era-body"><div><p>非欧几何证明公理不是唯一现实的自明真理，而是生成不同数学世界的系统选择；伽罗瓦的群论则把研究重点从对象转到保持关系的变换。</p><ul><li>欧氏空间从唯一空间变成多种模型之一。</li><li>群、环、域将数学对象重组为一般结构。</li><li>“真理”转化为相对于公理系统的条件真理。</li></ul><div class="people"><span class="person">罗巴切夫斯基</span><span class="person">黎曼</span><span class="person">伽罗瓦</span><span class="person">诺特</span></div></div><div><div class="change-box"><b>SYSTEM SHIFT</b><p>研究东西 → 研究关系与不变量</p></div><div class="mini-formula">Axiom → Different Worlds<br>Structure=(Set, Operation, Relation)</div></div></div>
+          </div>
+        </article>
+
+        <article class="era reveal" id="era-6">
+          <div class="era-date">19世纪末<br>—20世纪初</div><div class="era-marker"></div>
+          <div class="era-card">
+            <div class="era-top"><div><span class="era-index">STAGE 06 · FOUNDATION CRISIS</span><h3>集合论：统一与基础危机</h3></div><p class="era-question">核心问题：数学能否拥有统一基础？</p></div>
+            <div class="era-body"><div><p>康托尔以集合语言统一大量数学对象，完成一次巨大的信息压缩；无限集合与自指结构却同时引发悖论，暴露了“无边界地构造对象”的危险。</p><ul><li>集合成为数、函数、空间与结构的共同底层语言。</li><li>罗素悖论迫使数学重新规定合法对象与构造边界。</li><li>统一能力上升的同时，系统风险也集中到基础层。</li></ul><div class="people"><span class="person">康托尔</span><span class="person">弗雷格</span><span class="person">罗素</span><span class="person">策梅洛</span></div></div><div><div class="change-box"><b>SYSTEM SHIFT</b><p>万物集合化 → 自指悖论 → 公理化修复</p></div><div class="mini-formula">Everything → Set<br>R = {x | x ∉ x}</div></div></div>
+          </div>
+        </article>
+
+        <article class="era reveal" id="era-7">
+          <div class="era-date">1900<br>—1950</div><div class="era-marker"></div>
+          <div class="era-card">
+            <div class="era-top"><div><span class="era-index">STAGE 07 · REFLEXIVITY</span><h3>希尔伯特—哥德尔—图灵：系统审视自身</h3></div><p class="era-question">核心问题：证明与计算的边界在哪里？</p></div>
+            <div class="era-body"><div><p>希尔伯特试图把数学完全形式化并证明其一致性；哥德尔表明足够强的一致形式系统不可能同时完备；图灵则以机器模型定义“可计算”，并证明存在不可判定问题。</p><ul><li>数学第一次把自己的证明过程编码为数学对象。</li><li>不完备不是失败，而是对系统边界的精确刻画。</li><li>数学由证明系统进一步进入计算系统。</li></ul><div class="people"><span class="person">希尔伯特</span><span class="person">哥德尔</span><span class="person">图灵</span><span class="person">丘奇</span></div></div><div><div class="change-box"><b>SYSTEM SHIFT</b><p>追求闭合 → 发现边界 → 定义可计算过程</p></div><div class="mini-formula">Mathematics = Formal System ?<br>Formal System ≠ Complete<br>Algorithm + State → Process</div></div></div>
+          </div>
+        </article>
+
+        <article class="era reveal" id="era-8">
+          <div class="era-date">20<br>世纪</div><div class="era-marker"></div>
+          <div class="era-card">
+            <div class="era-top"><div><span class="era-index">STAGE 08 · COMPLEXITY</span><h3>自组织与复杂系统：规则涌现形态</h3></div><p class="era-question">核心问题：简单规则为何产生复杂结果？</p></div>
+            <div class="era-body"><div><p>非线性动力学、混沌与分形让数学面对不可约的复杂世界。庞加莱以定性方法研究轨迹空间；洛伦兹揭示初值敏感；曼德尔布罗用分形维数描述跨尺度自相似。</p><ul><li>确定性不再等于长期可预测性。</li><li>研究目标从求单一解转向研究行为的整体结构。</li><li>迭代、反馈与局部规则成为生成复杂性的核心机制。</li></ul><div class="people"><span class="person">庞加莱</span><span class="person">洛伦兹</span><span class="person">曼德尔布罗</span><span class="person">普里戈金</span></div></div><div><div class="change-box"><b>SYSTEM SHIFT</b><p>精确预测 → 行为空间 → 涌现结构</p></div><div class="mini-formula">x(t+1)=F(x(t))<br>δx(t)=δx(0)e<sup>λt</sup><br>D<sub>fractal</sub></div></div></div>
+          </div>
+        </article>
+
+        <article class="era reveal" id="era-9">
+          <div class="era-date">21<br>世纪</div><div class="era-marker"></div>
+          <div class="era-card">
+            <div class="era-top"><div><span class="era-index">STAGE 09 · NETWORK INTELLIGENCE</span><h3>网络与 AI 数学：系统学习函数</h3></div><p class="era-question">核心问题：系统如何学习和创造？</p></div>
+            <div class="era-body"><div><p>网络科学把关系放在实体之前；机器学习融合线性代数、概率、优化与信息论，不再要求先写出显式规则，而是通过数据反馈学习函数。</p><p class="scope-note">这里的“AI 数学”指多类数学方法在机器学习系统中的组合与反馈化应用，并不把机器学习直接等同于一个独立、统一的数学分支。</p><ul><li>节点与边描述大脑、互联网、金融与社会关系。</li><li>误差函数把环境反馈转化为参数更新。</li><li>数学从“找到公式”进一步转向“构造能学习结构的系统”。</li></ul><div class="people"><span class="person">欧拉（图论源头）</span><span class="person">Barabási</span><span class="person">Shannon</span><span class="person">现代机器学习</span></div></div><div><div class="change-box"><b>SYSTEM SHIFT</b><p>显式规则 → 数据反馈 → 适应性模型</p></div><div class="mini-formula">G=(V,E)<br>Model=f<sub>θ</sub>(x)<br>θ(t+1)=θ(t)−η∇L</div></div></div>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <section class="section reveal" id="closure" data-title="从封闭证明到开放生成">
+      <div class="section-head">
+        <div class="section-no">06 / Transition</div>
+        <div class="section-title">
+          <span class="kicker">Closure → crisis → generativity</span>
+          <h2>从封闭证明系统，走向开放生成系统</h2>
+          <p>数学不是简单抛弃确定性，而是在保留局部严格性的同时，逐步承认多模型、系统边界、计算过程与开放反馈。</p>
+        </div>
+      </div>
+      <p class="metric-note">以下状态条只用于呈现五种结构状态的相对侧重，不代表可测量的历史数据。</p>
+      <div class="closure-flow">
+        <article class="closure-step"><span class="state">CLOSED / ORDER</span><h3>高秩序闭合</h3><p>有限公理经逻辑推出定理；边界清晰，确定性极强。</p><div class="meter" aria-hidden="true"><i style="width:92%"></i></div></article>
+        <article class="closure-step"><span class="state">TENSION</span><h3>异常与张力</h3><p>平行公设、无限、自指与不可解问题积累在系统边界。</p><div class="meter" aria-hidden="true"><i style="width:72%"></i></div></article>
+        <article class="closure-step"><span class="state">FRACTURE</span><h3>结构分叉</h3><p>非欧几何与不同公理体系把唯一世界打开为可能世界空间。</p><div class="meter" aria-hidden="true"><i style="width:56%"></i></div></article>
+        <article class="closure-step"><span class="state">REFLEXIVITY</span><h3>自反与边界</h3><p>哥德尔与图灵表明：系统能够刻画自身，但无法完全封闭自身。</p><div class="meter" aria-hidden="true"><i style="width:68%"></i></div></article>
+        <article class="closure-step"><span class="state">OPEN / GENERATIVE</span><h3>开放生成</h3><p>迭代、数据与反馈不只描述结构，也持续产生、选择和修正结构。</p><div class="meter" aria-hidden="true"><i style="width:100%"></i></div></article>
+      </div>
+    </section>
+
+    <section class="section reveal" id="cross" data-title="哲学、系统论与数学">
+      <div class="section-head">
+        <div class="section-no">07 / Cross-map</div>
+        <div class="section-title">
+          <span class="kicker">Three languages for the same turn</span>
+          <h2>哲学、系统论与数学：三种语言描述同一演化</h2>
+          <p>哲学追问知识与实在，系统论追问组织与演化，数学提供可操作的形式。三者在每次范式转变中相互牵引。</p>
+        </div>
+      </div>
+      <div class="triad">
+        <article class="triad-col"><h3>哲学维度</h3><ul><li><strong>存在论</strong>对象究竟是什么</li><li><strong>认识论</strong>必然知识如何可能</li><li><strong>结构主义</strong>关系先于孤立实体</li><li><strong>生成论</strong>形式如何在时间中出现</li><li><strong>反身性</strong>认知系统如何认识自身</li></ul></article>
+        <div class="triad-link" aria-hidden="true">↔</div>
+        <article class="triad-col"><h3>系统论维度</h3><ul><li><strong>对象系统</strong>要素与边界</li><li><strong>结构系统</strong>整体与组织</li><li><strong>控制系统</strong>规则、信息与反馈</li><li><strong>复杂系统</strong>非线性、自组织与涌现</li><li><strong>网络系统</strong>关系拓扑与适应</li></ul></article>
+        <div class="triad-link" aria-hidden="true">↔</div>
+        <article class="triad-col"><h3>数学维度</h3><ul><li><strong>数与几何</strong>对象和不变量</li><li><strong>公理与证明</strong>闭合演绎秩序</li><li><strong>代数与算法</strong>符号化操作</li><li><strong>动力学与概率</strong>变化和行为分布</li><li><strong>网络与学习</strong>反馈生成模型</li></ul></article>
+      </div>
+      <div class="triad-caption"><strong>共同母题：</strong> 从“世界由什么组成”，转向“关系如何组织”，再转向“规则如何生成可学习的新结构”。</div>
+    </section>
+
+    <section class="section reveal" id="formulas" data-title="核心公式与概念">
+      <div class="section-head">
+        <div class="section-no">08 / Formulae</div>
+        <div class="section-title">
+          <span class="kicker">A compact grammar of the journey</span>
+          <h2>六个公式，压缩整条演化路线</h2>
+          <p>公式不是装饰：每一个都对应数学系统边界的一次改变。</p>
+        </div>
+      </div>
+      <div class="formula-grid">
+        <article class="formula-card wide"><small>01 · SYSTEM ONTOLOGY</small><code>S=(Object, Relation, Rule, Structure, Meta-system)</code><p>数学不只包含对象，也包含对象间的关系、允许的操作、整体结构，以及对这些结构进行审视的元系统。</p></article>
+        <article class="formula-card"><small>02 · AXIOMATIC CLOSURE</small><code>Axioms → Theorems</code><p>希腊形式理性的核心：在明确边界内，以逻辑把有限起点扩展为必然结论。</p></article>
+        <article class="formula-card"><small>03 · DYNAMICAL GENERATION</small><code>x(t+1)=F(x(t))</code><p>规则开始生成过程；系统的状态、迭代与时间成为数学对象。</p></article>
+        <article class="formula-card"><small>04 · NETWORK RELATION</small><code>G=(V,E)</code><p>节点不再孤立存在，边与拓扑结构决定信息传播、鲁棒性与整体行为。</p></article>
+        <article class="formula-card"><small>05 · LEARNED MODEL</small><code>Model=f<sub>θ</sub>(x)</code><p>函数结构不必完全由人先验写出，而可由参数化模型从数据中学习。</p></article>
+        <article class="formula-card wide"><small>06 · FEEDBACK OPTIMIZATION</small><code>θ(t+1)=θ(t)−η∇L</code><p>误差被转化为方向，反馈被转化为参数更新：形式系统由静态规则集合变成可适应的迭代系统。</p></article>
+      </div>
+    </section>
+
+    <section class="section reveal" id="summary" data-title="统一模型">
+      <div class="section-head">
+        <div class="section-no">09 / Synthesis</div>
+        <div class="section-title">
+          <span class="kicker">One history, eight identities</span>
+          <h2>数学对自身的八次重新定义</h2>
+          <p>同一套实践，在不同阶段回答不同问题，也获得不同的系统身份。</p>
+        </div>
+      </div>
+      <div class="table-wrap" role="region" tabindex="0" aria-label="数学系统身份汇总表，可横向滚动">
+        <table>
+          <thead><tr><th scope="col">阶段身份</th><th scope="col">核心问题</th><th scope="col">主要对象</th><th scope="col">验证 / 反馈</th><th scope="col">系统变化</th></tr></thead>
+          <tbody>
+            <tr><td>测量系统</td><td>世界有多少？</td><td>数量、长度、面积</td><td>实践有效性</td><td>现实对象被数量化</td></tr>
+            <tr><td>证明系统</td><td>为什么必然？</td><td>几何形式、命题</td><td>演绎证明</td><td>知识形成闭合秩序</td></tr>
+            <tr><td>符号系统</td><td>关系如何表达？</td><td>变量、方程、坐标</td><td>等价变换</td><td>跨分支翻译成为可能</td></tr>
+            <tr><td>动态系统</td><td>变化如何产生？</td><td>状态、变化率、轨迹</td><td>预测与积分</td><td>时间进入形式结构</td></tr>
+            <tr><td>结构系统</td><td>什么保持不变？</td><td>群、环、域、空间</td><td>同构与不变量</td><td>从对象转向一般关系</td></tr>
+            <tr><td>形式自反系统</td><td>数学边界在哪里？</td><td>证明、算法、编码</td><td>元证明与不可判定性</td><td>系统把自身变成对象</td></tr>
+            <tr><td>复杂生成系统</td><td>复杂结构如何出现？</td><td>相空间、吸引子、分形</td><td>模拟与定性分析</td><td>预测转向行为结构</td></tr>
+            <tr><td>网络计算系统</td><td>系统如何学习与创造？</td><td>图、概率、参数模型</td><td>数据、损失与优化</td><td>反馈持续生成新结构</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section class="finale reveal" id="conclusion" data-title="最终命题">
+      <div class="finale-inner">
+        <span class="finale-mark">READING &amp; MATHEMATICS · FINAL PROPOSITION</span>
+        <h2>数学的终点，不是找到所有答案。</h2>
+        <div class="big-path">对象 → 结构 → 关系 → 变化 → 抽象 → 自反 → 生成</div>
+        <p>它更像是在建立一种能够不断产生新对象、新关系、新模型与新问题的形式化生成系统。数学，是人类文明中最纯粹的一棵“形式化生命树”。</p>
+      </div>
+    </section>
+  </div>
+
+  <footer>
+    <span>Cavno · Reading &amp; Mathematics</span>
+    <a href="#page-title">返回顶部 ↑</a>
+  </footer>
+
+  <script>
+    (() => {
+      const page = document.currentScript.closest('.lp');
+      const root = page;
+      const toggle = page.querySelector('#math-life-tree-theme-toggle');
+      const progress = page.querySelector('.progress');
+      const indicator = page.querySelector('.chapter-indicator');
+      const sections = [...page.querySelectorAll('.article-main [data-title]')];
+      const reveals = [...page.querySelectorAll('.reveal')];
+
+      toggle.setAttribute('aria-pressed', String(root.dataset.theme === 'dark'));
+      toggle.addEventListener('click', () => {
+        root.dataset.theme = root.dataset.theme === 'dark' ? 'light' : 'dark';
+        toggle.setAttribute('aria-pressed', String(root.dataset.theme === 'dark'));
+        try { localStorage.setItem('cavno:math-life-tree-theme', root.dataset.theme); } catch (_) {}
+      });
+
+      if ('IntersectionObserver' in window) {
+        const revealObserver = new IntersectionObserver(entries => {
+          entries.forEach(entry => {
+            if (entry.isIntersecting) {
+              entry.target.classList.add('visible');
+              revealObserver.unobserve(entry.target);
+            }
+          });
+        }, { threshold: 0.08 });
+        reveals.forEach(el => revealObserver.observe(el));
+
+        const sectionObserver = new IntersectionObserver(entries => {
+          const active = entries.filter(e => e.isIntersecting).sort((a, b) => b.intersectionRatio - a.intersectionRatio)[0];
+          if (active) indicator.textContent = active.target.dataset.title;
+        }, { rootMargin: '-18% 0px -68% 0px', threshold: [0, .15, .4] });
+        sections.forEach(el => sectionObserver.observe(el));
+      } else {
+        reveals.forEach(el => el.classList.add('visible'));
+      }
+
+      const updateProgress = () => {
+        const start = page.offsetTop;
+        const max = Math.max(1, page.scrollHeight - innerHeight);
+        const pct = Math.min(100, Math.max(0, ((scrollY - start) / max) * 100));
+        progress.style.width = pct + '%';
+      };
+      window.addEventListener('scroll', updateProgress, { passive: true });
+      window.addEventListener('resize', updateProgress);
+      updateProgress();
+    })();
+  </script>
