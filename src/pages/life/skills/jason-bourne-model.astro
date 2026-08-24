@@ -1,0 +1,24 @@
+---
+import Base from '../../../layouts/Base.astro';
+import body from '../../../legacy/life/skills/jason-bourne-model/body.html?raw';
+import '../../../legacy/life/skills/jason-bourne-model/style.css';
+
+const meta = {
+  title: '杰森·伯恩能力模型｜复杂环境中的个人决策系统',
+  description: '以观察、理解、分析、决策与行动为主线，把电影角色的能力隐喻拆解为六维个人能力系统与五年成长路径。',
+};
+---
+<Base title={`${meta.title} · Cavno`} description={meta.description}>
+  <section class="cv-page-head bourne-page-head">
+    <div class="cv-wrap">
+      <div class="cv-eyebrow">Life & Skills · Skills</div>
+      <h1 class="cv-page-title">杰森·伯恩能力模型</h1>
+      <p class="cv-lede">从特工叙事中剥离动作幻想，提取在不确定环境下仍能保持判断质量的观察、认知、行动与战略能力。</p>
+      <a class="cv-crumb-back" href="/life/skills/">← 返回技能栏目</a>
+    </div>
+  </section>
+
+  <article class="lp bourne-article">
+    <Fragment set:html={body} />
+  </article>
+</Base>
