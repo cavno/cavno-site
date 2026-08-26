@@ -1,0 +1,293 @@
+<div class="fsi-page">
+  <nav class="fsi-page-nav" aria-label="本页章节">
+    <div class="fsi-wrap fsi-nav-inner">
+      <a class="fsi-nav-brand" href="#fsi-overview"><i aria-hidden="true"></i><span>FINANCIAL SYSTEMS</span></a>
+      <div class="fsi-nav-links">
+        <a data-fsi-nav href="#fsi-reframe"><span>01</span>重新提问</a>
+        <a data-fsi-nav href="#fsi-market"><span>02</span>市场模型</a>
+        <a data-fsi-nav href="#fsi-algorithms"><span>03</span>十种算法</a>
+        <a data-fsi-nav href="#fsi-pairs"><span>04</span>关键对偶</a>
+        <a data-fsi-nav href="#fsi-loop"><span>05</span>闭环控制</a>
+        <a data-fsi-nav href="#fsi-meta"><span>06</span>元系统</a>
+        <a data-fsi-nav href="#fsi-conclusion"><span>07</span>结论</a>
+      </div>
+      <label class="fsi-mobile-jump">
+        <span>章节导航</span>
+        <select data-fsi-jump aria-label="跳转到章节">
+          <option value="">选择章节</option>
+          <option value="#fsi-reframe">01 重新提问</option>
+          <option value="#fsi-market">02 市场模型</option>
+          <option value="#fsi-algorithms">03 十种算法</option>
+          <option value="#fsi-pairs">04 关键对偶</option>
+          <option value="#fsi-loop">05 闭环控制</option>
+          <option value="#fsi-meta">06 元系统</option>
+          <option value="#fsi-conclusion">07 结论</option>
+        </select>
+      </label>
+    </div>
+  </nav>
+
+  <header class="fsi-overview" id="fsi-overview">
+    <div class="fsi-wrap fsi-overview-grid">
+      <div class="fsi-overview-copy">
+        <p class="fsi-kicker">FROM SCHOOLS TO CONTROL ALGORITHMS</p>
+        <h2>金融大师的差异，首先是如何压缩复杂性</h2>
+        <p class="fsi-lede">价值、宏观、量化与概率并不是互斥答案。它们是有限认知主体面对同一个高维、反身、非平稳市场时，选择的不同系统边界与控制回路。</p>
+        <div class="fsi-principle">
+          <span>核心判断</span>
+          <strong>投资体系首先不是“你相信什么”，而是“你决定忽略什么”。</strong>
+        </div>
+      </div>
+      <div class="fsi-system-card" aria-label="金融市场的八变量系统模型">
+        <div class="fsi-model-head"><span>UNIFIED SYSTEM MODEL</span><strong>𝓕 = (X, A, B, P, I, L, R, N)</strong></div>
+        <div class="fsi-model-grid">
+          <div><b>X</b><span>真实经济状态</span></div>
+          <div><b>A</b><span>市场参与者</span></div>
+          <div><b>B</b><span>信念结构</span></div>
+          <div><b>P</b><span>价格系统</span></div>
+          <div><b>I</b><span>信息流</span></div>
+          <div><b>L</b><span>流动性与杠杆</span></div>
+          <div><b>R</b><span>制度规则</span></div>
+          <div><b>N</b><span>关系网络</span></div>
+        </div>
+        <p>价格来自现实，又通过信念、行动与融资条件反过来塑造现实。</p>
+      </div>
+    </div>
+  </header>
+
+  <main class="fsi-main">
+    <section class="fsi-section" id="fsi-reframe" aria-labelledby="fsi-reframe-title">
+      <div class="fsi-wrap">
+        <div class="fsi-section-head">
+          <span class="fsi-section-no">01 · REFRAME</span>
+          <div><h2 id="fsi-reframe-title">从“思想流派”再往下一层</h2><p>哲学框架解释一个人为什么采用某种方法；系统论继续追问，这套方法究竟切掉了什么、观测了什么，又怎样处理错误。</p></div>
+        </div>
+        <div class="fsi-question-chain" aria-label="系统论分析金融思想的五个问题">
+          <div><span>01</span><strong>系统边界怎么切？</strong><small>Boundary</small></div><i aria-hidden="true">→</i>
+          <div><span>02</span><strong>什么变量值得建模？</strong><small>State</small></div><i aria-hidden="true">→</i>
+          <div><span>03</span><strong>哪些风险能预测？</strong><small>Uncertainty</small></div><i aria-hidden="true">→</i>
+          <div><span>04</span><strong>错误如何反馈？</strong><small>Feedback</small></div><i aria-hidden="true">→</i>
+          <div><span>05</span><strong>怎样活着继续复利？</strong><small>Survival</small></div>
+        </div>
+        <aside class="fsi-callout"><b>真正的分野</b><p>不是“价值派、宏观派、量化派”，而是他们各自选择了怎样的复杂性压缩方式、控制回路与生存约束。</p></aside>
+      </div>
+    </section>
+
+    <section class="fsi-section fsi-section-tint" id="fsi-market" aria-labelledby="fsi-market-title">
+      <div class="fsi-wrap">
+        <div class="fsi-section-head">
+          <span class="fsi-section-no">02 · THE MARKET</span>
+          <div><h2 id="fsi-market-title">金融市场不是单向定价器，而是反身系统</h2><p>现实、信念、价格、行动和制度互为输入与输出；观察者并不站在系统之外。</p></div>
+        </div>
+        <div class="fsi-equation-panel">
+          <div class="fsi-equations"><code>Xₜ₊₁ = F(Xₜ, Aₜ, Bₜ, Lₜ, Rₜ, ξₜ)</code><code>Pₜ = G(Xₜ, Bₜ, Lₜ, Aₜ)</code><code>Bₜ₊₁ = U(Bₜ, Pₜ, Iₜ)</code></div>
+          <div class="fsi-feedback-orbit" aria-label="现实、信念、行动与价格的反馈环">
+            <div class="fsi-orbit-core">市场<br><small>ADAPTIVE SYSTEM</small></div>
+            <span class="fsi-orbit-node fsi-node-x">现实</span><span class="fsi-orbit-node fsi-node-b">信念</span><span class="fsi-orbit-node fsi-node-a">行动</span><span class="fsi-orbit-node fsi-node-p">价格</span>
+            <i class="fsi-ring fsi-ring-one" aria-hidden="true"></i><i class="fsi-ring fsi-ring-two" aria-hidden="true"></i>
+          </div>
+        </div>
+        <div class="fsi-trait-grid">
+          <article><span>01</span><h3>部分可观测</h3><p>真实状态不可直接读取，只能由财报、价格、信用与宏观数据间接估计。</p></article>
+          <article><span>02</span><h3>反身</h3><p>投资者的信念与行动会改变价格，甚至改变被观察的基本面。</p></article>
+          <article><span>03</span><h3>非线性与肥尾</h3><p>小扰动可能引发巨变，极端事件的重要性远高于正态分布直觉。</p></article>
+          <article><span>04</span><h3>多主体</h3><p>不同目标、时间尺度、杠杆和规则的参与者共同生成市场状态。</p></article>
+          <article><span>05</span><h3>非平稳</h3><p>规律会因资本进入、制度变化和技术进步而衰减甚至消失。</p></article>
+          <article><span>06</span><h3>网络化</h3><p>资产、机构、信用与叙事相互连接，局部风险可能级联扩散。</p></article>
+        </div>
+      </div>
+    </section>
+
+    <section class="fsi-section" id="fsi-algorithms" aria-labelledby="fsi-algorithms-title">
+      <div class="fsi-wrap">
+        <div class="fsi-section-head">
+          <span class="fsi-section-no">03 · TEN ALGORITHMS</span>
+          <div><h2 id="fsi-algorithms-title">十位人物，十种控制复杂性的算法</h2><p>先看他们主动建模和主动放弃的对象，再展开各自的系统机制。卡片可单独展开，不必一次读完所有人物。</p></div>
+        </div>
+        <div class="fsi-table-wrap">
+          <table>
+            <caption>十种金融思想的系统边界与核心控制机制</caption>
+            <thead><tr><th>人物</th><th>主动建模</th><th>主动放弃</th><th>控制机制</th></tr></thead>
+            <tbody>
+              <tr><th>巴菲特</th><td>企业长期现金流系统</td><td>短期市场与宏观预测</td><td>缩小边界 + 安全边际</td></tr>
+              <tr><th>芒格</th><td>企业及跨学科生态</td><td>单因子解释</td><td>多模型交叉验证</td></tr>
+              <tr><th>西蒙斯</th><td>价格数据的统计结构</td><td>人工语义与故事解释</td><td>系统辨识 + 信号提取</td></tr>
+              <tr><th>索罗斯</th><td>信念—价格—基本面反馈环</td><td>稳定均衡与永久真理</td><td>反身性 + 临界点</td></tr>
+              <tr><th>马克斯</th><td>周期位置与风险偏好</td><td>未来点预测</td><td>状态估计 + 防御</td></tr>
+              <tr><th>科斯托拉尼</th><td>资金、心理与筹码结构</td><td>精细基本面建模</td><td>群体动力学</td></tr>
+              <tr><th>德鲁肯米勒</th><td>流动性与跨资产反馈</td><td>长期固定观点</td><td>实时反馈 + 快速重构</td></tr>
+              <tr><th>达利欧</th><td>宏观因果结构与周期机制</td><td>个别企业故事</td><td>模型型鲁棒控制</td></tr>
+              <tr><th>塔勒布</th><td>脆弱性、尾部与收益形状</td><td>尾部概率精确估计</td><td>凸性 + 去脆弱</td></tr>
+              <tr><th>索普</th><td>局部概率优势与证券关系</td><td>宏观方向</td><td>Edge + Hedge + Sizing</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="fsi-algorithm-list">
+          <details class="fsi-algorithm" open>
+            <summary><span>01</span><div><strong>巴菲特</strong><small>Boundary Reduction</small></div><em>可知子系统 + 鲁棒余量</em></summary>
+            <div class="fsi-algorithm-body"><p>能力圈不是一种谦虚姿态，而是主动缩小状态空间：只进入主要变量能够被压缩到可理解范围的企业。</p><div class="fsi-code">𝓕 ⊃ Businessᵢ<br>Customers → Revenue → Margin → Cash Flow</div><div class="fsi-two-notes"><p><b>边界选择</b>寻找状态转移函数相对稳定的局部系统，不预测全部宏观变量。</p><p><b>安全边际</b>像工程中的 Robustness Margin，即使模型存在误差，系统也不至于失效。</p></div><blockquote>选择变化更慢、更可理解的系统，而不是让自己适应整个市场。</blockquote></div>
+          </details>
+          <details class="fsi-algorithm">
+            <summary><span>02</span><div><strong>芒格</strong><small>Model Ensemble</small></div><em>多模型 + 涌现</em></summary>
+            <div class="fsi-algorithm-body"><p>企业优势并非单因素作用，而是品牌、规模、网络效应、习惯、转换成本与文化的耦合结果。</p><div class="fsi-code">Outcome = f(F₁, F₂, …, Fₙ, interactions)<br>若 ∂²Outcome / ∂Fᵢ∂Fⱼ &gt; 0 → 协同放大 / 涌现</div><p>“多元思维模型”不是知识收藏，而是人脑版 Model Ensemble：不同模型像不同传感器，对同一现实交叉观测。</p></div>
+          </details>
+          <details class="fsi-algorithm">
+            <summary><span>03</span><div><strong>西蒙斯</strong><small>System Identification</small></div><em>信号提取 + 变量隔离</em></summary>
+            <div class="fsi-algorithm-body"><p>接受“为什么”可能不可得，但要求“什么模式能稳定预测”必须可检验。</p><div class="fsi-code">yₜ = h(xₜ) + εₜ<br>R = α + βM + ε；若优势来自 α，则通过对冲使 β ≈ 0</div><p>这是局部结构提取与无关变量剥离，而不是为整个市场编写解释性故事。</p></div>
+          </details>
+          <details class="fsi-algorithm">
+            <summary><span>04</span><div><strong>索罗斯</strong><small>Reflexivity</small></div><em>正反馈 + 临界跃迁</em></summary>
+            <div class="fsi-algorithm-body"><div class="fsi-code">Belief → Action → Price → Fundamental → New Belief</div><p>观察者位于系统内部。价格不仅反映现实，也通过融资成本、抵押品、信心与资本流动改变现实。</p><div class="fsi-two-notes"><p><b>Feedback Gain &lt; 1</b>扰动逐渐衰减，系统趋向稳定。</p><p><b>Feedback Gain &gt; 1</b>过程自我强化，直至真实约束触发相变。</p></div></div>
+          </details>
+          <details class="fsi-algorithm">
+            <summary><span>05</span><div><strong>霍华德·马克斯</strong><small>State Estimation</small></div><em>周期位置 + 防御控制</em></summary>
+            <div class="fsi-algorithm-body"><p>未来难以精确预测，但当前状态仍可估计。仓位因此不是未来点预测的函数，而是当前风险状态的函数。</p><div class="fsi-code">zₜ = f(Credit, Sentiment, Valuation, Risk Appetite)<br>Position Size = g(Current Risk State)</div><p>这是一套依据信用、情绪、估值与风险偏好进行反馈调节的防御控制系统。</p></div>
+          </details>
+          <details class="fsi-algorithm">
+            <summary><span>06</span><div><strong>科斯托拉尼</strong><small>Population Dynamics</small></div><em>资金 + 心理 + 筹码</em></summary>
+            <div class="fsi-algorithm-body"><div class="fsi-code">ΔPₜ = F(Liquidityₜ, Sentimentₜ, HolderStructureₜ)</div><p>“固执者—犹豫者”对应具有不同资本、杠杆、时间尺度和反应函数的主体。筹码从稳健资本转向高杠杆短线资本时，系统脆弱性随之上升。</p><blockquote>鸡蛋理论的深层结构，是资产所有权结构的相变。</blockquote></div>
+          </details>
+          <details class="fsi-algorithm">
+            <summary><span>07</span><div><strong>德鲁肯米勒</strong><small>Real-time Control</small></div><em>实时反馈 + 快速重构</em></summary>
+            <div class="fsi-algorithm-body"><div class="fsi-code">Hypothesis → Price Feedback → Update → Position Change</div><p>股票、债券与汇率是同一隐藏经济状态的不同传感器；传感器冲突时，模型必须重估。止损也像控制系统的 Reset / Anti-windup，先清掉错误仓位，避免错误观点继续累积。</p><blockquote>核心优势不是永远看对，而是模型更新得足够快。</blockquote></div>
+          </details>
+          <details class="fsi-algorithm">
+            <summary><span>08</span><div><strong>达利欧</strong><small>Model-based Control</small></div><em>因果模型 + 多环境生存</em></summary>
+            <div class="fsi-algorithm-body"><div class="fsi-code">Economy = Machine<br>Logic → Principle → Algorithm → Decision</div><p>宏观系统可以被部分因果化，但 All Weather 的成熟之处在于：即使模型很强，也不让组合依赖单一预测。</p><div class="fsi-code">Forecast Dependence ↓ → 多环境生存能力 ↑</div><blockquote>成熟的系统工程不是“模型很准”，而是“模型错了系统也不能死”。</blockquote></div>
+          </details>
+          <details class="fsi-algorithm">
+            <summary><span>09</span><div><strong>塔勒布</strong><small>Convexity</small></div><em>肥尾 + 反脆弱</em></summary>
+            <div class="fsi-algorithm-body"><p>与其精确预测未来状态，不如研究收益函数面对极端状态时的形状。</p><div class="fsi-code">Payoff = f(x)<br>f''(x) &gt; 0 → 凸性；f''(x) &lt; 0 → 凹性 / 脆弱</div><p>不必精确知道黑天鹅的概率，只需确认它发生时系统是否会归零。</p><div class="fsi-code">Assume Forecast Wrong → Design Payoff<br>Survival &gt; Prediction</div></div>
+          </details>
+          <details class="fsi-algorithm">
+            <summary><span>10</span><div><strong>索普</strong><small>Stochastic Control</small></div><em>优势 + 对冲 + 仓位</em></summary>
+            <div class="fsi-algorithm-body"><p>不解释整个宏观世界，只在局部可测区域内寻找可验证的概率优势。</p><div class="fsi-code">Edge = pb − q<br>f* = (bp − q) / b</div><div class="fsi-inline-flow"><span>找到 Edge</span><i>→</i><span>剥离无关风险</span><i>→</i><span>决定下注比例</span></div><p>目标不是单期收益最大化，而是约束破产风险后的长期几何增长。</p></div>
+          </details>
+        </div>
+      </div>
+    </section>
+
+    <section class="fsi-section fsi-section-dark" id="fsi-pairs" aria-labelledby="fsi-pairs-title">
+      <div class="fsi-wrap">
+        <div class="fsi-section-head">
+          <span class="fsi-section-no">04 · KEY DUALITIES</span>
+          <div><h2 id="fsi-pairs-title">真正重要的不是排队，而是对偶</h2><p>把思想家放在同一条排名线上会损失信息；把他们放进关键张力中，差异才会显现。</p></div>
+        </div>
+        <div class="fsi-duality-grid">
+          <article><span>MODEL / UNKNOWN</span><h3>达利欧 ↔ 塔勒布</h3><p><b>达利欧：</b>未知近似于尚未理解；尽可能扩充因果模型。</p><p><b>塔勒布：</b>未知包含不可知；从预测转向结构免疫。</p></article>
+          <article><span>LOCAL / TAIL</span><h3>索普 ↔ 塔勒布</h3><p><b>索普：</b>在模型有效的局部区域内优化。</p><p><b>塔勒布：</b>在模型可能失效的尾部区域设计生存。</p></article>
+          <article><span>SLOW / FAST</span><h3>巴菲特 ↔ 德鲁肯米勒</h3><p><b>巴菲特：</b>选择变化更慢的系统。</p><p><b>德鲁肯米勒：</b>提高反馈频率，适应快速变化。</p></article>
+          <article><span>VALUE / REFLEXIVITY</span><h3>巴菲特 ↔ 索罗斯</h3><p><b>巴菲特：</b>Value → Price。</p><p><b>索罗斯：</b>Price ↔ Value ↔ Belief。</p></article>
+        </div>
+        <div class="fsi-axis-card">
+          <div class="fsi-axis-head"><span>依赖预测</span><strong>PREDICTION ↔ ROBUSTNESS</strong><span>依赖鲁棒</span></div>
+          <div class="fsi-axis-track" aria-label="从预测到鲁棒的思想位置示意">
+            <i class="fsi-axis-point fsi-p1"><b>Dalio</b></i><i class="fsi-axis-point fsi-p2"><b>Simons</b></i><i class="fsi-axis-point fsi-p3"><b>Thorp</b></i><i class="fsi-axis-point fsi-p4"><b>Marks</b></i><i class="fsi-axis-point fsi-p5"><b>Soros</b></i><i class="fsi-axis-point fsi-p6"><b>Taleb</b></i>
+          </div>
+          <p>巴菲特通过“只进入无需频繁预测的稳定系统”，部分绕开了这条轴。</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="fsi-section" id="fsi-evolution" aria-labelledby="fsi-evolution-title">
+      <div class="fsi-wrap">
+        <div class="fsi-section-head">
+          <span class="fsi-section-no">05 · EVOLUTION</span>
+          <div><h2 id="fsi-evolution-title">金融认识的六次加维</h2><p>这不是人物的高低排序，而是金融问题从稳定结构逐步扩展到信息、反馈、非线性与生存约束。</p></div>
+        </div>
+        <ol class="fsi-stage-list">
+          <li><span>01</span><div><b>稳定子系统</b><p>巴菲特通过缩小边界，寻找局部可知、可持续的系统。</p></div><small>BOUNDARY</small></li>
+          <li><span>02</span><div><b>相互作用与涌现</b><p>芒格把企业理解为多因素耦合，而非单一因果链。</p></div><small>EMERGENCE</small></li>
+          <li><span>03</span><div><b>信息与计算</b><p>西蒙斯从噪声中提取统计结构，把市场视为可辨识信息系统。</p></div><small>INFORMATION</small></li>
+          <li><span>04</span><div><b>反馈与反身性</b><p>索罗斯把观察者放回系统，让信念与价格形成动态闭环。</p></div><small>FEEDBACK</small></li>
+          <li><span>05</span><div><b>状态估计与实时控制</b><p>马克斯、科斯托拉尼与德鲁肯米勒判断当前状态，并依据反馈调整行为。</p></div><small>CONTROL</small></li>
+          <li><span>06</span><div><b>非线性、鲁棒与随机控制</b><p>达利欧、塔勒布与索普分别从模型工程、肥尾凸性与概率下注解决长期生存。</p></div><small>SURVIVAL</small></li>
+        </ol>
+      </div>
+    </section>
+
+    <section class="fsi-section fsi-section-tint" id="fsi-loop" aria-labelledby="fsi-loop-title">
+      <div class="fsi-wrap">
+        <div class="fsi-section-head">
+          <span class="fsi-section-no">06 · CLOSED LOOP</span>
+          <div><h2 id="fsi-loop-title">投资不是一次预测，而是闭环控制</h2><p>现实只能被有限观测，行动又会进入市场。成熟体系必须把收益与新信息作为反馈，持续更新内部模型。</p></div>
+        </div>
+        <div class="fsi-control-loop" aria-label="投资决策的闭环控制过程">
+          <div><span>01</span><b>真实世界</b><small>xₜ</small></div><i>→</i>
+          <div><span>02</span><b>有限观测</b><small>yₜ</small></div><i>→</i>
+          <div><span>03</span><b>内部模型</b><small>Mₜ</small></div><i>→</i>
+          <div><span>04</span><b>仓位行动</b><small>aₜ</small></div><i>→</i>
+          <div><span>05</span><b>市场反馈</b><small>Rₜ₊₁</small></div>
+          <em aria-hidden="true">↺</em>
+        </div>
+        <div class="fsi-update-rule"><span>MODEL UPDATE</span><code>Mₜ₊₁ = U(Mₜ, yₜ₊₁, Rₜ₊₁)</code><strong>Observe → Estimate → Act → Feedback → Adapt</strong></div>
+        <div class="fsi-edge-decay">
+          <div><span>策略</span><i>→</i><span>模仿</span><i>→</i><span>资本流入</span><i>→</i><span>优势衰减</span><i>→</i><span>Edge → 0</span></div>
+          <p><b>金融比普通控制问题更难：</b>市场会学习你。一个策略持续赚钱，会吸引模仿与资本，最终消灭自身规律。</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="fsi-section" id="fsi-meta" aria-labelledby="fsi-meta-title">
+      <div class="fsi-wrap">
+        <div class="fsi-section-head">
+          <span class="fsi-section-no">07 · META SYSTEM</span>
+          <div><h2 id="fsi-meta-title">成熟体系不是第十一种流派，而是模型调度系统</h2><p>元投资系统不强求一个模型解释所有问题，而是判断当前任务应调用哪种模型，以及何时切换。</p></div>
+        </div>
+        <div class="fsi-meta-map">
+          <div class="fsi-meta-core"><small>META-INVESTMENT SYSTEM</small><strong>模型选择与切换</strong><span>问题识别 · 边界设定 · 反馈更新</span></div>
+          <div class="fsi-meta-branches">
+            <article><span>01</span><b>结构识别</b><p>Buffett · Munger · Dalio</p></article>
+            <article><span>02</span><b>状态估计</b><p>Marks · Kostolany · Druckenmiller</p></article>
+            <article><span>03</span><b>动态学习</b><p>Simons · Soros · Druckenmiller</p></article>
+            <article><span>04</span><b>鲁棒控制</b><p>Taleb · Thorp · Buffett · Dalio</p></article>
+          </div>
+        </div>
+        <div class="fsi-use-grid">
+          <article><b>企业长期价值</b><p>Buffett + Munger</p></article><article><b>当前市场状态</b><p>Marks + Druckenmiller</p></article><article><b>反身泡沫</b><p>Soros</p></article><article><b>结构化数据</b><p>Simons</p></article><article><b>局部概率优势</b><p>Thorp</p></article><article><b>不可测尾部</b><p>Taleb</p></article><article><b>多环境生存</b><p>Dalio</p></article><article><b>资金与筹码</b><p>Kostolany</p></article>
+        </div>
+      </div>
+    </section>
+
+    <section class="fsi-section fsi-section-objective" id="fsi-objective" aria-labelledby="fsi-objective-title">
+      <div class="fsi-wrap fsi-objective-grid">
+        <div>
+          <span class="fsi-section-no">08 · OBJECTIVE FUNCTION</span>
+          <h2 id="fsi-objective-title">目标不是最高单期收益，而是长期生存后的复利</h2>
+          <p>复杂系统中的最优策略，必须同时约束破产风险与模型不确定性。</p>
+        </div>
+        <div class="fsi-objective-formula"><span>ROBUST GROWTH</span><code>maximize&nbsp; E[log W<sub>T</sub>]</code><code>subject to&nbsp; P(Ruin) &lt; ε</code><small>先保证系统不会退出游戏，再利用可识别优势让资本复利。</small></div>
+      </div>
+      <div class="fsi-wrap fsi-pill-row" aria-label="长期生存约束的组成"><span>安全边际</span><span>避免愚蠢</span><span>防御</span><span>分散</span><span>凸性</span><span>Kelly</span></div>
+    </section>
+
+    <section class="fsi-section" id="fsi-capabilities" aria-labelledby="fsi-capabilities-title">
+      <div class="fsi-wrap">
+        <div class="fsi-section-head">
+          <span class="fsi-section-no">09 · FOUR CAPABILITIES</span>
+          <div><h2 id="fsi-capabilities-title">完整投资系统需要四类能力</h2><p>任何一类长期缺失，都可能构成结构性盲区；不必每项世界级，但不能完全没有其中任何一项。</p></div>
+        </div>
+        <div class="fsi-capability-grid">
+          <article><span>01</span><b>结构识别</b><small>WHAT DRIVES THE SYSTEM?</small><p>真正驱动系统的状态变量是什么？</p></article>
+          <article><span>02</span><b>状态估计</b><small>WHERE ARE WE NOW?</small><p>当前位于哪个阶段、风险状态与反馈区间？</p></article>
+          <article><span>03</span><b>动态学习</b><small>HOW DO WE UPDATE?</small><p>现实反馈与模型冲突时，怎样快速修正？</p></article>
+          <article><span>04</span><b>鲁棒控制</b><small>HOW DO WE SURVIVE?</small><p>无法知道未来时，怎样避免毁灭性损失？</p></article>
+        </div>
+      </div>
+    </section>
+
+    <section class="fsi-section fsi-closing" id="fsi-conclusion" aria-labelledby="fsi-conclusion-title">
+      <div class="fsi-wrap">
+        <span class="fsi-section-no">10 · CONCLUSION</span>
+        <h2 id="fsi-conclusion-title">他们不是十个互斥流派，而是十种控制算法</h2>
+        <p class="fsi-closing-lede">每套思想都在回答同一个更底层的问题：有限认知主体，怎样在复杂金融系统中长期生存并提取优势？</p>
+        <div class="fsi-definition-grid">
+          <article><span>巴菲特</span><p>只进入真正可理解的稳定子系统。</p></article><article><span>芒格</span><p>用多个模型逼近多层耦合的现实。</p></article><article><span>西蒙斯</span><p>从噪声中识别可重复的统计结构。</p></article><article><span>索罗斯</span><p>把信念、价格与现实放进反身闭环。</p></article><article><span>马克斯</span><p>不预测终点，估计系统当前状态。</p></article><article><span>科斯托拉尼</span><p>以资金、心理和筹码解释群体动力。</p></article><article><span>德鲁肯米勒</span><p>让价格反馈持续重构内部模型。</p></article><article><span>达利欧</span><p>因果化决策，并为模型错误保留生存空间。</p></article><article><span>塔勒布</span><p>不预测灾难，设计不会被灾难摧毁的结构。</p></article><article><span>索普</span><p>只下注局部可测优势，并科学控制规模。</p></article>
+        </div>
+        <blockquote class="fsi-final-quote">更高一级的金融思想，不是寻找永远正确的模型，而是设计一个能选择模型、更新模型、管理模型错误，并在不可知世界里持续生存的元系统。</blockquote>
+        <p class="fsi-disclaimer">本页是对附件观点的系统论可视化重构，用于思想比较与学习，不构成投资建议或对任何方法有效性的保证。</p>
+      </div>
+    </section>
+  </main>
+</div>
