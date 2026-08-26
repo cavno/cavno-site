@@ -1,0 +1,25 @@
+---
+import Base from '../../../layouts/Base.astro';
+import body from '../../../legacy/life/ai/ai-system-design-atlas/body.html?raw';
+import '../../../legacy/life/ai/ai-system-design-atlas/style.css';
+
+const meta = {
+  title: 'AI 顶层设计图谱｜五种系统哲学',
+  description: '从目标、原则、权限、反馈、适应与边界六个变量出发，比较 Anthropic、OpenAI、Google、DeepSeek 与 Kimi 的公开系统设计哲学。',
+};
+---
+<Base title={`${meta.title} · Cavno`} description={meta.description}>
+  <section class="cv-page-head ats-page-head">
+    <div class="cv-wrap">
+      <div class="cv-eyebrow">Life & Skills · AI</div>
+      <h1 class="cv-page-title">AI 顶层设计图谱</h1>
+      <p class="cv-lede">真正值得比较的不是参数量或模型榜单，而是智能系统如何被约束、怎样判断、谁拥有控制权、遇到未知时如何泛化，以及安全责任落在哪一层。</p>
+      <a class="cv-crumb-back" href="/life/ai/">← 返回 AI 栏目</a>
+    </div>
+  </section>
+
+  <article class="lp ats-article">
+    <Fragment set:html={body} />
+  </article>
+  <script>import '../../../legacy/life/ai/ai-system-design-atlas/script.js';</script>
+</Base>

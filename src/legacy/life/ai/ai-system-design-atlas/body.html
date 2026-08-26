@@ -1,0 +1,220 @@
+<div class="ats-shell">
+  <aside class="ats-toc" aria-label="本页目录">
+    <div class="ats-toc-head"><span>SYSTEM ATLAS</span><strong>AI 顶层设计</strong></div>
+    <ol>
+      <li><a href="#ats-question"><span>01</span><strong>真正的问题</strong><small>Six variables</small></a></li>
+      <li><a href="#ats-overview"><span>02</span><strong>五种哲学</strong><small>Five system types</small></a></li>
+      <li><a href="#ats-control"><span>03</span><strong>控制中心</strong><small>Interactive map</small></a></li>
+      <li><a href="#ats-layers"><span>04</span><strong>三层控制</strong><small>Model to lab</small></a></li>
+      <li><a href="#ats-boundaries"><span>05</span><strong>边界迁移</strong><small>Open and closed</small></a></li>
+      <li><a href="#ats-evolution"><span>06</span><strong>六阶段演化</strong><small>Structure to network</small></a></li>
+      <li><a href="#ats-space"><span>07</span><strong>五维空间</strong><small>No single ranking</small></a></li>
+      <li><a href="#ats-convergence"><span>08</span><strong>重新整合</strong><small>Mature AI system</small></a></li>
+    </ol>
+    <p class="ats-toc-note">附件观点整理 · 非实时厂商评测</p>
+  </aside>
+
+  <div class="ats-content">
+    <section class="ats-section ats-opening" id="ats-question" aria-labelledby="ats-question-title">
+      <div class="ats-section-index"><span>01 · THE REAL QUESTION</span><span>BEYOND MODEL SIZE</span></div>
+      <h2 id="ats-question-title">顶层设计决定的，是<em>智能如何被组织</em></h2>
+      <p class="ats-lead">真正应该比较的不是“谁的模型更强”，而是每家公司把规范、判断、控制、反馈、泛化与禁区放在哪一层解决。</p>
+
+      <div class="ats-formula-card">
+        <div><span>SYSTEM MODEL</span><code>S = (G, R, H, F, A, B)</code></div>
+        <p>一个 AI 系统的顶层设计，可以压缩为六个相互制约的变量。</p>
+      </div>
+
+      <div class="ats-variable-grid" aria-label="AI 顶层设计的六个变量">
+        <article><span>G</span><div><strong>Goal</strong><small>系统为什么行动？</small></div></article>
+        <article><span>R</span><div><strong>Rules / Principles</strong><small>依据什么行动？</small></div></article>
+        <article><span>H</span><div><strong>Hierarchy</strong><small>指令冲突时听谁的？</small></div></article>
+        <article><span>F</span><div><strong>Feedback</strong><small>判断错了怎么修？</small></div></article>
+        <article><span>A</span><div><strong>Adaptation</strong><small>新情境中如何泛化？</small></div></article>
+        <article><span>B</span><div><strong>Boundary</strong><small>哪些事绝不能做？</small></div></article>
+      </div>
+
+      <blockquote class="ats-core-question">
+        <span>TOP-LEVEL DESIGN</span>
+        <p>为什么行动 → 依据什么 → 听谁的 → 错了怎么修 → 未知中如何判断 → 边界在哪里</p>
+      </blockquote>
+
+      <p class="ats-source-note"><strong>阅读基线：</strong>页面只整理附件对各家公开材料的描述。公开文档的性质、完整度与更新时间不同；未公开对应层级的完整治理文档，不等于不存在内部治理体系。</p>
+    </section>
+
+    <section class="ats-section" id="ats-overview" aria-labelledby="ats-overview-title">
+      <div class="ats-section-index"><span>02 · FIVE PHILOSOPHIES</span><span>NOT THE SAME SYSTEM LAYER</span></div>
+      <h2 id="ats-overview-title">五家公司，并不在设计同一种系统</h2>
+      <p class="ats-section-lead">把五家强行排成一条高低顺序会误导分析。它们公开材料所突出的问题，分别落在价值、权限、风险、效率和行动五个不同方向。</p>
+
+      <div class="ats-company-grid">
+        <article class="ats-company ats-anthropic"><span class="ats-company-mark">A</span><small>VALUES</small><h3>Anthropic</h3><strong>原则内化型认知系统</strong><p>系统内部如何从一般原则生成具体判断？</p></article>
+        <article class="ats-company ats-openai"><span class="ats-company-mark">O</span><small>AUTHORITY</small><h3>OpenAI</h3><strong>分层权限型控制系统</strong><p>复杂指令冲突时，谁拥有最终控制权？</p></article>
+        <article class="ats-company ats-google"><span class="ats-company-mark">G</span><small>RISK</small><h3>Google</h3><strong>实验室风险治理系统</strong><p>能力跨过危险阈值时，怎样评估与制动？</p></article>
+        <article class="ats-company ats-deepseek"><span class="ats-company-mark">D</span><small>EFFICIENCY</small><h3>DeepSeek</h3><strong>高效开放智能引擎</strong><p>单位计算资源可以产生多少智能能力？</p></article>
+        <article class="ats-company ats-kimi"><span class="ats-company-mark">K</span><small>AGENCY</small><h3>Kimi</h3><strong>行动导向型智能体系统</strong><p>智能怎样从“回答”进化为“完成任务”？</p></article>
+      </div>
+
+      <div class="ats-overview-rule"><span>ANALYSIS RULE</span><p>比较时先确认“控制点在哪一层”，再比较具体机制；否则容易把模型规范、平台权限、实验室治理、计算架构和智能体能力混成同一指标。</p></div>
+    </section>
+
+    <section class="ats-section" id="ats-control" aria-labelledby="ats-control-title">
+      <div class="ats-section-index"><span>03 · CONTROL CENTERS</span><span>SELECT A SYSTEM</span></div>
+      <h2 id="ats-control-title">切换五个控制中心，看系统如何作出决定</h2>
+      <p class="ats-section-lead">同一个“安全与可控”目标，可以通过不同控制点实现：原则、权限、能力阈值、优化目标或任务执行回路。</p>
+
+      <div class="ats-control-tabs" role="tablist" aria-label="五家公司顶层设计比较">
+        <button id="ats-tab-anthropic" type="button" role="tab" aria-selected="true" aria-controls="ats-panel-anthropic" data-control-tab="anthropic">Anthropic</button>
+        <button id="ats-tab-openai" type="button" role="tab" aria-selected="false" aria-controls="ats-panel-openai" data-control-tab="openai" tabindex="-1">OpenAI</button>
+        <button id="ats-tab-google" type="button" role="tab" aria-selected="false" aria-controls="ats-panel-google" data-control-tab="google" tabindex="-1">Google</button>
+        <button id="ats-tab-deepseek" type="button" role="tab" aria-selected="false" aria-controls="ats-panel-deepseek" data-control-tab="deepseek" tabindex="-1">DeepSeek</button>
+        <button id="ats-tab-kimi" type="button" role="tab" aria-selected="false" aria-controls="ats-panel-kimi" data-control-tab="kimi" tabindex="-1">Kimi</button>
+      </div>
+
+      <div class="ats-control-panels">
+        <section class="ats-control-panel ats-anthropic" id="ats-panel-anthropic" role="tabpanel" aria-labelledby="ats-tab-anthropic" tabindex="0" data-control-panel="anthropic">
+          <div class="ats-control-identity"><span>CONTROL = VALUES</span><h3>原则内化</h3><strong>认知宪法</strong></div>
+          <div class="ats-control-main"><code>Principle → Reasoning → Action</code><p>附件把 Constitutional AI 的关键抽象为：不穷举所有情境，而是让模型理解原则背后的理由，并把判断推广到新状态。</p><dl><div><dt>机制</dt><dd>生成规则的规则系统</dd></div><div><dt>目标</dt><dd>Generalized Judgment</dd></div></dl></div>
+          <aside><span>核心张力</span><strong>价值解释</strong><p>原则之间会冲突，系统仍需要决定何者优先的元判断。</p></aside>
+        </section>
+
+        <section class="ats-control-panel ats-openai" id="ats-panel-openai" role="tabpanel" aria-labelledby="ats-tab-openai" tabindex="0" data-control-panel="openai" hidden>
+          <div class="ats-control-identity"><span>CONTROL = AUTHORITY</span><h3>权限分层</h3><strong>平台控制架构</strong></div>
+          <div class="ats-control-main"><code>Root &gt; System &gt; Developer &gt; User &gt; Guideline &gt; Untrusted</code><p>附件把 Model Spec 抽象为高度工程化的权力拓扑：重点不是让每个节点共享同一哲学，而是明确指令冲突时谁说了算。</p><dl><div><dt>机制</dt><dd>Authority Resolution</dd></div><div><dt>目标</dt><dd>AI Platform Governance</dd></div></dl></div>
+          <aside><span>核心张力</span><strong>集中与自由</strong><p>上层节点中心性越高，下层的可配置空间越需要清晰界定。</p></aside>
+        </section>
+
+        <section class="ats-control-panel ats-google" id="ats-panel-google" role="tabpanel" aria-labelledby="ats-tab-google" tabindex="0" data-control-panel="google" hidden>
+          <div class="ats-control-identity"><span>CONTROL = CAPABILITY THRESHOLD</span><h3>风险阈值</h3><strong>实验室治理</strong></div>
+          <div class="ats-control-main"><code>State → Threshold → Evaluation → Mitigation → Restriction</code><p>附件认为 Google 的公开框架更关注模型能力发展到何种程度后，实验室应触发评估、缓解与部署限制。</p><dl><div><dt>对象</dt><dd>AI Capability</dd></div><div><dt>目标</dt><dd>Control Dangerous Capability</dd></div></dl></div>
+          <aside><span>核心张力</span><strong>阈值与迟滞</strong><p>风险能力需要可测量的触发条件，也要避免判断滞后于能力跃迁。</p></aside>
+        </section>
+
+        <section class="ats-control-panel ats-deepseek" id="ats-panel-deepseek" role="tabpanel" aria-labelledby="ats-tab-deepseek" tabindex="0" data-control-panel="deepseek" hidden>
+          <div class="ats-control-identity"><span>CONTROL = OPTIMIZATION</span><h3>计算效率</h3><strong>开放智能引擎</strong></div>
+          <div class="ats-control-main"><code>η = Capability / Compute</code><p>附件中的公开材料重点落在架构、训练与推理效率：在给定计算资源下，尽可能提高智能生产效率。</p><dl><div><dt>机制</dt><dd>Architecture + Training + Inference</dd></div><div><dt>目标</dt><dd>Maximize Intelligence under C</dd></div></dl></div>
+          <aside><span>核心张力</span><strong>公开边界</strong><p>公开治理材料较少只能说明透明度差异，不能推出没有内部治理。</p></aside>
+        </section>
+
+        <section class="ats-control-panel ats-kimi" id="ats-panel-kimi" role="tabpanel" aria-labelledby="ats-tab-kimi" tabindex="0" data-control-panel="kimi" hidden>
+          <div class="ats-control-identity"><span>CONTROL = TASK EXECUTION</span><h3>智能体行动</h3><strong>任务完成系统</strong></div>
+          <div class="ats-control-main"><code>Goal → Plan → Tool → Observe → Replan → Complete</code><p>附件把 Kimi 的公开技术重点概括为工具调用、长链执行和智能体训练：系统目标从生成答案转向完成任务。</p><dl><div><dt>机制</dt><dd>Agentic Execution Loop</dd></div><div><dt>目标</dt><dd>Action Capability</dd></div></dl></div>
+          <aside><span>核心张力</span><strong>能力与授权</strong><p>行动能力越强，工具权限、观察范围与可逆性就越需要同步设计。</p></aside>
+        </section>
+      </div>
+      <p class="ats-interaction-note">可使用方向键切换公司；页面不会发送任何数据。</p>
+    </section>
+
+    <section class="ats-section" id="ats-layers" aria-labelledby="ats-layers-title">
+      <div class="ats-section-index"><span>04 · CONTROL LOCATION</span><span>MODEL / PLATFORM / LAB</span></div>
+      <h2 id="ats-layers-title">三个闭源体系，把控制点放在三个层级</h2>
+      <p class="ats-section-lead">Anthropic、OpenAI 与 Google 的公开文件并不是三个同层方案。它们分别控制模型怎样判断、平台怎样分配权力，以及实验室何时必须制动。</p>
+
+      <div class="ats-layer-stack" aria-label="三种控制位置">
+        <article class="ats-layer-google"><span>03 · CIVILIZATION / LAB</span><div><h3>Google</h3><strong>能力风险治理</strong><p>控制对象是实验室与模型能力阈值。</p></div><code>Capability → Threshold → Mitigation</code></article>
+        <i aria-hidden="true">↓</i>
+        <article class="ats-layer-openai"><span>02 · PLATFORM / INSTRUCTION</span><div><h3>OpenAI</h3><strong>权限与冲突解决</strong><p>控制对象是模型、工具、开发者和用户组成的平台网络。</p></div><code>Authority → Priority → Action</code></article>
+        <i aria-hidden="true">↓</i>
+        <article class="ats-layer-anthropic"><span>01 · MODEL / COGNITION</span><div><h3>Anthropic</h3><strong>原则与判断泛化</strong><p>控制对象是模型内部的价值解释与具体判断。</p></div><code>Principle → Judgment → Action</code></article>
+      </div>
+
+      <div class="ats-deep-difference">
+        <article><span>ANTHROPIC ASKS</span><h3>模型应该怎样判断？</h3><p>把复杂性从规则数量转移到价值解释与原则冲突。</p><code>Action = f(Context, Principles)</code></article>
+        <div aria-hidden="true"><span>≠</span></div>
+        <article><span>OPENAI ASKS</span><h3>谁有权决定行为？</h3><p>把复杂性组织成可操作、可配置但有根边界的权限拓扑。</p><code>Action = arg max Priority(I<sub>i</sub>)</code></article>
+      </div>
+    </section>
+
+    <section class="ats-section" id="ats-boundaries" aria-labelledby="ats-boundaries-title">
+      <div class="ats-section-index"><span>05 · SYSTEM BOUNDARY</span><span>RESPONSIBILITY MOVES</span></div>
+      <h2 id="ats-boundaries-title">开放权重改变的，是安全责任的系统边界</h2>
+      <p class="ats-section-lead">“开放还是闭源”不只是分发方式。模型能否离开原厂控制环境，会改变平台、部署者与下游治理之间的责任分配。</p>
+
+      <div class="ats-boundary-compare">
+        <article class="ats-closed-system"><span>CLOSED SERVICE</span><h3>模型与平台不可分离</h3><code>Safety = Model + Platform + Policy + Monitoring</code><p>厂商能够把模型、权限、策略、工具和监控放在同一个受控环境中。</p><ul><li>控制边界更集中</li><li>持续策略更新</li><li>平台级访问控制</li></ul></article>
+        <article class="ats-open-system"><span>OPEN WEIGHTS</span><h3>模型进入不同部署环境</h3><code>Safety = Model + Downstream Governance</code><p>行为边界在更大程度上由部署者、工具权限、数据环境与下游监督共同决定。</p><ul><li>系统边界更开放</li><li>部署情境更多样</li><li>责任向下游迁移</li></ul></article>
+      </div>
+
+      <div class="ats-engine-grid">
+        <article class="ats-deepseek"><span>EFFICIENCY ENGINE</span><h3>DeepSeek：资源约束优化</h3><code>Given Compute = C, maximize Intelligence</code><p>公开技术哲学集中在单位资源的智能产出。</p></article>
+        <article class="ats-kimi"><span>ACTION ENGINE</span><h3>Kimi：任务执行优化</h3><code>Answering → Planning → Acting</code><p>公开技术哲学更强调工具协同与任务完成。</p></article>
+      </div>
+
+      <p class="ats-boundary-note"><strong>重要限定：</strong>“没有公开同层级文档”与“没有安全或治理体系”不是同一命题。本页只比较附件呈现出的公开设计重点。</p>
+    </section>
+
+    <section class="ats-section" id="ats-evolution" aria-labelledby="ats-evolution-title">
+      <div class="ats-section-index"><span>06 · SYSTEM EVOLUTION</span><span>SIX SCIENTIFIC PARADIGMS</span></div>
+      <h2 id="ats-evolution-title">从结构模型到网络化行动系统</h2>
+      <p class="ats-section-lead">大模型已经不再是单一网络。模型、路由器、工具、智能体、用户、记忆与外部系统组成新的计算网络，不同公司在这条演化链的不同位置下注。</p>
+
+      <ol class="ats-evolution-rail">
+        <li><span>01</span><div><small>STRUCTURE</small><h3>结构系统</h3><p>MoE、Dense、Transformer 与专家网络回答“系统由什么构成”。</p><b>DeepSeek / Kimi 公开较多</b></div></li>
+        <li><span>02</span><div><small>INFORMATION</small><h3>信息系统</h3><p>Attention、多模态 token 与上下文回答“信息如何编码传递”。</p><b>多模态体系的重要战场</b></div></li>
+        <li><span>03</span><div><small>CONTROL</small><h3>控制系统</h3><p>权限层级决定复杂网络中谁能覆盖谁的指令。</p><b>OpenAI 的公开重点</b></div></li>
+        <li><span>04</span><div><small>SELF-ORGANIZATION</small><h3>自组织系统</h3><p>系统从一般原则出发，在未知情境中生成具体判断。</p><b>Anthropic 的公开重点</b></div></li>
+        <li><span>05</span><div><small>COMPLEX ADAPTATION</small><h3>复杂适应系统</h3><p>策略根据人类、模型、工具与环境反馈持续更新。</p><b>所有厂商都已进入</b></div></li>
+        <li><span>06</span><div><small>NETWORK + COMPUTE</small><h3>网络与计算复杂性</h3><p>Models + Routers + Tools + Agents + Users + Memory 形成智能基础设施。</p><b>当前共同前沿</b></div></li>
+      </ol>
+
+      <div class="ats-network-equation"><span>NETWORKED AI</span><code>G = (V, E)</code><p>控制问题从“单个模型怎样回答”扩展为“智能网络怎样分配价值、权限、风险、资源与行动能力”。</p></div>
+    </section>
+
+    <section class="ats-section" id="ats-space" aria-labelledby="ats-space-title">
+      <div class="ats-section-index"><span>07 · FIVE-DIMENSIONAL SPACE</span><span>NO ONE-DIMENSIONAL RANKING</span></div>
+      <h2 id="ats-space-title">五条路线构成状态空间，不是一维排行榜</h2>
+      <p class="ats-section-lead">“更先进”必须先说明评价维度。价值泛化、权限组织、风险治理、计算效率和行动能力之间存在协同，也存在无法回避的张力。</p>
+
+      <div class="ats-state-formula"><span>STATE SPACE</span><code>AI = f(Intelligence, Alignment, Control, Efficiency, Agency)</code></div>
+
+      <div class="ats-axis-grid">
+        <article><span>01</span><h3>Intelligence</h3><p>推理、表征与泛化能力</p></article>
+        <article><span>02</span><h3>Alignment</h3><p>原则、价值与行为边界</p></article>
+        <article><span>03</span><h3>Control</h3><p>权限、监督与冲突解决</p></article>
+        <article><span>04</span><h3>Efficiency</h3><p>单位计算资源的能力产出</p></article>
+        <article><span>05</span><h3>Agency</h3><p>规划、工具使用与任务完成</p></article>
+      </div>
+
+      <div class="ats-table-wrap">
+        <table>
+          <caption>附件中的五种公开顶层设计重点</caption>
+          <thead><tr><th scope="col">体系</th><th scope="col">核心控制点</th><th scope="col">主要系统问题</th><th scope="col">抽象类型</th></tr></thead>
+          <tbody>
+            <tr><th scope="row">Anthropic</th><td>Principles / Values</td><td>系统内部如何形成可泛化判断？</td><td>Agent with Constitution</td></tr>
+            <tr><th scope="row">OpenAI</th><td>Authority Hierarchy</td><td>复杂 AI 网络的控制权如何组织？</td><td>General Intelligence Platform</td></tr>
+            <tr><th scope="row">Google</th><td>Capability Threshold</td><td>能力越过危险阈值时如何制动？</td><td>Risk-governed AI Infrastructure</td></tr>
+            <tr><th scope="row">DeepSeek</th><td>Optimization</td><td>智能如何以更低资源成本产生？</td><td>Efficient Intelligence Engine</td></tr>
+            <tr><th scope="row">Kimi</th><td>Task Execution</td><td>智能如何从回答进化为行动？</td><td>Action-oriented Agent</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section class="ats-section" id="ats-convergence" aria-labelledby="ats-convergence-title">
+      <div class="ats-section-index"><span>08 · REINTEGRATION</span><span>THE MATURE SYSTEM</span></div>
+      <h2 id="ats-convergence-title">成熟系统最终需要重新整合这些专长</h2>
+      <p class="ats-section-lead">未来未必会证明某一家哲学完全正确。更可能的结果，是分化后的原则、权限、风险、效率和行动能力重新组合为更高阶系统。</p>
+
+      <div class="ats-convergence-grid" aria-label="成熟 AI 系统需要的六类能力">
+        <article class="ats-conv-reason"><span>BASE</span><h3>Reasoning</h3><p>理解情境、形成模型并处理未知。</p></article>
+        <article class="ats-conv-values"><span>ANTHROPIC QUESTION</span><h3>Values</h3><p>有原则地判断，而非只查规则表。</p></article>
+        <article class="ats-conv-authority"><span>OPENAI QUESTION</span><h3>Authority</h3><p>清楚谁拥有最终控制权。</p></article>
+        <article class="ats-conv-risk"><span>GOOGLE QUESTION</span><h3>Risk Control</h3><p>知道何时能力已经危险并需要制动。</p></article>
+        <article class="ats-conv-efficiency"><span>DEEPSEEK QUESTION</span><h3>Efficiency</h3><p>把有限算力高效转化为能力。</p></article>
+        <article class="ats-conv-agency"><span>KIMI QUESTION</span><h3>Agency</h3><p>使用工具、规划步骤并完成任务。</p></article>
+      </div>
+
+      <div class="ats-integration-flow"><span>EVOLUTION PATTERN</span><strong>分化</strong><i>→</i><strong>专业化</strong><i>→</i><strong>张力</strong><i>→</i><strong>重新整合</strong></div>
+
+      <blockquote class="ats-coda">
+        <span>FINAL SYSTEM</span>
+        <p>AI 顶层设计的终局，不是某一项局部指标胜出，而是原则判断、权限治理、风险阈值、计算效率与智能体行动在同一系统中保持可解释的动态平衡。</p>
+        <footer>Reasoning + Values + Authority + Risk Control + Efficiency + Agency</footer>
+      </blockquote>
+
+      <p class="ats-safety-note"><strong>阅读边界：</strong>厂商文档、模型结构和产品策略会持续变化。本页呈现的是附件中的系统论抽象，不构成对当前模型能力、安全水平或商业选择的实时结论。</p>
+    </section>
+
+    <footer class="ats-footer"><span>Cavno Life / AI</span><strong>AI System Design Atlas</strong></footer>
+  </div>
+</div>
