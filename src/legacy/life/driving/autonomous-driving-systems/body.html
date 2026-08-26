@@ -1,0 +1,260 @@
+<div class="ads-shell">
+  <aside class="ads-toc" aria-label="本页目录">
+    <div class="ads-toc-head">
+      <span>SYSTEM MAP</span>
+      <strong>智驾学习系统</strong>
+    </div>
+    <ol>
+      <li><a href="#ads-thesis"><span>01</span><strong>核心分叉</strong><small>Where complexity comes from</small></a></li>
+      <li><a href="#ads-open-system"><span>02</span><strong>开放系统</strong><small>Adaptive loop</small></a></li>
+      <li><a href="#ads-evolution"><span>03</span><strong>六阶段演化</strong><small>Rules to agents</small></a></li>
+      <li><a href="#ads-flywheels"><span>04</span><strong>两套飞轮</strong><small>Learning loops</small></a></li>
+      <li><a href="#ads-lenses"><span>05</span><strong>四个透镜</strong><small>Interactive comparison</small></a></li>
+      <li><a href="#ads-tradeoffs"><span>06</span><strong>复杂性迁移</strong><small>Trade-off matrix</small></a></li>
+      <li><a href="#ads-metrics"><span>07</span><strong>五项指标</strong><small>What to observe</small></a></li>
+      <li><a href="#ads-convergence"><span>08</span><strong>可能的合流</strong><small>End state</small></a></li>
+    </ol>
+    <p class="ads-toc-note">系统论整理 · 非实时产品评测</p>
+  </aside>
+
+  <div class="ads-content">
+    <section class="ads-section ads-opening" id="ads-thesis" aria-labelledby="ads-thesis-title">
+      <div class="ads-section-index"><span>01 · CORE THESIS</span><span>REALITY-FIRST / MODEL-FIRST</span></div>
+      <h2 id="ads-thesis-title">真正的分叉是：<em>系统从哪里获得复杂性？</em></h2>
+      <p class="ads-lead">附件把两条路线归纳为两种不同的复杂性来源：一条尽可能扩大现实世界采样，一条尝试把现实的统计结构搬进可高速迭代的内部世界模型。</p>
+
+      <div class="ads-route-compare" aria-label="两条智能驾驶学习路线">
+        <article class="ads-route ads-route-tesla">
+          <div class="ads-route-label"><span>A</span><strong>Reality-first</strong></div>
+          <h3>Tesla 路线</h3>
+          <ol class="ads-route-chain">
+            <li>现实世界</li><li>海量车队数据</li><li>统一神经网络</li><li>驾驶策略</li>
+          </ol>
+          <p>让真实道路不断提供长尾，让模型从人类驾驶轨迹与接管反馈中吸收复杂性。</p>
+          <strong class="ads-route-core">CORE FLYWHEEL · FLEET SCALE</strong>
+        </article>
+
+        <div class="ads-route-vs" aria-hidden="true"><span>VS</span></div>
+
+        <article class="ads-route ads-route-li">
+          <div class="ads-route-label"><span>B</span><strong>Model-first</strong></div>
+          <h3>理想 VLA 路线</h3>
+          <ol class="ads-route-chain">
+            <li>现实数据</li><li>世界模型</li><li>仿真生成</li><li>强化学习</li>
+          </ol>
+          <p>先学习一个可以生成场景的内部环境，再用合成变体提高单位真实数据的训练信息量。</p>
+          <strong class="ads-route-core">CORE FLYWHEEL · SIMULATION ITERATION</strong>
+        </article>
+      </div>
+
+      <blockquote class="ads-key-question">
+        <span>THE QUESTION</span>
+        <p>不是“纯视觉还是激光雷达”，也不只是“端到端还是 VLA”，而是现实采样能力与内部世界生成能力，谁能形成更强、更快、更安全的学习闭环。</p>
+      </blockquote>
+
+      <p class="ads-source-note"><strong>内容基线：</strong>页面中的具体路线描述均沿用附件文本；可视化与系统结构是对附件的编辑性抽象，不代表对当前产品版本、法规状态或道路安全能力的实时判断。</p>
+    </section>
+
+    <section class="ads-section" id="ads-open-system" aria-labelledby="ads-open-system-title">
+      <div class="ads-section-index"><span>02 · OPEN SYSTEM</span><span>PERCEPTION → ACTION → FEEDBACK</span></div>
+      <h2 id="ads-open-system-title">先把智驾定义成开放复杂适应系统</h2>
+      <p class="ads-section-lead">成熟智驾不是一次性的“输入—输出”机器，而是在真实交通环境中采取行动、接收反馈、更新模型并再次行动的持续循环。</p>
+
+      <div class="ads-system-tuple" aria-label="智能驾驶系统的六个组成部分">
+        <article><span>P</span><strong>Physical</strong><small>车辆、芯片与传感器</small></article>
+        <article><span>E</span><strong>Environment</strong><small>道路、天气与交通主体</small></article>
+        <article><span>I</span><strong>Information</strong><small>视觉、雷达、语言与时序</small></article>
+        <article><span>M</span><strong>Model</strong><small>神经网络与内部世界表示</small></article>
+        <article><span>A</span><strong>Action</strong><small>转向、制动与加速</small></article>
+        <article><span>F</span><strong>Feedback</strong><small>接管、风险、舒适与规则</small></article>
+      </div>
+
+      <div class="ads-adaptive-loop" aria-label="智能驾驶反馈学习闭环">
+        <ol>
+          <li><span>01</span><strong>感知</strong><small>读取环境状态</small></li>
+          <li><span>02</span><strong>建模</strong><small>形成内部表示</small></li>
+          <li><span>03</span><strong>行动</strong><small>改变下一时刻</small></li>
+          <li><span>04</span><strong>反馈</strong><small>记录结果与接管</small></li>
+          <li><span>05</span><strong>学习</strong><small>更新模型和策略</small></li>
+        </ol>
+        <div class="ads-loop-return"><span>MODEL<sub>t+1</sub></span><i>返回下一轮</i></div>
+      </div>
+
+      <div class="ads-equation-card">
+        <span>SYSTEM EQUATION</span>
+        <code>S = (P, E, I, M, A, F)</code>
+        <p>Environment<sub>t</sub> → Perception<sub>t</sub> → Model<sub>t</sub> → Action<sub>t</sub> → Environment<sub>t+1</sub></p>
+      </div>
+    </section>
+
+    <section class="ads-section" id="ads-evolution" aria-labelledby="ads-evolution-title">
+      <div class="ads-section-index"><span>03 · EVOLUTION</span><span>SIX SYSTEM PARADIGMS</span></div>
+      <h2 id="ads-evolution-title">智驾几乎复现了系统科学的六阶段演化</h2>
+      <p class="ads-section-lead">技术革命不只是把规则代码换成神经网络，而是把工程对象从“驾驶行为”逐步改造成“能够生成经验、学习策略并持续纠错的系统”。</p>
+
+      <ol class="ads-evolution-rail">
+        <li><span>01</span><div><small>MECHANICAL</small><h3>机械系统</h3><p>工程师编写规则，感知、预测、规划与控制彼此分离。</p></div></li>
+        <li><span>02</span><div><small>GENERAL SYSTEM</small><h3>整体融合</h3><p>BEV、Occupancy 与多任务网络开始形成一致世界表示。</p></div></li>
+        <li><span>03</span><div><small>CYBERNETICS</small><h3>闭环控制</h3><p>动作改变环境，接管与结果成为模型训练的反馈信号。</p></div></li>
+        <li><span>04</span><div><small>SELF-ORGANIZATION</small><h3>自组织</h3><p>从显式规则转向由架构、目标和数据共同涌现驾驶策略。</p></div></li>
+        <li><span>05</span><div><small>COMPLEX ADAPTATION</small><h3>复杂适应</h3><p>世界模型、强化学习与新颖场景推动策略持续演化。</p></div></li>
+        <li><span>06</span><div><small>NETWORK + COMPUTE</small><h3>网络化认知</h3><p>车队、仿真、训练基础设施与部署形成分布式学习系统。</p></div></li>
+      </ol>
+
+      <div class="ads-evolution-summary">
+        <span>PARADIGM SHIFT</span>
+        <p>工程师设计行为 → 工程师设计学习系统 → 学习系统生成经验、形成策略并由现实持续纠错</p>
+      </div>
+    </section>
+
+    <section class="ads-section" id="ads-flywheels" aria-labelledby="ads-flywheels-title">
+      <div class="ads-section-index"><span>04 · LEARNING LOOPS</span><span>THE PRODUCT IS THE LOOP</span></div>
+      <h2 id="ads-flywheels-title">竞争单位不是单个模型，而是整套学习飞轮</h2>
+      <p class="ads-section-lead">模型只是某个时间点的产物。真正决定演化速度的是数据如何进入、难例怎样被发现、策略如何验证，以及更新多久回到道路。</p>
+
+      <div class="ads-flywheel-grid">
+        <article class="ads-flywheel ads-flywheel-tesla">
+          <div class="ads-flywheel-head"><span>LOOP A</span><h3>现实车队学习网络</h3><small>Fleet → Data → Model → Fleet</small></div>
+          <ol>
+            <li><span>01</span><strong>Reality</strong><small>真实道路</small></li>
+            <li><span>02</span><strong>Fleet</strong><small>分布式感知节点</small></li>
+            <li><span>03</span><strong>Real Data</strong><small>长尾与接管信号</small></li>
+            <li><span>04</span><strong>E2E Network</strong><small>统一策略学习</small></li>
+            <li><span>05</span><strong>Deployment</strong><small>模型回到车辆</small></li>
+          </ol>
+          <p class="ads-flywheel-risk"><strong>关键张力：</strong>车队规模放大长尾覆盖，但真实极端场景仍然昂贵，数据边际收益也可能递减。</p>
+        </article>
+
+        <article class="ads-flywheel ads-flywheel-li">
+          <div class="ads-flywheel-head"><span>LOOP B</span><h3>世界模型仿真网络</h3><small>Reality → Simulation → Policy → Reality</small></div>
+          <ol>
+            <li><span>01</span><strong>Reality</strong><small>真实困难场景</small></li>
+            <li><span>02</span><strong>World Model</strong><small>重建环境结构</small></li>
+            <li><span>03</span><strong>Simulation</strong><small>生成大量变体</small></li>
+            <li><span>04</span><strong>RL + VLA</strong><small>主动试错学习</small></li>
+            <li><span>05</span><strong>Calibration</strong><small>道路验证纠偏</small></li>
+          </ol>
+          <p class="ads-flywheel-risk"><strong>关键张力：</strong>仿真可以解耦物理时间，但世界模型偏差可能被强化学习放大，必须持续接受现实校准。</p>
+        </article>
+      </div>
+    </section>
+
+    <section class="ads-section" id="ads-lenses" aria-labelledby="ads-lenses-title">
+      <div class="ads-section-index"><span>05 · FOUR LENSES</span><span>SELECT A COMPARISON</span></div>
+      <h2 id="ads-lenses-title">切换四个透镜，看复杂性被放到了哪里</h2>
+      <p class="ads-section-lead">两条路线都没有消灭复杂性，只是把它分配到现实采样、内部生成、硬件冗余、模型学习或接口协同的不同位置。</p>
+
+      <div class="ads-lens-tabs" role="tablist" aria-label="路线比较透镜">
+        <button id="ads-tab-learning" type="button" role="tab" aria-selected="true" aria-controls="ads-panel-learning" data-lens="learning">学习环境</button>
+        <button id="ads-tab-longtail" type="button" role="tab" aria-selected="false" aria-controls="ads-panel-longtail" data-lens="longtail" tabindex="-1">信息与长尾</button>
+        <button id="ads-tab-sensors" type="button" role="tab" aria-selected="false" aria-controls="ads-panel-sensors" data-lens="sensors" tabindex="-1">感知冗余</button>
+        <button id="ads-tab-reasoning" type="button" role="tab" aria-selected="false" aria-controls="ads-panel-reasoning" data-lens="reasoning" tabindex="-1">认知架构</button>
+      </div>
+
+      <div class="ads-lens-panels">
+        <section class="ads-lens-panel" id="ads-panel-learning" role="tabpanel" aria-labelledby="ads-tab-learning" tabindex="0" data-lens-panel="learning">
+          <article><span>TESLA</span><h3>扩大现实世界采样能力</h3><code>Reality → Data → Intelligence</code><p>把真实道路和车队行为视为最重要的训练环境。</p></article>
+          <div class="ads-lens-tension"><span>核心张力</span><strong>现实规模</strong><i>VS</i><strong>仿真速度</strong></div>
+          <article><span>LI AUTO</span><h3>扩大内部世界生成能力</h3><code>Reality → World Model → Synthetic Experience</code><p>把困难场景搬进可并行、可变体、可重复的训练环境。</p></article>
+        </section>
+
+        <section class="ads-lens-panel" id="ads-panel-longtail" role="tabpanel" aria-labelledby="ads-tab-longtail" tabindex="0" data-lens-panel="longtail" hidden>
+          <article><span>TESLA</span><h3>用节点规模覆盖低概率事件</h3><code>P(hit) = 1 − (1 − p)<sup>N</sup></code><p>车辆越多，真实长尾至少被遇到一次的概率越高。</p></article>
+          <div class="ads-lens-tension"><span>核心张力</span><strong>被动采样</strong><i>VS</i><strong>主动生成</strong></div>
+          <article><span>LI AUTO</span><h3>用场景变体放大单个样本</h3><code>1 real sample → n synthetic samples</code><p>改变时间、天气、参与者和制动条件，主动制造难例。</p></article>
+        </section>
+
+        <section class="ads-lens-panel" id="ads-panel-sensors" role="tabpanel" aria-labelledby="ads-tab-sensors" tabindex="0" data-lens-panel="sensors" hidden>
+          <article><span>TESLA</span><h3>较少异构接口，更多模型压力</h3><code>Interface Complexity ↓</code><p>附件口径下以视觉为主，统一数据空间，但需面对共同失效风险。</p></article>
+          <div class="ads-lens-tension"><span>核心张力</span><strong>统一性</strong><i>VS</i><strong>异构冗余</strong></div>
+          <article><span>LI AUTO</span><h3>提高物理冗余，承担融合成本</h3><code>Redundancy ↑ / Fusion Complexity ↑</code><p>摄像头、雷达与激光雷达提供不同误差模式，也增加同步和标定负担。</p></article>
+        </section>
+
+        <section class="ads-lens-panel" id="ads-panel-reasoning" role="tabpanel" aria-labelledby="ads-tab-reasoning" tabindex="0" data-lens-panel="reasoning" hidden>
+          <article><span>TESLA</span><h3>隐式 latent reasoning</h3><code>Perception → Latent → Action</code><p>理解、预测与规划尽可能在统一隐空间中涌现。</p></article>
+          <div class="ads-lens-tension"><span>核心张力</span><strong>隐式表征</strong><i>VS</i><strong>显式推理</strong></div>
+          <article><span>LI AUTO</span><h3>视觉—语言—动作统一</h3><code>Vision + Language + Action → Action Tokens</code><p>VLA 试图让慢推理与快控制在同一动力系统中协同。</p></article>
+        </section>
+      </div>
+      <p class="ads-interaction-note">可使用方向键切换透镜；页面不会发送任何数据。</p>
+    </section>
+
+    <section class="ads-section" id="ads-tradeoffs" aria-labelledby="ads-tradeoffs-title">
+      <div class="ads-section-index"><span>06 · TRADE-OFFS</span><span>COMPLEXITY MOVES, NOT DISAPPEARS</span></div>
+      <h2 id="ads-tradeoffs-title">复杂性没有消失，只是被转移</h2>
+      <p class="ads-section-lead">路线选择的本质，是决定让哪一部分系统承担不确定性：现实网络、仿真环境、硬件层、模型层，还是组织与供应链。</p>
+
+      <div class="ads-balance-grid">
+        <article><span>01 · SENSING</span><h3>传感器异质性</h3><div><span class="ads-balance-side"><strong>较低</strong><i>接口更少</i></span><b>↔</b><span class="ads-balance-side"><strong>较高</strong><i>物理冗余</i></span></div></article>
+        <article><span>02 · EXPERIENCE</span><h3>训练经验来源</h3><div><span class="ads-balance-side"><strong>真实世界</strong><i>开放但缓慢</i></span><b>↔</b><span class="ads-balance-side"><strong>生成世界</strong><i>快速但有偏差</i></span></div></article>
+        <article><span>03 · COMPUTE</span><h3>计算与供应链</h3><div><span class="ads-balance-side"><strong>垂直整合</strong><i>强耦合优化</i></span><b>↔</b><span class="ads-balance-side"><strong>模块生态</strong><i>借力外部进步</i></span></div></article>
+      </div>
+
+      <div class="ads-table-wrap">
+        <table>
+          <caption>附件中的两条技术路线抽象对比</caption>
+          <thead><tr><th scope="col">系统维度</th><th scope="col">Tesla 路线</th><th scope="col">理想 VLA 路线</th></tr></thead>
+          <tbody>
+            <tr><th scope="row">信息来源</th><td>真实世界为主</td><td>真实数据 + 生成数据</td></tr>
+            <tr><th scope="row">感知结构</th><td>较低传感器异质性</td><td>多传感器冗余</td></tr>
+            <tr><th scope="row">模型结构</th><td>高度统一的端到端网络</td><td>从双系统向统一 VLA 演进</td></tr>
+            <tr><th scope="row">学习机制</th><td>大规模模仿与反馈学习</td><td>模仿 + 世界模型 + 强化学习</td></tr>
+            <tr><th scope="row">长尾方式</th><td>车队覆盖现实事件</td><td>仿真主动生成变体</td></tr>
+            <tr><th scope="row">计算体系</th><td>更强调垂直整合</td><td>更偏供应链模块化</td></tr>
+            <tr><th scope="row">核心资产</th><td>车队学习网络</td><td>VLA 与仿真学习系统</td></tr>
+            <tr><th scope="row">主要风险</th><td>真实长尾成本、共同失效与数据边际收益</td><td>Sim-to-Real 偏差与世界模型错误放大</td></tr>
+            <tr><th scope="row">系统哲学</th><td>Reality → Intelligence</td><td>Model Reality → Generate Experience → Intelligence</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section class="ads-section" id="ads-metrics" aria-labelledby="ads-metrics-title">
+      <div class="ads-section-index"><span>07 · OBSERVATION METRICS</span><span>BEYOND PARAMETERS AND TOPS</span></div>
+      <h2 id="ads-metrics-title">真正值得观察的五项系统指标</h2>
+      <p class="ads-section-lead">参数量和单次演示容易吸引注意，但长期上限取决于整个学习闭环如何把数据、算力和时间转化为可验证的能力增量。</p>
+
+      <div class="ads-metric-grid">
+        <article><span>01</span><h3>现实信息摄取率</h3><code>R<sub>I</sub> = 有效新现实信息 / 时间</code><p>系统多快吸收到真正新增、可训练的道路事实。</p></article>
+        <article><span>02</span><h3>长尾发现率</h3><code>R<sub>L</sub> = 新高风险场景 / 里程或模拟时间</code><p>多快暴露低概率但高后果的困难情境。</p></article>
+        <article><span>03</span><h3>学习闭环时间</h3><code>T<sub>loop</sub> = T<sub>collect</sub> + T<sub>train</sub> + T<sub>validate</sub> + T<sub>deploy</sub></code><p>从发现问题到验证更新重新上路需要多久。</p></article>
+        <article><span>04</span><h3>世界模型偏差</h3><code>E<sub>W</sub> = D(W<sub>real</sub>, W<sub>sim</sub>)</code><p>模拟环境与真实分布的距离，决定强化学习是否会优化错方向。</p></article>
+        <article><span>05</span><h3>学习闭环效率</h3><code>η<sub>L</sub> = ΔCapability / (Data × Compute × Time)</code><p>每单位数据、算力和时间最终换来多少可靠能力。</p></article>
+      </div>
+    </section>
+
+    <section class="ads-section" id="ads-convergence" aria-labelledby="ads-convergence-title">
+      <div class="ads-section-index"><span>08 · CONVERGENCE</span><span>NETWORKED EVOLUTIONARY COGNITION</span></div>
+      <h2 id="ads-convergence-title">两条路线最终可能再次合流</h2>
+      <p class="ads-section-lead">现实采样与内部生成并非永久对立。世界模型仍需道路反馈，车队学习也可能吸收合成数据、仿真与更丰富的推理能力。</p>
+
+      <div class="ads-convergence-flow" aria-label="可能合流的智能驾驶学习系统">
+        <div><span>01</span><strong>Real Data</strong><small>现实采样</small></div>
+        <i>+</i>
+        <div><span>02</span><strong>World Model</strong><small>内部建模</small></div>
+        <i>+</i>
+        <div><span>03</span><strong>Simulation</strong><small>模拟生成</small></div>
+        <i>+</i>
+        <div><span>04</span><strong>RL / E2E</strong><small>策略学习</small></div>
+        <i>+</i>
+        <div><span>05</span><strong>Fleet Feedback</strong><small>道路纠错</small></div>
+      </div>
+
+      <div class="ads-end-state">
+        <span>END STATE</span>
+        <strong>Perception → World Model → Prediction → Action → Feedback → Learning</strong>
+        <p>当感知、内部世界、预测、行动、反馈、记忆与学习闭合成持续演化的回路，“自动驾驶算法”就逐渐变成一个自主认知系统。</p>
+      </div>
+
+      <blockquote class="ads-coda">
+        <span>FINAL JUDGMENT</span>
+        <p>真正的智驾战争，不是谁先拥有一个更响亮的模型名字，而是谁先形成足够强、足够快、足够安全，并且能被现实持续纠错的自我学习闭环。</p>
+        <footer>现实采样 ↔ 内部建模 ↔ 模拟生成 ↔ 策略学习 ↔ 道路反馈</footer>
+      </blockquote>
+
+      <p class="ads-safety-note"><strong>阅读边界：</strong>本页讨论的是系统架构与学习机制，不构成车型选择、自动驾驶能力承诺或道路操作建议。实际驾驶应始终遵守当地法规、车辆说明与驾驶员监督要求。</p>
+    </section>
+
+    <footer class="ads-footer"><span>Cavno Life / Driving</span><strong>Autonomous Driving Systems</strong></footer>
+  </div>
+</div>

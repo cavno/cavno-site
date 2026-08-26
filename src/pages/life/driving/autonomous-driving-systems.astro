@@ -1,0 +1,25 @@
+---
+import Base from '../../../layouts/Base.astro';
+import body from '../../../legacy/life/driving/autonomous-driving-systems/body.html?raw';
+import '../../../legacy/life/driving/autonomous-driving-systems/style.css';
+
+const meta = {
+  title: '智驾战争的系统论｜Tesla FSD 与理想 VLA',
+  description: '从开放复杂适应系统出发，比较现实车队学习与世界模型仿真两条路线，拆解数据、长尾、感知冗余、VLA、反馈闭环与最终合流。',
+};
+---
+<Base title={`${meta.title} · Cavno`} description={meta.description}>
+  <section class="cv-page-head ads-page-head">
+    <div class="cv-wrap">
+      <div class="cv-eyebrow">Life & Skills · Driving</div>
+      <h1 class="cv-page-title">智驾战争的系统论</h1>
+      <p class="cv-lede">Tesla FSD 与理想 VLA 的真正差异，不只在传感器或模型名称，而在两套学习系统从哪里获得复杂性、如何处理长尾，以及怎样被现实持续纠错。</p>
+      <a class="cv-crumb-back" href="/life/driving/">← 返回驾驶栏目</a>
+    </div>
+  </section>
+
+  <article class="lp ads-article">
+    <Fragment set:html={body} />
+  </article>
+  <script>import '../../../legacy/life/driving/autonomous-driving-systems/script.js';</script>
+</Base>
