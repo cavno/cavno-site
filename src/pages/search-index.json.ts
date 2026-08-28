@@ -26,6 +26,7 @@ export const GET: APIRoute = async () => {
       const section = nav.sections.find((entry) => entry.slug === item.data.section);
       const subsection = section?.subsections.find((entry) => entry.slug === item.data.subsection);
       const presentation = derivePresentation({
+        href: item.data.href,
         title: item.data.title,
         summary: item.data.summary,
         tags: item.data.tags,
@@ -49,6 +50,10 @@ export const GET: APIRoute = async () => {
         date: item.data.date.toISOString().slice(0, 10),
         cover: {
           hue: presentation.hue,
+          saturation: presentation.saturation,
+          theme: presentation.theme,
+          layout: presentation.layout,
+          texture: presentation.texture,
           variant: presentation.variant,
           serial: presentation.serial,
           motif: presentation.motif,
@@ -64,7 +69,7 @@ export const GET: APIRoute = async () => {
       };
     });
 
-  return new Response(JSON.stringify({ version: 1, items: entries }), {
+  return new Response(JSON.stringify({ version: 2, items: entries }), {
     headers: {
       'Content-Type': 'application/json; charset=utf-8',
       'Cache-Control': 'public, max-age=0, must-revalidate',

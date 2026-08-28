@@ -1,4 +1,8 @@
+import { deriveCoverDesign, type CoverDesign } from './cover-design';
+export type { CoverMotif } from './cover-design';
+
 export interface PresentationInput {
+  href?: string;
   title: string;
   summary?: string;
   tags?: string[];
@@ -7,35 +11,11 @@ export interface PresentationInput {
   body?: string;
 }
 
-export interface AutoPresentation {
+export interface AutoPresentation extends CoverDesign {
   title: string;
   summary: string;
   keywords: string[];
-  hue: number;
-  variant: number;
-  serial: string;
-  motif: CoverMotif;
-  motifLabel: string;
 }
-
-export type CoverMotif =
-  | 'child-seat'
-  | 'model-y'
-  | 'house'
-  | 'school'
-  | 'city'
-  | 'social'
-  | 'ai'
-  | 'code'
-  | 'data'
-  | 'options'
-  | 'market'
-  | 'commerce'
-  | 'book'
-  | 'math'
-  | 'philosophy'
-  | 'system'
-  | 'document';
 
 const ENTITY_MAP: Record<string, string> = {
   amp: '&', lt: '<', gt: '>', quot: '"', apos: "'", nbsp: ' ',
@@ -97,15 +77,6 @@ function inferredSummary(title: string, summary = '', body = ''): string {
   return take(candidates[0]?.text || htmlToPlainText(body) || title, 92);
 }
 
-function hashText(value: string): number {
-  let hash = 2166136261;
-  for (const char of value) {
-    hash ^= char.codePointAt(0) ?? 0;
-    hash = Math.imul(hash, 16777619);
-  }
-  return hash >>> 0;
-}
-
 function keywordCandidates(title: string, summary: string): string[] {
   const phrases = title
     .replace(/[（）()【】\[\]]/g, ' ')
@@ -137,119 +108,23 @@ function inferredKeywords(
   return result;
 }
 
-const MOTIF_LABELS: Record<CoverMotif, string> = {
-  'child-seat': 'CHILD SEAT',
-  'model-y': 'MODEL Y',
-  house: 'PROPERTY',
-  school: 'SCHOOL',
-  city: 'CITY ATLAS',
-  social: 'SOCIAL FLOW',
-  ai: 'AI CORE',
-  code: 'CODE',
-  data: 'DATA MAP',
-  options: 'OPTIONS',
-  market: 'MARKET',
-  commerce: 'COMMERCE',
-  book: 'OPEN BOOK',
-  math: 'AXIOM',
-  philosophy: 'DIALECTIC',
-  system: 'SYSTEM',
-  document: 'DOCUMENT',
-};
-
-const MOTIF_RULES: Array<{ motif: CoverMotif; pattern: RegExp }> = [
-  { motif: 'child-seat', pattern: /(安全座椅|儿童座椅|双娃座椅|Cybex|car\s*seat)/i },
-  { motif: 'model-y', pattern: /(Model\s*Y|特斯拉|Tesla|驾驶|上路|科目[一三四134]|考场|车辆)/i },
-  { motif: 'school', pattern: /(入学|学校|教育|学区|school)/i },
-  { motif: 'house', pattern: /(购房|房贷|房产|楼盘|住房|住宅|公寓|小区|成交|mortgage)/i },
-  { motif: 'social', pattern: /(微信|公众号|企微|私域|草稿箱|WeChat|WeCom)/i },
-  { motif: 'options', pattern: /(期权|Gamma|Delta|Squeeze|Long\s*Call|Max\s*Pain|Greeks|Options|卖\s*Put)/i },
-  { motif: 'commerce', pattern: /(广告|Amazon|亚马逊|推广|投放|eCPM|PPC|关键词|搜索词|新品发射|月销|销售|提成|市场尽调|老品资产)/i },
-  { motif: 'ai', pattern: /(^|\W)(AI|LLM)(\W|$)|Claude|智能体|机器人|API\s*模型|模型接入/i },
-  { motif: 'code', pattern: /(Vibecoder|技术名词|Rules|Hooks|斜杠命令|第三方中转|个人配置|Code)/i },
-  { motif: 'market', pattern: /(投资|估值|股市|股票|指数|SEBI|信用扩张|大类资产|债务|财政|经济|保证金)/i },
-  { motif: 'city', pattern: /(深圳|香港|澳门|东京|大阪|大湾区|中国|城市|地形|扇区|地图)/i },
-  { motif: 'data', pattern: /(数据|看板|Dashboard|查询系统|计算器|管理系统|对比系统|图表)/i },
-  { motif: 'math', pattern: /(数学|几何|公理|矩阵|Axiom|Combinatorics)/i },
-  { motif: 'philosophy', pattern: /(哲学|悖论|本体论|认识论|逻各斯|Logos|形而上学|生命的意义|自指)/i },
-  { motif: 'book', pattern: /(圣经|全书|《|》|Biblical|阅读)/i },
-  { motif: 'system', pattern: /(系统|结构|框架|逻辑|图谱|全景图|Atlas|推演|控制台|实验台)/i },
-];
-
-const MOTIF_FALLBACKS: Record<string, CoverMotif> = {
-  'life:driving': 'model-y',
-  'life:family': 'child-seat',
-  'life:house': 'house',
-  'life:school': 'school',
-  'life:china': 'city',
-  'life:ai': 'ai',
-  'life:skills': 'code',
-  'investing:options': 'options',
-  'investing:cases': 'market',
-  'investing:valuation': 'market',
-  'reading:books': 'book',
-  'reading:math': 'math',
-  'reading:philosophy': 'philosophy',
-  'reading:thinking': 'system',
-  'working:amazon': 'commerce',
-};
-
-function inferredMotif(input: PresentationInput, summary: string): CoverMotif {
-  const headline = compact([
-    input.title,
-    ...(input.tags ?? []),
-    input.subsection ?? '',
-  ].join(' '));
-  const context = compact(`${headline} ${summary}`);
-
-  for (const rule of MOTIF_RULES) {
-    rule.pattern.lastIndex = 0;
-    if (rule.pattern.test(headline)) return rule.motif;
-  }
-  for (const rule of MOTIF_RULES) {
-    rule.pattern.lastIndex = 0;
-    if (rule.pattern.test(context)) return rule.motif;
-  }
-
-  return MOTIF_FALLBACKS[`${input.section ?? ''}:${input.subsection ?? ''}`]
-    ?? (input.section === 'reading' ? 'book' : 'document');
-}
-
 export function derivePresentation(input: PresentationInput): AutoPresentation {
   const title = take(input.title, 38);
   const summary = inferredSummary(input.title, input.summary, input.body);
-  const motif = inferredMotif(input, summary);
-  const seed = hashText(`${input.section}:${input.subsection}:${input.title}`);
-  const motifHue: Record<CoverMotif, number> = {
-    'child-seat': 20,
-    'model-y': 204,
-    house: 34,
-    school: 48,
-    city: 166,
-    social: 132,
-    ai: 264,
-    code: 218,
-    data: 188,
-    options: 326,
-    market: 12,
-    commerce: 286,
-    book: 28,
-    math: 224,
-    philosophy: 252,
-    system: 162,
-    document: 42,
-  };
-  const hue = motifHue[motif] + (seed % 15) - 7;
+  const headings = Array.from((input.body ?? '').matchAll(/<h[1-6]\b[^>]*>([\s\S]*?)<\/h[1-6]>/gi))
+    .map((match) => htmlToPlainText(match[1])).join(' ').slice(0, 2400);
+  const design = deriveCoverDesign({
+    ...input,
+    summary,
+    headings,
+    bodyText: htmlToPlainText(input.body).slice(0, 6000),
+  });
 
   return {
+    ...design,
     title,
     summary,
     keywords: inferredKeywords(input.title, summary, input.tags, input.subsection),
-    hue,
-    variant: seed % 5,
-    serial: String(seed % 1000).padStart(3, '0'),
-    motif,
-    motifLabel: MOTIF_LABELS[motif],
   };
 }
 

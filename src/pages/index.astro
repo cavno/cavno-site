@@ -155,6 +155,8 @@ const tagFor = (sectionSlug: string, subSlug: string) => {
 </section>
 
 <script>
+  import { coverClassName, coverStyle, type CoverDesign } from '../lib/cover-design';
+
   interface SearchEntry {
     href: string;
     title: string;
@@ -163,7 +165,7 @@ const tagFor = (sectionSlug: string, subSlug: string) => {
     sectionLabel: string;
     subsectionLabel: string;
     date: string;
-    cover: { hue: number; variant: number; serial: string; motif: string };
+    cover: CoverDesign;
     text: string;
     _search?: string;
   }
@@ -228,8 +230,8 @@ const tagFor = (sectionSlug: string, subSlug: string) => {
     link.setAttribute('role', 'listitem');
 
     const thumb = document.createElement('span');
-    thumb.className = `cv-search-thumb cv-cover-v${entry.cover.variant} cv-cover-motif-${entry.cover.motif}`;
-    thumb.style.setProperty('--cv-cover-h', String(entry.cover.hue));
+    thumb.className = `cv-search-thumb ${coverClassName(entry.cover)}`;
+    thumb.style.cssText = coverStyle(entry.cover);
     thumb.setAttribute('aria-hidden', 'true');
     const thumbArt = document.createElement('span');
     thumbArt.className = `cv-cover-art cv-art-${entry.cover.motif}`;
@@ -238,9 +240,7 @@ const tagFor = (sectionSlug: string, subSlug: string) => {
       shape.className = `cv-art-${part}`;
       thumbArt.appendChild(shape);
     }
-    const thumbCode = document.createElement('b');
-    thumbCode.textContent = `CV/${entry.cover.serial}`;
-    thumb.append(thumbArt, thumbCode);
+    thumb.append(thumbArt);
 
     const copy = document.createElement('span');
     copy.className = 'cv-search-copy';

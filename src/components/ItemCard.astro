@@ -1,5 +1,6 @@
 ---
 import { derivePresentation } from '../lib/content-presentation';
+import { coverClassName, coverStyle } from '../lib/cover-design';
 
 interface Props {
   href: string;
@@ -24,7 +25,7 @@ const {
   body = '',
 } = Astro.props;
 const external = /^https?:\/\//.test(href);
-const cover = derivePresentation({ title, summary, tags, section, subsection, body });
+const cover = derivePresentation({ href, title, summary, tags, section, subsection, body });
 ---
 <a
   class="cv-item"
@@ -34,8 +35,8 @@ const cover = derivePresentation({ title, summary, tags, section, subsection, bo
   aria-label={title}
 >
   <div
-    class={`cv-auto-cover cv-cover-v${cover.variant} cv-cover-motif-${cover.motif}`}
-    style={`--cv-cover-h:${cover.hue};`}
+    class={`cv-auto-cover ${coverClassName(cover)}`}
+    style={coverStyle(cover)}
     aria-hidden="true"
   >
     <div class={`cv-cover-art cv-art-${cover.motif}`}>
