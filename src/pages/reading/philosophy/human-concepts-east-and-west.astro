@@ -1,0 +1,29 @@
+---
+import Base from '../../../layouts/Base.astro';
+import body from '../../../legacy/reading/philosophy/human-concepts-east-and-west/body.html?raw';
+import '../../../legacy/reading/philosophy/human-concepts-east-and-west/style.css';
+
+const meta = {
+  title: '东西方文明关于“人”的概念重定义',
+  description: '沿西方“本质—主体—系统”与东方“关系—修身—去中心化”两条思想路径，重新理解人作为多层、开放、反身且可塑的复杂适应系统。',
+};
+---
+
+<Base title={`${meta.title} · Cavno`} description={meta.description}>
+  <section class="cv-page-head">
+    <div class="cv-wrap">
+      <div class="cv-eyebrow">Reading & Thinking · Philosophy</div>
+      <h1 class="cv-page-title">{meta.title}</h1>
+      <p class="cv-lede">{meta.description}</p>
+      <a class="cv-crumb-back" href="/reading/philosophy/">← 返回哲学栏目</a>
+    </div>
+  </section>
+
+  <article class="lp hce-article">
+    <Fragment set:html={body} />
+  </article>
+
+  <script>
+    import '../../../legacy/reading/philosophy/human-concepts-east-and-west/script.js';
+  </script>
+</Base>
