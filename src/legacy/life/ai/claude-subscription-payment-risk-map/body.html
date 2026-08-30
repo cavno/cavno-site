@@ -1,0 +1,406 @@
+<div class="progress" aria-hidden="true"><i id="progressBar"></i></div>
+
+  <div class="topbar" aria-label="页面阅读导航">
+    <div class="top-meta"><span>CLAUDE SUBSCRIPTION</span><span>PAYMENT RISK MAP</span></div>
+    <button class="toc-toggle" id="tocToggle" type="button" aria-expanded="false" aria-controls="tocPanel">☰ 目录</button>
+  </div>
+
+  <div class="shell">
+    <aside class="sidebar" id="tocPanel" aria-label="章节目录">
+      <p class="side-label">Contents</p>
+      <nav class="toc" id="toc">
+        <a href="#overview"><span>00</span>总览：不是四个开关</a>
+        <a href="#flow"><span>01</span>付款的八级链路</a>
+        <a href="#card-signals"><span>02</span>BIN / AVS / CVV / 3DS</a>
+        <a href="#context-signals"><span>03</span>IP / ASN / 设备与账户</a>
+        <a href="#ownership"><span>04</span>谁负责检查什么</a>
+        <a href="#issuer"><span>05</span>发卡行与授权后拦截</a>
+        <a href="#recurring"><span>06</span>Token / CIT / MIT / 续费</a>
+        <a href="#troubleshoot"><span>07</span>失败排查顺序</a>
+        <a href="#conclusion"><span>08</span>结论：高维一致性</a>
+      </nav>
+      <div class="side-readout">
+        <b>READING MODE</b>
+        <p>概念性系统图，不代表 Anthropic、Stripe、Adyen 或任何发卡行的内部规则与真实权重。</p>
+      </div>
+    </aside>
+
+    <div id="cspr-main" class="cspr-main">
+      <div class="cspr-content">
+        <header class="hero" id="overview">
+          <div class="eyebrow">Payment Risk / System Anatomy</div>
+          <h1>一笔 Claude 订阅，究竟如何被<em>批准</em>？</h1>
+          <p class="hero-lead">从点击 Pay 到自动续费，系统同时判断两件事：<strong>这个账户是否像正常使用者</strong>，以及<strong>这张卡能否为这笔交易付款</strong>。结果不是由某个 BIN、地址或 IP 单独决定，而是多层风险决策的合成。</p>
+          <div class="hero-grid" aria-label="四层决策概览">
+            <div class="hero-stat"><i>01 / MERCHANT</i><b>账户与地区</b><span>账户历史 · 登录环境 · 国家/地区</span></div>
+            <div class="hero-stat"><i>02 / PSP</i><b>支付与反欺诈</b><span>卡片 · 地址 · IP · 设备 · 速度</span></div>
+            <div class="hero-stat"><i>03 / ISSUER</i><b>银行授权</b><span>余额 · 权限 · 3DS · 银行风控</span></div>
+            <div class="hero-stat"><i>04 / RECURRING</i><b>凭证与续费</b><span>Token · CIT / MIT · Off-session</span></div>
+          </div>
+          <div class="hero-note"><strong>边界说明</strong><span>本文解释主流订阅支付的公开机制，不提供冒用账单地址、规避地区限制或对抗风控的方法。正常支付应使用发卡机构登记的真实资料。</span></div>
+        </header>
+
+        <section aria-labelledby="overview-title">
+          <div class="section-head">
+            <div class="chapter">00 / OVERVIEW</div>
+            <div><h2 id="overview-title">不是“美区四件套”，而是一张一致性图谱</h2><p>“美国账号 + 美国 IP + 美国 BIN + 美国地址 = 一定成功”把高维系统误读成四个布尔开关。真实世界里，账户、网络、设备、卡片、地址和历史会互相验证，也会互相暴露矛盾。</p></div>
+          </div>
+
+          <div class="grid-2">
+            <div class="card signal-card">
+              <span class="card-kicker">System A · Platform Risk</span>
+              <span class="big">ACCOUNT</span>
+              <h3>账户 / 平台层</h3>
+              <p class="muted">判断“这个人在这里使用服务是否正常”。它关心账户国家、创建时间、登录历史、IP、设备、多个支付失败以及平台自身的地区与反滥用规则。</p>
+            </div>
+            <div class="card signal-card">
+              <span class="card-kicker">System B · Payment Risk</span>
+              <span class="big">PAYMENT</span>
+              <h3>支付 / 授权层</h3>
+              <p class="muted">判断“这张卡能否为这笔交易付款”。它横跨 PSP 风控、收单行、Visa / Mastercard 等卡组织，以及最终拥有批准权的发卡行。</p>
+            </div>
+          </div>
+
+          <div class="identity-map" aria-label="三类身份信号">
+            <div><b>网络身份</b><span>IP 国家 · ASN · 网络类型 · 代理声誉 · IP 历史</span></div>
+            <div><b>账户身份</b><span>账户地区 · 年龄 · 登录历史 · 设备关系 · 尝试速度</span></div>
+            <div><b>支付身份</b><span>BIN · 发卡国 · Billing Address · AVS · CVV · 3DS</span></div>
+          </div>
+          <div class="callout"><strong>核心模型：</strong>现代支付风险系统更接近 <span class="mono accent">Consistency + Reputation + History</span>，而不是“某一个字段填对就通过”。</div>
+        </section>
+
+        <section id="flow" aria-labelledby="flow-title">
+          <div class="section-head">
+            <div class="chapter">01 / END-TO-END</div>
+            <div><h2 id="flow-title">一笔订阅付款的八级链路</h2><p>Anthropic 并未承诺 Claude Web 永远固定使用某一家支付服务商。下图以 Stripe / Adyen 这类主流 PSP 的公开机制说明一般结构；实际供应商、规则与权重可以变化。</p></div>
+          </div>
+
+          <div class="flow-wrap">
+            <div class="flow-legend"><span><i class="dot"></i>商户 / 平台</span><span><i class="dot orange-dot"></i>支付基础设施</span><span><i class="dot cyan-dot"></i>卡组织 / 银行</span><span><i class="dot red-dot"></i>风险决策</span></div>
+            <div class="flow-scroll" role="region" aria-label="横向滚动查看完整支付链路" tabindex="0">
+              <div class="payment-flow">
+                <div class="flow-node"><span class="flow-no">01 / USER</span><h3>点击 Pay</h3><p>用户发起在场交易，提交卡号、有效期、CVV、账单资料与浏览器会话。</p><div class="decision-tags"><span class="tag green">CIT</span><span class="tag">ON-SESSION</span></div></div>
+                <div class="flow-node"><span class="flow-no">02 / CLAUDE</span><h3>账户与地区层</h3><p>平台可评估账户地区、账户历史、登录环境、IP 与平台反滥用信号。</p><div class="decision-tags"><span class="tag">ACCOUNT</span><span class="tag">REGION</span></div></div>
+                <div class="flow-node"><span class="flow-no">03 / CHECKOUT</span><h3>PSP 收集上下文</h3><p>整合 BIN、Billing Address、IP、Device、Email / Customer ID 与历史支付。</p><div class="decision-tags"><span class="tag orange-tag">PSP</span><span class="tag">ENRICH</span></div></div>
+                <div class="flow-node"><span class="flow-no">04 / FRAUD</span><h3>反欺诈引擎</h3><p>Radar / Protect 类系统可能给出 Allow、Review、Require 3DS 或 Block。</p><div class="decision-tags"><span class="tag green">ALLOW</span><span class="tag red-tag">BLOCK</span></div></div>
+                <div class="flow-node"><span class="flow-no">05 / RAILS</span><h3>收单行与卡组织</h3><p>授权请求经 Acquirer 进入 Visa / Mastercard 等网络，再路由到发卡行。</p><div class="decision-tags"><span class="tag cyan-tag">NETWORK</span></div></div>
+                <div class="flow-node"><span class="flow-no">06 / ISSUER</span><h3>发卡行授权</h3><p>检查卡状态、余额、权限、CVV / AVS、跨境、3DS 与银行自身反欺诈模型。</p><div class="decision-tags"><span class="tag green">APPROVE</span><span class="tag red-tag">DECLINE</span></div></div>
+                <div class="flow-node"><span class="flow-no">07 / POST-AUTH</span><h3>授权后二次判断</h3><p>即使银行已批准，商户或 PSP 的授权后规则仍可能阻止最终创建订阅。</p><div class="decision-tags"><span class="tag red-tag">REVERSE</span><span class="tag">REVIEW</span></div></div>
+                <div class="flow-node"><span class="flow-no">08 / VAULT</span><h3>保存凭证并续费</h3><p>PSP 保存 PaymentMethod / Token，未来由商户发起 off-session 自动续费。</p><div class="decision-tags"><span class="tag orange-tag">MIT</span><span class="tag">TOKEN</span></div></div>
+              </div>
+            </div>
+          </div>
+          <div class="callout orange-line"><strong>重要：</strong>“银行批准”只是链路中的一个决策，不等于商户一定接受，也不等于订阅一定创建。</div>
+        </section>
+
+        <section id="card-signals" aria-labelledby="card-title">
+          <div class="section-head">
+            <div class="chapter">02 / CARD SIGNALS</div>
+            <div><h2 id="card-title">BIN、AVS、CVV、3DS：四种完全不同的信号</h2><p>这四项经常被混为一谈：BIN 描述卡片发行体系；AVS 比对账单资料；CVV 证明付款者掌握安全码；3DS 则由发卡行进行更强的交易认证。</p></div>
+          </div>
+
+          <div class="grid-2">
+            <div class="card">
+              <span class="card-kicker">02.1 / BIN &amp; IIN</span>
+              <h3>“5177 卡段”只能说明一部分发行属性</h3>
+              <p class="muted">现代 BIN / IIN 通常不能只凭前四位判断。PSP 可由更完整的卡号前缀获得或推断网络、发卡机构、国家、资金类型与卡产品，并结合历史表现形成风险信号。</p>
+              <div class="table-wrap">
+                <table class="check-table">
+                  <thead><tr><th>属性</th><th>可能的信息</th></tr></thead>
+                  <tbody>
+                    <tr><td><strong>Network</strong></td><td>Visa / Mastercard</td></tr>
+                    <tr><td><strong>Issuer</strong></td><td>银行或发卡机构</td></tr>
+                    <tr><td><strong>Country</strong></td><td>发行国家 / 地区</td></tr>
+                    <tr><td><strong>Funding</strong></td><td>Credit / Debit / Prepaid</td></tr>
+                    <tr><td><strong>Reputation</strong></td><td>该发行体系的历史风险表现</td></tr>
+                  </tbody>
+                </table>
+              </div>
+              <div class="vs"><span>不存在</span><b>5177 = Claude 白名单</b><span>这样的卡组织标准</span></div>
+            </div>
+
+            <div class="card">
+              <span class="card-kicker">02.2 / AVS</span>
+              <h3>地址真实存在，不等于与卡片记录匹配</h3>
+              <p class="muted">Address Verification System 关注的是你提交的街道 / ZIP 与发卡机构保存的持卡人账单资料是否一致，而不是“地图上有没有这栋房子”。正常支付应使用发卡机构登记或分配给该卡的 Billing Address。</p>
+              <div class="avs-demo">
+                <div class="data-block"><span class="status pass">● ISSUER RECORD</span><br>456 Market Street<br>San Francisco, CA<br>94105</div>
+                <i>VS</i>
+                <div class="data-block"><span class="status fail">● SUBMITTED</span><br>123 Main Street<br>Beverly Hills, CA<br>90210</div>
+              </div>
+              <p class="tiny muted" style="margin-top:10px">即使后者是价值很高、真实存在的住宅，也不能推导出 <span class="mono red">AVS = PASS</span>。</p>
+            </div>
+
+            <div class="card">
+              <span class="card-kicker">02.3 / CVV · CVC</span>
+              <h3>它证明你知道安全码，不证明整笔交易安全</h3>
+              <p class="muted">PAN、有效期与 CVV 正确，可能得到 CVC check pass；CVV 错误则可能 fail。但 CVV 只是授权与风控的一个输入。</p>
+              <div class="data-block">CVV&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;PASS<br>AVS&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;PASS<br>3DS&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;PASS<br><span class="red">ISSUER&nbsp;&nbsp;&nbsp;&nbsp;DECLINE</span></div>
+              <div class="callout red-line"><strong>CVV PASS ≠ 支付通过。</strong>银行仍可拒绝；银行批准后，商户 / PSP 也仍可拦截。</div>
+            </div>
+
+            <div class="card">
+              <span class="card-kicker">02.4 / 3D SECURE 2</span>
+              <h3>发卡行级别的交易认证</h3>
+              <p class="muted">3DS 2 可能表现为短信验证码、银行 App 确认、生物认证或银行网页认证，也可能在后台无感完成。成功 3DS 在特定情形下还可能带来欺诈责任转移。</p>
+              <div class="ds-paths">
+                <div class="path"><b>Frictionless</b><ol><li>交易与设备数据送达银行</li><li>风险较低</li><li>后台认证成功</li></ol></div>
+                <div class="path challenge"><b>Challenge</b><ol><li>银行要求进一步验证</li><li>OTP / App / 生物认证</li><li>Pass 或 Fail</li></ol></div>
+              </div>
+              <p class="tiny muted" style="margin-top:12px">3DS2 可携带浏览器、设备、IP、金额、货币、商户、账户与认证历史等交易背景。</p>
+            </div>
+          </div>
+
+          <div class="compare" aria-label="同 BIN 不同结果示例">
+            <div class="profile good">
+              <h3>A 用户 <span>LOWER CONFLICT</span></h3>
+              <dl><div><dt>BIN / IP</dt><dd>US / US</dd></div><div><dt>AVS / CVC</dt><dd>Match / Match</dd></div><div><dt>3DS</dt><dd>Pass</dd></div><div><dt>ACCOUNT</dt><dd>老账号、付款历史正常</dd></div><div><dt>VELOCITY</dt><dd>低</dd></div></dl>
+            </div>
+            <div class="compare-mid">SAME<br>BIN</div>
+            <div class="profile risk">
+              <h3>B 用户 <span>HIGHER CONFLICT</span></h3>
+              <dl><div><dt>BIN / IP</dt><dd>US / 代理网络</dd></div><div><dt>AVS / CVC</dt><dd>Fail / Match</dd></div><div><dt>3DS</dt><dd>未知</dd></div><div><dt>ACCOUNT</dt><dd>新账号、多张卡失败</dd></div><div><dt>VELOCITY</dt><dd>短时间多次尝试</dd></div></dl>
+            </div>
+          </div>
+          <div class="callout"><strong>BIN ≠ 支付身份。</strong>相同 BIN 的两个人可以得到完全不同的结果，因为 BIN 只是完整风险图谱中的一个变量。</div>
+        </section>
+
+        <section id="context-signals" aria-labelledby="context-title">
+          <div class="section-head">
+            <div class="chapter">03 / CONTEXT</div>
+            <div><h2 id="context-title">IP、ASN、设备、账户与速度：付款之外的上下文</h2><p>PSP 与商户的风险层会把一串看似独立的数据连成关系图：哪个网络、哪个设备、哪个账户、哪张卡，在多长时间内尝试了多少次。</p></div>
+          </div>
+
+          <div class="card">
+            <span class="card-kicker">03.1 / IP INTELLIGENCE</span>
+            <h3>系统看的不是一个“US / 非 US”开关</h3>
+            <div class="signal-chain">
+              <div><b>IP ADDRESS</b><span>原始网络地址与粗粒度国家 / 地区</span></div>
+              <div><b>ENRICHMENT</b><span>城市、网络类型、代理 / 匿名属性</span></div>
+              <div><b>ASN / REPUTATION</b><span>住宅、移动、公司、云机房、VPN 等网络归属</span></div>
+              <div><b>HISTORY / VELOCITY</b><span>关联过多少账户、银行卡与失败尝试</span></div>
+            </div>
+            <p class="muted">ASN 表示 IP 所属的自治网络。它通常不是卡片授权报文里的一个简单字段，而是商户、PSP 或反滥用服务对 IP 进行情报增强后得到的网络与声誉特征。</p>
+            <div class="callout orange-line"><strong>Residential IP ≠ Valid payment identity。</strong>住宅网络最多改变网络身份，不能改变卡 BIN、发卡国、AVS、CVV、3DS、余额、卡片历史或商户规则。</div>
+          </div>
+
+          <div class="fingerprint" style="margin-top:14px">
+            <div class="card">
+              <div class="fingerprint-title"><b>Device Fingerprint</b><span>ENVIRONMENT</span></div>
+              <p class="muted">回答“大致是不是同一个浏览器 / 设备环境”。它不是一个单一编号，而是一组相关信号。</p>
+              <div class="chip-cloud"><span>User-Agent</span><span>OS</span><span>Browser</span><span>Device model</span><span>Cookies</span><span>Screen attributes</span><span>Session IDs</span><span>Page dwell</span><span>Copy / paste</span><span>Field timing</span></div>
+            </div>
+            <div class="card">
+              <div class="fingerprint-title"><b>Card Fingerprint</b><span>PAYMENT INSTRUMENT</span></div>
+              <p class="muted">回答“大致是不是同一张支付卡”。PSP 可将特定卡号映射为稳定标识，用于关系分析与风控。</p>
+              <div class="data-block">CARD PAN<br>&nbsp;&nbsp;&nbsp;&nbsp;↓ tokenized mapping<br><span class="accent">card_fingerprint</span><br>&nbsp;&nbsp;&nbsp;&nbsp;↓ relationship graph<br>customer / account / device / history</div>
+              <p class="tiny muted" style="margin-top:10px">删除并重新添加同一张卡，不必然让支付服务商把它视为一张新卡。</p>
+            </div>
+          </div>
+
+          <div class="grid-2" style="margin-top:14px">
+            <div class="card">
+              <span class="card-kicker">03.2 / ACCOUNT GRAPH</span>
+              <h3>Email、Account ID 与账户年龄</h3>
+              <p class="muted">风险系统可以对比“创建 5 分钟后连续试四张卡”的账户，与“使用两年、有稳定付款历史”的账户。Email、客户参考号、创建时间、电话与历史付款都会改变风险语境。</p>
+              <div class="grid-2">
+                <div class="data-block"><span class="red">ACCOUNT A</span><br>age: 5 min<br>card #1: decline<br>card #2: decline<br>card #3: decline</div>
+                <div class="data-block"><span class="accent">ACCOUNT B</span><br>age: 2 yrs<br>regular usage<br>previous success<br>same instrument</div>
+              </div>
+            </div>
+            <div class="card">
+              <span class="card-kicker">03.3 / VELOCITY</span>
+              <h3>为什么不断试卡会让问题更严重</h3>
+              <p class="muted">Velocity 指单位时间内某种行为出现多少次。系统可能统计 IP 每小时尝试数、账户每日试卡数、卡关联账户数、设备创建账户数，以及 Email 的失败付款数。</p>
+              <ul><li>IP → attempts / hour</li><li>Account → cards tried / day</li><li>Card → accounts used</li><li>Device → account creations</li><li>Email → failed payments</li></ul>
+              <div class="callout red-line"><strong>反复提交不是诊断。</strong>先确认拒绝原因、账单资料与发卡行支持情况。</div>
+            </div>
+          </div>
+
+          <div class="card" style="margin-top:14px">
+            <span class="card-kicker">03.4 / CLAUDE PLATFORM LAYER</span>
+            <h3>银行卡通过，与账户不触发地区 / 安全风控，是两件事</h3>
+            <p class="muted">Anthropic 的公开说明表明，Claude 会基于 IP 与其他信号推断粗粒度国家 / 地区，用于平台安全、反滥用和功能可用性判断。Web 订阅的 Billing Address 也与支付方式及税费处理相关。因此账户层与银行卡层并非同一个决策系统。</p>
+            <div class="signal-chain">
+              <div><b>ACCOUNT</b><span>地区 · 历史 · 登录 · 设备</span></div>
+              <div><b>CLAUDE CHECKOUT</b><span>平台规则与支付上下文相遇</span></div>
+              <div><b>PSP / NETWORK</b><span>风控、认证与交易路由</span></div>
+              <div><b>ISSUER</b><span>银行授权或拒绝</span></div>
+            </div>
+          </div>
+
+          <div class="grid-2" style="margin-top:14px">
+            <div class="card">
+              <span class="card-kicker">PUBLIC GUIDANCE · JUL 2026</span>
+              <h3>Anthropic 公开拒付说明透露的边界</h3>
+              <ul><li>支付方式的 origin country 应处于支持的 Billing Location</li><li>Billing Address 应与发卡银行记录一致</li><li>地址与支付来源国需满足处理要求</li><li>被要求时应完成 3DS authentication</li></ul>
+            </div>
+            <div class="card">
+              <span class="card-kicker">BILLING &amp; TAX</span>
+              <h3>账单地址还参与订阅与税费处理</h3>
+              <p class="muted">Anthropic 针对 Pro / Max 的账单说明表明，Web 订阅的 Billing Address 来自支付方式，适用税费也会依据该地址计算。这进一步说明它不是可随意替换的装饰字段。</p>
+              <div class="callout"><strong>正常路径：</strong>账户地区合法受支持，支付来源受支持，账单资料与发卡机构记录一致。</div>
+            </div>
+          </div>
+        </section>
+
+        <section id="ownership" aria-labelledby="ownership-title">
+          <div class="section-head">
+            <div class="chapter">04 / OWNERSHIP</div>
+            <div><h2 id="ownership-title">谁主要负责检查什么？</h2><p>同一个信号可能被多个参与方使用，但用途不同。下表的星级只表示概念上的大致相关程度，不代表 Claude 内部规则，也不是 Stripe、Adyen、卡组织或银行的真实权重。</p></div>
+          </div>
+          <div class="table-wrap" role="region" aria-label="支付信号责任矩阵" tabindex="0">
+            <table class="ownership">
+              <thead><tr><th>信号</th><th>Anthropic / 商户</th><th>PSP 风控</th><th>Visa / MC</th><th>Issuer</th></tr></thead>
+              <tbody>
+                <tr><td>Account region</td><td class="stars">★★★</td><td class="stars">★</td><td class="na">—</td><td class="na">—</td></tr>
+                <tr><td>Account age / history</td><td class="stars">★★★</td><td class="stars">★★</td><td class="na">—</td><td class="na">—</td></tr>
+                <tr><td>IP</td><td class="stars">★★★</td><td class="stars">★★★</td><td>少</td><td class="stars">★</td></tr>
+                <tr><td>ASN / network reputation</td><td class="stars">★★★</td><td class="stars">★★★</td><td class="na">—</td><td>间接</td></tr>
+                <tr><td>Device fingerprint</td><td class="stars">★★★</td><td class="stars">★★★</td><td class="na">—</td><td>3DS 可间接获得</td></tr>
+                <tr><td>BIN</td><td class="stars">★</td><td class="stars">★★★</td><td class="stars">★★★</td><td class="stars">★★★</td></tr>
+                <tr><td>Card country</td><td class="stars">★★</td><td class="stars">★★★</td><td class="stars">★★★</td><td class="stars">★★★</td></tr>
+                <tr><td>Prepaid / debit / credit</td><td class="stars">★</td><td class="stars">★★★</td><td class="stars">★★★</td><td class="stars">★★★</td></tr>
+                <tr><td>Billing country</td><td class="stars">★★★</td><td class="stars">★★★</td><td class="stars">★</td><td class="stars">★★</td></tr>
+                <tr><td>AVS</td><td class="stars">★★</td><td class="stars">★★★</td><td class="stars">★★★</td><td class="stars">★★★</td></tr>
+                <tr><td>CVV</td><td class="stars">★</td><td class="stars">★★★</td><td class="stars">★★★</td><td class="stars">★★★</td></tr>
+                <tr><td>3DS</td><td class="stars">★</td><td class="stars">★★★</td><td class="stars">★★★</td><td class="stars">★★★</td></tr>
+                <tr><td>Balance / credit</td><td class="na">—</td><td class="na">—</td><td class="na">—</td><td class="stars">★★★</td></tr>
+                <tr><td>Card fraud history</td><td class="na">—</td><td class="stars">★★★</td><td class="stars">★★</td><td class="stars">★★★</td></tr>
+                <tr><td>Velocity</td><td class="stars">★★★</td><td class="stars">★★★</td><td class="stars">★</td><td class="stars">★★★</td></tr>
+                <tr><td>Recurring status</td><td class="stars">★★</td><td class="stars">★★★</td><td class="stars">★★★</td><td class="stars">★★★</td></tr>
+                <tr><td>Stored credential / token</td><td class="stars">★</td><td class="stars">★★★</td><td class="stars">★★★</td><td class="stars">★★★</td></tr>
+              </tbody>
+            </table>
+          </div>
+          <p class="ownership-note">注：表格用于建立系统心智模型；真实决策取决于商户配置、地区、卡产品、发卡行与交易时点。</p>
+        </section>
+
+        <section id="issuer" aria-labelledby="issuer-title">
+          <div class="section-head">
+            <div class="chapter">05 / AUTHORIZATION</div>
+            <div><h2 id="issuer-title">到了发卡行，银行到底判断什么？</h2><p>PSP 风控没有提前拦截时，授权请求经收单行与卡组织到达 Issuer。发卡行拥有对这笔授权的最终批准权，但商户仍拥有是否接受交易的最终业务决定权。</p></div>
+          </div>
+
+          <div class="card">
+            <span class="card-kicker">ISSUER DECISION INPUTS</span>
+            <ol class="issuer-list">
+              <li>卡是否存在且有效</li><li>有效期是否正确</li><li>CVV / CVC 结果</li><li>卡是否被冻结</li><li>余额或信用额度</li><li>Online transaction 权限</li><li>Recurring transaction 权限</li><li>International transaction 权限</li><li>Merchant category / 商户风险</li><li>交易币种</li><li>交易金额</li><li>地理异常</li><li>持卡人历史消费模式</li><li>3DS 认证结果</li><li>银行自身反欺诈模型</li>
+            </ol>
+          </div>
+
+          <div class="auth-fork" aria-label="银行批准但商户仍可拒绝">
+            <div class="auth-box approved"><span class="card-kicker">ISSUER</span><b class="accent">APPROVED</b><span>银行同意授权，可能在卡上产生一笔 pending 记录。</span></div>
+            <div class="auth-arrow">→</div>
+            <div class="auth-box"><span class="card-kicker">PSP / MERCHANT</span><b>POST-AUTH RISK</b><span>授权后 CVC / AVS 规则、风险评分或商户策略继续判断。</span></div>
+            <div class="auth-arrow">→</div>
+            <div class="auth-box blocked"><span class="card-kicker">FINAL</span><b>BLOCK / REVERSE</b><span>订阅没有创建；授权随后撤销或释放，pending 记录可能数日后消失。</span></div>
+          </div>
+          <div class="callout"><strong>“银行说没有拒绝”与“商户显示 Payment failed”并不矛盾。</strong>授权成功、支付接受与订阅创建，是三个可分离的状态。</div>
+        </section>
+
+        <section id="recurring" aria-labelledby="recurring-title">
+          <div class="section-head">
+            <div class="chapter">06 / RECURRING</div>
+            <div><h2 id="recurring-title">第一次付款与第二个月续费，是两种交易语境</h2><p>初次订阅通常由持卡人当场发起，并建立保存凭证关系；下个月的自动续费由商户在用户不在场时发起。Token 让商户无需保存和反复传递明文卡号。</p></div>
+          </div>
+
+          <div class="lifecycle" aria-label="订阅支付生命周期">
+            <div class="life-step"><i>01 / INPUT</i><b>初始卡片资料</b><span>PAN、有效期、CVV、Billing Address，必要时进行 3DS。</span></div>
+            <div class="life-step"><i>02 / CIT</i><b>首次在场付款</b><span>持卡人在网站点击 Pay，完成授权与商户风险判断。</span></div>
+            <div class="life-step"><i>03 / VAULT</i><b>保存支付凭证</b><span>PSP 形成 Customer、PaymentMethod、Token / stored credential。</span></div>
+            <div class="life-step"><i>04 / MIT</i><b>自动续费</b><span>商户按预先授权，在 off-session 状态发起下一期收费。</span></div>
+            <div class="life-step"><i>05 / EXCEPTION</i><b>必要时重新认证</b><span>银行仍可拒绝并要求客户回到会话中重新完成 authentication。</span></div>
+          </div>
+
+          <div class="cit-mit">
+            <div class="txn">
+              <div class="abbr">CIT</div>
+              <h3>Cardholder-Initiated Transaction</h3>
+              <p class="muted">持卡人正在网站或 App 中主动付款。</p>
+              <dl><dt>SESSION</dt><dd>On-session</dd><dt>TRIGGER</dt><dd>本人点击 Pay</dd><dt>INPUTS</dt><dd>卡片、地址、CVV，可能需要 3DS</dd><dt>PURPOSE</dt><dd>首次订阅并建立未来收费授权</dd></dl>
+            </div>
+            <div class="txn mit">
+              <div class="abbr">MIT</div>
+              <h3>Merchant-Initiated Transaction</h3>
+              <p class="muted">商户依据事先授权，在持卡人不在场时自动收费。</p>
+              <dl><dt>SESSION</dt><dd>Off-session</dd><dt>TRIGGER</dt><dd>订阅周期到期</dd><dt>INPUTS</dt><dd>Token / PaymentMethod + MIT indicator + 既有凭证关系</dd><dt>PURPOSE</dt><dd>第二个月及之后自动续费</dd></dl>
+            </div>
+          </div>
+
+          <div class="grid-2" style="margin-top:14px">
+            <div class="card">
+              <span class="card-kicker">WHY NO CVV EVERY MONTH?</span>
+              <h3>正常续费不应每月重新获取 CVV</h3>
+              <p class="muted">初始交易建立 Stored Credential Agreement。后续 MIT 使用 Token、交易类型标识与先前凭证关系，不应要求商户反复保存或重新收集安全码。</p>
+              <div class="data-block">INITIAL: PAN + EXPIRY + CVV + 3DS<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;↓<br>STORED CREDENTIAL RELATIONSHIP<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;↓<br>RECURRING: TOKEN + MIT INDICATOR</div>
+            </div>
+            <div class="card">
+              <span class="card-kicker">TOKEN ≠ FOREVER</span>
+              <h3>首次成功，不等于永久成功</h3>
+              <ul><li>余额不足或额度不够</li><li>卡被冻结、过期或替换</li><li>Issuer 政策或商户风险变化</li><li>支付授权被撤销</li><li>Recurring 权限不允许</li><li>银行要求重新 authentication</li></ul>
+              <div class="callout red-line"><strong>Initial payment ✓　Recurring ✕</strong> 是完全可能的正常失败路径。</div>
+            </div>
+          </div>
+        </section>
+
+        <section id="troubleshoot" aria-labelledby="troubleshoot-title">
+          <div class="section-head">
+            <div class="chapter">07 / TROUBLESHOOT</div>
+            <div><h2 id="troubleshoot-title">支付失败时，正确的排查顺序</h2><p>排障的目标是定位哪一层拒绝，而不是连续更换 IP、地址或 BIN。每一次重复失败都可能成为新的历史与速度信号。</p></div>
+          </div>
+
+          <div class="diagnostic" aria-label="九步支付排查流程">
+            <div class="diag-row"><div class="diag-no">01</div><div class="diag-check"><b>Billing country 是否受支持</b><span>先确认服务地区与支付来源要求。</span></div><div class="diag-action"><strong>行动：</strong>使用服务商允许的真实账户地区与支付地区。</div></div>
+            <div class="diag-row"><div class="diag-no">02</div><div class="diag-check"><b>发卡机构是否允许该类交易</b><span>Online / International / Recurring。</span></div><div class="diag-action"><strong>行动：</strong>检查卡片设置或联系发卡机构确认权限。</div></div>
+            <div class="diag-row"><div class="diag-no">03</div><div class="diag-check"><b>真实 Billing Address</b><span>是否为发卡机构登记或分配给该卡的资料。</span></div><div class="diag-action"><strong>行动：</strong>不要使用地图上找到的他人住宅地址。</div></div>
+            <div class="diag-row"><div class="diag-no">04</div><div class="diag-check"><b>AVS 结果</b><span>Street / ZIP 是 match、fail 还是 unavailable。</span></div><div class="diag-action"><strong>行动：</strong>核对街道格式、邮编与发卡机构记录。</div></div>
+            <div class="diag-row"><div class="diag-no">05</div><div class="diag-check"><b>CVV / CVC</b><span>安全码是否正确、是否完成校验。</span></div><div class="diag-action"><strong>行动：</strong>重新核对卡面或发卡平台显示的安全码。</div></div>
+            <div class="diag-row"><div class="diag-no">06</div><div class="diag-check"><b>3DS</b><span>是否弹出挑战、是否在银行端完成。</span></div><div class="diag-action"><strong>行动：</strong>完成银行 App / OTP 认证；失败则联系银行。</div></div>
+            <div class="diag-row"><div class="diag-no">07</div><div class="diag-check"><b>余额 / 额度</b><span>税费、预授权或小额验证可能使所需余额高于标价。</span></div><div class="diag-action"><strong>行动：</strong>预留合理空间，并确认卡未冻结。</div></div>
+            <div class="diag-row"><div class="diag-no">08</div><div class="diag-check"><b>Issuer decline</b><span>如 insufficient funds、restricted card、do not honor。</span></div><div class="diag-action"><strong>行动：</strong>以发卡行提供的拒绝原因为准，避免盲目重试。</div></div>
+            <div class="diag-row"><div class="diag-no">09</div><div class="diag-check"><b>Merchant / PSP risk decline</b><span>银行批准但商户仍显示失败，或授权稍后释放。</span></div><div class="diag-action"><strong>行动：</strong>联系商户支持；不要把 pending 误认成最终扣款。</div></div>
+          </div>
+
+          <div class="grid-3" style="margin-top:14px">
+            <div class="card"><span class="card-kicker">ADDRESS</span><h3>“真实住宅地址”</h3><p class="muted">只证明地址存在，不证明它是这张卡的 Billing Address。AVS 关心的是后者。</p></div>
+            <div class="card"><span class="card-kicker">BIN</span><h3>“换一个卡段”</h3><p class="muted">不能修复余额、卡权限、AVS、3DS、账户历史或商户对预付 / 虚拟卡的限制。</p></div>
+            <div class="card"><span class="card-kicker">RETRY</span><h3>“继续多试几次”</h3><p class="muted">可能把一次可诊断的失败，升级为账户、设备、IP 与卡片的速度异常。</p></div>
+          </div>
+        </section>
+
+        <section id="conclusion" aria-labelledby="conclusion-title">
+          <div class="section-head">
+            <div class="chapter">08 / CONCLUSION</div>
+            <div><h2 id="conclusion-title">把订阅风控压缩成一个公式</h2><p>成功概率由账户、地区、网络、设备、卡片、认证、历史与发卡行决策共同决定。任何声称某一个 BIN 或某一种“干净地址”能保证成功的说法，都忽略了系统最重要的结构。</p></div>
+          </div>
+
+          <div class="formula">
+            <div class="formula-label">CONCEPTUAL MODEL</div>
+            <div class="formula-main">P(支付成功) = f(<span>Account</span>, Region, IP, Device, <span>BIN</span>, Issuer, <span>AVS</span>, CVV, <span>3DS</span>, History, Velocity, Issuer Decision)</div>
+            <div class="formula-wrong">P(成功) = f(5177 BIN)</div>
+          </div>
+
+          <div class="conclusions">
+            <div class="conclusion"><b>BIN ≠ 支付身份</b><span>它描述发行体系的一部分，不是商户白名单，也不能替代完整交易上下文。</span></div>
+            <div class="conclusion"><b>真实地址 ≠ AVS Match</b><span>地址存在与否不是核心；关键是提交资料是否与发卡机构记录一致。</span></div>
+            <div class="conclusion"><b>住宅 IP ≠ 有效付款人</b><span>网络身份只是账户身份与支付身份之外的一层。</span></div>
+            <div class="conclusion"><b>银行批准 ≠ 商户接受</b><span>授权后风控仍可拦截、撤销或释放一笔交易。</span></div>
+            <div class="conclusion"><b>首次成功 ≠ 永久续费</b><span>MIT 仍可能因余额、卡状态、策略变化或重新认证要求而失败。</span></div>
+            <div class="conclusion"><b>系统判断的是关系</b><span>Consistency + Reputation + History，比单字段“正确”更接近真实决策逻辑。</span></div>
+          </div>
+
+          <div class="callout orange-line" style="margin-top:18px"><strong>最后一句：</strong>所谓“神卡段”“干净地址”“美区四件套”，只是把一个高维风控系统过度简化。BIN 的确重要，但 AVS、Issuer、3DS、账户历史、支付历史与交易速度通常同样关键，甚至更关键。</div>
+        </section>
+      </div>
+
+      <footer class="footer">
+        <div class="footer-grid">
+          <div><b>SCOPE</b><p>基于主流 PSP、卡网络与发卡行公开机制整理的概念性系统图。Anthropic 并未公开其完整内部支付与反滥用规则。</p></div>
+          <div><b>USE</b><p>用于理解合法订阅支付与正常排障。请使用本人或发卡机构登记的真实账单资料，并遵守服务商条款与适用地区要求。</p></div>
+        </div>
+      </footer>
+    </div>
+  </div>
+
+  <button class="back-top" id="backTop" type="button" aria-label="返回顶部">↑</button>

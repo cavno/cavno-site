@@ -1,0 +1,30 @@
+---
+import Base from '../../../layouts/Base.astro';
+import body from '../../../legacy/life/ai/claude-subscription-payment-risk-map/body.html?raw';
+import '../../../legacy/life/ai/claude-subscription-payment-risk-map/style.css';
+
+const meta = {
+  title: 'Claude 订阅支付风控全链路',
+  description: '从账户与商户层、支付服务商风控、卡组织到发卡行，系统拆解 Claude 订阅支付、3DS、设备信号与自动续费。',
+};
+---
+
+<Base title={`${meta.title} · Cavno`} description={meta.description}>
+  <section class="cv-page-head cspr-page-head">
+    <div class="cv-wrap">
+      <div class="cv-eyebrow">Life & Skills · AI</div>
+      <h1 class="cv-page-title">Claude 订阅支付风控全链路</h1>
+      <p class="cv-lede">从点击付款到自动续费，沿账户、网络、设备、支付服务商、卡组织和发卡行逐层理解一笔订阅为何成功或失败。</p>
+      <a class="cv-crumb-back" href="/life/ai/">← 返回 AI 栏目</a>
+    </div>
+  </section>
+
+  <article class="lp cspr-article">
+    <Fragment set:html={body} />
+  </article>
+
+  <script>
+    import '../../../legacy/life/ai/claude-subscription-payment-risk-map/script.js';
+  </script>
+</Base>
+
