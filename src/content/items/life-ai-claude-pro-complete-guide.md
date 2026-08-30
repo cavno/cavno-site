@@ -5,5 +5,5 @@ subsection: "ai"
 href: "/life/ai/claude-pro-complete-guide/"
 date: 2026-08-30
 tags: ["Claude", "账号环境", "订阅", "操作清单"]
-summary: "在同一入口阅读 Claude 风控完整长文与可视化操作清单，原文内容及原站交互保持不变。"
+summary: "Claude 风控完整长文、主图和可视化操作清单的站内静态备份，原始正文保持不变。"
 ---

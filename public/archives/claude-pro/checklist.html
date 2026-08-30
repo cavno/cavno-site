@@ -1,0 +1,1412 @@
+<!doctype html>
+<html lang="zh-CN"><head>
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; style-src 'unsafe-inline'; img-src 'self' data:; base-uri 'none'; form-action 'none'"><meta http-equiv="content-type" content="text/html; charset=UTF-8">
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>搞定 Claude</title>
+  <meta name="description" content="Claude 注册、订阅、授权与网络环境方案整理">
+  <style>
+    :root {
+      --bg: #020503;
+      --panel: rgba(3, 11, 10, .88);
+      --panel-soft: rgba(9, 18, 18, .78);
+      --green: #8cff39;
+      --green-2: #54d824;
+      --orange: #ff6b17;
+      --orange-2: #ffad35;
+      --red: #ff3929;
+      --blue: #59d7ff;
+      --text: #f7fff2;
+      --muted: #cfd8cc;
+      --dim: #91a18e;
+      --line: rgba(140, 255, 57, .78);
+      --font-cn: "Microsoft YaHei", "PingFang SC", "Hiragino Sans GB", "Noto Sans SC", Arial, sans-serif;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html {
+      background: #000;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      color: var(--text);
+      font-family: var(--font-cn);
+      letter-spacing: 0;
+      background:
+        radial-gradient(circle at 50% 0%, rgba(255, 88, 17, .16), transparent 24rem),
+        linear-gradient(rgba(90, 255, 43, .045) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(90, 255, 43, .038) 1px, transparent 1px),
+        var(--bg);
+      background-size: auto, 18px 18px, 18px 18px, auto;
+    }
+
+    body::before,
+    body::after {
+      content: "";
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    body::before {
+      background:
+        linear-gradient(90deg, transparent 0 6px, rgba(255, 74, 18, .05) 7px, transparent 8px) 0 0 / 11px 100%,
+        radial-gradient(circle at 15% 24%, rgba(45, 209, 255, .08), transparent 18rem),
+        radial-gradient(circle at 83% 82%, rgba(140, 255, 57, .07), transparent 22rem);
+      mix-blend-mode: screen;
+    }
+
+    body::after {
+      background: linear-gradient(rgba(255,255,255,.035) 50%, transparent 50%) 0 0 / 100% 4px;
+      opacity: .14;
+    }
+
+    .page {
+      position: relative;
+      z-index: 1;
+      width: min(100%, 1660px);
+      margin: 0 auto;
+      padding: clamp(22px, 3vw, 42px) clamp(10px, 1.6vw, 24px) 36px;
+    }
+
+    .claude-logo {
+      display: grid;
+      place-items: center;
+      width: 116px;
+      height: 116px;
+      margin: 0 auto 16px;
+      border-radius: 26px;
+      color: #12120f;
+      background: linear-gradient(145deg, #ffffff, #f0f2ff);
+      box-shadow:
+        0 0 0 1px rgba(255,255,255,.64) inset,
+        0 0 20px rgba(120, 170, 255, .32);
+    }
+
+    .claude-mark {
+      position: relative;
+      width: 62px;
+      height: 62px;
+      filter: drop-shadow(0 0 2px rgba(210, 74, 43, .6));
+    }
+
+    .claude-mark i {
+      position: absolute;
+      left: 50%;
+      top: 50%;
+      width: 7px;
+      height: 58px;
+      border-radius: 999px;
+      background: #d85d3c;
+      transform-origin: center;
+    }
+
+    .claude-mark i:nth-child(1) { transform: translate(-50%, -50%) rotate(0deg); }
+    .claude-mark i:nth-child(2) { transform: translate(-50%, -50%) rotate(22.5deg); }
+    .claude-mark i:nth-child(3) { transform: translate(-50%, -50%) rotate(45deg); }
+    .claude-mark i:nth-child(4) { transform: translate(-50%, -50%) rotate(67.5deg); }
+    .claude-mark i:nth-child(5) { transform: translate(-50%, -50%) rotate(90deg); }
+    .claude-mark i:nth-child(6) { transform: translate(-50%, -50%) rotate(112.5deg); }
+    .claude-mark i:nth-child(7) { transform: translate(-50%, -50%) rotate(135deg); }
+    .claude-mark i:nth-child(8) { transform: translate(-50%, -50%) rotate(157.5deg); }
+
+    .claude-logo strong {
+      margin-top: -4px;
+      color: #191919;
+      font-size: 17px;
+      font-weight: 800;
+      line-height: 1;
+    }
+
+    .title-pill,
+    .section-title,
+    .tag,
+    .box-title,
+    .payment-title {
+      text-shadow: none;
+    }
+
+    .title-pill {
+      display: block;
+      width: fit-content;
+      margin: 0 auto -4px;
+      padding: 8px 32px 9px;
+      border: 2px solid #ff8b28;
+      border-radius: 10px;
+      color: #fff7df;
+      font-size: clamp(26px, 3.1vw, 38px);
+      font-weight: 900;
+      font-style: italic;
+      line-height: 1;
+      background:
+        linear-gradient(180deg, rgba(255, 189, 64, .95), rgba(255, 94, 11, .95) 44%, rgba(148, 24, 6, .96));
+      box-shadow:
+        0 0 0 2px rgba(255, 117, 21, .26),
+        0 0 22px rgba(255, 92, 14, .82),
+        inset 0 0 12px rgba(255,255,255,.34);
+      transform: perspective(320px) rotateX(4deg);
+    }
+
+    .panel {
+      position: relative;
+      margin-top: 18px;
+      padding: clamp(18px, 2.5vw, 28px);
+      border: 0;
+      border-radius: 6px;
+      background:
+        radial-gradient(circle at 10% 8%, rgba(42, 214, 255, .08), transparent 22rem),
+        linear-gradient(180deg, rgba(4, 14, 15, .92), rgba(1, 5, 5, .96));
+      box-shadow: none;
+      overflow: hidden;
+    }
+
+    .panel::before,
+    .panel::after {
+      content: "";
+      position: absolute;
+      inset: 8px;
+      border-radius: 14px;
+      pointer-events: none;
+      opacity: .38;
+    }
+
+    .panel::before {
+      border-top: 1px solid rgba(140, 255, 57, .2);
+      border-bottom: 1px solid rgba(255, 92, 14, .18);
+    }
+
+    .panel::after {
+      background:
+        radial-gradient(circle, rgba(255, 88, 20, .35) 0 1px, transparent 1.4px) 0 0 / 12px 12px;
+      mask-image: linear-gradient(90deg, #000, transparent 18%, transparent 82%, #000);
+      opacity: .15;
+    }
+
+    .flow-panel {
+      padding: 70px 34px 34px;
+    }
+
+    .phase-row {
+      position: absolute;
+      top: 72px;
+      left: 42px;
+      right: 42px;
+      display: grid;
+      grid-template-columns: minmax(0, 1.04fr) minmax(0, 1.04fr) minmax(0, 1.16fr) minmax(0, 1.16fr) minmax(0, 1.14fr);
+      gap: clamp(14px, 1.7vw, 28px);
+      color: #fff;
+      font-size: clamp(21px, 1.8vw, 30px);
+      font-weight: 800;
+      z-index: 2;
+      pointer-events: none;
+    }
+
+    .phase {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      min-width: 0;
+      color: #f4fff0;
+      text-shadow: 0 0 12px rgba(140, 255, 57, .68);
+    }
+
+    .phase:nth-child(1) {
+      grid-column: 2;
+    }
+
+    .phase:nth-child(2) {
+      grid-column: 4;
+    }
+
+    .phase:nth-child(3) {
+      grid-column: 5;
+    }
+
+    .phase::before,
+    .phase::after {
+      content: "";
+      height: 3px;
+      flex: 1 1 auto;
+      min-width: 12px;
+      border-radius: 999px;
+      background: linear-gradient(90deg, transparent, var(--line));
+      box-shadow: 0 0 10px var(--green);
+    }
+
+    .phase::after {
+      background: linear-gradient(90deg, var(--line), transparent);
+    }
+
+    .flow-grid {
+      position: relative;
+      z-index: 1;
+      display: grid;
+      grid-template-columns: minmax(0, 1.04fr) minmax(0, 1.04fr) minmax(0, 1.16fr) minmax(0, 1.16fr) minmax(0, 1.14fr);
+      gap: clamp(14px, 1.7vw, 28px);
+      align-items: start;
+      padding-top: 66px;
+    }
+
+    .flow-grid::before,
+    .flow-grid::after {
+      display: none;
+    }
+
+    .flow-grid::before {
+      left: calc(63.2% - 1px);
+    }
+
+    .flow-grid::after {
+      left: calc(81.8% - 3px);
+    }
+
+    .flow-col {
+      position: relative;
+      display: grid;
+      gap: 14px;
+      min-width: 0;
+    }
+
+    .box-title {
+      position: relative;
+      min-height: 70px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+      padding: 12px 14px;
+      border: 2px solid rgba(140, 255, 57, .82);
+      border-radius: 11px;
+      color: #f9fff4;
+      font-size: clamp(19px, 1.65vw, 28px);
+      font-weight: 900;
+      background:
+        linear-gradient(180deg, rgba(87, 189, 34, .86), rgba(18, 87, 12, .92) 53%, rgba(6, 38, 8, .96));
+      box-shadow:
+        0 0 18px rgba(140, 255, 57, .58),
+        inset 0 0 18px rgba(140, 255, 57, .24);
+      white-space: normal;
+      text-align: center;
+    }
+
+    .flow-col:not(:last-child) .box-title::after {
+      content: "";
+      position: absolute;
+      top: 50%;
+      right: -30px;
+      width: 0;
+      height: 0;
+      border-top: 15px solid transparent;
+      border-bottom: 15px solid transparent;
+      border-left: 24px solid var(--green);
+      filter: drop-shadow(0 0 9px var(--green));
+      transform: translateY(-50%);
+      z-index: 2;
+    }
+
+    .flow-col:nth-child(3) .box-title::after,
+    .flow-col:nth-child(4) .box-title::after {
+      display: none;
+    }
+
+    .card {
+      position: relative;
+      min-height: 84px;
+      padding: 16px 17px;
+      border: 1px solid rgba(172, 189, 194, .34);
+      border-radius: 9px;
+      color: var(--text);
+      background:
+        linear-gradient(145deg, rgba(18, 27, 30, .94), rgba(6, 10, 11, .96));
+      box-shadow:
+        inset 0 0 18px rgba(127, 223, 255, .06),
+        0 0 12px rgba(88, 210, 255, .06);
+    }
+
+    .card.orange {
+      border-color: rgba(255, 138, 30, .9);
+      background:
+        linear-gradient(160deg, rgba(255, 151, 30, .95), rgba(166, 43, 7, .95) 60%, rgba(82, 15, 4, .96));
+      box-shadow:
+        0 0 20px rgba(255, 95, 16, .75),
+        inset 0 0 18px rgba(255, 233, 129, .22);
+    }
+
+    .card.warning {
+      border-color: rgba(255, 77, 48, .55);
+      background: linear-gradient(145deg, rgba(43, 13, 10, .96), rgba(8, 6, 5, .96));
+      box-shadow: 0 0 16px rgba(255, 56, 33, .2);
+    }
+
+    .card h3,
+    .card p,
+    .card ul {
+      margin: 0;
+    }
+
+    .card h3 {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 8px;
+      color: #eaf4f3;
+      font-size: clamp(16px, 1.35vw, 22px);
+      line-height: 1.18;
+      font-weight: 900;
+    }
+
+    .card p,
+    .card li {
+      color: #f4f7ef;
+      font-size: clamp(14px, 1.2vw, 19px);
+      line-height: 1.5;
+      font-weight: 700;
+    }
+
+    .card ul {
+      padding-left: 1.25em;
+    }
+
+    .card strong {
+      color: #fff;
+      font-weight: 900;
+    }
+
+    .nav-link {
+      color: inherit;
+      text-decoration: none;
+      border-bottom: 1px solid rgba(140, 255, 57, .58);
+      text-shadow: inherit;
+      transition: color .18s ease, border-color .18s ease, filter .18s ease;
+    }
+
+    .nav-link:hover,
+    .nav-link:focus-visible {
+      color: #ccff68;
+      border-color: currentColor;
+      filter: drop-shadow(0 0 7px rgba(140, 255, 57, .78));
+      outline: none;
+    }
+
+    .mini-row {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      color: #ecfff0;
+      font-size: clamp(15px, 1.3vw, 21px);
+      font-weight: 900;
+      line-height: 1.25;
+    }
+
+    .small-note {
+      margin-top: 7px;
+      color: #fff;
+      font-size: clamp(13px, 1.08vw, 18px);
+      line-height: 1.35;
+      font-weight: 900;
+      font-style: italic;
+    }
+
+    .icon {
+      flex: 0 0 auto;
+      display: inline-grid;
+      place-items: center;
+      width: 38px;
+      height: 38px;
+      border: 2px solid currentColor;
+      border-radius: 8px;
+      color: var(--green);
+      font-size: 24px;
+      line-height: 1;
+      filter: drop-shadow(0 0 7px currentColor);
+    }
+
+    svg.icon {
+      padding: 7px;
+      stroke: currentColor;
+      stroke-width: 2.1;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+      fill: none;
+    }
+
+    .icon.round {
+      border-radius: 50%;
+    }
+
+    .icon.naked {
+      width: 46px;
+      height: 46px;
+      border: 0;
+      font-size: 42px;
+    }
+
+    .icon.orange {
+      color: #ffde59;
+    }
+
+    .icon.red {
+      color: var(--red);
+    }
+
+    .icon.blue {
+      color: var(--blue);
+    }
+
+    .section-title {
+      position: relative;
+      z-index: 1;
+      width: fit-content;
+      margin: 0 auto;
+      padding: 15px 78px 17px;
+      border: 2px solid rgba(140, 255, 57, .86);
+      border-radius: 9px;
+      color: #fff;
+      font-size: clamp(34px, 3.9vw, 56px);
+      line-height: 1;
+      font-weight: 950;
+      background: linear-gradient(180deg, rgba(53, 116, 26, .66), rgba(12, 48, 11, .9));
+      box-shadow:
+        0 0 20px rgba(140, 255, 57, .62),
+        inset 0 0 18px rgba(140, 255, 57, .22);
+    }
+
+    .network-tree {
+      position: relative;
+      z-index: 1;
+      margin-top: 42px;
+      padding: 32px 20px 0;
+    }
+
+    .network-tree::before {
+      display: none;
+    }
+
+    .branch-row {
+      position: relative;
+      display: grid;
+      grid-template-columns: minmax(0, .92fr) minmax(0, 1.55fr);
+      gap: clamp(44px, 5.6vw, 92px);
+      align-items: start;
+    }
+
+    .branch-row::before {
+      display: none;
+    }
+
+    .branch {
+      display: grid;
+      gap: 30px;
+      min-width: 0;
+    }
+
+    .branch-title {
+      position: relative;
+      width: fit-content;
+      min-width: min(100%, 360px);
+      margin: 0 auto;
+      padding: 18px 46px 20px;
+      border: 2px solid rgba(140, 255, 57, .86);
+      border-radius: 9px;
+      color: #fff;
+      font-size: clamp(27px, 3vw, 46px);
+      line-height: 1;
+      font-weight: 950;
+      background: linear-gradient(180deg, rgba(45, 113, 25, .8), rgba(8, 47, 10, .96));
+      box-shadow: 0 0 18px rgba(140, 255, 57, .58), inset 0 0 16px rgba(140, 255, 57, .2);
+      text-align: center;
+    }
+
+    .branch-title::before {
+      display: none;
+    }
+
+    .solution-grid {
+      position: relative;
+      display: grid;
+      gap: 18px;
+      align-items: stretch;
+    }
+
+    .solution-grid.two {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .solution-grid.three {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+
+    .solution {
+      display: grid;
+      gap: 14px;
+      min-width: 0;
+    }
+
+    .tag {
+      min-height: 58px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 12px 14px;
+      border: 2px solid rgba(140, 255, 57, .82);
+      border-radius: 9px;
+      color: #f3ffe8;
+      font-size: clamp(16px, 1.38vw, 24px);
+      line-height: 1.2;
+      font-weight: 900;
+      text-align: center;
+      background: linear-gradient(180deg, rgba(39, 111, 22, .83), rgba(7, 44, 7, .96));
+      box-shadow: 0 0 14px rgba(140, 255, 57, .55), inset 0 0 13px rgba(140, 255, 57, .2);
+    }
+
+    .tag::before {
+      content: "";
+      position: absolute;
+    }
+
+    .solution-card {
+      min-height: 185px;
+      display: grid;
+      align-content: center;
+      gap: 12px;
+      padding: 19px 18px;
+    }
+
+    .rec-line {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      color: #fff;
+      font-size: clamp(14px, 1.35vw, 18px);
+      line-height: 1.35;
+      font-weight: 800;
+    }
+
+    .rec-line .icon {
+      width: 44px;
+      height: 44px;
+      font-size: 34px;
+    }
+
+    .device-line {
+      justify-content: center;
+      gap: 26px;
+    }
+
+    .payment-panel {
+      padding-top: 26px;
+    }
+
+    .payment-heading {
+      position: relative;
+      z-index: 1;
+      display: grid;
+      place-items: center;
+      gap: 12px;
+      margin-bottom: 22px;
+    }
+
+    .payment-title {
+      padding: 13px 46px 15px;
+      border: 2px solid rgba(255, 139, 28, .96);
+      border-radius: 11px;
+      color: #fff3dd;
+      font-size: clamp(31px, 4.4vw, 50px);
+      line-height: 1;
+      font-weight: 950;
+      background: linear-gradient(180deg, rgba(255, 159, 35, .95), rgba(226, 67, 8, .96) 55%, rgba(96, 17, 4, .96));
+      box-shadow:
+        0 0 22px rgba(255, 96, 13, .78),
+        inset 0 0 15px rgba(255, 236, 148, .26);
+      text-align: center;
+    }
+
+    .subline {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      color: #fff;
+      font-size: clamp(18px, 2.1vw, 26px);
+      font-weight: 800;
+      letter-spacing: 4px;
+    }
+
+    .subline::before,
+    .subline::after {
+      content: "";
+      width: clamp(60px, 14vw, 180px);
+      height: 3px;
+      border-radius: 999px;
+      background: linear-gradient(90deg, transparent, rgba(255, 94, 15, .94));
+      box-shadow: 0 0 10px rgba(255, 92, 14, .94);
+    }
+
+    .subline::after {
+      background: linear-gradient(90deg, rgba(255, 94, 15, .94), transparent);
+    }
+
+    .payment-grid {
+      position: relative;
+      z-index: 1;
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: clamp(26px, 4vw, 74px);
+      align-items: stretch;
+    }
+
+    .pay-card {
+      min-width: 0;
+      border: 2px solid rgba(140, 255, 57, .7);
+      border-radius: 12px;
+      background: linear-gradient(180deg, rgba(9, 29, 9, .7), rgba(2, 7, 6, .96));
+      box-shadow: 0 0 18px rgba(140, 255, 57, .34), inset 0 0 18px rgba(140, 255, 57, .1);
+      overflow: hidden;
+    }
+
+    .pay-head {
+      min-height: 63px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 10px 17px;
+      color: #f5ffe4;
+      font-size: clamp(18px, 2vw, 25px);
+      font-weight: 950;
+      background: linear-gradient(180deg, rgba(80, 172, 33, .92), rgba(29, 82, 10, .96));
+      box-shadow: 0 0 16px rgba(140, 255, 57, .46);
+    }
+
+    .pay-head .rank {
+      display: grid;
+      place-items: center;
+      width: 34px;
+      height: 34px;
+      border: 2px solid currentColor;
+      border-radius: 50%;
+      font-size: 22px;
+      line-height: 1;
+    }
+
+    .pay-body {
+      display: grid;
+      grid-template-columns: 118px 1fr;
+      gap: 18px;
+      padding: 20px 18px 16px;
+      min-height: 270px;
+    }
+
+    .logo-stack {
+      display: grid;
+      align-content: center;
+      gap: 14px;
+    }
+
+    .brand-icon {
+      display: grid;
+      place-items: center;
+      width: 112px;
+      height: 112px;
+      border: 2px solid rgba(88, 215, 255, .56);
+      border-radius: 11px;
+      color: #fff;
+      background:
+        radial-gradient(circle at 45% 40%, rgba(88, 215, 255, .28), transparent 48%),
+        linear-gradient(145deg, rgba(9, 28, 39, .9), rgba(2, 9, 12, .97));
+      box-shadow: 0 0 18px rgba(88, 215, 255, .32), inset 0 0 18px rgba(88, 215, 255, .1);
+      font-size: 68px;
+      font-weight: 900;
+    }
+
+    .brand-icon svg {
+      width: 68%;
+      height: 68%;
+      stroke: currentColor;
+      stroke-width: 2.2;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+      fill: none;
+      filter: drop-shadow(0 0 9px currentColor);
+    }
+
+    .brand-icon.google {
+      font-family: Arial, sans-serif;
+      font-size: 72px;
+      background:
+        conic-gradient(from -40deg, #4285f4, #34a853 25%, #fbbc05 45%, #ea4335 72%, #4285f4);
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+      border-color: rgba(88, 215, 255, .56);
+    }
+
+    .brand-icon.card-mark,
+    .brand-icon.store,
+    .brand-icon.shield {
+      color: var(--blue);
+      font-size: 60px;
+    }
+
+    .brand-icon.apple svg {
+      fill: currentColor;
+      stroke: none;
+    }
+
+    .check-list {
+      display: grid;
+      align-content: center;
+      gap: 9px;
+      margin: 0;
+      padding: 0;
+      list-style: none;
+    }
+
+    .check-list li {
+      position: relative;
+      padding-left: 27px;
+      color: #f3fff2;
+      font-size: clamp(14px, 1.25vw, 18px);
+      line-height: 1.38;
+      font-weight: 800;
+    }
+
+    .check-list li::before {
+      content: "✓";
+      position: absolute;
+      left: 0;
+      top: 0;
+      display: grid;
+      place-items: center;
+      width: 19px;
+      height: 19px;
+      border: 1.5px solid var(--green);
+      border-radius: 50%;
+      color: var(--green);
+      font-size: 13px;
+      line-height: 1;
+      box-shadow: 0 0 7px rgba(140, 255, 57, .56);
+    }
+
+    .pay-foot {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      margin: 0 14px 15px;
+      padding: 11px;
+      border: 2px solid rgba(140, 255, 57, .67);
+      border-radius: 8px;
+      color: #ccff68;
+      font-size: clamp(17px, 1.8vw, 24px);
+      font-weight: 950;
+      background: linear-gradient(180deg, rgba(45, 130, 15, .7), rgba(7, 50, 9, .92));
+      box-shadow: inset 0 0 14px rgba(140, 255, 57, .18);
+    }
+
+    .pay-arrow {
+      position: absolute;
+      top: 48%;
+      color: var(--green);
+      font-size: clamp(44px, 5vw, 70px);
+      line-height: 1;
+      font-weight: 950;
+      text-shadow: 0 0 12px var(--green);
+      transform: translate(-50%, -50%);
+      pointer-events: none;
+    }
+
+    .pay-arrow.a1 { left: 32.7%; }
+    .pay-arrow.a2 { left: 66.3%; }
+
+    .bottom-row {
+      position: relative;
+      z-index: 1;
+      display: grid;
+      grid-template-columns: 1.25fr 1fr;
+      gap: 26px;
+      margin-top: 24px;
+    }
+
+    .bad-method {
+      display: grid;
+      grid-template-columns: 116px 1fr;
+      gap: 20px;
+      align-items: center;
+      padding: 18px 22px;
+      border: 2px solid rgba(255, 78, 42, .74);
+      border-radius: 12px;
+      background: linear-gradient(180deg, rgba(49, 9, 6, .88), rgba(6, 4, 3, .96));
+      box-shadow: 0 0 18px rgba(255, 56, 33, .28), inset 0 0 18px rgba(255, 56, 33, .08);
+    }
+
+    .bad-label {
+      grid-column: 1 / -1;
+      justify-self: center;
+      margin-top: -38px;
+      padding: 8px 46px;
+      border: 2px solid rgba(255, 105, 25, .9);
+      border-radius: 8px;
+      color: #fff6e8;
+      font-size: clamp(18px, 1.8vw, 26px);
+      font-weight: 950;
+      background: linear-gradient(180deg, #ff7c1c, #a52d09);
+      box-shadow: 0 0 15px rgba(255, 92, 14, .76);
+    }
+
+    .bad-title {
+      color: #ff5d38;
+      font-size: clamp(19px, 2vw, 30px);
+      font-weight: 950;
+      text-shadow: 0 0 10px rgba(255, 56, 33, .72);
+      white-space: nowrap;
+    }
+
+    .bad-list {
+      display: grid;
+      gap: 8px;
+      margin: 0;
+      padding: 0;
+      list-style: none;
+    }
+
+    .bad-list li {
+      position: relative;
+      padding-left: 24px;
+      color: #fff2ef;
+      font-size: clamp(13px, 1.2vw, 17px);
+      line-height: 1.4;
+      font-weight: 800;
+    }
+
+    .bad-list li::before {
+      content: "";
+      position: absolute;
+      left: 0;
+      top: .48em;
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background: var(--red);
+      box-shadow: 0 0 8px var(--red);
+    }
+
+    .recommend {
+      display: flex;
+      align-items: center;
+      gap: 24px;
+      padding: 20px 28px;
+      border: 2px solid rgba(140, 255, 57, .72);
+      border-radius: 11px;
+      background: linear-gradient(180deg, rgba(15, 42, 10, .8), rgba(3, 9, 6, .96));
+      box-shadow: 0 0 16px rgba(140, 255, 57, .32);
+    }
+
+    .recommend p {
+      margin: 0;
+      color: #fff;
+      font-size: clamp(19px, 2vw, 28px);
+      line-height: 1.55;
+      font-weight: 900;
+    }
+
+    .recommend strong {
+      color: #b6ff55;
+      white-space: nowrap;
+    }
+
+    .footer-tip {
+      position: relative;
+      z-index: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+      margin-top: 18px;
+      color: #cfd8cc;
+      font-size: clamp(14px, 1.3vw, 18px);
+      font-weight: 800;
+      letter-spacing: 5px;
+    }
+
+    .footer-tip::before,
+    .footer-tip::after {
+      content: "";
+      width: 25%;
+      max-width: 300px;
+      height: 2px;
+      background: linear-gradient(90deg, transparent, rgba(196, 205, 210, .62));
+    }
+
+    .footer-tip::after {
+      background: linear-gradient(90deg, rgba(196, 205, 210, .62), transparent);
+    }
+
+    @media (max-width: 1040px) {
+      .flow-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+
+      .flow-grid::before,
+      .flow-grid::after,
+      .phase-row {
+        display: none;
+      }
+
+      .flow-panel {
+        padding-top: 26px;
+      }
+
+      .flow-grid {
+        padding-top: 0;
+      }
+
+      .flow-col:not(:last-child) .box-title::after {
+        display: none;
+      }
+
+      .branch-row,
+      .payment-grid,
+      .bottom-row {
+        grid-template-columns: 1fr;
+      }
+
+      .branch-row::before,
+      .branch-title::before,
+      .network-tree::before,
+      .pay-arrow {
+        display: none;
+      }
+
+      .solution-grid.two,
+      .solution-grid.three {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+
+      .payment-grid {
+        gap: 22px;
+      }
+
+      .pay-body {
+        min-height: auto;
+      }
+    }
+
+    @media (max-width: 640px) {
+      .page {
+        padding-inline: 10px;
+      }
+
+      .claude-logo {
+        width: 94px;
+        height: 94px;
+        border-radius: 22px;
+      }
+
+      .claude-mark {
+        width: 50px;
+        height: 50px;
+      }
+
+      .claude-mark i {
+        width: 9px;
+        height: 47px;
+      }
+
+      .flow-grid,
+      .solution-grid.two,
+      .solution-grid.three {
+        grid-template-columns: 1fr;
+      }
+
+      .panel {
+        border-radius: 14px;
+        padding: 16px 13px;
+      }
+
+      .section-title,
+      .payment-title {
+        width: 100%;
+        padding-inline: 14px;
+      }
+
+      .subline {
+        letter-spacing: 1px;
+      }
+
+      .subline::before,
+      .subline::after {
+        width: 38px;
+      }
+
+      .pay-body,
+      .bad-method {
+        grid-template-columns: 1fr;
+      }
+
+      .brand-icon {
+        width: 98px;
+        height: 98px;
+        margin: 0 auto;
+      }
+
+      .bad-label {
+        margin-top: -31px;
+      }
+
+      .bad-title {
+        text-align: center;
+        white-space: normal;
+      }
+
+      .recommend {
+        align-items: flex-start;
+      }
+
+      .footer-tip {
+        letter-spacing: 1px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <svg aria-hidden="true" width="0" height="0" style="position:absolute;overflow:hidden">
+    <symbol id="i-clipboard" viewbox="0 0 24 24">
+      <rect x="6" y="4" width="12" height="17" rx="2"></rect>
+      <path d="M9 4.5h6M9.5 12l1.9 1.9 3.4-4.2"></path>
+    </symbol>
+    <symbol id="i-mail" viewbox="0 0 24 24">
+      <rect x="3.5" y="5.5" width="17" height="13" rx="2"></rect>
+      <path d="M4.5 7l7.5 6 7.5-6"></path>
+    </symbol>
+    <symbol id="i-phone" viewbox="0 0 24 24">
+      <rect x="7" y="2.8" width="10" height="18.4" rx="2.2"></rect>
+      <path d="M10 6h4M11.7 17.8h.6"></path>
+    </symbol>
+    <symbol id="i-globe" viewbox="0 0 24 24">
+      <circle cx="12" cy="12" r="8.5"></circle>
+      <path d="M3.5 12h17M12 3.5c2.2 2.4 3.2 5.2 3.2 8.5s-1 6.1-3.2 8.5M12 3.5C9.8 5.9 8.8 8.7 8.8 12s1 6.1 3.2 8.5"></path>
+    </symbol>
+    <symbol id="i-devices" viewbox="0 0 24 24">
+      <rect x="3" y="6" width="10" height="13" rx="1.5"></rect>
+      <rect x="14.5" y="10" width="6.5" height="9" rx="1.4"></rect>
+      <path d="M6.5 16.5h3M17.1 16.5h1.3"></path>
+    </symbol>
+    <symbol id="i-home" viewbox="0 0 24 24">
+      <path d="M4 11.3L12 4l8 7.3"></path>
+      <path d="M6.5 10.2V20h11v-9.8M10 20v-6h4v6"></path>
+    </symbol>
+    <symbol id="i-check" viewbox="0 0 24 24">
+      <circle cx="12" cy="12" r="8.8"></circle>
+      <path d="M7.8 12.3l2.6 2.6 5.8-6.2"></path>
+    </symbol>
+    <symbol id="i-x" viewbox="0 0 24 24">
+      <circle cx="12" cy="12" r="8.8"></circle>
+      <path d="M8.8 8.8l6.4 6.4M15.2 8.8l-6.4 6.4"></path>
+    </symbol>
+    <symbol id="i-alert" viewbox="0 0 24 24">
+      <path d="M12 4l9 16H3L12 4z"></path>
+      <path d="M12 9.2v4.5M12 17.4h.1"></path>
+    </symbol>
+    <symbol id="i-shield" viewbox="0 0 24 24">
+      <path d="M12 3.4l7 2.6v5.4c0 4.7-2.7 7.7-7 9.2-4.3-1.5-7-4.5-7-9.2V6l7-2.6z"></path>
+      <path d="M8.6 12l2.2 2.2 4.6-5"></path>
+    </symbol>
+    <symbol id="i-crown" viewbox="0 0 24 24">
+      <path d="M4 18h16M5 8l4.1 3.2L12 5l2.9 6.2L19 8l-1.8 8H6.8L5 8z"></path>
+      <path d="M8 21h8"></path>
+    </symbol>
+    <symbol id="i-server" viewbox="0 0 24 24">
+      <rect x="4" y="5" width="16" height="5" rx="1"></rect>
+      <rect x="4" y="14" width="16" height="5" rx="1"></rect>
+      <path d="M7.5 7.5h.1M7.5 16.5h.1M11 7.5h7M11 16.5h7"></path>
+    </symbol>
+    <symbol id="i-code" viewbox="0 0 24 24">
+      <path d="M8.2 8.2L4.5 12l3.7 3.8M15.8 8.2l3.7 3.8-3.7 3.8M13.3 6.8l-2.6 10.4"></path>
+    </symbol>
+    <symbol id="i-pin" viewbox="0 0 24 24">
+      <path d="M12 21s6.5-6.4 6.5-11.1A6.5 6.5 0 0 0 5.5 9.9C5.5 14.6 12 21 12 21z"></path>
+      <circle cx="12" cy="9.9" r="2.2"></circle>
+    </symbol>
+    <symbol id="i-chart" viewbox="0 0 24 24">
+      <path d="M4 20h16M6.5 16v-4M12 16V7M17.5 16v-8"></path>
+      <path d="M6 10l5-4 3.2 2.5L19 4"></path>
+    </symbol>
+    <symbol id="i-rocket" viewbox="0 0 24 24">
+      <path d="M13.5 4.5c2.8-.8 5-.3 6 .1.4 1 .9 3.2.1 6-1.1 3.6-4.1 6-8.4 7.1l-4.9-4.9c1.2-4.3 3.6-7.2 7.2-8.3z"></path>
+      <path d="M8.2 15.8l-3.7 3.7M14.8 8.2h.1"></path>
+    </symbol>
+    <symbol id="i-fingerprint" viewbox="0 0 24 24">
+      <path d="M7 13.5c0-3.1 2-5.3 5-5.3s5 2.2 5 5.3M9.5 20c.8-1.9 1.1-3.5 1.1-5.8 0-.8.5-1.5 1.4-1.5s1.4.7 1.4 1.5c0 2.2-.2 4.1-.8 6.2M6 17c.3-1 .4-2 .4-3.1 0-3.7 2.3-6.8 5.6-6.8s5.6 3.1 5.6 6.8c0 .9 0 1.7-.1 2.5M5.3 9.5A7.5 7.5 0 0 1 12 5.2a7.5 7.5 0 0 1 6.7 4.3"></path>
+    </symbol>
+    <symbol id="i-monitor" viewbox="0 0 24 24">
+      <rect x="4" y="5" width="16" height="11" rx="1.4"></rect>
+      <path d="M9 20h6M12 16v4"></path>
+    </symbol>
+    <symbol id="i-link" viewbox="0 0 24 24">
+      <path d="M9.5 8.5l-2.1 2.1a4 4 0 0 0 5.7 5.7l1.3-1.3"></path>
+      <path d="M14.5 15.5l2.1-2.1a4 4 0 0 0-5.7-5.7L9.6 9"></path>
+    </symbol>
+    <symbol id="i-apple" viewbox="0 0 24 24">
+      <path fill="currentColor" stroke="none" d="M16.5 2.8c-.9.1-1.9.6-2.5 1.3-.6.7-1 1.6-.9 2.5 1 .1 2-.5 2.7-1.2.6-.7.9-1.6.7-2.6zM20.2 17.2c-.5 1.1-.9 1.7-1.6 2.7-1 1.4-2.3 3-3.9 3-1.5 0-2-1-3.5-1s-2.1 1-3.6 1c-1.6 0-2.9-1.5-3.9-2.9-2.7-3.9-3-8.6-1.3-11.1 1.2-1.8 3-2.8 4.8-2.8s3 .9 4.4.9 2.3-.9 4.3-.9c1.6 0 3.2.9 4.3 2.4-3.7 2.1-3.1 7.3 0 8.7z"></path>
+    </symbol>
+    <symbol id="i-card" viewbox="0 0 24 24">
+      <rect x="3.5" y="6" width="17" height="12" rx="2"></rect>
+      <path d="M4 10h16M7 15h5"></path>
+    </symbol>
+    <symbol id="i-store" viewbox="0 0 24 24">
+      <path d="M4 10l1.2-5h13.6L20 10"></path>
+      <path d="M5 10v9h14v-9M8 19v-5h8v5"></path>
+      <path d="M4 10c.8 1.3 2.6 1.3 3.4 0 .8 1.3 2.6 1.3 3.4 0 .8 1.3 2.6 1.3 3.4 0 .8 1.3 2.6 1.3 3.8 0"></path>
+    </symbol>
+    <symbol id="i-trophy" viewbox="0 0 24 24">
+      <path d="M8 4h8v4.8c0 3.1-1.7 5.4-4 6.1-2.3-.7-4-3-4-6.1V4z"></path>
+      <path d="M8 6H4v2.2c0 2.1 1.5 3.8 4 4.1M16 6h4v2.2c0 2.1-1.5 3.8-4 4.1M12 15v4M8.5 21h7"></path>
+    </symbol>
+  </svg>
+  <main class="page">
+    <header>
+      <div class="claude-logo" aria-label="Claude">
+        <div class="claude-mark" aria-hidden="true">
+          <i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i>
+        </div>
+        <strong>Claude</strong>
+      </div>
+      <strong class="title-pill">搞定Claude</strong>
+    </header>
+
+    <section class="panel flow-panel" aria-label="搞定 Claude 流程">
+      <div class="phase-row">
+        <div class="phase">注册阶段</div>
+        <div class="phase">订阅阶段</div>
+        <div class="phase">授权阶段</div>
+      </div>
+
+      <div class="flow-grid">
+        <div class="flow-col">
+          <div class="box-title"><svg class="icon"><use href="#i-clipboard"></use></svg>前期准备</div>
+          <article class="card">
+            <h3><svg class="icon round"><use href="#i-globe"></use></svg>网络环境</h3>
+            <p>1、购买现成的IP<br>2、买VPS搭建节点</p>
+          </article>
+          <article class="card">
+            <h3><svg class="icon blue"><use href="#i-devices"></use></svg>解决多端使用</h3>
+            <p>1、浏览器<br>2、桌面终端<br>3、手机终端</p>
+          </article>
+          <article class="card orange">
+            <h3><svg class="icon orange"><use href="#i-home"></use></svg>不必刻意追求<br>住宅ISP的IP</h3>
+            <p><strong>IP最好在美国地区</strong></p>
+          </article>
+        </div>
+
+        <div class="flow-col">
+          <div class="box-title"><svg class="icon"><use href="#i-mail"></use></svg>注册邮箱</div>
+          <article class="card">
+            <div class="mini-row"><svg class="icon round"><use href="#i-check"></use></svg>谷歌账号</div>
+            <p class="small-note"><a class="nav-link" href="https://nf.video/RWN3k" target="_blank" rel="noopener noreferrer">【Gmail成品账号】</a></p>
+          </article>
+          <article class="card">
+            <div class="mini-row"><svg class="icon round"><use href="#i-check"></use></svg>通过 Cloudflare<br>自定义域名转发邮件</div>
+          </article>
+          <article class="card">
+            <div class="mini-row"><svg class="icon red round"><use href="#i-x"></use></svg>Outlook邮箱</div>
+          </article>
+          <article class="card">
+            <div class="mini-row"><svg class="icon orange"><use href="#i-alert"></use></svg>Protonmail邮箱</div>
+          </article>
+        </div>
+
+        <div class="flow-col">
+          <div class="box-title"><svg class="icon"><use href="#i-phone"></use></svg>手机验证码</div>
+          <article class="card">
+            <h3><svg class="icon"><use href="#i-shield"></use></svg><a class="nav-link" href="https://hero-sms.com/?ref=395765" target="_blank" rel="noopener noreferrer">HeroSMS高可用</a></h3>
+            <p>· 美国（不可用）<br>· 法国（推荐）</p>
+            <p class="small-note"><a class="nav-link" href="https://redman.blog/index.php/digital-immigrant/#2" target="_blank" rel="noopener noreferrer">【获得长期海外手机号】</a></p>
+          </article>
+          <article class="card orange">
+            <h3><svg class="icon orange"><use href="#i-pin"></use></svg>注册阶段</h3>
+            <p>手机号与IP所在地<br>不需要固定在同一地区</p>
+          </article>
+          <article class="card orange">
+            <h3><svg class="icon orange"><use href="#i-chart"></use></svg>如果IP够纯净的话</h3>
+            <p>有概率不会出现<br>跳过手机验证这一步</p>
+          </article>
+        </div>
+
+        <div class="flow-col">
+          <div class="box-title"><svg class="icon orange"><use href="#i-crown"></use></svg>订阅阶段</div>
+          <article class="card">
+            <div class="mini-row"><svg class="icon naked"><use href="#i-check"></use></svg>1、用AppleID支付</div>
+          </article>
+          <article class="card">
+            <div class="mini-row"><span class="icon naked">G</span>2、Google Pay绑卡</div>
+          </article>
+          <article class="card">
+            <div class="mini-row"><svg class="icon"><use href="#i-server"></use></svg>3、代充服务</div>
+            <p class="small-note"><a class="nav-link" href="https://aiplus123.com/" target="_blank" rel="noopener noreferrer">【aiplus123.com】</a></p>
+          </article>
+          <p class="small-note"><a class="nav-link" href="https://redman.blog/index.php/digital-immigrant/#3" target="_blank" rel="noopener noreferrer">【获得长期海外银行卡】</a></p>
+        </div>
+
+        <div class="flow-col">
+          <div class="box-title"><svg class="icon"><use href="#i-shield"></use></svg>Claude Code</div>
+          <article class="card">
+            <div class="mini-row"><svg class="icon"><use href="#i-shield"></use></svg>1、通过Claude授权<br>需要Pro套餐才可使用</div>
+          </article>
+          <article class="card">
+            <div class="mini-row"><svg class="icon"><use href="#i-code"></use></svg>2、通过Claude API</div>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="panel" aria-label="网络环境">
+      <h1 class="section-title">网络环境</h1>
+      <div class="network-tree">
+        <div class="branch-row">
+          <div class="branch">
+            <div class="branch-title">1、干净的代理</div>
+            <div class="solution-grid two">
+              <div class="solution">
+                <div class="tag">① 购买现成的服务</div>
+                <article class="card solution-card">
+                  <div class="rec-line"><svg class="icon"><use href="#i-rocket"></use></svg>推荐1.<br><a class="nav-link" href="https://bit.ly/3B6PUbG" target="_blank" rel="noopener noreferrer">红杏云</a></div>
+                  <div class="rec-line"><svg class="icon"><use href="#i-rocket"></use></svg>推荐2.<br><a class="nav-link" href="https://9981proxy.com/" target="_blank" rel="noopener noreferrer">9981proxy</a></div>
+                </article>
+              </div>
+              <div class="solution">
+                <div class="tag">② 买VPS搭建节点</div>
+                <article class="card solution-card">
+                  <div class="rec-line"><svg class="icon"><use href="#i-server"></use></svg>推荐1. <a class="nav-link" href="https://666clouds.com/aff.php?aff=2273" target="_blank" rel="noopener noreferrer">66云</a></div>
+                  <div class="rec-line"><svg class="icon"><use href="#i-server"></use></svg>推荐2. <a class="nav-link" href="https://www.vircs.com/welcome?vcd=0d7d43de" target="_blank" rel="noopener noreferrer">Vircs</a></div>
+                  <p class="small-note"><a class="nav-link" href="https://redman.blog/index.php/2025/02/02/vircs/" target="_blank" rel="noopener noreferrer">【搭建教程】</a></p>
+                </article>
+              </div>
+            </div>
+          </div>
+
+          <div class="branch">
+            <div class="branch-title">2、可使用的方案</div>
+            <div class="solution-grid three">
+              <div class="solution">
+                <div class="tag">① 普通魔法+静态IP+指纹浏览器</div>
+                <article class="card solution-card">
+                  <div class="rec-line"><svg class="icon round"><use href="#i-fingerprint"></use></svg>只能在指纹浏览器中使用</div>
+                  <p class="small-note"><a class="nav-link" href="https://share.adspower.net/redman" target="_blank" rel="noopener noreferrer">【Adspower】</a>【配置教程】</p>
+                </article>
+              </div>
+              <div class="solution">
+                <div class="tag">② 普通魔法+静态IP+链式代理</div>
+                <article class="card solution-card">
+                  <div class="rec-line device-line"><svg class="icon"><use href="#i-monitor"></use></svg><svg class="icon"><use href="#i-phone"></use></svg><svg class="icon"><use href="#i-devices"></use></svg></div>
+                  <p>电脑，手机，平板都能用</p>
+                  <p class="small-note"><a class="nav-link" href="https://youtu.be/aWUPPvxDNlg" target="_blank" rel="noopener noreferrer">【链式配置教程】</a></p>
+                </article>
+              </div>
+              <div class="solution">
+                <div class="tag">③ 中转站</div>
+                <article class="card solution-card">
+                  <div class="rec-line"><svg class="icon"><use href="#i-link"></use></svg>推荐1.<br><a class="nav-link" href="https://openrouter.ai/" target="_blank" rel="noopener noreferrer">openrouter</a></div>
+                  <div class="rec-line"><svg class="icon"><use href="#i-link"></use></svg>推荐2.<br><a class="nav-link" href="https://2233.ai/" target="_blank" rel="noopener noreferrer">2233.ai</a></div>
+                </article>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="panel payment-panel" aria-label="订阅 Claude 支付方式">
+      <div class="payment-heading">
+        <h2 class="payment-title">订阅 Claude 用什么支付方式？</h2>
+        <div class="subline">支付方式优先级与风控建议</div>
+      </div>
+
+      <div class="payment-grid">
+        <article class="pay-card">
+          <div class="pay-head"><svg class="icon orange"><use href="#i-crown"></use></svg><span class="rank">1</span>Apple ID 支付</div>
+          <div class="pay-body">
+            <div class="logo-stack">
+              <div class="brand-icon apple"><svg><use href="#i-apple"></use></svg></div>
+            </div>
+            <ul class="check-list">
+              <li>优先级最高</li>
+              <li>风控相对最低</li>
+              <li>通过 Apple 作为中间层隔离支付信息</li>
+              <li>可配合礼品卡充值</li>
+              <li>礼品卡充值后，建议放置 3 天以上再订阅</li>
+            </ul>
+          </div>
+          <div class="pay-foot"><svg class="icon"><use href="#i-shield"></use></svg>最稳妥 · 最推荐</div>
+        </article>
+
+        <div class="pay-arrow a1">»</div>
+
+        <article class="pay-card">
+          <div class="pay-head"><span class="rank">2</span>Google Pay 绑卡支付</div>
+          <div class="pay-body">
+            <div class="logo-stack">
+              <div class="brand-icon google">G</div>
+              <div class="brand-icon card-mark"><svg><use href="#i-card"></use></svg></div>
+            </div>
+            <ul class="check-list">
+              <li>次推荐方案</li>
+              <li>风控相对较低</li>
+              <li>通过 Google 作为中间层隔离支付信息</li>
+              <li>比直接绑信用卡更稳妥</li>
+              <li>若卡被风控，建议直接换卡</li>
+            </ul>
+          </div>
+          <div class="pay-foot"><svg class="icon"><use href="#i-shield"></use></svg>稳妥可靠 · 次优选择</div>
+        </article>
+
+        <div class="pay-arrow a2">»</div>
+
+        <article class="pay-card">
+          <div class="pay-head"><span class="rank">3</span>第三方代充服务</div>
+          <div class="pay-body">
+            <div class="logo-stack">
+              <div class="brand-icon store"><svg><use href="#i-store"></use></svg></div>
+              <div class="brand-icon shield"><svg><use href="#i-shield"></use></svg></div>
+            </div>
+            <ul class="check-list">
+              <li>适合不方便自己支付的人</li>
+              <li>操作省事</li>
+              <li>选择稳定可靠的服务商</li>
+              <li>作为备选方案使用</li>
+              <li>推荐：<a class="nav-link" href="https://aiplus123.com/" target="_blank" rel="noopener noreferrer">aiplus123.com</a></li>
+            </ul>
+          </div>
+          <div class="pay-foot"><svg class="icon"><use href="#i-shield"></use></svg>备选方案 · 省心便捷</div>
+        </article>
+      </div>
+
+      <div class="bottom-row">
+        <article class="bad-method">
+          <div class="bad-label">不建议的方式</div>
+          <div class="brand-icon" style="color: var(--red); font-size: 72px;"><svg><use href="#i-x"></use></svg></div>
+          <div>
+            <div class="bad-title">直接绑定信用卡</div>
+            <ul class="bad-list">
+              <li>支付风控最高</li>
+              <li>尤其不要直接使用 U 卡 / 虚拟卡</li>
+              <li>比 Apple ID / Google Pay 更容易触发封号风险</li>
+            </ul>
+          </div>
+        </article>
+
+        <aside class="recommend">
+          <svg class="icon orange" style="width:74px;height:74px;"><use href="#i-trophy"></use></svg>
+          <p>推荐顺序：<br><strong>Apple ID ＞ Google Pay ＞ 第三方代充</strong></p>
+        </aside>
+      </div>
+
+      <div class="footer-tip">◇ 温馨提示：遵守平台规则，合理订阅，保护账号安全 ◇</div>
+    </section>
+  </main>
+</body></html>
