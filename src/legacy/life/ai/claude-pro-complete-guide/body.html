@@ -1,9 +1,9 @@
 <div class="cpg-shell">
   <section class="cpg-intro" aria-labelledby="cpg-intro-title">
     <div class="cpg-intro-copy">
-      <p class="cpg-kicker">TWO SOURCES · ONE READING DESK</p>
-      <h2 id="cpg-intro-title">完整解释与操作清单，放到同一个入口</h2>
-      <p>两个页面承担不同功能：长文解释网络、注册、订阅与使用场景之间的关系；可视化页面把关键步骤压缩为可快速定位的清单。两份内容均由附件源码生成站内静态备份，不再依赖原始网页。</p>
+      <p class="cpg-kicker">TWO SOURCES · ONE CONTINUOUS PAGE</p>
+      <h2 id="cpg-intro-title">完整解释与操作清单，在同一页面连续展开</h2>
+      <p>先完整阅读网络、注册、订阅与使用场景之间的关系，再继续查看压缩后的可视化操作清单。两份内容均由附件源码生成站内静态备份，不再依赖原始网页。</p>
     </div>
 
     <div class="cpg-source-map" aria-label="两个原文来源">
@@ -33,52 +33,55 @@
     </div>
   </section>
 
-  <section class="cpg-reader" aria-labelledby="cpg-reader-title">
-    <div class="cpg-reader-head">
-      <div>
-        <p class="cpg-kicker">SOURCE READER</p>
-        <h2 id="cpg-reader-title">选择阅读视图</h2>
+  <section class="cpg-reader" aria-label="完整长文与可视化清单">
+    <section id="full-article" class="cpg-reader-section" aria-labelledby="cpg-article-title">
+      <div class="cpg-section-head">
+        <div>
+          <p class="cpg-kicker">01 · DEEP READING</p>
+          <h2 id="cpg-article-title">Claude 风控与订阅完整长文</h2>
+        </div>
+        <p class="cpg-section-summary">问题成因、使用环境与订阅方案按原文顺序完整展开，无须切换视图。</p>
       </div>
-      <div class="cpg-tabs" role="tablist" aria-label="原文来源切换">
-        <button id="cpg-tab-article" class="cpg-tab is-active" type="button" role="tab" aria-selected="true" aria-controls="cpg-panel-article" data-cpg-tab="article">
-          <span>01</span> 完整长文
-        </button>
-        <button id="cpg-tab-checklist" class="cpg-tab" type="button" role="tab" aria-selected="false" aria-controls="cpg-panel-checklist" data-cpg-tab="checklist" tabindex="-1">
-          <span>02</span> 可视化清单
-        </button>
-      </div>
-    </div>
 
-    <div id="cpg-panel-article" class="cpg-panel is-active" role="tabpanel" aria-labelledby="cpg-tab-article" data-cpg-panel="article">
-      <div class="cpg-frame-bar">
-        <div><i aria-hidden="true"></i><i aria-hidden="true"></i><i aria-hidden="true"></i></div>
-        <span>cavno.org / local archive / article</span>
-        <a href="/archives/claude-pro/article.html" target="_blank" rel="noopener noreferrer">打开本地备份 ↗</a>
+      <div class="cpg-panel">
+        <div class="cpg-frame-bar">
+          <div><i aria-hidden="true"></i><i aria-hidden="true"></i><i aria-hidden="true"></i></div>
+          <span>cavno.org / local archive / article</span>
+          <a href="/archives/claude-pro/article.html" target="_blank" rel="noopener noreferrer">单独打开 ↗</a>
+        </div>
+        <iframe
+          src="/archives/claude-pro/article.html"
+          title="Claude 为什么这么容易被封？大陆用户从网络环境到充值订阅的完整避坑指南"
+          loading="eager"
+          sandbox="allow-same-origin allow-popups allow-popups-to-escape-sandbox"
+          data-cpg-expand
+        ></iframe>
       </div>
-      <iframe
-        src="/archives/claude-pro/article.html"
-        title="Claude 为什么这么容易被封？大陆用户从网络环境到充值订阅的完整避坑指南"
-        loading="eager"
-        sandbox="allow-popups allow-popups-to-escape-sandbox"
-      ></iframe>
-    </div>
+    </section>
 
-    <div id="cpg-panel-checklist" class="cpg-panel" role="tabpanel" aria-labelledby="cpg-tab-checklist" data-cpg-panel="checklist" hidden>
-      <div class="cpg-frame-bar">
-        <div><i aria-hidden="true"></i><i aria-hidden="true"></i><i aria-hidden="true"></i></div>
-        <span>cavno.org / local archive / checklist</span>
-        <a href="/archives/claude-pro/checklist.html" target="_blank" rel="noopener noreferrer">打开本地备份 ↗</a>
+    <section id="visual-checklist" class="cpg-reader-section" aria-labelledby="cpg-checklist-title">
+      <div class="cpg-section-head">
+        <div>
+          <p class="cpg-kicker">02 · VISUAL CHECKLIST</p>
+          <h2 id="cpg-checklist-title">注册、订阅与授权操作清单</h2>
+        </div>
+        <p class="cpg-section-summary">长文结束后直接承接操作清单，适合按阶段核对准备事项、网络方案与支付路径。</p>
       </div>
-      <iframe
-        src="/archives/claude-pro/checklist.html"
-        title="搞定 Claude：注册、订阅与授权操作清单"
-        loading="lazy"
-        sandbox="allow-popups allow-popups-to-escape-sandbox"
-      ></iframe>
-    </div>
 
-    <noscript>
-      <p class="cpg-noscript">当前浏览器未启用 JavaScript。请通过上方“本地页”链接分别打开两份静态备份。</p>
-    </noscript>
+      <div class="cpg-panel">
+        <div class="cpg-frame-bar">
+          <div><i aria-hidden="true"></i><i aria-hidden="true"></i><i aria-hidden="true"></i></div>
+          <span>cavno.org / local archive / checklist</span>
+          <a href="/archives/claude-pro/checklist.html" target="_blank" rel="noopener noreferrer">单独打开 ↗</a>
+        </div>
+        <iframe
+          src="/archives/claude-pro/checklist.html"
+          title="搞定 Claude：注册、订阅与授权操作清单"
+          loading="eager"
+          sandbox="allow-same-origin allow-popups allow-popups-to-escape-sandbox"
+          data-cpg-expand
+        ></iframe>
+      </div>
+    </section>
   </section>
 </div>

@@ -2,45 +2,54 @@
   const root = document.querySelector('.cpg-article');
   if (!root) return;
 
-  const tabs = [...root.querySelectorAll('[data-cpg-tab]')];
-  const panels = [...root.querySelectorAll('[data-cpg-panel]')];
-  const validViews = new Set(tabs.map((tab) => tab.dataset.cpgTab));
+  const frames = [...root.querySelectorAll('iframe[data-cpg-expand]')];
+  const observers = new Map();
+  let resizeTimer;
 
-  const activate = (view, focus = false) => {
-    if (!validViews.has(view)) return;
+  const fit = (frame) => {
+    const doc = frame.contentDocument;
+    if (!doc?.documentElement || !doc.body) return;
 
-    tabs.forEach((tab) => {
-      const active = tab.dataset.cpgTab === view;
-      tab.classList.toggle('is-active', active);
-      tab.setAttribute('aria-selected', String(active));
-      tab.tabIndex = active ? 0 : -1;
-      if (active && focus) tab.focus();
-    });
+    const height = Math.ceil(Math.max(
+      doc.documentElement.scrollHeight,
+      doc.documentElement.offsetHeight,
+      doc.body.scrollHeight,
+      doc.body.offsetHeight,
+    ));
 
-    panels.forEach((panel) => {
-      const active = panel.dataset.cpgPanel === view;
-      panel.classList.toggle('is-active', active);
-      panel.hidden = !active;
-    });
-
-    const nextHash = view === 'checklist' ? '#visual-checklist' : '#full-article';
-    if (window.location.hash !== nextHash) history.replaceState(null, '', nextHash);
+    if (height > 0) frame.style.height = `${height}px`;
   };
 
-  tabs.forEach((tab, index) => {
-    tab.addEventListener('click', () => activate(tab.dataset.cpgTab));
-    tab.addEventListener('keydown', (event) => {
-      if (!['ArrowLeft', 'ArrowRight', 'Home', 'End'].includes(event.key)) return;
-      event.preventDefault();
-      let next = index;
-      if (event.key === 'ArrowRight') next = (index + 1) % tabs.length;
-      if (event.key === 'ArrowLeft') next = (index - 1 + tabs.length) % tabs.length;
-      if (event.key === 'Home') next = 0;
-      if (event.key === 'End') next = tabs.length - 1;
-      activate(tabs[next].dataset.cpgTab, true);
-    });
+  const observe = (frame) => {
+    observers.get(frame)?.disconnect();
+
+    const doc = frame.contentDocument;
+    if (!doc?.documentElement || !doc.body) return;
+
+    const scheduleFit = () => requestAnimationFrame(() => fit(frame));
+    const observer = new ResizeObserver(scheduleFit);
+    observer.observe(doc.documentElement);
+    observer.observe(doc.body);
+    observers.set(frame, observer);
+
+    scheduleFit();
+    doc.fonts?.ready.then(scheduleFit);
+  };
+
+  frames.forEach((frame) => {
+    frame.addEventListener('load', () => observe(frame));
+    if (frame.contentDocument?.readyState === 'complete') observe(frame);
   });
 
-  const initial = window.location.hash === '#visual-checklist' ? 'checklist' : 'article';
-  activate(initial);
+  window.addEventListener('resize', () => {
+    clearTimeout(resizeTimer);
+    resizeTimer = window.setTimeout(() => {
+      frames.forEach(fit);
+    }, 120);
+  });
+
+  window.addEventListener('beforeunload', () => {
+    observers.forEach((observer) => observer.disconnect());
+    clearTimeout(resizeTimer);
+  }, { once: true });
 })();
