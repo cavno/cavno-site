@@ -1,0 +1,29 @@
+---
+import Base from '../../../layouts/Base.astro';
+import body from '../../../legacy/life/ai/claude-pro-complete-guide/body.html?raw';
+import '../../../legacy/life/ai/claude-pro-complete-guide/style.css';
+
+const meta = {
+  title: 'Claude 稳定使用与订阅 · 原文整合',
+  description: '将 Redman 的 Claude 风控长文与“搞定 Claude”可视化操作清单汇集到同一页面，原文内容与原站交互保持不变。',
+};
+---
+
+<Base title={`${meta.title} · Cavno`} description={meta.description}>
+  <section class="cv-page-head cpg-page-head">
+    <div class="cv-wrap">
+      <div class="cv-eyebrow">Life & Skills · AI</div>
+      <h1 class="cv-page-title">Claude 稳定使用与订阅</h1>
+      <p class="cv-lede">一处阅读完整原文，一处查看可视化操作清单；两个来源保持原貌，不重写正文。</p>
+      <a class="cv-crumb-back" href="/life/ai/">← 返回 AI 栏目</a>
+    </div>
+  </section>
+
+  <article class="lp cpg-article">
+    <Fragment set:html={body} />
+  </article>
+
+  <script>
+    import '../../../legacy/life/ai/claude-pro-complete-guide/script.js';
+  </script>
+</Base>

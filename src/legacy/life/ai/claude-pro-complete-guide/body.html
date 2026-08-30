@@ -1,0 +1,84 @@
+<div class="cpg-shell">
+  <section class="cpg-intro" aria-labelledby="cpg-intro-title">
+    <div class="cpg-intro-copy">
+      <p class="cpg-kicker">TWO SOURCES · ONE READING DESK</p>
+      <h2 id="cpg-intro-title">完整解释与操作清单，放到同一个入口</h2>
+      <p>两个来源承担不同功能：长文解释网络、注册、订阅与使用场景之间的关系；可视化页面把关键步骤压缩为可快速定位的清单。下方直接呈现原页面，正文、链接和交互均不改动。</p>
+    </div>
+
+    <div class="cpg-source-map" aria-label="两个原文来源">
+      <article>
+        <span class="cpg-source-no">01</span>
+        <div>
+          <p class="cpg-source-type">DEEP READING · REDMAN BLOG</p>
+          <h3>Claude 风控与订阅完整长文</h3>
+          <p>适合从问题成因、使用场景到选择方案连续阅读。</p>
+        </div>
+        <a href="https://redman.blog/index.php/2026/05/25/claude-pro/" target="_blank" rel="noopener noreferrer" aria-label="在新窗口打开 Redman Blog 原文">原站 ↗</a>
+      </article>
+      <article>
+        <span class="cpg-source-no">02</span>
+        <div>
+          <p class="cpg-source-type">VISUAL CHECKLIST · 搞定 CLAUDE</p>
+          <h3>注册、订阅与授权操作清单</h3>
+          <p>适合按阶段快速查找准备事项、网络方案与支付路径。</p>
+        </div>
+        <a href="https://claude.redman3721.com/" target="_blank" rel="noopener noreferrer" aria-label="在新窗口打开搞定 Claude 原文">原站 ↗</a>
+      </article>
+    </div>
+
+    <div class="cpg-preserve-note" role="note">
+      <span aria-hidden="true">原</span>
+      <p><strong>内容保真方式</strong>　正文直接载入两个来源页面，不经过摘录、改写或二次排版；来源更新时，此处也会同步显示最新版本。</p>
+    </div>
+  </section>
+
+  <section class="cpg-reader" aria-labelledby="cpg-reader-title">
+    <div class="cpg-reader-head">
+      <div>
+        <p class="cpg-kicker">SOURCE READER</p>
+        <h2 id="cpg-reader-title">选择阅读视图</h2>
+      </div>
+      <div class="cpg-tabs" role="tablist" aria-label="原文来源切换">
+        <button id="cpg-tab-article" class="cpg-tab is-active" type="button" role="tab" aria-selected="true" aria-controls="cpg-panel-article" data-cpg-tab="article">
+          <span>01</span> 完整长文
+        </button>
+        <button id="cpg-tab-checklist" class="cpg-tab" type="button" role="tab" aria-selected="false" aria-controls="cpg-panel-checklist" data-cpg-tab="checklist" tabindex="-1">
+          <span>02</span> 可视化清单
+        </button>
+      </div>
+    </div>
+
+    <div id="cpg-panel-article" class="cpg-panel is-active" role="tabpanel" aria-labelledby="cpg-tab-article" data-cpg-panel="article">
+      <div class="cpg-frame-bar">
+        <div><i aria-hidden="true"></i><i aria-hidden="true"></i><i aria-hidden="true"></i></div>
+        <span>redman.blog / claude-pro</span>
+        <a href="https://redman.blog/index.php/2026/05/25/claude-pro/" target="_blank" rel="noopener noreferrer">新窗口打开 ↗</a>
+      </div>
+      <iframe
+        src="https://redman.blog/index.php/2026/05/25/claude-pro/"
+        title="Claude 为什么这么容易被封？大陆用户从网络环境到充值订阅的完整避坑指南"
+        loading="eager"
+        referrerpolicy="strict-origin-when-cross-origin"
+      ></iframe>
+    </div>
+
+    <div id="cpg-panel-checklist" class="cpg-panel" role="tabpanel" aria-labelledby="cpg-tab-checklist" data-cpg-panel="checklist" hidden>
+      <div class="cpg-frame-bar">
+        <div><i aria-hidden="true"></i><i aria-hidden="true"></i><i aria-hidden="true"></i></div>
+        <span>claude.redman3721.com</span>
+        <a href="https://claude.redman3721.com/" target="_blank" rel="noopener noreferrer">新窗口打开 ↗</a>
+      </div>
+      <iframe
+        src="https://claude.redman3721.com/"
+        title="搞定 Claude：注册、订阅与授权操作清单"
+        loading="lazy"
+        referrerpolicy="strict-origin-when-cross-origin"
+      ></iframe>
+    </div>
+
+    <noscript>
+      <p class="cpg-noscript">当前浏览器未启用 JavaScript。请通过上方“原站”链接分别打开两篇原文。</p>
+    </noscript>
+  </section>
+</div>
