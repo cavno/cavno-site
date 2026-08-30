@@ -2259,7 +2259,7 @@ var SAMPLE_PERF_AOA = (function () {
     S.perfRows = d.perf || [];
     S.perfBatches = d.perfBatches || [];
     if (DB.isMemory()) {
-      $('storageBadge').textContent = '仅内存运行 · 关闭页面即丢失（请部署到本地或 GitHub Pages 获得持久化）';
+      $('storageBadge').textContent = '临时数据模式 · 关闭页面即会清空，请及时导出分析结果';
       $('storageBadge').classList.add('warn');
     } else {
       $('storageBadge').textContent = '本地持久化 · IndexedDB';

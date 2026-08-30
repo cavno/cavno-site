@@ -172,7 +172,7 @@ strike, call_oi, put_oi
     <span class="lead">原程序最脆弱的一环是行情网关（FutuOpenD 必须本机在线），最通用的一环是算法本身——本页把前者换成剪贴板，把后者原封不动搬进浏览器。</span>
     解析器保留原程序的回退规则：某档 OI 为 0 或缺失时，以成交量（第 4/5 列，若提供）代入——对应 max_pain.py 中 "oi = option.get('volume', 0)" 的分支。合成链按"ATM 附近指数衰减 + 随机厚墙 + Put 偏斜"生成，用于体感不同地形下谷形与磁吸成本的变化；种子递增，连点即得新地形。
   </div>
-  <div class="src">对应原件：get_option_chain_complete()（富途拉链 + 分批快照 + left join 补 OI）→ 本卡；check_dates.py（到期日查询辅助脚本）与 run_max_pain.bat（chcp 65001 启动器）职能由静态页面天然豁免</div>
+  <div class="src">使用说明：可粘贴真实期权链，也可生成合成链，对比不同持仓分布下最大痛点、成本谷形与潜在磁吸区域的变化。</div>
 </section>
 </main>
 
