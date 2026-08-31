@@ -14,6 +14,7 @@ const items = defineCollection({
     subsection: z.string().default(''),
     href: z.string(),
     date: z.coerce.date(),
+    uploadedAt: z.coerce.date().optional(),
     tags: z.array(z.string()).default([]),
     summary: z.string().default(''),
   }),

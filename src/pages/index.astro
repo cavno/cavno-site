@@ -4,6 +4,7 @@ import ItemCard from '../components/ItemCard.astro';
 import nav from '../content/nav.json';
 import { getCollection } from 'astro:content';
 import { makeBodyLookup } from '../lib/content-presentation';
+import { compareItemsNewestFirst, formatUpdateTime, itemUpdatedAt } from '../lib/content-order';
 
 const legacyBodies = import.meta.glob('../legacy/**/body.html', {
   query: '?raw',
@@ -12,16 +13,14 @@ const legacyBodies = import.meta.glob('../legacy/**/body.html', {
 });
 const bodyByHref = makeBodyLookup(legacyBodies);
 
-const items = (await getCollection('items')).sort(
-  (a, b) => b.data.date.getTime() - a.data.date.getTime()
-);
+const items = (await getCollection('items')).sort(compareItemsNewestFirst);
 const total = items.length;
 const counts: Record<string, number> = {};
 for (const s of nav.sections) counts[s.slug] = items.filter((i) => i.data.section === s.slug).length;
 
 const ym = (d?: Date) =>
   d ? `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}` : '——';
-const latest = ym(items[0]?.data.date);
+const latest = ym(items[0] ? itemUpdatedAt(items[0]) : undefined);
 // 首页不展示 Working 条目：其标题本身即含工作信息（板块内容另受口令门保护）
 const recent = items.filter((i) => i.data.section !== 'working').slice(0, 6);
 
@@ -140,7 +139,7 @@ const tagFor = (sectionSlug: string, subSlug: string) => {
             title={i.data.title}
             summary={i.data.summary}
             tag={tagFor(i.data.section, i.data.subsection)}
-            date={ym(i.data.date)}
+            date={i.data.uploadedAt ? formatUpdateTime(itemUpdatedAt(i)) : ym(i.data.date)}
             tags={i.data.tags}
             section={i.data.section}
             subsection={i.data.subsection}
@@ -165,6 +164,7 @@ const tagFor = (sectionSlug: string, subSlug: string) => {
     sectionLabel: string;
     subsectionLabel: string;
     date: string;
+    updatedAt: number;
     cover: CoverDesign;
     text: string;
     _search?: string;
@@ -283,7 +283,7 @@ const tagFor = (sectionSlug: string, subSlug: string) => {
       const matched = entries
         .map((entry) => ({ entry, score: scoreEntry(entry, terms) }))
         .filter((result) => result.score >= 0)
-        .sort((a, b) => b.score - a.score || b.entry.date.localeCompare(a.entry.date))
+        .sort((a, b) => b.score - a.score || b.entry.updatedAt - a.entry.updatedAt || a.entry.href.localeCompare(b.entry.href))
         .slice(0, 24);
 
       results.replaceChildren(...matched.map(({ entry }) => resultNode(entry)));

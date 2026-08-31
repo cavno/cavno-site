@@ -4,6 +4,7 @@ import ItemCard from '../components/ItemCard.astro';
 import nav from '../content/nav.json';
 import { getCollection } from 'astro:content';
 import { makeBodyLookup } from '../lib/content-presentation';
+import { compareItemsNewestFirst } from '../lib/content-order';
 
 const legacyBodies = import.meta.glob('../legacy/**/body.html', {
   query: '?raw',
@@ -29,7 +30,7 @@ const sub = subSlug ? section.subsections.find((x) => x.slug === subSlug) ?? nul
 
 const all = (await getCollection('items'))
   .filter((i) => i.data.section === sectionSlug)
-  .sort((a, b) => b.data.date.getTime() - a.data.date.getTime());
+  .sort(compareItemsNewestFirst);
 const items = sub ? all.filter((i) => i.data.subsection === sub.slug) : all;
 
 const ym = (d: Date) => `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}`;

@@ -6,6 +6,7 @@ import {
   htmlToPlainText,
   makeBodyLookup,
 } from '../lib/content-presentation';
+import { compareItemsNewestFirst, itemUpdateTimestamp } from '../lib/content-order';
 
 export const prerender = true;
 
@@ -20,7 +21,7 @@ export const GET: APIRoute = async () => {
   const entries = (await getCollection('items'))
     // Working 由 Cloudflare Access 保护；公开索引不能泄露其标题和正文。
     .filter((item) => item.data.section !== 'working')
-    .sort((a, b) => b.data.date.getTime() - a.data.date.getTime())
+    .sort(compareItemsNewestFirst)
     .map((item) => {
       const body = bodyByHref[item.data.href] ?? '';
       const section = nav.sections.find((entry) => entry.slug === item.data.section);
@@ -48,6 +49,7 @@ export const GET: APIRoute = async () => {
         sectionLabel,
         subsectionLabel,
         date: item.data.date.toISOString().slice(0, 10),
+        updatedAt: itemUpdateTimestamp(item),
         cover: {
           hue: presentation.hue,
           saturation: presentation.saturation,

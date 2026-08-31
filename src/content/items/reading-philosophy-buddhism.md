@@ -4,6 +4,7 @@ section: reading
 subsection: "philosophy"
 href: "/reading/philosophy/buddhism/"
 date: 2026-08-31
+uploadedAt: 2026-08-31T05:23:40.985+08:00
 tags: ["佛教", "思想史", "因果", "认知"]
 summary: "佛教思想史围绕“苦如何生成、怎样止息”，不断重写自我、因果、认知、语言和实践的模型。"
 ---
