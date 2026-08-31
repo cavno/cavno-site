@@ -1,0 +1,25 @@
+---
+import Base from '../../../layouts/Base.astro';
+import body from '../../../legacy/reading/philosophy/confucianism/body.html?raw';
+import '../../../styles/systems-essay.css';
+
+const meta = {
+  "title": "儒家思想发展史",
+  "description": "儒家思想史围绕一个稳定问题：怎样把个体培养为能够共同生活的社会人格，并把人格、家庭与政治秩序连接起来。"
+};
+---
+<Base title={meta.title + ' · Cavno'} description={meta.description}>
+  <section class="cv-page-head">
+    <div class="cv-wrap">
+      <div class="cv-eyebrow">Reading & Thinking · Philosophy</div>
+      <h1 class="cv-page-title">{meta.title}</h1>
+      <p class="cv-lede">{meta.description}</p>
+      <a class="cv-crumb-back" href="/reading/philosophy/">← 返回哲学栏目</a>
+    </div>
+  </section>
+
+  <article class="lp systems-essay">
+    <Fragment set:html={body} />
+  </article>
+  <script is:inline src="/scripts/systems-essay.js" defer></script>
+</Base>

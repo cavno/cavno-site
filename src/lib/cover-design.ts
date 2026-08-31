@@ -121,6 +121,10 @@ export const ARTICLE_COVERS: Record<string, { motif: CoverMotif; layout?: CoverL
   '/reading/philosophy/greek-philosophy/': { motif: 'balance', layout: 'framed' },
   '/reading/philosophy/four-laws-logos-atlas/': { motif: 'proof', layout: 'band' },
   '/reading/philosophy/copleston-history-of-philosophy/': { motif: 'timeline', layout: 'stacked' },
+  '/reading/thinking/financial-system/': { motif: 'market', layout: 'band' },
+  '/reading/thinking/chinese-dynasties/': { motif: 'lineage', layout: 'split' },
+  '/reading/thinking/matter-evolution/': { motif: 'strata', layout: 'framed' },
+  '/reading/thinking/physics-evolution/': { motif: 'spectrum', layout: 'framed' },
 };
 
 const TEXTURES: Partial<Record<CoverMotif, [CoverTexture, CoverTexture]>> = {

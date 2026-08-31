@@ -1,0 +1,25 @@
+---
+import Base from '../../../layouts/Base.astro';
+import body from '../../../legacy/reading/thinking/state-governance/body.html?raw';
+import '../../../styles/systems-essay.css';
+
+const meta = {
+  "title": "中国国家治理制度逻辑演化史",
+  "description": "治理制度史关注授权链、信息链、资源链、合法性与纠错机制如何被重新组合，而不只是政权更替。"
+};
+---
+<Base title={meta.title + ' · Cavno'} description={meta.description}>
+  <section class="cv-page-head">
+    <div class="cv-wrap">
+      <div class="cv-eyebrow">Reading & Thinking · Thinking</div>
+      <h1 class="cv-page-title">{meta.title}</h1>
+      <p class="cv-lede">{meta.description}</p>
+      <a class="cv-crumb-back" href="/reading/thinking/">← 返回思考栏目</a>
+    </div>
+  </section>
+
+  <article class="lp systems-essay">
+    <Fragment set:html={body} />
+  </article>
+  <script is:inline src="/scripts/systems-essay.js" defer></script>
+</Base>

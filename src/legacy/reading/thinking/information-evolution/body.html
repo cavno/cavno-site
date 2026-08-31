@@ -1,0 +1,754 @@
+<div class="progress"></div><header class="hero"><div class="hero-grid"></div><nav class="hero-nav"><a href="/reading/thinking/">CAVNO / 系统论长文集</a><div class="hero-actions"><button class="icon-btn" data-top>回到顶部</button><button class="icon-btn" data-print>打印 / PDF</button></div></nav><div class="hero-layout"><div><p class="eyebrow">SYSTEMS HISTORY · 07</p><h1>信息演化史</h1><div class="subtitle">从物理差异到自我建模：记忆、编码与反馈如何扩展系统的可能性</div><p class="hero-desc">信息史从可区分状态、相关性和物理记忆开始，逐步进入遗传、神经、语言、计算与人工智能。</p><div class="hero-tags"><span class="tag">差异与相关</span><span class="tag">记忆外置</span><span class="tag">编码复制</span><span class="tag">语义与控制</span></div></div><div class="orbit"><i class="orbit-node n1"></i><i class="orbit-node n2"></i><i class="orbit-node n3"></i><div class="orbit-core">SYSTEM<br>MODEL</div></div></div></header><div class="formula-hero">Difference → Correlation → Memory → Code → Communication → Computation → Learning</div><div class="se-main"><section class="overview"><div class="section-label">核心问题 / THE GOVERNING QUESTION</div><div class="question">信息怎样从状态差异变成可保存、复制、解释并反过来控制物理过程的结构？</div><div class="stat-grid"><div class="stat"><b>物理起点</b><span>可区分状态</span></div><div class="stat"><b>生命跃迁</b><span>遗传编码</span></div><div class="stat"><b>文明跃迁</b><span>外部记忆</span></div><div class="stat"><b>AI 跃迁</b><span>统计生成模型</span></div></div><div class="timeline-wrap"><div class="section-label">演化时间线 / EVOLUTION TIMELINE</div><div class="timeline"><div class="moment"><b>物理记录</b><span>状态相关与稳定痕迹构成记忆。</span></div><div class="moment"><b>遗传信息</b><span>可复制编码跨代保存结构经验。</span></div><div class="moment"><b>神经系统</b><span>感知—预测—行动闭环。</span></div><div class="moment"><b>语言</b><span>经验跨个体组合为共享模型。</span></div><div class="moment"><b>文字与印刷</b><span>记忆外置，公共校验加速。</span></div><div class="moment"><b>电信与计算</b><span>传输处理被形式化和自动化。</span></div><div class="moment"><b>互联网</b><span>全球连接存储、搜索与反馈。</span></div><div class="moment"><b>人工智能</b><span>模型走向预测、生成与行动。</span></div></div></div><div class="timeline-wrap"><div class="section-label">阶段对比 / COMPARATIVE FRAME</div><div class="table-scroll"><table><thead><tr><th>系统阶段 / 模块</th><th>核心单位或回应</th><th>新增能力</th><th>新增脆弱性 / 限定</th></tr></thead><tbody><tr><td>物理信息</td><td>状态区分与相关</td><td>痕迹、信号</td><td>不自动有意义</td></tr><tr><td>香农信息</td><td>减少多少不确定性</td><td>编码与信道</td><td>不判断真假价值</td></tr><tr><td>生物信息</td><td>复制并控制功能</td><td>DNA、细胞网络</td><td>语义依赖生命</td></tr><tr><td>社会—AI 信息</td><td>共享解释、预测生成</td><td>语言、数据、模型</td><td>流畅不等于真知识</td></tr></tbody></table></div></div></section><details class="mobile-toc"><summary>展开本页目录</summary><a href="#chapter-01">先把“信息”拆成几个完全不同的概念</a><a href="#chapter-02">第二阶段：物质结构开始成为信息载体</a><a href="#chapter-03">这和普通物理记忆有根本区别</a><a href="#chapter-04">第八阶段：神经系统——分散信号变成高速网络</a><a href="#chapter-05">第十一阶段：社会动物——信息开始在个体之间复制</a><a href="#chapter-06">文字也改变了文明规模</a><a href="#chapter-07">第十八阶段：印刷 + 科学 + 学术网络——知识开始成为分布式系统</a><a href="#chapter-08">第二十二阶段：数字化——世界被重新编码成bit</a><a href="#chapter-09">信息网络出现新的系统性质：网络效应</a><a href="#chapter-10">第二十九阶段：机器学习——信息处理从“人工写规则”进入“从数据提取规</a><a href="#chapter-11">信息因此再次与控制合流</a></details><div class="shell"><aside class="toc"><div class="toc-title">STICKY INDEX</div><a href="#chapter-01">先把“信息”拆成几个完全不同的概念</a><a href="#chapter-02">第二阶段：物质结构开始成为信息载体</a><a href="#chapter-03">这和普通物理记忆有根本区别</a><a href="#chapter-04">第八阶段：神经系统——分散信号变成高速网络</a><a href="#chapter-05">第十一阶段：社会动物——信息开始在个体之间复制</a><a href="#chapter-06">文字也改变了文明规模</a><a href="#chapter-07">第十八阶段：印刷 + 科学 + 学术网络——知识开始成为分布式系统</a><a href="#chapter-08">第二十二阶段：数字化——世界被重新编码成bit</a><a href="#chapter-09">信息网络出现新的系统性质：网络效应</a><a href="#chapter-10">第二十九阶段：机器学习——信息处理从“人工写规则”进入“从数据提取规</a><a href="#chapter-11">信息因此再次与控制合流</a></aside><div class="article"><section class="chapter source-opening"><div class="chapter-index">导论 · OPENING</div>
+<p>可以。按照前面“物质—能量—人—经济—金融”的系统论框架来看，<strong>信息的演化史可能是这几条历史中最容易被说错的一条</strong>。 因为严格地说，信息不是像原子、石油或电一样的一种独立“东西”。真正发生演化的是：</p>
+<div class="quote"><strong>系统区分状态、保存差异、建立关联、复制模式、传递信号、压缩经验、预测环境，并最终利用这些信息反过来控制自身和外部世界的能力。</strong></div>
+<p>因此，“信息演化史”最准确的主线不是：</p>
+<div class="formula">少量信息→大量信息</div>
+<p>而是：</p>
+<div class="formula">差异 → 相关 → 记录 → 编码 → 复制 → 通信 → 记忆 → 计算 → 模型 → 反身知识</div>
+<p>如果把前面三条基本线并列起来：</p>
+<div class="formula">物质回答：什么结构存在？</div>
+<div class="formula">能量回答：什么过程能够发生？</div>
+<p>那么信息主要回答：</p>
+<div class="formula">系统怎样区分过去、现在、环境与可能未来？</div>
+</section>
+<section class="chapter" id="chapter-01"><div class="chapter-index">CHAPTER 01</div><h2>一、先把“信息”拆成几个完全不同的概念</h2>
+<p>这是整篇最重要的前提。 日常语言里我们会把以下东西全部叫“信息”：</p>
+<ul><li>一个DNA序列；</li><li>一张照片；</li><li>一条微信；</li><li>一个股票价格；</li><li>一条神经冲动；</li><li>一篇论文；</li><li>AI模型中的参数。</li></ul>
+<p>但它们并不属于完全相同的“信息”概念。 至少要区分四层：</p>
+<div class="table-scroll"><table><thead><tr><th>层级</th><th>核心问题</th><th>例子</th></tr></thead><tbody><tr><td>物理信息</td><td>系统处于哪个状态？</td><td>粒子位置、磁畴状态</td></tr><tr><td>香农信息</td><td>一个信号能减少多少不确定性？</td><td>比特、通信信道</td></tr><tr><td>功能信息</td><td>某种结构对系统行为有什么作用？</td><td>DNA、神经编码</td></tr><tr><td>语义信息</td><td>这个符号意味着什么？</td><td>语言、法律、科学理论</td></tr></tbody></table></div>
+<p>所以不能简单写成：</p>
+<div class="formula">Information=Meaning</div>
+<p>也不能写成：</p>
+<div class="formula">Information=Entropy</div>
+<p>更准确的是：</p>
+<div class="quote"><strong>不同层级的信息概念建立在不同问题上。</strong></div>
+<h3>二、如果建立一个统一的信息系统模型</h3>
+<p>可以把一个信息系统写成：</p>
+<div class="formula">mathcal I_t= (X_t,D_t,E_t,C_t,M_t,P_t,N_t,F_t)</div>
+<p>其中：</p>
+<div class="table-scroll"><table><thead><tr><th>变量</th><th>含义</th></tr></thead><tbody><tr><td><span class="inline-formula">X</span></td><td>States：系统可能状态</td></tr><tr><td><span class="inline-formula">D</span></td><td>Differences：可区分差异</td></tr><tr><td><span class="inline-formula">E</span></td><td>Encoding：编码规则</td></tr><tr><td><span class="inline-formula">C</span></td><td>Channel：传输通道</td></tr><tr><td><span class="inline-formula">M</span></td><td>Memory：存储机制</td></tr><tr><td><span class="inline-formula">P</span></td><td>Processing：处理与计算</td></tr><tr><td><span class="inline-formula">N</span></td><td>Network：信息传播网络</td></tr><tr><td><span class="inline-formula">F</span></td><td>Feedback：信息如何参与控制</td></tr></tbody></table></div>
+<p>于是信息史真正研究的是：</p>
+<div class="formula">系统怎样越来越有效地 获取差异、保存差异、压缩差异、传递差异并利用差异。</div>
+<h3>三、信息最原始的形式不是“文字”，而是“差异”</h3>
+<p>格雷戈里·贝特森有一句非常有名的话：</p>
+<div class="quote">information is a difference that makes a difference.</div>
+<p>如果用系统语言表达： 系统处于：</p>
+<div class="formula">State_A</div>
+<p>而不是：</p>
+<div class="formula">State_B</div>
+<p>本身就形成：</p>
+<div class="formula">Difference</div>
+<p>但只有当另一系统能够区分这个差异，并使行为发生变化时，它才进入更强意义的信息关系。 所以：</p>
+<div class="formula">Difference → Discrimination → Response</div>
+<p>可以看成信息史最早的逻辑结构。</p>
+<h3>四、第一阶段：物理世界首先产生的是“状态与相关性”</h3>
+<p>在生命出现以前，谈“信息”必须非常谨慎。 一个电子处在： 自旋向上， 而不是： 自旋向下。</p>
+<p>一个晶体： 具有某种排列， 而不是另一种排列。</p>
+<p>这些都是：</p>
+<div class="formula">PhysicalState</div>
+<p>如果两个变量之间存在相关：</p>
+<div class="formula">X↔ Y</div>
+<p>那么观察 <span class="inline-formula">X</span> 可以减少我们对 <span class="inline-formula">Y</span> 的不确定性。 这已经可以用：</p>
+<div class="formula">MutualInformation</div>
+<p>描述。</p>
+<h3>五、香农后来把这种“减少不确定性”形式化</h3>
+<p>对于离散随机变量 <span class="inline-formula">X</span>：</p>
+<div class="formula">H(X) = -Σ_x p(x)log_2p(x)</div>
+<p>这就是香农熵。 它测量：</p>
+<div class="quote">在知道结果之前，平均有多少不确定性。</div>
+<p>如果：</p>
+<div class="formula">P(X=1)=1</div>
+<p>那么：</p>
+<div class="formula">H(X)=0</div>
+<p>因为结果完全确定。 如果：</p>
+<div class="formula">P(0)=P(1)=0.5</div>
+<p>那么：</p>
+<div class="formula">H(X)=1\ bit</div>
+<p>不确定性最大。</p>
+<h3>六、所以“信息”首先可以被理解成对可能状态空间的区分</h3>
+<p>假设有：</p>
+<div class="formula">2^n</div>
+<p>种可能状态。 识别其中一个需要：</p>
+<div class="formula">n</div>
+<p>个比特。 于是：</p>
+<div class="formula">Information sim Reduction\ of\ uncertainty</div>
+<p>这就是现代数字信息世界能够成立的基础。</p>
+<h3>七、但这里必须避免一个最常见错误</h3>
+<p>不能说：</p>
+<div class="quote">“宇宙熵越高，信息就一定越少。”</div>
+<p>因为： 热力学熵、 香农熵、 算法复杂度、 语义信息， 不是一个概念。</p>
+<p>它们在特定条件下存在数学和物理联系， 但不能直接互换。 尤其不能简单写：</p>
+<div class="formula">Information=-Entropy</div>
+<p>作为普遍定律。</p>
+<h3>八、物理世界真正出现的第一种“记忆”是什么？</h3>
+<p>一个系统如果今天的状态：</p>
+<div class="formula">x_t</div>
+<p>取决于过去：</p>
+<div class="formula">x_t-1</div>
+<p>那么： 过去留下了：</p>
+<div class="formula">Trace</div>
+<p>例如： 岩石中的层理； 晶体缺陷； 磁畴； 放射性同位素比例； 撞击坑。</p>
+<p>这些结构： 都把过去的事件写进现在。 可以写：</p>
+<div class="formula">History → PersistentState</div>
+<p>这就是最广义的物理记忆。</p>
+<h3>九、所以“记忆”并不是从大脑开始</h3>
+<p>大脑只是高度复杂的记忆系统。 在此之前： 岩石已经记录： 地质历史。</p>
+<p>冰芯记录： 古气候。 树轮记录： 过去的环境。</p>
+<p>DNA记录： 演化历史。 共同结构都是：</p>
+<div class="formula">PastEvent → StateChange → Persistence</div>
+</section>
+<section class="chapter" id="chapter-02"><div class="chapter-index">CHAPTER 02</div><h2>十、第二阶段：物质结构开始成为信息载体</h2>
+<p>当物质能够形成大量稳定状态： 信息存储能力随之增加。 例如磁性材料： 可以形成：</p>
+<div class="formula">0</div>
+<p>和：</p>
+<div class="formula">1</div>
+<p>两种稳定状态。 DNA： 四种碱基：</p>
+<div class="formula">A,T,C,G</div>
+<p>电子设备： 高电压和低电压：</p>
+<div class="formula">1/0</div>
+<p>所以信息本身不是独立于物质的东西。 必须：</p>
+<div class="formula">Information</div>
+<p>被某种：</p>
+<div class="formula">PhysicalState</div>
+<p>承载。</p>
+<h3>十一、这得到一条极其重要的系统规律</h3>
+<div class="formula">No\ information without physical\ representation</div>
+<p>信息可以从纸： 复制到磁盘； 从磁盘： 复制到光纤； 再复制到内存。</p>
+<p>载体可以变化。 但每一次具体存在的信息， 都需要某种物理实现。</p>
+<h3>十二、这就是为什么信息与能量最终必然相遇</h3>
+<p>存储信息： 需要稳定状态。 传输信息： 需要物理信号。</p>
+<p>计算信息： 需要状态变化。 擦除信息： 存在热力学成本。</p>
+<p>Landauer原理给出： 在理想条件下不可逆擦除一个比特信息至少耗散：</p>
+<div class="formula">boxed E_min=k_BTln2</div>
+<p>这不是说： “一个bit等于这么多能量”。 而是说：</p>
+<div class="quote"><strong>不可逆信息处理存在最低热力学代价。</strong></div>
+<h3>十三、第三阶段：复杂化学——信息开始从“状态”转向“序列”</h3>
+<p>分子世界中出现一个关键突破： 同样的基本单元： 只要排列不同， 就能形成完全不同结构。</p>
+<p>例如：</p>
+<div class="formula">ABC</div>
+<p>和：</p>
+<div class="formula">ACB</div>
+<p>组成元素相同。 但序列不同。 于是：</p>
+<div class="formula">Composition → Sequence</div>
+<p>信息容量大幅增加。</p>
+<h3>十四、如果一个长度为 <span class="inline-formula">n</span> 的序列有 <span class="inline-formula">k</span> 种符号</h3>
+<p>可能序列数量：</p>
+<div class="formula">k^n</div>
+<p>因此： DNA只有四种主要碱基， 但长度足够大以后：</p>
+<div class="formula">4^n</div>
+<p>产生巨大状态空间。 所以序列带来：</p>
+<div class="formula">CombinatorialExplosion</div>
+<h3>十五、第四阶段：生命起源——信息第一次深度进入“自维持结构”</h3>
+<p>生命相较普通化学最关键的新结构之一是：</p>
+<div class="quote">某些分子排列不仅描述一个状态，还参与制造、维护和复制系统。</div>
+<p>DNA/RNA的特殊性不只是： “里面有信息”。 而是：</p>
+<div class="formula">Sequence</div>
+<p>通过复杂细胞机制： 影响：</p>
+<div class="formula">Protein</div>
+<p>再影响：</p>
+<div class="formula">Structure+Function</div>
+<p>所以：</p>
+<div class="formula">StoredPattern → FunctionalConsequence</div>
+<p>信息获得了功能性。</p>
+<h3>十六、这里必须避免一句过于简单的话</h3>
+<p>不能说：</p>
+<div class="formula">DNA=Blueprint</div>
+<p>然后把生命理解成建筑图纸。 因为生物体的生成还依赖： 细胞状态； 调控网络； 表观遗传； 空间结构； 环境； 发育过程。</p>
+<p>所以更准确：</p>
+<div class="formula">Phenotype = F( Genome, Regulation, Development, Environment )</div>
+<p>DNA是关键的信息结构， 但不是一个脱离系统就能独立“解释生命”的程序。</p>
+<h3>十七、生命真正完成的突破，是把“信息”和“复制”耦合起来</h3>
+<p>如果一个结构： 能够复制， 同时复制存在：</p>
+<div class="formula">Variation</div>
+<p>而变体具有不同：</p>
+<div class="formula">Fitness</div>
+<p>则：</p>
+<div class="formula">Variation → Selection → Retention</div>
+<p>于是过去成功的结构能够：</p>
+<div class="formula">Persist</div>
+<p>到未来。</p>
+<h3>十八、从信息论角度看，自然选择像一个历史过滤器</h3>
+<p>环境： 不断筛选： 哪些结构能够留下。</p>
+<p>于是： 过去的选择压力： 通过基因频率变化， 被部分写入： 今天的生物结构。</p>
+<p>所以：</p>
+<div class="formula">PastEnvironment → Selection → GenomeDistribution</div>
+<p>生命系统因此获得一种：</p>
+<h4>跨世代记忆。</h4>
+</section>
+<section class="chapter" id="chapter-03"><div class="chapter-index">CHAPTER 03</div><h2>十九、这和普通物理记忆有根本区别</h2>
+<p>岩石记录过去： 但它不会： 复制岩石记录。</p>
+<p>遗传系统： 则可以：</p>
+<div class="formula">Memory → Replication → Inheritance</div>
+<p>所以信息开始： 跨世代传播。</p>
+<h3>二十、第五阶段：遗传密码——系统第一次形成“符号映射规则”</h3>
+<p>DNA中： 三个核苷酸：</p>
+<div class="formula">Codon</div>
+<p>与： 氨基酸： 建立对应关系。</p>
+<p>例如： 某个codon：</p>
+<div class="formula">→ AminoAcid</div>
+<p>这是非常重要的一步：</p>
+<div class="formula">Symbol → Function</div>
+<p>当然遗传密码不是人类语言。 但它已经具有：</p>
+<div class="formula">EncodingMapping</div>
+<h3>二十一、于是生物信息系统开始具备四个基本部分</h3>
+<div class="formula">Storage + Code + Reader + Executor</div>
+<p>DNA： Storage。 遗传密码： Code。</p>
+<p>核糖体等： Reader。 蛋白质与细胞过程： Executor。</p>
+<p>这已经非常接近完整信息系统。</p>
+<h3>二十二、第六阶段：纠错——生命发现“信息保存需要冗余”</h3>
+<p>任何复制系统都会有：</p>
+<div class="formula">Error</div>
+<p>如果错误率过高： 信息无法稳定跨代保存。 于是生命发展出： DNA修复； 校对机制； 冗余编码。</p>
+<p>这揭示一个极深的系统规律：</p>
+<div class="formula">InformationPersistence requires ErrorControl</div>
+<h3>二十三、这一规律后来在人类通信系统中再次出现</h3>
+<p>数字通信： 也使用： 冗余； 校验码； 纠错码。</p>
+<p>例如：</p>
+<div class="formula">Message → EncodedMessage → NoisyChannel → DecodedMessage</div>
+<p>所以生物遗传与数字通信虽然机制完全不同， 却都面对同一个系统问题：</p>
+<div class="quote">如何让模式穿过噪声而不丢失？</div>
+<h3>二十四、第七阶段：感知——信息第一次用于实时环境控制</h3>
+<p>基因解决的是： 跨代适应。 但环境变化速度常常比世代更快。</p>
+<p>因此生命发展： 感受器。 例如： 光； 化学物； 温度； 压力。</p>
+<p>于是：</p>
+<div class="formula">Environment → Sensor → InternalSignal</div>
+<h3>二十五、这标志着系统从“历史信息”进入“实时信息”</h3>
+<p>遗传：</p>
+<div class="formula">Past\ information</div>
+<p>感知：</p>
+<div class="formula">Current\ information</div>
+<p>于是生命同时拥有：</p>
+<div class="formula">Memory_evolution</div>
+<p>与：</p>
+<div class="formula">Sensing_now</div>
+<h3>二十六、感知真正的功能不是“知道世界”</h3>
+<p>而是： 改善行动。 最简单的细菌趋化： 检测： 化学浓度变化。</p>
+<p>然后： 调整运动。 结构：</p>
+<div class="formula">Sense → Compare → Act</div>
+<p>这是非常原始的控制回路。</p>
+<h3>二十七、从这里开始，信息正式进入“控制系统”</h3>
+<p>没有信息： 系统无法知道： 自己是否偏离目标。</p>
+<p>有反馈：</p>
+<div class="formula">Reference - ActualState = Error</div>
+<p>控制器： 根据：</p>
+<div class="formula">Error</div>
+<p>调整行动。 于是：</p>
+<div class="formula">Information → Control</div>
+<p>这就是控制论最核心的一步。</p>
+</section>
+<section class="chapter" id="chapter-04"><div class="chapter-index">CHAPTER 04</div><h2>二十八、第八阶段：神经系统——分散信号变成高速网络</h2>
+<p>单细胞： 信息处理发生在一个细胞内部。 多细胞生命： 细胞之间需要： 通信。</p>
+<p>于是： 化学信号； 电信号； 神经系统， 逐步形成。</p>
+<p>结构：</p>
+<div class="formula">Sensor → NeuronNetwork → Muscle</div>
+<h3>二十九、神经系统真正解决的是“通信延迟”</h3>
+<p>体型变大以后： 单纯依赖慢速化学扩散：</p>
+<div class="formula">Latency↑</div>
+<p>神经系统： 通过电化学信号： 大幅加快：</p>
+<div class="formula">SignalSpeed</div>
+<p>于是：</p>
+<div class="formula">LargerSystem ⇒ NeedForFasterCommunication</div>
+<p>这和后来国家、电网、互联网的发展存在非常有意思的结构相似性。</p>
+<h3>三十、第九阶段：大脑——信息系统开始建立“内部世界模型”</h3>
+<p>简单反馈： 只需要：</p>
+<div class="formula">Stimulus→ Response</div>
+<p>但复杂环境： 需要： 预测。</p>
+<p>于是： 感觉信息：</p>
+<div class="formula">o_t</div>
+<p>被整合成内部状态：</p>
+<div class="formula">hatx_t</div>
+<p>然后：</p>
+<div class="formula">Model → Prediction → Action</div>
+<h3>三十一、这是一场极其重要的跃迁</h3>
+<p>系统不再只能回答：</p>
+<div class="quote">“现在发生了什么？”</div>
+<p>还开始回答：</p>
+<div class="quote">“接下来可能发生什么？”</div>
+<p>所以：</p>
+<div class="formula">Information</div>
+<p>从：</p>
+<div class="formula">Description</div>
+<p>升级为：</p>
+<div class="formula">Prediction</div>
+<h3>三十二、于是“模型”成为新的信息结构</h3>
+<p>现实世界： 高维。 大脑： 不可能保存全部细节。</p>
+<p>所以必须：</p>
+<div class="formula">Compression</div>
+<p>把大量感觉： 压缩成： 对象； 类别； 因果； 空间； 时间； 角色。</p>
+<p>于是：</p>
+<div class="formula">World → Compressed\ Model</div>
+<h3>三十三、这意味着认知本身是一种信息压缩</h3>
+<p>例如看到： 一百次不同角度的狗。 大脑不会分别建立： 100个毫无关系的状态。</p>
+<p>而形成：</p>
+<div class="formula">Category:Dog</div>
+<p>这就是：</p>
+<div class="formula">ManyObservations → LatentStructure</div>
+<h3>三十四、信息压缩为什么如此重要？</h3>
+<p>因为系统的计算资源有限。 如果每一次都从原始数据开始：</p>
+<div class="formula">Cost↑</div>
+<p>所以：</p>
+<div class="formula">Model</div>
+<p>其实是： 对过去经验的一种压缩存储。 于是：</p>
+<div class="formula">Learning = Extracting\ reusable\ structure</div>
+<h3>三十五、第十阶段：学习——信息开始在个体生命期间积累</h3>
+<p>基因： 更新速度：</p>
+<div class="formula">Generational</div>
+<p>学习： 更新速度：</p>
+<div class="formula">WithinLifetime</div>
+<p>于是：</p>
+<div class="formula">AdaptationRate↑</div>
+<p>主体可以根据一次事件： 改变后续行为。 结构：</p>
+<div class="formula">Experience_t → Memory_t → Policy_t+1</div>
+<h3>三十六、到这里，生命已经拥有三层信息时间尺度</h3>
+<div class="formula">EvolutionaryMemory + IndividualMemory + RealTimeSensing</div>
+<p>即： 基因： 慢。</p>
+<p>学习： 中。 感知： 快。</p>
+<p>这是多时间尺度信息系统。</p>
+</section>
+<section class="chapter" id="chapter-05"><div class="chapter-index">CHAPTER 05</div><h2>三十七、第十一阶段：社会动物——信息开始在个体之间复制</h2>
+<p>如果一个动物： 发现： 食物位置。</p>
+<p>通过叫声： 通知其他个体。 那么：</p>
+<div class="formula">Brain_A → Signal → Brain_B</div>
+<p>信息第一次大规模突破： 单个神经系统边界。</p>
+<h3>三十八、这意味着一个巨大的跃迁</h3>
+<p>原来：</p>
+<div class="formula">Knowledge_i</div>
+<p>死亡以后： 大部分消失。 社会传递出现以后： 知识可以：</p>
+<div class="formula">Individual_A → Individual_B</div>
+<p>于是：</p>
+<div class="formula">InformationLifetime &gt; IndividualLifetime</div>
+<h3>三十九、第十二阶段：语言——信息第一次获得开放式组合能力</h3>
+<p>动物通信往往： 信号集合有限。 人类语言： 具有： 组合性。</p>
+<p>有限词汇： 可以形成： 近乎无限句子。</p>
+<p>例如：</p>
+<div class="formula">Words + Grammar → UnboundedExpressions</div>
+<p>这是一场信息组合革命。</p>
+<h3>四十、语言真正带来的并不只是“交流更方便”</h3>
+<p>而是：</p>
+<div class="quote"><strong>可以把不存在于眼前的对象也编码。</strong></div>
+<p>可以讨论： 过去； 未来； 假设； 神； 法律； 战争计划； 数学对象。</p>
+<p>因此：</p>
+<div class="formula">Information</div>
+<p>从：</p>
+<div class="formula">CurrentEnvironment</div>
+<p>扩展到：</p>
+<div class="formula">CounterfactualWorlds</div>
+<h3>四十一、人类从此可以交换“模型”，而不只是交换信号</h3>
+<p>比如： 一个人说：</p>
+<div class="quote">“山那边有一群猎物。”</div>
+<p>听者没有亲自看见。 但：</p>
+<div class="formula">Model_A → Language → Model_B</div>
+<p>于是： 信息交流从：</p>
+<div class="formula">SignalTransmission</div>
+<p>升级成：</p>
+<div class="formula">ModelTransmission</div>
+<h3>四十二、第十三阶段：叙事——人类开始压缩长时间因果结构</h3>
+<p>故事： 不是随机信息堆积。 它把： 事件A； 事件B； 人物； 动机； 结果， 压缩成：</p>
+<div class="formula">Narrative</div>
+<p>于是：</p>
+<div class="formula">Events → CausalSequence</div>
+<p>这让人类可以： 用一个人的经验， 训练很多人。</p>
+<h3>四十三、神话、法律和习俗也属于这种信息技术</h3>
+<p>它们把： 大量历史经验和社会规则， 压缩成： 可记忆结构。</p>
+<p>例如： “不能偷盗” 背后可能对应： 复杂的社会稳定逻辑。</p>
+<p>但规则将其压缩为：</p>
+<div class="formula">Rule</div>
+<p>所以：</p>
+<div class="formula">ComplexExperience → SimpleNorm</div>
+<h3>四十四、第十四阶段：文字——信息第一次大规模脱离人脑</h3>
+<p>语言仍然依赖：</p>
+<div class="formula">Brain_A→ Brain_B</div>
+<p>文字出现以后：</p>
+<div class="formula">Brain → ExternalMedium</div>
+<p>于是：</p>
+<div class="formula">Memory</div>
+<p>被外部化。</p>
+<h3>四十五、这是人类信息史最大的断点之一</h3>
+<p>因为： 人脑死亡： 文字仍存在。</p>
+<p>信息开始： 跨越： 时间； 空间； 个体。</p>
+<p>所以：</p>
+<div class="formula">BiologicalMemory → ExternalMemory</div>
+</section>
+<section class="chapter" id="chapter-06"><div class="chapter-index">CHAPTER 06</div><h2>四十六、文字也改变了文明规模</h2>
+<p>口头社会中： 治理复杂度受到： 人的记忆限制。</p>
+<p>有账簿以后： 可以记录： 税收； 土地； 债务； 人口； 法律。</p>
+<p>于是：</p>
+<div class="formula">InformationCapacity↑</div>
+<p>支持：</p>
+<div class="formula">OrganizationScale↑</div>
+<p>这和我们前面金融史里看到： 账簿让债务网络扩大， 其实是同一个结构。</p>
+<h3>四十七、文明开始出现一个重要规律</h3>
+<div class="formula">OrganizationScale ≤ InformationProcessingCapacity</div>
+<p>组织越大： 需要记录： 更多状态。</p>
+<p>国家越大： 需要： 更多行政信息。</p>
+<p>企业越大： 需要： 更多会计和管理系统。</p>
+<p>军队越大： 需要： 更多指挥与通信。</p>
+<h3>四十八、第十五阶段：数字与数学——信息开始被高度抽象</h3>
+<p>文字： 描述具体事物。 数学： 进一步把关系抽象出来。</p>
+<p>例如： 三只羊； 三个苹果； 三个士兵， 全部可以压缩成：</p>
+<div class="formula">3</div>
+<p>这意味着：</p>
+<div class="formula">DifferentObjects → SameStructure</div>
+<h3>四十九、数学从系统论看是一种极端的信息压缩</h3>
+<p>例如： 牛顿运动定律： 用几个公式， 可以描述： 大量运动现象。</p>
+<p>于是：</p>
+<div class="formula">10^9\ observations</div>
+<p>可能被压缩为： 少量方程。 因此：</p>
+<div class="formula">Theory = Compression\ of\ regularity</div>
+<p>当然理论还要求解释、预测和可检验性，不能仅仅等同于压缩。</p>
+<h3>五十、第十六阶段：印刷术——信息复制成本发生断崖式下降</h3>
+<p>手抄时代： 复制一本书： 成本很高。</p>
+<p>印刷：</p>
+<div class="formula">CopyCost↓</div>
+<p>于是：</p>
+<div class="formula">Copies↑↑</div>
+<p>信息从： 稀缺物品， 进入： 规模复制。</p>
+<h3>五十一、这里第一次出现信息经济的一个核心规律</h3>
+<p>信息与普通物质商品不同。 制作第一份信息： 可能很贵。</p>
+<p>复制第二份： 可能非常便宜。 即：</p>
+<div class="formula">FixedCost↑</div>
+<div class="formula">MarginalCopyCost↓</div>
+<p>数字时代甚至：</p>
+<div class="formula">MarginalCost≈0</div>
+<h3>五十二、因此信息天然具有高复制性</h3>
+<p>一块面包： 给A以后， B不能再吃。</p>
+<p>但一个公式： 告诉A以后， 还可以同时告诉B。</p>
+<p>所以信息具有：</p>
+<div class="formula">NonRivalry</div>
+<p>倾向。 这会深刻改变： 知识产权； 软件； 互联网； AI经济。</p>
+<h3>五十三、第十七阶段：科学方法——信息系统开始制度化纠错</h3>
+<p>传统知识： 可能依赖： 权威。</p>
+<p>科学逐渐形成：</p>
+<div class="formula">Observation → Hypothesis → Experiment → Replication → Correction</div>
+<p>核心不是： “科学永远正确”。 而是：</p>
+<div class="formula">Error\ Correction</div>
+<p>被嵌入知识生产制度。</p>
+<h3>五十四、这与生命DNA修复出现了结构上的遥远呼应</h3>
+<p>DNA：</p>
+<div class="formula">Copy → Check → Repair</div>
+<p>科学：</p>
+<div class="formula">Claim → Test → Replicate → Correct</div>
+<p>两者并非相同系统， 但都面对：</p>
+<div class="formula">InformationPersistence vs Error</div>
+<p>这一普遍问题。</p>
+</section>
+<section class="chapter" id="chapter-07"><div class="chapter-index">CHAPTER 07</div><h2>五十五、第十八阶段：印刷 + 科学 + 学术网络——知识开始成为分布式系统</h2>
+<p>不再是： 一个天才保存全部知识。 而是：</p>
+<div class="formula">Researcher_1+·s+Researcher_n</div>
+<p>通过： 论文； 书籍； 学会； 大学， 组成：</p>
+<div class="formula">KnowledgeNetwork</div>
+<h3>五十六、知识系统从“个人记忆”升级为“社会记忆”</h3>
+<p>没有任何一个人： 掌握所有现代医学、 物理、 数学、 工程学。</p>
+<p>但是： 社会整体： 可以。</p>
+<p>于是：</p>
+<div class="formula">Knowledge_society ≫ Knowledge_individual</div>
+<p>这就是：</p>
+<div class="formula">DistributedCognition</div>
+<h3>五十七、第十九阶段：电报——信息第一次显著脱离物质运输速度</h3>
+<p>此前： 信息速度大体受： 人； 马； 船， 限制。</p>
+<p>电报出现： 消息不再需要： 随人或纸张移动。</p>
+<p>于是：</p>
+<div class="formula">InformationTransport</div>
+<p>和：</p>
+<div class="formula">MatterTransport</div>
+<p>开始解耦。</p>
+<h3>五十八、这是一场非常深的文明跃迁</h3>
+<p>过去：</p>
+<div class="formula">InformationSpeed ≈ TransportationSpeed</div>
+<p>电报以后：</p>
+<div class="formula">InformationSpeed ≫ TransportationSpeed</div>
+<p>这直接改变： 金融市场； 战争； 新闻； 国家管理； 企业组织。</p>
+<h3>五十九、第二十阶段：电话与广播——信息开始实时化与一对多传播</h3>
+<p>电报： 主要传： 编码文字。</p>
+<p>电话： 传声音。 广播： 实现：</p>
+<div class="formula">1→ N</div>
+<p>于是： 一个信息源： 可以同时影响： 数百万个节点。</p>
+<p>信息网络开始形成：</p>
+<div class="formula">CentralizedBroadcast</div>
+<h3>六十、这里首次大规模出现“注意力集中”</h3>
+<p>如果一个广播中心： 可以影响：</p>
+<div class="formula">10^6</div>
+<p>个人。 那么：</p>
+<div class="formula">NetworkCentrality</div>
+<p>本身成为： 权力。 于是：</p>
+<div class="formula">InformationNetworkStructure → SocialPower</div>
+<p>这与后来互联网平台更加明显。</p>
+<h3>六十一、第二十一阶段：香农——信息第一次摆脱“意义”成为可计算对象</h3>
+<p>1948年香农信息论的革命性在于： 他暂时不问：</p>
+<div class="quote">消息“什么意思”？</div>
+<p>而问：</p>
+<div class="quote">信道能够多可靠地传递多少符号？</div>
+<p>于是：</p>
+<div class="formula">SemanticMeaning</div>
+<p>被暂时放在系统之外。 只研究：</p>
+<div class="formula">Source → Encoder → Channel → Decoder → Receiver</div>
+<h3>六十二、这是一种极其强大的抽象</h3>
+<p>因为： 声音； 文字； 图像； 视频； 都可以统一成：</p>
+<div class="formula">Symbols</div>
+<p>然后研究： 带宽； 噪声； 编码； 信道容量。</p>
+<p>信息第一次拥有统一工程语言。</p>
+<h3>六十三、信道容量的基本思想是</h3>
+<p>有噪声时： 并不是： 只能接受错误。</p>
+<p>可以通过编码， 在一定条件下： 实现任意低错误率的通信。</p>
+<p>这就是香农信道编码定理的巨大意义。 于是：</p>
+<div class="formula">Noise ≠ InevitableInformationLoss</div>
+<p>只要： 编码和速率设计得当。</p>
+</section>
+<section class="chapter" id="chapter-08"><div class="chapter-index">CHAPTER 08</div><h2>六十四、第二十二阶段：数字化——世界被重新编码成bit</h2>
+<p>文字： 变成bit。 声音： 变成bit。</p>
+<p>图片： 变成bit。 视频： 变成bit。</p>
+<p>金融资产记录： 也变成bit。 于是：</p>
+<div class="formula">HeterogeneousInformation → BinaryRepresentation</div>
+<p>形成统一底层接口。</p>
+<h3>六十五、这和电力标准化能源形式非常相似</h3>
+<p>能源世界： 不同能源：</p>
+<div class="formula">→ Electricity</div>
+<p>信息世界： 不同内容：</p>
+<div class="formula">→ Bits</div>
+<p>于是：</p>
+<div class="formula">Digitalization = InformationStandardization</div>
+<p>这是结构类比，不是说bit和电是同一回事。</p>
+<h3>六十六、一旦信息变成bit，就产生三个革命性后果</h3>
+<p>第一：</p>
+<h4>无损复制</h4>
+<div class="formula">010101</div>
+<p>复制以后： 还是：</p>
+<div class="formula">010101</div>
+<p>不会像模拟复印一样： 每代不断衰减。 第二：</p>
+<h4>通用计算</h4>
+<p>同一台机器： 可以处理： 文本； 图像； 音乐； 财务模型。</p>
+<p>第三：</p>
+<h4>网络统一</h4>
+<p>所有类型信息： 都可以通过同一通信基础设施传输。</p>
+<h3>六十七、第二十三阶段：图灵机——信息处理规则本身被形式化</h3>
+<p>图灵的真正突破之一是： 把“计算”抽象为： 有限规则作用于符号。</p>
+<p>于是：</p>
+<div class="formula">Input → Algorithm → Output</div>
+<p>计算第一次从： 人的能力， 抽象为： 可以由机器执行的形式过程。</p>
+<h3>六十八、这里发生一次重要跃迁</h3>
+<p>以前机器处理： 物质和能量。 蒸汽机： 处理能量。</p>
+<p>纺织机： 处理材料。 计算机： 主要处理：</p>
+<div class="formula">RepresentedStates</div>
+<p>也就是信息。</p>
+<h3>六十九、第二十四阶段：存储程序计算机——规则本身也变成数据</h3>
+<p>早期机器： 程序可能固化在机械结构里。 存储程序架构： 程序：</p>
+<div class="formula">Program</div>
+<p>也存储为：</p>
+<div class="formula">Bits</div>
+<p>于是：</p>
+<div class="formula">Data</div>
+<p>和：</p>
+<div class="formula">Program</div>
+<p>在物理存储层拥有统一形式。</p>
+<h3>七十、这是一次极其深的反身性萌芽</h3>
+<p>机器中的信息： 不仅描述： “要处理什么”。</p>
+<p>还描述： “应该怎样处理信息”。 即：</p>
+<div class="formula">Information about InformationProcessing</div>
+<p>这已经接近： Meta-information。</p>
+<h3>七十一、第二十五阶段：互联网——信息从“中心广播”转向“网络互联”</h3>
+<p>传统广播：</p>
+<div class="formula">One→ Many</div>
+<p>互联网：</p>
+<div class="formula">Many↔ Many</div>
+<p>任何节点： 理论上既可以： 接受， 也可以： 发送。</p>
+<p>于是：</p>
+<div class="formula">InformationNetwork</div>
+<p>变成： 分布式网络。</p>
+<h3>七十二、互联网最深的意义不是“网页很多”</h3>
+<p>而是：</p>
+<div class="formula">Address + Protocol + PacketSwitching</div>
+<p>让异构计算机可以： 进入统一通信体系。 于是：</p>
+<div class="formula">LocalComputers → GlobalInformationNetwork</div>
+</section>
+<section class="chapter" id="chapter-09"><div class="chapter-index">CHAPTER 09</div><h2>七十三、信息网络出现新的系统性质：网络效应</h2>
+<p>节点数量：</p>
+<div class="formula">N↑</div>
+<p>潜在连接数量： 快速增加。 虽然真实价值不会简单严格按照 <span class="inline-formula">N^2</span> 增长， 但结构上：</p>
+<div class="formula">NetworkUtility</div>
+<p>通常会随参与者增加显著提高。 于是：</p>
+<div class="formula">Users↑ → Content↑ → Value↑ → Users↑</div>
+<p>形成正反馈。</p>
+<h3>七十四、第二十六阶段：搜索引擎——问题从“有没有信息”变成“如何找到信息”</h3>
+<p>互联网解决：</p>
+<div class="formula">Storage + Transmission</div>
+<p>但当信息爆炸以后： 新瓶颈变成：</p>
+<div class="formula">Attention</div>
+<p>与：</p>
+<div class="formula">Retrieval</div>
+<p>所以搜索引擎的核心不是制造信息。 而是建立：</p>
+<div class="formula">Query → RelevantInformation</div>
+<p>映射。</p>
+<h3>七十五、信息系统第一次遇到一个新的反常现象</h3>
+<div class="formula">InformationSupply↑</div>
+<p>不一定意味着：</p>
+<div class="formula">Knowledge↑</div>
+<p>甚至可能：</p>
+<div class="formula">Signal/Noise\ Ratio↓</div>
+<p>因此：</p>
+<div class="quote"><strong>信息稀缺时代的问题是获得信息；信息过剩时代的问题是筛选信息。</strong></div>
+<h3>七十六、于是信息史从“传输问题”进入“过滤问题”</h3>
+<p>早期：</p>
+<div class="formula">How\ to\ send?</div>
+<p>后来：</p>
+<div class="formula">How\ to\ store?</div>
+<p>现在：</p>
+<div class="formula">How\ to\ select?</div>
+<p>这是一条极其重要的演化：</p>
+<div class="formula">Acquisition → Transmission → Storage → Selection</div>
+<h3>七十七、第二十七阶段：社交媒体——信息开始大规模进入行为反馈闭环</h3>
+<p>用户： 看到内容。 产生： 点击； 点赞； 停留。</p>
+<p>平台获得：</p>
+<div class="formula">BehaviorData</div>
+<p>算法： 更新推荐。 于是：</p>
+<div class="formula">Behavior_t → Data_t → Model_t → Recommendation_t+1 → Behavior_t+1</div>
+<p>这和前面微观经济分析完全接上。</p>
+<h3>七十八、这里信息不再只是“告诉人世界是什么”</h3>
+<p>而开始：</p>
+<div class="formula">ShapeEnvironment</div>
+<p>即： 信息系统主动塑造用户看到的世界。 因此：</p>
+<div class="formula">Information → Behavior → NewInformation</div>
+<p>形成反身闭环。</p>
+<h3>七十九、这带来一个重要转变</h3>
+<p>传统媒体：</p>
+<div class="formula">Content → Audience</div>
+<p>现代平台：</p>
+<div class="formula">AudienceBehavior → Algorithm → ContentSelection → AudienceBehavior</div>
+<p>系统开始： 自适应。</p>
+<h3>八十、第二十八阶段：大数据——信息第一次从“人工记录”变成“自动行为痕迹”</h3>
+<p>过去大多数数据： 人主动写。 例如： 账簿； 调查； 报告。</p>
+<p>现代数字系统： 用户每一次： 点击； 移动； 支付； 浏览； 搜索， 都会自动留下：</p>
+<div class="formula">DigitalTrace</div>
+<p>于是：</p>
+<div class="formula">Behavior → Data</div>
+<p>几乎实时发生。</p>
+<h3>八十一、数据系统开始建立“数字镜像”</h3>
+<p>现实中的： 人； 城市； 工厂； 金融市场， 越来越拥有： 数字表示。</p>
+<p>例如：</p>
+<div class="formula">PhysicalState → DigitalState</div>
+<p>可以形成： Digital Twin。 于是： 系统能够： 观察； 模拟； 预测； 优化。</p>
+</section>
+<section class="chapter" id="chapter-10"><div class="chapter-index">CHAPTER 10</div><h2>八十二、第二十九阶段：机器学习——信息处理从“人工写规则”进入“从数据提取规则”</h2>
+<p>经典程序：</p>
+<div class="formula">Rules+Data → Output</div>
+<p>机器学习：</p>
+<div class="formula">Data+Outcomes → Model</div>
+<p>然后：</p>
+<div class="formula">Model+NewData → Prediction</div>
+<p>这是信息史又一次根本跃迁。</p>
+<h3>八十三、机器学习真正做的是什么？</h3>
+<p>从大量样本：</p>
+<div class="formula">x_1,ldots,x_n</div>
+<p>中寻找：</p>
+<div class="formula">Pattern</div>
+<p>然后压缩进：</p>
+<div class="formula">θ</div>
+<p>模型参数。 所以：</p>
+<div class="formula">Dataset → CompressedStatisticalStructure</div>
+<p>模型本身就是一种： 高度压缩的信息结构。</p>
+<h3>八十四、因此训练可以看成“信息压缩 + 函数构造”</h3>
+<p>大量经验：</p>
+<div class="formula">D</div>
+<p>被压缩为：</p>
+<div class="formula">Model_θ</div>
+<p>之后： 模型不需要重新查看全部数据， 就可以对新输入： 进行预测。</p>
+<p>这和大脑从经验形成内部模型， 在抽象层面有明显对应。</p>
+<h3>八十五、第三十阶段：生成式AI——信息系统从“检索已有信息”进入“生成新表示”</h3>
+<p>搜索引擎主要：</p>
+<div class="formula">Query → ExistingDocument</div>
+<p>生成模型：</p>
+<div class="formula">Context → NewSequence</div>
+<p>它不是简单复制数据库中的某一条文本。 而是利用训练中形成的统计结构： 产生新的组合。</p>
+<h3>八十六、于是信息处理发生一个重大变化</h3>
+<p>过去：</p>
+<div class="formula">Storage → Retrieval</div>
+<p>现在增加：</p>
+<div class="formula">Model → Generation</div>
+<p>所以：</p>
+<div class="formula">InformationSystem → GenerativeSystem</div>
+<h3>八十七、但必须非常谨慎地说“新信息”</h3>
+<p>生成一个此前不存在的句子： 当然形成了新的符号排列。 但： 这不自动意味着： 产生了新的真实知识。</p>
+<p>因为：</p>
+<div class="formula">GeneratedContent ≠ VerifiedKnowledge</div>
+<p>所以AI时代的核心问题之一又重新变成：</p>
+<div class="formula">Verification</div>
+<h3>八十八、这说明信息、知识和真理必须重新分开</h3>
+<p>可以粗略写：</p>
+<div class="formula">Data ≠ Information ≠ Knowledge ≠ Truth</div>
+<h4>Data</h4>
+<p>记录的状态或符号。</p>
+<h4>Information</h4>
+<p>能够减少某种不确定性的结构。</p>
+<h4>Knowledge</h4>
+<p>经过模型、解释、经验或验证组织起来的信息。</p>
+<h4>Truth</h4>
+<p>知识主张与其对象之间是否成立的问题。 所以： 信息数量：</p>
+<div class="formula">↑</div>
+<p>并不意味着： 真理数量： 同比增加。</p>
+<h3>八十九、第三十一阶段：Agent——信息开始直接驱动行动</h3>
+<p>过去： AI： 给答案。</p>
+<p>Agent系统进一步：</p>
+<div class="formula">Observe → Reason/Model → Act → Observe</div>
+<p>于是信息系统开始进入： 完整控制闭环。</p>
+<h3>九十、这里发生了一次极其重要的转变</h3>
+<p>传统信息技术：</p>
+<div class="formula">Human → Computer → Information → Human</div>
+<p>Agent： 可能：</p>
+<div class="formula">Computer → Information → Action → Environment</div>
+<p>人不再是每一个行动的即时执行者。</p>
+</section>
+<section class="chapter" id="chapter-11"><div class="chapter-index">CHAPTER 11</div><h2>九十一、信息因此再次与控制合流</h2>
+<p>我们回到了控制论：</p>
+<div class="formula">Information → Decision → Action → Feedback</div>
+<p>只是现在： 控制器可能不再是： 单纯人类。</p>
+<p>而是：</p>
+<div class="formula">Human+AI</div>
+<p>甚至部分自主AI。</p>
+<h3>九十二、如果把整个信息演化史压缩，会发现其实经历了九次核心跃迁</h3>
+<div class="table-scroll"><table><thead><tr><th>阶段</th><th>核心跃迁</th></tr></thead><tbody><tr><td>物理世界</td><td>状态差异</td></tr><tr><td>稳定结构</td><td>差异可以留下痕迹</td></tr><tr><td>生命</td><td>序列可以复制</td></tr><tr><td>遗传</td><td>信息跨世代积累</td></tr><tr><td>神经系统</td><td>实时感知与处理</td></tr><tr><td>大脑</td><td>建立预测模型</td></tr><tr><td>语言/文字</td><td>信息跨个体、跨世代外部化</td></tr><tr><td>计算机/互联网</td><td>信息数字化、计算化、网络化</td></tr><tr><td>AI</td><td>模型化、生成化、行动化</td></tr></tbody></table></div>
+<h3>九十三、再压缩成一条更深的演化线</h3>
+<div class="formula">Difference → Memory → Code → Replication → Communication → Computation → Model → Generation → Control</div>
+<p>但这里真正改变的不是“宇宙中的信息越来越多”。 而是：</p>
+<div class="quote"><strong>越来越多系统获得了利用信息改变自身未来状态的能力。</strong></div>
+<h3>九十四、这就是信息史第一条最重要的元规律</h3>
+<h4>信息从“描述状态”逐渐进入“控制状态”</h4>
+<p>最早： 信息只是：</p>
+<div class="formula">State</div>
+<p>生命：</p>
+<div class="formula">State → Response</div>
+<p>神经系统：</p>
+<div class="formula">State → Prediction → Action</div>
+<p>文明：</p>
+<div class="formula">Knowledge → Technology → EnvironmentChange</div>
+<p>所以：</p>
+<div class="formula">Representation → Control</div>
+<p>是整条信息史的一条主线。</p>
+<h3>九十五、第二条规律：信息越来越与载体解耦，但永远无法脱离载体</h3>
+<p>最早： 信息和物体几乎不可分。 一个岩石纹理： 就是那块岩石。</p>
+<p>文字出现： 同一句话： 可以写在： 竹简； 纸； 石头。</p>
+<p>数字化之后： 同一个文件： 可以存在： 硬盘； 光纤； 内存； 云端。</p>
+<p>于是：</p>
+<div class="formula">Content</div>
+<p>和：</p>
+<div class="formula">Carrier</div>
+<p>越来越解耦。 但绝不是：</p>
+<div class="formula">Information</div>
+<p>脱离物理世界。 正确结构：</p>
+<div class="formula">LogicalIndependence↑ but PhysicalDependence\ remains</div>
+<h3>九十六、第三条规律：存储不断把时间解耦</h3>
+<p>口头交流：</p>
+<div class="formula">SenderTime = ReceiverTime</div>
+<p>文字：</p>
+<div class="formula">SenderTime ≠ ReceiverTime</div>
+<p>所以：</p>
+<div class="formula">Memory = TemporalDecoupling</div>
+<p>这与能源中的储能高度相似。</p>
+<h3>九十七、第四条规律：通信不断把空间解耦</h3>
+<p>面对面：</p>
+<div class="formula">SenderLocation = ReceiverLocation</div>
+<p>电报、电话、互联网：</p>
+<div class="formula">SenderLocation ≠ ReceiverLocation</div>
+<p>于是：</p>
+<div class="formula">Communication = SpatialDecoupling</div>
+<h3>九十八、因此信息文明也完成了两次巨大解耦</h3>
+<div class="formula">Memory ⇒ TimeDecoupling</div>
+</section><section class="synthesis" id="synthesis"><div class="section-label">系统性收束 / SYNTHESIS</div><h2>把历史重新压缩成一条可解释的主线</h2><ol><li>信息演化关键是保存差异、跨时空复制并接入反馈控制。</li><li>载体革命扩大记忆半径，也制造噪声、过载和验证成本。</li><li>信息被系统解释并改变行动时，才转为功能性意义。</li><li>AI 读取人类行为，又通过输出改变后续数据，形成反身性。</li></ol><div class="caveat"><b>重要限定：</b>物理信息、香农信息、语义、知识和智慧不是同一概念。信息量大不等于真实、相关或可行动。</div></section></div></div></div><footer class="footer"><span><a href="/reading/thinking/energy-evolution/">← 能量演化史</a></span><span>系统论长文集 · 从结构、反馈、信息与演化理解复杂世界</span><span><a href="/reading/thinking/human-body-system/">人体系统 →</a></span></footer>
