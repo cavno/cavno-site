@@ -1,6 +1,7 @@
 ---
 import '../styles/global.css';
 import nav from '../content/nav.json';
+import GlobalSearch from '../components/GlobalSearch.astro';
 
 interface Props {
   title?: string;
@@ -66,6 +67,11 @@ const restricted = norm.startsWith('/working/');
     </nav>
 
     <div class="cv-head-actions">
+      <button class="cv-btn cv-btn-line cv-search-open" type="button" data-cv-search-open aria-haspopup="dialog" aria-controls="cvGlobalSearch" aria-expanded="false">
+        <span class="cv-search-open-icon" aria-hidden="true"></span>
+        搜索全站
+        <kbd>/</kbd>
+      </button>
       <a class="cv-btn cv-btn-ink" href="/#recent">最近更新</a>
     </div>
 
@@ -93,8 +99,14 @@ const restricted = norm.startsWith('/working/');
       </div>
     </div>
   ))}
+  <button class="cv-btn cv-btn-line cv-drawer-search" type="button" data-cv-search-open aria-haspopup="dialog" aria-controls="cvGlobalSearch" aria-expanded="false">
+    <span class="cv-search-open-icon" aria-hidden="true"></span>
+    搜索全站
+  </button>
   <a class="cv-btn cv-btn-ink" href="/#recent">浏览最近更新</a>
 </div>
+
+<GlobalSearch />
 
 <main id="cvMain">
   <slot />

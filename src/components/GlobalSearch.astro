@@ -1,0 +1,247 @@
+<div class="cv-global-search" id="cvGlobalSearch" hidden>
+  <button class="cv-gs-backdrop" type="button" data-cv-search-close aria-label="关闭全站搜索"></button>
+  <section class="cv-gs-panel" role="dialog" aria-modal="true" aria-labelledby="cvGlobalSearchTitle">
+    <div class="cv-gs-head">
+      <div>
+        <div class="cv-eyebrow">Search Cavno</div>
+        <h2 id="cvGlobalSearchTitle">搜索全站内容</h2>
+      </div>
+      <button class="cv-gs-close" type="button" data-cv-search-close aria-label="关闭全站搜索">×</button>
+    </div>
+
+    <form class="cv-search-form cv-gs-form" id="cvGlobalSearchForm" role="search">
+      <span class="cv-search-icon" aria-hidden="true"></span>
+      <label class="cv-sr-only" for="cvGlobalSearchInput">搜索标题、摘要、标签和正文</label>
+      <input
+        id="cvGlobalSearchInput"
+        type="search"
+        inputmode="search"
+        autocomplete="off"
+        placeholder="搜索标题、摘要、标签和正文…"
+      />
+      <button type="submit">搜索</button>
+    </form>
+    <div class="cv-search-status cv-gs-status" id="cvGlobalSearchStatus" aria-live="polite">输入关键词开始搜索</div>
+    <div class="cv-search-results cv-gs-results" id="cvGlobalSearchResults" role="list" hidden></div>
+    <div class="cv-gs-hint"><kbd>/</kbd> 打开搜索 <span>·</span> <kbd>Esc</kbd> 关闭</div>
+  </section>
+</div>
+
+<script>
+  import { coverClassName, coverStyle, type CoverDesign } from '../lib/cover-design';
+
+  interface SearchEntry {
+    href: string;
+    title: string;
+    summary: string;
+    tags: string[];
+    sectionLabel: string;
+    subsectionLabel: string;
+    date: string;
+    updatedAt: number;
+    cover: CoverDesign;
+    text: string;
+    _search?: string;
+  }
+
+  const overlay = document.getElementById('cvGlobalSearch');
+  const panel = overlay?.querySelector('.cv-gs-panel') as HTMLElement | null;
+  const form = document.getElementById('cvGlobalSearchForm') as HTMLFormElement | null;
+  const input = document.getElementById('cvGlobalSearchInput') as HTMLInputElement | null;
+  const status = document.getElementById('cvGlobalSearchStatus');
+  const results = document.getElementById('cvGlobalSearchResults');
+  const openers = Array.from(document.querySelectorAll<HTMLElement>('[data-cv-search-open]'));
+  const closers = Array.from(document.querySelectorAll<HTMLElement>('[data-cv-search-close]'));
+  let index: SearchEntry[] | null = null;
+  let loading: Promise<SearchEntry[]> | null = null;
+  let returnFocus: HTMLElement | null = null;
+  let timer = 0;
+
+  const normalise = (value: string) => value
+    .normalize('NFKC')
+    .toLocaleLowerCase('zh-CN')
+    .replace(/[^\p{Letter}\p{Number}+#.\-]+/gu, ' ')
+    .trim();
+
+  const drawerIsOpen = () => document.getElementById('cvDrawer')?.classList.contains('open') ?? false;
+
+  const loadIndex = async () => {
+    if (index) return index;
+    if (!loading) {
+      status && (status.textContent = '正在载入全站索引…');
+      input?.setAttribute('aria-busy', 'true');
+      loading = fetch('/search-index.json')
+        .then((response) => {
+          if (!response.ok) throw new Error(`HTTP ${response.status}`);
+          return response.json();
+        })
+        .then((payload) => {
+          index = (payload.items || []).map((entry: SearchEntry) => ({
+            ...entry,
+            _search: normalise(entry.text),
+          }));
+          return index;
+        })
+        .finally(() => input?.removeAttribute('aria-busy'));
+    }
+    return loading;
+  };
+
+  const scoreEntry = (entry: SearchEntry, terms: string[]) => {
+    const haystack = entry._search || '';
+    if (!terms.every((term) => haystack.includes(term))) return -1;
+    const title = normalise(entry.title);
+    const summary = normalise(entry.summary);
+    const tags = normalise(entry.tags.join(' '));
+    let score = 0;
+    for (const term of terms) {
+      if (title === term) score += 32;
+      else if (title.includes(term)) score += 16;
+      if (tags.includes(term)) score += 9;
+      if (summary.includes(term)) score += 5;
+      score += Math.min(4, haystack.split(term).length - 1);
+    }
+    return score;
+  };
+
+  const resultNode = (entry: SearchEntry) => {
+    const link = document.createElement('a');
+    link.className = 'cv-search-result';
+    link.href = entry.href;
+    link.setAttribute('role', 'listitem');
+
+    const thumb = document.createElement('span');
+    thumb.className = `cv-search-thumb ${coverClassName(entry.cover)}`;
+    thumb.style.cssText = coverStyle(entry.cover);
+    thumb.setAttribute('aria-hidden', 'true');
+    const thumbArt = document.createElement('span');
+    thumbArt.className = `cv-cover-art cv-art-${entry.cover.motif}`;
+    for (const part of ['a', 'b', 'c', 'd', 'e']) {
+      const shape = document.createElement('i');
+      shape.className = `cv-art-${part}`;
+      thumbArt.appendChild(shape);
+    }
+    thumb.append(thumbArt);
+
+    const copy = document.createElement('span');
+    copy.className = 'cv-search-copy';
+    const meta = document.createElement('span');
+    meta.className = 'cv-search-meta';
+    meta.textContent = `${entry.sectionLabel} · ${entry.subsectionLabel}`;
+    const title = document.createElement('strong');
+    title.textContent = entry.title;
+    const summary = document.createElement('span');
+    summary.className = 'cv-search-summary';
+    summary.textContent = entry.summary;
+    copy.append(meta, title, summary);
+
+    const date = document.createElement('time');
+    date.className = 'cv-search-date';
+    date.dateTime = entry.date;
+    date.textContent = entry.date.replaceAll('-', '.');
+    link.append(thumb, copy, date);
+    return link;
+  };
+
+  const search = async () => {
+    if (!input || !results || !status) return;
+    const query = input.value.trim();
+    if (!query) {
+      results.replaceChildren();
+      results.hidden = true;
+      status.textContent = '输入关键词开始搜索';
+      return;
+    }
+
+    try {
+      const entries = await loadIndex();
+      const terms = normalise(query).split(/\s+/).filter(Boolean);
+      const matched = entries
+        .map((entry) => ({ entry, score: scoreEntry(entry, terms) }))
+        .filter((result) => result.score >= 0)
+        .sort((a, b) => b.score - a.score || b.entry.updatedAt - a.entry.updatedAt || a.entry.href.localeCompare(b.entry.href))
+        .slice(0, 24);
+
+      results.replaceChildren(...matched.map(({ entry }) => resultNode(entry)));
+      results.hidden = false;
+      status.textContent = matched.length
+        ? `找到 ${matched.length} 条结果${matched.length === 24 ? '（显示前 24 条）' : ''}`
+        : `没有找到“${query}”相关内容`;
+    } catch {
+      results.hidden = true;
+      status.textContent = '搜索索引载入失败，请刷新页面后重试';
+    }
+  };
+
+  const openSearch = (opener?: HTMLElement | null) => {
+    if (!overlay || !input) return;
+    returnFocus = opener ?? (document.activeElement as HTMLElement | null);
+    const drawer = document.getElementById('cvDrawer');
+    const burger = document.getElementById('cvBurger');
+    drawer?.classList.remove('open');
+    burger?.setAttribute('aria-expanded', 'false');
+    openers.forEach((item) => item.setAttribute('aria-expanded', 'true'));
+    overlay.hidden = false;
+    document.body.classList.add('lock');
+    requestAnimationFrame(() => {
+      overlay.classList.add('open');
+      input.focus();
+    });
+    void loadIndex().then(() => {
+      if (!input.value.trim() && status) status.textContent = '输入关键词开始搜索';
+    }).catch(() => {
+      if (status) status.textContent = '搜索索引载入失败，请刷新页面后重试';
+    });
+  };
+
+  const closeSearch = () => {
+    if (!overlay || overlay.hidden) return;
+    overlay.classList.remove('open');
+    overlay.hidden = true;
+    openers.forEach((item) => item.setAttribute('aria-expanded', 'false'));
+    if (!drawerIsOpen()) document.body.classList.remove('lock');
+    returnFocus?.focus();
+  };
+
+  openers.forEach((opener) => opener.addEventListener('click', () => openSearch(opener)));
+  closers.forEach((closer) => closer.addEventListener('click', closeSearch));
+  form?.addEventListener('submit', (event) => {
+    event.preventDefault();
+    window.clearTimeout(timer);
+    void search();
+  });
+  input?.addEventListener('input', () => {
+    window.clearTimeout(timer);
+    timer = window.setTimeout(() => void search(), 180);
+  });
+  results?.addEventListener('click', (event) => {
+    if ((event.target as HTMLElement).closest('a')) closeSearch();
+  });
+
+  document.addEventListener('keydown', (event) => {
+    const target = event.target as HTMLElement;
+    const isTyping = target.matches('input, textarea, select, [contenteditable="true"]');
+    if (event.key === '/' && !isTyping && overlay?.hidden) {
+      event.preventDefault();
+      openSearch();
+      return;
+    }
+    if (event.key === 'Escape' && overlay && !overlay.hidden) {
+      event.preventDefault();
+      closeSearch();
+      return;
+    }
+    if (event.key === 'Tab' && overlay && !overlay.hidden && panel) {
+      const focusable = Array.from(panel.querySelectorAll<HTMLElement>('button:not([disabled]), input:not([disabled]), a[href]'));
+      const first = focusable[0];
+      const last = focusable[focusable.length - 1];
+      if (event.shiftKey && document.activeElement === first) {
+        event.preventDefault();
+        last?.focus();
+      } else if (!event.shiftKey && document.activeElement === last) {
+        event.preventDefault();
+        first?.focus();
+      }
+    }
+  });
+</script>
