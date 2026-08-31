@@ -125,6 +125,9 @@ export const ARTICLE_COVERS: Record<string, { motif: CoverMotif; layout?: CoverL
   '/reading/thinking/chinese-dynasties/': { motif: 'lineage', layout: 'split' },
   '/reading/thinking/matter-evolution/': { motif: 'strata', layout: 'framed' },
   '/reading/thinking/physics-evolution/': { motif: 'spectrum', layout: 'framed' },
+  '/reading/books/financial-alchemy-systems-analysis/': { motif: 'feedback', layout: 'framed' },
+  '/reading/thinking/financial-micro-market-evolution/': { motif: 'network', layout: 'split' },
+  '/reading/thinking/macroeconomics-evolution/': { motif: 'timeline', layout: 'band' },
 };
 
 const TEXTURES: Partial<Record<CoverMotif, [CoverTexture, CoverTexture]>> = {
