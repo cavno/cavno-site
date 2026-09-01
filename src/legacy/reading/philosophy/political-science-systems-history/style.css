@@ -1,0 +1,61 @@
+.lp{--bg:#f7f7f5;--paper:#fff;--ink:#171717;--muted:#666;--line:#e7e5e4;--soft:#f1f0ed;--max:1180px}
+.lp *{box-sizing:border-box}
+.lp{scroll-behavior:smooth}
+.lp{margin:0;background:var(--bg);color:var(--ink);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Microsoft YaHei",Arial,sans-serif;line-height:1.78}
+.lp .layout{max-width:var(--max);margin:auto;display:grid;grid-template-columns:260px minmax(0,1fr);gap:34px;padding:28px 24px 72px}
+.lp aside{position:sticky;top:18px;align-self:start;max-height:calc(100vh - 36px);overflow:auto;background:rgba(255,255,255,.9);backdrop-filter:blur(14px);border:1px solid var(--line);border-radius:18px;padding:18px}
+.lp aside h3{font-size:12px;letter-spacing:.12em;color:#777;margin:0 0 10px}
+.lp nav a{display:block;text-decoration:none;color:#595959;font-size:13px;padding:7px 9px;border-radius:9px}
+.lp nav a:hover{background:var(--soft);color:#111}
+.lp .hero, .lp section{background:var(--paper);border:1px solid var(--line);border-radius:22px}
+.lp .hero{padding:42px;margin-bottom:20px}
+.lp .kicker{font-size:12px;letter-spacing:.13em;color:#777;text-transform:uppercase;margin-bottom:10px}
+.lp h1{font-size:clamp(34px,4vw,56px);line-height:1.15;letter-spacing:-.04em;margin:0 0 18px}
+.lp .subtitle{font-size:19px;color:#444;max-width:900px}
+.lp .thesis{margin-top:28px;padding:22px 24px;border-left:4px solid #111;background:#f3f3f0;border-radius:13px;font-size:18px;font-weight:650}
+.lp section{padding:34px 36px;margin-bottom:18px}
+.lp h2{font-size:28px;margin:0 0 15px;letter-spacing:-.025em}
+.lp .lead{font-size:18px;color:var(--ink)}
+.lp .grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:15px;margin:18px 0}
+.lp .card{background:#fcfcfb;border:1px solid var(--line);border-radius:15px;padding:18px}
+.lp .card strong{display:block;margin-bottom:6px}
+.lp .formula{margin:18px 0;padding:18px 20px;border-radius:14px;background:#111;color:#f7f7f7;white-space:pre-wrap;overflow:auto;font-family:Consolas,Monaco,monospace;font-size:15px}
+.lp .formula.light{background:#f4f4f1;color:#171717;border:1px solid var(--line)}
+.lp .note{background:#f5f4f1;border:1px solid var(--line);border-radius:14px;padding:16px 18px;color:#444}
+.lp .quote{background:#111;color:#fff;border-radius:14px;padding:24px;margin:22px 0;font-size:20px;font-weight:650;line-height:1.65}
+.lp .pipeline{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin:20px 0}
+.lp .pipeline span{padding:9px 12px;border:1px solid var(--line);border-radius:999px;background:#fff;font-size:14px}
+.lp .pipeline b{color:#999}
+.lp table{width:100%;border-collapse:collapse;margin:18px 0 8px;font-size:14px}
+.lp th, .lp td{text-align:left;padding:12px 10px;border-bottom:1px solid var(--line);vertical-align:top}
+.lp th{background:#fafaf8}
+.lp .footer{padding:12px 4px;color:#777;font-size:13px}
+@media(max-width:920px){.lp .layout{grid-template-columns:1fr;padding:16px 14px 50px}
+.lp aside{position:relative;top:auto;max-height:none}
+.lp .hero{padding:30px 24px}
+.lp section{padding:28px 24px}
+.lp .grid{grid-template-columns:1fr}
+}
+
+.lp.political-systems-history{--bg:#faf9f5;--paper:#fff;--ink:#141413;--muted:#63615b;--line:#e3e0d5;
+  --soft:#f0eee6;--accent:#d97757;--accent-soft:rgba(217,119,87,.10);font-family:var(--sans)}
+.lp.political-systems-history .hero{background:linear-gradient(135deg,var(--accent-soft),transparent 58%),var(--paper)}
+.lp.political-systems-history .kicker{color:var(--accent);font-family:var(--mono)}
+.lp.political-systems-history h1,.lp.political-systems-history h2{font-family:var(--serif);font-weight:600}
+.lp.political-systems-history .thesis{border-left-color:var(--accent);background:var(--soft)}
+.lp.political-systems-history .formula{background:var(--ink);color:var(--paper);font-family:var(--mono)}
+.lp.political-systems-history .formula.light{background:var(--soft);color:var(--ink);border-color:var(--line)}
+.lp.political-systems-history .quote{background:var(--ink);color:var(--paper);font-family:var(--serif);font-weight:600}
+.lp.political-systems-history nav a:hover{background:var(--accent-soft);color:var(--accent)}
+.lp.political-systems-history aside summary{display:block;margin:0 0 10px;color:var(--muted);font-family:var(--mono);
+  font-size:12px;font-weight:600;letter-spacing:.12em;cursor:pointer;list-style:none}
+.lp.political-systems-history aside summary::-webkit-details-marker{display:none}
+.lp.political-systems-history aside details:not([open]) nav{display:block}
+@media(max-width:920px){
+  .lp.political-systems-history aside{padding:14px 18px}
+  .lp.political-systems-history aside summary{display:flex;align-items:center;justify-content:space-between;margin:0}
+  .lp.political-systems-history aside summary::after{content:"＋";color:var(--accent);font-size:18px;line-height:1}
+  .lp.political-systems-history aside details[open] summary::after{content:"－"}
+  .lp.political-systems-history aside details:not([open]) nav{display:none}
+  .lp.political-systems-history aside nav{margin-top:12px;padding-top:10px;border-top:1px solid var(--line)}
+}

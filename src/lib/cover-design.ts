@@ -128,6 +128,7 @@ export const ARTICLE_COVERS: Record<string, { motif: CoverMotif; layout?: CoverL
   '/reading/books/financial-alchemy-systems-analysis/': { motif: 'feedback', layout: 'framed' },
   '/reading/thinking/financial-micro-market-evolution/': { motif: 'network', layout: 'split' },
   '/reading/thinking/macroeconomics-evolution/': { motif: 'timeline', layout: 'band' },
+  '/reading/philosophy/political-science-systems-history/': { motif: 'network', layout: 'band' },
 };
 
 const TEXTURES: Partial<Record<CoverMotif, [CoverTexture, CoverTexture]>> = {
