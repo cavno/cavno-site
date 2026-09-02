@@ -49,6 +49,12 @@
           "desc": "西方哲学史十讲、二元对立史"
         },
         {
+          "slug": "politics",
+          "en": "Politics",
+          "zh": "政治",
+          "desc": "政治制度、国家治理与国际关系的系统演化"
+        },
+        {
           "slug": "theology",
           "en": "Theology",
           "zh": "神学",

@@ -1,0 +1,26 @@
+---
+// 由 scripts/convert.mjs 生成，可自由手工精修
+import Base from '../../../layouts/Base.astro';
+import body from '../../../legacy/reading/politics/china-reform-central-local-systems-analysis/body.html?raw';
+import '../../../styles/politics-essay.css';
+
+const meta = {
+  "title": "改革开放后的中央—地方政治经济演化",
+  "description": "以稳定边界、地方试验和绩效筛选为主线，分析改革开放后中央—地方在放权、财政、土地信用、风险治理与产业政策中的反馈演化。"
+};
+---
+<Base title={meta.title + ' · Cavno'} description={meta.description}>
+
+  <section class="cv-page-head">
+    <div class="cv-wrap">
+      <div class="cv-eyebrow">Reading & Thinking · Politics</div>
+      <h1 class="cv-page-title">{meta.title}</h1>
+      <p class="cv-lede">{meta.description}</p>
+      <a class="cv-crumb-back" href="/reading/politics/">← 返回政治栏目</a>
+    </div>
+  </section>
+
+  <article class="lp politics-essay">
+    <Fragment set:html={body} />
+  </article>
+</Base>

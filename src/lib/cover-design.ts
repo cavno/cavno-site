@@ -40,6 +40,7 @@ export interface CoverContent {
 // No title hash, keyword or motif may change a category's palette.
 export const CATEGORY_PALETTES: Record<string, { hue: number; saturation: number }> = {
   'reading:philosophy': { hue: 244, saturation: 22 },
+  'reading:politics': { hue: 9, saturation: 24 },
   'reading:thinking': { hue: 164, saturation: 24 },
   'reading:books': { hue: 32, saturation: 26 },
   'reading:theology': { hue: 28, saturation: 24 },
@@ -112,6 +113,7 @@ const FALLBACKS: Record<string, CoverMotif> = {
   'life:orders': 'document', 'investing:options': 'options', 'investing:cases': 'market',
   'investing:valuation': 'balance', 'reading:books': 'book', 'reading:math': 'math',
   'reading:philosophy': 'lineage', 'reading:thinking': 'system', 'reading:theology': 'book',
+  'reading:politics': 'network',
   'working:amazon': 'commerce', 'working:training': 'network',
 };
 
@@ -129,6 +131,8 @@ export const ARTICLE_COVERS: Record<string, { motif: CoverMotif; layout?: CoverL
   '/reading/thinking/financial-micro-market-evolution/': { motif: 'network', layout: 'split' },
   '/reading/thinking/macroeconomics-evolution/': { motif: 'timeline', layout: 'band' },
   '/reading/philosophy/political-science-systems-history/': { motif: 'network', layout: 'band' },
+  '/reading/politics/us-china-relations-systems-analysis/': { motif: 'balance', layout: 'split' },
+  '/reading/politics/china-reform-central-local-systems-analysis/': { motif: 'feedback', layout: 'framed' },
 };
 
 const TEXTURES: Partial<Record<CoverMotif, [CoverTexture, CoverTexture]>> = {
