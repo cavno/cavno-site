@@ -1,0 +1,420 @@
+<div class="progress" aria-hidden="true"></div>
+
+  <nav class="mobile-toc" aria-label="移动端目录">
+    <a href="#hero">总论</a><a href="#model">模型</a><a href="#boundary">边界</a><a href="#branches">双主干</a><a href="#five">五系统</a><a href="#map">全景图</a><a href="#jumps">七跃迁</a><a href="#verbs">动作链</a><a href="#laws">元规律</a><a href="#control">控制论</a><a href="#matrix">对照表</a><a href="#synthesis">总架构</a>
+  </nav>
+
+  <div class="shell">
+    <aside class="rail" aria-label="章节目录">
+      <div class="brand">
+        <div class="brand-mark">L<sub>t</sub></div>
+        <div><b>逻辑系统演化史</b><small>Systemic History of Logic</small></div>
+      </div>
+      <div class="toc-label">Contents</div>
+      <ol class="toc">
+        <li><a href="#hero"><span>00</span>总论：逻辑是什么</a></li>
+        <li><a href="#model"><span>01</span>逻辑系统模型</a></li>
+        <li><a href="#boundary"><span>02</span>形式逻辑的边界</a></li>
+        <li><a href="#branches"><span>03</span>两条历史主干</a></li>
+        <li><a href="#five"><span>04</span>五大逻辑系统</a></li>
+        <li><a href="#map"><span>05</span>子系统全景图</a></li>
+        <li><a href="#jumps"><span>06</span>七次历史跃迁</a></li>
+        <li><a href="#verbs"><span>07</span>核心动作链</a></li>
+        <li><a href="#laws"><span>08</span>系统演化元规律</a></li>
+        <li><a href="#control"><span>09</span>从规则到控制</a></li>
+        <li><a href="#matrix"><span>10</span>逻辑范式对照</a></li>
+        <li><a href="#synthesis"><span>11</span>统一认知架构</a></li>
+      </ol>
+      <div class="rail-note">这是一幅结构史地图，而非人物之间的单线影响史。它关注逻辑系统的功能如何逐层增加。</div>
+    </aside>
+
+    <main>
+      <section class="hero" id="hero">
+        <div class="hero-card">
+          <div class="hero-top">
+            <div class="eyebrow">A SYSTEMIC HISTORY OF LOGIC · 结构史 / 功能史</div>
+            <h1>逻辑<span class="thin">：</span><br>一个认知系统<br>如何学会改变自己</h1>
+            <p class="hero-lead">逻辑不只是从前提推出结论的技术。它是一个让认知状态能够被区分、约束、转换、生成、检验、更新，并在必要时修改自身规则的系统。</p>
+          </div>
+          <div class="hero-bottom">
+            <div class="master-formula">Logic = A System for <b>Constraining</b>, Transforming, <b>Generating</b>, Testing &amp; Revising Cognitive States</div>
+            <div class="hero-kicker"><strong>主线不是“谁取代了谁”</strong>而是系统功能不断分化、冲突、耦合与重新组合：从维持秩序，到处理开放世界中的不确定性与自我修正。</div>
+          </div>
+        </div>
+      </section>
+
+      <section id="model" class="reveal">
+        <div class="section-head">
+          <div class="section-no">01 / MODEL</div>
+          <div>
+            <h2>先重新定义逻辑：<br>受约束的状态转换系统</h2>
+            <p class="section-deck">把逻辑从单一“演绎规则”扩展为一套认知架构：它既规定什么可被表示、区分与接受，也规定新状态如何产生、验证和修正。</p>
+          </div>
+        </div>
+
+        <div class="panel formula-card">
+          <div class="formula-label">Logical system at time t</div>
+          <div class="formula-main">ℒ<sub>t</sub> = (Σ<sub>t</sub>, X<sub>t</sub>, B<sub>t</sub>, R<sub>t</sub>, G<sub>t</sub>, V<sub>t</sub>, C<sub>t</sub>, M<sub>t</sub>)</div>
+          <div class="formula-sub">任何逻辑体系，都是语言、状态、边界、规则、生成、验证、语境与元规则的特定配置。</div>
+        </div>
+
+        <div class="model-grid">
+          <div class="panel system-viz">
+            <svg viewBox="0 0 540 500" role="img" aria-label="逻辑系统八变量关系图">
+              <defs>
+                <linearGradient id="coreG" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#00b7b0"/><stop offset="1" stop-color="#176bdb"/></linearGradient>
+                <filter id="glow"><feGaussianBlur stdDeviation="6" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+              </defs>
+              <g fill="none" stroke="#315064" stroke-width="1.4" opacity=".88">
+                <path d="M270 250 L270 67 M270 250 L413 117 M270 250 L470 250 M270 250 L413 383 M270 250 L270 443 M270 250 L127 383 M270 250 L70 250 M270 250 L127 117"/>
+                <circle cx="270" cy="250" r="157" stroke-dasharray="4 8" opacity=".55"/>
+              </g>
+              <g fill="#102536" stroke="#456579" stroke-width="1.2">
+                <circle cx="270" cy="67" r="38"/><circle cx="413" cy="117" r="38"/><circle cx="470" cy="250" r="38"/><circle cx="413" cy="383" r="38"/><circle cx="270" cy="443" r="38"/><circle cx="127" cy="383" r="38"/><circle cx="70" cy="250" r="38"/><circle cx="127" cy="117" r="38"/>
+              </g>
+              <circle cx="270" cy="250" r="73" fill="url(#coreG)" opacity=".96" filter="url(#glow)"/>
+              <g fill="#fff" text-anchor="middle" font-family="Consolas, monospace">
+                <text x="270" y="241" font-size="25" font-weight="700">X<tspan baseline-shift="sub" font-size="13">t+1</tspan></text>
+                <text x="270" y="268" font-size="12" fill="#d9f7f6">ACCEPTABLE STATE</text>
+                <text x="270" y="62" font-size="20" font-weight="700">Σ</text><text x="270" y="79" font-size="9" fill="#98b3c2">LANGUAGE</text>
+                <text x="413" y="112" font-size="20" font-weight="700">X</text><text x="413" y="129" font-size="9" fill="#98b3c2">STATES</text>
+                <text x="470" y="245" font-size="20" font-weight="700">B</text><text x="470" y="262" font-size="9" fill="#98b3c2">BOUNDARY</text>
+                <text x="413" y="378" font-size="20" font-weight="700">R</text><text x="413" y="395" font-size="9" fill="#98b3c2">RULES</text>
+                <text x="270" y="438" font-size="20" font-weight="700">G</text><text x="270" y="455" font-size="9" fill="#98b3c2">GENERATE</text>
+                <text x="127" y="378" font-size="20" font-weight="700">V</text><text x="127" y="395" font-size="9" fill="#98b3c2">VERIFY</text>
+                <text x="70" y="245" font-size="20" font-weight="700">C</text><text x="70" y="262" font-size="9" fill="#98b3c2">CONTEXT</text>
+                <text x="127" y="112" font-size="20" font-weight="700">M</text><text x="127" y="129" font-size="9" fill="#98b3c2">META</text>
+              </g>
+            </svg>
+            <div class="system-caption"><span><strong>中心：</strong>可接受的新认知状态</span><span>八变量共同决定转换</span></div>
+          </div>
+
+          <div class="variable-grid">
+            <article class="variable"><span class="symbol">Σ</span><b>符号 / 表示</b><p>系统用什么语言编码对象、关系、命题与模型；可表示性决定可思考性。</p></article>
+            <article class="variable"><span class="symbol">X</span><b>认知状态</b><p>概念、判断、命题集、模型、信念分布或程序状态。</p></article>
+            <article class="variable"><span class="symbol">B</span><b>边界 / 区分</b><p>什么被视为同一对象、有效类别、内外部以及相关或无关。</p></article>
+            <article class="variable"><span class="symbol">R</span><b>转换规则</b><p>什么推导、操作或变化被允许；经典推理规则只是其中一类。</p></article>
+            <article class="variable"><span class="symbol">G</span><b>生成机制</b><p>怎样提出新概念、假说、结构、搜索路径与候选解释。</p></article>
+            <article class="variable"><span class="symbol">V</span><b>验证机制</b><p>怎样用证明、反例、数据、实验、预测或对抗来淘汰错误。</p></article>
+            <article class="variable"><span class="symbol">C</span><b>语境 / 资源</b><p>信息是否完全？时间、算力、注意力、行动代价和环境条件是什么？</p></article>
+            <article class="variable"><span class="symbol">M</span><b>元规则 / 控制</b><p>怎样选择逻辑、配置资源、改变标准，并评价规则本身是否仍然适用。</p></article>
+          </div>
+        </div>
+
+        <div class="equation-row">
+          <div class="panel equation-box"><b>TRANSFORM</b><code>X<sub>t+1</sub> = T<sub>ℒ</sub>(X<sub>t</sub>, R<sub>t</sub>, G<sub>t</sub>, B<sub>t</sub>, C<sub>t</sub>)</code></div>
+          <div class="equation-arrow">→</div>
+          <div class="panel equation-box"><b>TEST / ACCEPT</b><code>V<sub>t</sub>(X<sub>t+1</sub>) → accept / reject / revise</code></div>
+        </div>
+      </section>
+
+      <section id="boundary" class="reveal">
+        <div class="section-head">
+          <div class="section-no">02 / SCOPE</div>
+          <div><h2>形式逻辑很重要，<br>但它不是逻辑的全部</h2><p class="section-deck">“概念 → 判断 → 推理 → 论证”主要处理给定表示与前提之后，怎样保持有效性并完成正当化；它是整体逻辑系统中的推导—论证子系统。</p></div>
+        </div>
+        <div class="boundary">
+          <div class="panel subset-viz">
+            <svg class="rings" viewBox="0 0 480 400" role="img" aria-label="形式逻辑是整体逻辑系统的子系统">
+              <circle cx="240" cy="200" r="176" fill="#e9f0f5" stroke="#aabac4" stroke-width="1.5"/>
+              <circle cx="240" cy="200" r="121" fill="#dbe8f1" stroke="#6c8fa5" stroke-width="1.5"/>
+              <circle cx="240" cy="200" r="70" fill="#176bdb"/>
+              <g text-anchor="middle" font-family="Microsoft YaHei, sans-serif">
+                <text x="240" y="53" font-size="12" fill="#60707e" font-weight="700">整体逻辑系统</text>
+                <text x="240" y="97" font-size="12" fill="#48677a">认知状态的生成 · 检验 · 更新 · 元控制</text>
+                <text x="240" y="160" font-size="12" fill="#274d66">论证 / 推导系统</text>
+                <text x="240" y="193" font-size="17" fill="#fff" font-weight="700">形式逻辑</text>
+                <text x="240" y="217" font-size="11" fill="#cfe3ff">VALIDITY</text>
+                <text x="240" y="237" font-size="10" fill="#cfe3ff">真值保持</text>
+                <text x="240" y="306" font-size="11" fill="#48677a">概率 · 因果 · 动态 · 非单调 · 生成</text>
+                <text x="240" y="349" font-size="11" fill="#60707e">语境 / 资源 / 现实反馈 / 规则选择</text>
+              </g>
+            </svg>
+          </div>
+          <div class="panel boundary-copy">
+            <h3>形式逻辑回答的是一个局部但关键的问题</h3>
+            <p>给定概念、命题、前提与规则，结论是否能够有效推出？其理想是 <span class="mono">Truth Preservation</span>：在合法转换中保持真值或可接受性。</p>
+            <div class="quote">如果前提错了，推导再完美也不能保证认识现实；如果环境变了，旧规则即使一致，也可能不再有效。</div>
+            <div class="two-questions">
+              <div class="question"><b>LOGIC OF JUSTIFICATION</b><span>这个结论为什么成立？怎样证明从前提到结论的转移有效？</span></div>
+              <div class="question"><b>LOGIC OF GENERATION</b><span>前提、概念和新假说从哪里来？什么机制产生新的候选结构？</span></div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section id="branches" class="reveal">
+        <div class="section-head">
+          <div class="section-no">03 / BRANCHES</div>
+          <div><h2>西方理性内部的<br>两条深层主干</h2><p class="section-deck">这不是严格的师承谱系，而是两种持续存在的系统冲动：一条追问“什么必须保持不变”，另一条追问“新结构怎样成为可能”。</p></div>
+        </div>
+        <div class="panel branch-map">
+          <div class="branch-origin">LOGOS · 可理解的秩序</div>
+          <div class="branches">
+            <article class="branch">
+              <div class="branch-title"><strong>保持 / 证明路线</strong><em>INVARIANCE</em></div>
+              <ul class="node-list">
+                <li>巴门尼德 <small>存在、同一、不变</small></li>
+                <li>亚里士多德 <small>概念、判断与三段论</small></li>
+                <li>欧几里得 / 经院传统 <small>公理化证明与对抗性论证</small></li>
+                <li>莱布尼茨 → 布尔 → 弗雷格 <small>推理的符号化与计算化</small></li>
+                <li>希尔伯特 → 哥德尔 / 图灵 <small>形式系统及其边界</small></li>
+              </ul>
+            </article>
+            <article class="branch change">
+              <div class="branch-title"><strong>生成 / 变化路线</strong><em>TRANSFORMATION</em></div>
+              <ul class="node-list">
+                <li>赫拉克利特 / 辩证传统 <small>变化、张力与过程</small></li>
+                <li>康德 <small>主体如何综合并构成经验</small></li>
+                <li>黑格尔 <small>结构通过矛盾与扬弃发生转换</small></li>
+                <li>达尔文 / 历史科学 <small>变异、选择与新结构涌现</small></li>
+                <li>控制论 / 复杂系统 <small>反馈、自组织与适应</small></li>
+              </ul>
+            </article>
+          </div>
+          <div class="synthesis"><strong>现代计算与 AI：两条路线重新耦合</strong><code>演绎 + 搜索 + 生成 + 验证 + 反馈 + 元推理</code></div>
+        </div>
+      </section>
+
+      <section id="five" class="reveal">
+        <div class="section-head">
+          <div class="section-no">04 / FIVE SYSTEMS</div>
+          <div><h2>五大逻辑系统：<br>从稳定器到自我调节器</h2><p class="section-deck">它们不是五个互斥学派，而是成熟认知架构中的五种功能层。前者提供边界，后者逐步增加生成、反馈与规则选择能力。</p></div>
+        </div>
+        <div class="systems-grid">
+          <article class="panel system-card" data-index="1"><span class="chip">STABILIZE</span><h3>Constraint Logic<br>约束逻辑</h3><p>先阻止认知系统崩溃：保持对象身份、稳定边界、控制冲突，规定哪些状态不可同时接受。</p><div class="io"><div><b>INPUT</b><span>对象与区分</span></div><div><b>OP</b><span>分类、一致性约束</span></div><div><b>OUTPUT</b><span>稳定状态空间</span></div></div></article>
+          <article class="panel system-card" data-index="2"><span class="chip">JUSTIFY</span><h3>Inferential / Argumentative Logic<br>推导—论证逻辑</h3><p>在给定前提与规则下保持有效性，并通过证明、反驳、答辩来建立公共可检验的理由链。</p><div class="io"><div><b>INPUT</b><span>命题、前提</span></div><div><b>OP</b><span>演绎、证明、辩论</span></div><div><b>OUTPUT</b><span>正当化结论</span></div></div></article>
+          <article class="panel system-card" data-index="3"><span class="chip">CREATE</span><h3>Generative Logic<br>生成逻辑</h3><p>产生新的概念、假说、模型、表示方式与解题路径；它扩展候选空间，而不预先保证候选为真。</p><div class="io"><div><b>INPUT</b><span>问题、材料、张力</span></div><div><b>OP</b><span>归纳、溯因、变异、组合</span></div><div><b>OUTPUT</b><span>候选结构</span></div></div></article>
+          <article class="panel system-card" data-index="4"><span class="chip">ADAPT</span><h3>Updating Logic<br>更新逻辑</h3><p>当证据、时间、行动或语境变化时，重估信念并撤销旧结论；真理实践从单次判定变成持续校准。</p><div class="io"><div><b>INPUT</b><span>新证据与反馈</span></div><div><b>OP</b><span>概率更新、信念修正</span></div><div><b>OUTPUT</b><span>新认知状态</span></div></div></article>
+          <article class="panel system-card" data-index="5"><span class="chip">GOVERN</span><h3>MetaLogic<br>元逻辑</h3><p>比较和选择逻辑：此刻应演绎还是搜索？接受多大风险？如何分配时间、算力与注意力？规则何时应被修改？</p><div class="io"><div><b>INPUT</b><span>任务、目标、资源</span></div><div><b>OP</b><span>策略选择与系统监控</span></div><div><b>OUTPUT</b><span>适用的逻辑配置</span></div></div></article>
+        </div>
+      </section>
+
+      <section id="map" class="reveal">
+        <div class="section-head">
+          <div class="section-no">05 / SYSTEM MAP</div>
+          <div><h2>逻辑不是一根链，<br>而是一张协作网络</h2><p class="section-deck">分类限定状态空间；演绎维护局部有效性；归纳、因果与生成提出跨越；计算与搜索寻找路径；动态逻辑吸收反馈；元逻辑调度全局。</p></div>
+        </div>
+        <div class="map-layout">
+          <div class="panel network">
+            <svg viewBox="0 0 800 570" role="img" aria-label="逻辑子系统关系网络">
+              <defs>
+                <radialGradient id="metaG"><stop stop-color="#765ee2"/><stop offset="1" stop-color="#4231a4"/></radialGradient>
+              </defs>
+              <g fill="none" stroke="#355468" stroke-width="1.25" opacity=".95">
+                <path d="M400 285L142 115M400 285L308 90M400 285L524 95M400 285L671 142M400 285L690 334M400 285L573 483M400 285L322 501M400 285L115 426M400 285L98 260"/>
+                <path d="M142 115L308 90L524 95L671 142L690 334L573 483L322 501L115 426L98 260Z" stroke-dasharray="5 7" opacity=".55"/>
+                <path d="M142 115L98 260L115 426M308 90L524 95M524 95L671 142M671 142L690 334M690 334L573 483M573 483L322 501" opacity=".5"/>
+              </g>
+              <g font-family="Microsoft YaHei, sans-serif" text-anchor="middle">
+                <circle cx="400" cy="285" r="74" fill="url(#metaG)"/>
+                <text x="400" y="279" fill="#fff" font-size="18" font-weight="700">MetaLogic</text><text x="400" y="305" fill="#dcd6ff" font-size="12">选择 · 监控 · 调节</text>
+
+                <g><circle cx="142" cy="115" r="53" fill="#143b5c" stroke="#2d789d"/><text x="142" y="110" fill="#fff" font-size="14" font-weight="700">分类</text><text x="142" y="131" fill="#9ac5da" font-size="10">区分 / 边界</text></g>
+                <g><circle cx="308" cy="90" r="53" fill="#143b5c" stroke="#2d789d"/><text x="308" y="85" fill="#fff" font-size="14" font-weight="700">一致性</text><text x="308" y="106" fill="#9ac5da" font-size="10">同一 / 不矛盾</text></g>
+                <g><circle cx="524" cy="95" r="53" fill="#153f65" stroke="#3e83cf"/><text x="524" y="90" fill="#fff" font-size="14" font-weight="700">演绎</text><text x="524" y="111" fill="#a9ceef" font-size="10">真值保持</text></g>
+                <g><circle cx="671" cy="142" r="53" fill="#153f65" stroke="#3e83cf"/><text x="671" y="137" fill="#fff" font-size="14" font-weight="700">论证</text><text x="671" y="158" fill="#a9ceef" font-size="10">证明 / 反驳</text></g>
+                <g><circle cx="690" cy="334" r="57" fill="#0b5a61" stroke="#16a8a3"/><text x="690" y="322" fill="#fff" font-size="14" font-weight="700">归纳 / 概率</text><text x="690" y="343" fill="#a7e2de" font-size="10">不确定性</text><text x="690" y="359" fill="#a7e2de" font-size="10">证据权重</text></g>
+                <g><circle cx="573" cy="483" r="54" fill="#0b5a61" stroke="#16a8a3"/><text x="573" y="478" fill="#fff" font-size="14" font-weight="700">因果</text><text x="573" y="499" fill="#a7e2de" font-size="10">干预 / 反事实</text></g>
+                <g><circle cx="322" cy="501" r="57" fill="#6a3c25" stroke="#e86e38"/><text x="322" y="489" fill="#fff" font-size="14" font-weight="700">生成</text><text x="322" y="510" fill="#f5c0a9" font-size="10">新概念 / 假说</text><text x="322" y="526" fill="#f5c0a9" font-size="10">结构型创新</text></g>
+                <g><circle cx="115" cy="426" r="57" fill="#503f26" stroke="#d39f36"/><text x="115" y="414" fill="#fff" font-size="14" font-weight="700">计算 / 搜索</text><text x="115" y="435" fill="#ead5a4" font-size="10">程序 / 复杂度</text><text x="115" y="451" fill="#ead5a4" font-size="10">资源约束</text></g>
+                <g><circle cx="98" cy="260" r="58" fill="#49376d" stroke="#846adb"/><text x="98" y="247" fill="#fff" font-size="14" font-weight="700">动态 / 非单调</text><text x="98" y="269" fill="#d0c4f3" font-size="10">行动 / 时间 / 语境</text><text x="98" y="285" fill="#d0c4f3" font-size="10">可撤销推理</text></g>
+              </g>
+            </svg>
+          </div>
+          <aside class="panel legend-panel">
+            <h3>关系的三种方向</h3>
+            <ul class="legend-list">
+              <li><span class="legend-dot" style="background:#176bdb"></span><span><b>向内：</b>把候选状态压缩为可接受状态，强调约束、证明和淘汰。</span></li>
+              <li><span class="legend-dot" style="background:#00a7a5"></span><span><b>向外：</b>扩大状态空间，提出未被原体系直接蕴含的新结构。</span></li>
+              <li><span class="legend-dot" style="background:#7257db"></span><span><b>向上：</b>反思使用哪套规则、标准与资源配置，并允许系统自我修改。</span></li>
+            </ul>
+            <div class="subsystems" aria-label="子系统列表"><span>分类</span><span>一致性</span><span>演绎</span><span>论证</span><span>归纳</span><span>概率</span><span>因果</span><span>溯因</span><span>生成</span><span>计算</span><span>搜索</span><span>动态</span><span>非单调</span><span>元逻辑</span></div>
+          </aside>
+        </div>
+      </section>
+
+      <section id="jumps" class="reveal">
+        <div class="section-head">
+          <div class="section-no">06 / 7 JUMPS</div>
+          <div><h2>七次历史跃迁：<br>逻辑的状态空间逐级扩大</h2><p class="section-deck">每次跃迁都不是清除上一层，而是暴露旧系统无法处理的新变量，再把这些变量纳入更大的认知回路。</p></div>
+        </div>
+        <div class="timeline">
+          <article class="jump"><span class="jump-no">01</span><div><h3>从神话秩序到可讨论的区分</h3><p><b>希腊 Logos 与早期本体论。</b> 世界被设想为可言说、可区分、可保持同一的秩序；逻辑首先成为认知状态的稳定器。</p></div><div class="transform">ORDER → DISTINCTION<br>存在 → 同一 / 边界</div></article>
+          <article class="jump"><span class="jump-no">02</span><div><h3>从状态一致到有效推导</h3><p><b>亚里士多德。</b> 问题从“什么存在”推进到“什么从什么推出”；概念、判断和三段论构成可重复的转换规则。</p></div><div class="transform">CONSISTENCY → INFERENCE<br>状态 → 状态转换</div></article>
+          <article class="jump"><span class="jump-no">03</span><div><h3>从推导规则到证明制度</h3><p><b>欧几里得与经院辩证法。</b> 公理、定义和证明把知识组织成封闭生成器；质疑、答辩与反驳又把对抗性验证和反馈带入论证。</p></div><div class="transform">INFERENCE → PROOF<br>规则 → 公共验证</div></article>
+          <article class="jump"><span class="jump-no">04</span><div><h3>从必然性到证据与不确定性</h3><p><b>科学革命、归纳、概率与因果研究。</b> 理性开始追问前提如何获得，并将观察—假说—预测—实验—修正组织成开放回路。</p></div><div class="transform">CERTAINTY → PLAUSIBILITY<br>真值 → 置信度</div></article>
+          <article class="jump"><span class="jump-no">05</span><div><h3>从展开结果到生成新结构</h3><p><b>康德、黑格尔、历史科学与演化论。</b> “生成”不再只是把公理中隐含的结论显式化，而是概念、关系乃至规则本身发生历史性变化。</p></div><div class="transform">EXPLICATION → EMERGENCE<br>展开 → 结构变换</div></article>
+          <article class="jump"><span class="jump-no">06</span><div><h3>从思想规则到符号计算及其边界</h3><p><b>莱布尼茨、布尔、弗雷格、希尔伯特、哥德尔与图灵。</b> 推理被编码为可操作的形式系统，同时不完备性、不可判定性与复杂度显示：形式化不等于全能。</p></div><div class="transform">REASONING → COMPUTATION<br>直觉 → 机械过程 / 极限</div></article>
+          <article class="jump"><span class="jump-no">07</span><div><h3>从封闭规则系统到开放自适应架构</h3><p><b>控制论、动态逻辑、非单调推理、复杂系统与 AI。</b> 时间、行动、语境、有限资源和反馈成为内生变量；系统不仅推理，还监控并重配自己的推理方式。</p></div><div class="transform">RULE SYSTEM → CONTROL SYSTEM<br>执行规则 → 选择与修改规则</div></article>
+        </div>
+        <div class="jump-note">注：这是一种“功能—结构分期”。人物和传统之间并非单线传承；同一历史阶段往往同时包含多种相互竞争的逻辑方案。</div>
+      </section>
+
+      <section id="verbs" class="reveal">
+        <div class="section-head">
+          <div class="section-no">07 / OPERATIONS</div>
+          <div><h2>五个对象级动作，<br>加一个元动作</h2><p class="section-deck">从对象层看，逻辑依次增加区分、约束、推导、生成与更新能力；Self-Regulate 位于元层，负责调节前五者。</p></div>
+        </div>
+        <div class="verbs">
+          <article class="verb"><span class="v-no">01</span><strong>区分</strong><em>DISTINGUISH</em><p>把连续世界切分为对象、性质、类别与关系；没有差异，就没有信息。</p></article>
+          <article class="verb"><span class="v-no">02</span><strong>约束</strong><em>CONSTRAIN</em><p>排除不相容状态，稳定身份和边界；防止系统因意义漂移而崩溃。</p></article>
+          <article class="verb"><span class="v-no">03</span><strong>推导</strong><em>INFER</em><p>在给定规则下转换状态，并保存真值、有效性或可接受性。</p></article>
+          <article class="verb"><span class="v-no">04</span><strong>生成</strong><em>GENERATE</em><p>扩大候选空间：提出新概念、假说、模型、解释与行动方案。</p></article>
+          <article class="verb"><span class="v-no">05</span><strong>更新</strong><em>UPDATE</em><p>根据证据、语境、时间和行动后果重估信念，必要时撤销结论。</p></article>
+          <article class="verb"><span class="v-no">META</span><strong>自我调节</strong><em>SELF-REGULATE</em><p>监控目标与误差，选择逻辑、配置资源，并在环境改变时修改规则。</p></article>
+        </div>
+        <div class="verb-meta mono">Distinguish → Constrain → Infer → Generate → Update → Self-Regulate</div>
+      </section>
+
+      <section id="laws" class="reveal">
+        <div class="section-head">
+          <div class="section-no">08 / META-LAWS</div>
+          <div><h2>隐藏在逻辑史背后的<br>六条系统演化规律</h2><p class="section-deck">长时段上，逻辑的发展可以理解为：不断把原先被视为外部、固定或无需解释的条件，转化为系统内部可表示、可控制的变量。</p></div>
+        </div>
+        <div class="law-table">
+          <div class="law-row"><div class="law-num">01</div><div class="law-old">狭窄状态空间</div><div class="law-arrow">→</div><div class="law-new">状态空间扩大</div><div class="law-effect">从真 / 假命题扩展到概率分布、可能世界、行动状态、程序状态、模型与制度。</div></div>
+          <div class="law-row"><div class="law-num">02</div><div class="law-old">语言、边界、规则固定</div><div class="law-arrow">→</div><div class="law-new">固定变量动态化</div><div class="law-effect">Σ、B、R 不再只是背景常量；概念可重构，分类可修订，规则可学习。</div></div>
+          <div class="law-row"><div class="law-num">03</div><div class="law-old">封闭公理系统</div><div class="law-arrow">→</div><div class="law-new">开放反馈系统</div><div class="law-effect">现实、实验、他者、时间和行动结果持续输入，使结论能够被纠正。</div></div>
+          <div class="law-row"><div class="law-num">04</div><div class="law-old">生成与验证分离</div><div class="law-arrow">→</div><div class="law-new">生成 × 验证耦合</div><div class="law-effect">没有生成，系统无法创新；没有验证，候选无限扩张。智能来自两者的迭代闭环。</div></div>
+          <div class="law-row"><div class="law-num">05</div><div class="law-old">执行给定规则</div><div class="law-arrow">→</div><div class="law-new">规则系统成为控制系统</div><div class="law-effect">逻辑开始包含目标、误差、反馈、监控、策略切换与自身参数调节。</div></div>
+          <div class="law-row"><div class="law-num">06</div><div class="law-old">理性被视为无限</div><div class="law-arrow">→</div><div class="law-new">资源约束 + 元逻辑</div><div class="law-effect">有限时间、算力和注意力迫使系统决定：何时证明、何时搜索、何时停止。</div></div>
+        </div>
+
+        <div class="coupling">
+          <article class="panel coupling-card"><h3>展开型生成 ≠ 结构型生成</h3><ul><li><b>展开型：</b>Implicit → Explicit。结论已被公理与规则蕴含，证明把它展开。</li><li><b>结构型：</b>Structure<sub>t</sub> → New Structure<sub>t+1</sub>。分类、关系或规则本身改变。</li></ul><div class="coupling-formula">Deductive Generation ≠ Generative Transformation</div></article>
+          <article class="panel coupling-card dark"><h3>理性效率来自搜索与筛选的乘积</h3><ul><li>过强约束：搜索空间过早坍缩，系统僵化。</li><li>过强生成：候选泛滥，系统失去真伪控制。</li><li>成熟逻辑：让生成器和验证器快速循环。</li></ul><div class="coupling-formula">Intelligence ≈ Generation × Verification × Feedback</div></article>
+        </div>
+      </section>
+
+      <section id="control" class="reveal">
+        <div class="section-head">
+          <div class="section-no">09 / CONTROL</div>
+          <div><h2>最终转变：<br>从“规则书”到“认知控制系统”</h2><p class="section-deck">在开放环境中，逻辑不再只判定一步推理是否有效，而是连续管理状态、误差、搜索、证据、行动与资源。</p></div>
+        </div>
+        <div class="panel control-panel">
+          <svg viewBox="0 0 1050 460" role="img" aria-label="逻辑认知控制回路">
+            <defs>
+              <marker id="arrowB" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path d="M0 0L10 5L0 10Z" fill="#567386"/></marker>
+              <marker id="arrowC" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path d="M0 0L10 5L0 10Z" fill="#00a7a5"/></marker>
+            </defs>
+            <g fill="none" stroke="#567386" stroke-width="2" marker-end="url(#arrowB)">
+              <path d="M140 220H251M397 220H508M654 220H765M911 220H985"/>
+            </g>
+            <path d="M838 287C838 393 651 413 525 413C366 413 191 386 191 288" fill="none" stroke="#00a7a5" stroke-width="2.4" marker-end="url(#arrowC)" stroke-dasharray="7 7"/>
+            <path d="M525 74V160" fill="none" stroke="#7257db" stroke-width="2.4" marker-end="url(#arrowB)"/>
+            <g font-family="Microsoft YaHei, sans-serif" text-anchor="middle">
+              <g><rect x="14" y="164" width="126" height="112" rx="17" fill="#edf3f7" stroke="#a7b8c3"/><text x="77" y="208" fill="#13212e" font-size="16" font-weight="700">现实 / 问题</text><text x="77" y="233" fill="#60707e" font-size="11">Observation</text><text x="77" y="251" fill="#60707e" font-size="11">Mismatch</text></g>
+              <g><rect x="251" y="164" width="146" height="112" rx="17" fill="#e8f6f4" stroke="#79bbb7"/><text x="324" y="208" fill="#13212e" font-size="16" font-weight="700">生成 / 搜索</text><text x="324" y="233" fill="#60707e" font-size="11">Hypotheses</text><text x="324" y="251" fill="#60707e" font-size="11">Candidates</text></g>
+              <g><rect x="508" y="164" width="146" height="112" rx="17" fill="#eaf1fb" stroke="#83a8d9"/><text x="581" y="208" fill="#13212e" font-size="16" font-weight="700">推导 / 预测</text><text x="581" y="233" fill="#60707e" font-size="11">Inference</text><text x="581" y="251" fill="#60707e" font-size="11">Prediction</text></g>
+              <g><rect x="765" y="164" width="146" height="112" rx="17" fill="#fff0e9" stroke="#e3a285"/><text x="838" y="208" fill="#13212e" font-size="16" font-weight="700">验证 / 行动</text><text x="838" y="233" fill="#60707e" font-size="11">Test</text><text x="838" y="251" fill="#60707e" font-size="11">Intervention</text></g>
+              <g><rect x="964" y="164" width="78" height="112" rx="17" fill="#13212e"/><text x="1003" y="210" fill="#fff" font-size="14" font-weight="700">更新</text><text x="1003" y="234" fill="#9eb7c4" font-size="10">Revise</text></g>
+              <g><rect x="416" y="12" width="218" height="62" rx="31" fill="#7257db"/><text x="525" y="39" fill="#fff" font-size="15" font-weight="700">MetaControl · 元控制</text><text x="525" y="58" fill="#e3ddff" font-size="10">目标 / 策略 / 资源 / 停止条件</text></g>
+              <text x="522" y="443" fill="#008e8b" font-size="12" font-weight="700">FEEDBACK · 误差返回系统，推动下一轮候选生成与规则修正</text>
+            </g>
+          </svg>
+          <div class="control-caption">
+            <div><b>OPENNESS</b><span>现实不断输入新证据，系统无法一次闭合。</span></div>
+            <div><b>NON-MONOTONICITY</b><span>新增信息可能撤销旧结论，而非只累积真理。</span></div>
+            <div><b>BOUNDED RESOURCES</b><span>推理质量取决于时间、算力与注意力配置。</span></div>
+            <div><b>METACONTROL</b><span>系统必须决定用哪种逻辑，以及何时切换。</span></div>
+          </div>
+        </div>
+      </section>
+
+      <section id="matrix" class="reveal">
+        <div class="section-head">
+          <div class="section-no">10 / MATRIX</div>
+          <div><h2>主要逻辑范式<br>在系统中的位置</h2><p class="section-deck">同一问题通常需要多个范式协同：分类给边界，生成给候选，因果给机制，概率给权重，演绎给后果，实验与论证给检验，更新与元逻辑负责回路。</p></div>
+        </div>
+        <div class="matrix-wrap">
+          <table>
+            <thead><tr><th>子系统</th><th>核心问题</th><th>典型输入 → 输出</th><th>主要有效性标准</th><th>典型盲区 / 失败</th></tr></thead>
+            <tbody>
+              <tr><td>分类逻辑</td><td>什么是什么？边界怎样划分？</td><td>连续差异 → 类别与层级</td><td>清晰、互斥 / 完备、用途适配</td><td>把历史性类别误作永恒本质</td></tr>
+              <tr><td>一致性逻辑</td><td>哪些状态不可同时接受？</td><td>命题集 → 无冲突状态</td><td>同一、不矛盾、边界稳定</td><td>一致但与现实无关；对矛盾过敏</td></tr>
+              <tr><td>演绎 / 证明</td><td>什么从什么必然推出？</td><td>前提 + 规则 → 定理</td><td>真值保持、可证明性</td><td>无法保证前提为真；受形式边界限制</td></tr>
+              <tr><td>论证逻辑</td><td>结论能否经受公开质疑？</td><td>主张 + 理由 + 反驳 → 正当化</td><td>相关性、充分性、可回应性</td><td>社会权力、语境与共同前提可能失真</td></tr>
+              <tr><td>归纳 / 概率</td><td>有限证据支持多大置信度？</td><td>样本 / 先验 → 一般化 / 后验</td><td>校准、证据权重、预测表现</td><td>分布漂移、先验敏感、归纳不保证必然</td></tr>
+              <tr><td>因果逻辑</td><td>若进行干预，会发生什么？</td><td>观察 / 干预 → 机制与反事实</td><td>可干预性、机制一致、识别条件</td><td>把相关当因果；忽略未观测混杂</td></tr>
+              <tr><td>生成 / 溯因</td><td>什么新解释可能成立？</td><td>异常 / 问题 → 候选模型</td><td>新颖、解释力、可检验、简约</td><td>候选丰富不等于真；容易合理化</td></tr>
+              <tr><td>计算 / 搜索</td><td>有效过程能否在有限资源中执行？</td><td>问题 + 算法 → 路径 / 结果</td><td>可计算性、复杂度、停止性</td><td>组合爆炸；理论可行但实践不可行</td></tr>
+              <tr><td>动态 / 非单调</td><td>时间、行动和新信息怎样改变结论？</td><td>状态 + 事件 → 新状态</td><td>时序一致、可撤销、情境适应</td><td>默认规则冲突；更新顺序影响结果</td></tr>
+              <tr><td>元逻辑</td><td>此刻该用哪套逻辑？规则何时应改？</td><td>任务 + 目标 + 资源 → 逻辑配置</td><td>整体绩效、鲁棒性、成本 / 风险</td><td>元层也可能无限回归或被错误目标支配</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <section id="synthesis" class="reveal">
+        <div class="architecture">
+          <div class="eyebrow">11 / SYNTHESIS</div>
+          <h2>Logical Cognitive Architecture<br>统一的逻辑认知架构</h2>
+          <p class="architecture-lead">逻辑的成熟形态，不是一套垄断所有问题的规则，而是一个能在不同任务、证据与资源条件下，组织多种逻辑协作并持续自我修正的架构。</p>
+          <div class="arch-equation">
+            <strong>THE INTEGRATED FORMULA</strong>
+            <code>Representation + Constraint + Generation + Inference + Search + Verification + Update + MetaControl</code>
+          </div>
+          <div class="arch-grid">
+            <div class="arch-item"><b>Representation</b><span>把世界转化为可操作的符号、关系和模型。</span></div>
+            <div class="arch-item"><b>Constraint</b><span>限定边界，排除不可接受或不相容状态。</span></div>
+            <div class="arch-item"><b>Generation</b><span>提出新概念、解释、结构与行动候选。</span></div>
+            <div class="arch-item"><b>Inference</b><span>展开后果，维持局部有效性与一致性。</span></div>
+            <div class="arch-item"><b>Search</b><span>在巨大可能空间中寻找可行路径与策略。</span></div>
+            <div class="arch-item"><b>Verification</b><span>以证明、反例、实验、预测和对抗淘汰错误。</span></div>
+            <div class="arch-item"><b>Update</b><span>把反馈写回信念、模型、状态乃至规则。</span></div>
+            <div class="arch-item"><b>MetaControl</b><span>设定目标、调度逻辑、配置资源并监测系统。</span></div>
+          </div>
+          <p class="final-thesis">逻辑史的深层方向，是从“<em>保持一个真结论</em>”走向“<em>维持一个能够产生、检验并修正自身的认知系统</em>”。</p>
+        </div>
+        <div class="reading-notes">
+          <div class="panel reading-note"><b>不是相互取代</b><p>新逻辑通常修补旧逻辑的适用边界；演绎不会因概率与生成出现而失效。</p></div>
+          <div class="panel reading-note"><b>没有万能逻辑</b><p>适用性取决于对象、目标、信息完备度、行动风险与资源条件。</p></div>
+          <div class="panel reading-note"><b>元逻辑是开放问题</b><p>谁来设定目标？怎样评价评价标准？自我修正系统也需要外部现实与公共批评。</p></div>
+        </div>
+      </section>
+
+      <footer><span>逻辑作为系统的发展演化史</span><span>结构视角：区分 → 约束 → 推导 → 生成 → 更新 → 自我调节</span></footer>
+    </main>
+  </div>
+
+  <script>
+    (() => {
+      const root = document.querySelector('.logic-evolution-page');
+      if (!root) return;
+      const progress = root.querySelector('.progress');
+      const sections = [...root.querySelectorAll('main section[id]')];
+      const links = [...root.querySelectorAll('.toc a, .mobile-toc a')];
+      const byId = new Map();
+      links.forEach(link => {
+        const id = link.getAttribute('href').slice(1);
+        if (!byId.has(id)) byId.set(id, []);
+        byId.get(id).push(link);
+      });
+
+      const updateProgress = () => {
+        const max = document.documentElement.scrollHeight - innerHeight;
+        progress.style.transform = `scaleX(${max > 0 ? scrollY / max : 0})`;
+      };
+      addEventListener('scroll', updateProgress, { passive: true });
+      updateProgress();
+
+      const navObserver = new IntersectionObserver(entries => {
+        const visible = entries.filter(e => e.isIntersecting).sort((a, b) => b.intersectionRatio - a.intersectionRatio)[0];
+        if (!visible) return;
+        links.forEach(link => link.classList.remove('active'));
+        (byId.get(visible.target.id) || []).forEach(link => link.classList.add('active'));
+      }, { rootMargin: '-15% 0px -68% 0px', threshold: [0, .1, .3] });
+      sections.forEach(section => navObserver.observe(section));
+
+      const revealObserver = new IntersectionObserver(entries => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('visible');
+            revealObserver.unobserve(entry.target);
+          }
+        });
+      }, { threshold: .05, rootMargin: '0px 0px -5% 0px' });
+      root.querySelectorAll('.reveal').forEach(el => revealObserver.observe(el));
+    })();
+  </script>

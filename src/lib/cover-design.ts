@@ -136,6 +136,7 @@ export const ARTICLE_COVERS: Record<string, { motif: CoverMotif; layout?: CoverL
   '/reading/politics/china-reform-central-local-systems-analysis/': { motif: 'feedback', layout: 'framed' },
   '/working/memories/claude-conversation-library/': { motif: 'data', layout: 'split' },
   '/reading/thinking/concept-judgment-reasoning-argument/': { motif: 'feedback', layout: 'band' },
+  '/reading/thinking/logic-system-evolution/': { motif: 'timeline', layout: 'split' },
 };
 
 const TEXTURES: Partial<Record<CoverMotif, [CoverTexture, CoverTexture]>> = {
