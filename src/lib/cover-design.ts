@@ -137,6 +137,7 @@ export const ARTICLE_COVERS: Record<string, { motif: CoverMotif; layout?: CoverL
   '/working/memories/claude-conversation-library/': { motif: 'data', layout: 'split' },
   '/reading/thinking/concept-judgment-reasoning-argument/': { motif: 'feedback', layout: 'band' },
   '/reading/thinking/logic-system-evolution/': { motif: 'timeline', layout: 'split' },
+  '/reading/thinking/human-brain-evolution/': { motif: 'network', layout: 'framed' },
 };
 
 const TEXTURES: Partial<Record<CoverMotif, [CoverTexture, CoverTexture]>> = {
