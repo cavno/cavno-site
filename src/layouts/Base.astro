@@ -2,6 +2,8 @@
 import '../styles/global.css';
 import nav from '../content/nav.json';
 import GlobalSearch from '../components/GlobalSearch.astro';
+import { getCollection } from 'astro:content';
+import { compareItemsNewestFirst } from '../lib/content-order';
 
 interface Props {
   title?: string;
@@ -18,6 +20,10 @@ const _p = Astro.url.pathname;
 const norm = _p.endsWith('/') ? _p : _p + '/';
 const isSec = (slug: string) => norm.startsWith(`/${slug}/`);
 const isSub = (slug: string, sub: string) => norm.startsWith(`/${slug}/${sub}/`);
+const navEntries = (await getCollection('items')).sort(compareItemsNewestFirst);
+const recentFor = (section: string, subsection: string) =>
+  navEntries.filter((entry) => entry.data.section === section && entry.data.subsection === subsection).slice(0, 3);
+const panelColumns = (count: number) => Math.min(4, Math.max(1, count));
 
 /* Working 板块由 Cloudflare Access（Zero Trust）在边缘鉴权，仓库内不含任何口令。
    此处仅额外声明不被搜索引擎收录，作为纵深防御（见 docs/ACCESS-SETUP.md）。 */
@@ -48,31 +54,73 @@ const restricted = norm.startsWith('/working/');
 
     <nav class="cv-primary" aria-label="主导航">
       {nav.sections.map((s) => (
-        <div class="cv-nav-item">
-          <button class:list={['cv-nav-btn', { active: isSec(s.slug) }]} aria-expanded="false" aria-current={isSec(s.slug) ? 'true' : undefined}>{s.en}
+        <div class="cv-nav-item" style={`--cv-mega-columns:${panelColumns(s.subsections.length)}`}>
+          <button class:list={['cv-nav-btn', { active: isSec(s.slug) }]} id={`cvNav-${s.slug}`} aria-expanded="false" aria-controls={`cvMega-${s.slug}`} aria-current={isSec(s.slug) ? 'true' : undefined}>{s.en}
             <svg class="cv-chev" viewBox="0 0 12 12" fill="none" aria-hidden="true"><path d="M2 4l4 4 4-4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
           </button>
-          <div class="cv-panel">
-            {s.planned && <div class="cv-group-label">二级栏目 · 拟设</div>}
-            {s.subsections.map((sub) => (
-              <a href={`/${s.slug}/${sub.slug}/`} class:list={{ active: isSub(s.slug, sub.slug) }} aria-current={isSub(s.slug, sub.slug) ? 'page' : undefined}>
-                <div class="cv-p-title">{sub.en}{sub.zh !== sub.en && <small>{sub.zh}</small>}</div>
-                {sub.desc && <div class="cv-p-desc">{sub.desc}</div>}
-              </a>
-            ))}
-            <a class="cv-panel-home" href={`/${s.slug}/`}>进入 {s.zh} 板块 →</a>
+          <div class="cv-mega-panel" id={`cvMega-${s.slug}`} aria-labelledby={`cvNav-${s.slug}`}>
+            <div class="cv-mega-head">
+              <div>
+                <span class="cv-mega-kicker">{s.zh} · CONTENT MAP</span>
+                <p>{s.desc}</p>
+              </div>
+              <a class="cv-mega-overview" href={`/${s.slug}/`}>查看全部 {s.zh}内容 <span aria-hidden="true">↗</span></a>
+            </div>
+            <div class="cv-mega-grid">
+              {s.subsections.map((sub) => (
+                <div class:list={['cv-mega-group', { active: isSub(s.slug, sub.slug) }]}>
+                  <a class="cv-mega-group-title" href={`/${s.slug}/${sub.slug}/`} aria-current={isSub(s.slug, sub.slug) ? 'page' : undefined}>
+                    <span>{sub.en}</span><small>{sub.zh}</small><i aria-hidden="true">↗</i>
+                  </a>
+                  {sub.desc && <p class="cv-mega-group-desc">{sub.desc}</p>}
+                  <div class="cv-mega-links">
+                    {recentFor(s.slug, sub.slug).map((entry) => (
+                      <a href={entry.data.href}><span>{entry.data.title}</span><i aria-hidden="true">→</i></a>
+                    ))}
+                  </div>
+                </div>
+              ))}
+            </div>
           </div>
         </div>
       ))}
+      {nav.utilityMenus.map((menu) => (
+        <div class="cv-nav-item" style={`--cv-mega-columns:${panelColumns(menu.groups.length)}`}>
+          <button class="cv-nav-btn" id={`cvNav-${menu.slug}`} aria-expanded="false" aria-controls={`cvMega-${menu.slug}`}>{menu.en}
+            <svg class="cv-chev" viewBox="0 0 12 12" fill="none" aria-hidden="true"><path d="M2 4l4 4 4-4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+          </button>
+          <div class="cv-mega-panel cv-mega-panel-utility" id={`cvMega-${menu.slug}`} aria-labelledby={`cvNav-${menu.slug}`}>
+            <div class="cv-mega-head">
+              <div>
+                <span class="cv-mega-kicker">{menu.zh} · QUICK ACCESS</span>
+                <p>{menu.desc}</p>
+              </div>
+            </div>
+            <div class="cv-mega-grid">
+              {menu.groups.map((group) => (
+                <div class="cv-mega-group">
+                  <a class="cv-mega-group-title" href={group.href}>
+                    <span>{group.en}</span><small>{group.zh}</small><i aria-hidden="true">↗</i>
+                  </a>
+                  <div class="cv-mega-links cv-mega-links-utility">
+                    {group.links.map((link) => (
+                      <a href={link.href}><span>{link.title}</span><i aria-hidden="true">→</i></a>
+                    ))}
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+      ))}
+      <a class="cv-nav-link" href="/#about">About</a>
     </nav>
 
     <div class="cv-head-actions">
-      <button class="cv-btn cv-btn-line cv-search-open" type="button" data-cv-search-open aria-haspopup="dialog" aria-controls="cvGlobalSearch" aria-expanded="false">
+      <button class="cv-nav-search cv-search-open" type="button" data-cv-search-open aria-label="搜索全站" aria-haspopup="dialog" aria-controls="cvGlobalSearch" aria-expanded="false">
         <span class="cv-search-open-icon" aria-hidden="true"></span>
-        搜索全站
-        <kbd>/</kbd>
+        <span>Search</span>
       </button>
-      <a class="cv-btn cv-btn-ink" href="/#recent">最近更新</a>
     </div>
 
     <button class="cv-burger" id="cvBurger" aria-label="打开菜单" aria-expanded="false">
@@ -88,22 +136,40 @@ const restricted = norm.startsWith('/working/');
   </div>
   {nav.sections.map((s) => (
     <div class:list={['cv-acc', { open: isSec(s.slug) }]}>
-      <button class="cv-acc-btn">{s.en}
+      <button class="cv-acc-btn" aria-expanded={isSec(s.slug) ? 'true' : 'false'}>{s.en}
         <svg class="cv-chev" viewBox="0 0 12 12" fill="none" aria-hidden="true"><path d="M2 4l4 4 4-4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
       </button>
       <div class="cv-acc-body">
-        <a href={`/${s.slug}/`}>{s.zh}板块首页</a>
+        <a class="cv-drawer-overview" href={`/${s.slug}/`}>查看全部 {s.zh}内容 <span aria-hidden="true">↗</span></a>
         {s.subsections.map((sub) => (
-          <a href={`/${s.slug}/${sub.slug}/`} class:list={{ active: isSub(s.slug, sub.slug) }}>{sub.en}{sub.zh !== sub.en ? ` ${sub.zh}` : ''}</a>
+          <div class="cv-drawer-group">
+            <a class:list={['cv-drawer-group-title', { active: isSub(s.slug, sub.slug) }]} href={`/${s.slug}/${sub.slug}/`}>{sub.en}<small>{sub.zh}</small></a>
+            {recentFor(s.slug, sub.slug).slice(0, 2).map((entry) => <a class="cv-drawer-entry" href={entry.data.href}>{entry.data.title}</a>)}
+          </div>
         ))}
       </div>
     </div>
   ))}
+  {nav.utilityMenus.map((menu) => (
+    <div class="cv-acc">
+      <button class="cv-acc-btn" aria-expanded="false">{menu.en}
+        <svg class="cv-chev" viewBox="0 0 12 12" fill="none" aria-hidden="true"><path d="M2 4l4 4 4-4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+      </button>
+      <div class="cv-acc-body">
+        {menu.groups.map((group) => (
+          <div class="cv-drawer-group">
+            <a class="cv-drawer-group-title" href={group.href}>{group.en}<small>{group.zh}</small></a>
+            {group.links.map((link) => <a class="cv-drawer-entry" href={link.href}>{link.title}</a>)}
+          </div>
+        ))}
+      </div>
+    </div>
+  ))}
+  <a class="cv-drawer-direct" href="/#about">About <span>关于本站</span><i aria-hidden="true">↗</i></a>
   <button class="cv-btn cv-btn-line cv-drawer-search" type="button" data-cv-search-open aria-haspopup="dialog" aria-controls="cvGlobalSearch" aria-expanded="false">
     <span class="cv-search-open-icon" aria-hidden="true"></span>
     搜索全站
   </button>
-  <a class="cv-btn cv-btn-ink" href="/#recent">浏览最近更新</a>
 </div>
 
 <GlobalSearch />
@@ -111,7 +177,7 @@ const restricted = norm.startsWith('/working/');
 <main id="cvMain">
   <slot />
 </main>
-<footer class="cv-site-foot">
+<footer class="cv-site-foot" id="about">
   <div class="cv-foot-in">
     <div class="cv-foot-grid">
       <div>
@@ -140,8 +206,8 @@ const restricted = norm.startsWith('/working/');
   window.addEventListener('scroll', onScroll, { passive: true });
   onScroll();
 
-  // 桌面端下拉：点击开合（触屏友好），hover 由 CSS 处理
-  const items = Array.from(document.querySelectorAll('.cv-nav-item'));
+  // 桌面端多级导航：点击开合，hover / focus-within 由 CSS 处理
+  const items = Array.from(document.querySelectorAll('.cv-site-head .cv-nav-item'));
   const closeAll = () => items.forEach((o) => {
     o.classList.remove('open');
     o.querySelector('.cv-nav-btn')?.setAttribute('aria-expanded', 'false');
@@ -155,21 +221,27 @@ const restricted = norm.startsWith('/working/');
       if (willOpen) { it.classList.add('open'); btn.setAttribute('aria-expanded', 'true'); }
     });
   });
+  document.querySelectorAll('.cv-site-head [data-cv-search-open]').forEach((button) => button.addEventListener('click', closeAll));
   document.addEventListener('click', closeAll);
 
   // 移动端抽屉
   const cvDrawer = document.getElementById('cvDrawer');
   const cvBurger = document.getElementById('cvBurger');
-  const openDrawer = () => { cvDrawer?.classList.add('open'); document.body.classList.add('lock'); cvBurger?.setAttribute('aria-expanded', 'true'); };
-  const closeDrawer = () => { cvDrawer?.classList.remove('open'); document.body.classList.remove('lock'); cvBurger?.setAttribute('aria-expanded', 'false'); };
+  const drawerClose = document.getElementById('cvDrawerClose');
+  const openDrawer = () => { cvDrawer?.classList.add('open'); document.body.classList.add('lock'); cvBurger?.setAttribute('aria-expanded', 'true'); drawerClose?.focus(); };
+  const closeDrawer = (restoreFocus = false) => { cvDrawer?.classList.remove('open'); document.body.classList.remove('lock'); cvBurger?.setAttribute('aria-expanded', 'false'); if (restoreFocus) cvBurger?.focus(); };
   cvBurger?.addEventListener('click', openDrawer);
-  document.getElementById('cvDrawerClose')?.addEventListener('click', closeDrawer);
-  cvDrawer?.addEventListener('click', (e) => { if ((e.target as HTMLElement).tagName === 'A') closeDrawer(); });
-  document.addEventListener('keydown', (e) => { if (e.key === 'Escape') { closeAll(); closeDrawer(); } });
+  drawerClose?.addEventListener('click', () => closeDrawer(true));
+  cvDrawer?.addEventListener('click', (e) => { if ((e.target as HTMLElement).closest('a')) closeDrawer(); });
+  cvDrawer?.querySelector('[data-cv-search-open]')?.addEventListener('click', () => closeDrawer());
+  document.addEventListener('keydown', (e) => { if (e.key === 'Escape') { closeAll(); if (cvDrawer?.classList.contains('open')) closeDrawer(true); } });
 
   // 抽屉内手风琴
   document.querySelectorAll('.cv-acc-btn').forEach((b) => {
-    b.addEventListener('click', () => b.parentElement?.classList.toggle('open'));
+    b.addEventListener('click', () => {
+      const open = b.parentElement?.classList.toggle('open') ?? false;
+      b.setAttribute('aria-expanded', String(open));
+    });
   });
 </script>
 </body>
