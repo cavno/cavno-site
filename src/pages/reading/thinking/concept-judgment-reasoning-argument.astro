@@ -1,0 +1,26 @@
+---
+// 由 scripts/convert.mjs 生成，可自由手工精修
+import Base from '../../../layouts/Base.astro';
+import body from '../../../legacy/reading/thinking/concept-judgment-reasoning-argument/body.html?raw';
+import '../../../legacy/reading/thinking/concept-judgment-reasoning-argument/style.css';
+
+const meta = {
+  "title": "概念—判断—推理—论证｜动态自校正认知系统",
+  "description": "从系统论视角统一理解概念、判断、推理与论证：一个动态、自我校正的认知系统。"
+};
+---
+<Base title={meta.title + ' · Cavno'} description={meta.description}>
+
+  <section class="cv-page-head">
+    <div class="cv-wrap">
+      <div class="cv-eyebrow">Reading & Thinking · Thinking</div>
+      <h1 class="cv-page-title">{meta.title}</h1>
+      <p class="cv-lede">{meta.description}</p>
+      <a class="cv-crumb-back" href="/reading/thinking/">← 返回思考栏目</a>
+    </div>
+  </section>
+
+  <article class="lp logic-system-page">
+    <Fragment set:html={body} />
+  </article>
+</Base>

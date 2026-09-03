@@ -1,0 +1,365 @@
+<a class="skip" href="#main">跳到正文</a>
+  <div class="progress" aria-hidden="true"><span id="progressBar"></span></div>
+  <header class="topbar">
+    <div class="topbar-inner">
+      <button class="icon-btn menu-btn" id="menuBtn" aria-label="打开目录" aria-expanded="false">目录</button>
+      <div class="brand"><span class="brand-mark" aria-hidden="true"><i></i><i></i><i></i><i></i></span><span>系统逻辑</span></div>
+      <div class="topbar-title">概念 → 判断 → 推理 → 论证</div>
+      <div class="top-actions">
+        <button class="icon-btn focus-btn" id="focusBtn" aria-pressed="false">专注阅读</button>
+        <button class="icon-btn" id="themeBtn" aria-label="切换明暗主题">明暗</button>
+        <button class="icon-btn print-btn" onclick="window.print()">打印</button>
+      </div>
+    </div>
+  </header>
+
+  <div class="layout">
+    <aside class="toc" aria-label="页面目录">
+      <p class="toc-kicker">Contents</p>
+      <nav id="tocNav">
+        <a href="#overview">00 · 总览</a>
+        <a href="#map">01 · 四层地图</a>
+        <a href="#matrix">02 · 横向对比</a>
+        <a href="#concept">03 · 概念系统</a>
+        <a href="#judgment">04 · 判断系统</a>
+        <a href="#reasoning">05 · 推理系统</a>
+        <a href="#argument">06 · 论证系统</a>
+        <a href="#errors">07 · 错误传播</a>
+        <a href="#meta">08 · 元认知层级</a>
+        <a href="#unified">09 · 统一系统</a>
+        <a class="toc-sub" href="#protocol">实践协议</a>
+        <a href="#boundary">10 · 边界说明</a>
+      </nav>
+      <p class="toc-foot">四层递进 · 多层反馈 · 可回溯纠错<br>建议从总览进入，再按层深入。</p>
+    </aside>
+
+    <main id="main">
+      <section class="hero" id="overview">
+        <div class="content">
+          <p class="eyebrow">Formal logic × Systems thinking</p>
+          <h1>概念—判断—推理—论证<span>一个动态自校正的认知系统</span></h1>
+          <p class="lede">形式逻辑不只是四个静态名词。它们构成一条从现实到公共知识的加工链：<strong>概念决定看见什么，判断决定承诺什么，推理决定如何更新，论证决定为何值得共同接受。</strong></p>
+          <div class="hero-grid">
+            <div class="thesis">
+              <small>CORE THESIS · 核心命题</small>
+              <p>认知质量不只取决于推导是否有效，还取决于概念切分是否合适、判断是否与证据匹配、论证是否经得起他者与现实的双重检验，以及系统能否把错误反馈到正确的层级。</p>
+            </div>
+            <div class="hero-metrics" aria-label="页面框架数字">
+              <div class="metric"><strong>4</strong><span>认知加工层</span></div>
+              <div class="metric"><strong>8</strong><span>动态闭环节点</span></div>
+              <div class="metric"><strong>3</strong><span>验证回路</span></div>
+              <div class="metric"><strong>1</strong><span>统一认知系统</span></div>
+            </div>
+          </div>
+          <div class="hero-flow" aria-label="动态闭环总览">
+            <div class="flow-strip">
+              <div class="flow-node"><b>现实</b><span>尚未被完整编码的环境与事件</span></div>
+              <div class="flow-node c"><b>概念化</b><span>切分、压缩、命名与关系化</span></div>
+              <div class="flow-node j"><b>判断</b><span>形成有条件的认知承诺</span></div>
+              <div class="flow-node r"><b>推理</b><span>生成、搜索、检验与更新</span></div>
+              <div class="flow-node a"><b>论证</b><span>把理由结构公开化</span></div>
+              <div class="flow-node v"><b>社会验证</b><span>质疑、复核、实验与对话</span></div>
+              <div class="flow-node j"><b>修正判断</b><span>调整真值、强度与行动承诺</span></div>
+              <div class="flow-node c"><b>修订概念</b><span>重画边界、关系与本体结构</span></div>
+            </div>
+            <div class="feedback-note">修订后的概念框架重新进入下一轮观察；终点同时也是新起点。</div>
+          </div>
+        </div>
+      </section>
+
+      <section class="section" id="map">
+        <div class="content">
+          <div class="section-head"><div class="section-no">01 / MAP</div><div><h2>四个问题，四次认知跃迁</h2><p>每一层都接收上一层的输出，同时加入一种此前没有的新能力。它们不是简单并列，而是逐层扩大系统边界。</p></div></div>
+          <div class="four-grid">
+            <article class="layer-card concept"><span class="num">01 · CUT</span><h3>概念</h3><div class="en">Concept</div><p class="question">“我把现实中的什么，看成什么？”</p><p class="output">输出：可复用的对象、类别、属性与关系。</p></article>
+            <article class="layer-card judgment"><span class="num">02 · COMMIT</span><h3>判断</h3><div class="en">Judgment</div><p class="question">“在这个概念框架下，我承诺什么成立？”</p><p class="output">输出：带语境、证据与置信度的命题承诺。</p></article>
+            <article class="layer-card reason"><span class="num">03 · TRANSFORM</span><h3>推理</h3><div class="en">Reasoning</div><p class="question">“怎样从已有判断生成、检验并更新新判断？”</p><p class="output">输出：候选结论、解释、证明或决策。</p></article>
+            <article class="layer-card argument"><span class="num">04 · EXPOSE</span><h3>论证</h3><div class="en">Argument</div><p class="question">“为什么别人应接受它？怎样公开检查？”</p><p class="output">输出：可质疑、可复核、可修订的理由结构。</p></article>
+          </div>
+          <div class="bridge">
+            <div class="bridge-card"><span class="tag">Private cognition</span><b>主体内部：形成与更新信念</b><p>概念、判断与推理可以发生在单一认知主体内部。</p></div>
+            <div class="bridge-arrow" aria-hidden="true">→</div>
+            <div class="bridge-card"><span class="tag">Public inspection</span><b>主体之间：暴露与校正理由</b><p>论证加入“他者”，把私有推理升级为社会纠错机制。</p></div>
+          </div>
+        </div>
+      </section>
+
+      <section class="section" id="matrix">
+        <div class="content">
+          <div class="section-head"><div class="section-no">02 / MATRIX</div><div><h2>四层横向对比</h2><p>同一认知活动在不同层级上有不同输入、操作、质量标准和元问题。混淆层级，是许多争论无效的根源。</p></div></div>
+          <div class="table-wrap" role="region" aria-label="四层对比表" tabindex="0">
+            <table>
+              <thead><tr><th>维度</th><th class="col-c">概念 Concept</th><th class="col-j">判断 Judgment</th><th class="col-r">推理 Reasoning</th><th class="col-a">论证 Argument</th></tr></thead>
+              <tbody>
+                <tr><th>核心功能</th><td>表示与组织现实</td><td>对世界状态作承诺</td><td>转换与更新认知状态</td><td>公开正当化一个判断</td></tr>
+                <tr><th>主要输入</th><td>经验、差异、目的、语言</td><td>概念、关系、证据、语境</td><td>判断、知识、目标、资源</td><td>主张、前提、证据、受众</td></tr>
+                <tr><th>关键操作</th><td>区分、抽象、压缩、关联</td><td>绑定、量化、模态化、赋信</td><td>生成、搜索、演绎、归纳、溯因</td><td>呈示、担保、回应、反驳、修订</td></tr>
+                <tr><th>典型输出</th><td>类别 / 属性 / 关系结构</td><td>可真可假、可强可弱的承诺</td><td>新结论 / 解释 / 计划</td><td>可公开检查的理由网络</td></tr>
+                <tr><th>首要标准</th><td>有用区分 + 解释力</td><td>证据匹配 + 置信校准</td><td>有效性 + 相关性 + 效率</td><td>前提可靠 + 推导透明 + 可回应</td></tr>
+                <tr><th>主要验证</th><td>反例、边界案例、预测效果</td><td>事实核验、概率校准、行动后果</td><td>证明、实验、模拟、反事实</td><td>批判、同行复核、交叉询问、重复</td></tr>
+                <tr><th>典型故障</th><td>边界错、实体化、概念僵化</td><td>证据不足、过度确信、语境丢失</td><td>无效推导、搜索偏置、资源浪费</td><td>偷换前提、隐藏担保、屏蔽反驳</td></tr>
+                <tr><th>元层问题</th><td>是否该重画世界模型？</td><td>承诺强度是否合适？</td><td>是否该换表示、策略或验证器？</td><td>规则、公平性与证明责任是否合理？</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <section class="section" id="concept">
+        <div class="content">
+          <div class="section-head"><div class="section-no">03 / CONCEPT</div><div><h2>概念系统：先决定世界如何出现</h2><p>逻辑在概念之后开始工作。若切分现实的方式有误，形式上完美的推导也可能只是在错误地图上精确前进。</p></div></div>
+          <article class="stage concept">
+            <div class="stage-top"><div class="stage-id"><span class="roman">C</span><span class="stage-en">Representation layer</span></div><div class="stage-title"><h3>概念不是词义盒子，而是可更新的关系系统</h3><p class="big-q">它把连续、复杂、无限细节的现实，压缩为可识别、可比较、可组合、可预测的认知单位。</p><p class="definition">词只是概念的标签；定义只是概念的一个接口；集合只是概念的一种形式表示。概念还包含原型、边界、关系、用途与更新规则。</p></div></div>
+            <div class="formula"><strong>Concept</strong> = Representation + Boundary + Features + Examples + Relations + InferentialRole + Context + UpdateRules</div>
+            <div class="stage-body">
+              <div class="stage-col"><h4 class="mini-title">系统变量</h4><div class="variable-grid">
+                <div class="variable"><b>X</b><span>对象域：概念试图覆盖什么</span></div><div class="variable"><b>F</b><span>特征：用于识别和比较的维度</span></div>
+                <div class="variable"><b>B</b><span>边界：成员与非成员如何区分</span></div><div class="variable"><b>P</b><span>原型 / 范例：典型成员与边界案例</span></div>
+                <div class="variable"><b>R</b><span>关系：与上位、下位、相邻概念的连接</span></div><div class="variable"><b>I</b><span>推理角色：它允许推出或排除什么</span></div>
+                <div class="variable"><b>K</b><span>语境：任务、文化、尺度与背景知识</span></div><div class="variable"><b>U</b><span>更新规则：反例出现时如何修订</span></div>
+              </div></div>
+              <div class="stage-col"><h4 class="mini-title">基本变换</h4><div class="steps">
+                <div class="step"><b>差异探测：</b>从连续经验中发现稳定差异。</div><div class="step"><b>边界形成：</b>决定哪些差异重要、哪些暂时忽略。</div>
+                <div class="step"><b>关系嵌入：</b>把概念放入分类、因果和功能网络。</div><div class="step"><b>预测检验：</b>看它能否支持识别、解释与行动。</div>
+                <div class="step"><b>概念修订：</b>通过分裂、合并、重命名或换维度更新。</div>
+              </div></div>
+            </div>
+            <div class="stage-bottom">
+              <div class="panel"><h4 class="mini-title">典型故障</h4><div class="fault-list">
+                <div class="fault"><i>!</i><div><b>边界错误</b><span>把连续差异硬切成错误类别，或遗漏关键成员。</span></div></div>
+                <div class="fault"><i>!</i><div><b>概念实体化</b><span>把分析工具误当作世界中天然存在的实体。</span></div></div>
+                <div class="fault"><i>!</i><div><b>维度遗漏</b><span>只沿熟悉维度分类，看不见更有解释力的差异。</span></div></div>
+                <div class="fault"><i>!</i><div><b>概念锁定</b><span>面对反例只修补判断，却拒绝重画概念边界。</span></div></div>
+              </div></div>
+              <div class="panel"><h4 class="mini-title">元层能力</h4><div class="meta-list">
+                <div class="meta"><i>✓</i><div><b>边界审计</b><span>检查必要条件、充分条件、典型例与反例。</span></div></div>
+                <div class="meta"><i>✓</i><div><b>多表征切换</b><span>在集合、原型、网络、过程等表示之间切换。</span></div></div>
+                <div class="meta"><i>✓</i><div><b>本体重构</b><span>当旧分类持续失败时，重设对象与关系。</span></div></div>
+              </div></div>
+            </div>
+          </article>
+        </div>
+      </section>
+
+      <section class="section" id="judgment">
+        <div class="content">
+          <div class="section-head"><div class="section-no">04 / JUDGMENT</div><div><h2>判断系统：把表示转化为承诺</h2><p>概念提供“能说什么”，判断决定“此刻愿意承诺什么”。判断不是孤立命题，而是主体在证据、语境与目标下形成的可更新认知状态。</p></div></div>
+          <article class="stage judgment">
+            <div class="stage-top"><div class="stage-id"><span class="roman">J</span><span class="stage-en">Commitment layer</span></div><div class="stage-title"><h3>判断 = 状态判定 + 关系绑定 + 置信承诺</h3><p class="big-q">它把若干概念组织成关于世界的内容，并标明这个内容是真、可能、必要，还是仅在特定条件下值得行动。</p><p class="definition">一句话是语言表达；命题是它表达的可真可假内容；判断则进一步加入主体、证据、语境、置信度和承诺后果。</p></div></div>
+            <div class="formula"><strong>Judgment</strong> = ConceptBinding + RelationAssignment + Truth/EvidenceAssessment + Context + Commitment</div>
+            <div class="stage-body">
+              <div class="stage-col"><h4 class="mini-title">系统变量</h4><div class="variable-grid">
+                <div class="variable"><b>C</b><span>参与判断的概念</span></div><div class="variable"><b>R</b><span>主体、谓词、因果或比较关系</span></div>
+                <div class="variable"><b>Q</b><span>全称、存在、可能、必要等限定</span></div><div class="variable"><b>E</b><span>当前可用证据及其质量</span></div>
+                <div class="variable"><b>K</b><span>背景知识、时间与语境</span></div><div class="variable"><b>M</b><span>模态、真实性与置信强度</span></div>
+                <div class="variable"><b>V</b><span>核验、校准与反例机制</span></div><div class="variable"><b>A</b><span>可支持的行动与后续推理</span></div>
+              </div></div>
+              <div class="stage-col"><h4 class="mini-title">句子、命题、判断</h4><div class="distinction">
+                <div class="distinct"><b>句子</b><p>“明天下雨。”<br>语言载体</p></div><div class="distinct"><b>命题</b><p>明天下雨这一可真可假的内容</p></div><div class="distinct active"><b>判断</b><p>我基于证据，以 70% 置信度接受该命题</p></div>
+              </div><h4 class="mini-title" style="margin-top:22px">更新机制</h4><div class="formula" style="margin:0;background:var(--surface-2);color:var(--ink-2)"><strong>J<sub>t+1</sub></strong> = Update(J<sub>t</sub>, E<sub>t+1</sub>, K<sub>t+1</sub>)</div></div>
+            </div>
+            <div class="stage-bottom">
+              <div class="panel"><h4 class="mini-title">典型故障</h4><div class="fault-list">
+                <div class="fault"><i>!</i><div><b>证据—强度失配</b><span>有限证据却支持全称、必然或高度确信的结论。</span></div></div>
+                <div class="fault"><i>!</i><div><b>语境塌缩</b><span>把局部、短期、特定条件下成立误写成普遍成立。</span></div></div>
+                <div class="fault"><i>!</i><div><b>描述与评价混淆</b><span>事实判断、价值判断与行动判断未分层。</span></div></div>
+                <div class="fault"><i>!</i><div><b>承诺惯性</b><span>新证据出现后，因身份或沉没成本拒绝更新。</span></div></div>
+              </div></div>
+              <div class="panel"><h4 class="mini-title">元层能力</h4><div class="meta-list">
+                <div class="meta"><i>✓</i><div><b>置信校准</b><span>让主张强度与证据质量相称。</span></div></div>
+                <div class="meta"><i>✓</i><div><b>承诺分层</b><span>区分“相信”“暂定”“行动上采用”和“仅供探索”。</span></div></div>
+                <div class="meta"><i>✓</i><div><b>撤回条件显式化</b><span>预先说明什么新证据会使判断改变。</span></div></div>
+              </div></div>
+            </div>
+          </article>
+        </div>
+      </section>
+
+      <section class="section" id="reasoning">
+        <div class="content">
+          <div class="section-head"><div class="section-no">05 / REASONING</div><div><h2>推理系统：在可能空间中受控搜索</h2><p>逻辑规则只是推理的操作组件之一。完整推理还需要问题表示、目标、知识、启发式、记忆、验证器与资源分配。</p></div></div>
+          <article class="stage reason">
+            <div class="stage-top"><div class="stage-id"><span class="roman">R</span><span class="stage-en">Transformation layer</span></div><div class="stage-title"><h3>推理不是直线，而是“生成—检验—修订”闭环</h3><p class="big-q">给定不完整的当前状态，认知主体通过允许的操作与搜索策略，逐步抵达一个能通过验证阈值的新状态。</p><p class="definition">演绎保证条件性的有效；归纳从样本扩展；溯因寻找最佳解释；类比迁移结构；模拟与反事实探索“如果改变会怎样”。</p></div></div>
+            <div class="formula"><strong>Reasoning</strong> = Representation + Knowledge + Operators + Search + Memory + Verification + Feedback + ResourceAllocation</div>
+            <div class="stage-body">
+              <div class="stage-col"><h4 class="mini-title">系统变量</h4><div class="variable-grid">
+                <div class="variable"><b>X<sub>t</sub></b><span>当前认知状态 / 问题表示</span></div><div class="variable"><b>K<sub>t</sub></b><span>知识、模型与前提集合</span></div>
+                <div class="variable"><b>G<sub>t</sub></b><span>问题目标与停止条件</span></div><div class="variable"><b>O<sub>t</sub></b><span>允许使用的推理操作</span></div>
+                <div class="variable"><b>H<sub>t</sub></b><span>搜索策略与启发式</span></div><div class="variable"><b>M<sub>t</sub></b><span>工作记忆与外部记忆</span></div>
+                <div class="variable"><b>V<sub>t</sub></b><span>证明、实验、批判等验证器</span></div><div class="variable"><b>C<sub>t</sub></b><span>时间、注意力与算力预算</span></div>
+              </div></div>
+              <div class="stage-col"><h4 class="mini-title">基本循环</h4><div class="loop-3"><div>生成候选<br><small>Generate</small></div><div>评估候选<br><small>Evaluate</small></div><div>修订路径<br><small>Revise</small></div></div>
+                <div class="formula" style="margin:18px 0 0;background:var(--surface-2);color:var(--ink-2)"><strong>X<sub>t+1</sub></strong> = T(X<sub>t</sub>, K, G, O, H, M, V ; C)<br><span class="sub">直到 V(X<sub>n</sub>) ≥ Threshold</span></div>
+                <p style="margin:17px 0 0;color:var(--muted);font-size:13px"><b style="color:var(--ink)">关键区别：</b>有效性回答“若前提真，结论是否跟随”；推理质量还要回答“前提从哪来、路径是否相关、是否遗漏替代解释、成本是否可接受”。</p>
+              </div>
+            </div>
+            <div class="stage-bottom">
+              <div class="panel"><h4 class="mini-title">典型故障</h4><div class="fault-list">
+                <div class="fault"><i>!</i><div><b>表示错误</b><span>问题一开始就被编码错；搜索越深，偏离越远。</span></div></div>
+                <div class="fault"><i>!</i><div><b>搜索近视</b><span>只考察熟悉路径，过早停止或陷入局部最优。</span></div></div>
+                <div class="fault"><i>!</i><div><b>无效或不相关推导</b><span>结论不由前提支持，或虽有效却没有回答问题。</span></div></div>
+                <div class="fault"><i>!</i><div><b>验证器同源偏差</b><span>生成与检查共享同一盲点，形成虚假自洽。</span></div></div>
+              </div></div>
+              <div class="panel"><h4 class="mini-title">元层能力</h4><div class="meta-list">
+                <div class="meta"><i>✓</i><div><b>策略切换</b><span>知道何时从演绎换为溯因、类比、模拟或外部检索。</span></div></div>
+                <div class="meta"><i>✓</i><div><b>验证器设计</b><span>用不同机制检查：反例、独立证明、实验或红队。</span></div></div>
+                <div class="meta"><i>✓</i><div><b>资源管理</b><span>在搜索深度、时间成本和结论价值之间动态平衡。</span></div></div>
+              </div></div>
+            </div>
+          </article>
+        </div>
+      </section>
+
+      <section class="section" id="argument">
+        <div class="content">
+          <div class="section-head"><div class="section-no">06 / ARGUMENT</div><div><h2>论证系统：让推理进入公共空间</h2><p>推理是认知状态的转换；论证是把这种转换外部化，使别人能检查前提、证据、推导、担保与反驳条件。</p></div></div>
+          <article class="stage argument">
+            <div class="stage-top"><div class="stage-id"><span class="roman">A</span><span class="stage-en">Public inspection layer</span></div><div class="stage-title"><h3>论证 = 可公开检查的推理系统</h3><p class="big-q">它不只是“前提 → 结论”，而是一个包含支持、挑战、核验和修订的社会性反馈结构。</p><p class="definition">论证把 Other Mind 纳入系统。反对者不只是阻力，而是错误检测组件；实验、数据和重复则让现实本身成为外部验证器。</p></div></div>
+            <div class="formula"><strong>Argument</strong> = Claim + Premises + Evidence + Inference + Warrant + Defeaters + Verification + Revision</div>
+            <div class="argument-map" aria-label="论证组件关系图">
+              <div class="map-box map-side"><b>Evidence · 证据</b><span>观察、数据、记录与可重复事实</span></div>
+              <div class="map-warrant">WARRANT · 担保机制</div>
+              <div class="map-box map-claim"><b>Claim · 主张</b><span>希望受众接受的判断，以及其强度限定。公开检验后，它被接受、降级、暂缓或修订。</span></div>
+              <div class="map-box map-side"><b>Premises · 前提</b><span>显式假设、背景条件与共享知识</span></div>
+              <div class="map-box map-side"><b>Inference · 推导</b><span>证据与前提如何抵达结论</span></div>
+            </div>
+            <div class="formula center"><strong>Defeaters</strong> → 挑战支持链　·　<strong>Verification</strong> → 独立检查　·　<strong>Revision</strong> → 更新主张 / 前提 / 担保</div>
+            <div class="quality-grid">
+              <div class="quality"><b>有效性 Validity</b><div class="eq">P 为真 ⇒ C 必然跟随？</div><p>只检查内部推导结构，不保证前提真实。</p></div>
+              <div class="quality"><b>可靠性 Soundness</b><div class="eq">有效推导 + 真实前提</div><p>比有效性更强，但仍未涵盖全部现实论证质量。</p></div>
+              <div class="quality"><b>论证质量 Quality</b><div class="eq">Soundness + Evidence + Defeaters + Openness</div><p>还看证据质量、语境、反驳处理与修订能力。</p></div>
+            </div>
+            <div class="stage-body">
+              <div class="stage-col"><h4 class="mini-title">八个必要组件</h4><div class="variable-grid">
+                <div class="variable"><b>C</b><span>Claim：核心主张与限定强度</span></div><div class="variable"><b>P</b><span>Premises：前提与背景假设</span></div>
+                <div class="variable"><b>E</b><span>Evidence：经验与数据支持</span></div><div class="variable"><b>R</b><span>Inference：从支持到结论的路线</span></div>
+                <div class="variable"><b>W</b><span>Warrant：为何这些支持足以关联结论</span></div><div class="variable"><b>D</b><span>Defeaters：反例、例外与削弱条件</span></div>
+                <div class="variable"><b>V</b><span>Verification：复核、实验与对话标准</span></div><div class="variable"><b>M</b><span>Revision：谁在何种条件下如何修改</span></div>
+              </div></div>
+              <div class="stage-col"><h4 class="mini-title">动态反馈</h4><div class="steps">
+                <div class="step"><b>提出主张：</b>说明希望改变哪个判断。</div><div class="step"><b>公开支持：</b>列出前提、证据、推导和担保。</div>
+                <div class="step"><b>允许挑战：</b>攻击前提、推导、证据或适用范围。</div><div class="step"><b>独立核验：</b>由他者、制度或现实进行复核。</div>
+                <div class="step"><b>修订系统：</b>修改结论强度，必要时回溯到概念层。</div>
+              </div></div>
+            </div>
+            <div class="stage-bottom">
+              <div class="panel"><h4 class="mini-title">典型故障</h4><div class="fault-list">
+                <div class="fault"><i>!</i><div><b>隐藏担保</b><span>事实相同却因因果模型或价值假设不同得出相反结论。</span></div></div>
+                <div class="fault"><i>!</i><div><b>形式有效但前提虚假</b><span>内部一致掩盖了与现实脱节。</span></div></div>
+                <div class="fault"><i>!</i><div><b>免疫化</b><span>把一切反证改写为理论正确的证据，系统失去可错性。</span></div></div>
+                <div class="fault"><i>!</i><div><b>说服替代求真</b><span>受众心理、身份或权威压倒证据结构。</span></div></div>
+              </div></div>
+              <div class="panel"><h4 class="mini-title">元层能力</h4><div class="meta-list">
+                <div class="meta"><i>✓</i><div><b>证明责任分配</b><span>明确谁需举证、证据门槛多高、何时可暂缓判断。</span></div></div>
+                <div class="meta"><i>✓</i><div><b>敌对验证</b><span>主动引入强反方、红队、同行评议与交叉询问。</span></div></div>
+                <div class="meta"><i>✓</i><div><b>制度化修订</b><span>保存版本、记录反对意见，让撤回与更新有路径。</span></div></div>
+              </div></div>
+            </div>
+          </article>
+        </div>
+      </section>
+
+      <section class="section" id="errors">
+        <div class="content">
+          <div class="section-head"><div class="section-no">07 / FAILURE</div><div><h2>错误如何沿系统传播</h2><p>认知错误很少只停留在发生处。越底层的错误，传播半径越大；越晚发现，纠错成本越高。</p></div></div>
+          <div class="cascade" aria-label="错误传播链">
+            <div class="cascade-item"><div class="cascade-dot">C</div><h3>概念偏差</h3><p>边界、维度或关系被错误设定</p></div>
+            <div class="cascade-item"><div class="cascade-dot">J</div><h3>判断失真</h3><p>在错误地图上形成过强承诺</p></div>
+            <div class="cascade-item"><div class="cascade-dot">R</div><h3>推理放大</h3><p>有效规则精确放大初始偏差</p></div>
+            <div class="cascade-item"><div class="cascade-dot">A</div><h3>论证包装</h3><p>结构清晰使错误更具可信度</p></div>
+            <div class="cascade-item"><div class="cascade-dot">S</div><h3>社会扩散</h3><p>权威、网络与制度复制结论</p></div>
+            <div class="cascade-item"><div class="cascade-dot">↺</div><h3>反馈固化</h3><p>行动改变环境，反过来确认模型</p></div>
+          </div>
+          <div class="containment">
+            <div class="contain concept"><small>CONTAIN / 01</small><b>在概念层截断</b><span>寻找反例、边界案例与替代分类，成本最低。</span></div>
+            <div class="contain judgment"><small>CONTAIN / 02</small><b>在判断层降级</b><span>降低置信度、缩小适用范围、显式加入条件。</span></div>
+            <div class="contain reason"><small>CONTAIN / 03</small><b>在推理层复核</b><span>重做表示、枚举替代路径、使用独立验证器。</span></div>
+            <div class="contain argument"><small>CONTAIN / 04</small><b>在公共层纠错</b><span>公开证据、欢迎挑战、记录撤回并更新制度。</span></div>
+          </div>
+          <div class="formula" style="margin:26px 0 0"><strong>Correction Priority</strong> ∝ ErrorPropagationRadius × CorrectionLatency × DecisionImpact</div>
+        </div>
+      </section>
+
+      <section class="section" id="meta">
+        <div class="content">
+          <div class="section-head"><div class="section-no">08 / META</div><div><h2>元认知：不仅修答案，还修产生答案的系统</h2><p>低阶纠错更换结论；高阶纠错会追问表示、搜索、验证和对话规则本身是否需要改变。</p></div></div>
+          <div class="meta-stack">
+            <div class="meta-level"><span class="lv">L5</span><b>制度 / 元规则</b><span>谁能质疑？谁承担证明责任？怎样保存和修订知识？</span><em>治理论证系统</em></div>
+            <div class="meta-level"><span class="lv">L4</span><b>论证结构</b><span>支持链是否透明？反驳、核验与修订接口是否开放？</span><em>检查可公开性</em></div>
+            <div class="meta-level"><span class="lv">L3</span><b>推理策略</b><span>操作、搜索、资源与验证器是否适合当前问题？</span><em>调整认知过程</em></div>
+            <div class="meta-level"><span class="lv">L2</span><b>判断承诺</b><span>结论强度、语境与证据是否匹配？</span><em>校准置信</em></div>
+            <div class="meta-level"><span class="lv">L1</span><b>概念框架</b><span>对象、边界、属性和关系是否切分得当？</span><em>重画地图</em></div>
+            <div class="meta-level"><span class="lv">L0</span><b>现实耦合</b><span>系统是否仍能接收真实、及时、未被过滤的反馈？</span><em>保持可错性</em></div>
+          </div>
+          <div class="bridge" style="margin-top:26px">
+            <div class="bridge-card"><b>一阶学习</b><p>在既定概念、规则和目标下，改进具体答案。</p></div><div class="bridge-arrow">→</div><div class="bridge-card"><b>二阶学习</b><p>改变产生答案的概念、策略、验证器或制度规则。</p></div>
+          </div>
+        </div>
+      </section>
+
+      <section class="unified" id="unified">
+        <div class="content">
+          <div class="section-head"><div class="section-no">09 / SYNTHESIS</div><div><h2>Dynamic Self-Correcting Cognitive System</h2><p>统一模型不是一条只向前的流水线，而是多层反馈、可回溯、能重构自身表示与规则的开放系统。</p></div></div>
+          <div class="system-card">
+            <div class="system-eq"><strong>S<sub>t</sub></strong> = { RealityModel, Concepts, Judgments, ReasoningPolicy, Arguments, VerificationRules, Memory }</div>
+            <div class="system-sub">认知系统在 t 时刻的联合状态</div>
+            <div class="system-eq" style="margin-top:18px"><strong>S<sub>t+1</sub></strong> = Update(S<sub>t</sub>, NewEvidence, Criticism, Consequences, MetaEvaluation)</div>
+            <div class="three-loops">
+              <div class="verify-loop"><small>LOOP 01 · INTERNAL</small><b>内部一致性回路</b><p>检查概念兼容、判断一致与推导有效，避免系统自相矛盾。</p></div>
+              <div class="verify-loop"><small>LOOP 02 · EMPIRICAL</small><b>现实证据回路</b><p>让观察、实验、预测与行动后果约束内部模型。</p></div>
+              <div class="verify-loop"><small>LOOP 03 · SOCIAL</small><b>社会批判回路</b><p>由独立主体揭示盲点、隐藏假设和单一验证器的偏差。</p></div>
+            </div>
+          </div>
+          <div id="protocol" class="protocol" aria-label="实践协议">
+            <div><b>观察差异</b><p>先记录现象，不急于让旧概念吞没新信息。</p></div>
+            <div><b>声明概念</b><p>说明对象、边界、关系、尺度与使用目的。</p></div>
+            <div><b>形成判断</b><p>把证据、语境、限定词和置信度写进承诺。</p></div>
+            <div><b>展开推理</b><p>列出前提、操作、替代路径、资源与停止条件。</p></div>
+            <div><b>外化论证</b><p>公开 Claim、Evidence、Inference 与 Warrant。</p></div>
+            <div><b>主动求败</b><p>寻找最强反例、反方解释与独立验证器。</p></div>
+            <div><b>分层修订</b><p>判断故障来自结论、推导，还是更底层概念。</p></div>
+            <div><b>保留记忆</b><p>记录版本、错误类型与纠错路径，改进下一轮。</p></div>
+          </div>
+          <div class="final-thesis">真正高级的理性，不是让每个判断一开始就绝对正确；而是让错误更容易暴露、更难扩散、更低成本地被修正，并在必要时允许系统改变自己的概念与规则。</div>
+        </div>
+      </section>
+
+      <section class="section" id="boundary">
+        <div class="content">
+          <div class="section-head"><div class="section-no">10 / NOTES</div><div><h2>使用边界与三个提醒</h2><p>这是一个系统论重构框架：它连接形式逻辑、认识论、认知科学与论证理论，但不把这些传统强行等同。</p></div></div>
+          <div class="notes">
+            <div class="note-card"><h3>01 · 判断不等于命题</h3><p>命题是可真可假的内容；这里的“判断”强调主体对命题的证据评估、置信度和认知承诺。</p></div>
+            <div class="note-card"><h3>02 · 推理不等于逻辑</h3><p>逻辑研究保真规则；真实推理还包括表示、搜索、记忆、验证、资源分配与错误恢复。</p></div>
+            <div class="note-card"><h3>03 · 论证不等于证明</h3><p>严格证明是论证的特殊形态。现实论证通常是可撤销的，需要处理证据质量、例外、受众和新信息。</p></div>
+            <div class="note-card"><h3>04 · 说服不等于真</h3><p>修辞效果可以促进接受，却不能替代前提可靠性、推导有效性、现实证据与独立复核。</p></div>
+          </div>
+          <footer class="footer"><div class="footer-inner"><span>概念—判断—推理—论证 · 系统论整合阅读页</span><a class="backtop" href="#overview">返回顶部 ↑</a></div></footer>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <script>
+    (()=>{
+      const root=document.querySelector('.logic-system-page'), body=root;
+      if(!root)return;
+      const progress=document.getElementById('progressBar');
+      const themeBtn=document.getElementById('themeBtn');
+      const focusBtn=document.getElementById('focusBtn');
+      const menuBtn=document.getElementById('menuBtn');
+      let saved=null;try{saved=localStorage.getItem('logic-theme')}catch(_e){}
+      if(saved) root.dataset.theme=saved;
+      else if(matchMedia('(prefers-color-scheme: dark)').matches) root.dataset.theme='dark';
+      themeBtn.addEventListener('click',()=>{const next=root.dataset.theme==='dark'?'light':'dark';root.dataset.theme=next;try{localStorage.setItem('logic-theme',next)}catch(_e){}});
+      focusBtn.addEventListener('click',()=>{body.classList.toggle('focus');const on=body.classList.contains('focus');focusBtn.setAttribute('aria-pressed',on);focusBtn.textContent=on?'退出专注':'专注阅读'});
+      menuBtn.addEventListener('click',()=>{body.classList.toggle('nav-open');menuBtn.setAttribute('aria-expanded',body.classList.contains('nav-open'))});
+      root.querySelectorAll('.toc a').forEach(a=>a.addEventListener('click',()=>{body.classList.remove('nav-open');menuBtn.setAttribute('aria-expanded','false')}));
+      addEventListener('keydown',e=>{if(e.key==='Escape'){body.classList.remove('nav-open');menuBtn.setAttribute('aria-expanded','false')}});
+      const updateProgress=()=>{const max=document.documentElement.scrollHeight-innerHeight;progress.style.width=(max?scrollY/max*100:0)+'%'};
+      addEventListener('scroll',updateProgress,{passive:true});updateProgress();
+      const links=[...root.querySelectorAll('#tocNav a')];
+      const byId=new Map(links.map(a=>[a.getAttribute('href').slice(1),a]));
+      const observer=new IntersectionObserver(entries=>{entries.filter(e=>e.isIntersecting).sort((a,b)=>b.intersectionRatio-a.intersectionRatio).slice(0,1).forEach(e=>{links.forEach(a=>a.classList.remove('active'));byId.get(e.target.id)?.classList.add('active')})},{rootMargin:'-18% 0px -70% 0px',threshold:[0,.2,.6]});
+      root.querySelectorAll('main section[id], #protocol').forEach(s=>observer.observe(s));
+    })();
+  </script>
