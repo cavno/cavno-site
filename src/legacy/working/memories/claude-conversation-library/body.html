@@ -1,0 +1,449 @@
+<div class="app">
+  <aside class="sidebar">
+    <div class="brand">
+      <div class="brand-row"><h1>Claude 对话资料库</h1><span class="local-badge">工作归档</span></div>
+      <p id="archive-summary">正在载入归档…</p>
+    </div>
+    <div class="search-wrap">
+      <div class="search-box">
+        <input id="search" type="search" placeholder="搜索标题、正文、附件…" autocomplete="off" aria-label="搜索归档">
+        <span id="search-shortcut" class="shortcut">/</span>
+        <button id="clear-search" class="clear-search" type="button" aria-label="清空搜索" hidden>×</button>
+      </div>
+    </div>
+    <div class="controls">
+      <div class="tabs" role="tablist" aria-label="资料类型">
+        <button class="tab active" data-kind="all">全部</button>
+        <button class="tab" data-kind="conversation">对话</button>
+        <button class="tab" data-kind="project">项目</button>
+        <button class="tab" data-kind="code">代码</button>
+        <button class="tab" data-kind="memory">记忆</button>
+      </div>
+      <button id="tech-toggle" class="tech-toggle" title="显示或隐藏推理及工具记录">技术记录</button>
+    </div>
+    <div class="list-toolbar">
+      <div id="result-summary" class="result-summary" aria-live="polite"></div>
+      <select id="sort" class="sort-select" aria-label="排序方式">
+        <option value="newest">最近更新</option>
+        <option value="oldest">最早更新</option>
+        <option value="title">标题排序</option>
+      </select>
+    </div>
+    <div id="entry-list" class="entry-list" aria-label="资料目录"></div>
+  </aside>
+  <main id="main" class="main">
+    <div id="reader" class="reader"></div>
+    <button id="back-top" class="back-top" type="button" aria-label="返回页面顶部" title="返回顶部" hidden>↑</button>
+  </main>
+</div>
+<script id="archive-data" type="application/json">{"manifest":"/working/memories/claude-conversation-library/data/manifest.json"}</script>
+<script>
+(async () => {
+  'use strict';
+  const bootstrap = JSON.parse(document.getElementById('archive-data').textContent);
+  let archive;
+  try {
+    const manifest = await fetch(bootstrap.manifest).then(response => {
+      if (!response.ok) throw new Error(`HTTP ${response.status}`);
+      return response.json();
+    });
+    const parts = await Promise.all(manifest.chunks.map(url => fetch(url).then(response => {
+      if (!response.ok) throw new Error(`HTTP ${response.status}`);
+      return response.json();
+    })));
+    archive = { ...manifest, entries: parts.flatMap(part => part.entries) };
+  } catch (error) {
+    console.error('Claude archive load failed', error);
+    const summary = document.getElementById('archive-summary');
+    if (summary) summary.textContent = '归档数据加载失败，请刷新页面后重试';
+    return;
+  }
+  const entries = archive.entries;
+  const els = {
+    search: document.getElementById('search'),
+    list: document.getElementById('entry-list'),
+    reader: document.getElementById('reader'),
+    main: document.getElementById('main'),
+    result: document.getElementById('result-summary'),
+    summary: document.getElementById('archive-summary'),
+    tech: document.getElementById('tech-toggle'),
+    sort: document.getElementById('sort'),
+    clear: document.getElementById('clear-search'),
+    shortcut: document.getElementById('search-shortcut'),
+    backTop: document.getElementById('back-top'),
+  };
+  const state = { query: '', kind: 'all', selected: null, showTech: false, sort: 'newest' };
+  const kindLabels = { conversation: '对话', project: '项目', code: '代码项目', memory: '记忆' };
+
+  function escapeHTML(value) {
+    return String(value ?? '').replace(/[&<>"']/g, ch => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[ch]));
+  }
+  function escapeRegExp(value) { return value.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'); }
+  function tokens() { return state.query.trim().toLocaleLowerCase().split(/\s+/).filter(Boolean); }
+  function highlight(value) {
+    const ts = tokens();
+    if (!ts.length) return escapeHTML(value);
+    const pattern = new RegExp('(' + ts.map(escapeRegExp).join('|') + ')', 'gi');
+    return String(value ?? '').split(pattern).map((part, index) => index % 2 ? `<mark>${escapeHTML(part)}</mark>` : escapeHTML(part)).join('');
+  }
+  function renderInline(value) {
+    return String(value ?? '').split(/(https?:\/\/[^\s<>"']+)/g).map((part, index) => {
+      if (index % 2) return `<a href="${escapeHTML(part)}" target="_blank" rel="noopener noreferrer">${highlight(part)}</a>`;
+      return highlight(part);
+    }).join('');
+  }
+  function renderText(value) {
+    const chunks = String(value ?? '').replace(/\r\n/g, '\n').split(/```/);
+    return chunks.map((chunk, index) => {
+      if (index % 2) {
+        const cleaned = chunk.replace(/^[a-zA-Z0-9_+#.-]+\n/, '');
+        return `<pre><code>${highlight(cleaned)}</code></pre>`;
+      }
+      return chunk.split(/\n{2,}/).filter(part => part.length).map(part => `<p>${part.split('\n').map(renderInline).join('<br>')}</p>`).join('');
+    }).join('');
+  }
+  function formatDate(value, includeTime = false) {
+    if (!value) return '';
+    const date = new Date(value);
+    if (Number.isNaN(date.getTime())) return value.slice(0, 16);
+    const options = includeTime
+      ? { year:'numeric', month:'2-digit', day:'2-digit', hour:'2-digit', minute:'2-digit', hour12:false }
+      : { year:'numeric', month:'2-digit', day:'2-digit' };
+    return new Intl.DateTimeFormat('zh-CN', options).format(date).replaceAll('/', '-');
+  }
+  function bytes(value) {
+    const size = Number(value);
+    if (!Number.isFinite(size) || size <= 0) return '';
+    if (size < 1024) return `${size} B`;
+    if (size < 1048576) return `${(size / 1024).toFixed(1)} KB`;
+    return `${(size / 1048576).toFixed(1)} MB`;
+  }
+  function entryText(entry) {
+    const parts = [entry.title, entry.summary, entry.description, entry.prompt, entry.conversationMemory, entry.projectMemories];
+    for (const message of entry.messages || []) {
+      for (const section of message.sections || []) parts.push(section.text);
+      for (const attachment of message.attachments || []) parts.push(attachment.name, attachment.text);
+      for (const file of message.files || []) parts.push(file.name);
+    }
+    for (const doc of entry.documents || []) parts.push(doc.title, doc.text);
+    for (const source of entry.kind === 'code' ? (entry.files || []) : []) {
+      parts.push(source.path, source.originalPath, source.language, source.content);
+      for (const version of source.versions || []) parts.push(version.description, version.content, version.old, version.new);
+    }
+    return parts.filter(Boolean).join('\n').toLocaleLowerCase();
+  }
+  entries.forEach(entry => { entry._search = entryText(entry); });
+
+  function filteredEntries() {
+    const ts = tokens();
+    return entries.filter(entry => {
+      if (state.kind !== 'all' && entry.kind !== state.kind) return false;
+      return ts.every(token => entry._search.includes(token));
+    }).sort((a, b) => {
+      if (state.sort === 'title') return a.title.localeCompare(b.title, 'zh-CN');
+      const aDate = Date.parse(a.updated || a.created || 0) || 0;
+      const bDate = Date.parse(b.updated || b.created || 0) || 0;
+      if (aDate !== bDate) return state.sort === 'oldest' ? aDate - bDate : bDate - aDate;
+      return a.title.localeCompare(b.title, 'zh-CN');
+    });
+  }
+  function snippet(entry) {
+    const ts = tokens();
+    if (!ts.length) return entry.summary || entry.description || (entry.kind === 'conversation' ? '打开阅读全文' : '打开资料');
+    const rawParts = [];
+    for (const message of entry.messages || []) for (const section of message.sections || []) rawParts.push(section.text);
+    for (const doc of entry.documents || []) rawParts.push(doc.text);
+    for (const source of entry.kind === 'code' ? (entry.files || []) : []) rawParts.push(source.path, source.content);
+    rawParts.push(entry.summary, entry.description, entry.conversationMemory, entry.projectMemories);
+    const needle = ts[0];
+    for (const raw of rawParts.filter(Boolean)) {
+      const lower = raw.toLocaleLowerCase();
+      const pos = lower.indexOf(needle);
+      if (pos >= 0) {
+        const start = Math.max(0, pos - 55);
+        return (start ? '…' : '') + raw.slice(start, pos + needle.length + 100).replace(/\s+/g, ' ') + '…';
+      }
+    }
+    return '包含搜索关键词';
+  }
+  function entryMeta(entry) {
+    if (entry.kind === 'conversation') return `${formatDate(entry.updated || entry.created)} · ${entry.messageCount} 条消息`;
+    if (entry.kind === 'project') return `${formatDate(entry.updated || entry.created)} · ${entry.documentCount} 份文档`;
+    if (entry.kind === 'code') return `${entry.platform} · ${entry.fileCount} 个文件 · ${entry.versionCount} 个版本`;
+    return 'Claude 长期记忆';
+  }
+  function renderList() {
+    const savedScrollTop = els.list.scrollTop;
+    const filtered = filteredEntries();
+    els.clear.hidden = !els.search.value;
+    els.shortcut.hidden = Boolean(els.search.value);
+    els.result.textContent = state.query ? `找到 ${filtered.length} 项结果` : `显示 ${filtered.length} 项资料`;
+    if (!filtered.some(entry => entry.id === state.selected)) state.selected = filtered[0]?.id || null;
+    els.list.innerHTML = filtered.length ? filtered.map(entry => `
+      <button class="entry-card ${entry.id === state.selected ? 'active' : ''}" data-id="${escapeHTML(entry.id)}" ${entry.id === state.selected ? 'aria-current="true"' : ''}>
+        <div class="entry-title">${highlight(entry.title)}</div>
+        <div class="entry-meta"><span class="kind-dot kind-${entry.kind}"></span>${kindLabels[entry.kind]} · ${entryMeta(entry)}</div>
+        <div class="entry-snippet">${highlight(snippet(entry))}</div>
+      </button>`).join('') : '<div class="empty" style="color:#aeb9cb"><strong style="color:white">没有匹配结果</strong>试试更短的关键词</div>';
+    els.list.scrollTop = savedScrollTop;
+    els.list.querySelectorAll('.entry-card').forEach(button => button.addEventListener('click', () => {
+      state.selected = button.dataset.id;
+      renderList();
+      renderReader();
+      els.main.scrollTop = 0;
+    }));
+  }
+  function detailHTML(section) {
+    if (!state.showTech || section.type === 'text') return section.type === 'text' ? `<div class="content">${renderText(section.text)}</div>` : '';
+    const cls = section.type === 'thinking' ? ' thinking' : '';
+    const body = section.format === 'json' ? `<pre><code>${highlight(section.text)}</code></pre>` : `<div class="content">${renderText(section.text)}</div>`;
+    return `<details class="detail${cls}"><summary>${escapeHTML(section.label)}</summary><div class="detail-body">${body}</div></details>`;
+  }
+  function attachmentsHTML(message) {
+    const attachments = (message.attachments || []).map(item => `
+      <details class="attachment">
+        <summary>附件 · ${highlight(item.name)} ${item.type ? `· ${escapeHTML(item.type)}` : ''} ${bytes(item.size) ? `· ${bytes(item.size)}` : ''}</summary>
+        <div class="detail-body content">${item.text ? renderText(item.text) : '此导出记录只有附件信息，没有可提取文本。'}</div>
+      </details>`).join('');
+    const files = (message.files || []).map(file => `<span class="chip" title="${escapeHTML(file.id)}">文件引用 · ${highlight(file.name)}</span>`).join('');
+    return `${attachments ? `<div class="attachment-list">${attachments}</div>` : ''}${files ? `<div class="file-chips">${files}</div>` : ''}`;
+  }
+  function conversationHTML(entry) {
+    const messages = entry.messages.map(message => {
+      const who = message.role === 'human' ? '你' : message.role === 'assistant' ? 'Claude' : message.role;
+      const sections = message.sections.map(detailHTML).join('');
+      if (!sections && !message.attachments.length && !message.files.length) return '';
+      return `<article class="message ${message.role}">
+        <div class="message-who"><strong>${escapeHTML(who)}</strong><span class="message-time">${formatDate(message.created, true)}</span></div>
+        <div class="bubble">${sections}${attachmentsHTML(message)}</div>
+      </article>`;
+    }).join('');
+    return messages || '<div class="empty"><strong>对话中没有可显示消息</strong></div>';
+  }
+  function projectHTML(entry) {
+    const intro = [entry.description, entry.prompt].filter(Boolean).map((text, i) => `<section class="document"><h3>${i === 0 ? '项目说明' : '项目指令'}</h3><div class="content">${renderText(text)}</div></section>`).join('');
+    const docs = entry.documents.map(doc => `<section class="document"><h3>${highlight(doc.title)}</h3><div class="document-meta">${formatDate(doc.created, true)}</div><div class="content">${renderText(doc.text)}</div></section>`).join('');
+    return intro + docs || '<div class="empty"><strong>项目中没有可显示文档</strong></div>';
+  }
+  function memoryHTML(entry) {
+    const conversation = entry.conversationMemory ? `<section class="document"><h3>对话记忆</h3><div class="content">${renderText(entry.conversationMemory)}</div></section>` : '';
+    const projects = entry.projectMemories ? `<section class="document"><h3>项目记忆</h3><div class="content">${renderText(entry.projectMemories)}</div></section>` : '';
+    return conversation + projects || '<div class="empty"><strong>没有可显示的记忆内容</strong></div>';
+  }
+  function materializeVersions(file) {
+    if (file._materializedVersions) return file._materializedVersions;
+    let content = '';
+    const materialized = [];
+    const labels = { create: '创建', replace: '修改', snapshot: '完整快照', artifact: 'Artifact' };
+    for (const event of file.versions || []) {
+      let changed = false;
+      if (['create', 'snapshot', 'artifact'].includes(event.op)) {
+        content = event.content || '';
+        changed = true;
+      } else if (event.op === 'replace' && content.includes(event.old || '')) {
+        content = content.replace(event.old, event.new || '');
+        changed = true;
+      }
+      if (changed) materialized.push({
+        content,
+        op: event.op,
+        label: labels[event.op] || event.op,
+        at: event.at || '',
+        description: event.description || '',
+      });
+    }
+    if (!materialized.length || materialized.at(-1).content !== file.content) {
+      materialized.push({ content: file.content, op: 'recovered', label: '恢复最终版', at: '', description: '由最终可用记录恢复' });
+    }
+    file._materializedVersions = materialized;
+    return materialized;
+  }
+  function codePreviewHTML(entry, index, requestedVersion) {
+    const file = entry.files[index] || entry.files[0];
+    if (!file) return '<div class="empty"><strong>没有可显示的源文件</strong></div>';
+    const versions = materializeVersions(file);
+    const latest = Math.max(0, versions.length - 1);
+    const versionIndex = Number.isInteger(requestedVersion) ? Math.min(latest, Math.max(0, requestedVersion)) : latest;
+    const version = versions[versionIndex];
+    const delivery = file.delivered ? ' · 曾由 Claude 交付' : '';
+    const options = versions.map((item, optionIndex) => `<option value="${optionIndex}" ${optionIndex === versionIndex ? 'selected' : ''}>v${optionIndex + 1} · ${escapeHTML(item.label)}${item.at ? ` · ${formatDate(item.at, true)}` : ''}</option>`).reverse().join('');
+    return `<div class="code-preview-head">
+      <div class="code-preview-title">
+        <strong>${highlight(file.path)}</strong>
+        <span>${escapeHTML(file.language)} · ${version.content.length.toLocaleString('zh-CN')} 字符 · v${versionIndex + 1}/${versions.length}${delivery}</span>
+        <small title="${escapeHTML(file.originalPath)}">原始路径：${highlight(file.originalPath)}</small>
+      </div>
+      <div class="code-actions">
+        <select class="version-select" data-version-file="${index}" aria-label="选择文件版本">${options}</select>
+        <button class="code-action" type="button" data-code-action="path" data-index="${index}" data-version-index="${versionIndex}">复制路径</button>
+        <button class="code-action" type="button" data-code-action="copy" data-index="${index}" data-version-index="${versionIndex}">复制源码</button>
+        <button class="code-action" type="button" data-code-action="download" data-index="${index}" data-version-index="${versionIndex}">下载版本</button>
+      </div>
+    </div><pre class="source-code"><code>${highlight(version.content)}</code></pre>`;
+  }
+  function buildSourceTree(files) {
+    const root = { directories: Object.create(null), files: [] };
+    files.forEach((file, index) => {
+      const segments = file.path.split('/').filter(Boolean);
+      const name = segments.pop() || file.name;
+      let node = root;
+      for (const segment of segments) {
+        node.directories[segment] ||= { directories: Object.create(null), files: [] };
+        node = node.directories[segment];
+      }
+      node.files.push({ file, index, name });
+    });
+    return root;
+  }
+  function sourceTreeHTML(node, depth = 0) {
+    const directories = Object.keys(node.directories).sort((a, b) => a.localeCompare(b, 'zh-CN')).map(name => {
+      const child = node.directories[name];
+      const countFiles = branch => branch.files.length + Object.values(branch.directories).reduce((sum, item) => sum + countFiles(item), 0);
+      return `<details class="tree-folder" ${depth < 2 ? 'open' : ''}><summary>${highlight(name)} <small>(${countFiles(child)})</small></summary><div class="tree-children">${sourceTreeHTML(child, depth + 1)}</div></details>`;
+    }).join('');
+    const files = [...node.files].sort((a, b) => a.name.localeCompare(b.name, 'zh-CN')).map(({ file, index, name }) => `<button class="code-file ${index === 0 ? 'active' : ''}" type="button" data-file-index="${index}" title="${escapeHTML(file.originalPath)}">
+      <span class="code-file-name">${file.delivered ? '● ' : ''}${highlight(name)}</span>
+      <span class="code-file-path">${escapeHTML(file.language)} · ${file.versionCount || 1} 个版本</span>
+    </button>`).join('');
+    return directories + files;
+  }
+  function codeProjectHTML(entry) {
+    const tree = sourceTreeHTML(buildSourceTree(entry.files));
+    const roots = (entry.roots || []).slice(0, 8).map(root => `<span class="code-meta-pill">目录 · ${highlight(root)}</span>`).join('');
+    const moreRoots = (entry.roots || []).length > 8 ? `<span class="code-meta-pill">另有 ${(entry.roots || []).length - 8} 个根目录</span>` : '';
+    const formats = Object.entries(entry.formatCounts || {}).slice(0, 10).map(([extension, count]) => `<span class="code-meta-pill">${escapeHTML(extension)} · ${count}</span>`).join('');
+    const unresolved = entry.editsUnresolved ? `；${entry.editsUnresolved} 次修改因缺少完整文件状态而未强行套用` : '';
+    return `<div class="code-meta-strip">${roots}${moreRoots}${formats}</div><section class="code-workbench" data-code-workbench>
+      <nav class="code-files" aria-label="源码目录树">${tree}</nav>
+      <div class="code-preview" data-code-preview>${codePreviewHTML(entry, 0)}</div>
+    </section><p class="recovery-note">路径说明：目录树使用项目相对路径，预览区同时显示 Claude 工作区中的原始路径。版本说明：已恢复 ${entry.versionCount} 个可查看版本、应用 ${entry.editsApplied} 次可验证修改${unresolved}。圆点表示文件曾出现在正式交付记录中。</p>`;
+  }
+  async function copySource(text, button) {
+    try {
+      if (navigator.clipboard?.writeText) await navigator.clipboard.writeText(text);
+      else throw new Error('clipboard unavailable');
+    } catch (_) {
+      const field = document.createElement('textarea');
+      field.value = text;
+      field.style.position = 'fixed';
+      field.style.opacity = '0';
+      document.body.appendChild(field);
+      field.select();
+      document.execCommand('copy');
+      field.remove();
+    }
+    const previous = button.textContent;
+    button.textContent = '已复制';
+    setTimeout(() => { button.textContent = previous; }, 1200);
+  }
+  function downloadSource(file, content, versionIndex, latestIndex) {
+    const blob = new Blob([content], { type: 'text/plain;charset=utf-8' });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.href = url;
+    const dot = file.name.lastIndexOf('.');
+    const versionedName = versionIndex === latestIndex ? file.name : dot > 0 ? `${file.name.slice(0, dot)}.v${versionIndex + 1}${file.name.slice(dot)}` : `${file.name}.v${versionIndex + 1}`;
+    link.download = versionedName || 'source.txt';
+    document.body.appendChild(link);
+    link.click();
+    link.remove();
+    setTimeout(() => URL.revokeObjectURL(url), 1000);
+  }
+  function bindCodeWorkbench(entry) {
+    const workbench = els.reader.querySelector('[data-code-workbench]');
+    if (!workbench) return;
+    const preview = workbench.querySelector('[data-code-preview]');
+    workbench.addEventListener('click', event => {
+      const fileButton = event.target.closest('[data-file-index]');
+      if (fileButton) {
+        const index = Number(fileButton.dataset.fileIndex);
+        workbench.querySelectorAll('[data-file-index]').forEach(button => button.classList.toggle('active', button === fileButton));
+        preview.innerHTML = codePreviewHTML(entry, index);
+        return;
+      }
+      const action = event.target.closest('[data-code-action]');
+      if (!action) return;
+      const file = entry.files[Number(action.dataset.index)];
+      if (!file) return;
+      const versions = materializeVersions(file);
+      const versionIndex = Math.min(versions.length - 1, Math.max(0, Number(action.dataset.versionIndex)));
+      if (action.dataset.codeAction === 'download') downloadSource(file, versions[versionIndex].content, versionIndex, versions.length - 1);
+      else if (action.dataset.codeAction === 'path') copySource(file.originalPath, action);
+      else copySource(versions[versionIndex].content, action);
+    });
+    workbench.addEventListener('change', event => {
+      const select = event.target.closest('[data-version-file]');
+      if (!select) return;
+      preview.innerHTML = codePreviewHTML(entry, Number(select.dataset.versionFile), Number(select.value));
+    });
+  }
+  function renderReader() {
+    const entry = entries.find(item => item.id === state.selected);
+    if (!entry) {
+      els.reader.innerHTML = '<div class="empty"><strong>没有匹配的资料</strong>请调整左侧搜索条件</div>';
+      return;
+    }
+    const count = entry.kind === 'conversation' ? `${entry.messageCount} 条消息` : entry.kind === 'project' ? `${entry.documentCount} 份文档` : entry.kind === 'code' ? `${entry.fileCount} 个源文件 · ${entry.versionCount} 个版本` : '长期记忆';
+    const dates = [entry.created ? `创建 ${formatDate(entry.created, true)}` : '', entry.updated ? `更新 ${formatDate(entry.updated, true)}` : ''].filter(Boolean);
+    let body = entry.kind === 'conversation' ? conversationHTML(entry) : entry.kind === 'project' ? projectHTML(entry) : entry.kind === 'code' ? codeProjectHTML(entry) : memoryHTML(entry);
+    els.reader.innerHTML = `<header class="hero">
+      <div class="eyebrow">${kindLabels[entry.kind]}</div>
+      <h2>${highlight(entry.title)}</h2>
+      <div class="hero-meta"><span>${count}</span>${dates.map(date => `<span>${date}</span>`).join('')}</div>
+      ${entry.summary || entry.description ? `<div class="hero-summary">${renderText(entry.summary || entry.description)}</div>` : ''}
+    </header>${body}<div class="footer-note">资料归档 · 账户资料与登录历史未包含在本页面中</div>`;
+    if (entry.kind === 'code') bindCodeWorkbench(entry);
+  }
+  function renderAll() { renderList(); renderReader(); }
+
+  const counts = archive.stats;
+  els.summary.textContent = `${counts.conversations} 个对话 · ${counts.codeProjects || 0} 个代码项目 · ${counts.messages} 条消息 · 生成于 ${formatDate(archive.generated, true)}`;
+  document.querySelectorAll('.tab').forEach(tab => tab.addEventListener('click', () => {
+    state.kind = tab.dataset.kind;
+    document.querySelectorAll('.tab').forEach(item => item.classList.toggle('active', item === tab));
+    renderAll();
+  }));
+  els.tech.addEventListener('click', () => {
+    state.showTech = !state.showTech;
+    els.tech.classList.toggle('active', state.showTech);
+    els.tech.textContent = state.showTech ? '技术记录：开' : '技术记录';
+    renderReader();
+  });
+  els.sort.addEventListener('change', () => { state.sort = els.sort.value; renderAll(); });
+  els.clear.addEventListener('click', () => {
+    els.search.value = '';
+    state.query = '';
+    renderAll();
+    els.search.focus();
+  });
+  let timer;
+  els.search.addEventListener('input', () => {
+    clearTimeout(timer);
+    timer = setTimeout(() => { state.query = els.search.value; renderAll(); }, 90);
+  });
+  document.addEventListener('keydown', event => {
+    if (event.key === '/' && document.activeElement !== els.search) { event.preventDefault(); els.search.focus(); }
+    if (event.key === 'Escape' && document.activeElement === els.search) { els.search.value = ''; state.query = ''; els.search.blur(); renderAll(); }
+  });
+  els.list.addEventListener('keydown', event => {
+    if (!['ArrowDown', 'ArrowUp', 'Home', 'End'].includes(event.key)) return;
+    const buttons = [...els.list.querySelectorAll('.entry-card')];
+    if (!buttons.length) return;
+    const current = Math.max(0, buttons.findIndex(button => button.classList.contains('active')));
+    const next = event.key === 'Home' ? 0 : event.key === 'End' ? buttons.length - 1 : Math.min(buttons.length - 1, Math.max(0, current + (event.key === 'ArrowDown' ? 1 : -1)));
+    event.preventDefault();
+    buttons[next].click();
+    requestAnimationFrame(() => els.list.querySelector('.entry-card.active')?.focus());
+  });
+  function scrollToTop() {
+    if (window.matchMedia('(max-width: 820px)').matches) window.scrollTo({ top: 0, behavior: 'smooth' });
+    else els.main.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+  function updateBackTop() { els.backTop.hidden = Math.max(window.scrollY, els.main.scrollTop) < 650; }
+  els.backTop.addEventListener('click', scrollToTop);
+  els.main.addEventListener('scroll', updateBackTop, { passive: true });
+  window.addEventListener('scroll', updateBackTop, { passive: true });
+  state.selected = filteredEntries()[0]?.id || null;
+  renderAll();
+})();
+</script>

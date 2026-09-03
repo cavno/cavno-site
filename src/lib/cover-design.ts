@@ -58,6 +58,7 @@ export const CATEGORY_PALETTES: Record<string, { hue: number; saturation: number
   'life:skills': { hue: 192, saturation: 22 },
   'working:amazon': { hue: 28, saturation: 24 },
   'working:training': { hue: 166, saturation: 24 },
+  'working:memories': { hue: 222, saturation: 22 },
   reading: { hue: 164, saturation: 24 }, investing: { hue: 212, saturation: 26 },
   life: { hue: 192, saturation: 22 }, working: { hue: 28, saturation: 24 },
   default: { hue: 35, saturation: 18 },
@@ -114,7 +115,7 @@ const FALLBACKS: Record<string, CoverMotif> = {
   'investing:valuation': 'balance', 'reading:books': 'book', 'reading:math': 'math',
   'reading:philosophy': 'lineage', 'reading:thinking': 'system', 'reading:theology': 'book',
   'reading:politics': 'network',
-  'working:amazon': 'commerce', 'working:training': 'network',
+  'working:amazon': 'commerce', 'working:training': 'network', 'working:memories': 'document',
 };
 
 // Optional editorial corrections for ambiguous titles. Colour is intentionally
@@ -133,6 +134,7 @@ export const ARTICLE_COVERS: Record<string, { motif: CoverMotif; layout?: CoverL
   '/reading/philosophy/political-science-systems-history/': { motif: 'network', layout: 'band' },
   '/reading/politics/us-china-relations-systems-analysis/': { motif: 'balance', layout: 'split' },
   '/reading/politics/china-reform-central-local-systems-analysis/': { motif: 'feedback', layout: 'framed' },
+  '/working/memories/claude-conversation-library/': { motif: 'data', layout: 'split' },
 };
 
 const TEXTURES: Partial<Record<CoverMotif, [CoverTexture, CoverTexture]>> = {

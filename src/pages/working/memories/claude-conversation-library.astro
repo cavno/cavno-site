@@ -1,0 +1,23 @@
+---
+// 由 scripts/convert.mjs 生成，可自由手工精修
+import Base from '../../../layouts/Base.astro';
+import body from '../../../legacy/working/memories/claude-conversation-library/body.html?raw';
+import '../../../legacy/working/memories/claude-conversation-library/style.css';
+
+const meta = {
+  "title": "Claude 对话资料库",
+  "description": "集中检索与阅读 Claude 对话、项目文档、代码版本和长期记忆的工作归档。"
+};
+---
+<Base title={meta.title + ' · Cavno'} description={meta.description}>
+  <section class="cv-memory-context" aria-label="页面位置">
+    <div class="cv-wrap">
+      <span class="cv-eyebrow">Working · Memories</span>
+      <a href="/working/memories/">返回资料记忆栏目 →</a>
+    </div>
+  </section>
+
+  <article class="lp memory-library">
+    <Fragment set:html={body} />
+  </article>
+</Base>

@@ -221,7 +221,8 @@
   document.addEventListener('keydown', (event) => {
     const target = event.target as HTMLElement;
     const isTyping = target.matches('input, textarea, select, [contenteditable="true"]');
-    if (event.key === '/' && !isTyping && overlay?.hidden) {
+    const pageOwnsSearchShortcut = Boolean(document.querySelector('.memory-library #search'));
+    if (event.key === '/' && !isTyping && overlay?.hidden && !pageOwnsSearchShortcut) {
       event.preventDefault();
       openSearch();
       return;

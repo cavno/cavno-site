@@ -151,6 +151,12 @@
           "en": "Training",
           "zh": "企业培训",
           "desc": "AI 转型、销售增长与组织能力建设"
+        },
+        {
+          "slug": "memories",
+          "en": "Memories",
+          "zh": "资料记忆",
+          "desc": "Claude 对话、项目、代码版本与长期记忆归档"
         }
       ]
     }
