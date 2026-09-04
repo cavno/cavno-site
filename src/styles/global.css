@@ -39,7 +39,7 @@ code:where(:not(.lp *)){font-family:var(--mono);font-size:.88em;background:var(-
 .cv-head-in{position:relative;max-width:1180px;display:flex;align-items:center;gap:4px;height:68px}
 .cv-brand{font-family:var(--serif);font-weight:700;font-size:22px;letter-spacing:-.01em;white-space:nowrap}
 .cv-brand .cv-bdot{color:var(--coral)}
-nav.cv-primary{display:flex;align-items:center;gap:0;min-width:0}
+nav.cv-primary{display:flex;align-items:center;gap:0;min-width:0;margin-left:auto}
 .cv-nav-item{position:static}
 .cv-nav-btn,.cv-nav-link{display:flex;align-items:center;gap:6px;border:0;background:none;padding:9px 10px;border-radius:999px;color:var(--ink);font-size:14px;line-height:1;white-space:nowrap}
 .cv-nav-link{text-decoration:none}
@@ -69,9 +69,9 @@ nav.cv-primary{display:flex;align-items:center;gap:0;min-width:0}
 .cv-topic-links a:hover small,.cv-topic-links a.active small{color:inherit}
 .cv-nav-placeholder{color:var(--ink-2);cursor:default;user-select:none}
 .cv-nav-placeholder:hover{color:var(--ink-2);background:transparent}
-.cv-head-actions{margin-left:auto;display:flex;align-items:center;gap:8px}
-.cv-nav-search{display:flex;align-items:center;gap:7px;padding:9px 11px;border:1px solid var(--line-2);border-radius:999px;color:var(--ink);background:rgba(255,255,255,.52);font-size:13.5px}
-.cv-nav-search:hover{border-color:var(--ink);background:var(--card)}
+.cv-head-actions{margin-left:6px;display:flex;align-items:center;gap:8px}
+.cv-nav-search{display:flex;align-items:center;justify-content:flex-start;gap:9px;min-width:142px;padding:10px 16px;border:1px solid var(--line-2);border-radius:999px;color:var(--ink);background:rgba(255,255,255,.72);font-size:13.5px;box-shadow:inset 0 0 0 1px rgba(255,255,255,.28);transition:border-color .15s,background .15s,box-shadow .15s}
+.cv-nav-search:hover{border-color:var(--ink);background:var(--card);box-shadow:0 4px 14px rgba(38,35,30,.08)}
 .cv-btn{display:inline-flex;align-items:center;gap:8px;border-radius:999px;
   padding:10px 20px;font-size:14px;font-weight:500;line-height:1;
   transition:transform .15s,background .15s,border-color .15s}
