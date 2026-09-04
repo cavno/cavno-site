@@ -161,82 +161,9 @@
       ]
     }
   ],
-  "utilityMenus": [
-    {
-      "slug": "projects",
-      "en": "Projects",
-      "zh": "项目",
-      "desc": "从研究方法到日常决策，把可重复使用的模型做成工具。",
-      "groups": [
-        {
-          "en": "Investment Labs",
-          "zh": "投资实验室",
-          "href": "/investing/",
-          "links": [
-            { "title": "Gamma 敞口结构", "href": "/investing/options/gamma-profile/" },
-            { "title": "Max Pain 计算", "href": "/investing/options/maxpain/" },
-            { "title": "称重机估值", "href": "/investing/valuation/valuation-weigher-demo-report/" }
-          ]
-        },
-        {
-          "en": "Life Utilities",
-          "zh": "生活工具",
-          "href": "/life/",
-          "links": [
-            { "title": "房贷计算器", "href": "/life/house/mortgage-calc/" },
-            { "title": "楼盘对比", "href": "/life/house/property-comparison/" },
-            { "title": "深圳学区查询", "href": "/life/school/schoolscore-web/" }
-          ]
-        },
-        {
-          "en": "Work Systems",
-          "zh": "工作系统",
-          "href": "/working/",
-          "links": [
-            { "title": "AI 增长操作系统", "href": "/working/training/ai-growth-os/" },
-            { "title": "销量预测工作台", "href": "/working/amazon/forecast_workbench/" },
-            { "title": "市场尽调评分卡", "href": "/working/amazon/market_diligence_scorecard/" }
-          ]
-        }
-      ]
-    },
-    {
-      "slug": "resources",
-      "en": "Resources",
-      "zh": "资源",
-      "desc": "从全站检索、最近更新与主题索引进入所需内容。",
-      "groups": [
-        {
-          "en": "Discover",
-          "zh": "内容发现",
-          "href": "/#recent",
-          "links": [
-            { "title": "最近更新", "href": "/#recent" },
-            { "title": "搜索全部内容", "href": "/#search" },
-            { "title": "四大主题板块", "href": "/#boards" }
-          ]
-        },
-        {
-          "en": "Reading Library",
-          "zh": "阅读资料",
-          "href": "/reading/",
-          "links": [
-            { "title": "书籍精读", "href": "/reading/books/" },
-            { "title": "思考图谱", "href": "/reading/thinking/" },
-            { "title": "哲学谱系", "href": "/reading/philosophy/" }
-          ]
-        },
-        {
-          "en": "Reference",
-          "zh": "索引参考",
-          "href": "/life/skills/",
-          "links": [
-            { "title": "技能与方法", "href": "/life/skills/" },
-            { "title": "数学与形式", "href": "/reading/math/" },
-            { "title": "政治与治理", "href": "/reading/politics/" }
-          ]
-        }
-      ]
-    }
+  "placeholders": [
+    { "en": "Projects", "zh": "项目" },
+    { "en": "Resources", "zh": "资源" },
+    { "en": "About", "zh": "关于" }
   ]
 }
