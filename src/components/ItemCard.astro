@@ -1,5 +1,5 @@
 ---
-import { derivePresentation } from '../lib/content-presentation';
+import { derivePresentation, htmlToPlainText } from '../lib/content-presentation';
 import { coverClassName, coverStyle } from '../lib/cover-design';
 
 interface Props {
@@ -26,6 +26,17 @@ const {
 } = Astro.props;
 const external = /^https?:\/\//.test(href);
 const cover = derivePresentation({ href, title, summary, tags, section, subsection, body });
+const plainBody = htmlToPlainText(body);
+const hanCount = (plainBody.match(/\p{Script=Han}/gu) ?? []).length;
+const latinWordCount = (plainBody.match(/[A-Za-z0-9]+(?:['’-][A-Za-z0-9]+)*/g) ?? []).length;
+const contentUnits = hanCount + latinWordCount;
+const roundedUnits = contentUnits < 1000
+  ? Math.max(10, Math.round(contentUnits / 10) * 10)
+  : Math.round(contentUnits / 100) * 100;
+const countLabel = roundedUnits >= 10000
+  ? `${(roundedUnits / 10000).toFixed(roundedUnits >= 100000 ? 0 : 1).replace(/\.0$/, '')} 万字`
+  : `${new Intl.NumberFormat('zh-CN').format(roundedUnits)} 字`;
+const readingMinutes = Math.max(1, Math.ceil(hanCount / 350 + latinWordCount / 200));
 ---
 <a
   class="cv-item"
@@ -46,13 +57,14 @@ const cover = derivePresentation({ href, title, summary, tags, section, subsecti
       <i class="cv-art-d"></i>
       <i class="cv-art-e"></i>
     </div>
-    <div class="cv-cover-title">
-      <strong>{cover.title}</strong>
-    </div>
   </div>
   <div class="cv-item-body">
     <div class="cv-item-meta"><span class="cv-tag">{tag}</span><span class="cv-date">{date}</span></div>
     <h3 class="cv-item-title">{title}</h3>
-    {cover.summary && <p>{cover.summary}</p>}
+    {cover.summary && <p class="cv-item-summary">{cover.summary}</p>}
+    <div class="cv-item-stats" aria-label={`正文约 ${countLabel}，预计阅读 ${readingMinutes} 分钟`}>
+      <span>约 {countLabel}</span>
+      <span>阅读 {readingMinutes} 分钟</span>
+    </div>
   </div>
 </a>
