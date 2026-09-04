@@ -354,17 +354,19 @@ footer.cv-site-foot{background:var(--ink);color:rgba(250,249,245,.72);margin-top
 .cv-v-seg button:hover{color:var(--ink)}
 .cv-v-seg button[aria-pressed="true"]{background:var(--card);color:var(--ink);box-shadow:0 1px 3px rgba(20,20,19,.10)}
 
-/* 列表视图：同一份 DOM，网格改行式，摘要压成单行 */
+/* 列表视图：参考 Academy 的横向内容卡，左侧主题缩略封面、右侧完整信息。 */
 .cv-catalog .cv-v-grouped{display:none}
-.cv-catalog[data-view="list"] .cv-v-flat{display:flex;flex-direction:column;gap:6px}
-.cv-catalog[data-view="list"] .cv-item{display:grid;grid-template-columns:minmax(0,1.05fr) minmax(0,1fr) auto;
-  align-items:center;gap:16px;min-height:0;padding:11px 16px;border-radius:12px}
-.cv-catalog[data-view="list"] .cv-item:hover{transform:none}
-.cv-catalog[data-view="list"] .cv-auto-cover{display:none}
-.cv-catalog[data-view="list"] .cv-item-body{display:contents}
-.cv-catalog[data-view="list"] .cv-item-title{display:block;order:1;font-size:15px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.cv-catalog[data-view="list"] .cv-item-summary{display:block;order:2;font-size:12.5px;margin:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.cv-catalog[data-view="list"] .cv-item-details{display:flex;order:3;justify-self:end;margin:0;flex-wrap:nowrap;white-space:nowrap}
+.cv-catalog[data-view="list"] .cv-v-flat{display:flex;flex-direction:column;gap:12px}
+.cv-catalog[data-view="list"] .cv-item{display:grid;grid-template-columns:190px minmax(0,1fr);
+  align-items:stretch;gap:0;min-height:148px;padding:0;border-radius:16px}
+.cv-catalog[data-view="list"] .cv-item:hover{transform:translateY(-1px)}
+.cv-catalog[data-view="list"] .cv-auto-cover{display:grid;width:190px;height:100%;min-height:148px;align-self:stretch;border-right:1px solid var(--line)}
+.cv-catalog[data-view="list"] .cv-auto-cover::after{left:50%;bottom:-11px;width:122px;height:82px;border:1px solid hsl(var(--cv-cover-h) 18% 82% / .75);border-radius:10px;background:rgba(255,255,255,.9);box-shadow:0 5px 14px rgba(20,20,19,.08);transform:translateX(-50%)}
+.cv-catalog[data-view="list"] .cv-auto-cover .cv-cover-art{width:50px;height:50px;align-self:end;margin-bottom:19px}
+.cv-catalog[data-view="list"] .cv-item-body{display:flex;height:auto;min-height:148px;padding:18px 26px 16px;gap:7px}
+.cv-catalog[data-view="list"] .cv-item-title{display:-webkit-box;overflow:hidden;font-size:20px;line-height:1.35;white-space:normal;-webkit-box-orient:vertical;-webkit-line-clamp:2}
+.cv-catalog[data-view="list"] .cv-item-summary{display:-webkit-box;overflow:hidden;margin:0;font-size:14px;line-height:1.55;white-space:normal;-webkit-box-orient:vertical;-webkit-line-clamp:2}
+.cv-catalog[data-view="list"] .cv-item-details{display:flex;margin-top:auto;flex-wrap:wrap;white-space:normal}
 
 /* 分组视图：按二级栏目分节的紧凑索引 */
 .cv-catalog[data-view="grouped"] .cv-v-flat{display:none}
@@ -384,10 +386,27 @@ footer.cv-site-foot{background:var(--ink);color:rgba(250,249,245,.72);margin-top
 .cv-g-d{font-family:var(--mono);font-size:11.5px;color:var(--ink-2)}
 
 @media (max-width:720px){
-  .cv-catalog[data-view="list"] .cv-item{grid-template-columns:minmax(0,1fr) auto}
-  .cv-catalog[data-view="list"] .cv-item p{display:none}
+  .cv-catalog[data-view="list"] .cv-item{grid-template-columns:132px minmax(0,1fr);min-height:136px}
+  .cv-catalog[data-view="list"] .cv-auto-cover{width:132px;min-height:136px}
+  .cv-catalog[data-view="list"] .cv-auto-cover::after{width:92px;height:70px}
+  .cv-catalog[data-view="list"] .cv-auto-cover .cv-cover-art{width:44px;height:44px;margin-bottom:17px}
+  .cv-catalog[data-view="list"] .cv-item-body{min-height:136px;padding:14px 16px 13px;gap:5px}
+  .cv-catalog[data-view="list"] .cv-item-title{font-size:17px}
+  .cv-catalog[data-view="list"] .cv-item-summary{font-size:13.5px;-webkit-line-clamp:2}
   .cv-g-row{grid-template-columns:minmax(0,1fr) auto}
   .cv-g-s{display:none}
   .cv-v-seg button span{display:none}
   .cv-v-seg button{padding:7px 10px}
+}
+@media (max-width:480px){
+  .cv-catalog[data-view="list"] .cv-v-flat{gap:9px}
+  .cv-catalog[data-view="list"] .cv-item{grid-template-columns:104px minmax(0,1fr);min-height:126px;border-radius:13px}
+  .cv-catalog[data-view="list"] .cv-auto-cover{width:104px;min-height:126px}
+  .cv-catalog[data-view="list"] .cv-auto-cover::after{bottom:-8px;width:76px;height:62px;border-radius:8px}
+  .cv-catalog[data-view="list"] .cv-auto-cover .cv-cover-art{width:38px;height:38px;margin-bottom:15px}
+  .cv-catalog[data-view="list"] .cv-item-body{min-height:126px;padding:12px 13px 11px}
+  .cv-catalog[data-view="list"] .cv-item-title{font-size:15.5px;line-height:1.34}
+  .cv-catalog[data-view="list"] .cv-item-summary{font-size:12.5px;line-height:1.45;-webkit-line-clamp:1}
+  .cv-catalog[data-view="list"] .cv-item-details{font-size:10px;line-height:1.3}
+  .cv-catalog[data-view="list"] .cv-item-details span+span::before{padding:0 4px}
 }
