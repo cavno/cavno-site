@@ -153,22 +153,45 @@ const restricted = norm.startsWith('/working/');
 
   // 桌面端多级导航：点击开合，hover / focus-within 由 CSS 处理
   const items = Array.from(document.querySelectorAll('.cv-site-head .cv-nav-item'));
+  const finePointer = window.matchMedia('(hover: hover) and (pointer: fine)');
+  let navCloseTimer: ReturnType<typeof setTimeout> | undefined;
+  const cancelScheduledClose = () => {
+    if (navCloseTimer) window.clearTimeout(navCloseTimer);
+    navCloseTimer = undefined;
+  };
   const closeAll = () => items.forEach((o) => {
     o.classList.remove('open');
     o.querySelector('.cv-nav-btn')?.setAttribute('aria-expanded', 'false');
   });
   items.forEach((it) => {
     const btn = it.querySelector('.cv-nav-btn');
+    const openItem = () => {
+      cancelScheduledClose();
+      closeAll();
+      it.classList.add('open');
+      btn?.setAttribute('aria-expanded', 'true');
+    };
+    it.addEventListener('mouseenter', () => {
+      if (finePointer.matches) openItem();
+    });
+    it.addEventListener('mouseleave', () => {
+      if (!finePointer.matches) return;
+      cancelScheduledClose();
+      navCloseTimer = window.setTimeout(closeAll, 160);
+    });
     btn?.addEventListener('click', (e) => {
       e.stopPropagation();
       const willOpen = !it.classList.contains('open');
+      cancelScheduledClose();
       closeAll();
       if (willOpen) { it.classList.add('open'); btn.setAttribute('aria-expanded', 'true'); }
     });
-    it.querySelector('.cv-mega-panel')?.addEventListener('click', (e) => e.stopPropagation());
+    const panel = it.querySelector('.cv-mega-panel');
+    panel?.addEventListener('mouseenter', cancelScheduledClose);
+    panel?.addEventListener('click', (e) => e.stopPropagation());
   });
   document.querySelectorAll('.cv-site-head [data-cv-search-open]').forEach((button) => button.addEventListener('click', closeAll));
-  document.addEventListener('click', closeAll);
+  document.addEventListener('click', () => { cancelScheduledClose(); closeAll(); });
 
   // 移动端抽屉
   const cvDrawer = document.getElementById('cvDrawer');
