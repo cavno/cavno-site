@@ -59,10 +59,11 @@ const readingMinutes = Math.max(1, Math.ceil(hanCount / 350 + latinWordCount / 2
     </div>
   </div>
   <div class="cv-item-body">
-    <div class="cv-item-meta"><span class="cv-tag">{tag}</span><span class="cv-date">{date}</span></div>
     <h3 class="cv-item-title">{title}</h3>
     {cover.summary && <p class="cv-item-summary">{cover.summary}</p>}
-    <div class="cv-item-stats" aria-label={`正文约 ${countLabel}，预计阅读 ${readingMinutes} 分钟`}>
+    <div class="cv-item-details" aria-label={`${tag}，日期 ${date}，正文约 ${countLabel}，预计阅读 ${readingMinutes} 分钟`}>
+      <span class="cv-tag">{tag}</span>
+      <span class="cv-date">{date}</span>
       <span>约 {countLabel}</span>
       <span>阅读 {readingMinutes} 分钟</span>
     </div>
