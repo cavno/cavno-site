@@ -30,7 +30,10 @@ const restricted = norm.startsWith('/working/');
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
   <title>{title}</title>
   <meta name="description" content={description} />
-  <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+  <link rel="icon" href="/favicon.ico?v=2" type="image/x-icon" sizes="16x16 32x32 48x48" />
+  <link rel="icon" href="/favicon.svg?v=2" type="image/svg+xml" sizes="any" />
+  <link rel="apple-touch-icon" href="/apple-touch-icon.png?v=2" sizes="180x180" />
+  <meta name="theme-color" content="#FAF9F5" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <!-- 非阻塞加载：fonts.googleapis.com 在大陆不可达，阻塞式 <link> 会拖住首屏渲染。
