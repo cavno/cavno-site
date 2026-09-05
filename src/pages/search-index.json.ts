@@ -1,6 +1,7 @@
 import type { APIRoute } from 'astro';
 import { getCollection } from 'astro:content';
 import nav from '../content/nav.json';
+import { concepts, groups, conceptUpdated } from '../content/concepts';
 import {
   derivePresentation,
   htmlToPlainText,
@@ -71,7 +72,28 @@ export const GET: APIRoute = async () => {
       };
     });
 
-  return new Response(JSON.stringify({ version: 2, items: entries }), {
+  const conceptEntries = concepts.map((concept) => {
+    const href = `/about/concepts/#${concept.slug}`;
+    const group = groups.find((g) => g.id === concept.group)!;
+    const presentation = derivePresentation({
+      href, title: concept.name, summary: concept.definition,
+      tags: [concept.en, group.name], section: 'about', subsection: 'concepts', body: '',
+    });
+    return {
+      href, title: `${concept.name} · 概念库`, summary: concept.definition,
+      tags: [concept.en, group.name], section: 'about', subsection: 'concepts',
+      sectionLabel: 'About', subsectionLabel: '概念库', date: conceptUpdated,
+      updatedAt: Date.parse(`${conceptUpdated}T00:00:00+08:00`),
+      cover: {
+        hue: presentation.hue, saturation: presentation.saturation,
+        theme: presentation.theme, layout: presentation.layout,
+        texture: presentation.texture, variant: presentation.variant,
+        serial: presentation.serial, motif: presentation.motif,
+      },
+      text: [concept.name, concept.en, group.name, '概念库', concept.definition, concept.essentials, concept.boundary, concept.example].join(' '),
+    };
+  });
+  return new Response(JSON.stringify({ version: 2, items: [...entries, ...conceptEntries] }), {
     headers: {
       'Content-Type': 'application/json; charset=utf-8',
       'Cache-Control': 'public, max-age=0, must-revalidate',

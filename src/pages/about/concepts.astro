@@ -1,0 +1,159 @@
+---
+import Base from '../../layouts/Base.astro';
+import { getCollection } from 'astro:content';
+import { concepts, groups, conceptUpdated } from '../../content/concepts';
+const articles = await getCollection('items');
+const titleByHref = new Map(articles.map((a) => [a.data.href, a.data.title]));
+const bySlug = new Map(concepts.map((c) => [c.slug, c]));
+// 数据错误在构建时暴露，避免发布失效的延伸阅读与关联链接。
+if (bySlug.size !== concepts.length) throw new Error('概念 slug 重复');
+for (const c of concepts) {
+  if (!titleByHref.has(c.article)) throw new Error(`概念 ${c.slug} 的站内文章不存在：${c.article}`);
+  for (const slug of c.related) if (!bySlug.has(slug)) throw new Error(`关联概念不存在：${slug}`);
+}
+---
+<Base title="概念库 · Cavno" description="为系统、逻辑、投资与 AI 中的重要概念厘清定义、适用边界与常见误解，并连接站内延伸阅读。">
+  <div class="cl-page cv-wrap">
+    <header class="cl-intro">
+      <p class="cl-eyebrow"><a href="/">Cavno</a> / About / Concept Library</p>
+      <h1>概念清晰，<br />思考才有落点<span>。</span></h1>
+      <p class="cl-lede">一个词的意义，不止于一句解释。厘清它指什么、如何使用、在哪里失效，再把概念带回真实问题。</p>
+      <div class="cl-stats"><span>{concepts.length} 个核心概念</span><span>{groups.length} 个知识领域</span><span>更新于 <time datetime={conceptUpdated}>{conceptUpdated}</time></span></div>
+    </header>
+    <section class="cl-guide" aria-label="阅读说明">
+      <strong>定义 → 要点 → 边界 → 例子 → 延伸阅读</strong>
+      <p>本库先收录站内反复使用的基础概念，并非全站术语全集。定义按词条注明的语境使用；存在学派差异时保留区别。例子用于帮助理解，不是对现实事件的预测。</p>
+    </section>
+    <div class="cl-tools" hidden id="clTools">
+      <label for="clQuery">查找概念</label>
+      <div class="cl-search"><input type="search" id="clQuery" placeholder="中文、英文、缩写或定义关键词，例如：反馈、Delta、RAG" autocomplete="off" /><button type="button" id="clReset">重置</button></div>
+      <div class="cl-filters" role="group" aria-label="按知识领域筛选"><button type="button" data-group="all" aria-pressed="true">全部 <small>{concepts.length}</small></button>{groups.map((g) => <button type="button" data-group={g.id} aria-pressed="false">{g.name} <small>{concepts.filter((c) => c.group === g.id).length}</small></button>)}</div>
+      <p id="clCount" role="status" aria-live="polite">显示全部 {concepts.length} 个概念</p>
+    </div>
+    <div class="cl-layout">
+      <aside class="cl-index" aria-label="概念索引">
+        <h2>概念索引</h2>
+        {groups.map((g) => <div data-index-group={g.id}><h3>{g.name}</h3>{concepts.filter((c) => c.group === g.id).map((c) => <a href={`#${c.slug}`} data-index-link={c.slug}>{c.name}<small>{c.en.split(' · ')[0]}</small></a>)}</div>)}
+      </aside>
+      <div class="cl-entries">
+        <p id="clEmpty" class="cl-empty" hidden>没有找到匹配的概念。试试更短的关键词、英文名称，或点击“重置”查看全部。</p>
+        {groups.map((g) => <section data-section={g.id} aria-labelledby={`group-${g.id}`}>
+          <header class="cl-group-head"><h2 id={`group-${g.id}`}>{g.name}</h2><p>{g.note}</p></header>
+          {concepts.filter((c) => c.group === g.id).map((c) => <article class="cl-entry" id={c.slug} data-concept={c.slug} data-category={g.id} data-search={[c.name, c.en, c.definition, c.essentials, c.boundary, c.example, g.name].join(' ')}>
+            <header class="cl-entry-head"><div><p>{c.en}</p><h3><a href={`#${c.slug}`} aria-label={`${c.name}，词条永久链接`}>{c.name}<span aria-hidden="true">↗</span></a></h3></div><span class="cl-number">{String(concepts.indexOf(c) + 1).padStart(2, '0')}</span></header>
+            <p class="cl-definition">{c.definition}</p>
+            <dl><div><dt>关键要点</dt><dd>{c.essentials}</dd></div><div><dt>适用边界与常见误解</dt><dd>{c.boundary}</dd></div><div class="cl-example"><dt>看一个例子</dt><dd>{c.example}</dd></div></dl>
+            <footer><p class="cl-reading">站内延伸阅读 <a href={c.article}>{titleByHref.get(c.article)} →</a></p>
+              {c.reference && <p class="cl-reference">定义参考 <a href={c.reference.href}>{c.reference.title} ↗</a></p>}
+              <div class="cl-related"><span>关联概念</span>{c.related.map((slug) => <a href={`#${slug}`}>{bySlug.get(slug)!.name}</a>)}</div>
+            </footer>
+          </article>)}
+        </section>)}
+      </div>
+    </div>
+  </div>
+</Base>
+
+<script>
+  const input = document.querySelector<HTMLInputElement>('#clQuery')!;
+  const cards = Array.from(document.querySelectorAll<HTMLElement>('[data-concept]'));
+  const buttons = Array.from(document.querySelectorAll<HTMLButtonElement>('[data-group]'));
+  const normalize = (text: string) => text.normalize('NFKC').toLocaleLowerCase().trim();
+  const texts = new Map(cards.map((card) => [card, normalize(card.dataset.search || '')]));
+  let category = 'all';
+  const apply = () => {
+    const terms = normalize(input.value).split(/\s+/).filter(Boolean);
+    let count = 0;
+    const visible = new Set<string>();
+    cards.forEach((card) => {
+      const match = (category === 'all' || category === card.dataset.category) && terms.every((term) => texts.get(card)!.includes(term));
+      card.hidden = !match;
+      if (match) { count++; visible.add(card.dataset.concept!); }
+    });
+    document.querySelectorAll<HTMLElement>('[data-section]').forEach((section) => { section.hidden = !section.querySelector('[data-concept]:not([hidden])'); });
+    document.querySelectorAll<HTMLElement>('[data-index-link]').forEach((link) => { link.hidden = !visible.has(link.dataset.indexLink!); });
+    document.querySelectorAll<HTMLElement>('[data-index-group]').forEach((group) => { group.hidden = !group.querySelector('[data-index-link]:not([hidden])'); });
+    buttons.forEach((button) => button.setAttribute('aria-pressed', String(button.dataset.group === category)));
+    document.getElementById('clEmpty')!.hidden = count !== 0;
+    document.getElementById('clCount')!.textContent = `显示 ${count} / ${cards.length} 个概念`;
+  };
+  const clear = () => { input.value = ''; category = 'all'; apply(); };
+  const revealHash = () => {
+    let id: string;
+    try { id = decodeURIComponent(location.hash.slice(1)); } catch { return; }
+    const card = cards.find((entry) => entry.id === id);
+    if (!card) return;
+    if (card.hidden) clear();
+    requestAnimationFrame(() => card.scrollIntoView({ block: 'start', behavior: 'instant' }));
+  };
+  input.addEventListener('input', apply);
+  buttons.forEach((button) => button.addEventListener('click', () => { category = button.dataset.group!; apply(); }));
+  document.getElementById('clReset')!.addEventListener('click', () => { clear(); input.focus(); });
+  // 关联概念可以跨越当前筛选条件，点击后先恢复目标可见性。
+  document.querySelector('.cl-page')!.addEventListener('click', (event) => {
+    const link = (event.target as Element).closest<HTMLAnchorElement>('a[href^="#"]');
+    if (!link) return;
+    const target = cards.find((card) => `#${card.id}` === link.getAttribute('href'));
+    if (target?.hidden) clear();
+  });
+  window.addEventListener('hashchange', revealHash);
+  document.getElementById('clTools')!.hidden = false;
+  apply();
+  revealHash();
+</script>
+
+<style>
+  .cl-page{padding-top:48px;padding-bottom:80px;overflow-wrap:anywhere}
+  .cl-page [hidden]{display:none!important}
+  .cl-intro{max-width:850px;margin-bottom:32px}
+  .cl-eyebrow{font-size:12px;letter-spacing:.09em;color:var(--ink-2);margin-bottom:24px}
+  .cl-intro h1{font-family:var(--serif);font-size:clamp(34px,5vw,58px);font-weight:500;line-height:1.3;letter-spacing:-.035em}
+  .cl-intro h1 span{color:var(--coral)}
+  .cl-lede{font-size:18px;color:var(--ink-2);max-width:660px;margin-top:22px;line-height:1.9}
+  .cl-stats{display:flex;flex-wrap:wrap;gap:10px 22px;font-size:12px;color:var(--ink-2);margin-top:22px}
+  .cl-guide{background:var(--panel);border-radius:14px;padding:22px 26px;margin-bottom:28px}
+  .cl-guide strong{font-weight:500;font-size:16px}
+  .cl-guide p{font-size:14px;color:var(--ink-2);margin-top:8px;max-width:880px}
+  .cl-tools{padding:0 0 28px;border-bottom:1px solid var(--line);margin-bottom:30px}
+  .cl-tools label{display:block;font-size:14px;margin-bottom:8px}
+  .cl-search{display:flex;gap:10px}
+  .cl-search input{min-width:0;flex:1;padding:13px 16px;border:1px solid var(--line-2);border-radius:10px;background:var(--card);font:inherit;font-size:16px;color:var(--ink)}
+  .cl-search button{border:1px solid var(--line-2);background:var(--paper);border-radius:10px;padding:0 20px;font-size:14px;color:var(--ink)}
+  .cl-filters{display:flex;gap:8px;flex-wrap:wrap;margin-top:16px}
+  .cl-filters button{border:1px solid var(--line);border-radius:30px;background:var(--paper);padding:10px 15px;min-height:44px;color:var(--ink);font-size:13px}
+  .cl-filters button[aria-pressed="true"]{background:var(--ink);color:var(--paper);border-color:var(--ink)}
+  .cl-filters small{margin-left:5px;opacity:.75}
+  #clCount{margin-top:12px;font-size:12px;color:var(--ink-2)}
+  .cl-layout{display:grid;grid-template-columns:210px minmax(0,1fr);gap:42px;align-items:start}
+  .cl-index{position:sticky;top:calc(var(--cv-head-total) + 20px);max-height:calc(100dvh - var(--cv-head-total) - 40px);overflow:auto;padding-right:14px}
+  .cl-index h2{font-size:15px;font-weight:500;margin-bottom:16px}
+  .cl-index h3{font-size:12px;color:var(--ink-2);font-weight:400;margin-top:20px;margin-bottom:8px}
+  .cl-index a{display:block;border-radius:8px;padding:6px 8px;font-size:13px;min-height:44px}
+  .cl-index a:hover{background:var(--panel)}
+  .cl-index small{display:block;font-size:10px;color:var(--ink-2)}
+  .cl-group-head{display:flex;align-items:baseline;flex-wrap:wrap;gap:8px 18px;margin:4px 0 20px}
+  .cl-group-head h2{font-family:var(--serif);font-size:24px;font-weight:500}
+  .cl-group-head p{font-size:13px;color:var(--ink-2)}
+  .cl-entry{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:28px;margin-bottom:22px;scroll-margin-top:calc(var(--cv-head-total) + 18px)}
+  .cl-entry:target{border-color:var(--coral);box-shadow:0 0 0 2px #d9775720}
+  .cl-entry-head{display:flex;justify-content:space-between;gap:18px;margin-bottom:16px}
+  .cl-entry-head p{color:var(--ink-2);font-size:12px;letter-spacing:.025em;margin-bottom:4px}
+  .cl-entry h3{font-family:var(--serif);font-size:27px;font-weight:500;line-height:1.5}
+  .cl-entry h3 span{font-family:var(--sans);font-size:16px;color:var(--coral);margin-left:12px}
+  .cl-number{font-family:var(--mono);font-size:13px;color:var(--ink-2)}
+  .cl-definition{font-size:17px;line-height:1.95;margin-bottom:22px}
+  .cl-entry dl>div{margin-top:18px}
+  .cl-entry dt{font-size:12px;font-weight:600;color:var(--ink-2);margin-bottom:5px}
+  .cl-entry dd{font-size:15px;line-height:1.95;margin:0}
+  .cl-example{border-left:3px solid var(--coral);padding:12px 16px;background:var(--paper);border-radius:0 8px 8px 0}
+  .cl-entry footer{border-top:1px solid var(--line);padding-top:18px;margin-top:24px;font-size:12px;color:var(--ink-2)}
+  .cl-reading a,.cl-reference a{color:var(--ink);text-decoration:underline;text-underline-offset:4px;text-decoration-color:var(--line-2);margin-left:6px}
+  .cl-reference{margin-top:8px}
+  .cl-related{display:flex;flex-wrap:wrap;align-items:center;gap:8px;margin-top:16px}
+  .cl-related a{padding:6px 11px;border-radius:20px;background:var(--panel);color:var(--ink);min-height:34px}
+  .cl-page :is(a,button,input):focus-visible{outline:2px solid var(--coral-deep);outline-offset:3px}
+  .cl-empty{padding:32px;background:var(--panel);border-radius:14px}
+  @media(max-width:800px){.cl-layout{grid-template-columns:minmax(0,1fr);gap:20px}.cl-index{display:none}.cl-page{padding-top:30px}.cl-lede{font-size:16px}.cl-entry{padding:22px}.cl-entry h3{font-size:25px}}
+  @media(max-width:420px){.cl-entry{padding:18px}.cl-definition{font-size:16px}.cl-guide{padding:18px}.cl-search button{padding:0 12px}.cl-filters{gap:6px}.cl-filters button{padding:9px 12px}.cl-related a{min-height:44px;display:flex;align-items:center}}
+  @media print{.cl-tools,.cl-index{display:none!important}.cl-layout{display:block}.cl-entry{break-inside:avoid}.cl-page{padding:0}.cl-entry:target{box-shadow:none}}
+</style>

@@ -46,6 +46,10 @@ const data = nav.sections.map((s) => ({
   slug: s.slug, en: s.en, zh: s.zh,
   subs: s.subsections.map((x) => ({ slug: x.slug, en: x.en, zh: x.zh })),
 }));
+data.push({
+  slug: 'about', en: nav.about.en, zh: nav.about.zh,
+  subs: nav.about.links.map((link) => ({ slug: link.href.split('/').filter(Boolean).pop(), en: link.en, zh: link.zh })),
+});
 
 const js = `/* 自动生成：node scripts/gen-shell.mjs（数据源 nav.json + astro.config.site），请勿手改 */
 (function () {
@@ -120,16 +124,16 @@ const js = `/* 自动生成：node scripts/gen-shell.mjs（数据源 nav.json + 
       subs += '<a href="' + SITE + '/' + s.slug + '/' + u.slug + '/">' + esc(u.en) +
               (u.zh !== u.en ? ' <small>' + esc(u.zh) + '</small>' : '') + '</a>';
     }
-    subs += '<a class="ph" href="' + SITE + '/' + s.slug + '/">\\u8FDB\\u5165 ' + esc(s.zh) + ' \\u677F\\u5757 \\u2192</a>';
+    if (s.slug !== 'about') subs += '<a class="ph" href="' + SITE + '/' + s.slug + '/">\\u8FDB\\u5165 ' + esc(s.zh) + ' \\u677F\\u5757 \\u2192</a>';
     items += '<div class="it' + (cur === s.slug ? ' cur' : '') + '">' +
-             '<a class="btn" href="' + SITE + '/' + s.slug + '/">' + esc(s.en) + ' <span class="cv">\\u25BC</span></a>' +
+             '<a class="btn" href="' + SITE + '/' + s.slug + (s.slug === 'about' ? '/concepts/' : '/') + '">' + esc(s.en) + ' <span class="cv">\\u25BC</span></a>' +
              '<div class="pn">' + subs + '</div></div>';
   }
 
   var mob = '';
   for (var m2 = 0; m2 < NAV.length; m2++) {
     var t = NAV[m2];
-    mob += '<a class="sec' + (cur === t.slug ? ' on' : '') + '" href="' + SITE + '/' + t.slug + '/">' +
+    mob += '<a class="sec' + (cur === t.slug ? ' on' : '') + '" href="' + SITE + '/' + t.slug + (t.slug === 'about' ? '/concepts/' : '/') + '">' +
            esc(t.en) + ' ' + esc(t.zh) + '</a>';
     for (var m3 = 0; m3 < t.subs.length; m3++) {
       var v = t.subs[m3];

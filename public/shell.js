@@ -3,7 +3,7 @@
   var doc = document;
   if (doc.getElementById('cavno-shell')) return;
   var SITE = "https://cavno.org";
-  var NAV = [{"slug":"investing","en":"Investing","zh":"投资","subs":[{"slug":"options","en":"Options","zh":"期权"},{"slug":"valuation","en":"Valuation","zh":"估值"},{"slug":"cases","en":"Cases","zh":"案例"}]},{"slug":"reading","en":"Reading & Thinking","zh":"阅读与思考","subs":[{"slug":"books","en":"Books","zh":"书籍视察"},{"slug":"philosophy","en":"Philosophy","zh":"哲学"},{"slug":"thinking","en":"Thinking","zh":"思考"},{"slug":"math","en":"Mathematics","zh":"数学"}]},{"slug":"life","en":"Life & Skills","zh":"生活与技能","subs":[{"slug":"driving","en":"Driving","zh":"驾驶"},{"slug":"house","en":"House","zh":"房产"},{"slug":"school","en":"School","zh":"学校"},{"slug":"china","en":"China","zh":"中国"},{"slug":"family","en":"Family","zh":"育儿"},{"slug":"orders","en":"Orders","zh":"报单"},{"slug":"ai","en":"AI","zh":"AI"},{"slug":"skills","en":"Skills","zh":"技能"}]},{"slug":"working","en":"Working","zh":"工作","subs":[{"slug":"amazon","en":"Amazon Tools","zh":"亚马逊工具"}]}];
+  var NAV = [{"slug":"investing","en":"Investing","zh":"投资","subs":[{"slug":"options","en":"Options","zh":"期权"},{"slug":"valuation","en":"Valuation","zh":"估值"},{"slug":"cases","en":"Cases","zh":"案例"}]},{"slug":"reading","en":"Reading & Thinking","zh":"阅读与思考","subs":[{"slug":"books","en":"Books","zh":"书籍视察"},{"slug":"philosophy","en":"Philosophy","zh":"哲学"},{"slug":"politics","en":"Politics","zh":"政治"},{"slug":"theology","en":"Theology","zh":"神学"},{"slug":"thinking","en":"Thinking","zh":"思考"},{"slug":"math","en":"Mathematics","zh":"数学"}]},{"slug":"life","en":"Life & Skills","zh":"生活与技能","subs":[{"slug":"driving","en":"Driving","zh":"驾驶"},{"slug":"house","en":"House","zh":"房产"},{"slug":"school","en":"School","zh":"学校"},{"slug":"china","en":"China","zh":"中国"},{"slug":"family","en":"Family","zh":"育儿"},{"slug":"orders","en":"Orders","zh":"报单"},{"slug":"ai","en":"AI","zh":"AI"},{"slug":"skills","en":"Skills","zh":"技能"}]},{"slug":"working","en":"Working","zh":"工作","subs":[{"slug":"amazon","en":"Amazon Tools","zh":"亚马逊工具"},{"slug":"training","en":"Training","zh":"企业培训"},{"slug":"memories","en":"Memories","zh":"资料记忆"}]},{"slug":"about","en":"About","zh":"关于","subs":[{"slug":"concepts","en":"Concept Library","zh":"概念库"}]}];
   var MAP = {"Investing":"investing","Reading_and_Thinking":"reading","Life_Style_and_Skills":"life","Working":"working"};
 
   function esc(s) {
@@ -71,16 +71,16 @@
       subs += '<a href="' + SITE + '/' + s.slug + '/' + u.slug + '/">' + esc(u.en) +
               (u.zh !== u.en ? ' <small>' + esc(u.zh) + '</small>' : '') + '</a>';
     }
-    subs += '<a class="ph" href="' + SITE + '/' + s.slug + '/">\u8FDB\u5165 ' + esc(s.zh) + ' \u677F\u5757 \u2192</a>';
+    if (s.slug !== 'about') subs += '<a class="ph" href="' + SITE + '/' + s.slug + '/">\u8FDB\u5165 ' + esc(s.zh) + ' \u677F\u5757 \u2192</a>';
     items += '<div class="it' + (cur === s.slug ? ' cur' : '') + '">' +
-             '<a class="btn" href="' + SITE + '/' + s.slug + '/">' + esc(s.en) + ' <span class="cv">\u25BC</span></a>' +
+             '<a class="btn" href="' + SITE + '/' + s.slug + (s.slug === 'about' ? '/concepts/' : '/') + '">' + esc(s.en) + ' <span class="cv">\u25BC</span></a>' +
              '<div class="pn">' + subs + '</div></div>';
   }
 
   var mob = '';
   for (var m2 = 0; m2 < NAV.length; m2++) {
     var t = NAV[m2];
-    mob += '<a class="sec' + (cur === t.slug ? ' on' : '') + '" href="' + SITE + '/' + t.slug + '/">' +
+    mob += '<a class="sec' + (cur === t.slug ? ' on' : '') + '" href="' + SITE + '/' + t.slug + (t.slug === 'about' ? '/concepts/' : '/') + '">' +
            esc(t.en) + ' ' + esc(t.zh) + '</a>';
     for (var m3 = 0; m3 < t.subs.length; m3++) {
       var v = t.subs[m3];

@@ -74,6 +74,14 @@ const restricted = norm.startsWith('/working/');
         </div>
       </div>
       {nav.placeholders.map((item) => <span class="cv-nav-link cv-nav-placeholder" aria-disabled="true">{item.en}</span>)}
+      <div class="cv-nav-item cv-about-item">
+        <button type="button" class:list={['cv-nav-btn', { active: isSec('about') }]} id="cvNav-about" aria-expanded="false" aria-controls="cvMega-about">{nav.about.en}
+          <svg class="cv-chev" viewBox="0 0 12 12" fill="none" aria-hidden="true"><path d="M2 4l4 4 4-4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+        </button>
+        <div class="cv-mega-panel cv-about-panel" id="cvMega-about" aria-labelledby="cvNav-about">
+          {nav.about.links.map((link) => <a class="cv-about-entry" href={link.href} aria-current={norm === link.href ? 'page' : undefined}><strong>{link.zh}</strong><small>{link.en}</small><span>{link.desc}</span></a>)}
+        </div>
+      </div>
     </nav>
 
     <div class="cv-head-actions">
@@ -114,6 +122,12 @@ const restricted = norm.startsWith('/working/');
       <span>{item.en}</span><small>{item.zh} · 待规划</small>
     </div>
   ))}
+  <div class:list={['cv-acc', { open: isSec('about') }]}>
+    <button type="button" class="cv-acc-btn" aria-expanded={isSec('about') ? 'true' : 'false'} aria-controls="cvAboutMobile">About
+      <svg class="cv-chev" viewBox="0 0 12 12" fill="none" aria-hidden="true"><path d="M2 4l4 4 4-4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+    </button>
+    <div class="cv-acc-body" id="cvAboutMobile">{nav.about.links.map((link) => <a class="cv-drawer-entry" href={link.href} aria-current={norm === link.href ? 'page' : undefined}>{link.zh}<small>{link.en}</small></a>)}</div>
+  </div>
   <button class="cv-btn cv-btn-line cv-drawer-search" type="button" data-cv-search-open aria-haspopup="dialog" aria-controls="cvGlobalSearch" aria-expanded="false">
     <span class="cv-search-open-icon" aria-hidden="true"></span>
     搜索全站
@@ -146,6 +160,15 @@ const restricted = norm.startsWith('/working/');
     </div>
   </div>
 </footer>
+
+<style>
+  .cv-about-item{position:relative;align-self:stretch;display:flex;align-items:center}
+  .cv-about-panel{left:auto;right:0;width:270px;max-width:calc(100vw - 32px);padding:10px}
+  .cv-about-entry{display:grid;gap:3px;padding:14px;border-radius:10px}
+  .cv-about-entry:hover,.cv-about-entry:focus-visible{background:var(--panel)}
+  .cv-about-entry strong{font-family:var(--serif);font-size:19px}
+  .cv-about-entry small,.cv-about-entry span{color:var(--ink-2);font-size:13px}
+</style>
 
 <script>
   // 顶栏滚动描边

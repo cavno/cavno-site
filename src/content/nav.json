@@ -163,7 +163,10 @@
   ],
   "placeholders": [
     { "en": "Projects", "zh": "项目" },
-    { "en": "Resources", "zh": "资源" },
-    { "en": "About", "zh": "关于" }
-  ]
+    { "en": "Resources", "zh": "资源" }
+  ],
+  "about": {
+    "en": "About", "zh": "关于",
+    "links": [{ "href": "/about/concepts/", "en": "Concept Library", "zh": "概念库", "desc": "厘清定义，连接知识与实践" }]
+  }
 }
