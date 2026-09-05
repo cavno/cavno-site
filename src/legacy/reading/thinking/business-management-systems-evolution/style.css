@@ -1,0 +1,79 @@
+.lp.business-management-systems-page{
+  --bms-ink:var(--ink);--bms-muted:var(--ink-2);--bms-paper:var(--paper);--bms-panel:var(--panel);--bms-card:var(--card);
+  --bms-line:var(--line);--bms-accent:#3f7e6b;--bms-accent-deep:#285b4d;--bms-accent-soft:#e3eee9;
+  --bms-night:#142925;--bms-night-2:#203d36;--bms-serif:var(--serif);--bms-sans:var(--sans);--bms-mono:var(--mono);
+  margin-top:36px;border-top:1px solid var(--bms-line);color:var(--bms-ink);
+  background:linear-gradient(rgba(63,126,107,.035) 1px,transparent 1px),linear-gradient(90deg,rgba(63,126,107,.035) 1px,transparent 1px),var(--bms-paper);
+  background-size:32px 32px;font-family:var(--bms-sans);font-size:16px;line-height:1.78;text-rendering:optimizeLegibility;-webkit-font-smoothing:antialiased;
+}
+.lp.business-management-systems-page *{box-sizing:border-box}
+.lp.business-management-systems-page a{color:inherit}
+.lp.business-management-systems-page .layout{width:min(1320px,calc(100% - 48px));margin:0 auto;padding:34px 0 88px;display:grid;grid-template-columns:246px minmax(0,1fr);gap:clamp(30px,4vw,58px);align-items:start}
+.lp.business-management-systems-page aside{position:sticky;top:calc(var(--cv-head-total) + 18px);align-self:start;max-height:calc(100dvh - var(--cv-head-total) - 36px);overflow:auto;padding:20px 16px;border:1px solid var(--bms-line);border-radius:16px;background:rgba(250,249,245,.94);box-shadow:0 14px 36px rgba(20,20,19,.055);backdrop-filter:blur(12px);scrollbar-width:thin}
+.lp.business-management-systems-page .eyebrow{margin:0 8px 13px;color:var(--bms-accent);font:700 11px/1.3 var(--bms-mono);letter-spacing:.16em;text-transform:uppercase}
+.lp.business-management-systems-page nav{display:grid;gap:2px}
+.lp.business-management-systems-page nav a{display:block;padding:7px 9px;border-left:2px solid transparent;border-radius:8px;color:var(--bms-muted);font-size:12.5px;line-height:1.42;text-decoration:none;transition:background .16s,color .16s,border-color .16s}
+.lp.business-management-systems-page nav a:hover,.lp.business-management-systems-page nav a:focus-visible{color:var(--bms-ink);border-left-color:var(--bms-accent);background:var(--bms-accent-soft)}
+.lp.business-management-systems-page main{min-width:0}
+.lp.business-management-systems-page .hero,.lp.business-management-systems-page section{position:relative;overflow:hidden;border-radius:22px}
+.lp.business-management-systems-page .hero{min-height:500px;margin-bottom:22px;padding:clamp(34px,6vw,70px);display:flex;flex-direction:column;justify-content:center;color:#f5faf7;background:radial-gradient(circle at 84% 17%,rgba(142,205,179,.22),transparent 28%),radial-gradient(circle at 13% 94%,rgba(217,119,87,.14),transparent 31%),linear-gradient(145deg,var(--bms-night),var(--bms-night-2));box-shadow:0 24px 58px rgba(20,41,37,.18)}
+.lp.business-management-systems-page .hero::before{content:"";position:absolute;inset:0;pointer-events:none;background-image:linear-gradient(rgba(255,255,255,.04) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.04) 1px,transparent 1px);background-size:44px 44px;mask-image:linear-gradient(115deg,transparent 8%,black 78%)}
+.lp.business-management-systems-page .hero>*{position:relative;z-index:1}
+.lp.business-management-systems-page .kicker{margin-bottom:19px;color:#a9c8bc;font:700 11px/1.3 var(--bms-mono);letter-spacing:.16em;text-transform:uppercase}
+.lp.business-management-systems-page h1{max-width:880px;margin:0 0 22px;font:600 clamp(40px,6vw,76px)/1.08 var(--bms-serif);letter-spacing:-.035em}
+.lp.business-management-systems-page .subtitle{max-width:840px;margin:0;color:#ccddd6;font-family:var(--bms-serif);font-size:clamp(17px,2vw,21px);line-height:1.8}
+.lp.business-management-systems-page .thesis{margin-top:28px;padding:20px 22px;border-left:3px solid #8ecdb3;border-radius:0 13px 13px 0;background:rgba(255,255,255,.075);color:inherit;font-family:var(--bms-serif);font-size:17px;font-weight:600;line-height:1.72}
+.lp.business-management-systems-page section{margin-bottom:18px;padding:clamp(28px,4.2vw,46px);scroll-margin-top:calc(var(--cv-head-total) + 18px);border:1px solid var(--bms-line);background:rgba(255,255,255,.94);box-shadow:0 10px 30px rgba(20,20,19,.035)}
+.lp.business-management-systems-page section::before{content:"";position:absolute;left:0;top:0;width:5px;height:74px;background:linear-gradient(var(--bms-accent),#7eaa97)}
+.lp.business-management-systems-page h2{margin:0 0 19px;font:600 clamp(25px,3.3vw,36px)/1.32 var(--bms-serif);letter-spacing:-.018em}
+.lp.business-management-systems-page h3{margin:30px 0 10px;font:600 21px/1.4 var(--bms-serif)}
+.lp.business-management-systems-page p{margin:10px 0 16px}
+.lp.business-management-systems-page .lead{color:#303c38;font-size:17px}
+.lp.business-management-systems-page .formula{margin:21px 0;padding:20px 22px;overflow:auto;border:1px solid rgba(255,255,255,.1);border-radius:14px;color:#edf6f2;background:linear-gradient(135deg,var(--bms-night),#1b3d35);font:500 14px/1.72 var(--bms-mono);overflow-wrap:anywhere;white-space:pre-wrap}
+.lp.business-management-systems-page .formula.light{color:var(--bms-accent-deep);border-color:rgba(63,126,107,.24);background:linear-gradient(135deg,var(--bms-accent-soft),#f8faf8)}
+.lp.business-management-systems-page .quote{margin:24px 0;padding:22px 24px;border-radius:14px;color:#f5faf7;background:var(--bms-night);font:600 19px/1.68 var(--bms-serif)}
+.lp.business-management-systems-page .note{padding:17px 19px;border:1px solid rgba(63,126,107,.22);border-radius:13px;color:#385048;background:var(--bms-accent-soft)}
+.lp.business-management-systems-page .grid,.lp.business-management-systems-page .grid3{display:grid;gap:13px;margin:20px 0}
+.lp.business-management-systems-page .grid{grid-template-columns:repeat(2,minmax(0,1fr))}
+.lp.business-management-systems-page .grid3{grid-template-columns:repeat(3,minmax(0,1fr))}
+.lp.business-management-systems-page .card{min-width:0;padding:18px;border:1px solid var(--bms-line);border-radius:14px;background:#fbfcfa}
+.lp.business-management-systems-page .card strong{display:block;margin-bottom:6px;color:var(--bms-accent-deep);font-family:var(--bms-serif);font-size:17px}
+.lp.business-management-systems-page .card p{margin:0;color:var(--bms-muted);font-size:14px}
+.lp.business-management-systems-page .small{color:var(--bms-muted);font-size:13px}
+.lp.business-management-systems-page table{width:100%;margin:20px 0 10px;border-collapse:separate;border-spacing:0;overflow:hidden;border:1px solid var(--bms-line);border-radius:14px;background:var(--bms-card);font-size:13.5px}
+.lp.business-management-systems-page th,.lp.business-management-systems-page td{padding:13px 14px;border-bottom:1px solid var(--bms-line);text-align:left;vertical-align:top}
+.lp.business-management-systems-page th{color:var(--bms-accent-deep);background:var(--bms-accent-soft);font-weight:700}
+.lp.business-management-systems-page tr:last-child>*{border-bottom:0}
+.lp.business-management-systems-page .pipeline{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin:21px 0}
+.lp.business-management-systems-page .pipeline span{padding:8px 11px;border:1px solid rgba(63,126,107,.28);border-radius:999px;color:var(--bms-accent-deep);background:#f7faf8;font-size:13px;font-weight:600}
+.lp.business-management-systems-page .pipeline b{color:#91a69e;font-weight:500}
+.lp.business-management-systems-page .diagram{margin:21px 0;padding:16px;overflow:auto;border:1px solid var(--bms-line);border-radius:15px;background:#fbfcfa;overscroll-behavior-inline:contain}
+.lp.business-management-systems-page .diagram svg{display:block;width:100%;min-width:760px;height:auto}
+.lp.business-management-systems-page .badge{display:inline-flex;align-items:center;min-height:28px;margin:8px 6px 0 0;padding:4px 9px;border:1px solid rgba(63,126,107,.26);border-radius:999px;color:var(--bms-accent-deep);background:var(--bms-accent-soft);font-size:12px}
+.lp.business-management-systems-page .footer{padding:14px 4px 0;color:var(--bms-muted);font-size:13px}
+.lp.business-management-systems-page :focus-visible{outline:2px solid var(--bms-accent);outline-offset:3px}
+@media(max-width:980px){
+  .lp.business-management-systems-page .layout{width:min(100% - 28px,900px);grid-template-columns:1fr;gap:18px;padding-top:20px}
+  .lp.business-management-systems-page aside{position:relative;top:auto;max-height:none}
+  .lp.business-management-systems-page nav{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .lp.business-management-systems-page .hero{min-height:auto}
+}
+@media(max-width:680px){
+  .lp.business-management-systems-page{margin-top:26px;font-size:16px}
+  .lp.business-management-systems-page .layout{width:min(100% - 20px,900px);padding-bottom:58px}
+  .lp.business-management-systems-page nav{grid-template-columns:1fr}
+  .lp.business-management-systems-page .hero{padding:30px 23px}
+  .lp.business-management-systems-page h1{font-size:38px}
+  .lp.business-management-systems-page section{padding:26px 21px}
+  .lp.business-management-systems-page .grid,.lp.business-management-systems-page .grid3{grid-template-columns:1fr}
+  .lp.business-management-systems-page table{display:block;max-width:100%;overflow-x:auto;white-space:normal;overscroll-behavior-inline:contain}
+  .lp.business-management-systems-page .pipeline{align-items:stretch}
+  .lp.business-management-systems-page .pipeline span{text-align:center}
+  .lp.business-management-systems-page .formula{font-size:13px;padding:17px}
+}
+@media print{
+  .lp.business-management-systems-page{margin:0;background:#fff}
+  .lp.business-management-systems-page .layout{display:block;width:100%;padding:0}
+  .lp.business-management-systems-page aside{display:none}
+  .lp.business-management-systems-page .hero,.lp.business-management-systems-page section{break-inside:avoid;box-shadow:none}
+}
