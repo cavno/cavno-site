@@ -1,6 +1,6 @@
 @import url(https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@400;700;900&family=ZCOOL+XiaoWei&display=swap);
 
-*{ margin:0; padding:0; box-sizing:border-box; }.lp{
+.lp *{ margin:0; padding:0; box-sizing:border-box; }.lp{
   --bg: #0a0a0f;
   --card-bg: rgba(255,255,255,0.04);
   --card-border: rgba(255,255,255,0.08);

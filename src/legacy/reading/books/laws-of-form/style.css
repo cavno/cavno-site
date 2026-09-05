@@ -1,6 +1,6 @@
 @import url(https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@400;600;700;900&display=swap);
 
-:root{
+.lp{
   --parchment:var(--paper);
   --parchment-deep:#ECE1C4;
   

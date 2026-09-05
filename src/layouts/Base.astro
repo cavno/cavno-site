@@ -27,7 +27,7 @@ const restricted = norm.startsWith('/working/');
 <html lang="zh-CN">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
   <title>{title}</title>
   <meta name="description" content={description} />
   <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
@@ -86,7 +86,7 @@ const restricted = norm.startsWith('/working/');
   </div>
 </header>
 
-<div class="cv-drawer" id="cvDrawer" role="dialog" aria-label="站点菜单">
+<div class="cv-drawer" id="cvDrawer" role="dialog" aria-modal="true" aria-label="站点菜单" aria-hidden="true">
   <div class="cv-drawer-top">
     <span class="cv-brand">Cavno<span class="cv-bdot">.</span></span>
     <button class="cv-drawer-close" id="cvDrawerClose" aria-label="关闭菜单">×</button>
@@ -151,6 +151,26 @@ const restricted = norm.startsWith('/working/');
   window.addEventListener('scroll', onScroll, { passive: true });
   onScroll();
 
+  // 旧内容页里仍有自己的 sticky/fixed 导航。只对真正贴在视口 0 的导航型元素
+  // 增加公共顶栏偏移，避免误改表格表头、图表标注等局部吸顶元素。
+  const legacyStickySelector = '#cvMain :is(.lp,.sc-article,.tg-article,.wa-article) :is(header,nav,aside,.top,.topbar,.topnav,.sticky,.controls,.rail,.sidebar,.mobile-toc,.fsi-page-nav,.roadmap-nav,#console,#topnav)';
+  const syncLegacyStickyOffsets = () => {
+    document.querySelectorAll<HTMLElement>(legacyStickySelector).forEach((el) => {
+      const style = getComputedStyle(el);
+      const top = Number.parseFloat(style.top);
+      const shouldOffset = (style.position === 'sticky' || style.position === 'fixed') && Number.isFinite(top) && top <= 1;
+      el.classList.toggle('cv-sticky-under-site-head', shouldOffset);
+      el.classList.toggle('cv-sticky-viewport-panel', shouldOffset && el.getBoundingClientRect().height >= window.innerHeight - 2);
+    });
+  };
+  let stickySyncFrame = 0;
+  const scheduleStickySync = () => {
+    cancelAnimationFrame(stickySyncFrame);
+    stickySyncFrame = requestAnimationFrame(syncLegacyStickyOffsets);
+  };
+  scheduleStickySync();
+  window.addEventListener('resize', scheduleStickySync, { passive: true });
+
   // 桌面端多级导航：点击开合，hover / focus-within 由 CSS 处理
   const items = Array.from(document.querySelectorAll('.cv-site-head .cv-nav-item'));
   const finePointer = window.matchMedia('(hover: hover) and (pointer: fine)');
@@ -197,13 +217,25 @@ const restricted = norm.startsWith('/working/');
   const cvDrawer = document.getElementById('cvDrawer');
   const cvBurger = document.getElementById('cvBurger');
   const drawerClose = document.getElementById('cvDrawerClose');
-  const openDrawer = () => { cvDrawer?.classList.add('open'); document.body.classList.add('lock'); cvBurger?.setAttribute('aria-expanded', 'true'); drawerClose?.focus(); };
-  const closeDrawer = (restoreFocus = false) => { cvDrawer?.classList.remove('open'); document.body.classList.remove('lock'); cvBurger?.setAttribute('aria-expanded', 'false'); if (restoreFocus) cvBurger?.focus(); };
+  const openDrawer = () => { cvDrawer?.classList.add('open'); cvDrawer?.setAttribute('aria-hidden', 'false'); document.body.classList.add('lock'); cvBurger?.setAttribute('aria-expanded', 'true'); drawerClose?.focus(); };
+  const closeDrawer = (restoreFocus = false) => { cvDrawer?.classList.remove('open'); cvDrawer?.setAttribute('aria-hidden', 'true'); document.body.classList.remove('lock'); cvBurger?.setAttribute('aria-expanded', 'false'); if (restoreFocus) cvBurger?.focus(); };
   cvBurger?.addEventListener('click', openDrawer);
   drawerClose?.addEventListener('click', () => closeDrawer(true));
   cvDrawer?.addEventListener('click', (e) => { if ((e.target as HTMLElement).closest('a')) closeDrawer(); });
   cvDrawer?.querySelector('[data-cv-search-open]')?.addEventListener('click', () => closeDrawer());
-  document.addEventListener('keydown', (e) => { if (e.key === 'Escape') { closeAll(); if (cvDrawer?.classList.contains('open')) closeDrawer(true); } });
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') { closeAll(); if (cvDrawer?.classList.contains('open')) closeDrawer(true); }
+    if (e.key === 'Tab' && cvDrawer?.classList.contains('open')) {
+      const focusable = Array.from(cvDrawer.querySelectorAll<HTMLElement>('button:not([disabled]),a[href]'));
+      const first = focusable[0];
+      const last = focusable[focusable.length - 1];
+      if (e.shiftKey && document.activeElement === first) { e.preventDefault(); last?.focus(); }
+      else if (!e.shiftKey && document.activeElement === last) { e.preventDefault(); first?.focus(); }
+    }
+  });
+  window.matchMedia('(min-width: 961px)').addEventListener('change', (event) => {
+    if (event.matches && cvDrawer?.classList.contains('open')) closeDrawer();
+  });
 
   // 抽屉内手风琴
   document.querySelectorAll('.cv-acc-btn').forEach((b) => {
