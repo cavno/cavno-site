@@ -1,0 +1,27 @@
+---
+// 由 scripts/convert.mjs 生成，可自由手工精修
+import Base from '../../../layouts/Base.astro';
+import body from '../../../legacy/reading/thinking/financial-micro-market-evolution/body.html?raw';
+import '../../../styles/systems-essay.css';
+
+const meta = {
+  "title": "金融微观市场行为演化史",
+  "description": "金融微观行为不是主体在静态市场中的孤立选择，而是交易者、规则、技术、约束和网络在反身反馈中共同塑造价格的历史。"
+};
+---
+<Base title={meta.title + ' · Cavno'} description={meta.description}>
+
+  <section class="cv-page-head">
+    <div class="cv-wrap">
+      <div class="cv-eyebrow">Investing · Research</div>
+      <h1 class="cv-page-title">{meta.title}</h1>
+      <p class="cv-lede">{meta.description}</p>
+      <a class="cv-crumb-back" href="/investing/research/">← 返回投资研究栏目</a>
+    </div>
+  </section>
+
+  <article class="lp systems-essay">
+    <Fragment set:html={body} />
+  </article>
+  <script is:inline src="/scripts/systems-essay.js" defer></script>
+</Base>

@@ -1,8 +1,8 @@
 ---
 title: "中国国家治理制度逻辑演化史"
 section: reading
-subsection: "thinking"
-href: "/reading/thinking/state-governance/"
+subsection: "politics"
+href: "/reading/politics/state-governance/"
 date: 2026-08-31
 uploadedAt: 2026-08-31T05:23:40.963+08:00
 tags: ["国家治理", "制度逻辑", "授权链", "纠错机制"]

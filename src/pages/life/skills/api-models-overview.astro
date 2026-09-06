@@ -1,25 +1,5 @@
 ---
-import Base from '../../../layouts/Base.astro';
-import body from '../../../legacy/life/skills/api-models-overview/body.html?raw';
-import '../../../legacy/life/skills/api-models-overview/style.css';
-
-const meta = {
-  title: '第三方 API 模型接入清单',
-  description: '文本推理、图像生成、语音合成与数字人/视频四类 API 模型的能力、场景、状态和官方价格矩阵。',
-};
+const target = "/life/ai/api-models-overview/";
 ---
-<Base title={`${meta.title} · Cavno`} description={meta.description}>
-  <section class="cv-page-head am-page-head">
-    <div class="cv-wrap">
-      <div class="cv-eyebrow">Life & Skills · Skills</div>
-      <h1 class="cv-page-title">第三方 API 模型接入清单</h1>
-      <p class="cv-lede">14 个模型与服务，按文本、图像、语音和视频四类整理能力价值、使用场景、当前状态与官方价格。</p>
-      <a class="cv-crumb-back" href="/life/skills/">← 返回技能工具</a>
-    </div>
-  </section>
-
-  <article class="lp am-article">
-    <Fragment set:html={body} />
-  </article>
-</Base>
-
+<!doctype html>
+<html lang="zh-CN"><head><meta charset="utf-8" /><meta name="robots" content="noindex,follow" /><meta http-equiv="refresh" content={`0;url=${target}`} /><link rel="canonical" href={`https://cavno.org${target}`} /><title>页面已迁移 · Cavno</title></head><body><p>页面已迁移至 <a href={target}>新栏目</a>。</p><script is:inline define:vars={{ target }}>location.replace(target + location.search + location.hash);</script></body></html>

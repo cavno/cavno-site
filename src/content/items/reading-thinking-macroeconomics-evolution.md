@@ -1,8 +1,8 @@
 ---
 title: "宏观经济学演化史"
 section: reading
-subsection: "thinking"
-href: "/reading/thinking/macroeconomics-evolution/"
+subsection: "economics"
+href: "/reading/economics/macroeconomics-evolution/"
 date: 2026-09-01
 uploadedAt: 2026-09-01T04:24:02+08:00
 tags: ["宏观经济学", "总需求", "政策反馈", "预期", "资产负债表", "复杂适应系统"]

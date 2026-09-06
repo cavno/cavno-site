@@ -1,8 +1,8 @@
 ---
 title: "金融微观市场行为演化史"
-section: reading
-subsection: "thinking"
-href: "/reading/thinking/financial-micro-market-evolution/"
+section: investing
+subsection: "research"
+href: "/investing/research/financial-micro-market-evolution/"
 date: 2026-09-01
 uploadedAt: 2026-09-01T04:24:01+08:00
 tags: ["市场微观结构", "价格发现", "订单簿", "流动性", "风险反馈", "AI代理"]

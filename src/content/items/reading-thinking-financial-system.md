@@ -1,8 +1,8 @@
 ---
 title: "金融系统发展史"
 section: reading
-subsection: "thinking"
-href: "/reading/thinking/financial-system/"
+subsection: "economics"
+href: "/reading/economics/financial-system/"
 date: 2026-08-31
 uploadedAt: 2026-08-31T05:23:40.943+08:00
 tags: ["金融系统", "信用网络", "系统性风险", "演化"]

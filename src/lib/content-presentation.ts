@@ -1,3 +1,4 @@
+import routeMigrations from '../content/article-route-migrations.json';
 import { deriveCoverDesign, type CoverDesign } from './cover-design';
 export type { CoverMotif } from './cover-design';
 
@@ -136,7 +137,9 @@ export function makeBodyLookup(modules: Record<string, unknown>): Record<string,
     const start = path.indexOf(marker);
     if (start < 0 || !path.endsWith('/body.html')) continue;
     const route = path.slice(start + marker.length, -'/body.html'.length);
-    lookup[`/${route}/`] = typeof value === 'string' ? value : '';
+    const sourceHref = `/${route}/`;
+    const destination = (routeMigrations as Record<string, string>)[sourceHref] ?? sourceHref;
+    lookup[destination] = typeof value === 'string' ? value : '';
   }
   return lookup;
 }

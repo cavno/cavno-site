@@ -1,8 +1,8 @@
 ---
 title: "中国王朝发展史"
 section: reading
-subsection: "thinking"
-href: "/reading/thinking/chinese-dynasties/"
+subsection: "politics"
+href: "/reading/politics/chinese-dynasties/"
 date: 2026-08-31
 uploadedAt: 2026-08-31T05:23:40.948+08:00
 tags: ["中国王朝", "财政", "治理", "历史演化"]

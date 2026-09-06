@@ -1,0 +1,24 @@
+---
+import Base from '../../../layouts/Base.astro';
+import body from '../../../legacy/life/skills/wechat-auto-draft/body.html?raw';
+import '../../../legacy/life/skills/wechat-auto-draft/style.css';
+
+const meta = {
+  title: '公众号文章自动配图与草稿箱全链路',
+  description: '从素材改写、结构化中间稿、微信 HTML 排版、自动配图到写入草稿箱的完整技术路线与账号门槛。',
+};
+---
+<Base title={`${meta.title} · Cavno`} description={meta.description}>
+  <section class="cv-page-head wa-page-head">
+    <div class="cv-wrap">
+      <div class="cv-eyebrow">Working · Operations</div>
+      <h1 class="cv-page-title">从内容到公众号草稿箱，拆成一条可复用的自动化链路。</h1>
+      <p class="cv-lede">把写稿、排版、封面与正文配图、素材上传和草稿接口逐层拆开，并标清账号资质、平台限制与人工确认的边界。</p>
+      <a class="cv-crumb-back" href="/working/operations/">← 返回运营栏目</a>
+    </div>
+  </section>
+
+  <article class="lp wa-article">
+    <Fragment set:html={body} />
+  </article>
+</Base>

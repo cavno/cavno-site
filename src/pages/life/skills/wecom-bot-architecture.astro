@@ -1,16 +1,5 @@
 ---
-import Base from '../../../layouts/Base.astro';
-import body from '../../../legacy/life/skills/wecom-bot-architecture/body.html?raw';
-import '../../../legacy/life/skills/wecom-bot-architecture/style.css';
-const meta = { title: '企微 AI 机器人架构：一个人和一个智能体', description: '企微 AI 机器人的回调流水线、异步处理、知识库、问答、日报与好友自动通过架构分享。' };
+const target = "/working/operations/wecom-bot-architecture/";
 ---
-<Base title={`${meta.title} · Cavno`} description={meta.description}>
-  <section class="cv-page-head wa-page-head"><div class="cv-wrap">
-    <div class="cv-eyebrow">Life & Skills · Skills</div>
-    <h1 class="cv-page-title">企微 AI 机器人架构：一个人和一个智能体</h1>
-    <p class="cv-lede">从 HTTPS 回调到异步处理、知识库、问答、日报和好友自动通过，拆开一套真实运行系统的结构与取舍。</p>
-    <a class="cv-crumb-back" href="/life/skills/">← 返回技能工具</a>
-  </div></section>
-  <article class="lp wa-article"><Fragment set:html={body} /></article>
-</Base>
-
+<!doctype html>
+<html lang="zh-CN"><head><meta charset="utf-8" /><meta name="robots" content="noindex,follow" /><meta http-equiv="refresh" content={`0;url=${target}`} /><link rel="canonical" href={`https://cavno.org${target}`} /><title>页面已迁移 · Cavno</title></head><body><p>页面已迁移至 <a href={target}>新栏目</a>。</p><script is:inline define:vars={{ target }}>location.replace(target + location.search + location.hash);</script></body></html>

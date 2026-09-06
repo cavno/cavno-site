@@ -1,25 +1,5 @@
 ---
-import Base from '../../../layouts/Base.astro';
-import body from '../../../legacy/reading/thinking/matter-evolution/body.html?raw';
-import '../../../styles/systems-essay.css';
-
-const meta = {
-  "title": "物质演化史",
-  "description": "物质演化不是“东西越来越多”，而是约束、束缚、对称性破缺与环境选择不断创造新的稳定组织层级。"
-};
+const target = "/reading/science/matter-evolution/";
 ---
-<Base title={meta.title + ' · Cavno'} description={meta.description}>
-  <section class="cv-page-head">
-    <div class="cv-wrap">
-      <div class="cv-eyebrow">Reading & Thinking · Thinking</div>
-      <h1 class="cv-page-title">{meta.title}</h1>
-      <p class="cv-lede">{meta.description}</p>
-      <a class="cv-crumb-back" href="/reading/thinking/">← 返回思考栏目</a>
-    </div>
-  </section>
-
-  <article class="lp systems-essay">
-    <Fragment set:html={body} />
-  </article>
-  <script is:inline src="/scripts/systems-essay.js" defer></script>
-</Base>
+<!doctype html>
+<html lang="zh-CN"><head><meta charset="utf-8" /><meta name="robots" content="noindex,follow" /><meta http-equiv="refresh" content={`0;url=${target}`} /><link rel="canonical" href={`https://cavno.org${target}`} /><title>页面已迁移 · Cavno</title></head><body><p>页面已迁移至 <a href={target}>新栏目</a>。</p><script is:inline define:vars={{ target }}>location.replace(target + location.search + location.hash);</script></body></html>

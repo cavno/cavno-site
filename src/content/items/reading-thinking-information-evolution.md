@@ -1,8 +1,8 @@
 ---
 title: "信息演化史"
 section: reading
-subsection: "thinking"
-href: "/reading/thinking/information-evolution/"
+subsection: "science"
+href: "/reading/science/information-evolution/"
 date: 2026-08-31
 uploadedAt: 2026-08-31T05:23:40.977+08:00
 tags: ["信息演化", "遗传", "计算", "人工智能"]

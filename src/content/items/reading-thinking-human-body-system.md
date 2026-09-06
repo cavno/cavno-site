@@ -1,8 +1,8 @@
 ---
 title: "人体系统"
 section: reading
-subsection: "thinking"
-href: "/reading/thinking/human-body-system/"
+subsection: "science"
+href: "/reading/science/human-body-system/"
 date: 2026-08-31
 uploadedAt: 2026-08-31T05:23:40.980+08:00
 tags: ["人体系统", "稳态", "神经", "免疫"]

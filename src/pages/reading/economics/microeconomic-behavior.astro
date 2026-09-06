@@ -1,0 +1,25 @@
+---
+import Base from '../../../layouts/Base.astro';
+import body from '../../../legacy/reading/thinking/microeconomic-behavior/body.html?raw';
+import '../../../styles/systems-essay.css';
+
+const meta = {
+  "title": "微观经济行为演化史",
+  "description": "微观经济行为不是一次性的“理性选择”，而是目标、信息、规则、他人反应与历史路径组成的循环。"
+};
+---
+<Base title={meta.title + ' · Cavno'} description={meta.description}>
+  <section class="cv-page-head">
+    <div class="cv-wrap">
+      <div class="cv-eyebrow">Reading & Thinking · Economics</div>
+      <h1 class="cv-page-title">{meta.title}</h1>
+      <p class="cv-lede">{meta.description}</p>
+      <a class="cv-crumb-back" href="/reading/economics/">← 返回经济学栏目</a>
+    </div>
+  </section>
+
+  <article class="lp systems-essay">
+    <Fragment set:html={body} />
+  </article>
+  <script is:inline src="/scripts/systems-essay.js" defer></script>
+</Base>

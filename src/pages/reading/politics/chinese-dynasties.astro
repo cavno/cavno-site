@@ -1,0 +1,25 @@
+---
+import Base from '../../../layouts/Base.astro';
+import body from '../../../legacy/reading/thinking/chinese-dynasties/body.html?raw';
+import '../../../styles/systems-essay.css';
+
+const meta = {
+  "title": "中国王朝发展史",
+  "description": "王朝不是皇帝名单，而是中央、地方、财政、军事、交通、精英与合法性之间持续耦合的治理系统。"
+};
+---
+<Base title={meta.title + ' · Cavno'} description={meta.description}>
+  <section class="cv-page-head">
+    <div class="cv-wrap">
+      <div class="cv-eyebrow">Reading & Thinking · Politics</div>
+      <h1 class="cv-page-title">{meta.title}</h1>
+      <p class="cv-lede">{meta.description}</p>
+      <a class="cv-crumb-back" href="/reading/politics/">← 返回政治栏目</a>
+    </div>
+  </section>
+
+  <article class="lp systems-essay">
+    <Fragment set:html={body} />
+  </article>
+  <script is:inline src="/scripts/systems-essay.js" defer></script>
+</Base>

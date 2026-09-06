@@ -1,8 +1,8 @@
 ---
 title: "物理学发展史"
 section: reading
-subsection: "thinking"
-href: "/reading/thinking/physics-evolution/"
+subsection: "science"
+href: "/reading/science/physics-evolution/"
 date: 2026-08-31
 uploadedAt: 2026-08-31T05:23:40.988+08:00
 tags: ["物理学", "科学史", "理论演化", "系统"]

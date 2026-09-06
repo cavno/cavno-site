@@ -1,26 +1,5 @@
 ---
-// 由 scripts/convert.mjs 生成，可自由手工精修
-import Base from '../../../layouts/Base.astro';
-import body from '../../../legacy/life/china/gba/body.html?raw';
-import '../../../legacy/life/china/gba/style.css';
-
-const meta = {
-  "title": "大湾区 · 地形—制度叠加底图",
-  "description": "八门·山框·拉链·三极四膜·五港五场·代谢管线：被水统一、被史三分的海湾，如何给统一付缝合费、给落差做绝缘。"
-};
+const target = "/life/places/gba/";
 ---
-<Base title={meta.title + ' · Cavno'} description={meta.description}>
-
-  <section class="cv-page-head">
-    <div class="cv-wrap">
-      <div class="cv-eyebrow">Life & Skills · China</div>
-      <h1 class="cv-page-title">{meta.title}</h1>
-      <p class="cv-lede">{meta.description}</p>
-      <a class="cv-crumb-back" href="/life/china/">← 返回中国栏目</a>
-    </div>
-  </section>
-
-  <article class="lp">
-    <Fragment set:html={body} />
-  </article>
-</Base>
+<!doctype html>
+<html lang="zh-CN"><head><meta charset="utf-8" /><meta name="robots" content="noindex,follow" /><meta http-equiv="refresh" content={`0;url=${target}`} /><link rel="canonical" href={`https://cavno.org${target}`} /><title>页面已迁移 · Cavno</title></head><body><p>页面已迁移至 <a href={target}>新栏目</a>。</p><script is:inline define:vars={{ target }}>location.replace(target + location.search + location.hash);</script></body></html>

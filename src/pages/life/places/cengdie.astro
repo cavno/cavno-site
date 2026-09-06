@@ -1,0 +1,26 @@
+---
+// 由 scripts/convert.mjs 生成，可自由手工精修
+import Base from '../../../layouts/Base.astro';
+import body from '../../../legacy/life/china/cengdie/body.html?raw';
+import '../../../legacy/life/china/cengdie/style.css';
+
+const meta = {
+  "title": "层叠的中国 · 一次滚动完成的论证",
+  "description": "滚动叙事地图：22 步看清中国省界与方言、族群、山川的系统性错位——「犬牙交错」。市级精度，末附完整自由探索地图。"
+};
+---
+<Base title={meta.title + ' · Cavno'} description={meta.description}>
+
+  <section class="cv-page-head">
+    <div class="cv-wrap">
+      <div class="cv-eyebrow">Life & Skills · Places</div>
+      <h1 class="cv-page-title">{meta.title}</h1>
+      <p class="cv-lede">{meta.description}</p>
+      <a class="cv-crumb-back" href="/life/places/">← 返回城市与地理栏目</a>
+    </div>
+  </section>
+
+  <article class="lp">
+    <Fragment set:html={body} />
+  </article>
+</Base>

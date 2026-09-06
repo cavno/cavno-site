@@ -1,25 +1,5 @@
 ---
-import Base from '../../../layouts/Base.astro';
-import body from '../../../legacy/reading/thinking/financial-thought-systems-reconstruction/body.html?raw';
-import '../../../legacy/reading/thinking/financial-thought-systems-reconstruction/style.css';
-
-const meta = {
-  title: '复杂金融系统中的十种控制算法｜金融思想的系统论重构',
-  description: '用系统边界、反馈、状态估计、鲁棒控制与长期生存约束，重新理解十位金融思想家的方法差异。',
-};
+const target = "/investing/research/financial-thought-systems-reconstruction/";
 ---
-<Base title={`${meta.title} · Cavno`} description={meta.description}>
-  <section class="cv-page-head fsi-page-head">
-    <div class="cv-wrap">
-      <div class="cv-eyebrow">Reading &amp; Thinking · Thinking</div>
-      <h1 class="cv-page-title">复杂金融系统中的十种控制算法</h1>
-      <p class="cv-lede">把金融思想从“流派之争”重构为复杂系统中的边界选择、状态估计、反馈更新、风险控制与长期生存问题。</p>
-      <a class="cv-crumb-back" href="/reading/thinking/">← 返回思考栏目</a>
-    </div>
-  </section>
-
-  <article class="lp fsi-article">
-    <Fragment set:html={body} />
-  </article>
-  <script>import '../../../legacy/reading/thinking/financial-thought-systems-reconstruction/script.js';</script>
-</Base>
+<!doctype html>
+<html lang="zh-CN"><head><meta charset="utf-8" /><meta name="robots" content="noindex,follow" /><meta http-equiv="refresh" content={`0;url=${target}`} /><link rel="canonical" href={`https://cavno.org${target}`} /><title>页面已迁移 · Cavno</title></head><body><p>页面已迁移至 <a href={target}>新栏目</a>。</p><script is:inline define:vars={{ target }}>location.replace(target + location.search + location.hash);</script></body></html>

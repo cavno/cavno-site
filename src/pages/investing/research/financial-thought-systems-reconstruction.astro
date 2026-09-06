@@ -1,0 +1,25 @@
+---
+import Base from '../../../layouts/Base.astro';
+import body from '../../../legacy/reading/thinking/financial-thought-systems-reconstruction/body.html?raw';
+import '../../../legacy/reading/thinking/financial-thought-systems-reconstruction/style.css';
+
+const meta = {
+  title: '复杂金融系统中的十种控制算法｜金融思想的系统论重构',
+  description: '用系统边界、反馈、状态估计、鲁棒控制与长期生存约束，重新理解十位金融思想家的方法差异。',
+};
+---
+<Base title={`${meta.title} · Cavno`} description={meta.description}>
+  <section class="cv-page-head fsi-page-head">
+    <div class="cv-wrap">
+      <div class="cv-eyebrow">Investing · Research</div>
+      <h1 class="cv-page-title">复杂金融系统中的十种控制算法</h1>
+      <p class="cv-lede">把金融思想从“流派之争”重构为复杂系统中的边界选择、状态估计、反馈更新、风险控制与长期生存问题。</p>
+      <a class="cv-crumb-back" href="/investing/research/">← 返回投资研究栏目</a>
+    </div>
+  </section>
+
+  <article class="lp fsi-article">
+    <Fragment set:html={body} />
+  </article>
+  <script>import '../../../legacy/reading/thinking/financial-thought-systems-reconstruction/script.js';</script>
+</Base>

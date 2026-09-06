@@ -1,8 +1,8 @@
 ---
 title: "物质演化史"
 section: reading
-subsection: "thinking"
-href: "/reading/thinking/matter-evolution/"
+subsection: "science"
+href: "/reading/science/matter-evolution/"
 date: 2026-08-31
 uploadedAt: 2026-08-31T05:23:40.966+08:00
 tags: ["物质演化", "复杂系统", "层级", "涌现"]

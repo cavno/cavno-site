@@ -1,8 +1,8 @@
 ---
 title: "能量演化史"
 section: reading
-subsection: "thinking"
-href: "/reading/thinking/energy-evolution/"
+subsection: "science"
+href: "/reading/science/energy-evolution/"
 date: 2026-08-31
 uploadedAt: 2026-08-31T05:23:40.969+08:00
 tags: ["能量演化", "热力学", "功率", "文明"]

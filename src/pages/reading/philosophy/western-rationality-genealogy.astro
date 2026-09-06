@@ -1,0 +1,26 @@
+---
+// 由 scripts/convert.mjs 生成，可自由手工精修
+import Base from '../../../layouts/Base.astro';
+import body from '../../../legacy/reading/thinking/western-rationality-genealogy/body.html?raw';
+import '../../../legacy/reading/thinking/western-rationality-genealogy/style.css';
+
+const meta = {
+  "title": "西方理性全谱系｜从闭合证明到多层反身适应",
+  "description": "西方理性全谱系：从存在、形式与证明，到生成、概率、计算、反馈、学习与多层反身适应。"
+};
+---
+<Base title={meta.title + ' · Cavno'} description={meta.description}>
+
+  <section class="cv-page-head">
+    <div class="cv-wrap">
+      <div class="cv-eyebrow">Reading & Thinking · Philosophy</div>
+      <h1 class="cv-page-title">{meta.title}</h1>
+      <p class="cv-lede">{meta.description}</p>
+      <a class="cv-crumb-back" href="/reading/philosophy/">← 返回哲学栏目</a>
+    </div>
+  </section>
+
+  <article class="lp">
+    <Fragment set:html={body} />
+  </article>
+</Base>

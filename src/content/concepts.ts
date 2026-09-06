@@ -23,7 +23,7 @@ export const concepts: Concept[] = [
     essentials: '至少明确要素、关系、边界和环境；研究动态问题时还需识别状态、输入、输出与时间尺度。相同要素可以因为连接方式不同而产生不同结果。',
     boundary: '一份清单不自动构成有解释力的系统模型。自然系统也不必具有预先设定的目的；把所有行为都解释为“为了某个目标”容易引入目的论。',
     example: '理解金融市场不能只列出银行、企业和居民，还要追踪它们之间的债权、支付、抵押与信息关系。',
-    article: '/reading/thinking/financial-system/', related: ['system-boundary', 'feedback', 'emergence'],
+    article: '/reading/economics/financial-system/', related: ['system-boundary', 'feedback', 'emergence'],
   },
   {
     slug: 'system-boundary', name: '系统边界', en: 'System boundary', group: 'systems',
@@ -39,7 +39,7 @@ export const concepts: Concept[] = [
     essentials: '应具体说明交换对象、通道与约束，以及交换如何维持或改变内部结构。生命体依靠摄取、代谢和排出维持自身。',
     boundary: '开放不等于没有边界。热力学中的“封闭系统”仍可交换能量，而“孤立系统”不交换物质和能量；社会系统中的用法应注明是类比。',
     example: '人体通过食物、氧气、热量与环境交换维持生命；知识组织通过外部证据修正内部认识，是另一层面的开放。',
-    article: '/reading/thinking/human-body-system/', related: ['system-boundary', 'homeostasis', 'self-organization'],
+    article: '/reading/science/human-body-system/', related: ['system-boundary', 'homeostasis', 'self-organization'],
   },
   {
     slug: 'feedback', name: '反馈', en: 'Feedback', group: 'systems',
@@ -55,7 +55,7 @@ export const concepts: Concept[] = [
     essentials: '基本关系是“期末存量 = 期初存量 + 期间流入 − 期间流出”。存量和流量的单位不同，例如元与元/月；观测区间必须一致。',
     boundary: '流入减少不等于存量下降：只要流入仍大于流出，存量就继续上升。不能直接把某时点余额与全年交易额当作同类量比较。',
     example: '在没有利息和其他调整时，账户原有 100 元，本月存入 30 元、支出 20 元，期末为 110 元。',
-    article: '/reading/thinking/macroeconomics-evolution/', related: ['system', 'feedback', 'model'],
+    article: '/reading/economics/macroeconomics-evolution/', related: ['system', 'feedback', 'model'],
   },
   {
     slug: 'emergence', name: '涌现', en: 'Emergence', group: 'systems',
@@ -63,7 +63,7 @@ export const concepts: Concept[] = [
     essentials: '说明涌现需要指出观察尺度、局部规则、互动网络与宏观指标，而不能只把难以理解的现象重新命名。',
     boundary: '涌现并不自动意味着不可解释、不可计算或违反物理规律。哲学中的强涌现与弱涌现有不同主张，本词条不把强涌现视为既定事实。',
     example: '单辆车没有“交通拥堵”这一群体性质，但许多车辆在跟车、制动与道路容量约束下会形成拥堵波。',
-    article: '/reading/thinking/human-brain-evolution/', related: ['system', 'self-organization', 'model'],
+    article: '/reading/science/human-brain-evolution/', related: ['system', 'self-organization', 'model'],
   },
   {
     slug: 'self-organization', name: '自组织', en: 'Self-organization', group: 'systems',
@@ -79,7 +79,7 @@ export const concepts: Concept[] = [
     essentials: '需识别受调变量、感知机制、调节通路与效应器；调节通常涉及反馈，允许波动，也受到能量与生理能力的限制。',
     boundary: '稳态调节不等于热力学平衡，也不等于所有变量恒定。调节成功可能伴随较大内部活动；超出能力范围时，系统仍会失稳。',
     example: '体温升高时通过出汗与皮肤血流变化散热；这不是温度永远不变，而是在一定条件下抵抗偏离。',
-    article: '/reading/thinking/human-body-system/', related: ['feedback', 'open-system'],
+    article: '/reading/science/human-body-system/', related: ['feedback', 'open-system'],
   },
   {
     slug: 'concept', name: '概念', en: 'Concept', group: 'reasoning',

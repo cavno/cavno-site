@@ -1,26 +1,5 @@
 ---
-// 由 scripts/convert.mjs 生成，可自由手工精修
-import Base from '../../../layouts/Base.astro';
-import body from '../../../legacy/reading/philosophy/political-science-systems-history/body.html?raw';
-import '../../../legacy/reading/philosophy/political-science-systems-history/style.css';
-
-const meta = {
-  "title": "政治学发展史的系统论分析",
-  "description": "从正义秩序、政体与主权出发，追踪权力约束、民主聚合、国家能力、制度演化、网络政治与元治理的发展主线。"
-};
+const target = "/reading/politics/political-science-systems-history/";
 ---
-<Base title={meta.title + ' · Cavno'} description={meta.description}>
-
-  <section class="cv-page-head">
-    <div class="cv-wrap">
-      <div class="cv-eyebrow">Reading & Thinking · Philosophy</div>
-      <h1 class="cv-page-title">{meta.title}</h1>
-      <p class="cv-lede">{meta.description}</p>
-      <a class="cv-crumb-back" href="/reading/philosophy/">← 返回哲学栏目</a>
-    </div>
-  </section>
-
-  <article class="lp political-systems-history">
-    <Fragment set:html={body} />
-  </article>
-</Base>
+<!doctype html>
+<html lang="zh-CN"><head><meta charset="utf-8" /><meta name="robots" content="noindex,follow" /><meta http-equiv="refresh" content={`0;url=${target}`} /><link rel="canonical" href={`https://cavno.org${target}`} /><title>页面已迁移 · Cavno</title></head><body><p>页面已迁移至 <a href={target}>新栏目</a>。</p><script is:inline define:vars={{ target }}>location.replace(target + location.search + location.hash);</script></body></html>

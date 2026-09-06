@@ -1,0 +1,24 @@
+---
+import Base from '../../../layouts/Base.astro';
+import body from '../../../legacy/life/skills/stock-data-sources/body.html?raw';
+import '../../../legacy/life/skills/stock-data-sources/style.css';
+
+const meta = {
+  title: '给 AI 喂股市数据：价格、实时性与准确性横评',
+  description: '从免费公开行情、券商通道、商业数据源到 MCP 与 Skills，按价格、延迟、授权与准确性梳理股票数据方案。',
+};
+---
+<Base title={`${meta.title} · Cavno`} description={meta.description}>
+  <section class="cv-page-head sd-page-head">
+    <div class="cv-wrap">
+      <div class="cv-eyebrow">Investing · Research</div>
+      <h1 class="cv-page-title">给 AI 喂股市数据，先看价格、实时性与准确性。</h1>
+      <p class="cv-lede">把免费公开行情、券商通道、商业 API、MCP 与 Skills 放进同一套成本和延迟坐标，直接判断什么数据源适合什么任务。</p>
+      <a class="cv-crumb-back" href="/investing/research/">← 返回投资研究栏目</a>
+    </div>
+  </section>
+
+  <article class="lp sd-article">
+    <Fragment set:html={body} />
+  </article>
+</Base>

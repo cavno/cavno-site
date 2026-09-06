@@ -1,26 +1,5 @@
 ---
-// 由 scripts/convert.mjs 生成，可自由手工精修
-import Base from '../../../layouts/Base.astro';
-import body from '../../../legacy/reading/thinking/general-systems-theory-western-rationality-life-tree/body.html?raw';
-import '../../../legacy/reading/thinking/general-systems-theory-western-rationality-life-tree/style.css';
-
-const meta = {
-  "title": "一般系统论框架下的西方理性生命树",
-  "description": "以整体性、开放系统、反馈和层次结构为坐标，重新梳理西方理性从静态结构到反身系统的演化路径。"
-};
+const target = "/reading/philosophy/general-systems-theory-western-rationality-life-tree/";
 ---
-<Base title={meta.title + ' · Cavno'} description={meta.description}>
-
-  <section class="cv-page-head">
-    <div class="cv-wrap">
-      <div class="cv-eyebrow">Reading & Thinking · Thinking</div>
-      <h1 class="cv-page-title">{meta.title}</h1>
-      <p class="cv-lede">{meta.description}</p>
-      <a class="cv-crumb-back" href="/reading/thinking/">← 返回思考栏目</a>
-    </div>
-  </section>
-
-  <article class="lp">
-    <Fragment set:html={body} />
-  </article>
-</Base>
+<!doctype html>
+<html lang="zh-CN"><head><meta charset="utf-8" /><meta name="robots" content="noindex,follow" /><meta http-equiv="refresh" content={`0;url=${target}`} /><link rel="canonical" href={`https://cavno.org${target}`} /><title>页面已迁移 · Cavno</title></head><body><p>页面已迁移至 <a href={target}>新栏目</a>。</p><script is:inline define:vars={{ target }}>location.replace(target + location.search + location.hash);</script></body></html>

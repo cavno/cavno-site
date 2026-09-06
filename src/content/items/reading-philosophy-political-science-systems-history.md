@@ -1,8 +1,8 @@
 ---
 title: "政治学发展史的系统论分析"
 section: reading
-subsection: "philosophy"
-href: "/reading/philosophy/political-science-systems-history/"
+subsection: "politics"
+href: "/reading/politics/political-science-systems-history/"
 date: 2026-09-01
 uploadedAt: 2026-09-01T22:39:32+08:00
 tags: ["政治学", "政治哲学", "制度演化", "权力", "合法性", "元治理", "系统论"]

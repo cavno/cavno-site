@@ -1,17 +1,5 @@
 ---
-import Base from '../../../layouts/Base.astro';
-import body from '../../../legacy/life/skills/private-domain-dashboard/body.html?raw';
-import '../../../legacy/life/skills/private-domain-dashboard/style.css';
-const meta = { title: '私域运营数据看板：AI 智能体驱动', description: '以企微群聊、私信、问答和好友通过数据，复盘 AI 智能体驱动的私域运营全链路。' };
+const target = "/working/operations/private-domain-dashboard/";
 ---
-<Base title={`${meta.title} · Cavno`} description={meta.description}>
-  <section class="cv-page-head pd-page-head"><div class="cv-wrap">
-    <div class="cv-eyebrow">Life & Skills · Skills</div>
-    <h1 class="cv-page-title">私域运营数据看板：AI 智能体驱动</h1>
-    <p class="cv-lede">用 53 天真实运行数据观察群聊、私信、问答、好友通过、用户分层和商业线索的完整链路。</p>
-    <a class="cv-crumb-back" href="/life/skills/">← 返回技能工具</a>
-  </div></section>
-  <article class="lp pd-article"><Fragment set:html={body} /></article>
-  <script>import '../../../legacy/life/skills/private-domain-dashboard/script.js';</script>
-</Base>
-
+<!doctype html>
+<html lang="zh-CN"><head><meta charset="utf-8" /><meta name="robots" content="noindex,follow" /><meta http-equiv="refresh" content={`0;url=${target}`} /><link rel="canonical" href={`https://cavno.org${target}`} /><title>页面已迁移 · Cavno</title></head><body><p>页面已迁移至 <a href={target}>新栏目</a>。</p><script is:inline define:vars={{ target }}>location.replace(target + location.search + location.hash);</script></body></html>
