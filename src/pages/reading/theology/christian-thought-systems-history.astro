@@ -1,0 +1,24 @@
+---
+import Base from '../../../layouts/Base.astro';
+import body from '../../../legacy/reading/theology/christian-thought-systems-history/body.html?raw';
+import '../../../legacy/reading/theology/christian-thought-systems-history/style.css';
+
+const meta = {
+  title: '基督教思想的发展史：系统论视角',
+  description: '把基督教思想视为由启示、解释、教义、权威、制度、实践与历史环境共同构成的开放系统，梳理其两千年的稳定、危机与重构。',
+};
+---
+<Base title={meta.title + ' · Cavno'} description={meta.description}>
+  <section class="cv-page-head">
+    <div class="cv-wrap">
+      <div class="cv-eyebrow">Reading &amp; Thinking · Theology</div>
+      <h1 class="cv-page-title">{meta.title}</h1>
+      <p class="cv-lede">{meta.description}</p>
+      <a class="cv-crumb-back" href="/reading/theology/">← 返回神学栏目</a>
+    </div>
+  </section>
+
+  <article class="christian-thought-host">
+    <Fragment set:html={body} />
+  </article>
+</Base>

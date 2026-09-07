@@ -1,0 +1,10 @@
+{
+  "checks": 18,
+  "failures": [],
+  "route": "/reading/theology/christian-thought-systems-history/",
+  "sourceBytes": 16101,
+  "preservedBodySha256": "cf819b5278c1237ae40d8219d7c0739676cad8928659613a1eddcc995eb0d743",
+  "sections": 15,
+  "externalDependencies": 0,
+  "build": "Astro production build completed"
+}
