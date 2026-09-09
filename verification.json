@@ -1,10 +1,12 @@
 {
-  "checks": 18,
+  "checks": 25,
   "failures": [],
-  "route": "/reading/theology/christian-thought-systems-history/",
-  "sourceBytes": 16101,
-  "preservedBodySha256": "cf819b5278c1237ae40d8219d7c0739676cad8928659613a1eddcc995eb0d743",
-  "sections": 15,
-  "externalDependencies": 0,
-  "build": "Astro production build completed"
+  "route": "/reading/theology/christian-thought-two-millennia/",
+  "sourceBytes": 155138,
+  "preservedBodySha256": "65c81222c6c8d0d79b3183aaa24a8a2686a1832df57350b560ad6a25bd825775",
+  "parts": 10,
+  "propositions": 60,
+  "internalTargets": 71,
+  "articleExternalDependencies": 0,
+  "build": "Astro production build completed: 202 pages"
 }

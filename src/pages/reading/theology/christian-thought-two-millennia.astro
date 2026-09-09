@@ -1,0 +1,24 @@
+---
+import Base from '../../../layouts/Base.astro';
+import body from '../../../legacy/reading/theology/christian-thought-two-millennia/body.html?raw';
+import '../../../legacy/reading/theology/christian-thought-two-millennia/style.css';
+
+const meta = {
+  title: '基督教两千年思想演化史的系统论重构',
+  description: '以十部分、六十个命题与核心结论，重构基督教思想从启示、解释、教义和制度，到危机、再解释与全球多中心化的两千年演化。',
+};
+---
+<Base title={meta.title + ' · Cavno'} description={meta.description}>
+  <section class="cv-page-head">
+    <div class="cv-wrap">
+      <div class="cv-eyebrow">Reading &amp; Thinking · Theology</div>
+      <h1 class="cv-page-title">{meta.title}</h1>
+      <p class="cv-lede">{meta.description}</p>
+      <a class="cv-crumb-back" href="/reading/theology/">← 返回神学栏目</a>
+    </div>
+  </section>
+
+  <article class="christian-millennia-host">
+    <Fragment set:html={body} />
+  </article>
+</Base>
