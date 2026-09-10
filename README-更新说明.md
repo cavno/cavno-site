@@ -1,32 +1,31 @@
-# 基督教两千年思想演化史页面增量包
+# 系统论发展的总体路线图｜增量更新
 
-本包仅包含本轮新增页面所需的 4 个源码文件，不包含完整网站，也不会覆盖此前的《基督教思想的发展史：系统论视角》页面。
+本增量将附件内容更新到现有英文路径：
 
-新增地址：`/reading/theology/christian-thought-two-millennia/`
+`/reading/thinking/systems-theory-development-roadmap/`
+
+## 更新内容
+
+- 更新完整文章正文、图表、阶段导航与移动端目录交互；
+- 沿用 Cavno 的 `Base.astro` 页面外壳、全站导航、颜色与字体体系；
+- 文章样式限定在 `.systems-roadmap-v2` 内，避免影响站内其他页面；
+- 更新 Thinking 目录卡片摘要、标签和上传时间；
+- 文章继续使用原英文网址，不新增同名重复条目。
+
+## 包含文件
+
+- `src/content/items/reading-thinking-systems-theory-development-roadmap.md`
+- `src/pages/reading/thinking/systems-theory-development-roadmap.astro`
+- `src/legacy/reading/thinking/systems-theory-development-roadmap/body.html`
+- `src/legacy/reading/thinking/systems-theory-development-roadmap/style.css`
+- `verification.json`
 
 ## 更新方法
 
-将包内 `src` 文件夹合并到 Cavno 源码根目录的 `src` 文件夹，然后在源码根目录执行：
+将本目录中的 `src` 文件夹合并到 Cavno 项目根目录并允许覆盖同名文件，然后在项目根目录运行：
 
 ```powershell
 npm run build
 ```
 
-构建成功后，按网站原有流程发布新的构建结果。本包不会自动部署线上网站。
-
-## 本轮新增
-
-- Theology 栏目下的独立英文路径和站内原生页面；
-- Explore、Reading、Theology、“最新更新”和全站搜索自动读取的文章记录；
-- 附件中的十部分、六十个命题、核心结论、信息图和完整文字；
-- 与 Cavno 固定导航兼容的桌面章节侧栏；
-- 移动端目录抽屉、遮罩、长图表和横向内容溢出处理；
-- 页面内部章节定位与当前章节高亮交互。
-
-文章专属样式已限定在本页面，不会覆盖站点其他页面。附件中的外部字体链接未带入文章正文，字体改由 Cavno 站点现有字体体系承接；没有新增外部图片、iframe 或运行时数据依赖。
-
-## 验证结果
-
-Astro 生产构建成功，共生成 202 个页面。新文章已出现在首页、Reading、Theology 和全站搜索中。专项检查共 25 项，涵盖正文一致性、60 个命题、71 个内部导航目标、脚本语法、样式隔离、移动端规则、目录和搜索入口，结果均通过。详情见 `verification.json`。
-
-本次未部署线上，也未进行浏览器逐视口视觉测试。
+生产构建已通过，共生成 202 个页面。专项检查共 27 项，全部通过；检查结果见 `verification.json`。

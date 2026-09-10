@@ -1,12 +1,12 @@
 {
-  "checks": 25,
+  "checks": 27,
   "failures": [],
-  "route": "/reading/theology/christian-thought-two-millennia/",
-  "sourceBytes": 155138,
-  "preservedBodySha256": "65c81222c6c8d0d79b3183aaa24a8a2686a1832df57350b560ad6a25bd825775",
-  "parts": 10,
-  "propositions": 60,
-  "internalTargets": 71,
+  "route": "/reading/thinking/systems-theory-development-roadmap/",
+  "sourceBytes": 59372,
+  "preservedBodySha256": "61a483360ab6cd7757868504ddcafaaa41921619dc9b93034427ca028f2c6276",
+  "majorSections": 12,
+  "contentModules": 24,
+  "internalTargets": 37,
   "articleExternalDependencies": 0,
-  "build": "Astro production build completed: 202 pages"
+  "build": "Astro production build completed"
 }
