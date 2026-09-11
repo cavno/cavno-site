@@ -1,0 +1,7 @@
+src/components/ArticleDownloads.astro
+src/layouts/Base.astro
+scripts/export-article-documents.mjs
+scripts/audit-article-documents.mjs
+docs/ARTICLE-DOWNLOADS.md
+package.json
+package-lock.json
