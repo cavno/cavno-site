@@ -1,55 +1,57 @@
-param(
-    [Parameter(Mandatory = $true)]
-    [string]$Target
-)
-
+param([Parameter(Mandatory=$true)][string]$SiteRoot)
 $ErrorActionPreference = 'Stop'
-$packageRoot = Split-Path -Parent $MyInvocation.MyCommand.Path
-$payloadRoot = Join-Path $packageRoot 'payload'
-$targetRoot = [System.IO.Path]::GetFullPath($Target)
-$packageJson = Join-Path $targetRoot 'package.json'
+$sitePath = (Resolve-Path -LiteralPath $SiteRoot).Path
+$packagePath = $PSScriptRoot
 
-if (-not (Test-Path -LiteralPath $packageJson -PathType Leaf)) {
-    throw "目标目录不是 Cavno 源码根目录：找不到 package.json。"
+if (!(Test-Path -LiteralPath (Join-Path $sitePath 'package.json')) -or !(Test-Path -LiteralPath (Join-Path $sitePath 'src/content/nav.json'))) {
+    throw 'SiteRoot must be the Cavno source folder containing package.json and src/content/nav.json.'
 }
 
-$package = Get-Content -LiteralPath $packageJson -Raw -Encoding UTF8 | ConvertFrom-Json
-if ($package.name -ne 'cavno-site') {
-    throw "目标 package.json 的 name 不是 cavno-site，已停止更新。"
+$manifest = Get-Content -LiteralPath (Join-Path $packagePath 'files.json') -Raw | ConvertFrom-Json
+
+function Resolve-ContainedPath([string]$Base, [string]$Relative) {
+    $baseFull = [IO.Path]::GetFullPath($Base).TrimEnd([IO.Path]::DirectorySeparatorChar)
+    $resolved = [IO.Path]::GetFullPath((Join-Path $baseFull $Relative))
+    $prefix = $baseFull + [IO.Path]::DirectorySeparatorChar
+    if (!$resolved.StartsWith($prefix, [StringComparison]::OrdinalIgnoreCase)) { throw "Unsafe path: $Relative" }
+    return $resolved
 }
 
-$files = @(
-    'src/components/ArticleDownloads.astro',
-    'src/layouts/Base.astro',
-    'scripts/export-article-documents.mjs',
-    'scripts/audit-article-documents.mjs',
-    'docs/ARTICLE-DOWNLOADS.md',
-    'package.json',
-    'package-lock.json'
-)
-
-$timestamp = Get-Date -Format 'yyyyMMdd-HHmmss'
-$backupRoot = Join-Path $targetRoot "_increment-backups/article-downloads-$timestamp"
-
-foreach ($relativePath in $files) {
-    $source = Join-Path $payloadRoot $relativePath
-    $destination = Join-Path $targetRoot $relativePath
-
-    if (-not (Test-Path -LiteralPath $source -PathType Leaf)) {
-        throw "增量包缺少文件：$relativePath"
+foreach ($entry in $manifest.files) {
+    $source = Resolve-ContainedPath $packagePath $entry.path
+    if (!(Test-Path -LiteralPath $source -PathType Leaf)) { throw "Package file missing: $($entry.path)" }
+    if ((Get-FileHash -LiteralPath $source -Algorithm SHA256).Hash.ToLower() -ne $entry.sha256) {
+        throw "Package checksum mismatch: $($entry.path)"
     }
-
-    if (Test-Path -LiteralPath $destination -PathType Leaf) {
-        $backup = Join-Path $backupRoot $relativePath
-        New-Item -ItemType Directory -Force -Path (Split-Path -Parent $backup) | Out-Null
-        Copy-Item -LiteralPath $destination -Destination $backup -Force
+    $target = Resolve-ContainedPath $sitePath $entry.path
+    if (Test-Path -LiteralPath $target -PathType Leaf) {
+        $targetHash = (Get-FileHash -LiteralPath $target -Algorithm SHA256).Hash.ToLower()
+        if ($targetHash -ne $entry.sha256) {
+            throw "Target already contains a different file: $($entry.path). Stop and merge it manually."
+        }
     }
-
-    New-Item -ItemType Directory -Force -Path (Split-Path -Parent $destination) | Out-Null
-    Copy-Item -LiteralPath $source -Destination $destination -Force
 }
 
-Write-Host "增量文件已应用到：$targetRoot"
-Write-Host "旧文件备份位置：$backupRoot"
-Write-Host "请依次运行：npm install、npm run build、npm run documents:generate、npm run documents:audit、npm run build"
+$backupRelative = '.cavno-update-backups/three-systems-essays-' + (Get-Date -Format 'yyyyMMdd-HHmmss') + '-' + [guid]::NewGuid().ToString('N').Substring(0,8)
+$backupPath = Resolve-ContainedPath $sitePath $backupRelative
+$null = New-Item -ItemType Directory -Path $backupPath
 
+foreach ($entry in $manifest.files) {
+    $target = Resolve-ContainedPath $sitePath $entry.path
+    if (Test-Path -LiteralPath $target -PathType Leaf) {
+        $saved = Resolve-ContainedPath $backupPath $entry.path
+        $null = New-Item -ItemType Directory -Path (Split-Path -Parent $saved) -Force
+        Copy-Item -LiteralPath $target -Destination $saved
+    }
+}
+
+foreach ($entry in $manifest.files) {
+    $source = Resolve-ContainedPath $packagePath $entry.path
+    $target = Resolve-ContainedPath $sitePath $entry.path
+    $null = New-Item -ItemType Directory -Path (Split-Path -Parent $target) -Force
+    Copy-Item -LiteralPath $source -Destination $target -Force
+}
+
+Copy-Item -LiteralPath (Join-Path $packagePath 'files.json') -Destination (Join-Path $backupPath 'applied-files.json')
+Write-Host "Update applied. Backup: $backupPath"
+Write-Host 'Next: run npm run build in the Cavno source folder.'

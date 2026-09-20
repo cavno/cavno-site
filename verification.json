@@ -1,12 +1,45 @@
 {
-  "checks": 27,
-  "failures": [],
-  "route": "/reading/thinking/systems-theory-development-roadmap/",
-  "sourceBytes": 59372,
-  "preservedBodySha256": "61a483360ab6cd7757868504ddcafaaa41921619dc9b93034427ca028f2c6276",
-  "majorSections": 12,
-  "contentModules": 24,
-  "internalTargets": 37,
-  "articleExternalDependencies": 0,
-  "build": "Astro production build completed"
+  "verifiedAt": "2026-09-17T15:12:00+08:00",
+  "sourceSite": "work/nav-redesign-20260904/cavno-site",
+  "build": {
+    "passed": true,
+    "pages": 205
+  },
+  "browser": {
+    "passed": 36,
+    "desktopViewport": "1440x1000",
+    "mobileViewport": "390x844",
+    "checks": [
+      "global header and unified page header",
+      "article rail present",
+      "major sections present",
+      "Cavno canvas and text colors",
+      "no horizontal overflow",
+      "mobile rail opens and closes",
+      "mobile rail stays below global header",
+      "three category cards present"
+    ]
+  },
+  "sourceText": [
+    { "source": "系统论视角专题分析-西方哲学史.html", "characters": 15743, "exactVisibleText": true },
+    { "source": "约束与自由-哲学论文.html", "characters": 8288, "exactVisibleText": true },
+    { "source": "系统论视角专题分析-苏联与俄罗斯联邦.html", "characters": 11813, "exactVisibleText": true }
+  ],
+  "static": {
+    "iframes": 0,
+    "externalScripts": 0,
+    "duplicateIds": 0,
+    "replacementCharacters": 0
+  },
+  "incrementInstaller": {
+    "passed": true,
+    "manifestFiles": 12,
+    "manifestHashErrors": 0,
+    "powershellParseErrors": 0,
+    "cleanInstallPassed": true,
+    "repeatInstallPassed": true,
+    "automaticBackupRuns": 2
+  },
+  "onlineDeploymentVerified": false,
+  "allPhysicalMobileBrowsersVerified": false
 }
