@@ -1,0 +1,26 @@
+---
+// 由 scripts/convert.mjs 生成，可自由手工精修
+import Base from '../../../layouts/Base.astro';
+import body from '../../../legacy/reading/politics/soviet-russian-federation-systems-analysis/body.html?raw';
+import '../../../legacy/reading/politics/soviet-russian-federation-systems-analysis/style.css';
+
+const meta = {
+  "title": "苏联与俄罗斯联邦历史的系统论分析",
+  "description": "以系统结构、资源动员、信息反馈、制度适应与吸引子转换为坐标，分析苏联兴起、解体及俄罗斯联邦重构的百年历程。"
+};
+---
+<Base title={meta.title + ' · Cavno'} description={meta.description}>
+
+  <section class="cv-page-head">
+    <div class="cv-wrap">
+      <div class="cv-eyebrow">Reading & Thinking · Politics</div>
+      <h1 class="cv-page-title">{meta.title}</h1>
+      <p class="cv-lede">{meta.description}</p>
+      <a class="cv-crumb-back" href="/reading/politics/">← 返回政治栏目</a>
+    </div>
+  </section>
+
+  <article class="lp systems-history-essay">
+    <Fragment set:html={body} />
+  </article>
+</Base>

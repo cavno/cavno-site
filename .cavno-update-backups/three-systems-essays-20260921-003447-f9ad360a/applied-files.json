@@ -1,0 +1,18 @@
+{
+  "version": 1,
+  "name": "cavno-three-systems-essays-20260917",
+  "files": [
+    { "path": "src/content/items/reading-philosophy-constraints-and-freedom.md", "sha256": "71d12871bedc9f0b7ce64d0ba6ae03e08f11b811a6b49247c3fbbaaa172b113f", "bytes": 464 },
+    { "path": "src/content/items/reading-philosophy-western-philosophy-history-systems-analysis.md", "sha256": "5d27c179205613961d42ea55656476f0dea3550f222a4a47822cbd42ed1de62e", "bytes": 472 },
+    { "path": "src/content/items/reading-politics-soviet-russian-federation-systems-analysis.md", "sha256": "1b82e58d16a4c883f58ebe8349183d8fb6b5ff4c73ff8a532bf883f4b961beb1", "bytes": 467 },
+    { "path": "src/legacy/reading/philosophy/constraints-and-freedom/body.html", "sha256": "f9356b4e08f4a4bea0e8a99300ff1b170545063d7902fa2c49f36dd5352ad105", "bytes": 39096 },
+    { "path": "src/legacy/reading/philosophy/constraints-and-freedom/style.css", "sha256": "79afa358d7d08241679ff4a5d148e5985c8c7be3fc975e722d8e5dd990940119", "bytes": 21787 },
+    { "path": "src/legacy/reading/philosophy/western-philosophy-history-systems-analysis/body.html", "sha256": "a5dc23067045ecb7211164a173ed1a06a6b99e463837f839d9fc4bedd2cae98a", "bytes": 78365 },
+    { "path": "src/legacy/reading/philosophy/western-philosophy-history-systems-analysis/style.css", "sha256": "f61f03b575fa83ccb14d8a7cace5527218f95dd68f562b3dca02dccfbb424b16", "bytes": 21007 },
+    { "path": "src/legacy/reading/politics/soviet-russian-federation-systems-analysis/body.html", "sha256": "3227abc256ebd9b9510cdd20b4e0a1fe83da7509289e4a25378f43cb4fbdd384", "bytes": 57887 },
+    { "path": "src/legacy/reading/politics/soviet-russian-federation-systems-analysis/style.css", "sha256": "636c15bd1cf977e5ffc4183a4ce541e91041eafd1d67ed71bd6f26e3f6db3224", "bytes": 20869 },
+    { "path": "src/pages/reading/philosophy/constraints-and-freedom.astro", "sha256": "f451fac5853ae7faa6b8cff2bf7b0d13a4d86b965e54e07a0214d07bdd186c11", "bytes": 1079 },
+    { "path": "src/pages/reading/philosophy/western-philosophy-history-systems-analysis.astro", "sha256": "8068f816408295dbb0f1c8e76bb7e4f3e941c3203a7c8f752726890e2cd3cbda", "bytes": 1089 },
+    { "path": "src/pages/reading/politics/soviet-russian-federation-systems-analysis.astro", "sha256": "1b6d8fc60f7976104db027dfb3f664ffe29d8491c33e26ad1caf3c3ed36a94d8", "bytes": 1085 }
+  ]
+}
