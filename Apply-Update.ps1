@@ -1,57 +1,88 @@
-param([Parameter(Mandatory=$true)][string]$SiteRoot)
+param(
+  [Parameter(Mandatory = $true)]
+  [string]$SiteRoot
+)
+
 $ErrorActionPreference = 'Stop'
-$sitePath = (Resolve-Path -LiteralPath $SiteRoot).Path
-$packagePath = $PSScriptRoot
+$packageRoot = Split-Path -Parent $MyInvocation.MyCommand.Path
+$siteRootFull = [IO.Path]::GetFullPath($SiteRoot)
+$rootPrefix = $siteRootFull.TrimEnd([IO.Path]::DirectorySeparatorChar, [IO.Path]::AltDirectorySeparatorChar) + [IO.Path]::DirectorySeparatorChar
 
-if (!(Test-Path -LiteralPath (Join-Path $sitePath 'package.json')) -or !(Test-Path -LiteralPath (Join-Path $sitePath 'src/content/nav.json'))) {
-    throw 'SiteRoot must be the Cavno source folder containing package.json and src/content/nav.json.'
+if (-not (Test-Path -LiteralPath (Join-Path $siteRootFull 'package.json') -PathType Leaf)) {
+  throw 'SiteRoot is not a Cavno source root: package.json was not found.'
+}
+$navPath = Join-Path $siteRootFull 'src\content\nav.json'
+if (-not (Test-Path -LiteralPath $navPath -PathType Leaf)) {
+  throw 'SiteRoot is not a Cavno source root: src\content\nav.json was not found.'
 }
 
-$manifest = Get-Content -LiteralPath (Join-Path $packagePath 'files.json') -Raw | ConvertFrom-Json
-
-function Resolve-ContainedPath([string]$Base, [string]$Relative) {
-    $baseFull = [IO.Path]::GetFullPath($Base).TrimEnd([IO.Path]::DirectorySeparatorChar)
-    $resolved = [IO.Path]::GetFullPath((Join-Path $baseFull $Relative))
-    $prefix = $baseFull + [IO.Path]::DirectorySeparatorChar
-    if (!$resolved.StartsWith($prefix, [StringComparison]::OrdinalIgnoreCase)) { throw "Unsafe path: $Relative" }
-    return $resolved
-}
-
+$manifest = Get-Content -LiteralPath (Join-Path $packageRoot 'files.json') -Raw -Encoding UTF8 | ConvertFrom-Json
+$plan = @()
 foreach ($entry in $manifest.files) {
-    $source = Resolve-ContainedPath $packagePath $entry.path
-    if (!(Test-Path -LiteralPath $source -PathType Leaf)) { throw "Package file missing: $($entry.path)" }
-    if ((Get-FileHash -LiteralPath $source -Algorithm SHA256).Hash.ToLower() -ne $entry.sha256) {
-        throw "Package checksum mismatch: $($entry.path)"
+  $relative = [string]$entry.path
+  if ([IO.Path]::IsPathRooted($relative) -or $relative -match '(^|[\\/])\.\.([\\/]|$)') {
+    throw "Unsafe path in files.json: $relative"
+  }
+  $source = [IO.Path]::GetFullPath((Join-Path $packageRoot ($relative -replace '/', '\')))
+  $target = [IO.Path]::GetFullPath((Join-Path $siteRootFull ($relative -replace '/', '\')))
+  if (-not $target.StartsWith($rootPrefix, [StringComparison]::OrdinalIgnoreCase)) {
+    throw "Target escaped SiteRoot: $relative"
+  }
+  if (-not (Test-Path -LiteralPath $source -PathType Leaf)) {
+    throw "Package file is missing: $relative"
+  }
+  $hash = (Get-FileHash -LiteralPath $source -Algorithm SHA256).Hash.ToLowerInvariant()
+  $bytes = (Get-Item -LiteralPath $source).Length
+  if ($hash -ne [string]$entry.sha256 -or $bytes -ne [long]$entry.bytes) {
+    throw "Package verification failed: $relative"
+  }
+  if (Test-Path -LiteralPath $target -PathType Leaf) {
+    $targetHash = (Get-FileHash -LiteralPath $target -Algorithm SHA256).Hash.ToLowerInvariant()
+    if ($targetHash -ne $hash) {
+      throw "A different file already exists; nothing was changed: $relative"
     }
-    $target = Resolve-ContainedPath $sitePath $entry.path
-    if (Test-Path -LiteralPath $target -PathType Leaf) {
-        $targetHash = (Get-FileHash -LiteralPath $target -Algorithm SHA256).Hash.ToLower()
-        if ($targetHash -ne $entry.sha256) {
-            throw "Target already contains a different file: $($entry.path). Stop and merge it manually."
-        }
-    }
+  }
+  $plan += [pscustomobject]@{ Relative = $relative; Source = $source; Target = $target }
 }
 
-$backupRelative = '.cavno-update-backups/three-systems-essays-' + (Get-Date -Format 'yyyyMMdd-HHmmss') + '-' + [guid]::NewGuid().ToString('N').Substring(0,8)
-$backupPath = Resolve-ContainedPath $sitePath $backupRelative
-$null = New-Item -ItemType Directory -Path $backupPath
-
-foreach ($entry in $manifest.files) {
-    $target = Resolve-ContainedPath $sitePath $entry.path
-    if (Test-Path -LiteralPath $target -PathType Leaf) {
-        $saved = Resolve-ContainedPath $backupPath $entry.path
-        $null = New-Item -ItemType Directory -Path (Split-Path -Parent $saved) -Force
-        Copy-Item -LiteralPath $target -Destination $saved
-    }
+$oldDescription = '"desc": "科目三 / 科目四备考实验台"'
+$newDescription = '"desc": "新手上路、驾驶实务、驾考训练与智能驾驶系统"'
+$navText = [IO.File]::ReadAllText($navPath)
+$patchNav = $false
+if ($navText.Contains($newDescription)) {
+  $patchNav = $false
+} elseif ($navText.Contains($oldDescription)) {
+  $patchNav = $true
+} else {
+  throw 'Driving description in nav.json differs from both the expected old and new value; nothing was changed.'
 }
 
-foreach ($entry in $manifest.files) {
-    $source = Resolve-ContainedPath $packagePath $entry.path
-    $target = Resolve-ContainedPath $sitePath $entry.path
-    $null = New-Item -ItemType Directory -Path (Split-Path -Parent $target) -Force
-    Copy-Item -LiteralPath $source -Destination $target -Force
+$stamp = Get-Date -Format 'yyyyMMdd-HHmmss'
+$suffix = [Guid]::NewGuid().ToString('N').Substring(0, 8)
+$backupRoot = Join-Path $siteRootFull ".cavno-update-backups\beginner-driving-practical-manual-$stamp-$suffix"
+New-Item -ItemType Directory -Force -Path $backupRoot | Out-Null
+
+foreach ($item in $plan) {
+  if (Test-Path -LiteralPath $item.Target -PathType Leaf) {
+    $backup = Join-Path $backupRoot ($item.Relative -replace '/', '\')
+    New-Item -ItemType Directory -Force -Path (Split-Path -Parent $backup) | Out-Null
+    Copy-Item -LiteralPath $item.Target -Destination $backup -Force
+  }
+}
+if ($patchNav) {
+  $navBackup = Join-Path $backupRoot 'src\content\nav.json'
+  New-Item -ItemType Directory -Force -Path (Split-Path -Parent $navBackup) | Out-Null
+  Copy-Item -LiteralPath $navPath -Destination $navBackup -Force
 }
 
-Copy-Item -LiteralPath (Join-Path $packagePath 'files.json') -Destination (Join-Path $backupPath 'applied-files.json')
-Write-Host "Update applied. Backup: $backupPath"
+foreach ($item in $plan) {
+  New-Item -ItemType Directory -Force -Path (Split-Path -Parent $item.Target) | Out-Null
+  Copy-Item -LiteralPath $item.Source -Destination $item.Target -Force
+}
+if ($patchNav) {
+  $updatedNav = $navText.Replace($oldDescription, $newDescription)
+  [IO.File]::WriteAllText($navPath, $updatedNav, [Text.UTF8Encoding]::new($false))
+}
+
+Write-Host "Update applied. Backup: $backupRoot"
 Write-Host 'Next: run npm run build in the Cavno source folder.'
