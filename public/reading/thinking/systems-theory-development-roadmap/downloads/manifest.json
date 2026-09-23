@@ -1,0 +1,139 @@
+{
+  "version": 2,
+  "inputHash": "04795ce481d9ee938ff1c6a871c4b84242ddb1af4d891978d5460c2f94d88e63",
+  "title": "系统论发展的总体路线图",
+  "route": "/reading/thinking/systems-theory-development-roadmap/",
+  "source": "https://cavno.org/reading/thinking/systems-theory-development-roadmap/",
+  "generatedAt": "2026-09-23T19:26:06.519Z",
+  "visuals": 22,
+  "missingSourceCharacters": 0,
+  "files": {
+    "markdown": {
+      "name": "systems-theory-development-roadmap.md",
+      "bytes": 12703,
+      "sha256": "171a55648d61753f98d5de3372e26b80c8681aa128818b06319f097a59a38ec3"
+    },
+    "pdf": {
+      "name": "systems-theory-development-roadmap.pdf",
+      "bytes": 1709014,
+      "sha256": "b20194896fcc1c66e5c7cf795fee56c5ac4da959c4b2df3aea66f739051b390b"
+    },
+    "word": {
+      "name": "systems-theory-development-roadmap.docx",
+      "bytes": 240844,
+      "sha256": "fd3396bb614ee5049071993f23bb61c188114d932f33ddf02e7a5aa3992dca9f"
+    }
+  },
+  "assets": [
+    {
+      "name": "assets/systems-theory-development-roadmap-visual-001.png",
+      "bytes": 5119,
+      "sha256": "536f0eeb9ffc1613e1bdc367805fd5c90897903342b46d0734df9f0f4b082c38"
+    },
+    {
+      "name": "assets/systems-theory-development-roadmap-visual-002.png",
+      "bytes": 5473,
+      "sha256": "f2122e12c1ce0f4cb191de8164238d0d50f76362871eaa5076dad815578e5bdf"
+    },
+    {
+      "name": "assets/systems-theory-development-roadmap-visual-003.png",
+      "bytes": 16247,
+      "sha256": "bb0d4fcb6b85d30dd1bab146b1d045b9993ae4586f457eb0f24abe9440425d5b"
+    },
+    {
+      "name": "assets/systems-theory-development-roadmap-visual-004.png",
+      "bytes": 7047,
+      "sha256": "69edb65212e35bcfa77b9f31b23ad4c994bf9e002aa8e172256cf0bbae27a199"
+    },
+    {
+      "name": "assets/systems-theory-development-roadmap-visual-005.png",
+      "bytes": 10226,
+      "sha256": "87736edb7da3c0df2cfa0253149cd5316781f9589cf73637311d9cd8c4d67b2b"
+    },
+    {
+      "name": "assets/systems-theory-development-roadmap-visual-006.png",
+      "bytes": 11709,
+      "sha256": "6961d2eb86b9ba3dea32b0add707b2df6869e0a8d9d9a68c15c8f3916118a7d0"
+    },
+    {
+      "name": "assets/systems-theory-development-roadmap-visual-007.png",
+      "bytes": 5235,
+      "sha256": "2dfbf7c5273af32a5bf63b3ff12fde7d01d4d03d022de44d90af95e2402c86b9"
+    },
+    {
+      "name": "assets/systems-theory-development-roadmap-visual-008.png",
+      "bytes": 5818,
+      "sha256": "bae26be502843228d460951c5c20055ac521a90ade296d2f8a8ff9d846b65a15"
+    },
+    {
+      "name": "assets/systems-theory-development-roadmap-visual-009.png",
+      "bytes": 4584,
+      "sha256": "d7f4aaced9c3619a4afe8c51c0f41091450af3a557b91237c9a0afb0a11eaad4"
+    },
+    {
+      "name": "assets/systems-theory-development-roadmap-visual-010.png",
+      "bytes": 7669,
+      "sha256": "faf8451d410a08bf08db8f986f8893fbb044652cbbdd01b0afe745fc84e64f37"
+    },
+    {
+      "name": "assets/systems-theory-development-roadmap-visual-011.png",
+      "bytes": 7388,
+      "sha256": "69f0a063f948a8a46865fcda11488eac9df5ae6d01410517372601c1d63c6872"
+    },
+    {
+      "name": "assets/systems-theory-development-roadmap-visual-012.png",
+      "bytes": 6067,
+      "sha256": "8829087b48d6a6dea50fecf062d87e4f311fd65445d0e7820df2cf01b47b8095"
+    },
+    {
+      "name": "assets/systems-theory-development-roadmap-visual-013.png",
+      "bytes": 6846,
+      "sha256": "f70e0c4ef882aa2aab1b3325deb8a4527d8d259c0edd1b7e6666abc24f228564"
+    },
+    {
+      "name": "assets/systems-theory-development-roadmap-visual-014.png",
+      "bytes": 4246,
+      "sha256": "91ae97d225ea78550551b25890efcc360c0a595fca927b722ba8ff31a3e778d9"
+    },
+    {
+      "name": "assets/systems-theory-development-roadmap-visual-015.png",
+      "bytes": 10319,
+      "sha256": "ff36d012187c1e639257345fb26a9ab2237737658229884c935418b0f2481913"
+    },
+    {
+      "name": "assets/systems-theory-development-roadmap-visual-016.png",
+      "bytes": 18713,
+      "sha256": "e0ce64c7dadabf5db7537e48522b7caf0eb0d9264205ccab8914fe7456f46e08"
+    },
+    {
+      "name": "assets/systems-theory-development-roadmap-visual-017.png",
+      "bytes": 10989,
+      "sha256": "bb8142cadc8f6f8b3fbfc7583531aa0ac03c5c4971c94cc9e60d9553e4b3b7f4"
+    },
+    {
+      "name": "assets/systems-theory-development-roadmap-visual-018.png",
+      "bytes": 8103,
+      "sha256": "4de4c62176792424536590cd8f0de0f6ef4f7af03363c81457325efd11919399"
+    },
+    {
+      "name": "assets/systems-theory-development-roadmap-visual-019.png",
+      "bytes": 7878,
+      "sha256": "150be6d87bc2f354b07437bd50101bfa9f0fc0c4dde12dbe6776b4c8b30c6a5c"
+    },
+    {
+      "name": "assets/systems-theory-development-roadmap-visual-020.png",
+      "bytes": 7790,
+      "sha256": "9e1a8ffa6011972e9e4dc6456fab500af0908d37be8f3448ce50c74e032b33fb"
+    },
+    {
+      "name": "assets/systems-theory-development-roadmap-visual-021.png",
+      "bytes": 29662,
+      "sha256": "c93a308c7f03528cfc3e58b6472f69d70effba2d3946787d3da45491733a1613"
+    },
+    {
+      "name": "assets/systems-theory-development-roadmap-visual-022.png",
+      "bytes": 41319,
+      "sha256": "fa18bf4be757ce5e1063955210c5288c274e1827eff9c7891bde7f37e32e6ade"
+    }
+  ]
+}

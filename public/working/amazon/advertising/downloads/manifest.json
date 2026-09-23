@@ -1,0 +1,44 @@
+{
+  "version": 2,
+  "inputHash": "5c8d3240dde7f338e8e3eb2d83ad637da9b394ad57d5a0f413c9354ffd0de638",
+  "title": "广告投放的底层逻辑 · 一个带约束的最优化问题",
+  "route": "/working/amazon/advertising/",
+  "source": "https://cavno.org/working/amazon/advertising/",
+  "generatedAt": "2026-09-23T19:26:17.892Z",
+  "visuals": 3,
+  "missingSourceCharacters": 0,
+  "files": {
+    "markdown": {
+      "name": "advertising.md",
+      "bytes": 39488,
+      "sha256": "8a12eb5675a2d98f43ebc3e9cc8848fc21cb6a1ce12d29dc2e151dcecb6115c5"
+    },
+    "pdf": {
+      "name": "advertising.pdf",
+      "bytes": 4184897,
+      "sha256": "763217c28a06c8f575e80499c63d48a819a9498d25226410f701a2f40b58d155"
+    },
+    "word": {
+      "name": "advertising.docx",
+      "bytes": 138298,
+      "sha256": "90146fd5375e7d98a99e2ee7604263ebe4f4fe99a6c18f5ec4161c3ed3e91258"
+    }
+  },
+  "assets": [
+    {
+      "name": "assets/advertising-visual-001.png",
+      "bytes": 27552,
+      "sha256": "53e632b8cd7c9c9c621033406195fbd9a4686d5f2e648308ea2063df7c478e8b"
+    },
+    {
+      "name": "assets/advertising-visual-002.png",
+      "bytes": 32293,
+      "sha256": "b494affd7074e69976cb3eb04f95b10a46b1a63723c6123e7ce186589f6951a8"
+    },
+    {
+      "name": "assets/advertising-visual-003.png",
+      "bytes": 44048,
+      "sha256": "6157dfbd68f3190c4fb2dddb2033361a704044dae59176dd1482b18c98db4179"
+    }
+  ]
+}

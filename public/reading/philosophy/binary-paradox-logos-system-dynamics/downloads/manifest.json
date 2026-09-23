@@ -1,0 +1,39 @@
+{
+  "version": 2,
+  "inputHash": "6ac2e9bc7aab9db2304bdbcd57269a55b0ddf55e566d5446ace3451e4a4cdffa",
+  "title": "Logos 系统动力学 · 二元张力驱动的哲学系统演化",
+  "route": "/reading/philosophy/binary-paradox-logos-system-dynamics/",
+  "source": "https://cavno.org/reading/philosophy/binary-paradox-logos-system-dynamics/",
+  "generatedAt": "2026-09-23T19:22:42.741Z",
+  "visuals": 2,
+  "missingSourceCharacters": 0,
+  "files": {
+    "markdown": {
+      "name": "binary-paradox-logos-system-dynamics.md",
+      "bytes": 1389,
+      "sha256": "f916049392cd7aac5c039f75c682f4ed9642ccd30decfbbd5b44e792c861c555"
+    },
+    "pdf": {
+      "name": "binary-paradox-logos-system-dynamics.pdf",
+      "bytes": 484073,
+      "sha256": "0ec4dd277fc4a7c4a1a32d0a700ade440f2ea627f48a784878dc6695f0300d09"
+    },
+    "word": {
+      "name": "binary-paradox-logos-system-dynamics.docx",
+      "bytes": 195397,
+      "sha256": "3bad4da35733a5016e83746090a2b0afcf41d02271eb1a30e810b0cc0ccb711a"
+    }
+  },
+  "assets": [
+    {
+      "name": "assets/binary-paradox-logos-system-dynamics-visual-001.png",
+      "bytes": 157120,
+      "sha256": "484e652c19cf6eecb2bef1295c12d68b64f12779addf57ba8a2c8d428a30a936"
+    },
+    {
+      "name": "assets/binary-paradox-logos-system-dynamics-visual-002.png",
+      "bytes": 27846,
+      "sha256": "acf088151d41809ac15f8164b855eaac0f2d6d167bc4f525faa01f42e09f3efa"
+    }
+  ]
+}

@@ -1,0 +1,64 @@
+{
+  "version": 2,
+  "inputHash": "8401001e7c652aabfc4ae0c8073e43950b68c800779c6698a9b511bfb0c4b8ff",
+  "title": "希腊字母统一图谱 · Greeks Unified Atlas",
+  "route": "/investing/options/option_greek/",
+  "source": "https://cavno.org/investing/options/option_greek/",
+  "generatedAt": "2026-09-23T19:18:54.887Z",
+  "visuals": 7,
+  "missingSourceCharacters": 0,
+  "files": {
+    "markdown": {
+      "name": "option_greek.md",
+      "bytes": 13276,
+      "sha256": "97d237704a9847f3a6b0ee14482df01db83ef237f7d4f0610069325a83643969"
+    },
+    "pdf": {
+      "name": "option_greek.pdf",
+      "bytes": 1919738,
+      "sha256": "551ee64e955b48f54bac7801c354f7c3b3ff161307773002bac5710e80ff95e0"
+    },
+    "word": {
+      "name": "option_greek.docx",
+      "bytes": 406054,
+      "sha256": "ce8da59d9ca40195e2effe802749db6092c2ee52fca2f2a8a2574b6839feb6b0"
+    }
+  },
+  "assets": [
+    {
+      "name": "assets/option_greek-visual-001.png",
+      "bytes": 60119,
+      "sha256": "dd8232caecec3f492e0c953001155e47d1f286901f8a12fa9f66443c7a169f65"
+    },
+    {
+      "name": "assets/option_greek-visual-002.png",
+      "bytes": 53201,
+      "sha256": "7c039f97f0ab99954b924f024582307468c68ff097135199fd8d828d43dbfcea"
+    },
+    {
+      "name": "assets/option_greek-visual-003.png",
+      "bytes": 53317,
+      "sha256": "8e4e715a0870a5d16f1e8db1409696f14b525079510c0b21bf0973f452c73926"
+    },
+    {
+      "name": "assets/option_greek-visual-004.png",
+      "bytes": 52321,
+      "sha256": "c9ff3382942c81983997fbf410c06efe126d63cf04d62e8664cec19dbfca60c6"
+    },
+    {
+      "name": "assets/option_greek-visual-005.png",
+      "bytes": 49837,
+      "sha256": "69cbae10bf0d8681981fe84927a6ef17ffe40429be92a144fe67afdb536c1c4c"
+    },
+    {
+      "name": "assets/option_greek-visual-006.png",
+      "bytes": 64624,
+      "sha256": "75c27eae138617c49ed1bdc16f0afabc1cd394b5bb047e6c387f470e0486baab"
+    },
+    {
+      "name": "assets/option_greek-visual-007.png",
+      "bytes": 60828,
+      "sha256": "e7c1bc57f6787c8dea2ecf5a01499c401c60d54ce36eb88e78f50ddfcc920c65"
+    }
+  ]
+}

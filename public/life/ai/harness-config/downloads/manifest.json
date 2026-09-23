@@ -1,0 +1,28 @@
+{
+  "version": 2,
+  "inputHash": "33ee08fba2b634f17b99be02b6bf30e9281259146ede57659c460120916c32a2",
+  "title": "一份不完美的 Claude Code 个人配置",
+  "route": "/life/ai/harness-config/",
+  "source": "https://cavno.org/life/ai/harness-config/",
+  "generatedAt": "2026-09-23T19:19:54.575Z",
+  "visuals": 0,
+  "missingSourceCharacters": 0,
+  "files": {
+    "markdown": {
+      "name": "harness-config.md",
+      "bytes": 8052,
+      "sha256": "1a112aee9c72be426898159a5c009481988065896838113bbe70746957c03f98"
+    },
+    "pdf": {
+      "name": "harness-config.pdf",
+      "bytes": 789653,
+      "sha256": "dd693915e8f57b449c0e9378446e73dbd8e850ae4fcff526abd09d1efb6c1733"
+    },
+    "word": {
+      "name": "harness-config.docx",
+      "bytes": 16823,
+      "sha256": "c1465e39e761437184fa8c693555b4d10c9b68c2430faa6f990e04f6638128a3"
+    }
+  },
+  "assets": []
+}

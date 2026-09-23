@@ -1,0 +1,28 @@
+{
+  "version": 2,
+  "inputHash": "a2d7d08d8c9b15092776aef341aee0d3b7ccad001389aae3b340234b26266403",
+  "title": "政治学发展史的系统论分析",
+  "route": "/reading/politics/political-science-systems-history/",
+  "source": "https://cavno.org/reading/politics/political-science-systems-history/",
+  "generatedAt": "2026-09-23T19:24:06.886Z",
+  "visuals": 0,
+  "missingSourceCharacters": 0,
+  "files": {
+    "markdown": {
+      "name": "political-science-systems-history.md",
+      "bytes": 10293,
+      "sha256": "30a3c95598a79c9ab446f78d3fa9ef05ddf7922678c86f8ca6125901401ffd18"
+    },
+    "pdf": {
+      "name": "political-science-systems-history.pdf",
+      "bytes": 932246,
+      "sha256": "d1b457e7f39622224809fb7b1e7825a98e99bc1ab6d43deafddb1d0300de8f37"
+    },
+    "word": {
+      "name": "political-science-systems-history.docx",
+      "bytes": 17592,
+      "sha256": "fcfb3f6acb3767ed6eb9f203b2b2b52979ce92c3abc835a126ff5b3701d697d1"
+    }
+  },
+  "assets": []
+}

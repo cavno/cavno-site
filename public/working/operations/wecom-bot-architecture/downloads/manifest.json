@@ -1,0 +1,28 @@
+{
+  "version": 2,
+  "inputHash": "15715c069b06e31c89971ed1adaecbcc9366f2e9f1bcdc68734cf05a0d62844e",
+  "title": "企微 AI 机器人架构：一个人和一个智能体",
+  "route": "/working/operations/wecom-bot-architecture/",
+  "source": "https://cavno.org/working/operations/wecom-bot-architecture/",
+  "generatedAt": "2026-09-23T19:26:51.635Z",
+  "visuals": 0,
+  "missingSourceCharacters": 0,
+  "files": {
+    "markdown": {
+      "name": "wecom-bot-architecture.md",
+      "bytes": 17347,
+      "sha256": "c6e73385a3eb00f12a3e6edfe6db420ec2f9a17e9eb2ac4633d9ea3c90290435"
+    },
+    "pdf": {
+      "name": "wecom-bot-architecture.pdf",
+      "bytes": 1595183,
+      "sha256": "47b1b84b4d57ed5bec0361e4c8554449c4bc01a67a97774413ad3d0264bbec65"
+    },
+    "word": {
+      "name": "wecom-bot-architecture.docx",
+      "bytes": 22876,
+      "sha256": "4e32b1117740a518f01ce17287894f37887d4541227eaf55cbcd8b7168b35e89"
+    }
+  },
+  "assets": []
+}

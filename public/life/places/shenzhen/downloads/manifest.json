@@ -1,0 +1,34 @@
+{
+  "version": 2,
+  "inputHash": "9bf2402a6d885d967f6a4aa1dab18ca131111dc980113b7be4338ac4ce9a4fa2",
+  "title": "深圳 · 地形—战略叠加底图",
+  "route": "/life/places/shenzhen/",
+  "source": "https://cavno.org/life/places/shenzhen/",
+  "generatedAt": "2026-09-23T19:20:50.343Z",
+  "visuals": 1,
+  "missingSourceCharacters": 0,
+  "files": {
+    "markdown": {
+      "name": "shenzhen.md",
+      "bytes": 1496,
+      "sha256": "ed47d007b075bdd9046e932090c2b7134a7e8a0b0134d1f76e815e5d01341a29"
+    },
+    "pdf": {
+      "name": "shenzhen.pdf",
+      "bytes": 5302856,
+      "sha256": "2a9190635a17c00499db6d03756b7aba5f26a239acd68bcf51eb12e76dce6a7f"
+    },
+    "word": {
+      "name": "shenzhen.docx",
+      "bytes": 233933,
+      "sha256": "5cb531d757029f063eaed4177b3e17b17763e7d937d34562fb9536e9142794c6"
+    }
+  },
+  "assets": [
+    {
+      "name": "assets/shenzhen-visual-001.png",
+      "bytes": 221927,
+      "sha256": "b5f1cf04790dadcb4180b13309d7debd85cbcd945b044ce573199b67dbb07c6e"
+    }
+  ]
+}

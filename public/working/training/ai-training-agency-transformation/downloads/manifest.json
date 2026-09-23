@@ -1,0 +1,34 @@
+{
+  "version": 2,
+  "inputHash": "3504087e643abe0ba7c353f55918b2ec0295089c1c3c436ca8f8ffc997c7ca34",
+  "title": "企业培训代理公司的 AI 转型路径",
+  "route": "/working/training/ai-training-agency-transformation/",
+  "source": "https://cavno.org/working/training/ai-training-agency-transformation/",
+  "generatedAt": "2026-09-23T19:26:56.507Z",
+  "visuals": 1,
+  "missingSourceCharacters": 0,
+  "files": {
+    "markdown": {
+      "name": "ai-training-agency-transformation.md",
+      "bytes": 12727,
+      "sha256": "f59e7ec59710ba2d74147290bf1f39fcbc22df689f6a6fd1d2550062b13ab64a"
+    },
+    "pdf": {
+      "name": "ai-training-agency-transformation.pdf",
+      "bytes": 2161716,
+      "sha256": "2cc8c41652fbb97f1b6601ac4f96cc0591cd458c0c09cf7ad4ac527f68fc3bd6"
+    },
+    "word": {
+      "name": "ai-training-agency-transformation.docx",
+      "bytes": 49325,
+      "sha256": "c0bead3ad3ffd0a1c34adc6e3acc208daca207623e78863a0ae70eb39f85effc"
+    }
+  },
+  "assets": [
+    {
+      "name": "assets/ai-training-agency-transformation-visual-001.png",
+      "bytes": 29897,
+      "sha256": "aee0d71878e17da4d3ec1136e4d8688c020f23181a13eb7d3297ba20e052341b"
+    }
+  ]
+}

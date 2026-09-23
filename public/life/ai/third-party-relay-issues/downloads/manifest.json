@@ -1,0 +1,28 @@
+{
+  "version": 2,
+  "inputHash": "2b43b15cd7ec6b695281111a08554590984f5849ff4bad73826ddb9046845099",
+  "title": "第三方中转接入 Claude Code：问题全清单",
+  "route": "/life/ai/third-party-relay-issues/",
+  "source": "https://cavno.org/life/ai/third-party-relay-issues/",
+  "generatedAt": "2026-09-23T19:20:04.968Z",
+  "visuals": 0,
+  "missingSourceCharacters": 0,
+  "files": {
+    "markdown": {
+      "name": "third-party-relay-issues.md",
+      "bytes": 17570,
+      "sha256": "e0c90341aa50f96cc6ba635885abc72f8d41bd52ba06d2b15d66179da7c77b2a"
+    },
+    "pdf": {
+      "name": "third-party-relay-issues.pdf",
+      "bytes": 1703751,
+      "sha256": "b5d42368c385d5140d89a956e5606965162f927ee5877c788bbad3fda19a3440"
+    },
+    "word": {
+      "name": "third-party-relay-issues.docx",
+      "bytes": 22584,
+      "sha256": "dc8840d2192640caab7b03cafb28d8cc6b91c348c8415753784910b521059130"
+    }
+  },
+  "assets": []
+}

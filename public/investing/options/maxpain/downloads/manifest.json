@@ -1,0 +1,39 @@
+{
+  "version": 2,
+  "inputHash": "5223f283e2df2aae1eb49771faff55c300a81466bc7ff03db98dc400a7683114",
+  "title": "期权最大痛点 · 持仓地形 — Max Pain Terrain",
+  "route": "/investing/options/maxpain/",
+  "source": "https://cavno.org/investing/options/maxpain/",
+  "generatedAt": "2026-09-23T19:18:50.449Z",
+  "visuals": 2,
+  "missingSourceCharacters": 0,
+  "files": {
+    "markdown": {
+      "name": "maxpain.md",
+      "bytes": 10848,
+      "sha256": "c8ebe413d8cf7c23954736399804e1630245177ded8ecc50de25abeb43cbc6c9"
+    },
+    "pdf": {
+      "name": "maxpain.pdf",
+      "bytes": 1783686,
+      "sha256": "c1928758412317ebc402a1e94ec9f2d6cbdb348916e92cf993b1b403d7a8e870"
+    },
+    "word": {
+      "name": "maxpain.docx",
+      "bytes": 109989,
+      "sha256": "912e6a400e316ddf7be8ca16025bbb08eec20b3016b501483af70e3b72e2e492"
+    }
+  },
+  "assets": [
+    {
+      "name": "assets/maxpain-visual-001.png",
+      "bytes": 57661,
+      "sha256": "9ffa0b1f0ff93cc6659d28eaa426457e952c788dfb1b0f2ce5c18b81056711c9"
+    },
+    {
+      "name": "assets/maxpain-visual-002.png",
+      "bytes": 36614,
+      "sha256": "7cde1a6e1c70fe60c72bf8fe4e7f4e121c406040f4343284060a39736bdfe328"
+    }
+  ]
+}

@@ -1,0 +1,28 @@
+{
+  "version": 2,
+  "inputHash": "f71ca97b9062b7b8d8c274f82a1e852edc8ff978ff4e887a72b749f0225bbb8d",
+  "title": "月销预测台",
+  "route": "/working/amazon/forecast_workbench/",
+  "source": "https://cavno.org/working/amazon/forecast_workbench/",
+  "generatedAt": "2026-09-23T19:26:22.574Z",
+  "visuals": 0,
+  "missingSourceCharacters": 0,
+  "files": {
+    "markdown": {
+      "name": "forecast_workbench.md",
+      "bytes": 5135,
+      "sha256": "5020b4858cd46eb3b7f6797cd25efb4c92da95037d1d02fe1bacacdf7a6df4e2"
+    },
+    "pdf": {
+      "name": "forecast_workbench.pdf",
+      "bytes": 1269203,
+      "sha256": "9698fde5fae228d571fc058dfc4d0a0db8ce60cfed33b6e78ac8df2d5a4eaf74"
+    },
+    "word": {
+      "name": "forecast_workbench.docx",
+      "bytes": 13583,
+      "sha256": "c4ff2bcf3e1b81979b9ccb78f32387e6b06349d903f64c09bfd28a000a8cd107"
+    }
+  },
+  "assets": []
+}

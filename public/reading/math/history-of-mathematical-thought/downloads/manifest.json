@@ -1,0 +1,39 @@
+{
+  "version": 2,
+  "inputHash": "e6c94b686c823ee42b938010579debc541651a512e4ab4497e810a2517a5d6ad",
+  "title": "古今数学思想 · 四代诊断 —— 数学思想的演化史",
+  "route": "/reading/math/history-of-mathematical-thought/",
+  "source": "https://cavno.org/reading/math/history-of-mathematical-thought/",
+  "generatedAt": "2026-09-23T19:22:43.982Z",
+  "visuals": 2,
+  "missingSourceCharacters": 0,
+  "files": {
+    "markdown": {
+      "name": "history-of-mathematical-thought.md",
+      "bytes": 36108,
+      "sha256": "4468dcfdf045db6931d4c67c989b4351b79ef913c75068afee04081e503b74f3"
+    },
+    "pdf": {
+      "name": "history-of-mathematical-thought.pdf",
+      "bytes": 3462871,
+      "sha256": "5c81a29f0c1875beabb53c2b6b13b51a9c208d2ce5897f91494b1799f516ffb3"
+    },
+    "word": {
+      "name": "history-of-mathematical-thought.docx",
+      "bytes": 104045,
+      "sha256": "f186b5d4e01653c90b1b069eae44f3977461d8ddffa2a8dfd0e7ad5055868ad1"
+    }
+  },
+  "assets": [
+    {
+      "name": "assets/history-of-mathematical-thought-visual-001.png",
+      "bytes": 38446,
+      "sha256": "1f8edcfcd230a090f9b584a7ea12b3e18d599aa00613eb61f3e80d0b260e41ab"
+    },
+    {
+      "name": "assets/history-of-mathematical-thought-visual-002.png",
+      "bytes": 32913,
+      "sha256": "3b1bdb7706830b28ea4634ea212cb2d00065554fc1147ec3f2dd5c2928ef5ca0"
+    }
+  ]
+}

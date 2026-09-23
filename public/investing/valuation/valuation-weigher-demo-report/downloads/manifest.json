@@ -1,0 +1,28 @@
+{
+  "version": 2,
+  "inputHash": "ecaf7a37b620280a5b30c4b02955fab93f4b0be0a8f77bc6d03d852dc0304cdd",
+  "title": "示例工业股份 Demo Industrial · 称重机估值报告",
+  "route": "/investing/valuation/valuation-weigher-demo-report/",
+  "source": "https://cavno.org/investing/valuation/valuation-weigher-demo-report/",
+  "generatedAt": "2026-09-23T19:19:20.327Z",
+  "visuals": 0,
+  "missingSourceCharacters": 0,
+  "files": {
+    "markdown": {
+      "name": "valuation-weigher-demo-report.md",
+      "bytes": 7255,
+      "sha256": "3d656d3b4eb1e58a3e42b2127828304e31550363a43931f956b940d8c2c3f021"
+    },
+    "pdf": {
+      "name": "valuation-weigher-demo-report.pdf",
+      "bytes": 1364522,
+      "sha256": "2f5ecb85753370c1c2a8043e24089aca5c9a4b139cd3f245886b0adc197fe7fc"
+    },
+    "word": {
+      "name": "valuation-weigher-demo-report.docx",
+      "bytes": 16505,
+      "sha256": "f5c7781ce69052813d859e3e12fcb50344e7fdd612c66e235df2928eebd74c02"
+    }
+  },
+  "assets": []
+}

@@ -1,0 +1,28 @@
+{
+  "version": 2,
+  "inputHash": "66ee237caaabfce3151c5b1c8de62bb1b6298016a263523b2c960d5cf47e2a07",
+  "title": "《复杂》的内在逻辑 · 梅拉妮·米歇尔",
+  "route": "/reading/books/complexity/",
+  "source": "https://cavno.org/reading/books/complexity/",
+  "generatedAt": "2026-09-23T19:21:21.594Z",
+  "visuals": 0,
+  "missingSourceCharacters": 0,
+  "files": {
+    "markdown": {
+      "name": "complexity.md",
+      "bytes": 46598,
+      "sha256": "5b47ac4d45199ad8ef224d3b7874f42b80ec1fa6800791165af15dba9650166c"
+    },
+    "pdf": {
+      "name": "complexity.pdf",
+      "bytes": 5396849,
+      "sha256": "2795369b70348cf6d8adb61d09d6f5686770f4c57b2bccd72712d60ba7f0f593"
+    },
+    "word": {
+      "name": "complexity.docx",
+      "bytes": 41491,
+      "sha256": "919d479e039c7b5bc1f0ee6dce4b665d90e55bc9a74ee5c42966794ee109e42f"
+    }
+  },
+  "assets": []
+}

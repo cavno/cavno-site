@@ -1,0 +1,34 @@
+{
+  "version": 2,
+  "inputHash": "b628485336e292cadedcb203c205d5fabe114e19ce9871e610f31aee8d5baf90",
+  "title": "物理学发展史",
+  "route": "/reading/science/physics-evolution/",
+  "source": "https://cavno.org/reading/science/physics-evolution/",
+  "generatedAt": "2026-09-23T19:25:31.087Z",
+  "visuals": 1,
+  "missingSourceCharacters": 0,
+  "files": {
+    "markdown": {
+      "name": "physics-evolution.md",
+      "bytes": 36075,
+      "sha256": "f71a4f9e90dcc9640f257cf8fe8696b4fe3e1743bf0af57ecc6b882d396821aa"
+    },
+    "pdf": {
+      "name": "physics-evolution.pdf",
+      "bytes": 17700346,
+      "sha256": "c5c5b8783cd23872c5f3378701f534e509c8eee99d4d6e2788fa05f689c94f77"
+    },
+    "word": {
+      "name": "physics-evolution.docx",
+      "bytes": 65725,
+      "sha256": "9ec38fd90936b2a8f43b58b920b7de13411f821b2eb60c29412323ed49e7ba80"
+    }
+  },
+  "assets": [
+    {
+      "name": "assets/physics-evolution-visual-001.png",
+      "bytes": 34416,
+      "sha256": "0855a7d446265bd020f1b772020932c3a93728f58476650d629771d1d284f47c"
+    }
+  ]
+}

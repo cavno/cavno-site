@@ -1,0 +1,28 @@
+{
+  "version": 2,
+  "inputHash": "8778d252c807629c4f492571382ffb3091ec6454b5842fd8d089e4b547b37c87",
+  "title": "新手完整上路手册 · 深圳 · Model Y",
+  "route": "/life/driving/beginner-driving-guide/",
+  "source": "https://cavno.org/life/driving/beginner-driving-guide/",
+  "generatedAt": "2026-09-23T19:20:19.949Z",
+  "visuals": 0,
+  "missingSourceCharacters": 0,
+  "files": {
+    "markdown": {
+      "name": "beginner-driving-guide.md",
+      "bytes": 37323,
+      "sha256": "401ddff0ec1f9ee0b38284dfa87a64a2db88be4513f9a141943d8f3034fa1582"
+    },
+    "pdf": {
+      "name": "beginner-driving-guide.pdf",
+      "bytes": 2247964,
+      "sha256": "98d2cf21e84683bdd9d8ed8df56b7d9b815112bf44f9d53f81661fd1c5f40717"
+    },
+    "word": {
+      "name": "beginner-driving-guide.docx",
+      "bytes": 35838,
+      "sha256": "5e49badb5e1f7ca7bc7616f14440a5321a0567ef20de1d7d97b446763de3d4f4"
+    }
+  },
+  "assets": []
+}

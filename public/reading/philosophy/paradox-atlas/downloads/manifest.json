@@ -1,0 +1,28 @@
+{
+  "version": 2,
+  "inputHash": "0e84ee6839b4ac44cbc312bfe1408ca9625a0d845dca10e9770b24d8e78491f5",
+  "title": "悖论图谱 · An Atlas of Paradoxes",
+  "route": "/reading/philosophy/paradox-atlas/",
+  "source": "https://cavno.org/reading/philosophy/paradox-atlas/",
+  "generatedAt": "2026-09-23T19:23:31.897Z",
+  "visuals": 0,
+  "missingSourceCharacters": 0,
+  "files": {
+    "markdown": {
+      "name": "paradox-atlas.md",
+      "bytes": 1675,
+      "sha256": "1687fa58ec8873f48c5d23f7cf77be7cb8bbc147be11c151b359d2c547a80275"
+    },
+    "pdf": {
+      "name": "paradox-atlas.pdf",
+      "bytes": 634734,
+      "sha256": "792ad04f3116f4bbb27503066b12d9e1be793b7ffde74022349e23a50462f7f2"
+    },
+    "word": {
+      "name": "paradox-atlas.docx",
+      "bytes": 11573,
+      "sha256": "eccbe772270b101389229dccd07a327b63ec39bf7bd8c893a60bd3c72c0d7785"
+    }
+  },
+  "assets": []
+}

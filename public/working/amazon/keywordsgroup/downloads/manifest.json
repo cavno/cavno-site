@@ -1,0 +1,28 @@
+{
+  "version": 2,
+  "inputHash": "0230175d6218b2a297fdc6d70ee65ae377e17783ae30fd30441576f6cb444bef",
+  "title": "搜索词分组台 · Amazon 广告搜索词工程",
+  "route": "/working/amazon/keywordsgroup/",
+  "source": "https://cavno.org/working/amazon/keywordsgroup/",
+  "generatedAt": "2026-09-23T19:26:24.582Z",
+  "visuals": 0,
+  "missingSourceCharacters": 0,
+  "files": {
+    "markdown": {
+      "name": "keywordsgroup.md",
+      "bytes": 1052,
+      "sha256": "aec2819d5946c6cc3d970b6c2eff4ca22b3bed065f123e0a1353c53782d09609"
+    },
+    "pdf": {
+      "name": "keywordsgroup.pdf",
+      "bytes": 451204,
+      "sha256": "417001d420d306bd20861d1f18df9a46d52770c92d71f26db5b1b0066408df60"
+    },
+    "word": {
+      "name": "keywordsgroup.docx",
+      "bytes": 11127,
+      "sha256": "753179502e29fba4a89897e4a318b257b94e2ba475982cfeeb80a8586b61789b"
+    }
+  },
+  "assets": []
+}

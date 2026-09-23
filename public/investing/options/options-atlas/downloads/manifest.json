@@ -1,0 +1,28 @@
+{
+  "version": 2,
+  "inputHash": "87e72aacefe0cc12d1635fa3389c62e41a3e44f68477e97645063af385a353bf",
+  "title": "Options Strategy Atlas · 期权策略图谱",
+  "route": "/investing/options/options-atlas/",
+  "source": "https://cavno.org/investing/options/options-atlas/",
+  "generatedAt": "2026-09-23T19:18:57.364Z",
+  "visuals": 0,
+  "missingSourceCharacters": 0,
+  "files": {
+    "markdown": {
+      "name": "options-atlas.md",
+      "bytes": 9782,
+      "sha256": "7778d11216232352cb0c86c35cca38074b445a87782b6307910d3b7d84712589"
+    },
+    "pdf": {
+      "name": "options-atlas.pdf",
+      "bytes": 614118,
+      "sha256": "062f987794504af0195c6ef87fb8d60370efed2affc4e19fa2fdda5aaa937937"
+    },
+    "word": {
+      "name": "options-atlas.docx",
+      "bytes": 17825,
+      "sha256": "83c277bdbdd51136fb5659775b0aa0f804e39573aa734111191dbcd2da63819e"
+    }
+  },
+  "assets": []
+}

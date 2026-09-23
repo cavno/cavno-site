@@ -1,0 +1,28 @@
+{
+  "version": 2,
+  "inputHash": "27f85312eecc4b4ea4ee9875e842669aeb8113be1defec28f7dcb152f044f569",
+  "title": "科目四核心知识点速查 · 肖肖精华课整理（完整版）",
+  "route": "/life/driving/safe-driving-theory-test/",
+  "source": "https://cavno.org/life/driving/safe-driving-theory-test/",
+  "generatedAt": "2026-09-23T19:20:29.012Z",
+  "visuals": 0,
+  "missingSourceCharacters": 0,
+  "files": {
+    "markdown": {
+      "name": "safe-driving-theory-test.md",
+      "bytes": 14692,
+      "sha256": "f918ed20117fe97626c5ac5e9e8cc6c53a159882a638f70ad65e74935d2eb70c"
+    },
+    "pdf": {
+      "name": "safe-driving-theory-test.pdf",
+      "bytes": 1642617,
+      "sha256": "4ed51473e84e900fea2591c0ffd32813ec0895929e4bd7a0f4a1bf4d145780c5"
+    },
+    "word": {
+      "name": "safe-driving-theory-test.docx",
+      "bytes": 19522,
+      "sha256": "07ff32addcddffd1d59c9d4ec4f3b3721e6c746006c3f2fcc85cd98fbfc1aedf"
+    }
+  },
+  "assets": []
+}

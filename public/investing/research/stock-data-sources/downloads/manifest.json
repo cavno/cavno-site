@@ -1,0 +1,59 @@
+{
+  "version": 2,
+  "inputHash": "5b2f628e3fbe7404b56087b650dbf7adb555459c61a9c6d0e59e3bbdc9b002c0",
+  "title": "给 AI 喂股市数据：价格、实时性与准确性横评",
+  "route": "/investing/research/stock-data-sources/",
+  "source": "https://cavno.org/investing/research/stock-data-sources/",
+  "generatedAt": "2026-09-23T19:19:24.304Z",
+  "visuals": 6,
+  "missingSourceCharacters": 0,
+  "files": {
+    "markdown": {
+      "name": "stock-data-sources.md",
+      "bytes": 27253,
+      "sha256": "577986f874e77a1b36b68d9e91e47d45d344d1735cb51e398ab91767fdf8538c"
+    },
+    "pdf": {
+      "name": "stock-data-sources.pdf",
+      "bytes": 1760445,
+      "sha256": "c85fa9e98d8f48f65156f067dacb5d3ca38be74df9f9f5faa54cdbc3740fa34e"
+    },
+    "word": {
+      "name": "stock-data-sources.docx",
+      "bytes": 571968,
+      "sha256": "a197c3c7e566739b1ce6228fa19e1b732985c186d123e92e2183e3f7e2b96eda"
+    }
+  },
+  "assets": [
+    {
+      "name": "assets/stock-data-sources-visual-001.png",
+      "bytes": 73644,
+      "sha256": "c1d271e004390fa9af066048370888104af91772de590ec552baaa745939b6a5"
+    },
+    {
+      "name": "assets/stock-data-sources-visual-002.png",
+      "bytes": 78554,
+      "sha256": "0ca9cda927bf9ad232bf5c4b59348d67fff32c70c1f8fed46c6620a686af3e1d"
+    },
+    {
+      "name": "assets/stock-data-sources-visual-003.png",
+      "bytes": 60810,
+      "sha256": "31e5f473cdb422fb90f01a597f11a8b700603af0d38ec1012ca223b007a74a70"
+    },
+    {
+      "name": "assets/stock-data-sources-visual-004.png",
+      "bytes": 124953,
+      "sha256": "8eee6e0c0424327d5edcb7a0a546d38d8936673e2e9f123d77999bd737eb5616"
+    },
+    {
+      "name": "assets/stock-data-sources-visual-005.png",
+      "bytes": 62027,
+      "sha256": "73cbc8aff130218a09cdbbf5ec9db925e32ac629f83575a8d8e802de56cdb9f6"
+    },
+    {
+      "name": "assets/stock-data-sources-visual-006.png",
+      "bytes": 158751,
+      "sha256": "bc875b310de0d359c582a1b22d62e8b48cdbe1ba1f77e08dc806bb39ee8f1d56"
+    }
+  ]
+}

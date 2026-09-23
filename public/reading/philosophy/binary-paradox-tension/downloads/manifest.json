@@ -1,0 +1,28 @@
+{
+  "version": 2,
+  "inputHash": "d7cfa6b5e40f2d4951f02c5cd2c0df35ff97be7cbc22982a381fe68c786ae805",
+  "title": "二元悖论的张力 · 本体论 · 认识论 · 方法论",
+  "route": "/reading/philosophy/binary-paradox-tension/",
+  "source": "https://cavno.org/reading/philosophy/binary-paradox-tension/",
+  "generatedAt": "2026-09-23T19:22:46.836Z",
+  "visuals": 0,
+  "missingSourceCharacters": 0,
+  "files": {
+    "markdown": {
+      "name": "binary-paradox-tension.md",
+      "bytes": 16162,
+      "sha256": "9062f4479da598079ddeb7347af3cccbd6905302d42290151a340c55bbc376bb"
+    },
+    "pdf": {
+      "name": "binary-paradox-tension.pdf",
+      "bytes": 1804420,
+      "sha256": "48e91c697b16eb8e9b44a47785e9e8f4d7660da5c05c0af25deb044d41cb1e4f"
+    },
+    "word": {
+      "name": "binary-paradox-tension.docx",
+      "bytes": 20870,
+      "sha256": "9c32e43ec3f24425abd1187543dcffc10522379995c0263eb21f9ecf71ba5b62"
+    }
+  },
+  "assets": []
+}

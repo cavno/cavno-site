@@ -1,0 +1,28 @@
+{
+  "version": 2,
+  "inputHash": "ee65adf643ed29bc556bdca17e8dd96ee13cd4921958b500ab04b8c98697d2f3",
+  "title": "圣经互动浏览器 · Biblical Atlas",
+  "route": "/reading/theology/bible/",
+  "source": "https://cavno.org/reading/theology/bible/",
+  "generatedAt": "2026-09-23T19:25:16.916Z",
+  "visuals": 0,
+  "missingSourceCharacters": 0,
+  "files": {
+    "markdown": {
+      "name": "bible.md",
+      "bytes": 420,
+      "sha256": "9680b8d5d99605b7b9dab58324f151b67e62bab67ca740bee118c909a2569e4d"
+    },
+    "pdf": {
+      "name": "bible.pdf",
+      "bytes": 551747,
+      "sha256": "d5cfc43eaed1a3eda26eeb82c8282e3991559763eb61a394de2b64552cc5210c"
+    },
+    "word": {
+      "name": "bible.docx",
+      "bytes": 10850,
+      "sha256": "3271f2d5dd2ab412926f1ca8f354695f0e4c63aabec3c92db4d9bfcbb8021ac1"
+    }
+  },
+  "assets": []
+}

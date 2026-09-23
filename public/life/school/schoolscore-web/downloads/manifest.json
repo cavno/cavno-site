@@ -1,0 +1,28 @@
+{
+  "version": 2,
+  "inputHash": "e45366c239560f15e1dc0eeddab9181133835ac9f879dc02be0cf8cadc09e8b8",
+  "title": "龙岗区义务教育积分入学计算器",
+  "route": "/life/school/schoolscore-web/",
+  "source": "https://cavno.org/life/school/schoolscore-web/",
+  "generatedAt": "2026-09-23T19:20:51.665Z",
+  "visuals": 0,
+  "missingSourceCharacters": 0,
+  "files": {
+    "markdown": {
+      "name": "schoolscore-web.md",
+      "bytes": 942,
+      "sha256": "65a9c747eca04073c5da7ac99a33f02b2509e410ab593b0be9e94c230aa5bc37"
+    },
+    "pdf": {
+      "name": "schoolscore-web.pdf",
+      "bytes": 366341,
+      "sha256": "cfd3be6b3acbf53687381c04b63b24eed5991021a27c28077a65687e9beb08c3"
+    },
+    "word": {
+      "name": "schoolscore-web.docx",
+      "bytes": 11010,
+      "sha256": "4fb37accb09ed361d65889e36fb09d15b369a99ee63c6c4b6101abce66c5c3dd"
+    }
+  },
+  "assets": []
+}

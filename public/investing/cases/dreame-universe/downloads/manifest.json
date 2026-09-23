@@ -1,0 +1,54 @@
+{
+  "version": 2,
+  "inputHash": "c04dc6f23948cee338edb18b11a3f3f43be59307497a0d3c64179c8db7105efc",
+  "title": "追觅宇宙：俞浩控制的 955 家公司",
+  "route": "/investing/cases/dreame-universe/",
+  "source": "https://cavno.org/investing/cases/dreame-universe/",
+  "generatedAt": "2026-09-23T19:18:42.344Z",
+  "visuals": 5,
+  "missingSourceCharacters": 0,
+  "files": {
+    "markdown": {
+      "name": "dreame-universe.md",
+      "bytes": 36351,
+      "sha256": "093a5e97b3ce8d7dafaec2bade31c2cdaadf3793b04f3e69435cd67fffa1c3ed"
+    },
+    "pdf": {
+      "name": "dreame-universe.pdf",
+      "bytes": 3381292,
+      "sha256": "c76ceace6d44e49b6203f664812c75d38c44305a1659bcd0a78f1e5c2fb7ee42"
+    },
+    "word": {
+      "name": "dreame-universe.docx",
+      "bytes": 582341,
+      "sha256": "63a09f8cc33bf0b2fb17803593e88c412501e8d042fdbb8ab176233df9b4ba5a"
+    }
+  },
+  "assets": [
+    {
+      "name": "assets/dreame-universe-visual-001.png",
+      "bytes": 37988,
+      "sha256": "c3cbb5358e00100caa98e5dbeb872d8f2f3efd65dbd4ca2130505b2e64901987"
+    },
+    {
+      "name": "assets/dreame-universe-visual-002.png",
+      "bytes": 44873,
+      "sha256": "ce2d50ee5970ec090724f32b6c7476ad9d18afcc191b1de3c18130313c91ba46"
+    },
+    {
+      "name": "assets/dreame-universe-visual-003.png",
+      "bytes": 87430,
+      "sha256": "a3b883f4a3a4d72073c1eeb57a8018a37b71d856fdbaaf43bcb22904c5853578"
+    },
+    {
+      "name": "assets/dreame-universe-visual-004.png",
+      "bytes": 167205,
+      "sha256": "d9d1a14c9991272e4903c5d2f583852005975d9c30fde46eb52884888d8298c1"
+    },
+    {
+      "name": "assets/dreame-universe-visual-005.png",
+      "bytes": 248912,
+      "sha256": "2ffd4f7daec13807980b720eac84f2d44b76cb8c33e3acdac144b93f4961d19b"
+    }
+  ]
+}

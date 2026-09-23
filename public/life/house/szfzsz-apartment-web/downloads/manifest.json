@@ -1,0 +1,28 @@
+{
+  "version": 2,
+  "inputHash": "5ea4ed83009fe1a6662fed318cde298ce3c489cd8e30ada3c0f04bdcc2f6582c",
+  "title": "房产成交对比查询系统",
+  "route": "/life/house/szfzsz-apartment-web/",
+  "source": "https://cavno.org/life/house/szfzsz-apartment-web/",
+  "generatedAt": "2026-09-23T19:20:40.440Z",
+  "visuals": 0,
+  "missingSourceCharacters": 0,
+  "files": {
+    "markdown": {
+      "name": "szfzsz-apartment-web.md",
+      "bytes": 5794,
+      "sha256": "08e5c74172c1710719c4cb3ebcde9422aa4ed57834fe809fab33e1838a4f7aea"
+    },
+    "pdf": {
+      "name": "szfzsz-apartment-web.pdf",
+      "bytes": 346934,
+      "sha256": "57925d33b06b326372873ed032958f85ea83dc5600506e63da91b886e173b2eb"
+    },
+    "word": {
+      "name": "szfzsz-apartment-web.docx",
+      "bytes": 13827,
+      "sha256": "0f0d15c4852d9a561b6b3929524b06f33802d4099aaf90d604847c2d40cd1024"
+    }
+  },
+  "assets": []
+}

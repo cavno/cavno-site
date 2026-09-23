@@ -1,0 +1,44 @@
+{
+  "version": 2,
+  "inputHash": "c3124fc6488531e04e8e1115e97a534be6235d1c7e8615727c60ebf38df07942",
+  "title": "中国国家治理的制度逻辑 · 全书内在逻辑重构",
+  "route": "/reading/books/institutional-logic-of-chinese-governance/",
+  "source": "https://cavno.org/reading/books/institutional-logic-of-chinese-governance/",
+  "generatedAt": "2026-09-23T19:21:53.232Z",
+  "visuals": 3,
+  "missingSourceCharacters": 0,
+  "files": {
+    "markdown": {
+      "name": "institutional-logic-of-chinese-governance.md",
+      "bytes": 84347,
+      "sha256": "8c7d04114897fad6d4d3d395265643388435911035e25ba9f0b34a4d69ed9b0f"
+    },
+    "pdf": {
+      "name": "institutional-logic-of-chinese-governance.pdf",
+      "bytes": 5480764,
+      "sha256": "487e45a10d3d19eb8e4c3e53de6449ab35f9d3ccceed347139181effe5dbabcf"
+    },
+    "word": {
+      "name": "institutional-logic-of-chinese-governance.docx",
+      "bytes": 324743,
+      "sha256": "65c60d9610c647c152d9af146ed291c45e2316b339362ca34f1b390fbe2c605d"
+    }
+  },
+  "assets": [
+    {
+      "name": "assets/institutional-logic-of-chinese-governance-visual-001.png",
+      "bytes": 139570,
+      "sha256": "0943a1661f0b26c04bdc8c3bf82960c881bf09a1db6def638a606d8b00905907"
+    },
+    {
+      "name": "assets/institutional-logic-of-chinese-governance-visual-002.png",
+      "bytes": 77185,
+      "sha256": "4d9bc28b7f2a69b37fcce285258a2ce6170102914fdb24b828e7340283f5b6fa"
+    },
+    {
+      "name": "assets/institutional-logic-of-chinese-governance-visual-003.png",
+      "bytes": 55719,
+      "sha256": "744c30b8057fc63259c4b5e4a919079514c6629bd0d009354e951caa8221e26a"
+    }
+  ]
+}

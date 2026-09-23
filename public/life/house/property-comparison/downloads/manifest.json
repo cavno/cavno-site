@@ -1,0 +1,34 @@
+{
+  "version": 2,
+  "inputHash": "78fd3c3f3ca79ef7bb6137dd716b3f8b238d062a00dc7816e1c065f5d3247c8a",
+  "title": "购房决策 · 九盘对比图表",
+  "route": "/life/house/property-comparison/",
+  "source": "https://cavno.org/life/house/property-comparison/",
+  "generatedAt": "2026-09-23T19:20:37.331Z",
+  "visuals": 1,
+  "missingSourceCharacters": 0,
+  "files": {
+    "markdown": {
+      "name": "property-comparison.md",
+      "bytes": 13488,
+      "sha256": "52ac691a7806a0c70cbb68d0548c1ae533b23ac5305e8f8611308f2e49559aec"
+    },
+    "pdf": {
+      "name": "property-comparison.pdf",
+      "bytes": 1425924,
+      "sha256": "567cb287929258d1c5fa99ac7f94cfe99c8c1a6e07a5f08ad940df7fc4a49c2f"
+    },
+    "word": {
+      "name": "property-comparison.docx",
+      "bytes": 68359,
+      "sha256": "60fcaac9db3df8711db5ac4a5c619492b39dbdbc1d5184d303a74db178b17b25"
+    }
+  },
+  "assets": [
+    {
+      "name": "assets/property-comparison-visual-001.png",
+      "bytes": 49515,
+      "sha256": "789c00d702ff71527d91afbcbef18722b3bd027df979147dab09e68eda8e3703"
+    }
+  ]
+}

@@ -1,0 +1,28 @@
+{
+  "version": 2,
+  "inputHash": "2c06806506f8dcc0831f9adc7f9cd3f2dc1baaddbe20767e10c510095465de61",
+  "title": "智驾战争的系统论｜Tesla FSD 与理想 VLA",
+  "route": "/life/driving/autonomous-driving-systems/",
+  "source": "https://cavno.org/life/driving/autonomous-driving-systems/",
+  "generatedAt": "2026-09-23T19:20:09.360Z",
+  "visuals": 0,
+  "missingSourceCharacters": 0,
+  "files": {
+    "markdown": {
+      "name": "autonomous-driving-systems.md",
+      "bytes": 9145,
+      "sha256": "d97c4b15f309064b53ddc8c110484f89eda200e78fe9ceb75e763db480ce167a"
+    },
+    "pdf": {
+      "name": "autonomous-driving-systems.pdf",
+      "bytes": 1107241,
+      "sha256": "5c268afa902627fbb034eb14a9ab56e34719a346533e1bceed04f85451e2a595"
+    },
+    "word": {
+      "name": "autonomous-driving-systems.docx",
+      "bytes": 17873,
+      "sha256": "ff6b263f2fa50378ea288188a2fff9f6adcb395d25730c003329d4568c5c8c5d"
+    }
+  },
+  "assets": []
+}

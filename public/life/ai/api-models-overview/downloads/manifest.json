@@ -1,0 +1,28 @@
+{
+  "version": 2,
+  "inputHash": "7ebfa7e7785aaf9824d4c5d6c2c45ecd4a4a5514ad37cddcf90fbff143d13d14",
+  "title": "第三方 API 模型接入清单",
+  "route": "/life/ai/api-models-overview/",
+  "source": "https://cavno.org/life/ai/api-models-overview/",
+  "generatedAt": "2026-09-23T19:19:38.139Z",
+  "visuals": 0,
+  "missingSourceCharacters": 0,
+  "files": {
+    "markdown": {
+      "name": "api-models-overview.md",
+      "bytes": 8064,
+      "sha256": "6c539f362082b96de334cb1a3d271b8d2b2b13de1882d25dd9939b169e1f4c01"
+    },
+    "pdf": {
+      "name": "api-models-overview.pdf",
+      "bytes": 642258,
+      "sha256": "8a2893f814891e1979087c49e641e06c54a1a274f2a1c90dc410542173c1edde"
+    },
+    "word": {
+      "name": "api-models-overview.docx",
+      "bytes": 17107,
+      "sha256": "b0b847386d49d19cfb60f5a193be108cd91c79a05824e3265a34fa01dd7e31b0"
+    }
+  },
+  "assets": []
+}

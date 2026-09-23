@@ -1,0 +1,49 @@
+{
+  "version": 2,
+  "inputHash": "6561bbbe6a8db87bc036a98b42413c5c0f276cabf13c4cb4895bdabbe6eef87e",
+  "title": "五步法 · 通用系统推演引擎",
+  "route": "/reading/thinking/universal-five-step-method/",
+  "source": "https://cavno.org/reading/thinking/universal-five-step-method/",
+  "generatedAt": "2026-09-23T19:26:07.259Z",
+  "visuals": 4,
+  "missingSourceCharacters": 0,
+  "files": {
+    "markdown": {
+      "name": "universal-five-step-method.md",
+      "bytes": 11567,
+      "sha256": "24499a730b15913513afa347db3c941dbecc7f41b4d01d7e00250455eef626a8"
+    },
+    "pdf": {
+      "name": "universal-five-step-method.pdf",
+      "bytes": 2349525,
+      "sha256": "460ea7fa854ba51cff2f87eaf6d18e97630965fa0d9879674bd0590ba0b163cf"
+    },
+    "word": {
+      "name": "universal-five-step-method.docx",
+      "bytes": 146613,
+      "sha256": "a1e618a2ced5239f097c4aa9ec3e2a5687cbd581342b0e40c96d970f6c9b7f1b"
+    }
+  },
+  "assets": [
+    {
+      "name": "assets/universal-five-step-method-visual-001.png",
+      "bytes": 23782,
+      "sha256": "0d40f0c40d3739b11d438538463fca61b3371aee157733212346b910972918f4"
+    },
+    {
+      "name": "assets/universal-five-step-method-visual-002.png",
+      "bytes": 20124,
+      "sha256": "06a0f34215697d2b564f6e7b48184ad42e53da880392a7796e67f0b7c4f234cb"
+    },
+    {
+      "name": "assets/universal-five-step-method-visual-003.png",
+      "bytes": 79165,
+      "sha256": "70cb9b91b58b9b7eaa3f307ffa27fd15b2f1ecfe87a32e6ac1275373e7ac9fa5"
+    },
+    {
+      "name": "assets/universal-five-step-method-visual-004.png",
+      "bytes": 5420,
+      "sha256": "35f2ba5a6172314f2b07c65e09c2c7dee274c893edab0b1204edf2808941fd4b"
+    }
+  ]
+}

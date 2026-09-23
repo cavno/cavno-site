@@ -1,0 +1,49 @@
+{
+  "version": 2,
+  "inputHash": "25fff09f1ed4db238817d63c220b46dfc3aae282d18b00af53e875aa0fe40d8d",
+  "title": "系统论视角下的西方基督教神学演化史",
+  "route": "/reading/theology/western-christian-theology-evolution/",
+  "source": "https://cavno.org/reading/theology/western-christian-theology-evolution/",
+  "generatedAt": "2026-09-23T19:25:38.493Z",
+  "visuals": 4,
+  "missingSourceCharacters": 0,
+  "files": {
+    "markdown": {
+      "name": "western-christian-theology-evolution.md",
+      "bytes": 22974,
+      "sha256": "d111fd86d8f9da01f2bf7ce9ec4facbf9361f74956370f1a841ab153b3101790"
+    },
+    "pdf": {
+      "name": "western-christian-theology-evolution.pdf",
+      "bytes": 2741916,
+      "sha256": "dbb9405b3a8394edb9f549f033d0f6c7997c88b4d386f6350affc1b8931f004b"
+    },
+    "word": {
+      "name": "western-christian-theology-evolution.docx",
+      "bytes": 150206,
+      "sha256": "52db7ca1b36de3504602450d150edba1b5d15be16a2a2dbd0ac095e1140035a3"
+    }
+  },
+  "assets": [
+    {
+      "name": "assets/western-christian-theology-evolution-visual-001.png",
+      "bytes": 15868,
+      "sha256": "810a6ef6de5dbd9191b5321ded11875a83cebbdc7453e0ce321d4852d4fa671c"
+    },
+    {
+      "name": "assets/western-christian-theology-evolution-visual-002.png",
+      "bytes": 36799,
+      "sha256": "6c12dacfdb9795f2e612306af46ba503e73e47fb03b2a80c950ad9ba53a250cf"
+    },
+    {
+      "name": "assets/western-christian-theology-evolution-visual-003.png",
+      "bytes": 576,
+      "sha256": "45796e79185db45cc710cfeec3df92ba7dde8852b74c9addf23873d03b1b2686"
+    },
+    {
+      "name": "assets/western-christian-theology-evolution-visual-004.png",
+      "bytes": 75527,
+      "sha256": "da346fea34f293599923740467216feb18599f493ba103fc5e975afa350e21ab"
+    }
+  ]
+}

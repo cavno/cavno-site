@@ -1,0 +1,28 @@
+{
+  "version": 2,
+  "inputHash": "7717ffa79c000b20b29059a49ca21a0ed81f2a8f47563561d47963aec4c12aa8",
+  "title": "数学思想的生命树｜从数量秩序到计算智能",
+  "route": "/reading/math/mathematical-thought-life-tree/",
+  "source": "https://cavno.org/reading/math/mathematical-thought-life-tree/",
+  "generatedAt": "2026-09-23T19:22:40.587Z",
+  "visuals": 0,
+  "missingSourceCharacters": 0,
+  "files": {
+    "markdown": {
+      "name": "mathematical-thought-life-tree.md",
+      "bytes": 16412,
+      "sha256": "d409219e0940e4b49076d865bf0212a28583405424f52875662e9fbaa4d1e4e4"
+    },
+    "pdf": {
+      "name": "mathematical-thought-life-tree.pdf",
+      "bytes": 2042097,
+      "sha256": "6d605095abd9d15a7b821c7d2a330d39f14950a641c8706b9630848f3ff64569"
+    },
+    "word": {
+      "name": "mathematical-thought-life-tree.docx",
+      "bytes": 22142,
+      "sha256": "643124895c3cda0533dfdac0efb92b59258db13c4b42be09e01314708cb50cfb"
+    }
+  },
+  "assets": []
+}

@@ -1,0 +1,28 @@
+{
+  "version": 2,
+  "inputHash": "17dd9ee88ef7205eea005712788d8a76d6c3ac7afa8db8c2ba6d9a8bb0cf8782",
+  "title": "新手驾驶实战说明书",
+  "route": "/life/driving/beginner-driving-practical-manual/",
+  "source": "https://cavno.org/life/driving/beginner-driving-practical-manual/",
+  "generatedAt": "2026-09-23T19:20:19.810Z",
+  "visuals": 0,
+  "missingSourceCharacters": 0,
+  "files": {
+    "markdown": {
+      "name": "beginner-driving-practical-manual.md",
+      "bytes": 81019,
+      "sha256": "bb3abd2dad9546e4bf0e97484a3200ffb045490f878537e7782e15ab90d02d83"
+    },
+    "pdf": {
+      "name": "beginner-driving-practical-manual.pdf",
+      "bytes": 3473530,
+      "sha256": "2daef6a97f58d157f8c3c95e9661eddc65d2df8e2c5a24c1ea1b7d4fa7030cbb"
+    },
+    "word": {
+      "name": "beginner-driving-practical-manual.docx",
+      "bytes": 56710,
+      "sha256": "c8a97c9e25a8f6acb0d7dd72c943f9dcee2a6785813736e441cefa0f9f5a7f17"
+    }
+  },
+  "assets": []
+}

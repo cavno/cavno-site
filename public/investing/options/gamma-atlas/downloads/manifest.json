@@ -1,0 +1,99 @@
+{
+  "version": 2,
+  "inputHash": "4464362f040ee367cb39c033baf9d30bed2d2ff3f3e0a3a7cb9a2db369a5e0c7",
+  "title": "Gamma敞口结构图谱 · 14种典型市场博弈格局",
+  "route": "/investing/options/gamma-atlas/",
+  "source": "https://cavno.org/investing/options/gamma-atlas/",
+  "generatedAt": "2026-09-23T19:18:41.288Z",
+  "visuals": 14,
+  "missingSourceCharacters": 0,
+  "files": {
+    "markdown": {
+      "name": "gamma-atlas.md",
+      "bytes": 16314,
+      "sha256": "b656fa399b5a5b68e7bbf26cc47be06908677e2e07f44932c8ade689861837ad"
+    },
+    "pdf": {
+      "name": "gamma-atlas.pdf",
+      "bytes": 978769,
+      "sha256": "c4c2349f0ce74c3e7007ad10e98c54a8bdacfaa01fc47187d68e039f47d800c4"
+    },
+    "word": {
+      "name": "gamma-atlas.docx",
+      "bytes": 161301,
+      "sha256": "140c320757505988e800119ad7abdc4d3e1c420a76103f3bf4b6deb0d1429c7e"
+    }
+  },
+  "assets": [
+    {
+      "name": "assets/gamma-atlas-visual-001.png",
+      "bytes": 9694,
+      "sha256": "bfd417efe6dee54fa09149e8ae2854d7c53769d9e1179ab6def1f704785c87b2"
+    },
+    {
+      "name": "assets/gamma-atlas-visual-002.png",
+      "bytes": 10390,
+      "sha256": "84efbf622ee0c65a95fa6b0efd2aa7429c027479b5fcf5e2a3315daec10e2e00"
+    },
+    {
+      "name": "assets/gamma-atlas-visual-003.png",
+      "bytes": 10191,
+      "sha256": "4e2715a753b068269b475bae4b0bf97e1dd6f2ac2684f5fd77d9e0c96abc85e0"
+    },
+    {
+      "name": "assets/gamma-atlas-visual-004.png",
+      "bytes": 10217,
+      "sha256": "7840be9ef86411ac46d7819c69fef804e43555ecb78f521153f5cccb2acc753a"
+    },
+    {
+      "name": "assets/gamma-atlas-visual-005.png",
+      "bytes": 9076,
+      "sha256": "b5191ff00ac582d7ed5a0b8d47194d33fac53e64ce678a5b816657d7e790e7b6"
+    },
+    {
+      "name": "assets/gamma-atlas-visual-006.png",
+      "bytes": 10506,
+      "sha256": "5eac2a06245b62cdf3912efe83d1b7f27918f800a6d6f5cbd4677b6a428e9efe"
+    },
+    {
+      "name": "assets/gamma-atlas-visual-007.png",
+      "bytes": 11558,
+      "sha256": "d95843ebd254261221e330b9517fe642330c14d0437c1b8ec424cf08e81c9c99"
+    },
+    {
+      "name": "assets/gamma-atlas-visual-008.png",
+      "bytes": 11850,
+      "sha256": "61ef3543356ffbd0501aafae39e52727fbb27bf69d48172d35f8c79265c23acc"
+    },
+    {
+      "name": "assets/gamma-atlas-visual-009.png",
+      "bytes": 10311,
+      "sha256": "a73b4abfd2074831adc873b20f89c9b0ab06e7c51244e558730326dc75272f44"
+    },
+    {
+      "name": "assets/gamma-atlas-visual-010.png",
+      "bytes": 11147,
+      "sha256": "80e5a695af9ac898b3f43c9752c00a2323cfc4a254df80daaf44d81ba628e240"
+    },
+    {
+      "name": "assets/gamma-atlas-visual-011.png",
+      "bytes": 9587,
+      "sha256": "8092357fce6ee2793ce3cb2e9b370e0628b36dc199c9c7d919288938ed95c1ba"
+    },
+    {
+      "name": "assets/gamma-atlas-visual-012.png",
+      "bytes": 10607,
+      "sha256": "249c1917b5ded2a0d85b5875f728b325efda96173b5078d85894b6d5e25a6a86"
+    },
+    {
+      "name": "assets/gamma-atlas-visual-013.png",
+      "bytes": 10049,
+      "sha256": "cad415320710905792962673c27c14e8709c15ccdfcea26cb4cef23e33e6e1ee"
+    },
+    {
+      "name": "assets/gamma-atlas-visual-014.png",
+      "bytes": 7605,
+      "sha256": "ac6f1c874d99481eb128af31c5762f1fab6df564b619b5fa684d2bba48bfe5fd"
+    }
+  ]
+}

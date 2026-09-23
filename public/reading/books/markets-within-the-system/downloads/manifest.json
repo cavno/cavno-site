@@ -1,0 +1,69 @@
+{
+  "version": 2,
+  "inputHash": "47be633efc1219ab9ae61e5e5e2195765103a7fabe96253630564840d64df5c8",
+  "title": "制内市场 · 结构重构 —— 郑永年、黄彦杰《中国国家主导型政治经济学》",
+  "route": "/reading/books/markets-within-the-system/",
+  "source": "https://cavno.org/reading/books/markets-within-the-system/",
+  "generatedAt": "2026-09-23T19:22:06.442Z",
+  "visuals": 8,
+  "missingSourceCharacters": 0,
+  "files": {
+    "markdown": {
+      "name": "markets-within-the-system.md",
+      "bytes": 93527,
+      "sha256": "b570c15cf2b02ad7cb997ae78e166c5421a75319f0babf837e7cd3ce08576c28"
+    },
+    "pdf": {
+      "name": "markets-within-the-system.pdf",
+      "bytes": 4699304,
+      "sha256": "deb1f1e9a50d44f53502457ff3410951cc97f44050c42c62fceb9ffaa4e960c8"
+    },
+    "word": {
+      "name": "markets-within-the-system.docx",
+      "bytes": 2638416,
+      "sha256": "a576ed93076e7057d01cfd3da0328dcf7fd9f21b1843c388e6a9318936e8a3e9"
+    }
+  },
+  "assets": [
+    {
+      "name": "assets/markets-within-the-system-visual-001.png",
+      "bytes": 218033,
+      "sha256": "7bdff09355df635a577d106ea6304e5befcf972c4ee8d5a401db800cbecd1f6e"
+    },
+    {
+      "name": "assets/markets-within-the-system-visual-002.png",
+      "bytes": 211359,
+      "sha256": "35ca031e2b3ab50f8a646ae58e78f1070870e20618bf5edbd63f0d181d861152"
+    },
+    {
+      "name": "assets/markets-within-the-system-visual-003.png",
+      "bytes": 113118,
+      "sha256": "86f73344352f3f0f373f88be1bf69c3f46b2aa8e1c711188629f3fdeffe92057"
+    },
+    {
+      "name": "assets/markets-within-the-system-visual-004.png",
+      "bytes": 463925,
+      "sha256": "b23b3ad0485d603d8c96cac1e897be25d34c5b5c3e210d7c27fd3173ff51aa02"
+    },
+    {
+      "name": "assets/markets-within-the-system-visual-005.png",
+      "bytes": 567569,
+      "sha256": "dee365a89d4c546ec983444c91fbddd325e9809547f1fa1ebb87839a16b72397"
+    },
+    {
+      "name": "assets/markets-within-the-system-visual-006.png",
+      "bytes": 318576,
+      "sha256": "8ae30514950596bd4b79e03b0a61662c6b8af5fa66df5f9257293f121b8be0ce"
+    },
+    {
+      "name": "assets/markets-within-the-system-visual-007.png",
+      "bytes": 198413,
+      "sha256": "80654c9284fbef064610dc74f59898829db3e972ab0fba8b08f4146715f18d9a"
+    },
+    {
+      "name": "assets/markets-within-the-system-visual-008.png",
+      "bytes": 484885,
+      "sha256": "be0a642a6c174095a4dbe3c3adc9c8762f2cc71ccee1b732563c54e14842dd4e"
+    }
+  ]
+}

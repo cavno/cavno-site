@@ -1,0 +1,39 @@
+{
+  "version": 2,
+  "inputHash": "d02424fc779e79645ed6cf429bea09cfb67c4548f29bc4eed1a9d03680f7c9ca",
+  "title": "微观经济行为演化史",
+  "route": "/reading/economics/microeconomic-behavior/",
+  "source": "https://cavno.org/reading/economics/microeconomic-behavior/",
+  "generatedAt": "2026-09-23T19:22:35.271Z",
+  "visuals": 2,
+  "missingSourceCharacters": 0,
+  "files": {
+    "markdown": {
+      "name": "microeconomic-behavior.md",
+      "bytes": 32606,
+      "sha256": "ff9bd2da1a4c55564edc9e24301523ea97a0ea284a678891dc47460f933a26e2"
+    },
+    "pdf": {
+      "name": "microeconomic-behavior.pdf",
+      "bytes": 22589213,
+      "sha256": "c322963abfcd1568d6b6eb74b8277e79946541432e7a47165ef258af9f961fac"
+    },
+    "word": {
+      "name": "microeconomic-behavior.docx",
+      "bytes": 81678,
+      "sha256": "9c84a252fc7a1363fef795be64ebb938fd26d673eeb5a2b86ab812ef5201c07b"
+    }
+  },
+  "assets": [
+    {
+      "name": "assets/microeconomic-behavior-visual-001.png",
+      "bytes": 34371,
+      "sha256": "d88275f535f34012015bb87d5f7a0a48f2cc3da4bf028cf695ad321e4c6fa157"
+    },
+    {
+      "name": "assets/microeconomic-behavior-visual-002.png",
+      "bytes": 17987,
+      "sha256": "704f1a2fca31360174301bd2d3a459bb9267f27348f348d81e78608daf942feb"
+    }
+  ]
+}

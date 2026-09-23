@@ -1,0 +1,28 @@
+{
+  "version": 2,
+  "inputHash": "84123c8b766aac94a20e0e4f7babdfebf78b1e9f6fadaa2c9f217cc791e367e2",
+  "title": "科目一核心知识点速查 · 肖肖3小时精华课整理",
+  "route": "/life/driving/driving-theory-test/",
+  "source": "https://cavno.org/life/driving/driving-theory-test/",
+  "generatedAt": "2026-09-23T19:20:27.862Z",
+  "visuals": 0,
+  "missingSourceCharacters": 0,
+  "files": {
+    "markdown": {
+      "name": "driving-theory-test.md",
+      "bytes": 31231,
+      "sha256": "fb3296a69f0a7bdc92259afdb8352fe22a14f5bfd8c0140eeeb25614920c9d9d"
+    },
+    "pdf": {
+      "name": "driving-theory-test.pdf",
+      "bytes": 2290782,
+      "sha256": "0544db4c18d72f118880f965c58a06d159308b00c328eb08c7e9f0949875d24b"
+    },
+    "word": {
+      "name": "driving-theory-test.docx",
+      "bytes": 28628,
+      "sha256": "bddae6051001e1f77cae94cefb423ea2dd540a91b7d49166c2537548a81c00cb"
+    }
+  },
+  "assets": []
+}

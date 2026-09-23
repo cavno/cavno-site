@@ -1,0 +1,39 @@
+{
+  "version": 2,
+  "inputHash": "fefbd8d2bbc26170e3e3e779e8b68e699dda3129d670057997affd06b2fe6338",
+  "title": "广告投放逻辑实验台 · Ad Logic Lab",
+  "route": "/working/amazon/ad_logic_lab/",
+  "source": "https://cavno.org/working/amazon/ad_logic_lab/",
+  "generatedAt": "2026-09-23T19:26:13.173Z",
+  "visuals": 2,
+  "missingSourceCharacters": 0,
+  "files": {
+    "markdown": {
+      "name": "ad_logic_lab.md",
+      "bytes": 13515,
+      "sha256": "8cb4d193b5ccdc66172d3efa7342562a7b353e531575c5e87b9e114924f7c5dd"
+    },
+    "pdf": {
+      "name": "ad_logic_lab.pdf",
+      "bytes": 2484532,
+      "sha256": "fcdea6a7f2e39ca32e15f927389950431e7e4c3de01c57107c30c6ab4306debb"
+    },
+    "word": {
+      "name": "ad_logic_lab.docx",
+      "bytes": 47765,
+      "sha256": "5ca0ac5daa3395927b67cd9d1cf2a7322a100375797f0544b8ef80ea1b6dc6fc"
+    }
+  },
+  "assets": [
+    {
+      "name": "assets/ad_logic_lab-visual-001.png",
+      "bytes": 9588,
+      "sha256": "d03b941c14ee5ab662a2aa9e051e763f7374eba6d952cd00fdb19c9cd1a4d5bb"
+    },
+    {
+      "name": "assets/ad_logic_lab-visual-002.png",
+      "bytes": 17745,
+      "sha256": "ee8139278bb3ca1c8ba8a77f0e94d5d0d0c1d80e6cad9eb1711826ba9d3a2827"
+    }
+  ]
+}

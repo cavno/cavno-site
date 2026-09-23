@@ -1,0 +1,34 @@
+{
+  "version": 2,
+  "inputHash": "66f580be0ff3d3a20531a5c6803a816b66ea48c6d81c5c10a51927d5b9860a3f",
+  "title": "历代经济变革得失 · 内在逻辑重构",
+  "route": "/reading/books/chinese-economic-reforms-through-history/",
+  "source": "https://cavno.org/reading/books/chinese-economic-reforms-through-history/",
+  "generatedAt": "2026-09-23T19:21:12.488Z",
+  "visuals": 1,
+  "missingSourceCharacters": 0,
+  "files": {
+    "markdown": {
+      "name": "chinese-economic-reforms-through-history.md",
+      "bytes": 98536,
+      "sha256": "3b0baca096c1164ea0a4784dce615cbd31043499a7882c548d73d62d65141fc2"
+    },
+    "pdf": {
+      "name": "chinese-economic-reforms-through-history.pdf",
+      "bytes": 5362762,
+      "sha256": "fd924c754715ef5582d7aa29aeda509872b020003f34575b80f3927d2594c6f5"
+    },
+    "word": {
+      "name": "chinese-economic-reforms-through-history.docx",
+      "bytes": 110436,
+      "sha256": "14e9c3b028a1b6df99caa6138fe216a27c332ef69e4075dd3b8d97d26b97ae87"
+    }
+  },
+  "assets": [
+    {
+      "name": "assets/chinese-economic-reforms-through-history-visual-001.png",
+      "bytes": 41102,
+      "sha256": "feaa7f96ed94fc5ea7fd0e8d36a5c01f6df8e2b3d62bf01340d807dec014e8d0"
+    }
+  ]
+}

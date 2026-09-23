@@ -1,0 +1,69 @@
+{
+  "version": 2,
+  "inputHash": "f2b24608661ccd1643983dc8f5c371de380bf19dff1c41cdf0ae43426a0316ff",
+  "title": "以利为利 · 结构重构 —— 周飞舟《财政关系与地方政府行为》",
+  "route": "/reading/books/fiscal-relations-and-local-government/",
+  "source": "https://cavno.org/reading/books/fiscal-relations-and-local-government/",
+  "generatedAt": "2026-09-23T19:21:43.259Z",
+  "visuals": 8,
+  "missingSourceCharacters": 0,
+  "files": {
+    "markdown": {
+      "name": "fiscal-relations-and-local-government.md",
+      "bytes": 119198,
+      "sha256": "95b66c8478c87ebc1be9e01db4b00615db83ba20043a996decf141ea9e25ed5b"
+    },
+    "pdf": {
+      "name": "fiscal-relations-and-local-government.pdf",
+      "bytes": 4539441,
+      "sha256": "8044b2313d79e7146045c87531203069fd03ac04a09c644e1a02a88f3293ff2d"
+    },
+    "word": {
+      "name": "fiscal-relations-and-local-government.docx",
+      "bytes": 1687275,
+      "sha256": "4ff93d645d069de4da4f5b2a07e68accd256b65aa5ddfabc2ecc7362dcf7109c"
+    }
+  },
+  "assets": [
+    {
+      "name": "assets/fiscal-relations-and-local-government-visual-001.png",
+      "bytes": 237609,
+      "sha256": "60b02a19c0b380aede9099b3b3a607faffe903655b4ddcc3ce2bc32213e63084"
+    },
+    {
+      "name": "assets/fiscal-relations-and-local-government-visual-002.png",
+      "bytes": 45386,
+      "sha256": "6321c69ecf9fd9433ec9d22dfd6c64a7f0204bfe926789b9f15237dd3b24e1bb"
+    },
+    {
+      "name": "assets/fiscal-relations-and-local-government-visual-003.png",
+      "bytes": 145426,
+      "sha256": "1c39284c8cac70502e975f8686e2ab44e1df4a27d19f777f8cc689e3a2e5a022"
+    },
+    {
+      "name": "assets/fiscal-relations-and-local-government-visual-004.png",
+      "bytes": 319417,
+      "sha256": "14552e901598accf226274fb8be7cbf0a9f5f2b30a06d9b0a0589e4633ec93bb"
+    },
+    {
+      "name": "assets/fiscal-relations-and-local-government-visual-005.png",
+      "bytes": 188252,
+      "sha256": "b39bd260047c941a954012b19e884f46dac7bdf17f9f380f7a5a532555fc6d9f"
+    },
+    {
+      "name": "assets/fiscal-relations-and-local-government-visual-006.png",
+      "bytes": 305734,
+      "sha256": "fbfc2d3a534d3160bcb1e0b06c14de5b5f33d9ef8d46bc17f7eaee24adbb3d14"
+    },
+    {
+      "name": "assets/fiscal-relations-and-local-government-visual-007.png",
+      "bytes": 141915,
+      "sha256": "c8d4ec674baddd4f9250b1dbc86d66bbc7c2a3fae8c99a28f56c7d6a02231314"
+    },
+    {
+      "name": "assets/fiscal-relations-and-local-government-visual-008.png",
+      "bytes": 230387,
+      "sha256": "a11e5102e8b5773865a29f3fde5eaebc2b2dbb51601db50a2af04b5a24b12484"
+    }
+  ]
+}

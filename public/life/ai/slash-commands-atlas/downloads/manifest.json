@@ -1,0 +1,28 @@
+{
+  "version": 2,
+  "inputHash": "b041f2a788541bbdb8a677d79e8adfe11c2aa2c5547dd0a3f06e82d8bc6ed85e",
+  "title": "Claude Code 斜杠命令全图鉴",
+  "route": "/life/ai/slash-commands-atlas/",
+  "source": "https://cavno.org/life/ai/slash-commands-atlas/",
+  "generatedAt": "2026-09-23T19:20:09.849Z",
+  "visuals": 0,
+  "missingSourceCharacters": 0,
+  "files": {
+    "markdown": {
+      "name": "slash-commands-atlas.md",
+      "bytes": 57720,
+      "sha256": "e197b56884059e775a0fa6cc6c664ec3a47dc7120933e8078422590b02cd15bd"
+    },
+    "pdf": {
+      "name": "slash-commands-atlas.pdf",
+      "bytes": 7745552,
+      "sha256": "61dc6a16f0030c98ac826f65929a7c04611c480cc0cbc6c3f984ced3e08b80f6"
+    },
+    "word": {
+      "name": "slash-commands-atlas.docx",
+      "bytes": 42330,
+      "sha256": "05774996888b195bd4d0900ec2b72c1b76de81b34e1d01eb15ceeacfaa27a847"
+    }
+  },
+  "assets": []
+}

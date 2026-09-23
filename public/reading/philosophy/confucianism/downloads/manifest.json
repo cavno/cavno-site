@@ -1,0 +1,44 @@
+{
+  "version": 2,
+  "inputHash": "c93c9c03ab912b4ed8a7c25ab518b17f5e839a625487b7eb61f5951852fab356",
+  "title": "儒家思想发展史",
+  "route": "/reading/philosophy/confucianism/",
+  "source": "https://cavno.org/reading/philosophy/confucianism/",
+  "generatedAt": "2026-09-23T19:23:03.763Z",
+  "visuals": 3,
+  "missingSourceCharacters": 0,
+  "files": {
+    "markdown": {
+      "name": "confucianism.md",
+      "bytes": 33963,
+      "sha256": "fd748e0a91be73faab80fb72a8994f99ba74e588eb8b18a645c7ed4d7b16020f"
+    },
+    "pdf": {
+      "name": "confucianism.pdf",
+      "bytes": 16044551,
+      "sha256": "9161ae156bc091803ec5edd8e608120cc4d35a38f01abb64e41d9cf7a079a6e2"
+    },
+    "word": {
+      "name": "confucianism.docx",
+      "bytes": 105467,
+      "sha256": "881ef29816a0e7053eee7dbeb4e0f564d2c4f930a0e44ff89c22ce023b3f3227"
+    }
+  },
+  "assets": [
+    {
+      "name": "assets/confucianism-visual-001.png",
+      "bytes": 31575,
+      "sha256": "91328fb337fd780ed92bd3993d0030086957a406b9eaf06d803442e9d7412cea"
+    },
+    {
+      "name": "assets/confucianism-visual-002.png",
+      "bytes": 21844,
+      "sha256": "b2a81f0a34fb42ae2367cffdcd301c22c30d86a6461009c401f37f012a3683d9"
+    },
+    {
+      "name": "assets/confucianism-visual-003.png",
+      "bytes": 25586,
+      "sha256": "44b49c86c7a2ccb6b4e49247b7e924c52eb8a405722dec7c8640a68212a7ea33"
+    }
+  ]
+}

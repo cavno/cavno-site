@@ -1,0 +1,28 @@
+{
+  "version": 2,
+  "inputHash": "353837dba0c5f592b52878cf079de251d2cf77b4cb7728e628680705a9d61c34",
+  "title": "深圳全市真实成交查询系统",
+  "route": "/life/house/sz-apartment-web/",
+  "source": "https://cavno.org/life/house/sz-apartment-web/",
+  "generatedAt": "2026-09-23T19:20:36.415Z",
+  "visuals": 0,
+  "missingSourceCharacters": 0,
+  "files": {
+    "markdown": {
+      "name": "sz-apartment-web.md",
+      "bytes": 75302,
+      "sha256": "01ff8b76b6a54b7ad2d0bda9c55707639a35d280218723c41de519ee4db42af4"
+    },
+    "pdf": {
+      "name": "sz-apartment-web.pdf",
+      "bytes": 283362,
+      "sha256": "df9bdd39a7b3bbfd5884731f8e74336a3bdaa14a6f0a04ce3769ed3e901b9543"
+    },
+    "word": {
+      "name": "sz-apartment-web.docx",
+      "bytes": 60078,
+      "sha256": "5381a131192d540d139db4da3135ba484837e9ce9dbfd1908d8e0ab9fc199397"
+    }
+  },
+  "assets": []
+}

@@ -1,0 +1,34 @@
+{
+  "version": 2,
+  "inputHash": "fc219b14d1eb04bfc9a85d997146377959bfbe9bcf6df0ef7904667cb0f92114",
+  "title": "公众号文章自动配图与草稿箱全链路",
+  "route": "/working/operations/wechat-auto-draft/",
+  "source": "https://cavno.org/working/operations/wechat-auto-draft/",
+  "generatedAt": "2026-09-23T19:26:51.223Z",
+  "visuals": 1,
+  "missingSourceCharacters": 0,
+  "files": {
+    "markdown": {
+      "name": "wechat-auto-draft.md",
+      "bytes": 25089,
+      "sha256": "ac44b5f4385319ceded2c1e988d46fe7237b7e654fa28f7f80908f16e48fffc8"
+    },
+    "pdf": {
+      "name": "wechat-auto-draft.pdf",
+      "bytes": 1674406,
+      "sha256": "7bc740f5fc5fb9a1afd6ce5daf0e91c616ec9a2912bcacb376498ece58713fc7"
+    },
+    "word": {
+      "name": "wechat-auto-draft.docx",
+      "bytes": 63422,
+      "sha256": "8e40e68027978d58b7fb33ae264845787af026ae251933305d609c19081492b6"
+    }
+  },
+  "assets": [
+    {
+      "name": "assets/wechat-auto-draft-visual-001.png",
+      "bytes": 33336,
+      "sha256": "682b0330707e63a782f95b2c607d89c0fc3ffabb7ed6a688f5e3dbfa7470ca4d"
+    }
+  ]
+}

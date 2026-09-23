@@ -1,0 +1,28 @@
+{
+  "version": 2,
+  "inputHash": "70f0b9b6a9b279edc2d9f0833a615f0e90d16dc3bf19df61e449da35f343d9f8",
+  "title": "《置身事内》全书逻辑图谱 · 内在逻辑 / 发生顺序 / 事件因果",
+  "route": "/reading/books/inside-chinese-government/",
+  "source": "https://cavno.org/reading/books/inside-chinese-government/",
+  "generatedAt": "2026-09-23T19:21:49.974Z",
+  "visuals": 0,
+  "missingSourceCharacters": 0,
+  "files": {
+    "markdown": {
+      "name": "inside-chinese-government.md",
+      "bytes": 54347,
+      "sha256": "b95e54985820e03d5b57242a92eb61a9f8202692157e2f11000dbf3e6963027f"
+    },
+    "pdf": {
+      "name": "inside-chinese-government.pdf",
+      "bytes": 4484977,
+      "sha256": "adf8d104528532e13c1a713c0707f8e7418768539bcc6dd76bddfd1a2322bebe"
+    },
+    "word": {
+      "name": "inside-chinese-government.docx",
+      "bytes": 42500,
+      "sha256": "4ce43dc5af501783e492a13177c313cb3906a200e2e0c1a77eb8f5422dc1d382"
+    }
+  },
+  "assets": []
+}

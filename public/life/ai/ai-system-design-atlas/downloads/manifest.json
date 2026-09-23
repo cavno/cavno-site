@@ -1,0 +1,28 @@
+{
+  "version": 2,
+  "inputHash": "44eef44c528a8832878f05c9ca03a94125accad56ed198064a5210fce02d3839",
+  "title": "AI 顶层设计图谱｜五种系统哲学",
+  "route": "/life/ai/ai-system-design-atlas/",
+  "source": "https://cavno.org/life/ai/ai-system-design-atlas/",
+  "generatedAt": "2026-09-23T19:19:34.493Z",
+  "visuals": 0,
+  "missingSourceCharacters": 0,
+  "files": {
+    "markdown": {
+      "name": "ai-system-design-atlas.md",
+      "bytes": 9495,
+      "sha256": "a2a693bf064a3cf3b484e448c1f2f448d7226557e307a7e6de11da0624bd3d0e"
+    },
+    "pdf": {
+      "name": "ai-system-design-atlas.pdf",
+      "bytes": 922543,
+      "sha256": "77ed8bd7d985dd1b2e0761792a90d22c23caf2497855e6998e2acc1aeebd029f"
+    },
+    "word": {
+      "name": "ai-system-design-atlas.docx",
+      "bytes": 17661,
+      "sha256": "41aad73346b0f3bca4fb563480561b4654082d57a45cba68dc7487e3767705df"
+    }
+  },
+  "assets": []
+}

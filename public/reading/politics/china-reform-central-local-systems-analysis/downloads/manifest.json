@@ -1,0 +1,28 @@
+{
+  "version": 2,
+  "inputHash": "f09b31f8132adb90e254c361c1a97542cbdcaa8d14642fd511f133fc46793c27",
+  "title": "改革开放后的中央—地方政治经济演化",
+  "route": "/reading/politics/china-reform-central-local-systems-analysis/",
+  "source": "https://cavno.org/reading/politics/china-reform-central-local-systems-analysis/",
+  "generatedAt": "2026-09-23T19:24:00.947Z",
+  "visuals": 0,
+  "missingSourceCharacters": 0,
+  "files": {
+    "markdown": {
+      "name": "china-reform-central-local-systems-analysis.md",
+      "bytes": 9328,
+      "sha256": "5ea225b27e8577586a312d4f25ba4a37ca307933678865e6274a3acf7963f13b"
+    },
+    "pdf": {
+      "name": "china-reform-central-local-systems-analysis.pdf",
+      "bytes": 886915,
+      "sha256": "c5d364c75639c4737c3a14748ae2bfd5b24c08093630c3decf6efbd05c5d5cfd"
+    },
+    "word": {
+      "name": "china-reform-central-local-systems-analysis.docx",
+      "bytes": 16878,
+      "sha256": "fd39c514cb800644bdcffd7bf014cef068d994a1549ec1fbf7c3aac5605d39d7"
+    }
+  },
+  "assets": []
+}

@@ -1,0 +1,28 @@
+{
+  "version": 2,
+  "inputHash": "1db09064fd429a05ba5962630a418cecb337da950c4b85336a5f1da93930a066",
+  "title": "哲学思想脉络图",
+  "route": "/reading/philosophy/western-philosophy-lineage/",
+  "source": "https://cavno.org/reading/philosophy/western-philosophy-lineage/",
+  "generatedAt": "2026-09-23T19:23:44.446Z",
+  "visuals": 0,
+  "missingSourceCharacters": 0,
+  "files": {
+    "markdown": {
+      "name": "western-philosophy-lineage.md",
+      "bytes": 6391,
+      "sha256": "f8d1ebba2820224a0bbcaf486fc1a7117c9c4d487dd0c7ad157d9c1070ee03aa"
+    },
+    "pdf": {
+      "name": "western-philosophy-lineage.pdf",
+      "bytes": 1067356,
+      "sha256": "599d0f611b97b439549d997d91f31057b1ab4d6f7ca7ea9155dae00931efcebd"
+    },
+    "word": {
+      "name": "western-philosophy-lineage.docx",
+      "bytes": 14244,
+      "sha256": "c00cae9c51bf007313d2ea5ce844fbc06a5a6c506833266c0a411be77f00b0d1"
+    }
+  },
+  "assets": []
+}

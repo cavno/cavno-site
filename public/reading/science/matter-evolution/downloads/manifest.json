@@ -1,0 +1,49 @@
+{
+  "version": 2,
+  "inputHash": "1b4116e868ea38a361e0ddf948cb6788087ecb885a9ac31c5e01b5039d5d91e7",
+  "title": "物质演化史",
+  "route": "/reading/science/matter-evolution/",
+  "source": "https://cavno.org/reading/science/matter-evolution/",
+  "generatedAt": "2026-09-23T19:25:14.582Z",
+  "visuals": 4,
+  "missingSourceCharacters": 0,
+  "files": {
+    "markdown": {
+      "name": "matter-evolution.md",
+      "bytes": 35048,
+      "sha256": "fb812a2d38a9959cbfa2532387720e2ec4a32c177879433eb55cc6020d64a5be"
+    },
+    "pdf": {
+      "name": "matter-evolution.pdf",
+      "bytes": 19412133,
+      "sha256": "72278011917c58584aa54044d333d43fc8b8ddb475b8ba81262e2793be28eddc"
+    },
+    "word": {
+      "name": "matter-evolution.docx",
+      "bytes": 92667,
+      "sha256": "1d41a5aab3f04203653065c012427cb43b841275be491f854f19410da3036eaf"
+    }
+  },
+  "assets": [
+    {
+      "name": "assets/matter-evolution-visual-001.png",
+      "bytes": 31054,
+      "sha256": "2c5d18e4fb236833b611a0608419538e9f5745c7556fd1080e3d650fb044f664"
+    },
+    {
+      "name": "assets/matter-evolution-visual-002.png",
+      "bytes": 3585,
+      "sha256": "727678ba9c0767c5807b890b377f1b4053798d488a7bcf07113f4eccd938f4ee"
+    },
+    {
+      "name": "assets/matter-evolution-visual-003.png",
+      "bytes": 5709,
+      "sha256": "78bcf04d6bf9377475ba53a0d8ef8bc0bf894baf203b812de9f3e9cfdbb54a18"
+    },
+    {
+      "name": "assets/matter-evolution-visual-004.png",
+      "bytes": 22866,
+      "sha256": "bc2cff26ad667c3066f81bdfd5bccde127777cfc3e695be51069c1dd69d1e842"
+    }
+  ]
+}

@@ -1,0 +1,28 @@
+{
+  "version": 2,
+  "inputHash": "d67d1a821957cf831df626fa65cbaadafce82e10d976409a756c15bf5911541a",
+  "title": "老品资产管理台 ·",
+  "route": "/working/amazon/mature_asset_console/",
+  "source": "https://cavno.org/working/amazon/mature_asset_console/",
+  "generatedAt": "2026-09-23T19:26:33.111Z",
+  "visuals": 0,
+  "missingSourceCharacters": 0,
+  "files": {
+    "markdown": {
+      "name": "mature_asset_console.md",
+      "bytes": 4623,
+      "sha256": "a4770213b39c4c164de1ba1695d31f6aaf948aaf3d8c5a804d46605984f636a3"
+    },
+    "pdf": {
+      "name": "mature_asset_console.pdf",
+      "bytes": 1224689,
+      "sha256": "17bf768ad13925c0e7b7e858ef092aa819681416e240832e960fd8b89c18a06a"
+    },
+    "word": {
+      "name": "mature_asset_console.docx",
+      "bytes": 13381,
+      "sha256": "63195c11431b8667bcaf886750b01d4a4a5ddeb4f0c139ce67b67cb551c36017"
+    }
+  },
+  "assets": []
+}

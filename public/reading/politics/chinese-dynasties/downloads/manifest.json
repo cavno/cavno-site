@@ -1,0 +1,34 @@
+{
+  "version": 2,
+  "inputHash": "00b073d45fdafea26d8eb1608a0fc3116b3e68c9671c0e34b1cf7e6668fe9efc",
+  "title": "中国王朝发展史",
+  "route": "/reading/politics/chinese-dynasties/",
+  "source": "https://cavno.org/reading/politics/chinese-dynasties/",
+  "generatedAt": "2026-09-23T19:24:20.397Z",
+  "visuals": 1,
+  "missingSourceCharacters": 0,
+  "files": {
+    "markdown": {
+      "name": "chinese-dynasties.md",
+      "bytes": 35038,
+      "sha256": "d1225c35ee56228f55894810ef6516840def3d05be0915eaf807a4ba4a660acb"
+    },
+    "pdf": {
+      "name": "chinese-dynasties.pdf",
+      "bytes": 19204418,
+      "sha256": "6ba4ea2da443779700a8585efaf6156e600eb241cfba500a95fd0188d084fc86"
+    },
+    "word": {
+      "name": "chinese-dynasties.docx",
+      "bytes": 61986,
+      "sha256": "a31afc8afdea014a76cc74f97621b3b7df8c1bc9baf0a5ae1226b41c773c1ccf"
+    }
+  },
+  "assets": [
+    {
+      "name": "assets/chinese-dynasties-visual-001.png",
+      "bytes": 30445,
+      "sha256": "e1486aa63d535e1c537ad00e0de69ed6ce100caab7c3f73c240b10257d081fd5"
+    }
+  ]
+}

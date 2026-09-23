@@ -1,0 +1,54 @@
+{
+  "version": 2,
+  "inputHash": "01fff75dde5444f3262557b565ee556082e44ee24e330ad12c13fca87ebef455",
+  "title": "期权张力系统 · Options Tension Dynamics",
+  "route": "/investing/options/options_tension/",
+  "source": "https://cavno.org/investing/options/options_tension/",
+  "generatedAt": "2026-09-23T19:18:59.598Z",
+  "visuals": 5,
+  "missingSourceCharacters": 0,
+  "files": {
+    "markdown": {
+      "name": "options_tension.md",
+      "bytes": 3307,
+      "sha256": "588c382ae3510b655c609b249f12bd813cc81492c21879b7ccd55bf1c8322a82"
+    },
+    "pdf": {
+      "name": "options_tension.pdf",
+      "bytes": 800997,
+      "sha256": "fede2a950be298211888db52bb8f7f0098bd4617a15c78f3ba3eead978f78d64"
+    },
+    "word": {
+      "name": "options_tension.docx",
+      "bytes": 154871,
+      "sha256": "b8f21b0b51e2f828f7277f906ab8bc11541076da8efd325ca085fd96ffdd0cd0"
+    }
+  },
+  "assets": [
+    {
+      "name": "assets/options_tension-visual-001.png",
+      "bytes": 33233,
+      "sha256": "04e078eea8ec50320492ae55c44825fab9a0f2e2b1d187f02e60aab6a34740bd"
+    },
+    {
+      "name": "assets/options_tension-visual-002.png",
+      "bytes": 14850,
+      "sha256": "b79a4758c7d886c0f2222f7b22111b474ca11b8169b708298f6e9371d483400a"
+    },
+    {
+      "name": "assets/options_tension-visual-003.png",
+      "bytes": 11821,
+      "sha256": "180ca311d4406d41b6326bf7b7a64b31c6597792e512be5bd54f9fe72c3ebd24"
+    },
+    {
+      "name": "assets/options_tension-visual-004.png",
+      "bytes": 16157,
+      "sha256": "411cccd3bb71b6c9bd49a5900922050cfec306e28529f0eedf088b4dc19051a3"
+    },
+    {
+      "name": "assets/options_tension-visual-005.png",
+      "bytes": 67903,
+      "sha256": "8198833aff3b39feabd66629ee6a4ac45216222b800d837589acd1f2f5a9eb56"
+    }
+  ]
+}

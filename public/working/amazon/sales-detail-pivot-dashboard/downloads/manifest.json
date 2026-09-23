@@ -1,0 +1,28 @@
+{
+  "version": 2,
+  "inputHash": "520a5a1246a25a809f6073ada1536b25937151cc7eab051224b6e8d9e42f9f2b",
+  "title": "销售明细透视台 · 月度提成核算",
+  "route": "/working/amazon/sales-detail-pivot-dashboard/",
+  "source": "https://cavno.org/working/amazon/sales-detail-pivot-dashboard/",
+  "generatedAt": "2026-09-23T19:26:34.309Z",
+  "visuals": 0,
+  "missingSourceCharacters": 0,
+  "files": {
+    "markdown": {
+      "name": "sales-detail-pivot-dashboard.md",
+      "bytes": 552,
+      "sha256": "94c6d772c35a36f2a71bd07b6c926c40cbc6f1063b3ee968e9b70724f34404cb"
+    },
+    "pdf": {
+      "name": "sales-detail-pivot-dashboard.pdf",
+      "bytes": 294756,
+      "sha256": "9da1e8185a2ba43bc292d5f8b201bfdf9de1baa2deb4670c6c0aa03383e1a1a4"
+    },
+    "word": {
+      "name": "sales-detail-pivot-dashboard.docx",
+      "bytes": 10804,
+      "sha256": "1a3c7e70501399e3aab11449ae3cf43d8457121f1e20c1b54bc51b10224961c6"
+    }
+  },
+  "assets": []
+}

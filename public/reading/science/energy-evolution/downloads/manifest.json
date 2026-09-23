@@ -1,0 +1,34 @@
+{
+  "version": 2,
+  "inputHash": "995b07220c1b23c32f624e9d0962c8fa393e32e7028387b25ab76d3d5a9adaf9",
+  "title": "能量演化史",
+  "route": "/reading/science/energy-evolution/",
+  "source": "https://cavno.org/reading/science/energy-evolution/",
+  "generatedAt": "2026-09-23T19:24:45.252Z",
+  "visuals": 1,
+  "missingSourceCharacters": 0,
+  "files": {
+    "markdown": {
+      "name": "energy-evolution.md",
+      "bytes": 35244,
+      "sha256": "29e2b0f7aed7eb79d92fed28e5169d82562817f37afffcf8389fa4702241203c"
+    },
+    "pdf": {
+      "name": "energy-evolution.pdf",
+      "bytes": 20201120,
+      "sha256": "328a448e541694a9cf56448b4e5e2953324c0942a3128cddd541c5d1c3ea271a"
+    },
+    "word": {
+      "name": "energy-evolution.docx",
+      "bytes": 64740,
+      "sha256": "c3f726ee6c74f1b873af5942d1a8fb983b9af1db080ca36dd16dba553ee440bf"
+    }
+  },
+  "assets": [
+    {
+      "name": "assets/energy-evolution-visual-001.png",
+      "bytes": 33263,
+      "sha256": "d6dbaffc42277d33ee953238f9541921b0a5ef9ae0d240d8573f4db7d1da60bd"
+    }
+  ]
+}

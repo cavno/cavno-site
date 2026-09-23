@@ -1,0 +1,69 @@
+{
+  "version": 2,
+  "inputHash": "ac3b480ac71fa8d803fd5ad691a0ae9e6a7393a7ee7554d02af23e6a2d5538b4",
+  "title": "信用扩张场景全景图 · 明斯基脆弱度地形",
+  "route": "/investing/cases/creditexpansion/",
+  "source": "https://cavno.org/investing/cases/creditexpansion/",
+  "generatedAt": "2026-09-23T19:18:29.089Z",
+  "visuals": 8,
+  "missingSourceCharacters": 0,
+  "files": {
+    "markdown": {
+      "name": "creditexpansion.md",
+      "bytes": 24325,
+      "sha256": "a2072a567619f05be2e4919cb175f2ee441e73fb304643385f82526e8011722c"
+    },
+    "pdf": {
+      "name": "creditexpansion.pdf",
+      "bytes": 3225265,
+      "sha256": "b861ec7325b980b2380aa010449c6e975c7b2c67ea4bbb6ca8bfec4bffd40cc0"
+    },
+    "word": {
+      "name": "creditexpansion.docx",
+      "bytes": 1460467,
+      "sha256": "c41799f190e28027079b486a42dfc991b68b17c896bb78d156d0c5cd628ed420"
+    }
+  },
+  "assets": [
+    {
+      "name": "assets/creditexpansion-visual-001.png",
+      "bytes": 71383,
+      "sha256": "8a071fd4a3ea415e992a7526d2269850f40d7c1cd6f556fdf2e7a386e41e721a"
+    },
+    {
+      "name": "assets/creditexpansion-visual-002.png",
+      "bytes": 147723,
+      "sha256": "32f3b991af81e264e91bd99e07fcd6de98da2754505c1af6f5751fa5e257df97"
+    },
+    {
+      "name": "assets/creditexpansion-visual-003.png",
+      "bytes": 83230,
+      "sha256": "2cefe2cf8064cf7380a669ca0d8725f899d13b26eb6ef08d674eaf170a2c4f60"
+    },
+    {
+      "name": "assets/creditexpansion-visual-004.png",
+      "bytes": 240370,
+      "sha256": "70d67d96eae05e88b5774b70a13994794728ba3afa983bfa0274c15a10a81ba8"
+    },
+    {
+      "name": "assets/creditexpansion-visual-005.png",
+      "bytes": 259133,
+      "sha256": "ff2761cd5d3422940f9e751354929788bd1c03984d82b27353401f795934ecb7"
+    },
+    {
+      "name": "assets/creditexpansion-visual-006.png",
+      "bytes": 233525,
+      "sha256": "b04df53ae84465b5184885104121d72860a2e51028ecd0d7e196db72f9893d8f"
+    },
+    {
+      "name": "assets/creditexpansion-visual-007.png",
+      "bytes": 183993,
+      "sha256": "8c1d09e0e80dd7e95c843d5b8ba392adeebda3c4a43e47763a8081aac268d67b"
+    },
+    {
+      "name": "assets/creditexpansion-visual-008.png",
+      "bytes": 238371,
+      "sha256": "e1ce85dcfdbc0c6b02270fe0194aefe17c0d970ed8a6d331f63078ec081a3679"
+    }
+  ]
+}

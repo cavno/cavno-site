@@ -1,0 +1,34 @@
+{
+  "version": 2,
+  "inputHash": "29e3b56806d8c577199f926f517866d2cabf9aec661909c832fa8934f020ae75",
+  "title": "形式法则 · Laws of Form — 知识制品",
+  "route": "/reading/books/laws-of-form/",
+  "source": "https://cavno.org/reading/books/laws-of-form/",
+  "generatedAt": "2026-09-23T19:21:55.830Z",
+  "visuals": 1,
+  "missingSourceCharacters": 0,
+  "files": {
+    "markdown": {
+      "name": "laws-of-form.md",
+      "bytes": 34787,
+      "sha256": "9e40c3b1e964ef6146391ed3ebed86fe1a58d95e0f389e6eef1b0502ee6eb06a"
+    },
+    "pdf": {
+      "name": "laws-of-form.pdf",
+      "bytes": 2949354,
+      "sha256": "a95b8499cce05c6cf4e1adf35826a2fcc600974ff17c62f113c429f95e6c7d47"
+    },
+    "word": {
+      "name": "laws-of-form.docx",
+      "bytes": 151927,
+      "sha256": "594d34016deea170b4c3eddabbfc77c5565e33234e37dbda4d381809f7920221"
+    }
+  },
+  "assets": [
+    {
+      "name": "assets/laws-of-form-visual-001.png",
+      "bytes": 116818,
+      "sha256": "06eb20e628bb17af57388898092f114d863da8406be66f1497711edb61472d34"
+    }
+  ]
+}

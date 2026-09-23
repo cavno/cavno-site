@@ -1,0 +1,39 @@
+{
+  "version": 2,
+  "inputHash": "46c3d562dde197c931fd42d10dec0733ce7a2aad2b71a1a24774d4a0284da4cc",
+  "title": "人的大脑进化过程：系统论视角",
+  "route": "/reading/science/human-brain-evolution/",
+  "source": "https://cavno.org/reading/science/human-brain-evolution/",
+  "generatedAt": "2026-09-23T19:24:52.908Z",
+  "visuals": 2,
+  "missingSourceCharacters": 0,
+  "files": {
+    "markdown": {
+      "name": "human-brain-evolution.md",
+      "bytes": 10865,
+      "sha256": "1a9f095f9c9be4914b49015e075514ef0d42600faf1d0c09fed92f80791da671"
+    },
+    "pdf": {
+      "name": "human-brain-evolution.pdf",
+      "bytes": 3003414,
+      "sha256": "28184b30f5d22e5f9139144b0cf3f0fa65312b13e84a598aa724ce6642412404"
+    },
+    "word": {
+      "name": "human-brain-evolution.docx",
+      "bytes": 62340,
+      "sha256": "34a77cf08008c76123fda47e8840ac9028e0f89a16e97ebb8a7511c22cebcd64"
+    }
+  },
+  "assets": [
+    {
+      "name": "assets/human-brain-evolution-visual-001.png",
+      "bytes": 18401,
+      "sha256": "c3df0f382c70d6a97fe02a00254d4112f3e6eeb5ff6688b76eb9bf3d5a0338e4"
+    },
+    {
+      "name": "assets/human-brain-evolution-visual-002.png",
+      "bytes": 28568,
+      "sha256": "e105099d83b846ad0b7b2c01fd0cace0135d32ade1c816111c9bf41be8742560"
+    }
+  ]
+}

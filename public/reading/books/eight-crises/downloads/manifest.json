@@ -1,0 +1,34 @@
+{
+  "version": 2,
+  "inputHash": "877e25eb8a83540e036e90d21901cd72c040787fbee8c872a592ece09340f874",
+  "title": "八次危机：内在逻辑重构 · 温铁军《八次危机》全书观点结构化呈现",
+  "route": "/reading/books/eight-crises/",
+  "source": "https://cavno.org/reading/books/eight-crises/",
+  "generatedAt": "2026-09-23T19:21:31.144Z",
+  "visuals": 1,
+  "missingSourceCharacters": 0,
+  "files": {
+    "markdown": {
+      "name": "eight-crises.md",
+      "bytes": 67582,
+      "sha256": "3d56b4eb1b0511087d2f62d6b3e2724c97feffa2a07bd79a08322c94c7796762"
+    },
+    "pdf": {
+      "name": "eight-crises.pdf",
+      "bytes": 3659542,
+      "sha256": "eefda4134067080d5e485968e3d4ac5a9c45745c6bfb27c6a4cb4d47808ac954"
+    },
+    "word": {
+      "name": "eight-crises.docx",
+      "bytes": 203573,
+      "sha256": "84e8f9fc3b228ca173ca01a4e66960de85e4f48c7e2f14cb43c4f1e244613f72"
+    }
+  },
+  "assets": [
+    {
+      "name": "assets/eight-crises-visual-001.png",
+      "bytes": 158890,
+      "sha256": "24514c2b901fd2654eaa02331e6465c4cd832a65e011e49dfa5a06dd55287e91"
+    }
+  ]
+}

@@ -1,0 +1,28 @@
+{
+  "version": 2,
+  "inputHash": "af5bcd388f3d57e803fe2795498edd37d0f3d20759d224d1963919a2ff678dfa",
+  "title": "古希腊哲学：16组对立中的底层原理",
+  "route": "/reading/philosophy/greek-philosophy/",
+  "source": "https://cavno.org/reading/philosophy/greek-philosophy/",
+  "generatedAt": "2026-09-23T19:23:24.150Z",
+  "visuals": 0,
+  "missingSourceCharacters": 0,
+  "files": {
+    "markdown": {
+      "name": "greek-philosophy.md",
+      "bytes": 33827,
+      "sha256": "b0e69180ef0684e15f7294b0b7892bbb3225e10b7c635ef54a196c9b92e44ae4"
+    },
+    "pdf": {
+      "name": "greek-philosophy.pdf",
+      "bytes": 1608263,
+      "sha256": "43ca77075293bbfdb1a0f263f63fc74ff50994df2d617db5bf1ef51b4f897810"
+    },
+    "word": {
+      "name": "greek-philosophy.docx",
+      "bytes": 34610,
+      "sha256": "dc6ac151d97250285a507db412b344250d5f9d25cf439e6bc1bf20d1a354d8b4"
+    }
+  },
+  "assets": []
+}

@@ -1,0 +1,34 @@
+{
+  "version": 2,
+  "inputHash": "3faae782b9d984a6dade2e1007e2c58d66d6da75f1c81c4fe8ffd22a33fbc9a0",
+  "title": "你的 Claude Code 用对了吗？",
+  "route": "/life/ai/access-truth/",
+  "source": "https://cavno.org/life/ai/access-truth/",
+  "generatedAt": "2026-09-23T19:19:31.757Z",
+  "visuals": 1,
+  "missingSourceCharacters": 0,
+  "files": {
+    "markdown": {
+      "name": "access-truth.md",
+      "bytes": 25397,
+      "sha256": "15ba7d0751a90a77f3e54dd5cdb94e23c8686ed28de9f9b58f1efac5fa871e17"
+    },
+    "pdf": {
+      "name": "access-truth.pdf",
+      "bytes": 3948584,
+      "sha256": "c558f0eab23fcf881f32faefb2f651683b98efea8d940aacd59c97982ff5f8f6"
+    },
+    "word": {
+      "name": "access-truth.docx",
+      "bytes": 107237,
+      "sha256": "d237f5ec324510dce90ca7daf6507021e8f193d3f4c140911958a8943d03ac2a"
+    }
+  },
+  "assets": [
+    {
+      "name": "assets/access-truth-visual-001.png",
+      "bytes": 80534,
+      "sha256": "5c4027e545d12a852101301442b64c37e801da083413aca78cd136636d07917c"
+    }
+  ]
+}

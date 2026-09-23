@@ -1,0 +1,39 @@
+{
+  "version": 2,
+  "inputHash": "e371600e3b4089f47bb4358387a29cca03059e27ab0fd5aaebd28e2c76c7098f",
+  "title": "层叠的中国 · 一次滚动完成的论证",
+  "route": "/life/places/cengdie/",
+  "source": "https://cavno.org/life/places/cengdie/",
+  "generatedAt": "2026-09-23T19:20:41.444Z",
+  "visuals": 2,
+  "missingSourceCharacters": 0,
+  "files": {
+    "markdown": {
+      "name": "cengdie.md",
+      "bytes": 2017,
+      "sha256": "74808c54ac5895b4b032df8797509d5b69dc5e528af1a5d5d5f0c6c0722abfcd"
+    },
+    "pdf": {
+      "name": "cengdie.pdf",
+      "bytes": 242983,
+      "sha256": "3aeb37371d4eab155abfad06eee9e814db8edb1cd95c9b88af819cafe59fa483"
+    },
+    "word": {
+      "name": "cengdie.docx",
+      "bytes": 12818,
+      "sha256": "c800a1101d7ebcb05370f1c4172ec8bbc6b4bf42cc2ea734f171d8688321758a"
+    }
+  },
+  "assets": [
+    {
+      "name": "assets/cengdie-visual-001.png",
+      "bytes": 501,
+      "sha256": "a00b06f3285b74f2f7e30f346c653274d03729c433c9f8e07509784178daff74"
+    },
+    {
+      "name": "assets/cengdie-visual-002.png",
+      "bytes": 501,
+      "sha256": "a00b06f3285b74f2f7e30f346c653274d03729c433c9f8e07509784178daff74"
+    }
+  ]
+}

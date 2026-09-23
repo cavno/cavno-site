@@ -1,0 +1,28 @@
+{
+  "version": 2,
+  "inputHash": "6b17d861c1f7eb5c460209a3c060e59ab0cc9717616ca78f07eb4c9c825d851f",
+  "title": "计算广告 · 底层逻辑全景图 · eCPM = μ·ν 的演绎下行",
+  "route": "/working/amazon/computational_advertising_atlas/",
+  "source": "https://cavno.org/working/amazon/computational_advertising_atlas/",
+  "generatedAt": "2026-09-23T19:26:19.489Z",
+  "visuals": 0,
+  "missingSourceCharacters": 0,
+  "files": {
+    "markdown": {
+      "name": "computational_advertising_atlas.md",
+      "bytes": 2707,
+      "sha256": "363c8af86fba773509ba7ccb315ddf71fb315c61b8e56dd9e5982523ab5a015a"
+    },
+    "pdf": {
+      "name": "computational_advertising_atlas.pdf",
+      "bytes": 1059412,
+      "sha256": "4bd0c952aa7c2a4045cb100db79ead557ce6d9067c13e4cd908fbb677d0817c8"
+    },
+    "word": {
+      "name": "computational_advertising_atlas.docx",
+      "bytes": 12489,
+      "sha256": "9b58e76c99e5e19cd7a51223602e8b045244724e82c837f2c791c0c3631c3028"
+    }
+  },
+  "assets": []
+}

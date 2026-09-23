@@ -1,0 +1,34 @@
+{
+  "version": 2,
+  "inputHash": "3f805d7ff5c50c6fa2060dfd0f8f9212e5e321590b3a7ecb7a0b8b64e041f8c8",
+  "title": "Jane Street 操纵指数策略拆解 · SEBI 调查可视化",
+  "route": "/investing/cases/jane-street-viz/",
+  "source": "https://cavno.org/investing/cases/jane-street-viz/",
+  "generatedAt": "2026-09-23T19:18:31.674Z",
+  "visuals": 1,
+  "missingSourceCharacters": 0,
+  "files": {
+    "markdown": {
+      "name": "jane-street-viz.md",
+      "bytes": 2788,
+      "sha256": "8e78d2d6c9d04288355e5855529b38bf15417e55b9cc1fba9551b778777d0ae4"
+    },
+    "pdf": {
+      "name": "jane-street-viz.pdf",
+      "bytes": 298067,
+      "sha256": "54b514327f2cb35cb556338a677a442a0bcd25ce2b0add5df3f9b77c25e6a334"
+    },
+    "word": {
+      "name": "jane-street-viz.docx",
+      "bytes": 34307,
+      "sha256": "07d7cb2206157fdfbbc1d4951c087d48807ea753af405820ecfc176c3c54f775"
+    }
+  },
+  "assets": [
+    {
+      "name": "assets/jane-street-viz-visual-001.png",
+      "bytes": 21694,
+      "sha256": "75ed3062efd05bc010f9360cccdfcd23137c0c84ff522a2d30e952299134c4cb"
+    }
+  ]
+}

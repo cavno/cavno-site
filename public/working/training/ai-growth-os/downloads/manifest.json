@@ -1,0 +1,28 @@
+{
+  "version": 2,
+  "inputHash": "7a7af3539a174895ea08d1885e3b82fe234f9718dcde46c3f1091c2854160ea9",
+  "title": "企业培训 AI 增长操作系统",
+  "route": "/working/training/ai-growth-os/",
+  "source": "https://cavno.org/working/training/ai-growth-os/",
+  "generatedAt": "2026-09-23T19:26:53.961Z",
+  "visuals": 0,
+  "missingSourceCharacters": 0,
+  "files": {
+    "markdown": {
+      "name": "ai-growth-os.md",
+      "bytes": 2419,
+      "sha256": "3aaadd45f1356641d7dbc70a5205032696a247498de066a77c7f3c02e3b5b624"
+    },
+    "pdf": {
+      "name": "ai-growth-os.pdf",
+      "bytes": 616553,
+      "sha256": "e0b2ef0f2fb47d064234999e690582dad38b71bf8f00199ae5cf62f23d1ab5cd"
+    },
+    "word": {
+      "name": "ai-growth-os.docx",
+      "bytes": 12483,
+      "sha256": "a7597c0ec4bd61824ed1cbb309325ae66577b9de64a943a5c0945b159350bc11"
+    }
+  },
+  "assets": []
+}

@@ -1,0 +1,114 @@
+{
+  "version": 2,
+  "inputHash": "9b442ebf7529523051205db913e9f78bb913c46315b075558ab508fcb0fd7bd8",
+  "title": "约束与自由：一个系统论存在链的哲学考察",
+  "route": "/reading/philosophy/constraints-and-freedom/",
+  "source": "https://cavno.org/reading/philosophy/constraints-and-freedom/",
+  "generatedAt": "2026-09-23T19:23:09.152Z",
+  "visuals": 17,
+  "missingSourceCharacters": 0,
+  "files": {
+    "markdown": {
+      "name": "constraints-and-freedom.md",
+      "bytes": 20683,
+      "sha256": "d6a06cfffb397f802dc29b581d15ead889fcda8089c4265601f80a06f10884e6"
+    },
+    "pdf": {
+      "name": "constraints-and-freedom.pdf",
+      "bytes": 2232176,
+      "sha256": "7bc6491ee9c0a51603d07654c0548b8dd42ef516f1cc95945f969ad42ec1a87d"
+    },
+    "word": {
+      "name": "constraints-and-freedom.docx",
+      "bytes": 385327,
+      "sha256": "1455fb90d4960d490e22620d4aca8fd70482d95589473a679bbcd3a9de56c90d"
+    }
+  },
+  "assets": [
+    {
+      "name": "assets/constraints-and-freedom-visual-001.png",
+      "bytes": 10219,
+      "sha256": "df4f2c8ea2cb5a54bbf96f61678b7a73370a29f9dfa8c46fc3fb591a44deebbf"
+    },
+    {
+      "name": "assets/constraints-and-freedom-visual-002.png",
+      "bytes": 5766,
+      "sha256": "808368dd95943b0106520556a16c89f12036fa3071c42e0025d9dc90e02e58a3"
+    },
+    {
+      "name": "assets/constraints-and-freedom-visual-003.png",
+      "bytes": 15213,
+      "sha256": "f9d0d064042002cbb206bdd4dffdbaed9b768a28ff08802ae6ef3fafe4fc1ea9"
+    },
+    {
+      "name": "assets/constraints-and-freedom-visual-004.png",
+      "bytes": 17372,
+      "sha256": "9794de550dc2d8604c57bcffd5b5810fd49b775619045d2657d64acabf7d91d6"
+    },
+    {
+      "name": "assets/constraints-and-freedom-visual-005.png",
+      "bytes": 11342,
+      "sha256": "141b8b6e5a717016ae0e687b05c0643f34d72bd5d176aeb254f1accd16f97acc"
+    },
+    {
+      "name": "assets/constraints-and-freedom-visual-006.png",
+      "bytes": 14361,
+      "sha256": "a5a3afc5b574399be325ed4cfb4d1002e7b45e93cbcac7ac554e6d562d5e315f"
+    },
+    {
+      "name": "assets/constraints-and-freedom-visual-007.png",
+      "bytes": 13578,
+      "sha256": "d1c64185c292bfe94ff2858fc4fce635bb2ce410260a51826d4431dcd2a2870a"
+    },
+    {
+      "name": "assets/constraints-and-freedom-visual-008.png",
+      "bytes": 52732,
+      "sha256": "e5e8f6c6891dea8f4b8f6b7bdc4e8653db3df0b24beee6954719f5ebfff0e29b"
+    },
+    {
+      "name": "assets/constraints-and-freedom-visual-009.png",
+      "bytes": 17274,
+      "sha256": "7576e754ce4b2a415aa9b0a576a61e068db1f67f9561b50af4c90a24c6c3076e"
+    },
+    {
+      "name": "assets/constraints-and-freedom-visual-010.png",
+      "bytes": 29535,
+      "sha256": "3b0cbc72b07b1a0599df0b97359f990eb8aa4d6bc63b77f3c94a5ce66ad01d43"
+    },
+    {
+      "name": "assets/constraints-and-freedom-visual-011.png",
+      "bytes": 8039,
+      "sha256": "2dd3c461d9383b450e72a8b705b2e4c42b438309524efb1f50428565f25e272f"
+    },
+    {
+      "name": "assets/constraints-and-freedom-visual-012.png",
+      "bytes": 8333,
+      "sha256": "0beff9c1bab915600f11c8fc2172b962382f8d8b9e0a687648052f2dbb6260f7"
+    },
+    {
+      "name": "assets/constraints-and-freedom-visual-013.png",
+      "bytes": 12327,
+      "sha256": "1d4e3336b6f11a12382098dd115a543cade00ad74f022df09b066d51d403e358"
+    },
+    {
+      "name": "assets/constraints-and-freedom-visual-014.png",
+      "bytes": 63101,
+      "sha256": "c6731f3b985c736a8acf0ce5bd7ee8aff94c2203f836fcfc14d8ec666a99c5e0"
+    },
+    {
+      "name": "assets/constraints-and-freedom-visual-015.png",
+      "bytes": 16166,
+      "sha256": "7aedbcb9f78e9424a5ff431f56e33a30b7f050a93ddb981e4a2358d80471663b"
+    },
+    {
+      "name": "assets/constraints-and-freedom-visual-016.png",
+      "bytes": 63376,
+      "sha256": "9b9b22be6fc0e58b0c816ad4272fad701715388897c769a261e07fd26a08672a"
+    },
+    {
+      "name": "assets/constraints-and-freedom-visual-017.png",
+      "bytes": 14513,
+      "sha256": "af5df4015a5bac215aca6488d68e9ac22ec7d3f3595e8d34d6338610e03f521f"
+    }
+  ]
+}

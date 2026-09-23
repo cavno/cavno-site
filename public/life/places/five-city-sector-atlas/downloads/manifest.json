@@ -1,0 +1,149 @@
+{
+  "version": 2,
+  "inputHash": "65d109de72ec73a4302ca9f4915898210d22b58f928081ce43a6f3e97a28ab01",
+  "title": "深港澳·东京大阪五城枢纽扇区图谱",
+  "route": "/life/places/five-city-sector-atlas/",
+  "source": "https://cavno.org/life/places/five-city-sector-atlas/",
+  "generatedAt": "2026-09-23T19:21:01.176Z",
+  "visuals": 24,
+  "missingSourceCharacters": 0,
+  "files": {
+    "markdown": {
+      "name": "five-city-sector-atlas.md",
+      "bytes": 61943,
+      "sha256": "8554bb8323a818fa95ebcd0b8d85a7bd2cbb6b71d250a7c3e781aab32946271a"
+    },
+    "pdf": {
+      "name": "five-city-sector-atlas.pdf",
+      "bytes": 23480474,
+      "sha256": "b76ee7c6ad8f5bf1efad9900322bc887d4a1688e370b58d35e9327664e23b0f4"
+    },
+    "word": {
+      "name": "five-city-sector-atlas.docx",
+      "bytes": 5935818,
+      "sha256": "87732c86462a013d0c76eba81dc678cf1301dddc618f7de7aaf3876d6ebb76ab"
+    }
+  },
+  "assets": [
+    {
+      "name": "assets/five-city-sector-atlas-visual-001.png",
+      "bytes": 262397,
+      "sha256": "6feced2937a683ec3ca1dcabac3b2c7e163eaac9723d47ac516973a0a7f9f271"
+    },
+    {
+      "name": "assets/five-city-sector-atlas-visual-002.png",
+      "bytes": 224612,
+      "sha256": "c4cece1c63c16d256929e29909e524a4c6bd6aa73a55991ec1f87504d7ff31d1"
+    },
+    {
+      "name": "assets/five-city-sector-atlas-visual-003.png",
+      "bytes": 271515,
+      "sha256": "f7c185828e294e5611c9a2a1c092bd6d7be86f68eb820db06ddcfacaf8e0b005"
+    },
+    {
+      "name": "assets/five-city-sector-atlas-visual-004.png",
+      "bytes": 271919,
+      "sha256": "ccbcde593c50eca138aa16f8d7db9cb3a0742991ca7204baed413cfeb7bedeb1"
+    },
+    {
+      "name": "assets/five-city-sector-atlas-visual-005.png",
+      "bytes": 271954,
+      "sha256": "92c179e8dcceb67b8fe9770e09c557bc97759bd79aeb0a6ca1df846e87651ace"
+    },
+    {
+      "name": "assets/five-city-sector-atlas-visual-006.png",
+      "bytes": 261013,
+      "sha256": "f75b799871f3e4344f8d98e068e773773608b7ffe9da79abd64fbd8c3d8a5ec4"
+    },
+    {
+      "name": "assets/five-city-sector-atlas-visual-007.png",
+      "bytes": 251837,
+      "sha256": "94d3c958c215503311c2784fcbd5f2b623f09c110340deb6d2a14e02a5838314"
+    },
+    {
+      "name": "assets/five-city-sector-atlas-visual-008.png",
+      "bytes": 244764,
+      "sha256": "b96fe00d72dd65984b2ad75400096b681dc02b0649e4f3ac99c7e9885435dd52"
+    },
+    {
+      "name": "assets/five-city-sector-atlas-visual-009.png",
+      "bytes": 242140,
+      "sha256": "9d1193cb71a424e5a62a36ae334e2aff3a598099ee4da95af905e0412fdcaa8d"
+    },
+    {
+      "name": "assets/five-city-sector-atlas-visual-010.png",
+      "bytes": 270284,
+      "sha256": "a69ffa4d4c6854fa6854d263dce4c616590f61353c2fb50904a691f4fb2fcd8f"
+    },
+    {
+      "name": "assets/five-city-sector-atlas-visual-011.png",
+      "bytes": 210845,
+      "sha256": "79c7d82417eef598fc1d207c06ac97cd5070e598e53a67547b1b15e967aa782f"
+    },
+    {
+      "name": "assets/five-city-sector-atlas-visual-012.png",
+      "bytes": 214298,
+      "sha256": "7ccc27a65092fadd7020191414ea2f79fd2beccd823921bcf7f2fbc8bba4b8c1"
+    },
+    {
+      "name": "assets/five-city-sector-atlas-visual-013.png",
+      "bytes": 263492,
+      "sha256": "61f018df9f5d0854fa1e14b610d1b18b6716588edd1c3390a77f4cdde7444200"
+    },
+    {
+      "name": "assets/five-city-sector-atlas-visual-014.png",
+      "bytes": 241707,
+      "sha256": "a21a52d12e332b2bf2eb858971231583c9ff2974e0ffa4019825073bda95c834"
+    },
+    {
+      "name": "assets/five-city-sector-atlas-visual-015.png",
+      "bytes": 261963,
+      "sha256": "ade980df425e163342b81a974f67b4925c4c63ad7cc4c7f35e72e49e52dd25d1"
+    },
+    {
+      "name": "assets/five-city-sector-atlas-visual-016.png",
+      "bytes": 267192,
+      "sha256": "2c75ba400064855399e32047eca9d2afd833bc27fb1287aa38bb760d880109cb"
+    },
+    {
+      "name": "assets/five-city-sector-atlas-visual-017.png",
+      "bytes": 270126,
+      "sha256": "695c894777c459c2e335483a7f72e6dfeced04b64c6e256e6ba1339e75b4eff1"
+    },
+    {
+      "name": "assets/five-city-sector-atlas-visual-018.png",
+      "bytes": 272448,
+      "sha256": "a5742365263c79989dce1412557a9fb85528004cbd3019f79e6d3e1ecdf16c5b"
+    },
+    {
+      "name": "assets/five-city-sector-atlas-visual-019.png",
+      "bytes": 264748,
+      "sha256": "af43f934a443602704439680adf8530c8e26bc2029a879df0103877968a2065d"
+    },
+    {
+      "name": "assets/five-city-sector-atlas-visual-020.png",
+      "bytes": 257015,
+      "sha256": "15aefea39bc24b5a6039272af9d64bf271b5c5d04564103e6b7a77ce603f9420"
+    },
+    {
+      "name": "assets/five-city-sector-atlas-visual-021.png",
+      "bytes": 212702,
+      "sha256": "f73fe3a50def36d6021626a8572df9a113c922c0e44217d38f6eae8917aa0513"
+    },
+    {
+      "name": "assets/five-city-sector-atlas-visual-022.png",
+      "bytes": 243144,
+      "sha256": "aaa81f08662eaa3d2fb78daa656e04291f4f81b0374173dc372699f5994cf198"
+    },
+    {
+      "name": "assets/five-city-sector-atlas-visual-023.png",
+      "bytes": 210290,
+      "sha256": "a2821fe12bf3d930a83bc68c30981ebca62fe32ff3f1ff06a9cd759cbcd9469b"
+    },
+    {
+      "name": "assets/five-city-sector-atlas-visual-024.png",
+      "bytes": 198508,
+      "sha256": "3c72730a8ce922046c5f90400be77a65773197d113ec2b9a6398eec91a8304aa"
+    }
+  ]
+}

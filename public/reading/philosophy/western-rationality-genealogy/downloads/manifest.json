@@ -1,0 +1,28 @@
+{
+  "version": 2,
+  "inputHash": "f401923579cee0fa24c9460d2c4aecfdaec42be9ba9223259353590775cbc69c",
+  "title": "西方理性全谱系｜从闭合证明到多层反身适应",
+  "route": "/reading/philosophy/western-rationality-genealogy/",
+  "source": "https://cavno.org/reading/philosophy/western-rationality-genealogy/",
+  "generatedAt": "2026-09-23T19:23:56.277Z",
+  "visuals": 0,
+  "missingSourceCharacters": 0,
+  "files": {
+    "markdown": {
+      "name": "western-rationality-genealogy.md",
+      "bytes": 29876,
+      "sha256": "b09dab81ae347dc4a5785d2d22528963fcd8cb786e15a9d133b6254773b4c85f"
+    },
+    "pdf": {
+      "name": "western-rationality-genealogy.pdf",
+      "bytes": 2266159,
+      "sha256": "2642c3c98e42b0ed24519493c37341ae7c70bc3154f9962a1dc6d6674ec9e000"
+    },
+    "word": {
+      "name": "western-rationality-genealogy.docx",
+      "bytes": 31051,
+      "sha256": "aab7aad6963f12ebb13df6022e790712ee2df36ec7bd61b3d456a2660c77f5b4"
+    }
+  },
+  "assets": []
+}

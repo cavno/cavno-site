@@ -1,0 +1,28 @@
+{
+  "version": 2,
+  "inputHash": "a8c7141ddbbbd1f9b895f9ee0a99c5fef7577be11469b4aaf3e7d645a2f79c17",
+  "title": "四律 · 逻辑思脉地图（科普勒斯顿全谱系）Atlas Logoi",
+  "route": "/reading/philosophy/four-laws-logos-atlas/",
+  "source": "https://cavno.org/reading/philosophy/four-laws-logos-atlas/",
+  "generatedAt": "2026-09-23T19:23:15.023Z",
+  "visuals": 0,
+  "missingSourceCharacters": 0,
+  "files": {
+    "markdown": {
+      "name": "four-laws-logos-atlas.md",
+      "bytes": 14436,
+      "sha256": "0a24bbf6adbf3eb2bbeee0d76e462123ff545f996d605700a004013e1512a17e"
+    },
+    "pdf": {
+      "name": "four-laws-logos-atlas.pdf",
+      "bytes": 1570936,
+      "sha256": "9357289dbe8843fd22b5d30d10a1a3754d70a100df409c414097560fd79ae511"
+    },
+    "word": {
+      "name": "four-laws-logos-atlas.docx",
+      "bytes": 15824,
+      "sha256": "187e497061c4ba2924557c9102ca8737e26ede2a4f80d52b0dcdeec7db89494a"
+    }
+  },
+  "assets": []
+}

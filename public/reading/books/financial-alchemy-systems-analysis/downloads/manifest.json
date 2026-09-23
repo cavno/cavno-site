@@ -1,0 +1,54 @@
+{
+  "version": 2,
+  "inputHash": "40b6312a6381767073a9a8b1cdc9991bcc00730549be73ba8ab7078caf5af556",
+  "title": "《金融炼金术》：一个反身复杂系统的解剖",
+  "route": "/reading/books/financial-alchemy-systems-analysis/",
+  "source": "https://cavno.org/reading/books/financial-alchemy-systems-analysis/",
+  "generatedAt": "2026-09-23T19:21:42.107Z",
+  "visuals": 5,
+  "missingSourceCharacters": 0,
+  "files": {
+    "markdown": {
+      "name": "financial-alchemy-systems-analysis.md",
+      "bytes": 28193,
+      "sha256": "d5fed4d278a23c3e21a213e0da105f6fe9f8895e34b193f1fdbee1a8541480e4"
+    },
+    "pdf": {
+      "name": "financial-alchemy-systems-analysis.pdf",
+      "bytes": 3215487,
+      "sha256": "f80a8d1f1746bb5208d70798f8ed74679ad30f6fce8c5ecc45533169638b4225"
+    },
+    "word": {
+      "name": "financial-alchemy-systems-analysis.docx",
+      "bytes": 170026,
+      "sha256": "737ba4bce89c1444849900e042778cec0d4007245f7fa4a6b644ac3e591df6c7"
+    }
+  },
+  "assets": [
+    {
+      "name": "assets/financial-alchemy-systems-analysis-visual-001.png",
+      "bytes": 21701,
+      "sha256": "bb16f8d63bc1e7a06fdad8553b877bb71d663c97f2a41581df0f4dd683d65d44"
+    },
+    {
+      "name": "assets/financial-alchemy-systems-analysis-visual-002.png",
+      "bytes": 59142,
+      "sha256": "d65dc040dcc4774573d460d47be5bc77b2d80cf3dc8f2e8c05872b7e91036daf"
+    },
+    {
+      "name": "assets/financial-alchemy-systems-analysis-visual-003.png",
+      "bytes": 15525,
+      "sha256": "7712611e0ce9c4416bc8064bddef88e5678fd3efc7166de41a2cbd1b4869ad49"
+    },
+    {
+      "name": "assets/financial-alchemy-systems-analysis-visual-004.png",
+      "bytes": 29611,
+      "sha256": "b71eee924cf457be8a1a4a9eba92588d261e7bc600a7f3a3dfc6c440bded1994"
+    },
+    {
+      "name": "assets/financial-alchemy-systems-analysis-visual-005.png",
+      "bytes": 19246,
+      "sha256": "0139c54f14a114e40ac3a5563c96a0760ee762d4d9c91751f377bad55427ae93"
+    }
+  ]
+}

@@ -1,0 +1,44 @@
+{
+  "version": 2,
+  "inputHash": "979387e113b0793d2b696445572d06f8d7e9612d392a61bbae3c4a70d1097076",
+  "title": "债务危机 · 内在逻辑全景重构 —— 达利欧债务大周期模型",
+  "route": "/reading/books/debt-crises/",
+  "source": "https://cavno.org/reading/books/debt-crises/",
+  "generatedAt": "2026-09-23T19:21:24.117Z",
+  "visuals": 3,
+  "missingSourceCharacters": 0,
+  "files": {
+    "markdown": {
+      "name": "debt-crises.md",
+      "bytes": 93385,
+      "sha256": "4b0b57bc874f419276d8b6113f517bdf983c9163865f404cf5ddde0fd0e0abf1"
+    },
+    "pdf": {
+      "name": "debt-crises.pdf",
+      "bytes": 6540554,
+      "sha256": "4c9b8e796b280ed738a4dc5174912277241b0c371a616019e2f25b69bdd0c589"
+    },
+    "word": {
+      "name": "debt-crises.docx",
+      "bytes": 323098,
+      "sha256": "99568c05632e36acf711dd881cca5d6e7f7776900fa14f3380773c4f137c808c"
+    }
+  },
+  "assets": [
+    {
+      "name": "assets/debt-crises-visual-001.png",
+      "bytes": 102685,
+      "sha256": "ed76675593bb70e4a838e037685adace2602c620f56960d531761fe1d8e05eb5"
+    },
+    {
+      "name": "assets/debt-crises-visual-002.png",
+      "bytes": 64555,
+      "sha256": "544da190dd286b64b597e21f6e770ee4324ee1c29bfa8c68ac201fc1945ef360"
+    },
+    {
+      "name": "assets/debt-crises-visual-003.png",
+      "bytes": 88011,
+      "sha256": "3d05e66801964e9391590600b39bca3bafb1c8d8292f0b606b6d0d47a8fecc51"
+    }
+  ]
+}

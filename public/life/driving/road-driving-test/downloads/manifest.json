@@ -1,0 +1,28 @@
+{
+  "version": 2,
+  "inputHash": "cf99ac88d19f232328b7de43573a1fec89e822520f845011a9c2b055ae16ce0d",
+  "title": "水头考场科目三速查 · GA 1026 主干（自动挡）",
+  "route": "/life/driving/road-driving-test/",
+  "source": "https://cavno.org/life/driving/road-driving-test/",
+  "generatedAt": "2026-09-23T19:20:23.295Z",
+  "visuals": 0,
+  "missingSourceCharacters": 0,
+  "files": {
+    "markdown": {
+      "name": "road-driving-test.md",
+      "bytes": 4224,
+      "sha256": "3ae16c3f8aad8a634b9cb42c3530762d14a161587f285140009b703e8ee8cac4"
+    },
+    "pdf": {
+      "name": "road-driving-test.pdf",
+      "bytes": 464031,
+      "sha256": "3d5ad034ac3e02372fdd9104eccc42a14307ae95acb39ddd165a41cebf01608d"
+    },
+    "word": {
+      "name": "road-driving-test.docx",
+      "bytes": 13264,
+      "sha256": "8f6c88c9149e7e470af3ea4f41573cb777ff679e8f2b64b9eb820f26ee6ff9b1"
+    }
+  },
+  "assets": []
+}

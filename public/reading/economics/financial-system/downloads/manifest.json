@@ -1,0 +1,69 @@
+{
+  "version": 2,
+  "inputHash": "1e5fe275f2a96ae18b89221e447431d03f6638175ca38b7203f559addc7aa190",
+  "title": "金融系统发展史",
+  "route": "/reading/economics/financial-system/",
+  "source": "https://cavno.org/reading/economics/financial-system/",
+  "generatedAt": "2026-09-23T19:22:15.611Z",
+  "visuals": 8,
+  "missingSourceCharacters": 0,
+  "files": {
+    "markdown": {
+      "name": "financial-system.md",
+      "bytes": 32240,
+      "sha256": "6f3849260fa9759d3b1719fa0120c2c6c58c3debd62d45ad8158ad36585dfe76"
+    },
+    "pdf": {
+      "name": "financial-system.pdf",
+      "bytes": 22729054,
+      "sha256": "415127fc5942a8fce58e4bfd15ff69749dfc91cf3050f04f5a64fb81ff2bb077"
+    },
+    "word": {
+      "name": "financial-system.docx",
+      "bytes": 107620,
+      "sha256": "01015c598e37eb708498368669ff4266632be39ccefc065a009ba8fb10e02a88"
+    }
+  },
+  "assets": [
+    {
+      "name": "assets/financial-system-visual-001.png",
+      "bytes": 35149,
+      "sha256": "d98ed7dfc92bedd7fc7090c26ba7036b7b26c6ca85622ecc6dbafe514bb2c438"
+    },
+    {
+      "name": "assets/financial-system-visual-002.png",
+      "bytes": 5002,
+      "sha256": "1374739524bf12e5f2c74e4b09233847572942a646c26c2a9538620ae01953c6"
+    },
+    {
+      "name": "assets/financial-system-visual-003.png",
+      "bytes": 6156,
+      "sha256": "8173a35745f988701fe3c789c5fa6aed019288eee8f6ad8afd34d4cbd940de50"
+    },
+    {
+      "name": "assets/financial-system-visual-004.png",
+      "bytes": 3079,
+      "sha256": "a74fb0ae73b38af42c78eb4e2f8f604aeb4748fb8f162bb943832d15b3e215ff"
+    },
+    {
+      "name": "assets/financial-system-visual-005.png",
+      "bytes": 3354,
+      "sha256": "752f4161dc78deb79c3e02ac885be0cbe3cd868d0651d8ba6ed6bdb87d6e8f8b"
+    },
+    {
+      "name": "assets/financial-system-visual-006.png",
+      "bytes": 2243,
+      "sha256": "b9c3c64c0310292dc1357c0269ef08b49b4c3027e17da45d83d19e879a2c30b8"
+    },
+    {
+      "name": "assets/financial-system-visual-007.png",
+      "bytes": 6275,
+      "sha256": "37c297e88468efc911786e2d69a33d1684519469604f04e81dd42e4383933bd5"
+    },
+    {
+      "name": "assets/financial-system-visual-008.png",
+      "bytes": 19565,
+      "sha256": "5cba8f21ce044d69ef6f210fe18c2436a083433bc872def0ab00d9a0d170a169"
+    }
+  ]
+}

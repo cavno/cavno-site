@@ -1,0 +1,28 @@
+{
+  "version": 2,
+  "inputHash": "7cc03610bcf74235bd6c578c862e6b7eeb1f0af86b07337a14934396dc833261",
+  "title": "Vibecoder 技术名词入门词典",
+  "route": "/life/skills/tech-glossary/",
+  "source": "https://cavno.org/life/skills/tech-glossary/",
+  "generatedAt": "2026-09-23T19:21:11.637Z",
+  "visuals": 0,
+  "missingSourceCharacters": 1,
+  "files": {
+    "markdown": {
+      "name": "tech-glossary.md",
+      "bytes": 120470,
+      "sha256": "9cf73a9967f6a86b1e4f18fe82dffac99d15a0f82ef2da92e8e22b157d31a19f"
+    },
+    "pdf": {
+      "name": "tech-glossary.pdf",
+      "bytes": 2413305,
+      "sha256": "24febbf4cf6c366d612b95bae6cac8e720b72e3c83d31289bb08f9716712fc99"
+    },
+    "word": {
+      "name": "tech-glossary.docx",
+      "bytes": 95265,
+      "sha256": "3cf0d1a0e5a7ef0167f446f5348121a46e63815582908b56d60bc16440f0dc5b"
+    }
+  },
+  "assets": []
+}

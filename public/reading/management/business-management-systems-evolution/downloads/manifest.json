@@ -1,0 +1,39 @@
+{
+  "version": 2,
+  "inputHash": "e1313d3b131ca8111ec4172bb30600b9735ee5c52290e0f6e1cb0557635e096f",
+  "title": "企业经营管理学的发展演化：系统论视角",
+  "route": "/reading/management/business-management-systems-evolution/",
+  "source": "https://cavno.org/reading/management/business-management-systems-evolution/",
+  "generatedAt": "2026-09-23T19:22:35.710Z",
+  "visuals": 2,
+  "missingSourceCharacters": 0,
+  "files": {
+    "markdown": {
+      "name": "business-management-systems-evolution.md",
+      "bytes": 12747,
+      "sha256": "3c87be5cdbe7683bfdd3d63d2f4a8f9c98ee2806bb3678483fa0314d1fe71338"
+    },
+    "pdf": {
+      "name": "business-management-systems-evolution.pdf",
+      "bytes": 3679031,
+      "sha256": "63cf10f128dc6b24a7ca4ddd93953a219c17534fe630cdc9032853afb58c415f"
+    },
+    "word": {
+      "name": "business-management-systems-evolution.docx",
+      "bytes": 60898,
+      "sha256": "6f65c8cb419bea5d4aa7ebf387d3cea3afd2acf0de3cd4095d66f6a2b3ca07db"
+    }
+  },
+  "assets": [
+    {
+      "name": "assets/business-management-systems-evolution-visual-001.png",
+      "bytes": 20787,
+      "sha256": "c240d583de4f255eb975307719d08a2ff9ee20468fe4e32d2bc3c4ae01d73c5c"
+    },
+    {
+      "name": "assets/business-management-systems-evolution-visual-002.png",
+      "bytes": 21597,
+      "sha256": "b878067b9d69302f77d92f936a6a2583cf1fb5e60f6eb2b285e95a4ad7028f33"
+    }
+  ]
+}

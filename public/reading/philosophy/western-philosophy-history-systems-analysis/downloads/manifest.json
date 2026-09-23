@@ -1,0 +1,104 @@
+{
+  "version": 2,
+  "inputHash": "b8b86b0d844f18acd72e36f424b1aaf119b3135b096564f809b08dede87de673",
+  "title": "西方哲学史的系统论分析",
+  "route": "/reading/philosophy/western-philosophy-history-systems-analysis/",
+  "source": "https://cavno.org/reading/philosophy/western-philosophy-history-systems-analysis/",
+  "generatedAt": "2026-09-23T19:23:46.766Z",
+  "visuals": 15,
+  "missingSourceCharacters": 0,
+  "files": {
+    "markdown": {
+      "name": "western-philosophy-history-systems-analysis.md",
+      "bytes": 42851,
+      "sha256": "69f025c48b8063aa27485c02fbdddbda7a51b192fecc5b8eb5d8201f7af168d5"
+    },
+    "pdf": {
+      "name": "western-philosophy-history-systems-analysis.pdf",
+      "bytes": 3141582,
+      "sha256": "38cbfbb78c55b8c3ca6226b7259ab608668fa776ac510c644aa216d64864d594"
+    },
+    "word": {
+      "name": "western-philosophy-history-systems-analysis.docx",
+      "bytes": 448753,
+      "sha256": "01dc7b4964e930134c36143293ac50ce76e6934bcac8cbd2664725e00d590c4a"
+    }
+  },
+  "assets": [
+    {
+      "name": "assets/western-philosophy-history-systems-analysis-visual-001.png",
+      "bytes": 26144,
+      "sha256": "7c8d0323385f61c70cd3daf9ad5252f8f4981537807e20e80ea23c410c2a9571"
+    },
+    {
+      "name": "assets/western-philosophy-history-systems-analysis-visual-002.png",
+      "bytes": 34620,
+      "sha256": "ba38d7a62693916a7046f8c1e9ecd11be4a0ba832b032acd9aefaf1efda653cc"
+    },
+    {
+      "name": "assets/western-philosophy-history-systems-analysis-visual-003.png",
+      "bytes": 40918,
+      "sha256": "37a37710c7e49710c750cde3681d2f0cb2947cfb2310594089c7c96fe9aca767"
+    },
+    {
+      "name": "assets/western-philosophy-history-systems-analysis-visual-004.png",
+      "bytes": 23301,
+      "sha256": "82b8ed2acab73336c63249a0943a0bdea12c32ed0bea656840bd437dae4f9c3e"
+    },
+    {
+      "name": "assets/western-philosophy-history-systems-analysis-visual-005.png",
+      "bytes": 9465,
+      "sha256": "97800c7d1af96b618aa13ce060ed35cf3ef35df8759fd5ec4143ece2d6ed4bc6"
+    },
+    {
+      "name": "assets/western-philosophy-history-systems-analysis-visual-006.png",
+      "bytes": 9088,
+      "sha256": "23229054b38c248c6fc98b885c23e433692c234ed5c7f1e55a30bffad7485dcb"
+    },
+    {
+      "name": "assets/western-philosophy-history-systems-analysis-visual-007.png",
+      "bytes": 14370,
+      "sha256": "65f57d854e3281b00dfbb84e1a1eb64d7ad615abfde1eca3a353363544a0acfb"
+    },
+    {
+      "name": "assets/western-philosophy-history-systems-analysis-visual-008.png",
+      "bytes": 121032,
+      "sha256": "94fe3b79693a0449dcf1160429badd0e9586aabf0edc77adc9a9c843e113eae8"
+    },
+    {
+      "name": "assets/western-philosophy-history-systems-analysis-visual-009.png",
+      "bytes": 15692,
+      "sha256": "609d8264fcb4af9f9cff2544e5d0b9cda97c9829b5692d179e27ca914151ead2"
+    },
+    {
+      "name": "assets/western-philosophy-history-systems-analysis-visual-010.png",
+      "bytes": 15676,
+      "sha256": "54df11b9da636792c6dcca1a2f206ec3e7f55ae6976a1838944f361ac2f30672"
+    },
+    {
+      "name": "assets/western-philosophy-history-systems-analysis-visual-011.png",
+      "bytes": 13350,
+      "sha256": "c4fde77758c657b0aae32940c079d1a5d324767625c79bb87ea2b384799987a1"
+    },
+    {
+      "name": "assets/western-philosophy-history-systems-analysis-visual-012.png",
+      "bytes": 34939,
+      "sha256": "955f3dee905fcf6aff2e8be2d5ae96251b0093f96951d7c0446e929918018c34"
+    },
+    {
+      "name": "assets/western-philosophy-history-systems-analysis-visual-013.png",
+      "bytes": 17857,
+      "sha256": "0d42ed14f9e0b863ffde19c39854df56b3fa43c00da12adde5f4a71acefb77aa"
+    },
+    {
+      "name": "assets/western-philosophy-history-systems-analysis-visual-014.png",
+      "bytes": 40267,
+      "sha256": "245fe9450307c75ebfa05c09f31b1ba9e2c2d907f1af9094a203f368f8c3efcb"
+    },
+    {
+      "name": "assets/western-philosophy-history-systems-analysis-visual-015.png",
+      "bytes": 19189,
+      "sha256": "65604f06a3723cca1d8e89efea58ae07357d21abb6b51698545a4a6619be2e17"
+    }
+  ]
+}

@@ -1,0 +1,28 @@
+{
+  "version": 2,
+  "inputHash": "bbc97b90ad05bb72da4ab824561f0c07a5dd3ebc0b65da033178d3da0ee8eb6b",
+  "title": "亚马逊推广底层逻辑全景图 · 恒等式 / 模型 / 经验常数 × 出价杆 / 结构杆",
+  "route": "/working/amazon/amazon_ppc_deep_structure_atlas/",
+  "source": "https://cavno.org/working/amazon/amazon_ppc_deep_structure_atlas/",
+  "generatedAt": "2026-09-23T19:26:16.147Z",
+  "visuals": 0,
+  "missingSourceCharacters": 0,
+  "files": {
+    "markdown": {
+      "name": "amazon_ppc_deep_structure_atlas.md",
+      "bytes": 2532,
+      "sha256": "1eb893906b0bfb94cf4082eec89c47ca9d4a7339084ee8cb6f6cfea4df75da99"
+    },
+    "pdf": {
+      "name": "amazon_ppc_deep_structure_atlas.pdf",
+      "bytes": 970646,
+      "sha256": "05466a703f959e0cd28d0815f5ec9a342fc916abd36310bff1bf69cb072ccdad"
+    },
+    "word": {
+      "name": "amazon_ppc_deep_structure_atlas.docx",
+      "bytes": 12453,
+      "sha256": "30a41ddf27ffbb510656b2a33a5b100f1b6953aeb7b0bc21acc7872baa2924bb"
+    }
+  },
+  "assets": []
+}

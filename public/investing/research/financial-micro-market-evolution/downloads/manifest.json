@@ -1,0 +1,34 @@
+{
+  "version": 2,
+  "inputHash": "4b93a37876680b2980939ec3876c3f1f7e618c756fd45c1e8e2d0780b745a631",
+  "title": "金融微观市场行为演化史",
+  "route": "/investing/research/financial-micro-market-evolution/",
+  "source": "https://cavno.org/investing/research/financial-micro-market-evolution/",
+  "generatedAt": "2026-09-23T19:19:17.724Z",
+  "visuals": 1,
+  "missingSourceCharacters": 0,
+  "files": {
+    "markdown": {
+      "name": "financial-micro-market-evolution.md",
+      "bytes": 42449,
+      "sha256": "7f75af3dc9d268436f02203b270f0ec5c3b0282c74098f3df42373b8a759550c"
+    },
+    "pdf": {
+      "name": "financial-micro-market-evolution.pdf",
+      "bytes": 23287388,
+      "sha256": "afa2bb9295cfb5666aafb57f23dab863ea4b1fd5e8cb0db3e0b58081ddea541c"
+    },
+    "word": {
+      "name": "financial-micro-market-evolution.docx",
+      "bytes": 77272,
+      "sha256": "bf0e6bd2d4aac67108ec481ccb0a76a58727a05fd6792bb728105dfe3a839325"
+    }
+  },
+  "assets": [
+    {
+      "name": "assets/financial-micro-market-evolution-visual-001.png",
+      "bytes": 38419,
+      "sha256": "0a76e61084b836d84d3ceb43fee8ae2c0079c9820267102232cb3d614dec35ff"
+    }
+  ]
+}

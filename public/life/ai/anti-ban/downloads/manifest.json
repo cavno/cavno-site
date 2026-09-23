@@ -1,0 +1,28 @@
+{
+  "version": 2,
+  "inputHash": "6d932ac2905ee3b3f4eac75337ab168d5e2bc72132ea1134fbcec06b433b372f",
+  "title": "不养号也不被封 · 四个干净",
+  "route": "/life/ai/anti-ban/",
+  "source": "https://cavno.org/life/ai/anti-ban/",
+  "generatedAt": "2026-09-23T19:19:35.520Z",
+  "visuals": 0,
+  "missingSourceCharacters": 0,
+  "files": {
+    "markdown": {
+      "name": "anti-ban.md",
+      "bytes": 7087,
+      "sha256": "4e164a3db70cc82a142a6f88886e68a9559774f932e30ac0bf877ed75adac0ae"
+    },
+    "pdf": {
+      "name": "anti-ban.pdf",
+      "bytes": 711213,
+      "sha256": "76510600ced97480f426e014b0ffd77e57f61e9a5750ffd70de86f2100ed974b"
+    },
+    "word": {
+      "name": "anti-ban.docx",
+      "bytes": 15819,
+      "sha256": "30457ec7a18f48554def7fa57cd8541c43d7fd1da20ca3c36e6c29bae599dbfa"
+    }
+  },
+  "assets": []
+}

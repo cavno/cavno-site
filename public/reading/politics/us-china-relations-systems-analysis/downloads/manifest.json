@@ -1,0 +1,28 @@
+{
+  "version": 2,
+  "inputHash": "3570cb7f9466d844057ae9c0815c2118787f178dc1a815f84847a4e4fd1d55e9",
+  "title": "中美关系演化的系统论分析",
+  "route": "/reading/politics/us-china-relations-systems-analysis/",
+  "source": "https://cavno.org/reading/politics/us-china-relations-systems-analysis/",
+  "generatedAt": "2026-09-23T19:24:24.898Z",
+  "visuals": 0,
+  "missingSourceCharacters": 0,
+  "files": {
+    "markdown": {
+      "name": "us-china-relations-systems-analysis.md",
+      "bytes": 9488,
+      "sha256": "d79419723faae01125a6c44020ec258f7e7859a64813a24e238e4b6181d90a18"
+    },
+    "pdf": {
+      "name": "us-china-relations-systems-analysis.pdf",
+      "bytes": 898392,
+      "sha256": "b8cba14386aa4c00062828eedd88c3cbc3a483cd0edbe2b549a934813430158d"
+    },
+    "word": {
+      "name": "us-china-relations-systems-analysis.docx",
+      "bytes": 17132,
+      "sha256": "e8246e9de0620494f30faec0a0ffa0ef16c50950b93f716f1e5599e69344b9ba"
+    }
+  },
+  "assets": []
+}

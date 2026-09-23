@@ -1,0 +1,34 @@
+{
+  "version": 2,
+  "inputHash": "a1b0ff7ed7cb0e0f2ce8f7daf500041b4ddd19d4cdd3cd159ce18ef7bed84e7e",
+  "title": "宏观经济学演化史",
+  "route": "/reading/economics/macroeconomics-evolution/",
+  "source": "https://cavno.org/reading/economics/macroeconomics-evolution/",
+  "generatedAt": "2026-09-23T19:22:27.358Z",
+  "visuals": 1,
+  "missingSourceCharacters": 0,
+  "files": {
+    "markdown": {
+      "name": "macroeconomics-evolution.md",
+      "bytes": 50324,
+      "sha256": "98b43e9085e83d6dda43518f46617a4c06f92334349ee30bafeed77578e2e7d0"
+    },
+    "pdf": {
+      "name": "macroeconomics-evolution.pdf",
+      "bytes": 22893273,
+      "sha256": "cdfff24e0d0932a16d9347e342cfed74bc870d14728feb5cfc77a966b6cdec2e"
+    },
+    "word": {
+      "name": "macroeconomics-evolution.docx",
+      "bytes": 84912,
+      "sha256": "242dd836d1531a3b44fa5ebcd9b166bb24457a21a52521d7c4abd1fd93cd4bde"
+    }
+  },
+  "assets": [
+    {
+      "name": "assets/macroeconomics-evolution-visual-001.png",
+      "bytes": 42939,
+      "sha256": "f482b061349b7b537b3a0fa1ae7e41dd532b1e254bf8d154477f80f285224639"
+    }
+  ]
+}

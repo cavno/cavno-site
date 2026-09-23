@@ -1,0 +1,344 @@
+{
+  "version": 2,
+  "inputHash": "b31bff65b88a157b8c8bfbc2bc3b246433f312d6919ce0e52e267e696eba99c6",
+  "title": "基督教两千年思想演化史的系统论重构",
+  "route": "/reading/theology/christian-thought-two-millennia/",
+  "source": "https://cavno.org/reading/theology/christian-thought-two-millennia/",
+  "generatedAt": "2026-09-23T19:25:42.587Z",
+  "visuals": 63,
+  "missingSourceCharacters": 0,
+  "files": {
+    "markdown": {
+      "name": "christian-thought-two-millennia.md",
+      "bytes": 66899,
+      "sha256": "c9ae7e761fa2ac9f3438962bcdb81258eb2b3b812d204046c42fb8a8fd79d1da"
+    },
+    "pdf": {
+      "name": "christian-thought-two-millennia.pdf",
+      "bytes": 4150749,
+      "sha256": "e4f165731f8fecd49ffa3db21a3d8019a190235eeef3676357aa84252ab92dc1"
+    },
+    "word": {
+      "name": "christian-thought-two-millennia.docx",
+      "bytes": 1236815,
+      "sha256": "fca6d5d5950d44514fb74494c4f87a9239764d435ad183d0c4c455543c228cb2"
+    }
+  },
+  "assets": [
+    {
+      "name": "assets/christian-thought-two-millennia-visual-001.png",
+      "bytes": 84481,
+      "sha256": "b44dac6171dcd892db33e4ffa4d929d00180b99c2dab7f4ecc7c3ac5acb975f6"
+    },
+    {
+      "name": "assets/christian-thought-two-millennia-visual-002.png",
+      "bytes": 10233,
+      "sha256": "e3c75801bc050dbf0efca15e4ce70a3725b625d6d8d87291e8ae2c8a51952700"
+    },
+    {
+      "name": "assets/christian-thought-two-millennia-visual-003.png",
+      "bytes": 13362,
+      "sha256": "430db60d854c89369922942e1e6955328f7c179f2ceca83c181318fa7e6498b8"
+    },
+    {
+      "name": "assets/christian-thought-two-millennia-visual-004.png",
+      "bytes": 8149,
+      "sha256": "8919206bdfcf24bca26ae229e55b08de6fcb5f122f8272714a3425e50d91c84b"
+    },
+    {
+      "name": "assets/christian-thought-two-millennia-visual-005.png",
+      "bytes": 8480,
+      "sha256": "9e05006d8f0997375bdd8195ea74aae6fbe819e1c1e0c5aaff75415c60a4f37b"
+    },
+    {
+      "name": "assets/christian-thought-two-millennia-visual-006.png",
+      "bytes": 6334,
+      "sha256": "df3caa0e1aaff6dfe0ac780e9dd71f6735e69ee535c557985dab2e155e2b19a9"
+    },
+    {
+      "name": "assets/christian-thought-two-millennia-visual-007.png",
+      "bytes": 14840,
+      "sha256": "214deb2c792a860f14e5efa9ac799512a2327c094e015da2e31f726b3252cce9"
+    },
+    {
+      "name": "assets/christian-thought-two-millennia-visual-008.png",
+      "bytes": 7506,
+      "sha256": "228d0d569be83fa1eea4ec0476ceeea98b43668989a18c6514ffbd3025168ed0"
+    },
+    {
+      "name": "assets/christian-thought-two-millennia-visual-009.png",
+      "bytes": 8664,
+      "sha256": "68d831201e6e664f374dbcdce31d6248dfa49323f84b81b1b1b2983a8c0b97d5"
+    },
+    {
+      "name": "assets/christian-thought-two-millennia-visual-010.png",
+      "bytes": 8764,
+      "sha256": "7cd32fe074450c53c6a394783506e1f8d4e13161689301b54a29079c13e6dbb8"
+    },
+    {
+      "name": "assets/christian-thought-two-millennia-visual-011.png",
+      "bytes": 13847,
+      "sha256": "d8004aa3c08a1b7c1345bd569624d83b01ea97e531fbf9a6bafe23539ebb4e01"
+    },
+    {
+      "name": "assets/christian-thought-two-millennia-visual-012.png",
+      "bytes": 7813,
+      "sha256": "32f620a34afd0f10b4f8b30d9d38b6dc67d8cd5091abf30fcea61a77486a3f51"
+    },
+    {
+      "name": "assets/christian-thought-two-millennia-visual-013.png",
+      "bytes": 8255,
+      "sha256": "db16ddfd86aa7eecbfe8e7c0b43d42a06e0cb751bc5a7c1c6e877cfc365290a7"
+    },
+    {
+      "name": "assets/christian-thought-two-millennia-visual-014.png",
+      "bytes": 7961,
+      "sha256": "648167660aaf1c1a2a44ffbae8e6a23ef66912d17bbc72dae3381209e40d3a5d"
+    },
+    {
+      "name": "assets/christian-thought-two-millennia-visual-015.png",
+      "bytes": 8771,
+      "sha256": "67210b1128d7aea16843d693f3fbe33c3be5e911af7392a2479dd35661b42d3b"
+    },
+    {
+      "name": "assets/christian-thought-two-millennia-visual-016.png",
+      "bytes": 7872,
+      "sha256": "980253d0aad8f34e7eb4d595293aac2a5c3a1d67f268c218eca28188bd4a5f24"
+    },
+    {
+      "name": "assets/christian-thought-two-millennia-visual-017.png",
+      "bytes": 9747,
+      "sha256": "3d0b900c5ee62a69bf91957d59bb3d5f9cb684caf0d340a5d30e6e9e53c66997"
+    },
+    {
+      "name": "assets/christian-thought-two-millennia-visual-018.png",
+      "bytes": 7090,
+      "sha256": "3bc71e09de2ed65437abadc70774decca29776ff14d8b1f858a477ae41e110a9"
+    },
+    {
+      "name": "assets/christian-thought-two-millennia-visual-019.png",
+      "bytes": 10346,
+      "sha256": "9d240abe9106b5c3d65be245825ec68f1e56eb5909b018b112345914e2744a95"
+    },
+    {
+      "name": "assets/christian-thought-two-millennia-visual-020.png",
+      "bytes": 6752,
+      "sha256": "1b3653299deab0d79dc3e78693706cadf18bfc35ce0ca5dca6ca41f7b7eaecbc"
+    },
+    {
+      "name": "assets/christian-thought-two-millennia-visual-021.png",
+      "bytes": 10737,
+      "sha256": "cdbd9a90e72ccfac1a8c97ab7c1c42b4d583b7a4274d7ce498fc164bb4c282b2"
+    },
+    {
+      "name": "assets/christian-thought-two-millennia-visual-022.png",
+      "bytes": 10735,
+      "sha256": "c925e933f067de3cd3c76b0043071f768867d3bc4cf098e7101f13506d5de857"
+    },
+    {
+      "name": "assets/christian-thought-two-millennia-visual-023.png",
+      "bytes": 13079,
+      "sha256": "135feb3d874e2e3f30b89625627361cb8088fed944262b01c4989a9696e54e9e"
+    },
+    {
+      "name": "assets/christian-thought-two-millennia-visual-024.png",
+      "bytes": 15404,
+      "sha256": "f2802b8c3c7f6861ad3d540866cad0c8eac47785d669f63d6b6dcf0f37ca084e"
+    },
+    {
+      "name": "assets/christian-thought-two-millennia-visual-025.png",
+      "bytes": 14409,
+      "sha256": "45da00416b9fb11430d1b235bfb6fac6b7a111b4863b50a1140dc73bc5d8c227"
+    },
+    {
+      "name": "assets/christian-thought-two-millennia-visual-026.png",
+      "bytes": 16313,
+      "sha256": "ad6c6dce86de1bf846efdafb9147bdf967b45211163c1bb5ad24a7cc40a5e936"
+    },
+    {
+      "name": "assets/christian-thought-two-millennia-visual-027.png",
+      "bytes": 10612,
+      "sha256": "25577adab9f3bb3fb39992560c2421c6704ccce768ea04094c9b9320e26681a9"
+    },
+    {
+      "name": "assets/christian-thought-two-millennia-visual-028.png",
+      "bytes": 11081,
+      "sha256": "aa580b4ba6371fb28b2c6f309610b07d3690d5c8e89464ff394fa97850382fb7"
+    },
+    {
+      "name": "assets/christian-thought-two-millennia-visual-029.png",
+      "bytes": 10170,
+      "sha256": "126db97ec25859c16fa59a22cd64ccf6228ce2485272491ad5088953a63df064"
+    },
+    {
+      "name": "assets/christian-thought-two-millennia-visual-030.png",
+      "bytes": 7509,
+      "sha256": "224105a54bd860398633388b44345ff537158aebca52c414a61659dbf058ffd7"
+    },
+    {
+      "name": "assets/christian-thought-two-millennia-visual-031.png",
+      "bytes": 14343,
+      "sha256": "ad28589725d9d1f68f952acb4b62caf4192aa0f92413653628e37bd0c3df8eac"
+    },
+    {
+      "name": "assets/christian-thought-two-millennia-visual-032.png",
+      "bytes": 9167,
+      "sha256": "70fec87258b68f49606d861e375e163c5eab223aac99825706a64b6caba73b3c"
+    },
+    {
+      "name": "assets/christian-thought-two-millennia-visual-033.png",
+      "bytes": 11315,
+      "sha256": "08efb406140d222b6d9b4933563f6157fc53941255e9f3f6e6ff71f6ffb15ebc"
+    },
+    {
+      "name": "assets/christian-thought-two-millennia-visual-034.png",
+      "bytes": 9302,
+      "sha256": "6dd297361babb36a6b31eb74ca9818d23048015dd027be4508a2e6f7b8240606"
+    },
+    {
+      "name": "assets/christian-thought-two-millennia-visual-035.png",
+      "bytes": 8382,
+      "sha256": "ed6d853e34a4c2e6678b69dbe0800529f409b280c5f8fca1f70aed478b4087ce"
+    },
+    {
+      "name": "assets/christian-thought-two-millennia-visual-036.png",
+      "bytes": 6966,
+      "sha256": "fe9941d34850a7c7a9d9afea0b9b5aca9c53b5d1d9c477194c041c239e96354c"
+    },
+    {
+      "name": "assets/christian-thought-two-millennia-visual-037.png",
+      "bytes": 9285,
+      "sha256": "198b143d12d183dc3cae3e0965c8fda516ba6b52a35164ed58a3cf858ab86643"
+    },
+    {
+      "name": "assets/christian-thought-two-millennia-visual-038.png",
+      "bytes": 10698,
+      "sha256": "bf2f2682237a4234aba2c978335556831b47c515e68b2f436ddad5f12637df3f"
+    },
+    {
+      "name": "assets/christian-thought-two-millennia-visual-039.png",
+      "bytes": 8617,
+      "sha256": "84785b9e18a9f0f06904fd649fed5a3b02b93ca1e12ed7c00dfe00eba20cea16"
+    },
+    {
+      "name": "assets/christian-thought-two-millennia-visual-040.png",
+      "bytes": 17735,
+      "sha256": "f028108066a242f1d6f038b2ec4213e0f62335273b44c517c57684fcda075eb9"
+    },
+    {
+      "name": "assets/christian-thought-two-millennia-visual-041.png",
+      "bytes": 6170,
+      "sha256": "6cca6f4a2e89f04f8ec6e787f3f45cec6a437cf4a57f8c3c1bb59dd2004f19d7"
+    },
+    {
+      "name": "assets/christian-thought-two-millennia-visual-042.png",
+      "bytes": 24142,
+      "sha256": "5ad8fedcf19346741a3d1524e55d187e346f4b66b45ee7855773ca97e7f7edb4"
+    },
+    {
+      "name": "assets/christian-thought-two-millennia-visual-043.png",
+      "bytes": 10808,
+      "sha256": "a6cd3ea4963622beace238782aaa91b71f254b4c1659a17f840dcef8a10f0531"
+    },
+    {
+      "name": "assets/christian-thought-two-millennia-visual-044.png",
+      "bytes": 7076,
+      "sha256": "b33cce1e2856aeba8886572fdbf35d9446d0cffe89d991fca0797b0180a97c2a"
+    },
+    {
+      "name": "assets/christian-thought-two-millennia-visual-045.png",
+      "bytes": 69081,
+      "sha256": "85bb1e833d6457bc43d3d208fbca9ed07064e9659c96e4981d79c10d9841593b"
+    },
+    {
+      "name": "assets/christian-thought-two-millennia-visual-046.png",
+      "bytes": 23007,
+      "sha256": "e530d4fcd27f0652ee363b3369a61c0b4eb654fe6062320deb3ef53de82454d1"
+    },
+    {
+      "name": "assets/christian-thought-two-millennia-visual-047.png",
+      "bytes": 60483,
+      "sha256": "a59247a9efe048b483a722cb362fa7d453a171f12f35f18953ec11ae6b78df36"
+    },
+    {
+      "name": "assets/christian-thought-two-millennia-visual-048.png",
+      "bytes": 25454,
+      "sha256": "fe2783b7519de12afb6605c0e93caad4f996582fe697585c5946c54b2806ec2b"
+    },
+    {
+      "name": "assets/christian-thought-two-millennia-visual-049.png",
+      "bytes": 20545,
+      "sha256": "3189cb7b547e7155c80bf79496cb95604dfb94957015877f901d0adb2c496ad7"
+    },
+    {
+      "name": "assets/christian-thought-two-millennia-visual-050.png",
+      "bytes": 17611,
+      "sha256": "622d8ffefd2edff8d6658e84a1f02eba77e9112649ddb853e4e850dca3b0bcdd"
+    },
+    {
+      "name": "assets/christian-thought-two-millennia-visual-051.png",
+      "bytes": 15366,
+      "sha256": "d4acfab9dd0c4450d99d4b4abb68ccce632044354c6455238e9b294914c36ccf"
+    },
+    {
+      "name": "assets/christian-thought-two-millennia-visual-052.png",
+      "bytes": 88971,
+      "sha256": "f229422e5f4cac89f69d2a6d156b3a0821883041f2ef846164b89d5f0f3e9914"
+    },
+    {
+      "name": "assets/christian-thought-two-millennia-visual-053.png",
+      "bytes": 77409,
+      "sha256": "93cd536500b930299db7c8719da1e3be1a1acd09cf5fe22cd29128fbc30d29c7"
+    },
+    {
+      "name": "assets/christian-thought-two-millennia-visual-054.png",
+      "bytes": 66763,
+      "sha256": "f03a5bf461f3d61763287a56923467bb3dc38ebf40c983311729f52bbc8e193a"
+    },
+    {
+      "name": "assets/christian-thought-two-millennia-visual-055.png",
+      "bytes": 14579,
+      "sha256": "a4c91e24dd5918c7b3862dc65a4eba605a92a2b853e386b56b138a7ec62de06d"
+    },
+    {
+      "name": "assets/christian-thought-two-millennia-visual-056.png",
+      "bytes": 8715,
+      "sha256": "8abdee3545188cb72264bff35746b7a65dac8ca1e7ebf67441f1131e25b46daa"
+    },
+    {
+      "name": "assets/christian-thought-two-millennia-visual-057.png",
+      "bytes": 10235,
+      "sha256": "065da1ad64cc9e22872faac6cbab5212e677033c614bd0144e50b95a70940b36"
+    },
+    {
+      "name": "assets/christian-thought-two-millennia-visual-058.png",
+      "bytes": 9018,
+      "sha256": "b643c27a0d9b75e1422b23988fe3647374bdf0e5de5d44d61ea18f2e2eeb7ed6"
+    },
+    {
+      "name": "assets/christian-thought-two-millennia-visual-059.png",
+      "bytes": 9567,
+      "sha256": "4b8656456d9c8a02bf827e82a843103fac2d9ab4b9b8ac4bd3897286f42c1601"
+    },
+    {
+      "name": "assets/christian-thought-two-millennia-visual-060.png",
+      "bytes": 111214,
+      "sha256": "9555bd9a0f7dce4e68d96d400eeeec3a43f3ded2141258a01d092f897e6ddc9f"
+    },
+    {
+      "name": "assets/christian-thought-two-millennia-visual-061.png",
+      "bytes": 33850,
+      "sha256": "636ccddaee052bfc9ce90d189f209edf712596029ea0078ecf2181770f29b29d"
+    },
+    {
+      "name": "assets/christian-thought-two-millennia-visual-062.png",
+      "bytes": 15154,
+      "sha256": "721368a23d8336d71deb96f7748b2241c34300488023ab084fc836a4cfbc1b58"
+    },
+    {
+      "name": "assets/christian-thought-two-millennia-visual-063.png",
+      "bytes": 25988,
+      "sha256": "41ed13e712bb1bccf40f0fc8496eb9dff934eba7bef76d5b1976882d7c4428f2"
+    }
+  ]
+}

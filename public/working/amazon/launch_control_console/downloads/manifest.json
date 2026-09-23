@@ -1,0 +1,28 @@
+{
+  "version": 2,
+  "inputHash": "a67df42cc282d0997554f967dc21d9e3d3b2ce249c6bad1fa0c260520cfa6885",
+  "title": "新品发射控制台 ·",
+  "route": "/working/amazon/launch_control_console/",
+  "source": "https://cavno.org/working/amazon/launch_control_console/",
+  "generatedAt": "2026-09-23T19:26:28.920Z",
+  "visuals": 0,
+  "missingSourceCharacters": 0,
+  "files": {
+    "markdown": {
+      "name": "launch_control_console.md",
+      "bytes": 5476,
+      "sha256": "6af86776b034ed0223ba601e347b2c57651301305b7d716227b3cc19e5811b67"
+    },
+    "pdf": {
+      "name": "launch_control_console.pdf",
+      "bytes": 1285448,
+      "sha256": "ae2adca8565d146b4351c10a7817f7045f44863cd840103fc1631e2a8def83dd"
+    },
+    "word": {
+      "name": "launch_control_console.docx",
+      "bytes": 14089,
+      "sha256": "ba1a6b73f66f0c377015f230bb51b51176c1c974bf5138e68fc9c820b0533e3d"
+    }
+  },
+  "assets": []
+}

@@ -1,0 +1,28 @@
+{
+  "version": 2,
+  "inputHash": "9499f69290eb3826b98cef2dfaf49933ac79111cbdb880ce1b85796f5d41c67e",
+  "title": "Claude 账号安全配置清单",
+  "route": "/life/ai/claude-account-safety/",
+  "source": "https://cavno.org/life/ai/claude-account-safety/",
+  "generatedAt": "2026-09-23T19:19:40.647Z",
+  "visuals": 0,
+  "missingSourceCharacters": 0,
+  "files": {
+    "markdown": {
+      "name": "claude-account-safety.md",
+      "bytes": 13114,
+      "sha256": "fa68c5ed758129f5ce2457040a25dc27390b7d563c970ff93c8e2cac4b8f7e1d"
+    },
+    "pdf": {
+      "name": "claude-account-safety.pdf",
+      "bytes": 1063055,
+      "sha256": "524a34696cc1468313b074d828de2a18568c5c989fb9d813490e75fce897726f"
+    },
+    "word": {
+      "name": "claude-account-safety.docx",
+      "bytes": 19056,
+      "sha256": "e9d1f51e5726e7afa1678eab99fdaaa08c805aeb6aaa90b22340509f17513331"
+    }
+  },
+  "assets": []
+}

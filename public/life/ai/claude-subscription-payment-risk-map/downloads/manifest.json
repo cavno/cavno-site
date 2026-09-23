@@ -1,0 +1,28 @@
+{
+  "version": 2,
+  "inputHash": "39b4e1dbc3ed8679a6be52b4eaf10302be3455dd097b01b3d3c92eb9ef9b56c9",
+  "title": "Claude 订阅支付风控全链路",
+  "route": "/life/ai/claude-subscription-payment-risk-map/",
+  "source": "https://cavno.org/life/ai/claude-subscription-payment-risk-map/",
+  "generatedAt": "2026-09-23T19:19:49.458Z",
+  "visuals": 0,
+  "missingSourceCharacters": 0,
+  "files": {
+    "markdown": {
+      "name": "claude-subscription-payment-risk-map.md",
+      "bytes": 19051,
+      "sha256": "dda5a28090248270e145674a49ed035fe00f958a90840f03b22782224e05460c"
+    },
+    "pdf": {
+      "name": "claude-subscription-payment-risk-map.pdf",
+      "bytes": 2368803,
+      "sha256": "629161cf8b3a989b2336d9e57a2784e961ba4c7ed88ac026573fec0acf78864b"
+    },
+    "word": {
+      "name": "claude-subscription-payment-risk-map.docx",
+      "bytes": 24412,
+      "sha256": "af4ed795912ec1512fe3176a2c0f5f522a1aa2cd29f441136eb35994a7c156e1"
+    }
+  },
+  "assets": []
+}

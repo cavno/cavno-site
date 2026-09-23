@@ -1,0 +1,44 @@
+{
+  "version": 2,
+  "inputHash": "0cd4bf3919be0222f19ad432c7cd9f91cb903d6a46c851d34845ff46623effcd",
+  "title": "GOOGL · Gamma Profile (SpotGamma Framework)",
+  "route": "/investing/options/gamma-profile/",
+  "source": "https://cavno.org/investing/options/gamma-profile/",
+  "generatedAt": "2026-09-23T19:18:44.232Z",
+  "visuals": 3,
+  "missingSourceCharacters": 0,
+  "files": {
+    "markdown": {
+      "name": "gamma-profile.md",
+      "bytes": 2563,
+      "sha256": "e5c0b3917b8262c253616eaabc5e0ea8b1d404fae0af82ac29c1a059c49f3389"
+    },
+    "pdf": {
+      "name": "gamma-profile.pdf",
+      "bytes": 385391,
+      "sha256": "ccf780a52abd9cde35cf3ba355c568414895e1719f2ecd095a66385cecf202fc"
+    },
+    "word": {
+      "name": "gamma-profile.docx",
+      "bytes": 59879,
+      "sha256": "008d089dd087c5ff23b03b2307cf11b4d566c48ee4a1dee12fe4f6774199551e"
+    }
+  },
+  "assets": [
+    {
+      "name": "assets/gamma-profile-visual-001.png",
+      "bytes": 41255,
+      "sha256": "06a3b89e9b851a8cee1284e72f2629b0a1a8133153787b8a0bd0daa044cb18af"
+    },
+    {
+      "name": "assets/gamma-profile-visual-002.png",
+      "bytes": 4135,
+      "sha256": "2811d0978e01ad75f296668d72549d881f69560feef7544036165cf7235768ed"
+    },
+    {
+      "name": "assets/gamma-profile-visual-003.png",
+      "bytes": 4250,
+      "sha256": "8f1c4c13dd2fd8eeb49c122fbd1eee883969d66b7afc4d3a5c31e04d08930b89"
+    }
+  ]
+}

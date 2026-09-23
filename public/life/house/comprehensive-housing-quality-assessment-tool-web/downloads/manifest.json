@@ -1,0 +1,28 @@
+{
+  "version": 2,
+  "inputHash": "63f5c50018d4194e4e51dd4631bf2aa899ee3aaffdf2966b20c42087312f7351",
+  "title": "购房综合评分对比系统",
+  "route": "/life/house/comprehensive-housing-quality-assessment-tool-web/",
+  "source": "https://cavno.org/life/house/comprehensive-housing-quality-assessment-tool-web/",
+  "generatedAt": "2026-09-23T19:20:30.351Z",
+  "visuals": 0,
+  "missingSourceCharacters": 0,
+  "files": {
+    "markdown": {
+      "name": "comprehensive-housing-quality-assessment-tool-web.md",
+      "bytes": 555,
+      "sha256": "c8978be3419e9b351e0d13f48279740ae28dc97921cf5aa48d07efc0a4f2e1d1"
+    },
+    "pdf": {
+      "name": "comprehensive-housing-quality-assessment-tool-web.pdf",
+      "bytes": 143841,
+      "sha256": "fde5719d623be40f8aa08537b37357f75ae4529ca5689323521be18995918e31"
+    },
+    "word": {
+      "name": "comprehensive-housing-quality-assessment-tool-web.docx",
+      "bytes": 10766,
+      "sha256": "82c75a21812d525c772306f2924ce955e2c01385e3038ea199806fb5e90b5362"
+    }
+  },
+  "assets": []
+}

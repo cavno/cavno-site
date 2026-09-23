@@ -1,0 +1,28 @@
+{
+  "version": 2,
+  "inputHash": "77a5b93bc682bee30b3f2595d7d46a65fa08013abea44c65acc2135a655cdd6c",
+  "title": "动态对冲 · 核心概念与内在逻辑 — 互动导读",
+  "route": "/investing/options/dynamic-hedging/",
+  "source": "https://cavno.org/investing/options/dynamic-hedging/",
+  "generatedAt": "2026-09-23T19:18:35.884Z",
+  "visuals": 0,
+  "missingSourceCharacters": 0,
+  "files": {
+    "markdown": {
+      "name": "dynamic-hedging.md",
+      "bytes": 3237,
+      "sha256": "af5f8f388a1cee52fa3a89e26096043b4ae68ab241d5c6a8b0b3d18aed54e8c3"
+    },
+    "pdf": {
+      "name": "dynamic-hedging.pdf",
+      "bytes": 965735,
+      "sha256": "e60c582ba46d9c7de4260c3507e9468b0ae5f2ccb7c3ee460ee25e92d0d0599b"
+    },
+    "word": {
+      "name": "dynamic-hedging.docx",
+      "bytes": 12910,
+      "sha256": "9297fd9a709e34617f1af93903e847edc139d91dd2d63d89e8cf16c5cf1b9cd7"
+    }
+  },
+  "assets": []
+}

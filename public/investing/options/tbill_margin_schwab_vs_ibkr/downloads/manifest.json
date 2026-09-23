@@ -1,0 +1,39 @@
+{
+  "version": 2,
+  "inputHash": "01290e266c0a8cdfec3c7a63b30d3e548afed46c6f19c9c653fc69f550397622",
+  "title": "T-bill 当保证金 · 滚动卖 Put — Schwab 与 IBKR 对照拆解",
+  "route": "/investing/options/tbill_margin_schwab_vs_ibkr/",
+  "source": "https://cavno.org/investing/options/tbill_margin_schwab_vs_ibkr/",
+  "generatedAt": "2026-09-23T19:19:02.510Z",
+  "visuals": 2,
+  "missingSourceCharacters": 0,
+  "files": {
+    "markdown": {
+      "name": "tbill_margin_schwab_vs_ibkr.md",
+      "bytes": 13963,
+      "sha256": "9fe54ef9fc050a2d64fdff4e3fad0bea73c88a5158dcf32456e612860adf95ae"
+    },
+    "pdf": {
+      "name": "tbill_margin_schwab_vs_ibkr.pdf",
+      "bytes": 2095323,
+      "sha256": "829c140d15a781d60fad92bdf10d8727a714bcd3d9eb6b3a5a3aa6987663955b"
+    },
+    "word": {
+      "name": "tbill_margin_schwab_vs_ibkr.docx",
+      "bytes": 205855,
+      "sha256": "e806cfd1721518f7d1865a5da1183332d7dc4400b952af921880c5ded291dc98"
+    }
+  },
+  "assets": [
+    {
+      "name": "assets/tbill_margin_schwab_vs_ibkr-visual-001.png",
+      "bytes": 111719,
+      "sha256": "9e2c719dfb166887a0ca3dd55800b24a61066f2010c9d9957699a60eba56bf5e"
+    },
+    {
+      "name": "assets/tbill_margin_schwab_vs_ibkr-visual-002.png",
+      "bytes": 77436,
+      "sha256": "de44efb159ec08744a0f3fb2329c3c51487ab86e024c9a4a21b79939e3f6a02f"
+    }
+  ]
+}

@@ -1,0 +1,28 @@
+{
+  "version": 2,
+  "inputHash": "b80d785e9834bde7df171cee23756000ca3bb4f28f9e214c32f157eb589fd83d",
+  "title": "报单管理系统",
+  "route": "/working/operations/order-management/",
+  "source": "https://cavno.org/working/operations/order-management/",
+  "generatedAt": "2026-09-23T19:26:36.015Z",
+  "visuals": 0,
+  "missingSourceCharacters": 0,
+  "files": {
+    "markdown": {
+      "name": "order-management.md",
+      "bytes": 712,
+      "sha256": "c0676ce65700d55440cd4a7b40e813270e278417d2ac773ab371e7bd09b5bc62"
+    },
+    "pdf": {
+      "name": "order-management.pdf",
+      "bytes": 144847,
+      "sha256": "e8f1f467dca0c0c5b847b1662fbcefe39ab805d78c9c51896ea35cfcef3588bc"
+    },
+    "word": {
+      "name": "order-management.docx",
+      "bytes": 10842,
+      "sha256": "1102f3d626dedbb568453fb21a5bbd3ad7dd35e9dac5a2c75cae224d2f743b50"
+    }
+  },
+  "assets": []
+}

@@ -1,0 +1,34 @@
+{
+  "version": 2,
+  "inputHash": "6c4ab860321872d9b7a8376f877ad6aacd6b6dfd5eb01149934cf81e2abdbd3f",
+  "title": "人体系统",
+  "route": "/reading/science/human-body-system/",
+  "source": "https://cavno.org/reading/science/human-body-system/",
+  "generatedAt": "2026-09-23T19:24:54.741Z",
+  "visuals": 1,
+  "missingSourceCharacters": 0,
+  "files": {
+    "markdown": {
+      "name": "human-body-system.md",
+      "bytes": 35333,
+      "sha256": "4d8705c554fb07da6f24365c4787d96ac78bd9b729dffd25f80a9bdfb766a238"
+    },
+    "pdf": {
+      "name": "human-body-system.pdf",
+      "bytes": 18988452,
+      "sha256": "cbec021752cdc183d3a76a797216b4409618b4114a7d406be0f9c329b387a9e1"
+    },
+    "word": {
+      "name": "human-body-system.docx",
+      "bytes": 67184,
+      "sha256": "ed4b4f9ffa69ac78f84efd6753dad8919cfdc397db72d1a1b5b2dd86670053e5"
+    }
+  },
+  "assets": [
+    {
+      "name": "assets/human-body-system-visual-001.png",
+      "bytes": 35334,
+      "sha256": "7b4ba7808a37d909b7e3d95dc83b16178428ca6171cdc9263bc7a26632f457c6"
+    }
+  ]
+}

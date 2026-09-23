@@ -1,0 +1,28 @@
+{
+  "version": 2,
+  "inputHash": "1626689600ff3236dfb55c9d49a592e5afd1678a9be487a1ce4623867c66b4ed",
+  "title": "Cybex 四款对比 · Model Y 双娃座椅决策页",
+  "route": "/life/family/child-car-seats/",
+  "source": "https://cavno.org/life/family/child-car-seats/",
+  "generatedAt": "2026-09-23T19:20:30.764Z",
+  "visuals": 0,
+  "missingSourceCharacters": 0,
+  "files": {
+    "markdown": {
+      "name": "child-car-seats.md",
+      "bytes": 7830,
+      "sha256": "61e14be57ad45b7c9a83ef486992c338f4facd4aa9f5e861993d59ee604068f2"
+    },
+    "pdf": {
+      "name": "child-car-seats.pdf",
+      "bytes": 1367928,
+      "sha256": "5c31b5e4ca46668cab13b017fde462297d2684d25f888abb754d226e0dc3c14a"
+    },
+    "word": {
+      "name": "child-car-seats.docx",
+      "bytes": 16324,
+      "sha256": "d1740fc275d11a4d4a14f7982e5b2391448db5d2c639b71b9d8cdac82d0bfc11"
+    }
+  },
+  "assets": []
+}

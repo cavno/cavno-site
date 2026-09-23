@@ -1,0 +1,28 @@
+{
+  "version": 2,
+  "inputHash": "0ad7b3217fa84f76a80c8554f249498ae12e99acfec7f5fe92ce3ac0312db65a",
+  "title": "Claude 稳定使用与订阅 · 原文整合",
+  "route": "/life/ai/claude-pro-complete-guide/",
+  "source": "https://cavno.org/life/ai/claude-pro-complete-guide/",
+  "generatedAt": "2026-09-23T19:19:52.263Z",
+  "visuals": 0,
+  "missingSourceCharacters": 0,
+  "files": {
+    "markdown": {
+      "name": "claude-pro-complete-guide.md",
+      "bytes": 1908,
+      "sha256": "cd5393ac7c7990ca17b152f1e8ea99f646d39f5b22a264fd27aa063a053834e1"
+    },
+    "pdf": {
+      "name": "claude-pro-complete-guide.pdf",
+      "bytes": 6119075,
+      "sha256": "4285fcf42f70e49a6ed56a0a564c730b965d4a3253de9dadcac4b3304f233d5d"
+    },
+    "word": {
+      "name": "claude-pro-complete-guide.docx",
+      "bytes": 11910,
+      "sha256": "455355eea01c67b643af37b6b48c896c5acffc40ed5d60c0a3b7b0d833bf87e0"
+    }
+  },
+  "assets": []
+}

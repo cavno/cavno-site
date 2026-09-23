@@ -1,0 +1,59 @@
+{
+  "version": 2,
+  "inputHash": "41bc84ce052d22a4253325d847e83495c77288484d9449eebaf9f63a0b7c49b5",
+  "title": "西方理性的生命树｜从闭合证明系统到自我演化的认知生态",
+  "route": "/reading/philosophy/western-rationality-life-tree/",
+  "source": "https://cavno.org/reading/philosophy/western-rationality-life-tree/",
+  "generatedAt": "2026-09-23T19:24:01.661Z",
+  "visuals": 6,
+  "missingSourceCharacters": 0,
+  "files": {
+    "markdown": {
+      "name": "western-rationality-life-tree.md",
+      "bytes": 30745,
+      "sha256": "b2571c1fad39a0b32be76973408a5574606857f533e79f583bb5cc56939d6c92"
+    },
+    "pdf": {
+      "name": "western-rationality-life-tree.pdf",
+      "bytes": 2520775,
+      "sha256": "8e04d53367cf59c4d845a3cfa4ecc5b02187e2439ab5f73b674d3a72807d0fda"
+    },
+    "word": {
+      "name": "western-rationality-life-tree.docx",
+      "bytes": 681096,
+      "sha256": "74febabe0793809d33c6a3cd45359c1ee2a0d8a6555a1bb10b9dd7fb743fd7fd"
+    }
+  },
+  "assets": [
+    {
+      "name": "assets/western-rationality-life-tree-visual-001.png",
+      "bytes": 143652,
+      "sha256": "838280c0bb7b6b76d1fd8561de0d894a1fbbdefe43ac6f37b8edb10341435f6f"
+    },
+    {
+      "name": "assets/western-rationality-life-tree-visual-002.png",
+      "bytes": 336132,
+      "sha256": "33939385716060d579051e4b0b7cd338e2562d5c893f4ad642fa1d8074dff855"
+    },
+    {
+      "name": "assets/western-rationality-life-tree-visual-003.png",
+      "bytes": 9479,
+      "sha256": "7200d05b81e64fdd94dfc419b32137da66963072a72f7eef3ea1488afd4ab4e4"
+    },
+    {
+      "name": "assets/western-rationality-life-tree-visual-004.png",
+      "bytes": 5661,
+      "sha256": "9ae553b24c7f32b26cd99c7d707eaade6b09c0d1c4ad69293f848e86886ee453"
+    },
+    {
+      "name": "assets/western-rationality-life-tree-visual-005.png",
+      "bytes": 53022,
+      "sha256": "43c976286ff26ee9b017a31d809a98dc331557b570bbf98b7d00d6773d5e7ce0"
+    },
+    {
+      "name": "assets/western-rationality-life-tree-visual-006.png",
+      "bytes": 104442,
+      "sha256": "97729795796fabc9d1b995e9c4a4c093e42eacb40ba9471b9a7b381b645b5cb5"
+    }
+  ]
+}

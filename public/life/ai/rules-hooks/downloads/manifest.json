@@ -1,0 +1,28 @@
+{
+  "version": 2,
+  "inputHash": "215375ab67356ed3774cbb550d840a049b29b51d976fa99c6c1bf8c459b40470",
+  "title": "Claude Code Rules & Hooks 完整版",
+  "route": "/life/ai/rules-hooks/",
+  "source": "https://cavno.org/life/ai/rules-hooks/",
+  "generatedAt": "2026-09-23T19:19:58.666Z",
+  "visuals": 0,
+  "missingSourceCharacters": 0,
+  "files": {
+    "markdown": {
+      "name": "rules-hooks.md",
+      "bytes": 43131,
+      "sha256": "9edcd2a3c1ff03f8ab5d02a02320c540b4ee387d83985c6ea4253a8ae750372c"
+    },
+    "pdf": {
+      "name": "rules-hooks.pdf",
+      "bytes": 1272155,
+      "sha256": "edf3852dd4d9a3ea3f0d98a1309f690141cc81a6541022c5bbfad404bd4cadd8"
+    },
+    "word": {
+      "name": "rules-hooks.docx",
+      "bytes": 36278,
+      "sha256": "c1e771547735bc4fec8fc78747209c876c06b8c0d72d55e43bae87c0254d9d55"
+    }
+  },
+  "assets": []
+}

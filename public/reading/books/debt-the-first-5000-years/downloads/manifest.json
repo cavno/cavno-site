@@ -1,0 +1,28 @@
+{
+  "version": 2,
+  "inputHash": "41deed02728a715c93e9c2ec9d2c88e92e67237ef79832c56afded93c18f9168",
+  "title": "债:5000年债务史 · 内在逻辑重构",
+  "route": "/reading/books/debt-the-first-5000-years/",
+  "source": "https://cavno.org/reading/books/debt-the-first-5000-years/",
+  "generatedAt": "2026-09-23T19:21:29.701Z",
+  "visuals": 0,
+  "missingSourceCharacters": 0,
+  "files": {
+    "markdown": {
+      "name": "debt-the-first-5000-years.md",
+      "bytes": 63570,
+      "sha256": "2bd52279e091b5e7e9344d758e149d7efa6a96be7f3a4d591c2658071b92f88d"
+    },
+    "pdf": {
+      "name": "debt-the-first-5000-years.pdf",
+      "bytes": 4438132,
+      "sha256": "56b0386b0fddc6be58e552ba1d1612a8ffbd95e8d42988ae5c196e07e7c8e18e"
+    },
+    "word": {
+      "name": "debt-the-first-5000-years.docx",
+      "bytes": 50754,
+      "sha256": "00cdeb3febbaa5eada1b686d8bb212383d4fa4c41759b16fd609c4539304be21"
+    }
+  },
+  "assets": []
+}

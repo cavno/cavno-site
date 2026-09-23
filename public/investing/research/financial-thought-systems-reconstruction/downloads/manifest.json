@@ -1,0 +1,28 @@
+{
+  "version": 2,
+  "inputHash": "e7aa9291911ba5014d8bf9ea01ea87e82b571111afe2efdba648f7de75ad62bf",
+  "title": "复杂金融系统中的十种控制算法",
+  "route": "/investing/research/financial-thought-systems-reconstruction/",
+  "source": "https://cavno.org/investing/research/financial-thought-systems-reconstruction/",
+  "generatedAt": "2026-09-23T19:19:07.082Z",
+  "visuals": 0,
+  "missingSourceCharacters": 0,
+  "files": {
+    "markdown": {
+      "name": "financial-thought-systems-reconstruction.md",
+      "bytes": 13674,
+      "sha256": "80d245aa95253f2bdc953d11eb298abb9e861b059c6bf35cda0f11c87ba54398"
+    },
+    "pdf": {
+      "name": "financial-thought-systems-reconstruction.pdf",
+      "bytes": 2195922,
+      "sha256": "7d77df57276c7616c8cfea9061838992f3f1defc12c15c122f09a93a853eb815"
+    },
+    "word": {
+      "name": "financial-thought-systems-reconstruction.docx",
+      "bytes": 21205,
+      "sha256": "71d1585b65c5ad169596910345972e2ebe805ab6faf314d77ad65a4783c56b2e"
+    }
+  },
+  "assets": []
+}

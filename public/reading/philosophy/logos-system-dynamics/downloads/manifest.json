@@ -1,0 +1,39 @@
+{
+  "version": 2,
+  "inputHash": "35d8eecb2286569dbfdd5703151d8dbda0e702bc443ea58e9d9f675d8d1d9846",
+  "title": "Logos 系统动力学 · 二元张力驱动的哲学系统演化",
+  "route": "/reading/philosophy/logos-system-dynamics/",
+  "source": "https://cavno.org/reading/philosophy/logos-system-dynamics/",
+  "generatedAt": "2026-09-23T19:23:29.543Z",
+  "visuals": 2,
+  "missingSourceCharacters": 0,
+  "files": {
+    "markdown": {
+      "name": "logos-system-dynamics.md",
+      "bytes": 1299,
+      "sha256": "94467d3d5aa7fd9fda96d18f4f6ff52623015d4a3736c88fec372906843270f5"
+    },
+    "pdf": {
+      "name": "logos-system-dynamics.pdf",
+      "bytes": 484073,
+      "sha256": "8d6cfa86f325953027801ca827a0f2332acc7ba962e4c8025ba0322b9ce26420"
+    },
+    "word": {
+      "name": "logos-system-dynamics.docx",
+      "bytes": 195373,
+      "sha256": "4e44f6c4d63f77c2ce64d118d2fe785c5596379cfcc722e68973359ee542688e"
+    }
+  },
+  "assets": [
+    {
+      "name": "assets/logos-system-dynamics-visual-001.png",
+      "bytes": 157120,
+      "sha256": "484e652c19cf6eecb2bef1295c12d68b64f12779addf57ba8a2c8d428a30a936"
+    },
+    {
+      "name": "assets/logos-system-dynamics-visual-002.png",
+      "bytes": 27846,
+      "sha256": "acf088151d41809ac15f8164b855eaac0f2d6d167bc4f525faa01f42e09f3efa"
+    }
+  ]
+}

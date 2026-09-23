@@ -1,0 +1,34 @@
+{
+  "version": 2,
+  "inputHash": "69544ddbd1663fb85ba3ef6fd27903290c7776867a2ce9de7bf5dcff12095712",
+  "title": "大湾区 · 地形—制度叠加底图",
+  "route": "/life/places/gba/",
+  "source": "https://cavno.org/life/places/gba/",
+  "generatedAt": "2026-09-23T19:20:45.640Z",
+  "visuals": 1,
+  "missingSourceCharacters": 0,
+  "files": {
+    "markdown": {
+      "name": "gba.md",
+      "bytes": 1723,
+      "sha256": "55582fa2fb7ad92b286afb61564909f1227a4f96d60ad083b33332a2a3a6970e"
+    },
+    "pdf": {
+      "name": "gba.pdf",
+      "bytes": 5917216,
+      "sha256": "d835df6d9dc2d7483019c36053ed1ae0714b8f9f63f35fe08d3572f894adb472"
+    },
+    "word": {
+      "name": "gba.docx",
+      "bytes": 395553,
+      "sha256": "64f35d4d7281b92c3f6be439c19f318ebf119a3de3d752fb54ed9fd81a380c86"
+    }
+  },
+  "assets": [
+    {
+      "name": "assets/gba-visual-001.png",
+      "bytes": 383237,
+      "sha256": "eaf3c67daa5e01ddcf6fb9294dc52fd0ef86292b034569b08a67e2480f434e39"
+    }
+  ]
+}

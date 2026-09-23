@@ -1,0 +1,28 @@
+{
+  "version": 2,
+  "inputHash": "d60b17e26e86a5a7a01b1484d90dd208090091484addfc72f30a7b766ae09044",
+  "title": "东西方文明关于‘人’的概念重定义",
+  "route": "/reading/philosophy/human-concepts-east-and-west/",
+  "source": "https://cavno.org/reading/philosophy/human-concepts-east-and-west/",
+  "generatedAt": "2026-09-23T19:23:27.083Z",
+  "visuals": 0,
+  "missingSourceCharacters": 0,
+  "files": {
+    "markdown": {
+      "name": "human-concepts-east-and-west.md",
+      "bytes": 13357,
+      "sha256": "2ea3c92b2e5a66ef3e69195f49a494bedb26914ea99f4217e60d1fc4ef317610"
+    },
+    "pdf": {
+      "name": "human-concepts-east-and-west.pdf",
+      "bytes": 1437064,
+      "sha256": "9434ddc448ba4d09f35e34bd0d24637b9367a00451a38f04ef411e8293b8478b"
+    },
+    "word": {
+      "name": "human-concepts-east-and-west.docx",
+      "bytes": 20125,
+      "sha256": "c8fbd29300ddf33bfc5fa1f6d18d22505fce0155d0fbe3ae68603d394c28bade"
+    }
+  },
+  "assets": []
+}

@@ -1,0 +1,34 @@
+{
+  "version": 2,
+  "inputHash": "889402d7d547a338f362870d042a1f2408371f156524fbab187d0b14e59eb165",
+  "title": "中国国家治理制度逻辑演化史",
+  "route": "/reading/politics/state-governance/",
+  "source": "https://cavno.org/reading/politics/state-governance/",
+  "generatedAt": "2026-09-23T19:24:34.808Z",
+  "visuals": 1,
+  "missingSourceCharacters": 0,
+  "files": {
+    "markdown": {
+      "name": "state-governance.md",
+      "bytes": 34295,
+      "sha256": "f243d9963f9ff9a9a1603c48516203b7aba738bc3d99eb8e019b323f37bb5177"
+    },
+    "pdf": {
+      "name": "state-governance.pdf",
+      "bytes": 18903765,
+      "sha256": "524a1c04063d6bc6ae31aa8e1aa33511cc7b768acb610f91545e7de51703b994"
+    },
+    "word": {
+      "name": "state-governance.docx",
+      "bytes": 65748,
+      "sha256": "336d3a83fa17aa6e01c3e2ce22d33726b9f30f1b2cbb8370f23c4d3220204c2c"
+    }
+  },
+  "assets": [
+    {
+      "name": "assets/state-governance-visual-001.png",
+      "bytes": 33989,
+      "sha256": "5b9a334dfa5585f98b2c987c030f80d749f005b0720a81abc0e6dae9f558792c"
+    }
+  ]
+}

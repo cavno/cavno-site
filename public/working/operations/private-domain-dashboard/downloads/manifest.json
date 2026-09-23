@@ -1,0 +1,59 @@
+{
+  "version": 2,
+  "inputHash": "011e567d53b7d12ed69d138ba450486d8f938454aeb5bbae8bfe64b7da525dac",
+  "title": "私域运营数据看板：AI 智能体驱动",
+  "route": "/working/operations/private-domain-dashboard/",
+  "source": "https://cavno.org/working/operations/private-domain-dashboard/",
+  "generatedAt": "2026-09-23T19:26:42.875Z",
+  "visuals": 6,
+  "missingSourceCharacters": 0,
+  "files": {
+    "markdown": {
+      "name": "private-domain-dashboard.md",
+      "bytes": 10178,
+      "sha256": "0958ee1058cd2bf77affa3545e4fbe083ab3c7e7ebce81c84951edec16c0a67d"
+    },
+    "pdf": {
+      "name": "private-domain-dashboard.pdf",
+      "bytes": 1233869,
+      "sha256": "d9ad11b2ac15abeae7a1498311add5bd999470be7484e62cccd015c735bbdc10"
+    },
+    "word": {
+      "name": "private-domain-dashboard.docx",
+      "bytes": 85048,
+      "sha256": "bf1a099fe00e2a1d31947bec9e91c418fb43c3f9ddba2945eb6e76b178b3b7b8"
+    }
+  },
+  "assets": [
+    {
+      "name": "assets/private-domain-dashboard-visual-001.png",
+      "bytes": 36747,
+      "sha256": "af2717c8b7817dc9ba3688e4230c3cb5b88b47af5a6eb118685c4a4ac1e14b45"
+    },
+    {
+      "name": "assets/private-domain-dashboard-visual-002.png",
+      "bytes": 4368,
+      "sha256": "1de03b35574328c2e895208c57ca1641edd4fa3fa923dce071180ec5ef8d0eba"
+    },
+    {
+      "name": "assets/private-domain-dashboard-visual-003.png",
+      "bytes": 4036,
+      "sha256": "d182bd95eddd01b60e8609e23feb9327cd6408b34e773e8b8c08bec4ced86447"
+    },
+    {
+      "name": "assets/private-domain-dashboard-visual-004.png",
+      "bytes": 2690,
+      "sha256": "2efd7a292c4caf04c65e785e9a151286b78db316129e994155ab9cd8c1d88d07"
+    },
+    {
+      "name": "assets/private-domain-dashboard-visual-005.png",
+      "bytes": 11873,
+      "sha256": "4b8052a6fb25e20feb221f5a37e4175ad5f041e8b200caaea96c8b16eede4049"
+    },
+    {
+      "name": "assets/private-domain-dashboard-visual-006.png",
+      "bytes": 9045,
+      "sha256": "ecffb07d072fb57d95f65678bf18fef1047c3e503203693cedf716db4f2cdc2e"
+    }
+  ]
+}

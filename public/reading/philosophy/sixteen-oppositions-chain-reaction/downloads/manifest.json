@@ -1,0 +1,28 @@
+{
+  "version": 2,
+  "inputHash": "48b57c6bdac6d0850139aa61430b9556421642534b0fc71e74108bb4cbaeb7c8",
+  "title": "十六组对立 · 连锁反应链 — 缺口·填补·新缺口",
+  "route": "/reading/philosophy/sixteen-oppositions-chain-reaction/",
+  "source": "https://cavno.org/reading/philosophy/sixteen-oppositions-chain-reaction/",
+  "generatedAt": "2026-09-23T19:23:36.347Z",
+  "visuals": 0,
+  "missingSourceCharacters": 0,
+  "files": {
+    "markdown": {
+      "name": "sixteen-oppositions-chain-reaction.md",
+      "bytes": 3163,
+      "sha256": "8f5567fc834bee7a11f50210c0ff9d7a99b73a8b8a65b348e9692a96c38cc9d5"
+    },
+    "pdf": {
+      "name": "sixteen-oppositions-chain-reaction.pdf",
+      "bytes": 903084,
+      "sha256": "dd4110c1ee402679f87c798f930db26938724b3b83897e83c73a3657cd24b66b"
+    },
+    "word": {
+      "name": "sixteen-oppositions-chain-reaction.docx",
+      "bytes": 12703,
+      "sha256": "c5e9698a19bf22ba7a5936463cc4d5e87b21c8e1afeea6385cf04ae85a5d4f75"
+    }
+  },
+  "assets": []
+}

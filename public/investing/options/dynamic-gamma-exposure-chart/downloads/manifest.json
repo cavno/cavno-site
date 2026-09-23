@@ -1,0 +1,34 @@
+{
+  "version": 2,
+  "inputHash": "52213575451b70ecd387757355a74e6c2767cb0d71cf18669a1fbbf78ca8ba51",
+  "title": "GOOGL Gamma敞口 · 动态交互图 (2026/05/15)",
+  "route": "/investing/options/dynamic-gamma-exposure-chart/",
+  "source": "https://cavno.org/investing/options/dynamic-gamma-exposure-chart/",
+  "generatedAt": "2026-09-23T19:18:33.751Z",
+  "visuals": 1,
+  "missingSourceCharacters": 0,
+  "files": {
+    "markdown": {
+      "name": "dynamic-gamma-exposure-chart.md",
+      "bytes": 1752,
+      "sha256": "f2a07f3dfae56a2384b98178624795c05499101cf5a4b8b00d3866203d6890b2"
+    },
+    "pdf": {
+      "name": "dynamic-gamma-exposure-chart.pdf",
+      "bytes": 416430,
+      "sha256": "19a296c4728af4f545727e01edf433aedc26206fea07e726e7c5ef57857d06e6"
+    },
+    "word": {
+      "name": "dynamic-gamma-exposure-chart.docx",
+      "bytes": 37218,
+      "sha256": "2a1ec2ae379c469a93fca4719d5e5fbc019d793bc68a9220e5b7042338f2e721"
+    }
+  },
+  "assets": [
+    {
+      "name": "assets/dynamic-gamma-exposure-chart-visual-001.png",
+      "bytes": 26406,
+      "sha256": "9fca4b19b1addf9af82bd087bdf0e5ee458a741a437994be7912b1d81b6282c1"
+    }
+  ]
+}

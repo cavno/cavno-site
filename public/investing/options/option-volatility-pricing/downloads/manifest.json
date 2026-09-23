@@ -1,0 +1,28 @@
+{
+  "version": 2,
+  "inputHash": "4dae85de7f15beb095b6f46885ac1a54c01a46aed2d23dfb16cab1d1665ccc7b",
+  "title": "期权波动率与定价 · 核心概念与内在逻辑",
+  "route": "/investing/options/option-volatility-pricing/",
+  "source": "https://cavno.org/investing/options/option-volatility-pricing/",
+  "generatedAt": "2026-09-23T19:18:56.588Z",
+  "visuals": 0,
+  "missingSourceCharacters": 0,
+  "files": {
+    "markdown": {
+      "name": "option-volatility-pricing.md",
+      "bytes": 93998,
+      "sha256": "cfa724a3fc9ef225b054c04943093273b5fb7fd1e9abd6be02375fc5b553076a"
+    },
+    "pdf": {
+      "name": "option-volatility-pricing.pdf",
+      "bytes": 4071511,
+      "sha256": "83071c239472f44a95c34582d7493c31d3250d3bd4bd6fb83eb27cde56ea3225"
+    },
+    "word": {
+      "name": "option-volatility-pricing.docx",
+      "bytes": 65796,
+      "sha256": "dfa04af164505ca21f066a0a073ac584be48de1e34ff536b28b86abcb69a23bb"
+    }
+  },
+  "assets": []
+}

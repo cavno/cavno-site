@@ -1,0 +1,49 @@
+{
+  "version": 2,
+  "inputHash": "cc4ba2f82518d7c86c4df8f48b529843d4adc4cd01943edb631ea7b60bd24c0f",
+  "title": "Gamma & Delta Squeeze 动态演示",
+  "route": "/investing/options/gamma-delta-squeeze/",
+  "source": "https://cavno.org/investing/options/gamma-delta-squeeze/",
+  "generatedAt": "2026-09-23T19:18:46.649Z",
+  "visuals": 4,
+  "missingSourceCharacters": 0,
+  "files": {
+    "markdown": {
+      "name": "gamma-delta-squeeze.md",
+      "bytes": 1436,
+      "sha256": "783edd7997d42b55aed4191d680d5bf9f89f1ab25a970fc0b174421a02b25f58"
+    },
+    "pdf": {
+      "name": "gamma-delta-squeeze.pdf",
+      "bytes": 635060,
+      "sha256": "6737560cf8fc50bb0baa864c3ba6651503add5e06346f99925903e62a8f44be5"
+    },
+    "word": {
+      "name": "gamma-delta-squeeze.docx",
+      "bytes": 28311,
+      "sha256": "4a9f69629e9b2be29d6570b7c5576c6ca1272bb3dd8cce90bad84b0d6215e038"
+    }
+  },
+  "assets": [
+    {
+      "name": "assets/gamma-delta-squeeze-visual-001.png",
+      "bytes": 7525,
+      "sha256": "29c4ce2c29b9429e4b39f5df60d6631f0e21ff27ee5afdc328ef1eb5535acaa0"
+    },
+    {
+      "name": "assets/gamma-delta-squeeze-visual-002.png",
+      "bytes": 2562,
+      "sha256": "b89e82376a2c2a934d31e4d259a69d548f956c7f3c4bf8cded5bb25abc093c3d"
+    },
+    {
+      "name": "assets/gamma-delta-squeeze-visual-003.png",
+      "bytes": 2430,
+      "sha256": "8baa69a7fdbc7fdbbc4a4f348511a8fa9dfd21b943843fd7a3e367b615f5db8c"
+    },
+    {
+      "name": "assets/gamma-delta-squeeze-visual-004.png",
+      "bytes": 3656,
+      "sha256": "5f6d3d75edf8499fcbc13b4816ad7118bc81f91f38c688edff985663d5243b16"
+    }
+  ]
+}

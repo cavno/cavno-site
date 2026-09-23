@@ -1,0 +1,34 @@
+{
+  "version": 2,
+  "inputHash": "440e0e46167de3cfa06078c5149f7dee14bc252f4e90a9f46a84b44a24b4b41c",
+  "title": "市场尽调记分卡台 ·",
+  "route": "/working/amazon/market_diligence_scorecard/",
+  "source": "https://cavno.org/working/amazon/market_diligence_scorecard/",
+  "generatedAt": "2026-09-23T19:26:30.442Z",
+  "visuals": 1,
+  "missingSourceCharacters": 0,
+  "files": {
+    "markdown": {
+      "name": "market_diligence_scorecard.md",
+      "bytes": 5548,
+      "sha256": "4d043798ffb221e71fc85d6ae59de1bf90265f0adc62bbc17d913b35ae729150"
+    },
+    "pdf": {
+      "name": "market_diligence_scorecard.pdf",
+      "bytes": 1291017,
+      "sha256": "fdc89c245abbd38deff458efcb124aca6b11a6c6c3aaf1539bd3f80b33f6e4ff"
+    },
+    "word": {
+      "name": "market_diligence_scorecard.docx",
+      "bytes": 14782,
+      "sha256": "bff4bd0469637ecfe34f23f6e2b68e5e22971f0a38de7d05f174ce5c67a60fa9"
+    }
+  },
+  "assets": [
+    {
+      "name": "assets/market_diligence_scorecard-visual-001.png",
+      "bytes": 499,
+      "sha256": "781dc0510aacface5b3446999051ea377ebb76f4b9695e62aba5121ee4f9ced3"
+    }
+  ]
+}

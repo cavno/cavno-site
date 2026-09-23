@@ -1,0 +1,49 @@
+{
+  "version": 2,
+  "inputHash": "e7b56bf6c4840e20118138728679ea3ba7010c898fec59b4995be3e79020b3c2",
+  "title": "买入看涨 · 损益解剖 — Long Call Anatomy",
+  "route": "/investing/options/longcall/",
+  "source": "https://cavno.org/investing/options/longcall/",
+  "generatedAt": "2026-09-23T19:18:48.462Z",
+  "visuals": 4,
+  "missingSourceCharacters": 0,
+  "files": {
+    "markdown": {
+      "name": "longcall.md",
+      "bytes": 10463,
+      "sha256": "f83e906e365618ce7a5d3b63dd9de32b3cffb01213163e192ffb6085fde2bfcb"
+    },
+    "pdf": {
+      "name": "longcall.pdf",
+      "bytes": 1797217,
+      "sha256": "65303fde99c1c79cd5f081d74fa847df29cabb4639093296e411402b0a483c67"
+    },
+    "word": {
+      "name": "longcall.docx",
+      "bytes": 265896,
+      "sha256": "d4d1dd4a7bcc0bc5726301d5f957720bd8108d24e5c6d2cd088e93c53d9ce128"
+    }
+  },
+  "assets": [
+    {
+      "name": "assets/longcall-visual-001.png",
+      "bytes": 64498,
+      "sha256": "b4b46b593fd891d96fb38477cea6fca6a174af4c0dfb57955f371a9b71161321"
+    },
+    {
+      "name": "assets/longcall-visual-002.png",
+      "bytes": 78278,
+      "sha256": "d54accdca1359b5a383bb0f5fbd10b84c0f9413b0e34063a976579675a6d43cc"
+    },
+    {
+      "name": "assets/longcall-visual-003.png",
+      "bytes": 57743,
+      "sha256": "5ff842b917f3a51a587d67c3211904595b00c544834a1a56c58660a9b976abe5"
+    },
+    {
+      "name": "assets/longcall-visual-004.png",
+      "bytes": 52424,
+      "sha256": "cf45e7f7f6aca71645e1229d920f0b4a764e7f4065d1acbc9b6e7b60426e3bc2"
+    }
+  ]
+}

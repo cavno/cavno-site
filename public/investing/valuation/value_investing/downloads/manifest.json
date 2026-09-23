@@ -1,0 +1,49 @@
+{
+  "version": 2,
+  "inputHash": "a5232b3cfb2c97ab7416b3a6f897412d3a1f9507954bcb52dbf66347510be4bb",
+  "title": "价值投资：从格雷厄姆到巴菲特的头号投资法则（第二版）· 核心概念与内在逻辑",
+  "route": "/investing/valuation/value_investing/",
+  "source": "https://cavno.org/investing/valuation/value_investing/",
+  "generatedAt": "2026-09-23T19:19:30.286Z",
+  "visuals": 4,
+  "missingSourceCharacters": 0,
+  "files": {
+    "markdown": {
+      "name": "value_investing.md",
+      "bytes": 74038,
+      "sha256": "70f517c7b0e536313627a520a888aa8b88d587d36b0bf427ecfda7da3bebe4a9"
+    },
+    "pdf": {
+      "name": "value_investing.pdf",
+      "bytes": 5275523,
+      "sha256": "67dfb5d738bff0b06e274feff02d7d296c29d171d5c164485bcf4d9bad449f56"
+    },
+    "word": {
+      "name": "value_investing.docx",
+      "bytes": 284818,
+      "sha256": "dacfc575aa9aa8a921446d6850226bcf115d601e6c685772d5712071bcbba5cf"
+    }
+  },
+  "assets": [
+    {
+      "name": "assets/value_investing-visual-001.png",
+      "bytes": 127962,
+      "sha256": "222bde56cbc1eb05ef66c9b2b65a8fe2143182dea7c1337a6b4bf449265a7991"
+    },
+    {
+      "name": "assets/value_investing-visual-002.png",
+      "bytes": 6917,
+      "sha256": "bf764e7b515615ccca1785fbb9db9c469ce8a5bfcd765055b4177fded2c1ab85"
+    },
+    {
+      "name": "assets/value_investing-visual-003.png",
+      "bytes": 9835,
+      "sha256": "e285d407060e8bde40e82e2846a3fc6f6fcb3528705a62625b8a7f2a6f4c047e"
+    },
+    {
+      "name": "assets/value_investing-visual-004.png",
+      "bytes": 78545,
+      "sha256": "3122f4a7e01c0ffafebd3a398eb2b42cca6c9f3ab029346fbb2d0cb8f055e1c1"
+    }
+  ]
+}

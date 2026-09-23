@@ -1,0 +1,39 @@
+{
+  "version": 2,
+  "inputHash": "e24060466c12ea4f2680e43fcbfb7110df12be8278db5a7b154f9ef3fa56dc5a",
+  "title": "公理组合矩阵 · Axiom Combinatorics",
+  "route": "/reading/philosophy/juzhen/",
+  "source": "https://cavno.org/reading/philosophy/juzhen/",
+  "generatedAt": "2026-09-23T19:23:27.096Z",
+  "visuals": 2,
+  "missingSourceCharacters": 0,
+  "files": {
+    "markdown": {
+      "name": "juzhen.md",
+      "bytes": 1160,
+      "sha256": "c1ade7b5ca1073a07c15e3545f0651b3c70c4c527295d8ef2a9ea44be4204714"
+    },
+    "pdf": {
+      "name": "juzhen.pdf",
+      "bytes": 626608,
+      "sha256": "0d604493c8546cc554d9e89d5d9cd1c5ff94157e406aec660b9cd0d233adac38"
+    },
+    "word": {
+      "name": "juzhen.docx",
+      "bytes": 527229,
+      "sha256": "c66706dcb95577376da67dc307f29753e42ae6f953db11a37409b1ce1dfc4d07"
+    }
+  },
+  "assets": [
+    {
+      "name": "assets/juzhen-visual-001.png",
+      "bytes": 42953,
+      "sha256": "61759b92415e3fd99feec8b91565ad74f6052e7b402aefa486e0a8c41d52866f"
+    },
+    {
+      "name": "assets/juzhen-visual-002.png",
+      "bytes": 478255,
+      "sha256": "0266abe1454367f9760cf8c76231d8e6421d92fca1160b3aef2ea0a7632d6bce"
+    }
+  ]
+}

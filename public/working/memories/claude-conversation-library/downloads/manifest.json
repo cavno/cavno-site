@@ -1,0 +1,28 @@
+{
+  "version": 2,
+  "inputHash": "6ba02651060392f8c6cbcdd76eea83d3cbe33ca78d52afceac54349564db425d",
+  "title": "Claude 对话资料库",
+  "route": "/working/memories/claude-conversation-library/",
+  "source": "https://cavno.org/working/memories/claude-conversation-library/",
+  "generatedAt": "2026-09-23T19:26:41.798Z",
+  "visuals": 0,
+  "missingSourceCharacters": 0,
+  "files": {
+    "markdown": {
+      "name": "claude-conversation-library.md",
+      "bytes": 120833,
+      "sha256": "58eb35837721d4221e19747ded1f5f15ad1dfbda378b88c41bf638ebdf664d46"
+    },
+    "pdf": {
+      "name": "claude-conversation-library.pdf",
+      "bytes": 1055405,
+      "sha256": "9a201d53e885abdba79fe0c2f59022e3a6d9d549bc1f35b0c8efa4cd5670001b"
+    },
+    "word": {
+      "name": "claude-conversation-library.docx",
+      "bytes": 68344,
+      "sha256": "f1536ccc7b36e31485ef63807a6cb0a9a9ddd9e2fcf064982243530aa3d8d6c9"
+    }
+  },
+  "assets": []
+}

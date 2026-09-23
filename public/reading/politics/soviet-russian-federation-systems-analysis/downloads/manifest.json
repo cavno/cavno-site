@@ -1,0 +1,99 @@
+{
+  "version": 2,
+  "inputHash": "e76b2ad87de09db45165ee8436db8e63d626a688dc968a3b9340ffb17cc7eac7",
+  "title": "苏联与俄罗斯联邦历史的系统论分析",
+  "route": "/reading/politics/soviet-russian-federation-systems-analysis/",
+  "source": "https://cavno.org/reading/politics/soviet-russian-federation-systems-analysis/",
+  "generatedAt": "2026-09-23T19:24:15.501Z",
+  "visuals": 14,
+  "missingSourceCharacters": 0,
+  "files": {
+    "markdown": {
+      "name": "soviet-russian-federation-systems-analysis.md",
+      "bytes": 31217,
+      "sha256": "2a4c22dd5c68a6cdf97b5f44b936b62b8a26a8a29148daaa1c74c68139942189"
+    },
+    "pdf": {
+      "name": "soviet-russian-federation-systems-analysis.pdf",
+      "bytes": 2784851,
+      "sha256": "3d000773cb71e1c33069712ad686817ffd2c9511c97b9130a9eb7b5103cbe2bf"
+    },
+    "word": {
+      "name": "soviet-russian-federation-systems-analysis.docx",
+      "bytes": 408288,
+      "sha256": "df0e7bcd18f1f5732ff028d1ab71a7f16e7bde9c433611330b921327c555b5c9"
+    }
+  },
+  "assets": [
+    {
+      "name": "assets/soviet-russian-federation-systems-analysis-visual-001.png",
+      "bytes": 10192,
+      "sha256": "b93f7d0e863fbd6d7e5ffaa4bea23f707b2d829dc677e4758d5fd6ab3d7d9cc0"
+    },
+    {
+      "name": "assets/soviet-russian-federation-systems-analysis-visual-002.png",
+      "bytes": 25528,
+      "sha256": "1b9cead3cc41d3ce28a7aa9e43485df14bb6fc0b25933a53b354342213dd14aa"
+    },
+    {
+      "name": "assets/soviet-russian-federation-systems-analysis-visual-003.png",
+      "bytes": 29200,
+      "sha256": "dad88a4b9d2eec1c285c43064f66ef050f85c7aea51b38a88b50ca555a658759"
+    },
+    {
+      "name": "assets/soviet-russian-federation-systems-analysis-visual-004.png",
+      "bytes": 17436,
+      "sha256": "849b35edf054405e9a8d489d10b6ec1e07428194ab041f68f1366807c10141bd"
+    },
+    {
+      "name": "assets/soviet-russian-federation-systems-analysis-visual-005.png",
+      "bytes": 13789,
+      "sha256": "d467ae772d75a77bf7df4425e80206be396b8f667d7295e6a9699bae90721331"
+    },
+    {
+      "name": "assets/soviet-russian-federation-systems-analysis-visual-006.png",
+      "bytes": 12624,
+      "sha256": "774c1dd08b2c143f2762c5591e6f5b4dc02c43b427802dba32bae0f833adc4bc"
+    },
+    {
+      "name": "assets/soviet-russian-federation-systems-analysis-visual-007.png",
+      "bytes": 21320,
+      "sha256": "575a35e850459debc6a199fb9b99a26d0f53af5430cf2c86a9f5a2a279dbde82"
+    },
+    {
+      "name": "assets/soviet-russian-federation-systems-analysis-visual-008.png",
+      "bytes": 47555,
+      "sha256": "0b2331d6b1e6a40a065e62675a7d065ddf4d6a9f77a9b6cb02389813a1e7c486"
+    },
+    {
+      "name": "assets/soviet-russian-federation-systems-analysis-visual-009.png",
+      "bytes": 35848,
+      "sha256": "be4ad83a8c2199cbdaefecd6e8a31156e62f60979218062e823b44716b73c7b3"
+    },
+    {
+      "name": "assets/soviet-russian-federation-systems-analysis-visual-010.png",
+      "bytes": 6534,
+      "sha256": "634d441407c2f458d8d1bafe9fdce622b0ec21d913bd9076594a209c3bffe5f1"
+    },
+    {
+      "name": "assets/soviet-russian-federation-systems-analysis-visual-011.png",
+      "bytes": 11232,
+      "sha256": "b0be1d6ee849e52a107a25ea06e93d9411e93a5b8d7101bc03011a54e85c9b67"
+    },
+    {
+      "name": "assets/soviet-russian-federation-systems-analysis-visual-012.png",
+      "bytes": 34404,
+      "sha256": "910063b5d8c742f79489af12a370bbb555890e381248133ba4b8c83287f87e9a"
+    },
+    {
+      "name": "assets/soviet-russian-federation-systems-analysis-visual-013.png",
+      "bytes": 105147,
+      "sha256": "371d5571dff8e20d54d842d35eacdf29b85fe33c706b58e4dfa6368bb9d0e252"
+    },
+    {
+      "name": "assets/soviet-russian-federation-systems-analysis-visual-014.png",
+      "bytes": 24488,
+      "sha256": "6bb38b48cd2e923b48df3b0998dad223bcff8a0d1c7f545bfd6a807000494758"
+    }
+  ]
+}

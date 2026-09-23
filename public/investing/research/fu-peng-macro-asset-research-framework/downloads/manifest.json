@@ -1,0 +1,64 @@
+{
+  "version": 2,
+  "inputHash": "aeb92b8247d607ce099aa5c654e7111117c0dff0d2cccfe7a4ca65bf7ce2f932",
+  "title": "付鹏 · 大类资产投研框架 · 课程内在逻辑重构",
+  "route": "/investing/research/fu-peng-macro-asset-research-framework/",
+  "source": "https://cavno.org/investing/research/fu-peng-macro-asset-research-framework/",
+  "generatedAt": "2026-09-23T19:19:14.389Z",
+  "visuals": 7,
+  "missingSourceCharacters": 0,
+  "files": {
+    "markdown": {
+      "name": "fu-peng-macro-asset-research-framework.md",
+      "bytes": 39643,
+      "sha256": "8f5078343644442d63a61be785210c03383a01d1d23ffb258c8e3b345cad0a97"
+    },
+    "pdf": {
+      "name": "fu-peng-macro-asset-research-framework.pdf",
+      "bytes": 3383009,
+      "sha256": "cb6a86ad080f15ad8591e50e9b777793e81be8ded0f2bb22542454e42f963f12"
+    },
+    "word": {
+      "name": "fu-peng-macro-asset-research-framework.docx",
+      "bytes": 297283,
+      "sha256": "3a40f600117e57ebc609babd498df1cef06b4980720e0155a578b851bd7e4abc"
+    }
+  },
+  "assets": [
+    {
+      "name": "assets/fu-peng-macro-asset-research-framework-visual-001.png",
+      "bytes": 39364,
+      "sha256": "ded1a225b1a7d485e2c747800e3076814d3a89454e511e5ed8d05d80b1d31fc6"
+    },
+    {
+      "name": "assets/fu-peng-macro-asset-research-framework-visual-002.png",
+      "bytes": 49782,
+      "sha256": "f8f29795a8b5835d61ed3614df75856b99f59cffa6c701b050e6bd3a2a9aa466"
+    },
+    {
+      "name": "assets/fu-peng-macro-asset-research-framework-visual-003.png",
+      "bytes": 53750,
+      "sha256": "4bb6039356773173407de1981622c03fc56a0a943bb88c49cb53b498cdd8b0ff"
+    },
+    {
+      "name": "assets/fu-peng-macro-asset-research-framework-visual-004.png",
+      "bytes": 31374,
+      "sha256": "60d52b63a8c4e64d4c35dcbd19077cd14b7a6aface3103fabd1c465ba55db223"
+    },
+    {
+      "name": "assets/fu-peng-macro-asset-research-framework-visual-005.png",
+      "bytes": 20585,
+      "sha256": "88b95b8bf15a1e6ce29d43a5b5b9c116e58186905cdb5055236ea00b8c182d46"
+    },
+    {
+      "name": "assets/fu-peng-macro-asset-research-framework-visual-006.png",
+      "bytes": 30974,
+      "sha256": "501bc8381a3e97132373f8595c80f33feeb9007515c6df5b1ad532de19871f9e"
+    },
+    {
+      "name": "assets/fu-peng-macro-asset-research-framework-visual-007.png",
+      "bytes": 39312,
+      "sha256": "b163a7bb85f7a2a2d11bb1b71731413025a0639c6969176b3e3ffb54621525db"
+    }
+  ]
+}

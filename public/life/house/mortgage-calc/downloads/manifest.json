@@ -1,0 +1,28 @@
+{
+  "version": 2,
+  "inputHash": "2b2355011c71bcb62be9998050b3931b0d7dc96194caf60eeb45cc3a917ad476",
+  "title": "房贷计算器 · Mortgage Calculator",
+  "route": "/life/house/mortgage-calc/",
+  "source": "https://cavno.org/life/house/mortgage-calc/",
+  "generatedAt": "2026-09-23T19:20:32.436Z",
+  "visuals": 0,
+  "missingSourceCharacters": 0,
+  "files": {
+    "markdown": {
+      "name": "mortgage-calc.md",
+      "bytes": 1327,
+      "sha256": "634214c2ecec11e5684e144558dc47b6e1e4a9788c76dcf1c943632cef0ad847"
+    },
+    "pdf": {
+      "name": "mortgage-calc.pdf",
+      "bytes": 422854,
+      "sha256": "90a00ce053bb85e58858408523ade98b8384df879485fa0ad7544d23a6d3d40b"
+    },
+    "word": {
+      "name": "mortgage-calc.docx",
+      "bytes": 11749,
+      "sha256": "7939b983452aae22ab075acea3ce7bb03cca5ba4e49a4227c7aa3da4b922f214"
+    }
+  },
+  "assets": []
+}

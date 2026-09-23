@@ -1,0 +1,54 @@
+{
+  "version": 2,
+  "inputHash": "8699797bc7cc895831787f8df8e0c06dbc4244f03fecbc430b02e524f51b4624",
+  "title": "逻辑：一个认知系统的演化史",
+  "route": "/reading/thinking/logic-system-evolution/",
+  "source": "https://cavno.org/reading/thinking/logic-system-evolution/",
+  "generatedAt": "2026-09-23T19:26:00.816Z",
+  "visuals": 5,
+  "missingSourceCharacters": 0,
+  "files": {
+    "markdown": {
+      "name": "logic-system-evolution.md",
+      "bytes": 14228,
+      "sha256": "b578a342ef1c0e84e0b860074ae771172ab87c66a419efb6d11d855d5126a01a"
+    },
+    "pdf": {
+      "name": "logic-system-evolution.pdf",
+      "bytes": 1335345,
+      "sha256": "05c1ecf4fb247c2c46329568e09e5c58e2bf56b9b13ac28fe880877d8f9dd791"
+    },
+    "word": {
+      "name": "logic-system-evolution.docx",
+      "bytes": 213226,
+      "sha256": "1c7a1210897e1a0be47c4a3f0c665b9b9c1e2c299ecfd340b7af955c54444ede"
+    }
+  },
+  "assets": [
+    {
+      "name": "assets/logic-system-evolution-visual-001.png",
+      "bytes": 43520,
+      "sha256": "9655949db0a1d9fad7ba8b890b0b5f0d6ac21c36e538bca5da2e203b6732ea8e"
+    },
+    {
+      "name": "assets/logic-system-evolution-visual-002.png",
+      "bytes": 2899,
+      "sha256": "9fa2b23a667b62d9ad1c336f61bdaa2a43cb16cceab666d86978cd421b742419"
+    },
+    {
+      "name": "assets/logic-system-evolution-visual-003.png",
+      "bytes": 6040,
+      "sha256": "b1d0dbb5d1fa65a46a83a5efae09ad3964fe5a3a593eb54cfcbe129c14019167"
+    },
+    {
+      "name": "assets/logic-system-evolution-visual-004.png",
+      "bytes": 152629,
+      "sha256": "f516897b741cdc6c316e8e3c8c360fd0acf1d5ff61dcf4c2c8b26e1a8fb4ced6"
+    },
+    {
+      "name": "assets/logic-system-evolution-visual-005.png",
+      "bytes": 6403,
+      "sha256": "0a2f1f64fa1c5b0f64689dfc6df04976c91c9eb1627b650c3edcb797acab898c"
+    }
+  ]
+}

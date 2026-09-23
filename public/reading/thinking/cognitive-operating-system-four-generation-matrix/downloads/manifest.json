@@ -1,0 +1,28 @@
+{
+  "version": 2,
+  "inputHash": "e4792f2646a6e9431c3a0d9fc87808661f162f91339a4af5555251f5a0a164fd",
+  "title": "认知操作系统 · 四代矩阵 · 二十七系统 × 四版本",
+  "route": "/reading/thinking/cognitive-operating-system-four-generation-matrix/",
+  "source": "https://cavno.org/reading/thinking/cognitive-operating-system-four-generation-matrix/",
+  "generatedAt": "2026-09-23T19:25:43.539Z",
+  "visuals": 0,
+  "missingSourceCharacters": 0,
+  "files": {
+    "markdown": {
+      "name": "cognitive-operating-system-four-generation-matrix.md",
+      "bytes": 12570,
+      "sha256": "92328061448fc0ffcf03362a29e02994c4bb232fa46406f7995d95b7f12f3026"
+    },
+    "pdf": {
+      "name": "cognitive-operating-system-four-generation-matrix.pdf",
+      "bytes": 1748589,
+      "sha256": "33af006a04a0d39a003227d18b2b18b81c15a8a383ed289f1c5b9bdad6ffca37"
+    },
+    "word": {
+      "name": "cognitive-operating-system-four-generation-matrix.docx",
+      "bytes": 19590,
+      "sha256": "f296bcfdf0ef102d6584433d358a69a61150d13619ea4980d184ae6c8f9cd478"
+    }
+  },
+  "assets": []
+}

@@ -1,0 +1,28 @@
+{
+  "version": 2,
+  "inputHash": "4587522e0e2ffc4533542914b321be84f9ac652c4dcd12c3b1edc40a5d66c5dc",
+  "title": "杰森·伯恩能力模型｜复杂环境中的个人决策系统",
+  "route": "/life/skills/jason-bourne-model/",
+  "source": "https://cavno.org/life/skills/jason-bourne-model/",
+  "generatedAt": "2026-09-23T19:20:55.346Z",
+  "visuals": 0,
+  "missingSourceCharacters": 0,
+  "files": {
+    "markdown": {
+      "name": "jason-bourne-model.md",
+      "bytes": 5623,
+      "sha256": "57ae3605463b749359731aedca086b119140ec0beaec761a1373b5f6ecf18dbc"
+    },
+    "pdf": {
+      "name": "jason-bourne-model.pdf",
+      "bytes": 714035,
+      "sha256": "720ad608d35a31812c08926ae2aa9cf547463cd1ed3e5d564b8dbc8f4d9c8496"
+    },
+    "word": {
+      "name": "jason-bourne-model.docx",
+      "bytes": 15309,
+      "sha256": "61144d90d1d75558b67975a9a09df8cc4eda9e7446daddd17500a4af54b1b5e1"
+    }
+  },
+  "assets": []
+}

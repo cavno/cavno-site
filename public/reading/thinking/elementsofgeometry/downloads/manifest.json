@@ -1,0 +1,54 @@
+{
+  "version": 2,
+  "inputHash": "32d7f4248b3d013d45f66fecbc5de10edfecf056fdf82ee36d9046276c037825",
+  "title": "公理化演绎 · 《几何原本》的整体思维方式",
+  "route": "/reading/thinking/elementsofgeometry/",
+  "source": "https://cavno.org/reading/thinking/elementsofgeometry/",
+  "generatedAt": "2026-09-23T19:15:09.192Z",
+  "visuals": 3,
+  "missingSourceCharacters": 0,
+  "files": {
+    "markdown": {
+      "name": "elementsofgeometry.md",
+      "bytes": 15474,
+      "sha256": "db37a1737620e281bc2b40aefbcdeea6029009c103dc9505138ed9e08bd3882c"
+    },
+    "pdf": {
+      "name": "elementsofgeometry.pdf",
+      "bytes": 2534428,
+      "sha256": "37b6f23e97a9c66280e27be889a845c73a061a3ee3b349be6c47243f96877048"
+    },
+    "word": {
+      "name": "elementsofgeometry.docx",
+      "bytes": 196320,
+      "sha256": "285d9be7ea09280efc37e206e96773e53648c50cb53371360fc25583637abbc7"
+    }
+  },
+  "assets": [
+    {
+      "name": "assets/elementsofgeometry-visual-001.png",
+      "bytes": 156796,
+      "sha256": "2fd542d3865c6be4bef98c9e0ef5bd4ce80eae5aac0ac1da6a6601fa30ca2faa"
+    },
+    {
+      "name": "assets/elementsofgeometry-visual-002.png",
+      "bytes": 2239,
+      "sha256": "ea1e3bffa458a1accc1ce0b781eb37b95c2b29c3d8283645e18a7a93cce843f4"
+    },
+    {
+      "name": "assets/elementsofgeometry-visual-003.png",
+      "bytes": 17793,
+      "sha256": "30747e44059b6df0d98b802bb636b96f7585e9854bcf6a423bd1c07aeff0dfad"
+    },
+    {
+      "name": "assets/elementsofgeometry-visual-004.png",
+      "bytes": 4737,
+      "sha256": "d887d2a0178aba0d96caa3e16b2534f2c22a082f796611f9aa6b0df0e8659ce4"
+    },
+    {
+      "name": "assets/elementsofgeometry-visual-005.png",
+      "bytes": 8301,
+      "sha256": "d7975be3f660fa7d928ca21b0777c9312460f0e4f03d42dc760ad71ed0ce173f"
+    }
+  ]
+}

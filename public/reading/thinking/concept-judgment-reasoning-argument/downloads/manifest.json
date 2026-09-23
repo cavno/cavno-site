@@ -1,0 +1,28 @@
+{
+  "version": 2,
+  "inputHash": "ffc622661f40d320d8fe534f421fd253b61bbdea2f836b84c415ddaf9eefe916",
+  "title": "概念—判断—推理—论证｜动态自校正认知系统",
+  "route": "/reading/thinking/concept-judgment-reasoning-argument/",
+  "source": "https://cavno.org/reading/thinking/concept-judgment-reasoning-argument/",
+  "generatedAt": "2026-09-23T19:25:58.347Z",
+  "visuals": 0,
+  "missingSourceCharacters": 0,
+  "files": {
+    "markdown": {
+      "name": "concept-judgment-reasoning-argument.md",
+      "bytes": 17968,
+      "sha256": "d52bc99aeadec38568d466fefdcfa4933a6b9d1490fcb45679f3e33b1c9ce3a5"
+    },
+    "pdf": {
+      "name": "concept-judgment-reasoning-argument.pdf",
+      "bytes": 1428720,
+      "sha256": "f0aa19119f0435c40d0336e2f2d8da91accfbdf1c0d02779a9c5d4958d8c0480"
+    },
+    "word": {
+      "name": "concept-judgment-reasoning-argument.docx",
+      "bytes": 23056,
+      "sha256": "f7003eb219f03e438ff78df2ddd99806b9f3f9cfc5e068225441c58d0c54a033"
+    }
+  },
+  "assets": []
+}

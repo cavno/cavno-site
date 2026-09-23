@@ -1,0 +1,34 @@
+{
+  "version": 2,
+  "inputHash": "560113bd5ef4fd35d1530bdaf5f77579c092660d8660b6c7881958a922ab9a0c",
+  "title": "中介之死与五次竞标 · 近代哲学结构图",
+  "route": "/reading/philosophy/death-of-the-mediator/",
+  "source": "https://cavno.org/reading/philosophy/death-of-the-mediator/",
+  "generatedAt": "2026-09-23T19:23:11.775Z",
+  "visuals": 1,
+  "missingSourceCharacters": 0,
+  "files": {
+    "markdown": {
+      "name": "death-of-the-mediator.md",
+      "bytes": 920,
+      "sha256": "71cd5a9a90316967b7eb1136eebaaf8249a0312c6f7cc223bcf4bfe43bc33a58"
+    },
+    "pdf": {
+      "name": "death-of-the-mediator.pdf",
+      "bytes": 909698,
+      "sha256": "fbde14d0c006fad0f6d7edc45b6d29bc159372cfbfcf4ef8b02f5cbb6de68e27"
+    },
+    "word": {
+      "name": "death-of-the-mediator.docx",
+      "bytes": 344384,
+      "sha256": "f7f18a273ee6a8797acbd30a453f98929b9b90b5f609b46c79bb38ed593bb50f"
+    }
+  },
+  "assets": [
+    {
+      "name": "assets/death-of-the-mediator-visual-001.png",
+      "bytes": 333266,
+      "sha256": "72d46997c57bfbcf53a1879c80ac22535d635d9cbeb229eaf4ee7182a97c21c1"
+    }
+  ]
+}

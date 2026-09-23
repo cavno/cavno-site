@@ -1,0 +1,28 @@
+{
+  "version": 2,
+  "inputHash": "4adccaffc752c4f8e29f801537eb00d716878f17498a5bfc148d243f5f501b9c",
+  "title": "关键词结构分析台",
+  "route": "/working/amazon/keyword_structure_lab/",
+  "source": "https://cavno.org/working/amazon/keyword_structure_lab/",
+  "generatedAt": "2026-09-23T19:26:25.095Z",
+  "visuals": 0,
+  "missingSourceCharacters": 0,
+  "files": {
+    "markdown": {
+      "name": "keyword_structure_lab.md",
+      "bytes": 5239,
+      "sha256": "d7dca58357d0e6b8e7dfae02ccb4ad068b59ac0a578a4661fff3f253465a68f3"
+    },
+    "pdf": {
+      "name": "keyword_structure_lab.pdf",
+      "bytes": 1387127,
+      "sha256": "628d906961605a05271e560a13cae349156396534affc885acf3d641ea277d2a"
+    },
+    "word": {
+      "name": "keyword_structure_lab.docx",
+      "bytes": 13850,
+      "sha256": "bcd3ba9ec695364f9baf20476516fa57d25ba3a4a89fc639ea139f92eafbcd09"
+    }
+  },
+  "assets": []
+}
