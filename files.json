@@ -1,26 +1,26 @@
 {
-  "package": "cavno-beginner-driving-practical-manual-increment",
-  "createdAt": "2026-09-22T11:35:00+08:00",
+  "packageId": "cavno-adspower-ssh-ipv4-ipv6-guide-20260927",
+  "route": "/life/ai/adspower-ssh-ipv4-ipv6-guide/",
   "files": [
     {
-      "path": "src/pages/life/driving/beginner-driving-practical-manual.astro",
-      "sha256": "5df865f8968b9cdc89424fdc5acfd6f5943023b2d283487b378e14ffabf4998f",
-      "bytes": 1049
+      "path": "src/pages/life/ai/adspower-ssh-ipv4-ipv6-guide.astro",
+      "bytes": 980,
+      "sha256": "076434befa6c93b1b5e77e5f0d329114e55ca83e2d57f6afffb6528909318118"
     },
     {
-      "path": "src/content/items/life-driving-beginner-driving-practical-manual.md",
-      "sha256": "435baf2f2650a6ec983ad2251a931c8a629b73301f75fc359a4be3ccb4b1b804",
-      "bytes": 437
+      "path": "src/content/items/life-ai-adspower-ssh-ipv4-ipv6-guide.md",
+      "bytes": 441,
+      "sha256": "a2ff1e03d62dc5eddc574d4046f1c21625bd8e3dea8daa2ba9297eaba57ca89c"
     },
     {
-      "path": "src/legacy/life/driving/beginner-driving-practical-manual/body.html",
-      "sha256": "a804d05fc5aafd549b47e9a6afff708ea353cd2fd756254ec7801d69fdbefc51",
-      "bytes": 94943
+      "path": "src/legacy/life/ai/adspower-ssh-ipv4-ipv6-guide/body.html",
+      "bytes": 38954,
+      "sha256": "a423e7549ee7fefd616c1c3d7cb662dfc16f9b086c79a82424db8d95dca061d9"
     },
     {
-      "path": "src/legacy/life/driving/beginner-driving-practical-manual/style.css",
-      "sha256": "7cba976801209cfe5a330accbe6a3264f879a8bc85d1a6363eed9d0ac4fc3be4",
-      "bytes": 12747
+      "path": "src/legacy/life/ai/adspower-ssh-ipv4-ipv6-guide/style.css",
+      "bytes": 8973,
+      "sha256": "72b7386f0ec406294030a7d1e1f876fa2d83626895a56df3db1f99d49746b986"
     }
   ]
 }

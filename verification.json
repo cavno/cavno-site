@@ -1,46 +1,55 @@
 {
-  "verifiedAt": "2026-09-22T11:35:00+08:00",
-  "route": "/life/driving/beginner-driving-practical-manual/",
-  "sourceSite": "work/nav-redesign-20260904/cavno-site",
-  "build": {
-    "passed": true,
-    "pages": 206
-  },
-  "browser": {
-    "passed": 17,
-    "desktopViewport": "1440x1000",
-    "mobileViewport": "390x844",
-    "checks": [
-      "global fixed header and unified page header",
-      "sticky article toolbar and table of contents",
-      "11 lessons and mistakes summary",
-      "Cavno canvas and text colors",
-      "no horizontal overflow",
-      "mobile table of contents opens and closes below the site header",
-      "driving category card and updated category description"
-    ]
-  },
-  "sourceText": {
-    "source": "新手驾驶实战说明书.html",
-    "characters": 26369,
-    "exactVisibleText": true
-  },
-  "static": {
-    "iframes": 0,
-    "externalScripts": 0,
-    "duplicateIds": 0,
+  "status": "passed",
+  "verifiedAt": "2026-09-27T02:03:00+08:00",
+  "route": "/life/ai/adspower-ssh-ipv4-ipv6-guide/",
+  "sourceIntegration": {
+    "sourceMarkdownCharacters": 10329,
+    "sourceMarkdownLines": 1054,
+    "sourceHeadings": 28,
+    "convertedContentHeadings": 28,
+    "mainSections": 19,
+    "sourceCodeFencePairs": 84,
+    "convertedCodeAndDiagramBlocks": 84,
+    "tables": 2,
+    "referenceLinks": 7,
+    "chatgptInternalCitationTokensRemaining": 0,
     "replacementCharacters": 0
   },
-  "incrementInstaller": {
-    "passed": true,
-    "manifestFiles": 4,
-    "manifestHashErrors": 0,
-    "powershellParseErrors": 0,
-    "cleanInstallPassed": true,
-    "repeatInstallPassed": true,
-    "navigationPatchPassed": true,
-    "automaticBackupPassed": true
+  "staticChecks": {
+    "astroBuild": "passed",
+    "generatedPages": 207,
+    "routeGenerated": true,
+    "lifeAiCardGenerated": true,
+    "searchIndexEntryGenerated": true,
+    "duplicateIds": 0,
+    "iframes": 0,
+    "externalContentScripts": 0
   },
-  "onlineDeploymentVerified": false,
-  "allPhysicalMobileBrowsersVerified": false
+  "browserChecks": {
+    "engine": "Microsoft Edge via Playwright",
+    "desktopViewport": "1440x1000",
+    "mobileViewport": "390x844",
+    "passedChecks": 18,
+    "desktopHorizontalOverflow": false,
+    "mobileHorizontalOverflow": false,
+    "fixedSiteHeader": true,
+    "stickyDesktopArticleRail": true,
+    "mobileRailOpenClose": true,
+    "responsiveTables": true,
+    "manualScreenshotInspection": "passed"
+  },
+  "packageChecks": {
+    "sourceFiles": 4,
+    "manifestHashes": "passed",
+    "powershellSyntax": "passed",
+    "cleanInstall": "passed",
+    "repeatInstall": "passed",
+    "hashesAfterInstall": "4/4 matched",
+    "recoveryTest": "passed",
+    "filesRemainingAfterCleanRecovery": 0
+  },
+  "boundaries": {
+    "onlineDeploymentPerformed": false,
+    "productionDomainCheckedAfterDeployment": false
+  }
 }

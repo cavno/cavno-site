@@ -1,68 +1,82 @@
-# 《新手驾驶实战说明书》Cavno 增量更新
+# Cavno 增量更新：AdsPower 代理协议与 IPv4/IPv6 出口指南
 
-本包只包含一个新增页面所需的 4 个源码文件、一个安全安装脚本和验证资料，不包含整站源码，也不会自动发布到线上。
+## 本包包含什么
 
-## 新增网址
+这是一个**增量包**，不是整站源码，只新增 4 个站点源文件：
 
-`/life/driving/beginner-driving-practical-manual/`
+- 新文章路由：`/life/ai/adspower-ssh-ipv4-ipv6-guide/`
+- AI 栏目卡片元数据
+- 完整文章正文与交互
+- 文章专属响应式样式
 
-原有 `/life/driving/beginner-driving-guide/` 不会被替换，两篇内容并存。
+文章内容来自用户指定的 ChatGPT 分享页；正文结构、命令、表格和来源链接均已转成站内原生 HTML，未使用 iframe，也不依赖外部 CSS 或 JavaScript。
 
-## 一键安装
+## 最稳妥的安装方法
 
-1. 完整解压 ZIP，不能只在压缩包预览窗口里运行脚本。
-2. 在解压后的文件夹空白处按住 Shift 并单击鼠标右键，选择“在此处打开 PowerShell”。
-3. 运行：
+1. 解压 ZIP，进入 `cavno-adspower-ssh-ipv4-ipv6-guide-increment` 文件夹。
+2. 找到 Cavno 最新源码的根目录。这个目录里必须同时能看到 `package.json` 和 `src` 文件夹。
+3. 在增量包文件夹空白处按住 Shift 并单击鼠标右键，选择“在终端中打开”。
+4. 执行下面两行命令，把示例路径替换成你的 Cavno 源码根目录：
 
 ```powershell
-powershell.exe -NoProfile -ExecutionPolicy Bypass -File ".\Apply-Update.ps1" -SiteRoot "你的 Cavno 源码根目录"
+Set-ExecutionPolicy -Scope Process Bypass
+.\Apply-Update.ps1 -SiteRoot "D:\你的目录\cavno-site"
 ```
 
-`SiteRoot` 是直接包含 `package.json` 和 `src` 的文件夹，不是 `dist`，也不是网站网址。
+安装器会先核对 4 个文件的大小和 SHA-256，再检查目标路径。如果发现同名但内容不同的文件，会直接停止，避免覆盖你的修改。
 
-脚本会先完成全部预检再写入：
+## 构建和本地检查
 
-- 校验 4 个增量文件的 SHA-256 和字节数；
-- 拒绝不安全路径；
-- 如果同名新页面已存在但内容不同，立即停止，不覆盖；
-- 对 `src/content/nav.json` 只替换 Driving 栏目的一句介绍，不整文件覆盖；
-- 在 `.cavno-update-backups` 下保存本次涉及的原文件。
-
-出现 `Update applied` 后，进入 Cavno 源码根目录运行：
+进入 Cavno 源码根目录后运行：
 
 ```powershell
+npm install
 npm run build
+npm run preview -- --host 127.0.0.1 --port 4321
 ```
 
-构建成功后，按原有 Git、Cloudflare Pages 或静态文件上传方式发布。运行本脚本和本地构建都不会自动修改 cavno.org。
+浏览器打开：
 
-## 手工合并
-
-如果不运行脚本，将本包 `src` 下的 4 个文件按原目录结构复制到 Cavno 源码根目录；然后在 `src/content/nav.json` 中把：
-
-```json
-"desc": "科目三 / 科目四备考实验台"
+```text
+http://127.0.0.1:4321/life/ai/adspower-ssh-ipv4-ipv6-guide/
 ```
 
-改成：
+同时检查 AI 栏目页是否出现新卡片：
 
-```json
-"desc": "新手上路、驾驶实务、驾考训练与智能驾驶系统"
+```text
+http://127.0.0.1:4321/life/ai/
 ```
 
-最后运行 `npm run build`。
+如果项目启用了文章 Markdown、PDF、Word 下载文件的预生成流程，再运行：
 
-## 文档下载功能
+```powershell
+npm run documents:generate
+npm run documents:audit
+```
 
-如果网站已经启用每篇文章的 Markdown、PDF、Word 下载功能，需要在合并后重新执行全站文档生成步骤，再发布生成的下载文件；否则新文章的下载菜单可能暂时返回 404。
+## 如何恢复
 
-## 已完成的验证
+安装完成后，终端会输出一个 `Recovery record` 路径，类似：
 
-- Astro 生产构建成功，共生成 206 个页面；
-- 新页面、驾驶栏目卡片和搜索索引条目均存在；
-- 附件与站内正文的可见文字规范化后逐字一致，共 26,369 个字符；
-- 桌面端与 390px 手机视口共 17 项浏览器检查通过；
-- 无横向页面溢出、iframe、外部脚本、重复 ID 或 Unicode 替换乱码字符；
-- 安装脚本已在隔离目录完成首次安装和重复安装测试；导航配置与同名文件备份均正常。
+```text
+D:\你的目录\cavno-site\.cavno-update-backups\adspower-ssh-ipv4-ipv6-guide-日期-编号
+```
 
-本次没有发布线上，也没有对全部真实手机型号逐台测试。
+需要撤销时，在增量包目录执行：
+
+```powershell
+.\Restore-Update.ps1 `
+  -SiteRoot "D:\你的目录\cavno-site" `
+  -BackupRoot "上一步输出的 Recovery record 完整路径"
+```
+
+恢复脚本只处理本包登记的 4 个文件。如果安装后你又修改了其中任何文件，恢复会停止并提示，避免误删后续工作。
+
+## 验证范围
+
+- 已完成 Astro 整站构建。
+- 已确认新路由、AI 栏目卡片和站内搜索索引均生成。
+- 已完成桌面端 1440 × 1000 与移动端 390 × 844 的浏览器检查。
+- 已检查固定导航、文章目录、无整页横向溢出、移动目录展开/关闭和响应式宽表格。
+- 已核对 19 个主章节、84 个代码/链路示意块、2 张表格与 7 个来源链接。
+- 本包没有部署到线上；合并、构建和发布仍需在你的正式源码与发布环境中执行。

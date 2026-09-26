@@ -1,0 +1,643 @@
+<div class="network-article">
+  <button class="rail-toggle" type="button" aria-expanded="false" aria-controls="networkRail">目录</button>
+  <div class="rail-scrim" aria-hidden="true"></div>
+  <div class="article-layout">
+    <aside class="article-rail" id="networkRail" aria-label="文章目录">
+      <div class="rail-kicker">NETWORK FIELD GUIDE</div>
+      <strong>代理协议与出口路径</strong>
+      <nav><a href="#section-1"><span>01</span>HTTP / HTTPS / SOCKS5 / SSH 到底有什么区别</a>
+<a href="#section-2"><span>02</span>HTTPS Proxy</a>
+<a href="#section-3"><span>03</span>SOCKS5</a>
+<a href="#section-4"><span>04</span>SSH</a>
+<a href="#section-5"><span>05</span>为什么我输入的是 IPv4，却显示 IPv6？</a>
+<a href="#section-6"><span>06</span>IPv6 本身是不是有问题？</a>
+<a href="#section-7"><span>07</span>那为什么我仍建议你固定成 IPv4？</a>
+<a href="#section-8"><span>08</span>最直接的修改方法</a>
+<a href="#section-9"><span>09</span>先临时关闭 IPv6 测试</a>
+<a href="#section-10"><span>10</span>再测试出口</a>
+<a href="#section-11"><span>11</span>回 AdsPower 重新检测</a>
+<a href="#section-12"><span>12</span>确认没问题以后永久关闭 IPv6</a>
+<a href="#section-13"><span>13</span>注意：不要只修改 sshd 的 AddressFamily</a>
+<a href="#section-14"><span>14</span>SSH 到底适不适合 AdsPower？</a>
+<a href="#section-15"><span>15</span>但你现在有一个配置，我强烈建议改掉</a>
+<a href="#section-16"><span>16</span>SSH 与 SOCKS5，我更建议哪个？</a>
+<a href="#section-17"><span>17</span>对 Claude 而言，SSH / SOCKS5 / HTTP 哪个更重要？</a>
+<a href="#section-18"><span>18</span>关于 Claude 本身还有一个边界要明确</a>
+<a href="#section-19"><span>19</span>我对你现在这套 Linode + AdsPower 的建议</a></nav>
+    </aside>
+    <main class="article-main">
+      <div class="article-hero">
+        <div class="hero-badge">SSH · PROXY · DUAL STACK</div>
+        <h2>入口地址不等于出口地址</h2>
+        <p>从代理协议、SSH 隧道和双栈路由出发，厘清 AdsPower 检测到 IPv6 的原因，并建立可验证、可回滚的 IPv4 出口方案。</p>
+        <div class="path-model" aria-label="网络路径示意"><span>AdsPower</span><b>SSH / IPv4</b><span>Linode</span><b>IPv4 或 IPv6</b><span>Internet</span></div>
+      </div>
+      <div class="source-content"><p>可以。先给结论：</p>
+<blockquote><p><strong>你现在的 SSH 配置本身是通的。之所以 AdsPower 检测出 <code>2a01:7e03::...</code>，是因为你虽然通过 IPv4 <code>172.235.55.4</code> 登录 Linode，但 Linode 对目标网站发起连接时优先使用了 IPv6。</strong></p><p>如果你的目标是让 AdsPower 始终显示、始终使用 <code>172.235.55.4</code> 这个固定 IPv4，我建议把这台 Linode 的<strong>公网出口统一为 IPv4</strong>。这比让 IPv4/IPv6 双栈随机参与连接更容易管理和排错。 </p></blockquote>
+<p>AdsPower 官方明确支持 HTTP、HTTPS、SOCKS5 和 SSH，同时其检测页面展示的是 <strong>Outbound IP</strong>，即真正访问互联网时的出口地址。</p>
+<hr>
+<h2 id="section-1" class="section-title">1. HTTP / HTTPS / SOCKS5 / SSH 到底有什么区别</h2>
+<p>先看最核心的结构：</p>
+<figure class="code-block"><figcaption>链路 / 配置</figcaption><pre><code>HTTP Proxy
+AdsPower ─────HTTP Proxy────→ 网站
+
+HTTPS Proxy
+AdsPower ──TLS──→ HTTPS Proxy ─────→ 网站
+
+SOCKS5
+AdsPower ─────SOCKS5────→ Proxy ─────→ 网站
+
+SSH
+AdsPower ═════SSH加密隧道═════→ Linode VPS ─────→ 网站
+                                      │
+                                      └──真正的公网出口</code></pre><button class="copy-code" type="button" aria-label="复制代码">复制</button></figure>
+<h4 id="sub-2-对比" class="sub-title">对比</h4>
+<div class="table-wrap"><table><thead><tr><th>项目</th><th>HTTP</th><th>HTTPS Proxy</th><th>SOCKS5</th><th>SSH</th></tr></thead><tbody><tr><td>工作层级</td><td>HTTP 应用层</td><td>HTTP Proxy + TLS</td><td>通用代理协议</td><td>SSH 隧道</td></tr><tr><td>常用端口</td><td>8080/3128等</td><td>443等</td><td>1080等</td><td><strong>22</strong></td></tr><tr><td>浏览 HTTPS 网站</td><td>✅ CONNECT</td><td>✅ CONNECT</td><td>✅</td><td>✅</td></tr><tr><td>客户端→代理加密</td><td>❌通常没有</td><td>✅</td><td>❌协议本身不加密</td><td><strong>✅强加密</strong></td></tr><tr><td>TCP</td><td>✅</td><td>✅</td><td>✅</td><td>✅</td></tr><tr><td>UDP</td><td>❌</td><td>❌</td><td>可支持</td><td>一般不适合</td></tr><tr><td>DNS 远程解析</td><td>取决于实现</td><td>取决于实现</td><td>通常容易实现</td><td>通常由远端完成</td></tr><tr><td>需要 VPS 安装代理软件</td><td>✅</td><td>✅</td><td>✅</td><td><strong>❌通常不需要</strong></td></tr><tr><td>VPS 开箱即用</td><td>❌</td><td>❌</td><td>❌</td><td><strong>✅</strong></td></tr><tr><td>AdsPower 官方支持</td><td>✅</td><td>✅</td><td>✅</td><td>✅</td></tr><tr><td>配置难度</td><td>中</td><td>中</td><td>中</td><td><strong>低</strong></td></tr></tbody></table></div>
+<p>AdsPower 官方目前直接支持这四类代理。</p>
+<hr>
+<h3 id="sub-2-http" class="sub-title">HTTP</h3>
+<p>例如：</p>
+<figure class="code-block"><figcaption>链路 / 配置</figcaption><pre><code>AdsPower
+   ↓
+172.235.55.4:8080
+   ↓
+Squid / 3proxy
+   ↓
+Internet</code></pre><button class="copy-code" type="button" aria-label="复制代码">复制</button></figure>
+<p>这里 Linode 必须运行一个 HTTP Proxy，例如 Squid。</p>
+<p>一个经常被误解的地方是：</p>
+<blockquote><p>HTTP Proxy <strong>也可以访问 HTTPS 网站</strong>。 </p></blockquote>
+<p>通常通过：</p>
+<figure class="code-block"><figcaption>链路 / 配置</figcaption><pre><code>CONNECT claude.ai:443</code></pre><button class="copy-code" type="button" aria-label="复制代码">复制</button></figure>
+<p>建立 TCP 隧道。</p>
+<p>所以：</p>
+<figure class="code-block"><figcaption>链路 / 配置</figcaption><pre><code>HTTP Proxy</code></pre><button class="copy-code" type="button" aria-label="复制代码">复制</button></figure>
+<p>并不意味着：</p>
+<figure class="code-block"><figcaption>链路 / 配置</figcaption><pre><code>只能访问 http://</code></pre><button class="copy-code" type="button" aria-label="复制代码">复制</button></figure>
+<hr>
+<h2 id="section-2" class="section-title">2. HTTPS Proxy</h2>
+<p>HTTPS Proxy 可以理解为：</p>
+<figure class="code-block"><figcaption>链路 / 配置</figcaption><pre><code>AdsPower
+   │
+   │ TLS
+   ↓
+Proxy Server
+   │
+   │ HTTPS
+   ↓
+claude.ai</code></pre><button class="copy-code" type="button" aria-label="复制代码">复制</button></figure>
+<p>因此存在两层加密关系：</p>
+<figure class="code-block"><figcaption>链路 / 配置</figcaption><pre><code>AdsPower ←TLS→ Proxy
+
+浏览器 ←TLS→ Claude</code></pre><button class="copy-code" type="button" aria-label="复制代码">复制</button></figure>
+<p>相比普通 HTTP Proxy，客户端到 Proxy 本身也受到 TLS 保护。</p>
+<p>但你需要在 VPS 上部署代理服务器和证书，所以配置比 SSH 麻烦。</p>
+<hr>
+<h2 id="section-3" class="section-title">3. SOCKS5</h2>
+<p>SOCKS5 是最“通用”的传统代理方式。</p>
+<p>它基本不关心上层是什么：</p>
+<figure class="code-block"><figcaption>链路 / 配置</figcaption><pre><code>HTTP
+HTTPS
+SSH
+API
+WebSocket
+其他 TCP</code></pre><button class="copy-code" type="button" aria-label="复制代码">复制</button></figure>
+<p>都可以通过 SOCKS5 转发。</p>
+<p>例如：</p>
+<figure class="code-block"><figcaption>链路 / 配置</figcaption><pre><code>AdsPower
+    ↓
+SOCKS5
+    ↓
+172.235.55.4:1080
+    ↓
+Claude</code></pre><button class="copy-code" type="button" aria-label="复制代码">复制</button></figure>
+<h4 id="sub-4-socks5-最大优点" class="sub-title">SOCKS5 最大优点</h4>
+<p>HTTP Proxy 工作在 HTTP 层。</p>
+<p>SOCKS5 更接近：</p>
+<blockquote><p>“帮我建立一条到目标 IP/端口的连接。” </p></blockquote>
+<p>因此代理浏览器时非常常见。</p>
+<p>不过：</p>
+<blockquote><p><strong>SOCKS5 本身不提供传输加密。</strong> </p></blockquote>
+<p>网站本身如果是 HTTPS，网站内容仍然由 HTTPS 加密；但 AdsPower→SOCKS5 Server 这一段不像 SSH 那样天然加密。</p>
+<hr>
+<h2 id="section-4" class="section-title">4. SSH</h2>
+<p>你现在使用的是这一种。</p>
+<p>结构实际上是：</p>
+<figure class="code-block"><figcaption>链路 / 配置</figcaption><pre><code>Windows
+│
+│ AdsPower
+│
+│ SSH
+↓
+172.235.55.4:22
+│
+│ Linode
+│
+├── IPv4 → 172.235.55.4
+│
+└── IPv6 → 2a01:7e03::2000:f8ff:fedb:b1df
+         ↓
+       Internet</code></pre><button class="copy-code" type="button" aria-label="复制代码">复制</button></figure>
+<p>SSH 最大优势：</p>
+<h4 id="sub-5-不需要在-linode-上安装-squid-dante-3proxy" class="sub-title">不需要在 Linode 上安装 Squid、Dante、3proxy</h4>
+<p>Linode 默认就有：</p>
+<figure class="code-block"><figcaption>链路 / 配置</figcaption><pre><code>sshd</code></pre><button class="copy-code" type="button" aria-label="复制代码">复制</button></figure>
+<p>所以你直接填写：</p>
+<figure class="code-block"><figcaption>链路 / 配置</figcaption><pre><code>Proxy Type: SSH
+
+Host:
+172.235.55.4
+
+Port:
+22
+
+Username:
+root
+
+Password:
+********</code></pre><button class="copy-code" type="button" aria-label="复制代码">复制</button></figure>
+<p>AdsPower 就能够利用 SSH 建立隧道。</p>
+<p>这也是为什么你没有配置 SOCKS5 或 HTTP Server，却已经能正常代理。</p>
+<hr>
+<h2 id="section-5" class="section-title">5. 为什么我输入的是 IPv4，却显示 IPv6？</h2>
+<p>这是你这次问题最关键的地方。</p>
+<p>你实际上存在<strong>两个 IP 概念</strong>。</p>
+<h3 id="sub-6-ssh-入口地址" class="sub-title">SSH 入口地址</h3>
+<figure class="code-block"><figcaption>链路 / 配置</figcaption><pre><code>172.235.55.4</code></pre><button class="copy-code" type="button" aria-label="复制代码">复制</button></figure>
+<p>Windows 是这样连接 VPS 的：</p>
+<figure class="code-block"><figcaption>链路 / 配置</figcaption><pre><code>AdsPower
+      │
+      │ IPv4
+      ↓
+172.235.55.4</code></pre><button class="copy-code" type="button" aria-label="复制代码">复制</button></figure>
+<p>这里只说明：</p>
+<blockquote><p>AdsPower 使用 IPv4 成功连接到了 Linode SSH Server。 </p></blockquote>
+<p>它<strong>不代表 Linode 访问互联网也使用 IPv4。</strong></p>
+<hr>
+<h3 id="sub-6-vps-出口地址" class="sub-title">VPS 出口地址</h3>
+<p>Linode 是 Dual Stack：</p>
+<figure class="code-block"><figcaption>链路 / 配置</figcaption><pre><code>IPv4
+172.235.55.4
+
+IPv6
+2a01:7e03::2000:f8ff:fedb:b1df</code></pre><button class="copy-code" type="button" aria-label="复制代码">复制</button></figure>
+<p>假设 Claude 同时具有：</p>
+<figure class="code-block"><figcaption>链路 / 配置</figcaption><pre><code>A Record
+→ IPv4
+
+AAAA Record
+→ IPv6</code></pre><button class="copy-code" type="button" aria-label="复制代码">复制</button></figure>
+<p>Linux 可能选择：</p>
+<figure class="code-block"><figcaption>链路 / 配置</figcaption><pre><code>Linode
+     │
+     ├─ IPv4
+     │
+     └─ IPv6 ← 被选择
+            ↓
+        Claude</code></pre><button class="copy-code" type="button" aria-label="复制代码">复制</button></figure>
+<p>于是完整链路实际上变成：</p>
+<figure class="code-block"><figcaption>链路 / 配置</figcaption><pre><code>你的电脑
+   │
+   │ SSH IPv4
+   ↓
+172.235.55.4
+   │
+   │ VPS内部
+   ↓
+IPv6
+2a01:7e03::2000:f8ff:fedb:b1df
+   │
+   ↓
+Claude</code></pre><button class="copy-code" type="button" aria-label="复制代码">复制</button></figure>
+<p>所以 AdsPower 检测出来：</p>
+<figure class="code-block"><figcaption>链路 / 配置</figcaption><pre><code>2a01:7e03::2000:f8ff:fedb:b1df</code></pre><button class="copy-code" type="button" aria-label="复制代码">复制</button></figure>
+<p>完全合理。</p>
+<hr>
+<h2 id="section-6" class="section-title">6. IPv6 本身是不是有问题？</h2>
+<p><strong>不是。</strong></p>
+<p>不要形成：</p>
+<figure class="code-block"><figcaption>链路 / 配置</figcaption><pre><code>IPv4 = 安全
+IPv6 = 风险</code></pre><button class="copy-code" type="button" aria-label="复制代码">复制</button></figure>
+<p>这样的判断。</p>
+<p>真正应该区分的是：</p>
+<figure class="code-block"><figcaption>链路 / 配置</figcaption><pre><code>IP Version
+IPv4 / IPv6
+        │
+        ↓
+只是网络地址协议
+
+IP属性
+Datacenter / ISP / Residential
+ASN
+国家
+城市
+IP历史
+信誉
+        │
+        ↓
+这是另外一个维度</code></pre><button class="copy-code" type="button" aria-label="复制代码">复制</button></figure>
+<p>你的：</p>
+<figure class="code-block"><figcaption>链路 / 配置</figcaption><pre><code>172.235.55.4</code></pre><button class="copy-code" type="button" aria-label="复制代码">复制</button></figure>
+<p>即使是 IPv4，它仍然是：</p>
+<figure class="code-block"><figcaption>链路 / 配置</figcaption><pre><code>Linode/Akamai
+Datacenter IP</code></pre><button class="copy-code" type="button" aria-label="复制代码">复制</button></figure>
+<p>把它变成 IPv4：</p>
+<figure class="code-block"><figcaption>链路 / 配置</figcaption><pre><code>≠ Residential IP
+≠ ISP residential IP
+≠ 改变 ASN</code></pre><button class="copy-code" type="button" aria-label="复制代码">复制</button></figure>
+<p>AdsPower 自己的文档也明确区分了 Datacenter 与 Residential ISP：数据中心代理和住宅 ISP 代理属于不同网络属性。</p>
+<p>所以：</p>
+<blockquote><p><strong>HTTP / SOCKS5 / SSH 并不会改变你的 IP 属性。</strong> </p></blockquote>
+<p>如果全部都经过同一台 Linode：</p>
+<figure class="code-block"><figcaption>链路 / 配置</figcaption><pre><code>HTTP   ┐
+SOCKS5 ├──→ Linode → Internet
+SSH    ┘</code></pre><button class="copy-code" type="button" aria-label="复制代码">复制</button></figure>
+<p>最终仍然属于 Linode/Akamai 网络。</p>
+<hr>
+<h2 id="section-7" class="section-title">7. 那为什么我仍建议你固定成 IPv4？</h2>
+<p>不是因为：</p>
+<blockquote><p>IPv6 不好。 </p></blockquote>
+<p>而是因为：</p>
+<blockquote><p><strong>网络路径确定性更高。</strong> </p></blockquote>
+<p>现在你的 VPS 是：</p>
+<figure class="code-block"><figcaption>链路 / 配置</figcaption><pre><code>              ┌── IPv4
+AdsPower → VPS│
+              └── IPv6</code></pre><button class="copy-code" type="button" aria-label="复制代码">复制</button></figure>
+<p>不同目标网站可能出现：</p>
+<figure class="code-block"><figcaption>链路 / 配置</figcaption><pre><code>网站 A → IPv4
+网站 B → IPv6
+网站 C → IPv6
+网站 D → IPv4</code></pre><button class="copy-code" type="button" aria-label="复制代码">复制</button></figure>
+<p>甚至不同检测服务可能分别报告：</p>
+<figure class="code-block"><figcaption>链路 / 配置</figcaption><pre><code>IP Checker A
+172.235.55.4
+
+IP Checker B
+2a01:7e03::...
+
+IP Checker C
+172.235.55.4</code></pre><button class="copy-code" type="button" aria-label="复制代码">复制</button></figure>
+<p>对于一个长期固定使用的浏览器环境，这会增加排错变量。</p>
+<p>因此我更倾向：</p>
+<figure class="code-block"><figcaption>链路 / 配置</figcaption><pre><code>AdsPower
+    ↓
+SSH
+    ↓
+172.235.55.4
+    ↓
+IPv4 ONLY
+    ↓
+Internet</code></pre><button class="copy-code" type="button" aria-label="复制代码">复制</button></figure>
+<p>这样非常明确：</p>
+<figure class="code-block"><figcaption>链路 / 配置</figcaption><pre><code>入口 IP = 172.235.55.4
+出口 IP = 172.235.55.4</code></pre><button class="copy-code" type="button" aria-label="复制代码">复制</button></figure>
+<hr>
+<h2 id="section-8" class="section-title">8. 最直接的修改方法</h2>
+<p>假设你的 Linode 是 Ubuntu/Debian。</p>
+<p>先 SSH 登录：</p>
+<figure class="code-block"><figcaption>bash</figcaption><pre><code>ssh root@172.235.55.4</code></pre><button class="copy-code" type="button" aria-label="复制代码">复制</button></figure>
+<h3 id="sub-9-第一步-先看看当前-ipv4-ipv6" class="sub-title">第一步：先看看当前 IPv4/IPv6</h3>
+<p>执行：</p>
+<figure class="code-block"><figcaption>bash</figcaption><pre><code>ip addr</code></pre><button class="copy-code" type="button" aria-label="复制代码">复制</button></figure>
+<p>然后：</p>
+<figure class="code-block"><figcaption>bash</figcaption><pre><code>curl -4 ifconfig.me</code></pre><button class="copy-code" type="button" aria-label="复制代码">复制</button></figure>
+<p>应该返回类似：</p>
+<figure class="code-block"><figcaption>链路 / 配置</figcaption><pre><code>172.235.55.4</code></pre><button class="copy-code" type="button" aria-label="复制代码">复制</button></figure>
+<p>然后：</p>
+<figure class="code-block"><figcaption>bash</figcaption><pre><code>curl -6 ifconfig.me</code></pre><button class="copy-code" type="button" aria-label="复制代码">复制</button></figure>
+<p>现在大概率返回：</p>
+<figure class="code-block"><figcaption>链路 / 配置</figcaption><pre><code>2a01:7e03::2000:f8ff:fedb:b1df</code></pre><button class="copy-code" type="button" aria-label="复制代码">复制</button></figure>
+<p>这就直接证明了问题：</p>
+<figure class="code-block"><figcaption>链路 / 配置</figcaption><pre><code>VPS IPv4正常
++
+VPS IPv6正常
++
+VPS为Dual Stack</code></pre><button class="copy-code" type="button" aria-label="复制代码">复制</button></figure>
+<hr>
+<h2 id="section-9" class="section-title">9. 先临时关闭 IPv6 测试</h2>
+<p>先不要永久修改。</p>
+<p>执行：</p>
+<figure class="code-block"><figcaption>bash</figcaption><pre><code>sysctl -w net.ipv6.conf.all.disable_ipv6=1
+sysctl -w net.ipv6.conf.default.disable_ipv6=1</code></pre><button class="copy-code" type="button" aria-label="复制代码">复制</button></figure>
+<p>检查：</p>
+<figure class="code-block"><figcaption>bash</figcaption><pre><code>cat /proc/sys/net/ipv6/conf/all/disable_ipv6</code></pre><button class="copy-code" type="button" aria-label="复制代码">复制</button></figure>
+<p>如果返回：</p>
+<figure class="code-block"><figcaption>链路 / 配置</figcaption><pre><code>1</code></pre><button class="copy-code" type="button" aria-label="复制代码">复制</button></figure>
+<p>代表已经禁用。</p>
+<p>Ubuntu/Linux 常见的这个 <code>sysctl</code> 方法就是通过 <code>net.ipv6.conf.*.disable_ipv6</code> 控制 IPv6。</p>
+<hr>
+<h2 id="section-10" class="section-title">10. 再测试出口</h2>
+<p>执行：</p>
+<figure class="code-block"><figcaption>bash</figcaption><pre><code>curl -4 ifconfig.me</code></pre><button class="copy-code" type="button" aria-label="复制代码">复制</button></figure>
+<p>应该：</p>
+<figure class="code-block"><figcaption>链路 / 配置</figcaption><pre><code>172.235.55.4</code></pre><button class="copy-code" type="button" aria-label="复制代码">复制</button></figure>
+<p>再运行：</p>
+<figure class="code-block"><figcaption>bash</figcaption><pre><code>curl -6 ifconfig.me</code></pre><button class="copy-code" type="button" aria-label="复制代码">复制</button></figure>
+<p>应该：</p>
+<figure class="code-block"><figcaption>链路 / 配置</figcaption><pre><code>失败</code></pre><button class="copy-code" type="button" aria-label="复制代码">复制</button></figure>
+<p>这是我们想要的结果。</p>
+<hr>
+<h2 id="section-11" class="section-title">11. 回 AdsPower 重新检测</h2>
+<p>你的配置仍然保持：</p>
+<figure class="code-block"><figcaption>链路 / 配置</figcaption><pre><code>Proxy Type
+SSH
+
+Host
+172.235.55.4
+
+Port
+22
+
+Username
+你的SSH用户
+
+Password
+******</code></pre><button class="copy-code" type="button" aria-label="复制代码">复制</button></figure>
+<p>点击：</p>
+<figure class="code-block"><figcaption>链路 / 配置</figcaption><pre><code>Check Proxy</code></pre><button class="copy-code" type="button" aria-label="复制代码">复制</button></figure>
+<p>之前：</p>
+<figure class="code-block"><figcaption>链路 / 配置</figcaption><pre><code>Outbound IP
+
+2a01:7e03::2000:f8ff:fedb:b1df</code></pre><button class="copy-code" type="button" aria-label="复制代码">复制</button></figure>
+<p>修改后应该变为：</p>
+<figure class="code-block"><figcaption>链路 / 配置</figcaption><pre><code>Outbound IP
+
+172.235.55.4</code></pre><button class="copy-code" type="button" aria-label="复制代码">复制</button></figure>
+<p>AdsPower 官方所谓的 <code>Outbound IP</code> 正是最终代理出口。</p>
+<hr>
+<h2 id="section-12" class="section-title">12. 确认没问题以后永久关闭 IPv6</h2>
+<p>我推荐不要乱改 GRUB，直接建立独立 sysctl 文件：</p>
+<figure class="code-block"><figcaption>bash</figcaption><pre><code>nano /etc/sysctl.d/99-disable-ipv6.conf</code></pre><button class="copy-code" type="button" aria-label="复制代码">复制</button></figure>
+<p>加入：</p>
+<figure class="code-block"><figcaption>链路 / 配置</figcaption><pre><code>net.ipv6.conf.all.disable_ipv6=1
+net.ipv6.conf.default.disable_ipv6=1
+net.ipv6.conf.lo.disable_ipv6=1</code></pre><button class="copy-code" type="button" aria-label="复制代码">复制</button></figure>
+<p>保存：</p>
+<figure class="code-block"><figcaption>链路 / 配置</figcaption><pre><code>Ctrl + O
+Enter
+Ctrl + X</code></pre><button class="copy-code" type="button" aria-label="复制代码">复制</button></figure>
+<p>加载：</p>
+<figure class="code-block"><figcaption>bash</figcaption><pre><code>sysctl --system</code></pre><button class="copy-code" type="button" aria-label="复制代码">复制</button></figure>
+<p>然后验证：</p>
+<figure class="code-block"><figcaption>bash</figcaption><pre><code>cat /proc/sys/net/ipv6/conf/all/disable_ipv6</code></pre><button class="copy-code" type="button" aria-label="复制代码">复制</button></figure>
+<p>应该：</p>
+<figure class="code-block"><figcaption>链路 / 配置</figcaption><pre><code>1</code></pre><button class="copy-code" type="button" aria-label="复制代码">复制</button></figure>
+<p>再：</p>
+<figure class="code-block"><figcaption>bash</figcaption><pre><code>ip -6 addr</code></pre><button class="copy-code" type="button" aria-label="复制代码">复制</button></figure>
+<p>不应该再看到原来可用于公网通信的 IPv6。</p>
+<hr>
+<h2 id="section-13" class="section-title">13. 注意：不要只修改 sshd 的 AddressFamily</h2>
+<p>Akamai/Linode 官方文档会提供这样的配置：</p>
+<figure class="code-block"><figcaption>链路 / 配置</figcaption><pre><code>/etc/ssh/sshd_config</code></pre><button class="copy-code" type="button" aria-label="复制代码">复制</button></figure>
+<p>加入：</p>
+<figure class="code-block"><figcaption>链路 / 配置</figcaption><pre><code>AddressFamily inet</code></pre><button class="copy-code" type="button" aria-label="复制代码">复制</button></figure>
+<p>意思是：</p>
+<blockquote><p>SSH Server 只接受 IPv4 SSH 连接。 </p></blockquote>
+<p>例如：</p>
+<figure class="code-block"><figcaption>链路 / 配置</figcaption><pre><code>AdsPower
+    ↓ IPv4
+SSH Server</code></pre><button class="copy-code" type="button" aria-label="复制代码">复制</button></figure>
+<p>但是官方文档也特别说明，这<strong>并不是系统级禁用 IPv6</strong>。</p>
+<p>所以它不能解决你现在的问题。</p>
+<p>你真正的问题是：</p>
+<figure class="code-block"><figcaption>链路 / 配置</figcaption><pre><code>AdsPower ─IPv4→ VPS ─IPv6→ Internet
+                     ↑
+                   这里</code></pre><button class="copy-code" type="button" aria-label="复制代码">复制</button></figure>
+<p>而不是：</p>
+<figure class="code-block"><figcaption>链路 / 配置</figcaption><pre><code>AdsPower ─IPv6→ VPS</code></pre><button class="copy-code" type="button" aria-label="复制代码">复制</button></figure>
+<p>因此：</p>
+<figure class="code-block"><figcaption>链路 / 配置</figcaption><pre><code>AddressFamily inet</code></pre><button class="copy-code" type="button" aria-label="复制代码">复制</button></figure>
+<p>不是关键解决方案。</p>
+<hr>
+<h2 id="section-14" class="section-title">14. SSH 到底适不适合 AdsPower？</h2>
+<h4 id="sub-15-技术层面-适合" class="sub-title">技术层面：适合。</h4>
+<p>AdsPower 官方直接支持 SSH。</p>
+<p>而且对于：</p>
+<figure class="code-block"><figcaption>链路 / 配置</figcaption><pre><code>自己拥有一台 Linode VPS
++
+只需要几个固定浏览器环境</code></pre><button class="copy-code" type="button" aria-label="复制代码">复制</button></figure>
+<p>SSH 其实是很简洁的办法：</p>
+<figure class="code-block"><figcaption>链路 / 配置</figcaption><pre><code>不需要Squid
+不需要Dante
+不需要3proxy
+不需要额外开放1080/8080端口
+
+只需要22</code></pre><button class="copy-code" type="button" aria-label="复制代码">复制</button></figure>
+<p>还有一个优点：</p>
+<figure class="code-block"><figcaption>链路 / 配置</figcaption><pre><code>电脑 ═══ SSH加密 ═══ VPS</code></pre><button class="copy-code" type="button" aria-label="复制代码">复制</button></figure>
+<p>客户端→服务器的代理传输天然加密。</p>
+<hr>
+<h2 id="section-15" class="section-title">15. 但你现在有一个配置，我强烈建议改掉</h2>
+<p>就是：</p>
+<figure class="code-block"><figcaption>链路 / 配置</figcaption><pre><code>Username: root
+Password: root密码</code></pre><button class="copy-code" type="button" aria-label="复制代码">复制</button></figure>
+<p><strong>不要把 Linode 的 root 账号+root 密码长期存进 AdsPower。</strong></p>
+<p>从服务器安全角度，这是不必要的。</p>
+<p>AdsPower 只需要：</p>
+<blockquote><p>一个能够 SSH 登录并进行 TCP forwarding 的普通用户。 </p></blockquote>
+<p>例如建立：</p>
+<figure class="code-block"><figcaption>bash</figcaption><pre><code>adduser adspower</code></pre><button class="copy-code" type="button" aria-label="复制代码">复制</button></figure>
+<p>系统让你输入密码。</p>
+<p>然后测试：</p>
+<figure class="code-block"><figcaption>bash</figcaption><pre><code>ssh adspower@172.235.55.4</code></pre><button class="copy-code" type="button" aria-label="复制代码">复制</button></figure>
+<p>可以登录即可。</p>
+<p>AdsPower 改成：</p>
+<figure class="code-block"><figcaption>链路 / 配置</figcaption><pre><code>Proxy Type:
+SSH
+
+Host:
+172.235.55.4
+
+Port:
+22
+
+Username:
+adspower
+
+Password:
+********</code></pre><button class="copy-code" type="button" aria-label="复制代码">复制</button></figure>
+<p>这个用户：</p>
+<figure class="code-block"><figcaption>链路 / 配置</figcaption><pre><code>不加入 sudo
+不需要 root
+不需要服务器管理权限</code></pre><button class="copy-code" type="button" aria-label="复制代码">复制</button></figure>
+<p>于是：</p>
+<figure class="code-block"><figcaption>链路 / 配置</figcaption><pre><code>AdsPower账号泄露
+       ↓
+最多泄露普通SSH账户
+
+而不是
+
+AdsPower账号泄露
+       ↓
+整台Linode root权限</code></pre><button class="copy-code" type="button" aria-label="复制代码">复制</button></figure>
+<p>这是你当前配置里比 IPv6 <strong>更值得马上修正</strong>的地方。</p>
+<hr>
+<h2 id="section-16" class="section-title">16. SSH 与 SOCKS5，我更建议哪个？</h2>
+<p>如果你的情况就是：</p>
+<figure class="code-block"><figcaption>链路 / 配置</figcaption><pre><code>1台自己的Linode
++
+1~几个AdsPower环境
++
+自己使用</code></pre><button class="copy-code" type="button" aria-label="复制代码">复制</button></figure>
+<p>我会选择：</p>
+<blockquote><p><strong>SSH。</strong> </p></blockquote>
+<p>因为：</p>
+<figure class="code-block"><figcaption>链路 / 配置</figcaption><pre><code>SSH
+├── 配置简单
+├── 天然加密
+├── 不需要部署额外Proxy Server
+├── AdsPower原生支持
+└── 适合单机长期固定使用</code></pre><button class="copy-code" type="button" aria-label="复制代码">复制</button></figure>
+<p>如果未来是：</p>
+<figure class="code-block"><figcaption>链路 / 配置</figcaption><pre><code>几十个AdsPower Profile
+几十个账号
+多个工作人员
+权限隔离
+流量统计
+多个出口</code></pre><button class="copy-code" type="button" aria-label="复制代码">复制</button></figure>
+<p>那时才更适合：</p>
+<figure class="code-block"><figcaption>链路 / 配置</figcaption><pre><code>SOCKS5 / HTTPS Proxy
++
+独立代理账户
++
+ACL
++
+日志
++
+出口绑定</code></pre><button class="copy-code" type="button" aria-label="复制代码">复制</button></figure>
+<p>也就是说：</p>
+<figure class="code-block"><figcaption>链路 / 配置</figcaption><pre><code>个人 / 少量环境
+SSH更省事
+
+企业 / 大规模环境
+SOCKS5 / HTTPS Proxy更专业</code></pre><button class="copy-code" type="button" aria-label="复制代码">复制</button></figure>
+<hr>
+<h2 id="section-17" class="section-title">17. 对 Claude 而言，SSH / SOCKS5 / HTTP 哪个更重要？</h2>
+<p>真正重要的是理解这一点：</p>
+<figure class="code-block"><figcaption>链路 / 配置</figcaption><pre><code>                Proxy协议
+            HTTP/SOCKS5/SSH
+                   │
+                   ↓
+              只是传输方式
+                   │
+                   ↓
+Claude真正看到的是
+━━━━━━━━━━━━━━━━━━━━━━
+出口IP
+ASN
+国家/地区
+网络运营商
+连接行为
+以及其他安全信号
+━━━━━━━━━━━━━━━━━━━━━━</code></pre><button class="copy-code" type="button" aria-label="复制代码">复制</button></figure>
+<p>因此：</p>
+<figure class="code-block"><figcaption>链路 / 配置</figcaption><pre><code>SSH → Linode</code></pre><button class="copy-code" type="button" aria-label="复制代码">复制</button></figure>
+<p>换成：</p>
+<figure class="code-block"><figcaption>链路 / 配置</figcaption><pre><code>SOCKS5 → 同一台Linode</code></pre><button class="copy-code" type="button" aria-label="复制代码">复制</button></figure>
+<p>Claude 最终看到的出口网络仍然是 Linode。</p>
+<p>换代理协议本身不会把：</p>
+<figure class="code-block"><figcaption>链路 / 配置</figcaption><pre><code>Linode Datacenter IP</code></pre><button class="copy-code" type="button" aria-label="复制代码">复制</button></figure>
+<p>变成：</p>
+<figure class="code-block"><figcaption>链路 / 配置</figcaption><pre><code>Residential ISP IP</code></pre><button class="copy-code" type="button" aria-label="复制代码">复制</button></figure>
+<p>Anthropic 官方也明确表示，Claude 会使用 IP 等信号推断国家/地区，用于平台安全、反滥用及地区可用性判断。</p>
+<p>所以如果以后出现订阅问题，不应该简单理解成：</p>
+<figure class="code-block"><figcaption>链路 / 配置</figcaption><pre><code>SSH不好
+↓
+换SOCKS5
+↓
+问题解决</code></pre><button class="copy-code" type="button" aria-label="复制代码">复制</button></figure>
+<p>协议通常不是决定变量。</p>
+<hr>
+<h2 id="section-18" class="section-title">18. 关于 Claude 本身还有一个边界要明确</h2>
+<p>Anthropic 当前官方要求 Claude 用户位于其支持地区，并维护一份支持国家和地区名单。</p>
+<p>所以：</p>
+<blockquote><p>网络配置可以解决“流量究竟怎么走、出口究竟是什么 IP”的技术问题，但不能改变 Anthropic 对账户资格、地区或支付的规则。 </p></blockquote>
+<hr>
+<h2 id="section-19" class="section-title">19. 我对你现在这套 Linode + AdsPower 的建议</h2>
+<p>如果只是讨论<strong>网络工程上的确定性和安全性</strong>，我会这样改：</p>
+<figure class="code-block"><figcaption>链路 / 配置</figcaption><pre><code>                    Windows
+                       │
+                       │
+                    AdsPower
+                       │
+                       │ SSH
+                       │
+                       ▼
+              172.235.55.4:22
+             Linode / Akamai VPS
+                       │
+                  普通SSH用户
+                  非 root 用户
+                       │
+                IPv6 Disabled
+                       │
+                       │ IPv4 Only
+                       ▼
+                 172.235.55.4
+                       │
+                       ▼
+                   Internet</code></pre><button class="copy-code" type="button" aria-label="复制代码">复制</button></figure>
+<p>最终目标是：</p>
+<figure class="code-block"><figcaption>链路 / 配置</figcaption><pre><code>SSH入口
+172.235.55.4
+
+        ↓
+
+VPS IPv4出口
+172.235.55.4
+
+        ↓
+
+AdsPower检测
+172.235.55.4</code></pre><button class="copy-code" type="button" aria-label="复制代码">复制</button></figure>
+<p>而不是现在：</p>
+<figure class="code-block"><figcaption>链路 / 配置</figcaption><pre><code>SSH入口
+172.235.55.4
+
+        ↓
+
+VPS IPv6出口
+2a01:7e03::...
+
+        ↓
+
+AdsPower检测
+2a01:7e03::...</code></pre><button class="copy-code" type="button" aria-label="复制代码">复制</button></figure>
+<h4 id="sub-20-三个问题最终答案" class="sub-title">三个问题最终答案</h4>
+<div class="table-wrap"><table><thead><tr><th>你的问题</th><th>结论</th></tr></thead><tbody><tr><td>HTTP/HTTPS/SOCKS5/SSH 有什么区别？</td><td>协议层和隧道方式不同；SSH 天然加密、VPS 无需另外部署代理软件</td></tr><tr><td>SSH 能不能用于 AdsPower？</td><td><strong>可以，而且 AdsPower 官方支持</strong>；自己的一台 VPS + 少量环境时很方便</td></tr><tr><td>SSH 能不能用于正常浏览 Claude？</td><td>技术上没有协议兼容问题；最终更关键的是出口 IP/地区/ASN等，而不是 SSH 这个协议本身</td></tr><tr><td>当前 IPv6 是否说明 SSH 配错？</td><td><strong>不是</strong></td></tr><tr><td>为什么填 IPv4 却显示 IPv6？</td><td>IPv4 是 SSH <strong>入口</strong>，IPv6 是 VPS 的互联网<strong>出口</strong></td></tr><tr><td>IPv6 本身是不是坏 IP？</td><td><strong>不是</strong></td></tr><tr><td>是否建议改成 IPv4？</td><td><strong>如果你希望出口固定、路径明确，我建议改成 IPv4-only</strong></td></tr><tr><td>改 IPv4 能否把 Linode 变住宅 IP？</td><td><strong>不能</strong>，仍然是 Linode/Akamai 数据中心网络</td></tr><tr><td>root 能不能继续用？</td><td>能工作，但<strong>不建议</strong>；应建立专门普通 SSH 用户</td></tr></tbody></table></div>
+<p><strong>因此你现在最值得做的两件事就是：① Linode 出口固定为 IPv4；② AdsPower 不再保存 root 凭据，改用专门的普通 SSH 用户。</strong></p></div>
+      <section class="references" aria-labelledby="references-title">
+        <h2 id="references-title">参考资料</h2>
+        <p>以下为原共享回答中显示的主要来源链接。</p>
+        <ol><li><a href="https://chatgpt.com/s/t_6ab8060e4ae88191baf60c80b77dcd11" rel="noopener noreferrer">ChatGPT 分享页原文</a></li><li><a href="https://help.adspower.com/docs/proxy_types" rel="noopener noreferrer">AdsPower：Proxy Types</a></li><li><a href="https://help.adspower.com/docs/proxy_list" rel="noopener noreferrer">AdsPower：Proxies—Add, Buy, Renew, Check, Filter</a></li><li><a href="https://learnubuntu.com/disable-ipv6/" rel="noopener noreferrer">Learn Ubuntu：Disable IPv6 in Ubuntu</a></li><li><a href="https://techdocs.akamai.com/cloud-computing/docs/set-up-and-secure-a-compute-instance" rel="noopener noreferrer">Akamai TechDocs：Set up and secure a Linode</a></li><li><a href="https://privacy.anthropic.com/en/articles/11186740-does-claude-use-my-location" rel="noopener noreferrer">Anthropic Privacy Center：Does Claude use my location?</a></li><li><a href="https://www.anthropic.com/supported-countries" rel="noopener noreferrer">Anthropic：Supported countries and regions</a></li></ol>
+      </section>
+      <footer>内容备份自用户指定的 ChatGPT 分享页；网络与平台政策可能变化，执行服务器配置前请保留现有配置并确认仍有可用的远程登录通道。</footer>
+    </main>
+  </div>
+</div>
+<script>
+(() => {
+  const root = document.querySelector('.network-article');
+  if (!root) return;
+  const rail = root.querySelector('.article-rail');
+  const toggle = root.querySelector('.rail-toggle');
+  const scrim = root.querySelector('.rail-scrim');
+  const closeRail = () => { rail.classList.remove('open'); scrim.classList.remove('open'); toggle.setAttribute('aria-expanded', 'false'); };
+  toggle.addEventListener('click', () => { const open = !rail.classList.contains('open'); rail.classList.toggle('open', open); scrim.classList.toggle('open', open); toggle.setAttribute('aria-expanded', String(open)); });
+  scrim.addEventListener('click', closeRail);
+  rail.addEventListener('click', event => { if (event.target.closest('a')) closeRail(); });
+  root.querySelectorAll('.copy-code').forEach(button => button.addEventListener('click', async () => {
+    const code = button.parentElement.querySelector('code')?.innerText || '';
+    try { await navigator.clipboard.writeText(code); button.textContent = '已复制'; setTimeout(() => { button.textContent = '复制'; }, 1200); } catch { button.textContent = '复制失败'; }
+  }));
+  const links = [...rail.querySelectorAll('a')];
+  const sections = links.map(link => document.querySelector(link.getAttribute('href'))).filter(Boolean);
+  const update = () => {
+    let current = sections[0];
+    sections.forEach(section => { if (section.getBoundingClientRect().top <= 180) current = section; });
+    links.forEach(link => link.classList.toggle('active', current && link.getAttribute('href') === '#' + current.id));
+  };
+  document.addEventListener('scroll', update, { passive: true });
+  update();
+})();
+</script>

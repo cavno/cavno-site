@@ -1,0 +1,24 @@
+---
+import Base from '../../../layouts/Base.astro';
+import body from '../../../legacy/life/ai/adspower-ssh-ipv4-ipv6-guide/body.html?raw';
+import '../../../legacy/life/ai/adspower-ssh-ipv4-ipv6-guide/style.css';
+
+const meta = {
+  title: 'AdsPower 代理协议与 IPv4/IPv6 出口指南',
+  description: '系统比较 HTTP、HTTPS Proxy、SOCKS5 与 SSH，解释代理入口和 VPS 公网出口的差异，并给出 Linode 双栈环境下可验证、可回滚的 IPv4 出口与账户安全方案。',
+};
+---
+<Base title={`${meta.title} · Cavno`} description={meta.description}>
+  <section class="cv-page-head">
+    <div class="cv-wrap">
+      <div class="cv-eyebrow">Life & Skills · AI</div>
+      <h1 class="cv-page-title">{meta.title}</h1>
+      <p class="cv-lede">{meta.description}</p>
+      <a class="cv-crumb-back" href="/life/ai/">← 返回 AI 栏目</a>
+    </div>
+  </section>
+
+  <article class="lp network-guide">
+    <Fragment set:html={body} />
+  </article>
+</Base>
