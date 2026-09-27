@@ -53,7 +53,7 @@ foreach ($entry in $manifest.files) {
 
 $stamp = Get-Date -Format 'yyyyMMdd-HHmmss'
 $suffix = [Guid]::NewGuid().ToString('N').Substring(0, 8)
-$backupRoot = Join-Path $siteRootFull ".cavno-update-backups\adspower-ssh-ipv4-ipv6-guide-$stamp-$suffix"
+$backupRoot = Join-Path $siteRootFull ".cavno-update-backups\linode-ubuntu-disable-ipv6-guide-$stamp-$suffix"
 New-Item -ItemType Directory -Force -Path $backupRoot | Out-Null
 
 foreach ($item in $plan) {

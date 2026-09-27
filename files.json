@@ -1,26 +1,26 @@
 {
-  "packageId": "cavno-adspower-ssh-ipv4-ipv6-guide-20260927",
-  "route": "/life/ai/adspower-ssh-ipv4-ipv6-guide/",
+  "packageId": "cavno-linode-ubuntu-disable-ipv6-guide-20260928",
+  "route": "/life/ai/linode-ubuntu-disable-ipv6-keep-ssh-ipv4/",
   "files": [
     {
-      "path": "src/pages/life/ai/adspower-ssh-ipv4-ipv6-guide.astro",
-      "bytes": 980,
-      "sha256": "076434befa6c93b1b5e77e5f0d329114e55ca83e2d57f6afffb6528909318118"
+      "path": "src/pages/life/ai/linode-ubuntu-disable-ipv6-keep-ssh-ipv4.astro",
+      "bytes": 984,
+      "sha256": "9475cb1e17e5fcabfc6e17e511898b256ff0bfe8eeff246d58658beec5ea9077"
     },
     {
-      "path": "src/content/items/life-ai-adspower-ssh-ipv4-ipv6-guide.md",
-      "bytes": 441,
-      "sha256": "a2ff1e03d62dc5eddc574d4046f1c21625bd8e3dea8daa2ba9297eaba57ca89c"
+      "path": "src/content/items/life-ai-linode-ubuntu-disable-ipv6-keep-ssh-ipv4.md",
+      "bytes": 448,
+      "sha256": "82bb0d8e68aea421169af7cb7100e54713a564d8e158700a3de0274d99fcbdf5"
     },
     {
-      "path": "src/legacy/life/ai/adspower-ssh-ipv4-ipv6-guide/body.html",
-      "bytes": 38954,
-      "sha256": "a423e7549ee7fefd616c1c3d7cb662dfc16f9b086c79a82424db8d95dca061d9"
+      "path": "src/legacy/life/ai/linode-ubuntu-disable-ipv6-keep-ssh-ipv4/body.html",
+      "bytes": 12300,
+      "sha256": "4553751f034c1ea790906f230ee99cb7e69a5ed4313b1d0e2d393d4cad0ec518"
     },
     {
-      "path": "src/legacy/life/ai/adspower-ssh-ipv4-ipv6-guide/style.css",
-      "bytes": 8973,
-      "sha256": "72b7386f0ec406294030a7d1e1f876fa2d83626895a56df3db1f99d49746b986"
+      "path": "src/legacy/life/ai/linode-ubuntu-disable-ipv6-keep-ssh-ipv4/style.css",
+      "bytes": 8951,
+      "sha256": "0e8a0083513ce55625e516e51f0adc238ebfa40c9e3fa646d79bc1289416cf55"
     }
   ]
 }

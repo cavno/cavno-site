@@ -1,23 +1,21 @@
 {
   "status": "passed",
-  "verifiedAt": "2026-09-27T02:03:00+08:00",
-  "route": "/life/ai/adspower-ssh-ipv4-ipv6-guide/",
+  "verifiedAt": "2026-09-28T00:59:10+08:00",
+  "route": "/life/ai/linode-ubuntu-disable-ipv6-keep-ssh-ipv4/",
   "sourceIntegration": {
-    "sourceMarkdownCharacters": 10329,
-    "sourceMarkdownLines": 1054,
-    "sourceHeadings": 28,
-    "convertedContentHeadings": 28,
-    "mainSections": 19,
-    "sourceCodeFencePairs": 84,
-    "convertedCodeAndDiagramBlocks": 84,
+    "sourceMarkdownCharacters": 3571,
+    "sourceMarkdownLines": 186,
+    "normalizedVisibleTextCharacters": 2978,
+    "visibleTextExactSequence": true,
+    "mainSections": 7,
+    "subSections": 8,
+    "codeAndConfigurationBlocks": 13,
     "tables": 2,
-    "referenceLinks": 7,
-    "chatgptInternalCitationTokensRemaining": 0,
     "replacementCharacters": 0
   },
   "staticChecks": {
     "astroBuild": "passed",
-    "generatedPages": 207,
+    "generatedPages": 208,
     "routeGenerated": true,
     "lifeAiCardGenerated": true,
     "searchIndexEntryGenerated": true,
@@ -40,7 +38,7 @@
   },
   "packageChecks": {
     "sourceFiles": 4,
-    "manifestHashes": "passed",
+    "manifestHashes": "4/4 matched",
     "powershellSyntax": "passed",
     "cleanInstall": "passed",
     "repeatInstall": "passed",
@@ -49,6 +47,7 @@
     "filesRemainingAfterCleanRecovery": 0
   },
   "boundaries": {
+    "articleCommandsExecutedAgainstServer": false,
     "onlineDeploymentPerformed": false,
     "productionDomainCheckedAfterDeployment": false
   }

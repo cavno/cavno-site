@@ -1,0 +1,133 @@
+<div class="ipv4-article">
+  <button class="rail-toggle" type="button" aria-expanded="false" aria-controls="ipv4Rail">目录</button>
+  <div class="rail-scrim" aria-hidden="true"></div>
+  <div class="article-layout">
+    <aside class="article-rail" id="ipv4Rail" aria-label="文章目录">
+      <div class="rail-kicker">SAFE NETWORK CHANGE</div>
+      <strong>IPv4-only 实施路线</strong>
+      <nav><a href="#section-1"><span>01</span>操作前准备</a>
+<a href="#section-2"><span>02</span>配置 Linode Cloud Firewall</a>
+<a href="#section-3"><span>03</span>在 Ubuntu 24.04 中禁用 IPv6</a>
+<a href="#section-4"><span>04</span>立即验证</a>
+<a href="#section-5"><span>05</span>验证重启后仍然生效</a>
+<a href="#section-6"><span>06</span>防止 SSH 被锁死</a>
+<a href="#section-7"><span>07</span>无法通过 SSH 登录时恢复</a></nav>
+    </aside>
+    <main class="article-main">
+      <div class="article-hero">
+        <div class="hero-badge">FIREWALL · SYSCTL · SSH</div>
+        <h2>先保住入口，再限制出口</h2>
+        <p>以可用的 IPv4 SSH 会话与 Lish Console 为安全绳，依次完成云防火墙、系统内核、即时验证、重启复验与故障恢复。</p>
+        <div class="safety-chain" aria-label="安全变更流程">
+          <span><b>01</b>Cloud Firewall</span><i>→</i><span><b>02</b>第二路 SSH</span><i>→</i><span><b>03</b>Ubuntu sysctl</span><i>→</i><span><b>04</b>重启与恢复</span>
+        </div>
+      </div>
+      <div class="source-content"><p>目标：禁止 Linode 的 IPv6 入站、出站和 Ubuntu 系统 IPv6，同时保留 FinalShell/SSH 的 IPv4 访问。</p>
+<h2 id="section-1" class="section-title"><span>01</span>一、操作前准备</h2>
+<ol class="task-list"><li>登录 Linode Cloud Manager，确认可以打开该主机的 <strong>Lish Console</strong>。</li><li>保持当前 SSH 会话不要关闭。</li><li>在 Linode Cloud Manager 中确认主机的公网 IPv4 地址。</li><li>在 FinalShell 中把主机地址直接填写为该公网 IPv4，不要填写可能解析出 AAAA 记录的域名。</li><li>如果 SSH 端口不是 <code>22</code>，下文所有 <code>22</code> 均替换为实际端口。</li></ol>
+<h2 id="section-2" class="section-title"><span>02</span>二、配置 Linode Cloud Firewall</h2>
+<p>进入：</p>
+<p><code>Cloud Manager → Firewalls → 选择已绑定该 Linode 或其 Public Interface 的 Firewall → Rules</code></p>
+<h3 id="section-2-1" class="sub-title">1. Inbound 最终配置</h3>
+<p>默认策略：</p>
+<figure class="code-block"><figcaption>配置 / 预期结果</figcaption><pre><code>Inbound Policy: DROP</code></pre><button class="copy-code" type="button" aria-label="复制代码">复制</button></figure>
+<p>只保留以下必要规则：</p>
+<div class="table-wrap"><table><thead><tr><th>顺序</th><th>Label</th><th>Protocol</th><th>Ports</th><th>Sources</th><th>Action</th></tr></thead><tbody><tr><td>1</td><td><code>allow-ssh-ipv4</code></td><td>TCP</td><td><code>22</code></td><td>All IPv4</td><td>ACCEPT</td></tr></tbody></table></div>
+<p>要求：</p>
+<ul class="task-list"><li>不添加 IPv6 来源。</li><li>不添加 UDP 入站规则。</li><li>如果已有允许 SSH 的 IPv6 规则，删除或禁用。</li><li>如果确认本地公网 IPv4 长期固定，可在完成全部验证后把 <code>All IPv4</code> 改为 <code>你的公网IPv4/32</code>。</li></ul>
+<h3 id="section-2-2" class="sub-title">2. Outbound 最终配置</h3>
+<p>默认策略：</p>
+<figure class="code-block"><figcaption>配置 / 预期结果</figcaption><pre><code>Outbound Policy: ACCEPT</code></pre><button class="copy-code" type="button" aria-label="复制代码">复制</button></figure>
+<p>把以下四条规则放在所有 Outbound 规则的最上方：</p>
+<div class="table-wrap"><table><thead><tr><th>顺序</th><th>Label</th><th>Protocol</th><th>Ports</th><th>Destinations</th><th>Action</th></tr></thead><tbody><tr><td>1</td><td><code>block-ipv6-tcp</code></td><td>TCP</td><td>All Ports</td><td>All IPv6</td><td>DROP</td></tr><tr><td>2</td><td><code>block-ipv6-udp</code></td><td>UDP</td><td>All Ports</td><td>All IPv6</td><td>DROP</td></tr><tr><td>3</td><td><code>block-ipv6-icmp</code></td><td>ICMP</td><td>不填写</td><td>All IPv6</td><td>DROP</td></tr><tr><td>4</td><td><code>block-ipv6-ipencap</code></td><td>IPENCAP</td><td>不填写</td><td>All IPv6</td><td>DROP</td></tr></tbody></table></div>
+<p>要求：</p>
+<ul class="task-list"><li>删除或下移位于这四条规则之前、且会允许 IPv6 的冲突规则。</li><li>确认 Firewall 状态为 <strong>Enabled</strong>。</li><li>确认 Firewall 已绑定到目标 Linode；如果该主机使用 Linode Interfaces，确认绑定到对应的 Public Interface。</li><li>点击 <strong>Save Changes</strong>。</li></ul>
+<h3 id="section-2-3" class="sub-title">3. 立即验证 IPv4 SSH</h3>
+<p>不要关闭原 SSH 会话。另开一个 FinalShell 窗口，使用 Linode 公网 IPv4 建立新连接：</p>
+<figure class="code-block"><figcaption>配置 / 预期结果</figcaption><pre><code>主机：Linode 公网 IPv4
+协议：SSH
+端口：22</code></pre><button class="copy-code" type="button" aria-label="复制代码">复制</button></figure>
+<p>只有新窗口能够正常登录后，才继续执行 Ubuntu 配置。</p>
+<h2 id="section-3" class="section-title"><span>03</span>三、在 Ubuntu 24.04 中禁用 IPv6</h2>
+<p>在已确认使用 IPv4 的 SSH 会话中执行：</p>
+<figure class="code-block"><figcaption>Terminal · Bash</figcaption><pre><code>sudo install -d -m 0755 /etc/sysctl.d
+
+sudo tee /etc/sysctl.d/99-disable-ipv6.conf &gt;/dev/null &lt;&lt;&#39;EOF&#39;
+net.ipv6.conf.all.disable_ipv6 = 1
+net.ipv6.conf.default.disable_ipv6 = 1
+net.ipv6.conf.lo.disable_ipv6 = 1
+EOF
+
+sudo sysctl --system</code></pre><button class="copy-code" type="button" aria-label="复制代码">复制</button></figure>
+<h2 id="section-4" class="section-title"><span>04</span>四、立即验证</h2>
+<h3 id="section-4-1" class="sub-title">1. 检查 sysctl 值</h3>
+<figure class="code-block"><figcaption>Terminal · Bash</figcaption><pre><code>sysctl net.ipv6.conf.all.disable_ipv6
+sysctl net.ipv6.conf.default.disable_ipv6
+sysctl net.ipv6.conf.lo.disable_ipv6</code></pre><button class="copy-code" type="button" aria-label="复制代码">复制</button></figure>
+<p>三项都应显示：</p>
+<figure class="code-block"><figcaption>配置 / 预期结果</figcaption><pre><code>= 1</code></pre><button class="copy-code" type="button" aria-label="复制代码">复制</button></figure>
+<h3 id="section-4-2" class="sub-title">2. 检查 IPv6 地址与路由</h3>
+<figure class="code-block"><figcaption>Terminal · Bash</figcaption><pre><code>ip -6 address show
+ip -6 route show</code></pre><button class="copy-code" type="button" aria-label="复制代码">复制</button></figure>
+<p>不应显示可用的 IPv6 地址或 IPv6 路由。</p>
+<h3 id="section-4-3" class="sub-title">3. 检查 IPv4 出口</h3>
+<figure class="code-block"><figcaption>Terminal · Bash</figcaption><pre><code>curl -4 --connect-timeout 10 https://ifconfig.co</code></pre><button class="copy-code" type="button" aria-label="复制代码">复制</button></figure>
+<p>应返回 Linode 的公网 IPv4。</p>
+<h3 id="section-4-4" class="sub-title">4. 检查 IPv6 出口</h3>
+<figure class="code-block"><figcaption>Terminal · Bash</figcaption><pre><code>curl -6 --connect-timeout 5 https://ifconfig.co</code></pre><button class="copy-code" type="button" aria-label="复制代码">复制</button></figure>
+<p>该命令应失败，不能返回公网 IPv6。</p>
+<h3 id="section-4-5" class="sub-title">5. 再次测试 SSH</h3>
+<p>保持当前会话不关闭，再开一个 FinalShell 窗口，使用 Linode 公网 IPv4 登录。新窗口登录成功后再关闭旧窗口。</p>
+<h2 id="section-5" class="section-title"><span>05</span>五、验证重启后仍然生效</h2>
+<p>确认已有可用的 Lish Console 后执行：</p>
+<figure class="code-block"><figcaption>Terminal · Bash</figcaption><pre><code>sudo reboot</code></pre><button class="copy-code" type="button" aria-label="复制代码">复制</button></figure>
+<p>主机启动后，使用公网 IPv4 重新登录并执行：</p>
+<figure class="code-block"><figcaption>Terminal · Bash</figcaption><pre><code>sysctl net.ipv6.conf.all.disable_ipv6
+sysctl net.ipv6.conf.default.disable_ipv6
+sysctl net.ipv6.conf.lo.disable_ipv6
+ip -6 address show
+ip -6 route show
+curl -4 --connect-timeout 10 https://ifconfig.co
+curl -6 --connect-timeout 5 https://ifconfig.co</code></pre><button class="copy-code" type="button" aria-label="复制代码">复制</button></figure>
+<h2 id="section-6" class="section-title"><span>06</span>六、防止 SSH 被锁死</h2>
+<ol class="task-list"><li>先配置并保存 Cloud Firewall 的 IPv4 SSH 入站规则，再禁用 Ubuntu IPv6。</li><li>全程保留一个已连接的 SSH 会话，并用第二个窗口测试新连接。</li><li>FinalShell 使用公网 IPv4，不使用域名，不使用 IPv6 地址。</li><li>未确认本地公网 IPv4固定前，SSH 来源保持 <code>All IPv4</code>。</li><li>不要把 Inbound Policy 设为 <code>DROP</code> 后却不配置 <code>TCP 22 / IPv4 / ACCEPT</code>。</li><li>不要把 Outbound Policy 设为 <code>DROP</code>，除非已经另外建立完整的 IPv4 放行规则。</li><li>应用配置前确认 Lish Console 可用。</li></ol>
+<h2 id="section-7" class="section-title"><span>07</span>七、无法通过 SSH 登录时恢复</h2>
+<p>通过 Linode Cloud Manager 打开 <strong>Lish Console</strong>，执行：</p>
+<figure class="code-block"><figcaption>Terminal · Bash</figcaption><pre><code>sudo rm -f /etc/sysctl.d/99-disable-ipv6.conf
+sudo sysctl -w net.ipv6.conf.default.disable_ipv6=0
+sudo sysctl -w net.ipv6.conf.all.disable_ipv6=0
+sudo sysctl -w net.ipv6.conf.lo.disable_ipv6=0</code></pre><button class="copy-code" type="button" aria-label="复制代码">复制</button></figure>
+<p>然后在 Cloud Firewall 中检查并恢复：</p>
+<figure class="code-block"><figcaption>配置 / 预期结果</figcaption><pre><code>Inbound Policy: DROP
+TCP 22 / All IPv4 / ACCEPT</code></pre><button class="copy-code" type="button" aria-label="复制代码">复制</button></figure>
+<p>点击 <strong>Save Changes</strong>，再使用公网 IPv4 重新连接。</p></div>
+      <footer>本文依据用户提供的 Markdown 附件完整排版。涉及防火墙、网络栈与重启的操作具有断联风险；执行前应保留现有 SSH 会话并确认 Lish Console 可用。</footer>
+    </main>
+  </div>
+</div>
+<script>
+(() => {
+  const root = document.querySelector('.ipv4-article');
+  if (!root) return;
+  const rail = root.querySelector('.article-rail');
+  const toggle = root.querySelector('.rail-toggle');
+  const scrim = root.querySelector('.rail-scrim');
+  const closeRail = () => { rail.classList.remove('open'); scrim.classList.remove('open'); toggle.setAttribute('aria-expanded', 'false'); };
+  toggle.addEventListener('click', () => { const open = !rail.classList.contains('open'); rail.classList.toggle('open', open); scrim.classList.toggle('open', open); toggle.setAttribute('aria-expanded', String(open)); });
+  scrim.addEventListener('click', closeRail);
+  rail.addEventListener('click', event => { if (event.target.closest('a')) closeRail(); });
+  root.querySelectorAll('.copy-code').forEach(button => button.addEventListener('click', async () => {
+    const code = button.parentElement.querySelector('code')?.innerText || '';
+    try { await navigator.clipboard.writeText(code); button.textContent = '已复制'; setTimeout(() => { button.textContent = '复制'; }, 1200); } catch { button.textContent = '复制失败'; }
+  }));
+  const links = [...rail.querySelectorAll('a')];
+  const sections = links.map(link => document.querySelector(link.getAttribute('href'))).filter(Boolean);
+  const update = () => {
+    let current = sections[0];
+    sections.forEach(section => { if (section.getBoundingClientRect().top <= 180) current = section; });
+    links.forEach(link => link.classList.toggle('active', current && link.getAttribute('href') === '#' + current.id));
+  };
+  document.addEventListener('scroll', update, { passive: true });
+  update();
+})();
+</script>
