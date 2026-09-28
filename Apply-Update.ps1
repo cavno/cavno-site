@@ -19,7 +19,7 @@ $manifest = Get-Content -LiteralPath (Join-Path $packageRoot 'files.json') -Raw 
 $plan = @()
 foreach ($entry in $manifest.files) {
   $relative = [string]$entry.path
-  if ([IO.Path]::IsPathRooted($relative) -or $relative -match '(^|[\/])\.\.([\/]|$)') {
+  if ([IO.Path]::IsPathRooted($relative) -or $relative -match '(^|[\\/])\.\.([\\/]|$)') {
     throw "Unsafe path in files.json: $relative"
   }
   $source = [IO.Path]::GetFullPath((Join-Path $packageRoot ($relative -replace '/', '\')))
@@ -38,7 +38,11 @@ foreach ($entry in $manifest.files) {
   $preExisting = Test-Path -LiteralPath $target -PathType Leaf
   if ($preExisting) {
     $targetHash = (Get-FileHash -LiteralPath $target -Algorithm SHA256).Hash.ToLowerInvariant()
-    if ($targetHash -ne $hash) {
+    $allowedTargetHashes = @($hash)
+    if ($null -ne $entry.acceptedPreviousSha256) {
+      $allowedTargetHashes += @($entry.acceptedPreviousSha256 | ForEach-Object { ([string]$_).ToLowerInvariant() })
+    }
+    if ($targetHash -notin $allowedTargetHashes) {
       throw "A different file already exists; nothing was changed: $relative"
     }
   }
@@ -53,7 +57,7 @@ foreach ($entry in $manifest.files) {
 
 $stamp = Get-Date -Format 'yyyyMMdd-HHmmss'
 $suffix = [Guid]::NewGuid().ToString('N').Substring(0, 8)
-$backupRoot = Join-Path $siteRootFull ".cavno-update-backups\linode-ubuntu-disable-ipv6-guide-$stamp-$suffix"
+$backupRoot = Join-Path $siteRootFull ".cavno-update-backups\linode-ubuntu-ipv4-only-complete-guide-$stamp-$suffix"
 New-Item -ItemType Directory -Force -Path $backupRoot | Out-Null
 
 foreach ($item in $plan) {

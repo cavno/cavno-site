@@ -1,21 +1,30 @@
 {
-  "packageId": "cavno-linode-ubuntu-disable-ipv6-guide-20260928",
+  "packageId": "cavno-linode-ubuntu-ipv4-only-complete-guide-20260929",
   "route": "/life/ai/linode-ubuntu-disable-ipv6-keep-ssh-ipv4/",
   "files": [
     {
       "path": "src/pages/life/ai/linode-ubuntu-disable-ipv6-keep-ssh-ipv4.astro",
-      "bytes": 984,
-      "sha256": "9475cb1e17e5fcabfc6e17e511898b256ff0bfe8eeff246d58658beec5ea9077"
+      "bytes": 1019,
+      "sha256": "c42686d4a0fee13796dc145c438fa0d94ef81f646d07750295fb2ee54e62734a",
+      "acceptedPreviousSha256": [
+        "9475cb1e17e5fcabfc6e17e511898b256ff0bfe8eeff246d58658beec5ea9077"
+      ]
     },
     {
       "path": "src/content/items/life-ai-linode-ubuntu-disable-ipv6-keep-ssh-ipv4.md",
-      "bytes": 448,
-      "sha256": "82bb0d8e68aea421169af7cb7100e54713a564d8e158700a3de0274d99fcbdf5"
+      "bytes": 505,
+      "sha256": "2a0b1ffaad437f26c416dd8b3d3bcd7060e0ceee98e4a2c0f16eb30b2a0c67eb",
+      "acceptedPreviousSha256": [
+        "82bb0d8e68aea421169af7cb7100e54713a564d8e158700a3de0274d99fcbdf5"
+      ]
     },
     {
       "path": "src/legacy/life/ai/linode-ubuntu-disable-ipv6-keep-ssh-ipv4/body.html",
-      "bytes": 12300,
-      "sha256": "4553751f034c1ea790906f230ee99cb7e69a5ed4313b1d0e2d393d4cad0ec518"
+      "bytes": 22687,
+      "sha256": "4c25078484d3e7d8d02368cd8b543222522a5091085cfc064bd45fd913ca9257",
+      "acceptedPreviousSha256": [
+        "4553751f034c1ea790906f230ee99cb7e69a5ed4313b1d0e2d393d4cad0ec518"
+      ]
     },
     {
       "path": "src/legacy/life/ai/linode-ubuntu-disable-ipv6-keep-ssh-ipv4/style.css",

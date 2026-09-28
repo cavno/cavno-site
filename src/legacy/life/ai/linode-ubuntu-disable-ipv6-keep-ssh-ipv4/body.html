@@ -3,104 +3,224 @@
   <div class="rail-scrim" aria-hidden="true"></div>
   <div class="article-layout">
     <aside class="article-rail" id="ipv4Rail" aria-label="文章目录">
-      <div class="rail-kicker">SAFE NETWORK CHANGE</div>
-      <strong>IPv4-only 实施路线</strong>
-      <nav><a href="#section-1"><span>01</span>操作前准备</a>
-<a href="#section-2"><span>02</span>配置 Linode Cloud Firewall</a>
-<a href="#section-3"><span>03</span>在 Ubuntu 24.04 中禁用 IPv6</a>
-<a href="#section-4"><span>04</span>立即验证</a>
-<a href="#section-5"><span>05</span>验证重启后仍然生效</a>
-<a href="#section-6"><span>06</span>防止 SSH 被锁死</a>
-<a href="#section-7"><span>07</span>无法通过 SSH 登录时恢复</a></nav>
+      <div class="rail-kicker">COMPLETE IPV4-ONLY PLAYBOOK</div>
+      <strong>防火墙、系统与验收</strong>
+      <nav><a href="#section-1"><span>01</span>实施目标与边界</a>
+<a href="#section-2"><span>02</span>操作前建立安全绳</a>
+<a href="#section-3"><span>03</span>配置 Linode Cloud Firewall</a>
+<a href="#section-4"><span>04</span>备份现有网络配置</a>
+<a href="#section-5"><span>05</span>写入 Ubuntu IPv6 禁用配置</a>
+<a href="#section-6"><span>06</span>禁止 eth0 自动取得 IPv6</a>
+<a href="#section-7"><span>07</span>立即应用并验证 VPS</a>
+<a href="#section-8"><span>08</span>验证代理与指纹浏览器</a>
+<a href="#section-9"><span>09</span>关闭 VPS 的 Network Helper</a>
+<a href="#section-10"><span>10</span>重启后最终验收</a>
+<a href="#section-11"><span>11</span>防止 SSH 被锁死的全过程规则</a>
+<a href="#section-12"><span>12</span>SSH 无法登录时回滚</a></nav>
     </aside>
     <main class="article-main">
       <div class="article-hero">
-        <div class="hero-badge">FIREWALL · SYSCTL · SSH</div>
-        <h2>先保住入口，再限制出口</h2>
-        <p>以可用的 IPv4 SSH 会话与 Lish Console 为安全绳，依次完成云防火墙、系统内核、即时验证、重启复验与故障恢复。</p>
+        <div class="hero-badge">FIREWALL · NETWORKD · SYSCTL · SSH</div>
+        <h2>双层阻断，完整验收</h2>
+        <p>先以 Cloud Firewall 阻断 IPv6，再由 sysctl 与 systemd-networkd 固化 IPv4-only；全过程保留第二路 SSH、Lish Console、备份和回滚。</p>
         <div class="safety-chain" aria-label="安全变更流程">
-          <span><b>01</b>Cloud Firewall</span><i>→</i><span><b>02</b>第二路 SSH</span><i>→</i><span><b>03</b>Ubuntu sysctl</span><i>→</i><span><b>04</b>重启与恢复</span>
+          <span><b>01</b>Cloud Firewall</span><i>→</i><span><b>02</b>备份与双 SSH</span><i>→</i><span><b>03</b>sysctl + networkd</span><i>→</i><span><b>04</b>浏览器与重启验收</span>
         </div>
       </div>
-      <div class="source-content"><p>目标：禁止 Linode 的 IPv6 入站、出站和 Ubuntu 系统 IPv6，同时保留 FinalShell/SSH 的 IPv4 访问。</p>
-<h2 id="section-1" class="section-title"><span>01</span>一、操作前准备</h2>
-<ol class="task-list"><li>登录 Linode Cloud Manager，确认可以打开该主机的 <strong>Lish Console</strong>。</li><li>保持当前 SSH 会话不要关闭。</li><li>在 Linode Cloud Manager 中确认主机的公网 IPv4 地址。</li><li>在 FinalShell 中把主机地址直接填写为该公网 IPv4，不要填写可能解析出 AAAA 记录的域名。</li><li>如果 SSH 端口不是 <code>22</code>，下文所有 <code>22</code> 均替换为实际端口。</li></ol>
-<h2 id="section-2" class="section-title"><span>02</span>二、配置 Linode Cloud Firewall</h2>
+      <div class="source-content"><p>目标：禁止 Linode 的 IPv6 入站、出站和 Ubuntu 系统 IPv6，同时保留 FinalShell/SSH 的 IPv4 访问，并确保代理浏览器继续通过 VPS 公网 IPv4 正常访问互联网。</p>
+<h2 id="section-1" class="section-title"><span>01</span>一、实施目标与边界</h2>
+<p>最终状态应同时满足：</p>
+<ul class="task-list"><li>Linode Cloud Firewall 不接受 IPv6 入站，也不允许 IPv6 出站。</li><li>Ubuntu 的 <code>all</code>、<code>default</code>、<code>lo</code> 和 <code>eth0</code> 均禁用 IPv6。</li><li><code>eth0</code> 不再通过 Router Advertisement 或自动配置取得 IPv6。</li><li>SSH 只通过 VPS 公网 IPv4 连接，端口保持实际 SSH 端口。</li><li>VPS 的 IPv4 地址、IPv4 默认路由和 <code>systemd-networkd</code> 保持正常。</li><li>代理浏览器出口显示 VPS 公网 IPv4，不出现可用公网 IPv6，也不暴露本地真实公网 IP。</li></ul>
+<p>本文默认 SSH 端口为 <code>22</code>。如果实际端口不是 <code>22</code>，下文所有 <code>22</code> 均替换为实际端口。</p>
+<h2 id="section-2" class="section-title"><span>02</span>二、操作前建立安全绳</h2>
+<ol class="task-list"><li>登录 Linode Cloud Manager，确认可以打开该主机的 <strong>Lish Console</strong>。</li><li>保持当前 FinalShell/SSH 会话不要关闭。</li><li>在 Linode Cloud Manager 中确认 VPS 的公网 IPv4 地址。</li><li>在 FinalShell 中直接填写该公网 IPv4，不使用可能解析出 AAAA 记录的域名，也不使用 IPv6 地址。</li><li>再打开一个 FinalShell 窗口，使用 VPS 公网 IPv4 登录。</li><li>两个 FinalShell 窗口都能登录后再继续。</li></ol>
+<h3 id="section-2-1" class="sub-title">1. 执行前置检查</h3>
+<p>执行：</p>
+<figure class="code-block"><figcaption>Terminal · Bash</figcaption><pre><code>sudo ss -lntp4 | grep &#39;:22 &#39;
+systemctl is-active systemd-networkd
+sudo test -f /etc/systemd/network/05-eth0.network &amp;&amp; echo OK</code></pre><button class="copy-code" type="button" aria-label="复制代码">复制</button></figure>
+<p>必须看到：</p>
+<figure class="code-block"><figcaption>配置 / 预期结果</figcaption><pre><code>TCP 22 正在监听
+active
+OK</code></pre><button class="copy-code" type="button" aria-label="复制代码">复制</button></figure>
+<p>如果 SSH 的 IPv4 监听、<code>systemd-networkd</code> 状态或 <code>/etc/systemd/network/05-eth0.network</code> 任意一项不符合预期，停止操作，先解决该问题。</p>
+<h2 id="section-3" class="section-title"><span>03</span>三、配置 Linode Cloud Firewall</h2>
 <p>进入：</p>
 <p><code>Cloud Manager → Firewalls → 选择已绑定该 Linode 或其 Public Interface 的 Firewall → Rules</code></p>
-<h3 id="section-2-1" class="sub-title">1. Inbound 最终配置</h3>
+<h3 id="section-3-1" class="sub-title">1. Inbound 最终配置</h3>
 <p>默认策略：</p>
 <figure class="code-block"><figcaption>配置 / 预期结果</figcaption><pre><code>Inbound Policy: DROP</code></pre><button class="copy-code" type="button" aria-label="复制代码">复制</button></figure>
 <p>只保留以下必要规则：</p>
 <div class="table-wrap"><table><thead><tr><th>顺序</th><th>Label</th><th>Protocol</th><th>Ports</th><th>Sources</th><th>Action</th></tr></thead><tbody><tr><td>1</td><td><code>allow-ssh-ipv4</code></td><td>TCP</td><td><code>22</code></td><td>All IPv4</td><td>ACCEPT</td></tr></tbody></table></div>
 <p>要求：</p>
-<ul class="task-list"><li>不添加 IPv6 来源。</li><li>不添加 UDP 入站规则。</li><li>如果已有允许 SSH 的 IPv6 规则，删除或禁用。</li><li>如果确认本地公网 IPv4 长期固定，可在完成全部验证后把 <code>All IPv4</code> 改为 <code>你的公网IPv4/32</code>。</li></ul>
-<h3 id="section-2-2" class="sub-title">2. Outbound 最终配置</h3>
+<ul class="task-list"><li>不添加 IPv6 来源。</li><li>不添加 UDP 入站规则。</li><li>不增加 Inbound <code>443</code>、<code>53</code> 或其他与本次目标无关的端口。</li><li>如果已有允许 SSH 的 IPv6 规则，删除或禁用。</li><li>如果确认本地公网 IPv4 长期固定，可在完成全部验证后把 <code>All IPv4</code> 收紧为 <code>你的公网IPv4/32</code>。</li></ul>
+<h3 id="section-3-2" class="sub-title">2. Outbound 最终配置</h3>
 <p>默认策略：</p>
 <figure class="code-block"><figcaption>配置 / 预期结果</figcaption><pre><code>Outbound Policy: ACCEPT</code></pre><button class="copy-code" type="button" aria-label="复制代码">复制</button></figure>
 <p>把以下四条规则放在所有 Outbound 规则的最上方：</p>
 <div class="table-wrap"><table><thead><tr><th>顺序</th><th>Label</th><th>Protocol</th><th>Ports</th><th>Destinations</th><th>Action</th></tr></thead><tbody><tr><td>1</td><td><code>block-ipv6-tcp</code></td><td>TCP</td><td>All Ports</td><td>All IPv6</td><td>DROP</td></tr><tr><td>2</td><td><code>block-ipv6-udp</code></td><td>UDP</td><td>All Ports</td><td>All IPv6</td><td>DROP</td></tr><tr><td>3</td><td><code>block-ipv6-icmp</code></td><td>ICMP</td><td>不填写</td><td>All IPv6</td><td>DROP</td></tr><tr><td>4</td><td><code>block-ipv6-ipencap</code></td><td>IPENCAP</td><td>不填写</td><td>All IPv6</td><td>DROP</td></tr></tbody></table></div>
 <p>要求：</p>
-<ul class="task-list"><li>删除或下移位于这四条规则之前、且会允许 IPv6 的冲突规则。</li><li>确认 Firewall 状态为 <strong>Enabled</strong>。</li><li>确认 Firewall 已绑定到目标 Linode；如果该主机使用 Linode Interfaces，确认绑定到对应的 Public Interface。</li><li>点击 <strong>Save Changes</strong>。</li></ul>
-<h3 id="section-2-3" class="sub-title">3. 立即验证 IPv4 SSH</h3>
-<p>不要关闭原 SSH 会话。另开一个 FinalShell 窗口，使用 Linode 公网 IPv4 建立新连接：</p>
-<figure class="code-block"><figcaption>配置 / 预期结果</figcaption><pre><code>主机：Linode 公网 IPv4
+<ul class="task-list"><li>删除或下移位于这四条规则之前、且会允许 IPv6 的冲突规则。</li><li>不要把 Outbound Policy 设为 <code>DROP</code>，除非已经另外建立完整的 IPv4 放行规则。</li><li>确认 Firewall 状态为 <strong>Enabled</strong>。</li><li>确认 Firewall 已绑定到目标 Linode；如果主机使用 Linode Interfaces，确认绑定到对应的 Public Interface。</li><li>点击 <strong>Save Changes</strong>。</li></ul>
+<h3 id="section-3-3" class="sub-title">3. 立即验证 IPv4 SSH</h3>
+<p>不要关闭原 SSH 会话。另开一个 FinalShell 窗口，使用 VPS 公网 IPv4 建立新连接：</p>
+<figure class="code-block"><figcaption>配置 / 预期结果</figcaption><pre><code>主机：VPS 公网 IPv4
 协议：SSH
-端口：22</code></pre><button class="copy-code" type="button" aria-label="复制代码">复制</button></figure>
-<p>只有新窗口能够正常登录后，才继续执行 Ubuntu 配置。</p>
-<h2 id="section-3" class="section-title"><span>03</span>三、在 Ubuntu 24.04 中禁用 IPv6</h2>
-<p>在已确认使用 IPv4 的 SSH 会话中执行：</p>
+端口：22 或实际 SSH 端口</code></pre><button class="copy-code" type="button" aria-label="复制代码">复制</button></figure>
+<p>只有新窗口能够正常登录后，才继续修改 Ubuntu。</p>
+<h2 id="section-4" class="section-title"><span>04</span>四、备份现有网络配置</h2>
+<p>整段复制执行：</p>
+<figure class="code-block"><figcaption>Terminal · Bash</figcaption><pre><code>fix_stamp=$(date +%Y%m%d-%H%M%S)
+fix_backup=&quot;/root/ipv6-fix-backup-$fix_stamp&quot;
+sudo mkdir -p &quot;$fix_backup&quot;
+sudo cp -a /etc/systemd/network/05-eth0.network &quot;$fix_backup/&quot;
+
+if [ -f /etc/sysctl.d/99-disable-ipv6.conf ]; then
+  sudo cp -a /etc/sysctl.d/99-disable-ipv6.conf &quot;$fix_backup/&quot;
+fi
+
+if [ -f /etc/systemd/network/05-eth0.network.d/90-disable-ipv6.conf ]; then
+  sudo mkdir -p &quot;$fix_backup/05-eth0.network.d&quot;
+  sudo cp -a /etc/systemd/network/05-eth0.network.d/90-disable-ipv6.conf &quot;$fix_backup/05-eth0.network.d/&quot;
+fi
+
+echo &quot;$fix_backup&quot;
+sudo ls -la &quot;$fix_backup&quot;</code></pre><button class="copy-code" type="button" aria-label="复制代码">复制</button></figure>
+<p>记下屏幕显示的 <code>/root/ipv6-fix-backup-日期时间</code> 目录。后续发生异常时，这个目录用于恢复修改前的配置。</p>
+<h2 id="section-5" class="section-title"><span>05</span>五、写入 Ubuntu IPv6 禁用配置</h2>
+<p>整段复制执行：</p>
 <figure class="code-block"><figcaption>Terminal · Bash</figcaption><pre><code>sudo install -d -m 0755 /etc/sysctl.d
 
 sudo tee /etc/sysctl.d/99-disable-ipv6.conf &gt;/dev/null &lt;&lt;&#39;EOF&#39;
 net.ipv6.conf.all.disable_ipv6 = 1
 net.ipv6.conf.default.disable_ipv6 = 1
 net.ipv6.conf.lo.disable_ipv6 = 1
+net.ipv6.conf.eth0.autoconf = 0
+net.ipv6.conf.eth0.accept_ra = 0
+net.ipv6.conf.eth0.disable_ipv6 = 1
+EOF</code></pre><button class="copy-code" type="button" aria-label="复制代码">复制</button></figure>
+<p>前三项从系统全局、默认接口和回环接口禁用 IPv6；后三项专门阻止 <code>eth0</code> 自动配置、接受 RA 和继续启用 IPv6。</p>
+<h2 id="section-6" class="section-title"><span>06</span>六、禁止 eth0 自动取得 IPv6</h2>
+<p>整段复制执行：</p>
+<figure class="code-block"><figcaption>Terminal · Bash</figcaption><pre><code>sudo install -d -m 0755 /etc/systemd/network/05-eth0.network.d
+
+sudo tee /etc/systemd/network/05-eth0.network.d/90-disable-ipv6.conf &gt;/dev/null &lt;&lt;&#39;EOF&#39;
+[Network]
+IPv6AcceptRA=no
+LinkLocalAddressing=ipv4
 EOF
 
-sudo sysctl --system</code></pre><button class="copy-code" type="button" aria-label="复制代码">复制</button></figure>
-<h2 id="section-4" class="section-title"><span>04</span>四、立即验证</h2>
-<h3 id="section-4-1" class="sub-title">1. 检查 sysctl 值</h3>
-<figure class="code-block"><figcaption>Terminal · Bash</figcaption><pre><code>sysctl net.ipv6.conf.all.disable_ipv6
-sysctl net.ipv6.conf.default.disable_ipv6
-sysctl net.ipv6.conf.lo.disable_ipv6</code></pre><button class="copy-code" type="button" aria-label="复制代码">复制</button></figure>
-<p>三项都应显示：</p>
-<figure class="code-block"><figcaption>配置 / 预期结果</figcaption><pre><code>= 1</code></pre><button class="copy-code" type="button" aria-label="复制代码">复制</button></figure>
-<h3 id="section-4-2" class="sub-title">2. 检查 IPv6 地址与路由</h3>
-<figure class="code-block"><figcaption>Terminal · Bash</figcaption><pre><code>ip -6 address show
-ip -6 route show</code></pre><button class="copy-code" type="button" aria-label="复制代码">复制</button></figure>
-<p>不应显示可用的 IPv6 地址或 IPv6 路由。</p>
-<h3 id="section-4-3" class="sub-title">3. 检查 IPv4 出口</h3>
-<figure class="code-block"><figcaption>Terminal · Bash</figcaption><pre><code>curl -4 --connect-timeout 10 https://ifconfig.co</code></pre><button class="copy-code" type="button" aria-label="复制代码">复制</button></figure>
-<p>应返回 Linode 的公网 IPv4。</p>
-<h3 id="section-4-4" class="sub-title">4. 检查 IPv6 出口</h3>
-<figure class="code-block"><figcaption>Terminal · Bash</figcaption><pre><code>curl -6 --connect-timeout 5 https://ifconfig.co</code></pre><button class="copy-code" type="button" aria-label="复制代码">复制</button></figure>
-<p>该命令应失败，不能返回公网 IPv6。</p>
-<h3 id="section-4-5" class="sub-title">5. 再次测试 SSH</h3>
-<p>保持当前会话不关闭，再开一个 FinalShell 窗口，使用 Linode 公网 IPv4 登录。新窗口登录成功后再关闭旧窗口。</p>
-<h2 id="section-5" class="section-title"><span>05</span>五、验证重启后仍然生效</h2>
-<p>确认已有可用的 Lish Console 后执行：</p>
-<figure class="code-block"><figcaption>Terminal · Bash</figcaption><pre><code>sudo reboot</code></pre><button class="copy-code" type="button" aria-label="复制代码">复制</button></figure>
-<p>主机启动后，使用公网 IPv4 重新登录并执行：</p>
+sudo systemd-analyze cat-config systemd/network/05-eth0.network
+sudo networkctl reload
+sudo journalctl -u systemd-networkd --no-pager -n 30</code></pre><button class="copy-code" type="button" aria-label="复制代码">复制</button></figure>
+<p>确认输出中存在：</p>
+<figure class="code-block"><figcaption>配置 / 预期结果</figcaption><pre><code>IPv6AcceptRA=no
+LinkLocalAddressing=ipv4</code></pre><button class="copy-code" type="button" aria-label="复制代码">复制</button></figure>
+<p>不要通过 SSH 执行：</p>
+<figure class="code-block"><figcaption>Terminal · Bash</figcaption><pre><code>networkctl reconfigure eth0</code></pre><button class="copy-code" type="button" aria-label="复制代码">复制</button></figure>
+<p>该命令可能立即重配正在承载 SSH 的网卡，增加远程断联风险。这里只执行 <code>networkctl reload</code>，把完整应用留到计划内重启。</p>
+<h2 id="section-7" class="section-title"><span>07</span>七、立即应用并验证 VPS</h2>
+<h3 id="section-7-1" class="sub-title">1. 应用配置</h3>
+<p>按顺序执行：</p>
+<figure class="code-block"><figcaption>Terminal · Bash</figcaption><pre><code>sudo sysctl --system
+sudo sysctl -w net.ipv6.conf.eth0.autoconf=0
+sudo sysctl -w net.ipv6.conf.eth0.accept_ra=0
+sudo sysctl -w net.ipv6.conf.eth0.disable_ipv6=1</code></pre><button class="copy-code" type="button" aria-label="复制代码">复制</button></figure>
+<h3 id="section-7-2" class="sub-title">2. 检查 sysctl、地址与路由</h3>
+<p>执行：</p>
 <figure class="code-block"><figcaption>Terminal · Bash</figcaption><pre><code>sysctl net.ipv6.conf.all.disable_ipv6
 sysctl net.ipv6.conf.default.disable_ipv6
 sysctl net.ipv6.conf.lo.disable_ipv6
+sysctl net.ipv6.conf.eth0.disable_ipv6
+sysctl net.ipv6.conf.eth0.autoconf
+sysctl net.ipv6.conf.eth0.accept_ra
 ip -6 address show
 ip -6 route show
+ip -4 address show dev eth0
+ip -4 route show</code></pre><button class="copy-code" type="button" aria-label="复制代码">复制</button></figure>
+<p>应满足：</p>
+<figure class="code-block"><figcaption>配置 / 预期结果</figcaption><pre><code>all/default/lo/eth0 disable_ipv6 = 1
+eth0 autoconf = 0
+eth0 accept_ra = 0
+ip -6 address 无可用地址
+ip -6 route 无可用路由
+IPv4 地址和默认路由正常</code></pre><button class="copy-code" type="button" aria-label="复制代码">复制</button></figure>
+<h3 id="section-7-3" class="sub-title">3. 检查 IPv4 与 IPv6 出口</h3>
+<p>执行：</p>
+<figure class="code-block"><figcaption>Terminal · Bash</figcaption><pre><code>curl -4 --connect-timeout 10 https://ifconfig.co
+curl -6 --connect-timeout 5 https://ifconfig.co
+
+curl -4 -sS -o /dev/null -w &#39;HTTP=%{http_code}\n&#39; --connect-timeout 10 --max-time 20 https://www.google.com/generate_204
+curl -6 -sS -o /dev/null -w &#39;HTTP=%{http_code}\n&#39; --connect-timeout 5 --max-time 10 https://www.google.com/generate_204</code></pre><button class="copy-code" type="button" aria-label="复制代码">复制</button></figure>
+<p>合格结果：</p>
+<figure class="code-block"><figcaption>配置 / 预期结果</figcaption><pre><code>ifconfig.co 的 IPv4 测试返回 VPS 公网 IPv4
+ifconfig.co 的 IPv6 测试连接失败
+IPv4 generate_204 测试返回 HTTP=204
+IPv6 generate_204 测试连接失败</code></pre><button class="copy-code" type="button" aria-label="复制代码">复制</button></figure>
+<h3 id="section-7-4" class="sub-title">4. 再次测试 SSH</h3>
+<p>保持当前会话不关闭，再开一个 FinalShell 窗口，使用 VPS 公网 IPv4 登录。新窗口登录成功后再继续。</p>
+<h2 id="section-8" class="section-title"><span>08</span>八、验证代理与指纹浏览器</h2>
+<ol class="task-list"><li>关闭使用该 VPS 代理的浏览器 Profile。</li><li>重新打开该 Profile。</li><li>执行代理检测。</li><li>依次打开：</li></ol>
+<ul class="task-list"><li><code>https://www.google.com/</code></li><li><code>https://www.tiktok.com/</code></li><li><code>https://www.browserscan.net/</code></li><li><code>https://test-ipv6.com/</code></li></ul>
+<p>必须满足：</p>
+<figure class="code-block"><figcaption>配置 / 预期结果</figcaption><pre><code>Google 可以打开
+TikTok 可以打开
+出口显示 VPS 公网 IPv4
+没有可用公网 IPv6
+WebRTC 不显示本地真实公网 IP</code></pre><button class="copy-code" type="button" aria-label="复制代码">复制</button></figure>
+<h2 id="section-9" class="section-title"><span>09</span>九、关闭 VPS 的 Network Helper</h2>
+<p>只有在 Cloud Firewall、Ubuntu 即时验证、第二路 SSH 和代理浏览器全部通过后，才执行本节。</p>
+<h3 id="section-9-1" class="sub-title">1. 使用 Linode Interfaces</h3>
+<ol class="task-list"><li>保持 Lish Console 打开。</li><li>在 Cloud Manager 关闭 VPS。</li><li>打开：<code>VPS → Network → Interface Settings</code>。</li><li>关闭 <strong>Enable Network Helper</strong>。</li><li>点击 <strong>Save</strong>。</li><li>启动 VPS。</li></ol>
+<h3 id="section-9-2" class="sub-title">2. 使用 Legacy Configuration Profile</h3>
+<ol class="task-list"><li>打开：<code>VPS → Configurations → Edit</code>。</li><li>找到 <strong>Filesystem/Boot Helpers</strong>。</li><li>关闭 <strong>Auto-configure networking</strong>。</li><li>点击 <strong>Save Changes</strong>。</li><li>重启 VPS。</li></ol>
+<p>只关闭当前 VPS 自己的 Network Helper，不修改账户全局设置。</p>
+<h2 id="section-10" class="section-title"><span>10</span>十、重启后最终验收</h2>
+<p>确认 Lish Console 可用后执行：</p>
+<figure class="code-block"><figcaption>Terminal · Bash</figcaption><pre><code>sudo reboot</code></pre><button class="copy-code" type="button" aria-label="复制代码">复制</button></figure>
+<p>主机启动后，用 VPS 公网 IPv4 登录并执行：</p>
+<figure class="code-block"><figcaption>Terminal · Bash</figcaption><pre><code>systemctl is-active systemd-networkd
+sysctl net.ipv6.conf.all.disable_ipv6
+sysctl net.ipv6.conf.default.disable_ipv6
+sysctl net.ipv6.conf.lo.disable_ipv6
+sysctl net.ipv6.conf.eth0.disable_ipv6
+sysctl net.ipv6.conf.eth0.autoconf
+sysctl net.ipv6.conf.eth0.accept_ra
+ip -6 address show
+ip -6 route show
+ip -4 address show dev eth0
+ip -4 route show
 curl -4 --connect-timeout 10 https://ifconfig.co
-curl -6 --connect-timeout 5 https://ifconfig.co</code></pre><button class="copy-code" type="button" aria-label="复制代码">复制</button></figure>
-<h2 id="section-6" class="section-title"><span>06</span>六、防止 SSH 被锁死</h2>
-<ol class="task-list"><li>先配置并保存 Cloud Firewall 的 IPv4 SSH 入站规则，再禁用 Ubuntu IPv6。</li><li>全程保留一个已连接的 SSH 会话，并用第二个窗口测试新连接。</li><li>FinalShell 使用公网 IPv4，不使用域名，不使用 IPv6 地址。</li><li>未确认本地公网 IPv4固定前，SSH 来源保持 <code>All IPv4</code>。</li><li>不要把 Inbound Policy 设为 <code>DROP</code> 后却不配置 <code>TCP 22 / IPv4 / ACCEPT</code>。</li><li>不要把 Outbound Policy 设为 <code>DROP</code>，除非已经另外建立完整的 IPv4 放行规则。</li><li>应用配置前确认 Lish Console 可用。</li></ol>
-<h2 id="section-7" class="section-title"><span>07</span>七、无法通过 SSH 登录时恢复</h2>
+curl -6 --connect-timeout 5 https://ifconfig.co
+curl -4 -sS -o /dev/null -w &#39;HTTP=%{http_code}\n&#39; --connect-timeout 10 --max-time 20 https://www.google.com/generate_204
+curl -6 -sS -o /dev/null -w &#39;HTTP=%{http_code}\n&#39; --connect-timeout 5 --max-time 10 https://www.google.com/generate_204</code></pre><button class="copy-code" type="button" aria-label="复制代码">复制</button></figure>
+<p>最终合格标准：</p>
+<div class="table-wrap"><table><thead><tr><th>检查项</th><th>合格结果</th></tr></thead><tbody><tr><td><code>systemd-networkd</code></td><td><code>active</code></td></tr><tr><td><code>all/default/lo/eth0 disable_ipv6</code></td><td>全部为 <code>1</code></td></tr><tr><td><code>eth0 autoconf</code></td><td><code>0</code></td></tr><tr><td><code>eth0 accept_ra</code></td><td><code>0</code></td></tr><tr><td>IPv6 地址与路由</td><td>无可用地址、无可用路由</td></tr><tr><td>IPv4 地址与默认路由</td><td>正常</td></tr><tr><td>IPv4 出口</td><td>返回 VPS 公网 IPv4，<code>generate_204</code> 返回 <code>HTTP=204</code></td></tr><tr><td>IPv6 出口</td><td>连接失败</td></tr><tr><td>FinalShell</td><td>使用 VPS 公网 IPv4正常登录</td></tr><tr><td>代理浏览器</td><td>Google、TikTok 正常，出口为 VPS 公网 IPv4，无可用公网 IPv6</td></tr></tbody></table></div>
+<h2 id="section-11" class="section-title"><span>11</span>十一、防止 SSH 被锁死的全过程规则</h2>
+<ol class="task-list"><li>先保存 Cloud Firewall 的 IPv4 SSH 入站规则，再修改 Ubuntu。</li><li>全程保留一个已连接的 SSH 会话，并用第二个窗口测试新连接。</li><li>FinalShell 直接使用 VPS 公网 IPv4，不使用域名或 IPv6 地址。</li><li>未确认本地公网 IPv4 固定前，SSH 来源保持 <code>All IPv4</code>。</li><li>不要把 Inbound Policy 设为 <code>DROP</code> 后却不配置 <code>TCP 22 / IPv4 / ACCEPT</code>。</li><li>不要把 Outbound Policy 设为 <code>DROP</code>，除非已建立完整的 IPv4 放行规则。</li><li>不要通过 SSH 执行 <code>networkctl reconfigure eth0</code>。</li><li>应用配置和重启前确认 Lish Console 可用，并记住备份目录。</li></ol>
+<h2 id="section-12" class="section-title"><span>12</span>十二、SSH 无法登录时回滚</h2>
 <p>通过 Linode Cloud Manager 打开 <strong>Lish Console</strong>，执行：</p>
-<figure class="code-block"><figcaption>Terminal · Bash</figcaption><pre><code>sudo rm -f /etc/sysctl.d/99-disable-ipv6.conf
-sudo sysctl -w net.ipv6.conf.default.disable_ipv6=0
+<figure class="code-block"><figcaption>Terminal · Bash</figcaption><pre><code>sudo sysctl -w net.ipv6.conf.default.disable_ipv6=0
 sudo sysctl -w net.ipv6.conf.all.disable_ipv6=0
-sudo sysctl -w net.ipv6.conf.lo.disable_ipv6=0</code></pre><button class="copy-code" type="button" aria-label="复制代码">复制</button></figure>
-<p>然后在 Cloud Firewall 中检查并恢复：</p>
-<figure class="code-block"><figcaption>配置 / 预期结果</figcaption><pre><code>Inbound Policy: DROP
-TCP 22 / All IPv4 / ACCEPT</code></pre><button class="copy-code" type="button" aria-label="复制代码">复制</button></figure>
-<p>点击 <strong>Save Changes</strong>，再使用公网 IPv4 重新连接。</p></div>
+sudo sysctl -w net.ipv6.conf.lo.disable_ipv6=0
+sudo sysctl -w net.ipv6.conf.eth0.disable_ipv6=0
+sudo sysctl -w net.ipv6.conf.eth0.autoconf=1
+sudo sysctl -w net.ipv6.conf.eth0.accept_ra=1
+
+sudo test -f /etc/sysctl.d/99-disable-ipv6.conf &amp;&amp; \
+  sudo mv /etc/sysctl.d/99-disable-ipv6.conf /etc/sysctl.d/99-disable-ipv6.conf.disabled
+
+sudo test -f /etc/systemd/network/05-eth0.network.d/90-disable-ipv6.conf &amp;&amp; \
+  sudo mv /etc/systemd/network/05-eth0.network.d/90-disable-ipv6.conf \
+  /etc/systemd/network/05-eth0.network.d/90-disable-ipv6.conf.disabled</code></pre><button class="copy-code" type="button" aria-label="复制代码">复制</button></figure>
+<p>如果需要恢复备份文件，先把下面的路径替换为第四节记录的实际备份目录，再执行：</p>
+<figure class="code-block"><figcaption>Terminal · Bash</figcaption><pre><code>fix_backup=&quot;/root/ipv6-fix-backup-日期时间&quot;
+sudo cp -a &quot;$fix_backup/05-eth0.network&quot; /etc/systemd/network/05-eth0.network
+
+if [ -f &quot;$fix_backup/99-disable-ipv6.conf&quot; ]; then
+  sudo cp -a &quot;$fix_backup/99-disable-ipv6.conf&quot; /etc/sysctl.d/99-disable-ipv6.conf
+fi</code></pre><button class="copy-code" type="button" aria-label="复制代码">复制</button></figure>
+<p>然后在 Cloud Manager 中：</p>
+<ol class="task-list"><li>检查 Cloud Firewall，恢复 <code>Inbound Policy: DROP</code> 与 <code>TCP 22 / All IPv4 / ACCEPT</code>。</li><li>如果此前关闭了 Network Helper，关闭 VPS 并重新启用当前 VPS 的 Network Helper。</li><li>保存并启动 VPS。</li><li>使用 VPS 公网 IPv4重新登录。</li></ol></div>
       <footer>本文依据用户提供的 Markdown 附件完整排版。涉及防火墙、网络栈与重启的操作具有断联风险；执行前应保留现有 SSH 会话并确认 Lish Console 可用。</footer>
     </main>
   </div>

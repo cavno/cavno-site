@@ -1,25 +1,37 @@
 {
   "status": "passed",
-  "verifiedAt": "2026-09-28T00:59:10+08:00",
+  "verifiedAt": "2026-09-29T00:45:08+08:00",
   "route": "/life/ai/linode-ubuntu-disable-ipv6-keep-ssh-ipv4/",
   "sourceIntegration": {
-    "sourceMarkdownCharacters": 3571,
-    "sourceMarkdownLines": 186,
-    "normalizedVisibleTextCharacters": 2978,
+    "mergedMarkdownCharacters": 9084,
+    "mergedMarkdownLines": 390,
+    "normalizedVisibleTextCharacters": 8055,
     "visibleTextExactSequence": true,
-    "mainSections": 7,
-    "subSections": 8,
-    "codeAndConfigurationBlocks": 13,
-    "tables": 2,
-    "replacementCharacters": 0
+    "mainSections": 12,
+    "subSections": 10,
+    "codeAndConfigurationBlocks": 20,
+    "tables": 3,
+    "vpsBReferences": 0,
+    "coverageChecks": {
+      "cloudFirewall": true,
+      "configurationBackup": true,
+      "expandedSysctl": true,
+      "systemdNetworkdDropIn": true,
+      "browserAcceptance": true,
+      "networkHelper": true,
+      "rebootAcceptance": true,
+      "lishRecovery": true
+    }
   },
   "staticChecks": {
     "astroBuild": "passed",
     "generatedPages": 208,
+    "finalBuildWarnings": 0,
     "routeGenerated": true,
     "lifeAiCardGenerated": true,
     "searchIndexEntryGenerated": true,
     "duplicateIds": 0,
+    "replacementCharacters": 0,
     "iframes": 0,
     "externalContentScripts": 0
   },
@@ -42,9 +54,9 @@
     "powershellSyntax": "passed",
     "cleanInstall": "passed",
     "repeatInstall": "passed",
-    "hashesAfterInstall": "4/4 matched",
-    "recoveryTest": "passed",
-    "filesRemainingAfterCleanRecovery": 0
+    "upgradeFromPreviousVersion": "passed, 4/4 updated hashes matched",
+    "restorePreviousVersion": "passed, 4/4 previous hashes restored",
+    "restoreCleanInstall": "passed, 0 source files remained"
   },
   "boundaries": {
     "articleCommandsExecutedAgainstServer": false,
