@@ -1,0 +1,230 @@
+/* 仅作用于新增文章；沿用 Base.astro 的站点色彩、字体和导航。 */
+.jobs-page-head .cv-page-title {
+  max-width: 1040px;
+  font-size: clamp(29px, 3.7vw, 46px);
+  line-height: 1.5;
+  letter-spacing: -.025em;
+  overflow-wrap: anywhere;
+}
+.jobs-page-head .cv-lede { max-width: 900px; line-height: 1.8; }
+.jobs-layout {
+  display: grid;
+  grid-template-columns: 248px minmax(0, 1fr);
+  gap: 60px;
+  align-items: start;
+  padding-top: 44px;
+  padding-bottom: 80px;
+}
+.jobs-toc {
+  position: sticky;
+  top: calc(var(--cv-head-total) + 24px);
+  max-height: calc(100dvh - var(--cv-head-total) - 48px);
+  overflow-y: auto;
+  scrollbar-width: thin;
+  scrollbar-color: var(--line-2) transparent;
+  padding-right: 12px;
+  font-size: 12px;
+}
+.jobs-toc summary {
+  cursor: pointer;
+  font-size: 13px;
+  font-weight: 600;
+  padding-bottom: 16px;
+  color: var(--ink);
+}
+.jobs-toc summary span { color: var(--ink-2); font-weight: 400; margin-left: 8px; }
+.jobs-toc nav { display: grid; gap: 0; }
+.jobs-toc nav a {
+  display: block;
+  border-left: 1px solid var(--line);
+  padding: 8px 12px;
+  color: var(--ink-2);
+  line-height: 1.65;
+  text-decoration: none;
+}
+.jobs-toc nav a:hover,
+.jobs-toc nav a:focus-visible { color: var(--coral-deep); border-left-color: var(--coral); background: var(--panel); }
+.lp.jobs-essay {
+  min-width: 0;
+  color: var(--ink);
+  font-family: var(--sans);
+  font-size: 16px;
+  line-height: 2;
+  overflow-wrap: anywhere;
+}
+.lp.jobs-essay * { box-sizing: border-box; }
+.lp.jobs-essay p { margin: 0 0 1.25em; }
+.lp.jobs-essay strong { font-weight: 600; }
+.lp.jobs-essay .jobs-section { margin-top: 48px; }
+.lp.jobs-essay h2 {
+  margin: 0 0 24px;
+  font-family: var(--serif);
+  font-size: clamp(21px, 2vw, 26px);
+  font-weight: 700;
+  line-height: 1.65;
+  letter-spacing: -.01em;
+  text-wrap: pretty;
+  scroll-margin-top: calc(var(--cv-head-total) + 24px);
+}
+.lp.jobs-essay .jobs-source-list {
+  list-style: none;
+  margin: 0 0 1.25em;
+  padding: 0;
+}
+.lp.jobs-essay .jobs-source-list li { margin: .6em 0; padding: 0; }
+/* 原文单格表用于定义、公式和判词；只转换容器，保留全部原句与段落。 */
+.lp.jobs-essay .jobs-source-note {
+  margin: 24px 0;
+  padding: 18px 22px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-s);
+  background: var(--panel);
+  font-size: 15px;
+  line-height: 1.9;
+  overflow-wrap: anywhere;
+}
+.lp.jobs-essay .jobs-source-note p { margin: 0; }
+.lp.jobs-essay .jobs-source-note p + p { margin-top: .75em; }
+.lp.jobs-essay .jobs-table-scroll {
+  max-width: 100%;
+  overflow-x: auto;
+  margin: 24px 0;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-s);
+  background: var(--card);
+}
+.lp.jobs-essay table {
+  width: 100%;
+  min-width: 480px;
+  border-collapse: collapse;
+  table-layout: fixed;
+  font-size: 14px;
+  line-height: 1.85;
+}
+.lp.jobs-essay caption {
+  /* 表名已作为原文章节标题显示，此处保留可访问名称。 */
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+.lp.jobs-essay th,
+.lp.jobs-essay td {
+  padding: 15px 16px;
+  border-right: 1px solid var(--line);
+  border-bottom: 1px solid var(--line);
+  text-align: left;
+  vertical-align: top;
+  font-weight: 400;
+}
+.lp.jobs-essay thead th { background: var(--panel); font-weight: 600; }
+.lp.jobs-essay tbody th { font-weight: 600; }
+.lp.jobs-essay tbody tr:nth-child(even) { background: var(--paper); }
+.lp.jobs-essay tr > :last-child { border-right: 0; }
+.lp.jobs-essay tbody tr:last-child > * { border-bottom: 0; }
+.lp.jobs-essay td p,
+.lp.jobs-essay th p { margin: 0; }
+.lp.jobs-essay .jobs-end {
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 16px;
+  margin-top: 56px;
+  padding-top: 24px;
+  border-top: 1px solid var(--line);
+  font-size: 13px;
+}
+.lp.jobs-essay .jobs-end a { color: var(--coral-deep); text-decoration: none; }
+.lp.jobs-essay .jobs-end a:hover { text-decoration: underline; }
+@media (max-width: 960px) {
+  .jobs-layout { grid-template-columns: 1fr; gap: 32px; padding-top: 28px; padding-bottom: 56px; }
+  .jobs-toc {
+    position: static;
+    max-height: none;
+    overflow: visible;
+    padding: 18px 20px;
+    border: 1px solid var(--line);
+    border-radius: var(--radius-s);
+  }
+  .jobs-toc nav { max-height: 260px; overflow-y: auto; }
+  .jobs-toc details:not([open]) summary { padding-bottom: 0; }
+}
+@media (max-width: 600px) {
+  .jobs-page-head .cv-page-title { font-size: 28px; line-height: 1.55; }
+  .jobs-page-head .cv-lede { font-size: 15px; }
+  .lp.jobs-essay { font-size: 16px; line-height: 1.95; }
+  .lp.jobs-essay .jobs-source-note { padding: 16px; }
+  .lp.jobs-essay .jobs-section { margin-top: 38px; }
+}
+@media print {
+  body:has(.jobs-layout) { padding-top: 0; }
+  body:has(.jobs-layout) .cv-site-head,
+  body:has(.jobs-layout) .cv-site-foot,
+  .jobs-toc,
+  .jobs-page-head .cv-crumb-back,
+  .lp.jobs-essay .jobs-end { display: none !important; }
+  .jobs-layout { display: block; max-width: none; padding: 0; }
+  .jobs-page-head { padding-top: 0; }
+  .lp.jobs-essay h2 { break-after: avoid; }
+  .lp.jobs-essay table { min-width: 0; font-size: 10pt; }
+  .lp.jobs-essay .jobs-table-scroll { overflow: visible; border-radius: 0; }
+  .lp.jobs-essay tr { break-inside: avoid; }
+}
+
+/* 原文短句分段照录；仅压缩相邻短段的视觉间隔。 */
+.lp.jobs-essay .jobs-fragment { margin-bottom: .35em; }
+.lp.jobs-essay .jobs-source-gap { height: 12px; }
+.lp.jobs-essay h3 { margin: 30px 0 16px; font: 600 19px/1.7 var(--serif); }
+.lp.jobs-essay a { color: var(--coral-deep); text-decoration: underline; text-underline-offset: 3px; overflow-wrap: anywhere; }
+.lp.jobs-essay .jobs-formula {
+  display: block;
+  max-width: 100%;
+  overflow-x: auto;
+  overflow-y: hidden;
+  margin: 16px 0;
+  padding: 12px 14px;
+  line-height: 1.8;
+  font-size: 17px;
+  scrollbar-width: thin;
+  scrollbar-color: var(--line-2) transparent;
+}
+.lp.jobs-essay .jobs-formula.is-boxed { background: var(--panel); border: 1px solid var(--line); border-radius: var(--radius-s); }
+.lp.jobs-essay math { font-family: "Cambria Math", "STIX Two Math", math; }
+.lp.jobs-essay .jobs-formula math { width: max-content; min-width: 0; margin: 0; text-align: left; }
+.lp.jobs-essay .jobs-prose-formula { display: block; white-space: normal; font: 500 16px/1.95 var(--sans); }
+.lp.jobs-essay .jobs-inline-math { white-space: nowrap; }
+.lp.jobs-essay td .jobs-inline-math, .lp.jobs-essay th .jobs-inline-math { font-size: 17px; }
+@media (max-width: 600px) {
+  .lp.jobs-essay .jobs-formula { font-size: 16px; padding: 12px; }
+}
+@media print {
+  .lp.jobs-essay .jobs-formula { font-size: 9pt; }
+}
+.lp.jobs-essay > .jobs-section:first-child { margin-top: 0; }
+.jobs-page-head .cv-page-title { text-wrap: balance; }
+.jobs-page-head .jobs-title-chunk { display: inline-block; max-width: 100%; }
+.lp.jobs-essay table[data-columns="2"] th:first-child { width: 24%; }
+.lp.jobs-essay table[data-columns="2"] th:nth-child(2) { width: 76%; }
+.lp.jobs-essay table[data-columns="3"] { min-width: 650px; }
+.lp.jobs-essay table[data-columns="3"] th:first-child { width: 28%; }
+.lp.jobs-essay table[data-columns="3"] th:nth-child(2),
+.lp.jobs-essay table[data-columns="3"] th:nth-child(3) { width: 36%; }
+.lp.jobs-essay figure { margin: 0; }
+.lp.jobs-essay figure.jobs-image-frame { margin: 26px 0; }
+.lp.jobs-essay .jobs-source-image { display: block; width: auto; height: auto; max-width: 100%; max-height: 640px; margin: 0 auto; border-radius: var(--radius-s); }
+.lp.jobs-essay .jobs-image-gallery { display: grid; grid-template-columns: repeat(3,minmax(0,1fr)); gap: 12px; margin: 26px 0; align-items: center; }
+.lp.jobs-essay .jobs-source-badge { display: flex; width: fit-content; align-items: center; gap: 8px; margin: 16px 0 24px; padding: 5px 10px; border: 1px solid var(--line); border-radius: 8px; color: var(--ink-2); font-size: 12px; line-height: 1.6; }
+.lp.jobs-essay .jobs-source-favicon { display: block; flex: none; width: 20px; height: 20px; }
+.lp.jobs-essay .jobs-source-count { color: var(--ink-2); }
+@media(max-width:600px) {
+  .lp.jobs-essay .jobs-image-gallery { grid-template-columns: 1fr; gap: 18px; }
+  .lp.jobs-essay .jobs-source-image { max-height: none; }
+}
+@media print {
+  .lp.jobs-essay .jobs-source-image { max-height: 160mm; }
+  .lp.jobs-essay table[data-columns] { min-width: 0; }
+  .lp.jobs-essay figure { break-inside: avoid; }
+}

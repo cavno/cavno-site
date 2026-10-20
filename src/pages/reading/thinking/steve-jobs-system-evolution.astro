@@ -1,0 +1,39 @@
+---
+import Base from '../../../layouts/Base.astro';
+import body from '../../../legacy/reading/thinking/steve-jobs-system-evolution/body.html?raw';
+import '../../../legacy/reading/thinking/steve-jobs-system-evolution/style.css';
+
+const title = "乔布斯的一生：从艺术、科技、哲学到商业的系统演化";
+const description = "乔布斯的传奇不在于他分别懂艺术、懂科技、懂哲学、懂商业，而在于他能够将这些原本遵循不同规则的领域，重新组织成一个相互强化的完整系统。";
+// 目录从原文章节提取，不维护第二份标题文本。
+const headings = Array.from(body.matchAll(/<h2 id="([^"]+)">([^<]+)<\/h2>/g),
+  ([, id, text]) => ({ id, text }));
+---
+<Base title={title + ' · Cavno'} description={description}>
+  <main id="jobs-main">
+    <section class="cv-page-head jobs-page-head">
+      <div class="cv-wrap">
+        <div class="cv-eyebrow">Reading &amp; Thinking · Thinking</div>
+        <h1 class="cv-page-title" id="jobs-title">{title.split(/(?<=[：、])/u).map((part) => <span class="jobs-title-chunk">{part}</span>)}</h1>
+        <a class="cv-crumb-back" href="/reading/thinking/">← 返回思考栏目</a>
+      </div>
+    </section>
+    <div class="cv-wrap jobs-layout">
+      <aside class="jobs-toc" aria-label="文章目录">
+        <details open>
+          <summary>文章目录 <span>{headings.length} 节</span></summary>
+          <nav aria-label="章节导航">
+            {headings.map(({ id, text }) => <a href={'#' + id} set:html={text} />)}
+          </nav>
+        </details>
+      </aside>
+      <article class="lp jobs-essay" aria-labelledby="jobs-title">
+        <Fragment set:html={body} />
+        <nav class="jobs-end" aria-label="文章导航">
+          <a href="/reading/thinking/">← 返回思考栏目</a>
+          <a href="#jobs-title">回到顶部 ↑</a>
+        </nav>
+      </article>
+    </div>
+  </main>
+</Base>
