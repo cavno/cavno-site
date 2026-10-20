@@ -1,0 +1,41 @@
+---
+import Base from '../../../layouts/Base.astro';
+import body from '../../../legacy/reading/thinking/musk-recursive-self-evolution/body.html?raw';
+import '../../../legacy/reading/thinking/musk-recursive-self-evolution/style.css';
+
+const title = "马斯克递归自我进化：基于“约束生成链”与递归自指的主体能动性分析";
+const subtitle = "——从物理工程、信息中枢到制度博弈的系统哲学考察 (1971—2026)";
+const description = "马斯克的人生轨迹非常适合运用“约束生成链”进行系统哲学分析。";
+// 目录从原文章节提取，不维护第二份标题文本。
+const headings = Array.from(body.matchAll(/<h2 id="([^"]+)">([^<]+)<\/h2>/g),
+  ([, id, text]) => ({ id, text }));
+---
+<Base title={title + ' · Cavno'} description={description}>
+  <main id="musk-main">
+    <section class="cv-page-head musk-page-head">
+      <div class="cv-wrap">
+        <div class="cv-eyebrow">Reading &amp; Thinking · Thinking</div>
+        <h1 class="cv-page-title" id="musk-title">{title}</h1>
+        <p class="cv-lede">{subtitle}</p>
+        <a class="cv-crumb-back" href="/reading/thinking/">← 返回思考栏目</a>
+      </div>
+    </section>
+    <div class="cv-wrap musk-layout">
+      <aside class="musk-toc" aria-label="文章目录">
+        <details open>
+          <summary>文章目录 <span>{headings.length} 节</span></summary>
+          <nav aria-label="章节导航">
+            {headings.map(({ id, text }) => <a href={'#' + id} set:html={text} />)}
+          </nav>
+        </details>
+      </aside>
+      <article class="lp musk-essay" aria-labelledby="musk-title">
+        <Fragment set:html={body} />
+        <nav class="musk-end" aria-label="文章导航">
+          <a href="/reading/thinking/">← 返回思考栏目</a>
+          <a href="#musk-title">回到顶部 ↑</a>
+        </nav>
+      </article>
+    </div>
+  </main>
+</Base>

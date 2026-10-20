@@ -1,0 +1,178 @@
+/* 仅作用于新增文章；沿用 Base.astro 的站点色彩、字体和导航。 */
+.musk-page-head .cv-page-title {
+  max-width: 1040px;
+  font-size: clamp(29px, 3.7vw, 46px);
+  line-height: 1.5;
+  letter-spacing: -.025em;
+  overflow-wrap: anywhere;
+}
+.musk-page-head .cv-lede { max-width: 900px; line-height: 1.8; }
+.musk-layout {
+  display: grid;
+  grid-template-columns: 248px minmax(0, 1fr);
+  gap: 60px;
+  align-items: start;
+  padding-top: 44px;
+  padding-bottom: 80px;
+}
+.musk-toc {
+  position: sticky;
+  top: calc(var(--cv-head-total) + 24px);
+  max-height: calc(100dvh - var(--cv-head-total) - 48px);
+  overflow-y: auto;
+  scrollbar-width: thin;
+  scrollbar-color: var(--line-2) transparent;
+  padding-right: 12px;
+  font-size: 12px;
+}
+.musk-toc summary {
+  cursor: pointer;
+  font-size: 13px;
+  font-weight: 600;
+  padding-bottom: 16px;
+  color: var(--ink);
+}
+.musk-toc summary span { color: var(--ink-2); font-weight: 400; margin-left: 8px; }
+.musk-toc nav { display: grid; gap: 0; }
+.musk-toc nav a {
+  display: block;
+  border-left: 1px solid var(--line);
+  padding: 8px 12px;
+  color: var(--ink-2);
+  line-height: 1.65;
+  text-decoration: none;
+}
+.musk-toc nav a:hover,
+.musk-toc nav a:focus-visible { color: var(--coral-deep); border-left-color: var(--coral); background: var(--panel); }
+.lp.musk-essay {
+  min-width: 0;
+  color: var(--ink);
+  font-family: var(--sans);
+  font-size: 16px;
+  line-height: 2;
+  overflow-wrap: anywhere;
+}
+.lp.musk-essay * { box-sizing: border-box; }
+.lp.musk-essay p { margin: 0 0 1.25em; }
+.lp.musk-essay strong { font-weight: 600; }
+.lp.musk-essay .musk-section { margin-top: 48px; }
+.lp.musk-essay h2 {
+  margin: 0 0 24px;
+  font-family: var(--serif);
+  font-size: clamp(21px, 2vw, 26px);
+  font-weight: 700;
+  line-height: 1.65;
+  letter-spacing: -.01em;
+  text-wrap: pretty;
+  scroll-margin-top: calc(var(--cv-head-total) + 24px);
+}
+.lp.musk-essay .musk-source-list {
+  list-style: none;
+  margin: 0 0 1.25em;
+  padding: 0;
+}
+.lp.musk-essay .musk-source-list li { margin: .6em 0; padding: 0; }
+/* 原文单格表用于定义、公式和判词；只转换容器，保留全部原句与段落。 */
+.lp.musk-essay .musk-source-note {
+  margin: 24px 0;
+  padding: 18px 22px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-s);
+  background: var(--panel);
+  font-size: 15px;
+  line-height: 1.9;
+  overflow-wrap: anywhere;
+}
+.lp.musk-essay .musk-source-note p { margin: 0; }
+.lp.musk-essay .musk-source-note p + p { margin-top: .75em; }
+.lp.musk-essay .musk-table-scroll {
+  max-width: 100%;
+  overflow-x: auto;
+  margin: 24px 0;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-s);
+  background: var(--card);
+}
+.lp.musk-essay table {
+  width: 100%;
+  min-width: 700px;
+  border-collapse: collapse;
+  table-layout: fixed;
+  font-size: 14px;
+  line-height: 1.85;
+}
+.lp.musk-essay caption {
+  /* 表名已作为原文章节标题显示，此处保留可访问名称。 */
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+.lp.musk-essay th,
+.lp.musk-essay td {
+  padding: 15px 16px;
+  border-right: 1px solid var(--line);
+  border-bottom: 1px solid var(--line);
+  text-align: left;
+  vertical-align: top;
+  font-weight: 400;
+}
+.lp.musk-essay th:first-child { width: 13%; }
+.lp.musk-essay th:nth-child(2) { width: 19%; }
+.lp.musk-essay th:nth-child(3) { width: 29%; }
+.lp.musk-essay thead th { background: var(--panel); font-weight: 600; }
+.lp.musk-essay tbody th { font-weight: 600; }
+.lp.musk-essay tbody tr:nth-child(even) { background: var(--paper); }
+.lp.musk-essay tr > :last-child { border-right: 0; }
+.lp.musk-essay tbody tr:last-child > * { border-bottom: 0; }
+.lp.musk-essay td p,
+.lp.musk-essay th p { margin: 0; }
+.lp.musk-essay .musk-end {
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 16px;
+  margin-top: 56px;
+  padding-top: 24px;
+  border-top: 1px solid var(--line);
+  font-size: 13px;
+}
+.lp.musk-essay .musk-end a { color: var(--coral-deep); text-decoration: none; }
+.lp.musk-essay .musk-end a:hover { text-decoration: underline; }
+@media (max-width: 960px) {
+  .musk-layout { grid-template-columns: 1fr; gap: 32px; padding-top: 28px; padding-bottom: 56px; }
+  .musk-toc {
+    position: static;
+    max-height: none;
+    overflow: visible;
+    padding: 18px 20px;
+    border: 1px solid var(--line);
+    border-radius: var(--radius-s);
+  }
+  .musk-toc nav { max-height: 260px; overflow-y: auto; }
+  .musk-toc details:not([open]) summary { padding-bottom: 0; }
+}
+@media (max-width: 600px) {
+  .musk-page-head .cv-page-title { font-size: 28px; line-height: 1.55; }
+  .musk-page-head .cv-lede { font-size: 15px; }
+  .lp.musk-essay { font-size: 16px; line-height: 1.95; }
+  .lp.musk-essay .musk-source-note { padding: 16px; }
+  .lp.musk-essay .musk-section { margin-top: 38px; }
+}
+@media print {
+  body:has(.musk-layout) { padding-top: 0; }
+  body:has(.musk-layout) .cv-site-head,
+  body:has(.musk-layout) .cv-site-foot,
+  .musk-toc,
+  .musk-page-head .cv-crumb-back,
+  .lp.musk-essay .musk-end { display: none !important; }
+  .musk-layout { display: block; max-width: none; padding: 0; }
+  .musk-page-head { padding-top: 0; }
+  .lp.musk-essay h2 { break-after: avoid; }
+  .lp.musk-essay table { min-width: 0; font-size: 10pt; }
+  .lp.musk-essay .musk-table-scroll { overflow: visible; border-radius: 0; }
+  .lp.musk-essay tr { break-inside: avoid; }
+}
