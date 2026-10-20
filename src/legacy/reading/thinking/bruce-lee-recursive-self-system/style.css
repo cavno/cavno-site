@@ -1,0 +1,208 @@
+/* 仅作用于新增文章；沿用 Base.astro 的站点色彩、字体和导航。 */
+.lee-page-head .cv-page-title {
+  max-width: 1040px;
+  font-size: clamp(29px, 3.7vw, 46px);
+  line-height: 1.5;
+  letter-spacing: -.025em;
+  overflow-wrap: anywhere;
+}
+.lee-page-head .cv-lede { max-width: 900px; line-height: 1.8; }
+.lee-layout {
+  display: grid;
+  grid-template-columns: 248px minmax(0, 1fr);
+  gap: 60px;
+  align-items: start;
+  padding-top: 44px;
+  padding-bottom: 80px;
+}
+.lee-toc {
+  position: sticky;
+  top: calc(var(--cv-head-total) + 24px);
+  max-height: calc(100dvh - var(--cv-head-total) - 48px);
+  overflow-y: auto;
+  scrollbar-width: thin;
+  scrollbar-color: var(--line-2) transparent;
+  padding-right: 12px;
+  font-size: 12px;
+}
+.lee-toc summary {
+  cursor: pointer;
+  font-size: 13px;
+  font-weight: 600;
+  padding-bottom: 16px;
+  color: var(--ink);
+}
+.lee-toc summary span { color: var(--ink-2); font-weight: 400; margin-left: 8px; }
+.lee-toc nav { display: grid; gap: 0; }
+.lee-toc nav a {
+  display: block;
+  border-left: 1px solid var(--line);
+  padding: 8px 12px;
+  color: var(--ink-2);
+  line-height: 1.65;
+  text-decoration: none;
+}
+.lee-toc nav a:hover,
+.lee-toc nav a:focus-visible { color: var(--coral-deep); border-left-color: var(--coral); background: var(--panel); }
+.lp.lee-essay {
+  min-width: 0;
+  color: var(--ink);
+  font-family: var(--sans);
+  font-size: 16px;
+  line-height: 2;
+  overflow-wrap: anywhere;
+}
+.lp.lee-essay * { box-sizing: border-box; }
+.lp.lee-essay p { margin: 0 0 1.25em; }
+.lp.lee-essay strong { font-weight: 600; }
+.lp.lee-essay .lee-section { margin-top: 48px; }
+.lp.lee-essay h2 {
+  margin: 0 0 24px;
+  font-family: var(--serif);
+  font-size: clamp(21px, 2vw, 26px);
+  font-weight: 700;
+  line-height: 1.65;
+  letter-spacing: -.01em;
+  text-wrap: pretty;
+  scroll-margin-top: calc(var(--cv-head-total) + 24px);
+}
+.lp.lee-essay .lee-source-list {
+  list-style: none;
+  margin: 0 0 1.25em;
+  padding: 0;
+}
+.lp.lee-essay .lee-source-list li { margin: .6em 0; padding: 0; }
+/* 原文单格表用于定义、公式和判词；只转换容器，保留全部原句与段落。 */
+.lp.lee-essay .lee-source-note {
+  margin: 24px 0;
+  padding: 18px 22px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-s);
+  background: var(--panel);
+  font-size: 15px;
+  line-height: 1.9;
+  overflow-wrap: anywhere;
+}
+.lp.lee-essay .lee-source-note p { margin: 0; }
+.lp.lee-essay .lee-source-note p + p { margin-top: .75em; }
+.lp.lee-essay .lee-table-scroll {
+  max-width: 100%;
+  overflow-x: auto;
+  margin: 24px 0;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-s);
+  background: var(--card);
+}
+.lp.lee-essay table {
+  width: 100%;
+  min-width: 480px;
+  border-collapse: collapse;
+  table-layout: fixed;
+  font-size: 14px;
+  line-height: 1.85;
+}
+.lp.lee-essay caption {
+  /* 表名已作为原文章节标题显示，此处保留可访问名称。 */
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+.lp.lee-essay th,
+.lp.lee-essay td {
+  padding: 15px 16px;
+  border-right: 1px solid var(--line);
+  border-bottom: 1px solid var(--line);
+  text-align: left;
+  vertical-align: top;
+  font-weight: 400;
+}
+.lp.lee-essay th:first-child { width: 24%; }
+.lp.lee-essay th:nth-child(2) { width: 76%; }
+.lp.lee-essay th:nth-child(3) { width: 29%; }
+.lp.lee-essay thead th { background: var(--panel); font-weight: 600; }
+.lp.lee-essay tbody th { font-weight: 600; }
+.lp.lee-essay tbody tr:nth-child(even) { background: var(--paper); }
+.lp.lee-essay tr > :last-child { border-right: 0; }
+.lp.lee-essay tbody tr:last-child > * { border-bottom: 0; }
+.lp.lee-essay td p,
+.lp.lee-essay th p { margin: 0; }
+.lp.lee-essay .lee-end {
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 16px;
+  margin-top: 56px;
+  padding-top: 24px;
+  border-top: 1px solid var(--line);
+  font-size: 13px;
+}
+.lp.lee-essay .lee-end a { color: var(--coral-deep); text-decoration: none; }
+.lp.lee-essay .lee-end a:hover { text-decoration: underline; }
+@media (max-width: 960px) {
+  .lee-layout { grid-template-columns: 1fr; gap: 32px; padding-top: 28px; padding-bottom: 56px; }
+  .lee-toc {
+    position: static;
+    max-height: none;
+    overflow: visible;
+    padding: 18px 20px;
+    border: 1px solid var(--line);
+    border-radius: var(--radius-s);
+  }
+  .lee-toc nav { max-height: 260px; overflow-y: auto; }
+  .lee-toc details:not([open]) summary { padding-bottom: 0; }
+}
+@media (max-width: 600px) {
+  .lee-page-head .cv-page-title { font-size: 28px; line-height: 1.55; }
+  .lee-page-head .cv-lede { font-size: 15px; }
+  .lp.lee-essay { font-size: 16px; line-height: 1.95; }
+  .lp.lee-essay .lee-source-note { padding: 16px; }
+  .lp.lee-essay .lee-section { margin-top: 38px; }
+}
+@media print {
+  body:has(.lee-layout) { padding-top: 0; }
+  body:has(.lee-layout) .cv-site-head,
+  body:has(.lee-layout) .cv-site-foot,
+  .lee-toc,
+  .lee-page-head .cv-crumb-back,
+  .lp.lee-essay .lee-end { display: none !important; }
+  .lee-layout { display: block; max-width: none; padding: 0; }
+  .lee-page-head { padding-top: 0; }
+  .lp.lee-essay h2 { break-after: avoid; }
+  .lp.lee-essay table { min-width: 0; font-size: 10pt; }
+  .lp.lee-essay .lee-table-scroll { overflow: visible; border-radius: 0; }
+  .lp.lee-essay tr { break-inside: avoid; }
+}
+
+/* 原文短句分段照录；仅压缩相邻短段的视觉间隔。 */
+.lp.lee-essay .lee-fragment { margin-bottom: .35em; }
+.lp.lee-essay .lee-source-gap { height: 12px; }
+.lp.lee-essay h3 { margin: 30px 0 16px; font: 600 19px/1.7 var(--serif); }
+.lp.lee-essay a { color: var(--coral-deep); text-decoration: underline; text-underline-offset: 3px; overflow-wrap: anywhere; }
+.lp.lee-essay .lee-formula {
+  display: block;
+  max-width: 100%;
+  overflow-x: auto;
+  overflow-y: hidden;
+  margin: 16px 0;
+  padding: 12px 14px;
+  line-height: 1.8;
+  font-size: 17px;
+  scrollbar-width: thin;
+  scrollbar-color: var(--line-2) transparent;
+}
+.lp.lee-essay .lee-formula.is-boxed { background: var(--panel); border: 1px solid var(--line); border-radius: var(--radius-s); }
+.lp.lee-essay math { font-family: "Cambria Math", "STIX Two Math", math; }
+.lp.lee-essay .lee-formula math { width: max-content; min-width: 0; margin: 0; text-align: left; }
+.lp.lee-essay .lee-prose-formula { display: block; white-space: normal; font: 500 16px/1.95 var(--sans); }
+.lp.lee-essay .lee-inline-math { white-space: nowrap; }
+.lp.lee-essay td .lee-inline-math, .lp.lee-essay th .lee-inline-math { font-size: 17px; }
+@media (max-width: 600px) {
+  .lp.lee-essay .lee-formula { font-size: 16px; padding: 12px; }
+}
+@media print {
+  .lp.lee-essay .lee-formula { font-size: 9pt; }
+}

@@ -1,0 +1,39 @@
+---
+import Base from '../../../layouts/Base.astro';
+import body from '../../../legacy/reading/thinking/bruce-lee-recursive-self-system/body.html?raw';
+import '../../../legacy/reading/thinking/bruce-lee-recursive-self-system/style.css';
+
+const title = "李小龙的自我递归系统";
+const description = "一个具体的人，怎样避免被既有形式、身份、传统和自我想象困住，在不断变化的现实中保持真实、有效而自由的行动？";
+// 目录从原文章节提取，不维护第二份标题文本。
+const headings = Array.from(body.matchAll(/<h2 id="([^"]+)">([^<]+)<\/h2>/g),
+  ([, id, text]) => ({ id, text }));
+---
+<Base title={title + ' · Cavno'} description={description}>
+  <main id="lee-main">
+    <section class="cv-page-head lee-page-head">
+      <div class="cv-wrap">
+        <div class="cv-eyebrow">Reading &amp; Thinking · Thinking</div>
+        <h1 class="cv-page-title" id="lee-title">{title}</h1>
+        <a class="cv-crumb-back" href="/reading/thinking/">← 返回思考栏目</a>
+      </div>
+    </section>
+    <div class="cv-wrap lee-layout">
+      <aside class="lee-toc" aria-label="文章目录">
+        <details open>
+          <summary>文章目录 <span>{headings.length} 节</span></summary>
+          <nav aria-label="章节导航">
+            {headings.map(({ id, text }) => <a href={'#' + id} set:html={text} />)}
+          </nav>
+        </details>
+      </aside>
+      <article class="lp lee-essay" aria-labelledby="lee-title">
+        <Fragment set:html={body} />
+        <nav class="lee-end" aria-label="文章导航">
+          <a href="/reading/thinking/">← 返回思考栏目</a>
+          <a href="#lee-title">回到顶部 ↑</a>
+        </nav>
+      </article>
+    </div>
+  </main>
+</Base>
