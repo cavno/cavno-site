@@ -1,0 +1,39 @@
+---
+import Base from '../../../layouts/Base.astro';
+import body from '../../../legacy/reading/thinking/steve-jobs-recursive-self-evolution/body.html?raw';
+import '../../../legacy/reading/thinking/steve-jobs-recursive-self-evolution/style.css';
+
+const title = "用“自我递归—自指进化”框架，完整分析乔布斯的一生";
+const description = "当原有的自己已经无法解决问题时，他能否修改那个负责解决问题的自己？";
+// 目录从原文章节提取，不维护第二份标题文本。
+const headings = Array.from(body.matchAll(/<h2 id="([^"]+)">([^<]+)<\/h2>/g),
+  ([, id, text]) => ({ id, text }));
+---
+<Base title={title + ' · Cavno'} description={description}>
+  <main id="rj-main">
+    <section class="cv-page-head rj-page-head">
+      <div class="cv-wrap">
+        <div class="cv-eyebrow">Reading &amp; Thinking · Thinking</div>
+        <h1 class="cv-page-title" id="rj-title">{title.split(/(?<=[，：、])/u).map((part) => <span class="rj-title-chunk">{part}</span>)}</h1>
+        <div class="rj-page-links"><a class="cv-crumb-back" href="/reading/thinking/">← 返回思考栏目</a><a class="cv-crumb-back" href="https://chatgpt.com/s/t_6ad7a22ab1d08191bba18052c11d5cc2" target="_blank" rel="noopener noreferrer">原始分享 ↗</a></div>
+      </div>
+    </section>
+    <div class="cv-wrap rj-layout">
+      <aside class="rj-toc" aria-label="文章目录">
+        <details open>
+          <summary>文章目录 <span>{headings.length} 节</span></summary>
+          <nav aria-label="章节导航">
+            {headings.map(({ id, text }) => <a href={'#' + id} set:html={text} />)}
+          </nav>
+        </details>
+      </aside>
+      <article class="lp rj-essay" aria-labelledby="rj-title">
+        <Fragment set:html={body} />
+        <nav class="rj-end" aria-label="文章导航">
+          <a href="/reading/thinking/">← 返回思考栏目</a>
+          <a href="#rj-title">回到顶部 ↑</a>
+        </nav>
+      </article>
+    </div>
+  </main>
+</Base>

@@ -1,0 +1,229 @@
+/* 仅作用于新增文章；沿用 Base.astro 的站点色彩、字体和导航。 */
+.rj-page-head .cv-page-title {
+  max-width: 1040px;
+  font-size: clamp(29px, 3.7vw, 46px);
+  line-height: 1.5;
+  letter-spacing: -.025em;
+  overflow-wrap: anywhere;
+}
+.rj-page-head .cv-lede { max-width: 900px; line-height: 1.8; }
+.rj-layout {
+  display: grid;
+  grid-template-columns: 248px minmax(0, 1fr);
+  gap: 60px;
+  align-items: start;
+  padding-top: 44px;
+  padding-bottom: 80px;
+}
+.rj-toc {
+  position: sticky;
+  top: calc(var(--cv-head-total) + 24px);
+  max-height: calc(100dvh - var(--cv-head-total) - 48px);
+  overflow-y: auto;
+  scrollbar-width: thin;
+  scrollbar-color: var(--line-2) transparent;
+  padding-right: 12px;
+  font-size: 12px;
+}
+.rj-toc summary {
+  cursor: pointer;
+  font-size: 13px;
+  font-weight: 600;
+  padding-bottom: 16px;
+  color: var(--ink);
+}
+.rj-toc summary span { color: var(--ink-2); font-weight: 400; margin-left: 8px; }
+.rj-toc nav { display: grid; gap: 0; }
+.rj-toc nav a {
+  display: block;
+  border-left: 1px solid var(--line);
+  padding: 8px 12px;
+  color: var(--ink-2);
+  line-height: 1.65;
+  text-decoration: none;
+}
+.rj-toc nav a:hover,
+.rj-toc nav a:focus-visible { color: var(--coral-deep); border-left-color: var(--coral); background: var(--panel); }
+.lp.rj-essay {
+  min-width: 0;
+  color: var(--ink);
+  font-family: var(--sans);
+  font-size: 16px;
+  line-height: 2;
+  overflow-wrap: anywhere;
+}
+.lp.rj-essay * { box-sizing: border-box; }
+.lp.rj-essay p { margin: 0 0 1.25em; }
+.lp.rj-essay strong { font-weight: 600; }
+.lp.rj-essay .rj-section { margin-top: 48px; }
+.lp.rj-essay h2 {
+  margin: 0 0 24px;
+  font-family: var(--serif);
+  font-size: clamp(21px, 2vw, 26px);
+  font-weight: 700;
+  line-height: 1.65;
+  letter-spacing: -.01em;
+  text-wrap: pretty;
+  scroll-margin-top: calc(var(--cv-head-total) + 24px);
+}
+.lp.rj-essay .rj-source-list {
+  list-style: none;
+  margin: 0 0 1.25em;
+  padding: 0;
+}
+.lp.rj-essay .rj-source-list li { margin: .6em 0; padding: 0; }
+/* 原文单格表用于定义、公式和判词；只转换容器，保留全部原句与段落。 */
+.lp.rj-essay .rj-source-note {
+  margin: 24px 0;
+  padding: 18px 22px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-s);
+  background: var(--panel);
+  font-size: 15px;
+  line-height: 1.9;
+  overflow-wrap: anywhere;
+}
+.lp.rj-essay .rj-source-note p { margin: 0; }
+.lp.rj-essay .rj-source-note p + p { margin-top: .75em; }
+.lp.rj-essay .rj-table-scroll {
+  max-width: 100%;
+  overflow-x: auto;
+  margin: 24px 0;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-s);
+  background: var(--card);
+}
+.lp.rj-essay table {
+  width: 100%;
+  min-width: 480px;
+  border-collapse: collapse;
+  table-layout: fixed;
+  font-size: 14px;
+  line-height: 1.85;
+}
+.lp.rj-essay caption {
+  /* 表名已作为原文章节标题显示，此处保留可访问名称。 */
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+.lp.rj-essay th,
+.lp.rj-essay td {
+  padding: 15px 16px;
+  border-right: 1px solid var(--line);
+  border-bottom: 1px solid var(--line);
+  text-align: left;
+  vertical-align: top;
+  font-weight: 400;
+}
+.lp.rj-essay thead th { background: var(--panel); font-weight: 600; }
+.lp.rj-essay tbody th { font-weight: 600; }
+.lp.rj-essay tbody tr:nth-child(even) { background: var(--paper); }
+.lp.rj-essay tr > :last-child { border-right: 0; }
+.lp.rj-essay tbody tr:last-child > * { border-bottom: 0; }
+.lp.rj-essay td p,
+.lp.rj-essay th p { margin: 0; }
+.lp.rj-essay .rj-end {
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 16px;
+  margin-top: 56px;
+  padding-top: 24px;
+  border-top: 1px solid var(--line);
+  font-size: 13px;
+}
+.lp.rj-essay .rj-end a { color: var(--coral-deep); text-decoration: none; }
+.lp.rj-essay .rj-end a:hover { text-decoration: underline; }
+@media (max-width: 960px) {
+  .rj-layout { grid-template-columns: 1fr; gap: 32px; padding-top: 28px; padding-bottom: 56px; }
+  .rj-toc {
+    position: static;
+    max-height: none;
+    overflow: visible;
+    padding: 18px 20px;
+    border: 1px solid var(--line);
+    border-radius: var(--radius-s);
+  }
+  .rj-toc nav { max-height: 260px; overflow-y: auto; }
+  .rj-toc details:not([open]) summary { padding-bottom: 0; }
+}
+@media (max-width: 600px) {
+  .rj-page-head .cv-page-title { font-size: 28px; line-height: 1.55; }
+  .rj-page-head .cv-lede { font-size: 15px; }
+  .lp.rj-essay { font-size: 16px; line-height: 1.95; }
+  .lp.rj-essay .rj-source-note { padding: 16px; }
+  .lp.rj-essay .rj-section { margin-top: 38px; }
+}
+@media print {
+  body:has(.rj-layout) { padding-top: 0; }
+  body:has(.rj-layout) .cv-site-head,
+  body:has(.rj-layout) .cv-site-foot,
+  .rj-toc,
+  .rj-page-head .cv-crumb-back,
+  .lp.rj-essay .rj-end { display: none !important; }
+  .rj-layout { display: block; max-width: none; padding: 0; }
+  .rj-page-head { padding-top: 0; }
+  .lp.rj-essay h2 { break-after: avoid; }
+  .lp.rj-essay table { min-width: 0; font-size: 10pt; }
+  .lp.rj-essay .rj-table-scroll { overflow: visible; border-radius: 0; }
+  .lp.rj-essay tr { break-inside: avoid; }
+}
+
+/* 原文短句分段照录；仅压缩相邻短段的视觉间隔。 */
+.lp.rj-essay .rj-fragment { margin-bottom: .35em; }
+.lp.rj-essay .rj-source-gap { height: 12px; }
+.lp.rj-essay h3 { margin: 30px 0 16px; font: 600 19px/1.7 var(--serif); }
+.lp.rj-essay a { color: var(--coral-deep); text-decoration: underline; text-underline-offset: 3px; overflow-wrap: anywhere; }
+.lp.rj-essay .rj-formula {
+  display: block;
+  max-width: 100%;
+  overflow-x: auto;
+  overflow-y: hidden;
+  margin: 16px 0;
+  padding: 12px 14px;
+  line-height: 1.8;
+  font-size: 17px;
+  scrollbar-width: thin;
+  scrollbar-color: var(--line-2) transparent;
+}
+.lp.rj-essay .rj-formula.is-boxed { background: var(--panel); border: 1px solid var(--line); border-radius: var(--radius-s); }
+.lp.rj-essay math { font-family: "Cambria Math", "STIX Two Math", math; }
+.lp.rj-essay .rj-formula math { width: max-content; min-width: 0; margin: 0; text-align: left; }
+.lp.rj-essay .rj-prose-formula { display: block; white-space: normal; font: 500 16px/1.95 var(--sans); }
+.lp.rj-essay .rj-inline-math { white-space: nowrap; }
+.lp.rj-essay td .rj-inline-math, .lp.rj-essay th .rj-inline-math { font-size: 17px; }
+@media (max-width: 600px) {
+  .lp.rj-essay .rj-formula { font-size: 16px; padding: 12px; }
+}
+@media print {
+  .lp.rj-essay .rj-formula { font-size: 9pt; }
+}
+
+.rj-page-head .cv-page-title { text-wrap: balance; }
+.rj-title-chunk { display: inline-block; max-width: 100%; }
+.rj-page-links { display: flex; flex-wrap: wrap; align-items: center; gap: 24px; }
+.lp.rj-essay > .rj-section:first-child { margin-top: 0; }
+.lp.rj-essay ul, .lp.rj-essay ol { margin: 0 0 1.25em; padding-left: 1.5em; }
+.lp.rj-essay li { margin: .55em 0; }
+.lp.rj-essay li p { margin: .35em 0; }
+.lp.rj-essay blockquote { margin: 24px 0; padding: 18px 22px; border-left: 3px solid var(--coral); background: var(--panel); }
+.lp.rj-essay blockquote p:last-child { margin-bottom: 0; }
+.lp.rj-essay .rj-source-ref, .lp.rj-essay .rj-file-ref { display: inline; font-size: 12px; line-height: 1.7; color: var(--ink-2); overflow-wrap: anywhere; }
+.lp.rj-essay .rj-source-ref a { margin-left: 7px; color: var(--coral-deep); }
+.lp.rj-essay .rj-file-ref { margin-left: 7px; }
+.lp.rj-essay .rj-level-grid { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap: 14px; margin: 26px 0; }
+.lp.rj-essay .rj-level { padding: 20px; background: var(--card); border: 1px solid var(--line); border-radius: var(--radius-s); }
+.lp.rj-essay .rj-level p { margin-bottom: .5em; }
+.lp.rj-essay .rj-level p:last-child { margin-bottom: 0; }
+.lp.rj-essay .rj-level-code { display: inline-block; margin-bottom: 10px; padding: 1px 9px; border-radius: 6px; background: var(--panel); color: var(--coral-deep); font: 600 12px/1.8 var(--mono); }
+.lp.rj-essay table { min-width: 650px; }
+.lp.rj-essay th:first-child { width: 25%; }
+.lp.rj-essay th:nth-child(2) { width: 42%; }
+.lp.rj-essay th:nth-child(3) { width: 33%; }
+@media(max-width:600px){.lp.rj-essay .rj-level-grid {grid-template-columns:1fr;}}
+@media print{.lp.rj-essay table{min-width:0;}.rj-page-links{display:none!important;}}
