@@ -1,74 +1,27 @@
-# 乔布斯自我递归与自指进化 · Cavno 增量代码
+# 《ITIN的作用与底层原理》增量接入说明
 
-## 接入方法
+本包只含 4 个新增源码文件，适用于此前提供的 Cavno Astro 源码。
 
-将压缩包中的 `src/` 合并到现有 `cavno-site/` 项目根目录。
-本包只新增 4 个源码文件，不覆盖任何现有文件，不包含整站源码、`.git` 或依赖目录。
+## 接入
 
-```
-src/pages/reading/thinking/steve-jobs-recursive-self-evolution.astro
-src/legacy/reading/thinking/steve-jobs-recursive-self-evolution/body.html
-src/legacy/reading/thinking/steve-jobs-recursive-self-evolution/style.css
-src/content/items/reading-thinking-steve-jobs-recursive-self-evolution.md
-```
+1. 将压缩包中的 src 文件夹合并到网站项目根目录，保持目录结构。
+2. 在项目根目录运行 `npm run build`，再沿用现有流程发布。
+3. 新文章路径：`/investing/research/itin-functions-and-underlying-principles/`。
+4. `/investing/research/` 栏目、Investing 页面和全站搜索会依据新增内容条目自动收录，无需修改现有栏目页、导航或搜索代码。
 
-在原项目根目录执行原有构建命令：
+## 文件用途
 
-```sh
-npm run build
-```
+- `src/pages/investing/research/itin-functions-and-underlying-principles.astro`：文章路由，复用站点 Base 布局、导航、页脚与搜索。
+- `src/legacy/investing/research/itin-functions-and-underlying-principles/body.html`：原文 HTML，保留原始提问、正文、4 个主要章节、6 个小节、1 张表格、21 处引用标记与其 22 个原始来源链接。
+- `src/legacy/investing/research/itin-functions-and-underlying-principles/style.css`：仅作用于本篇文章的样式，使用原站字体、配色和布局变量；手机端表格可横向滚动。
+- `src/content/items/investing-research-itin-functions-and-underlying-principles.md`：Research 栏目及搜索索引条目。摘要摘自原文，日期采用分享页显示的发布时间 2026-10-22。
 
-再按原项目流程提交、推送并发布。新页面路径为：
+## 内容与预览
 
-```
-/reading/thinking/steve-jobs-recursive-self-evolution/
-```
+原始分享：https://share.gemini.google/A4KkFqs1eKup
 
-现有内容集合会自动把新文章接入 Thinking 栏目、Reading 总列表、首页和全站搜索。
-无需修改现有栏目页、导航或搜索脚本。
-`body.html` 是正文片段，不要单独上传为完整页面；请重新构建整站。
+保留原文措辞、顺序、加粗与列表层级，仅做 HTML 语义化和排版；不新增分析或结论。原文 21 处引用已逐一读取其来源弹层并保留实际链接，其中“+ 1”仍可点击查看第二来源。
 
-本篇与此前 DOCX 版本的乔布斯文章采用不同路径，不会覆盖或替换此前的文章。
-可独立接入原始附件源码，也可叠加在此前的增量包之后。
+交付中的独立 HTML 可直接双击查看，已内嵌样式和必要脚本；它的搜索仅用于本次文章预览，栏目及其他站点链接指向 cavno.org。正式网站会复用全站搜索。本包不增加运行依赖。
 
-## 原文保留
-
-原始分享：https://chatgpt.com/s/t_6ad7a22ab1d08191bba18052c11d5cc2
-
-- 保留原题《用“自我递归—自指进化”框架，完整分析乔布斯的一生》。
-- 保留全部 13 个主章节、18 个次级标题、列表、强调、引用段落和原文顺序。
-- 保留 2 张表格、L0—L5 六层说明及 51 处数学表达式。
-- 公式静态排版，原始 TeX 保留于 `data-source` 属性中；还原后与来源正文逐字比较通过，仅忽略排版空白。
-- 保留 20 处引用标记，其中 18 处为网页引用、2 处为附件引用。
-- 网页引用使用分享页原有来源地址；`+1` 链接对应该引用组中的第二个来源。
-- 附件引用保留原始文件名，未补造下载地址。
-- 原文末尾的继续阅读建议保留为普通文字，不会触发新的 ChatGPT 对话。
-- 不复制 ChatGPT 的侧栏、登录框、服务条款提示等产品界面；引用站点的装饰性图标由文字链接替代。
-- 列表摘要直接引用原文“当原有的自己已经无法解决问题时……”这一句，没有另写摘要或结论。
-- 条目日期为本次入站日期 2026-10-21。
-
-## 设计与交互
-
-沿用原站 `Base.astro`、全站导航、页脚、搜索及字体和颜色变量。
-新增样式仅作用于 `rj-` 类名，不影响此前文章。
-
-提供侧边目录、手机折叠目录、章节锚点、栏目返回、顶部返回和原始分享链接。
-表格和长公式在自身区域内横向滚动，不撑宽整个页面。
-数学表达式已静态编译为 MathML，无需安装新的项目依赖或加载在线数学渲染脚本。
-浏览器需支持原生 MathML，本次已在 Chromium 浏览器中验证。
-
-## 检查
-
-- Astro 生产构建通过。
-- 正文顺序、标题、公式及引用标记校验通过。
-- 目录锚点完整且无重复 ID。
-- 新页面进入栏目列表和全文搜索索引。
-- 桌面与手机排版、六层说明、宽表格和公式局部滚动已检查。
-
-## 单文件预览
-
-另附的 HTML 预览已内嵌正文、样式、公式和交互，可直接双击打开。
-公共导航链接通向现有 cavno.org；预览内搜索仅包含本篇文章。
-正式接入后使用原站全站搜索。
-
-预览文件用于看效果，无需另行放入项目。本交付尚未修改或发布线上网站。
+已完成 Astro 构建、正文文本比对、栏目收录、搜索、目录锚点及手机排版检查。尚未发布到线上。

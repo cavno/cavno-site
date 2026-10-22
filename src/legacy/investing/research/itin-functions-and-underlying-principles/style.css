@@ -1,0 +1,182 @@
+/* 仅作用于新增文章；沿用 Base.astro 的站点色彩、字体和导航。 */
+.itin-page-head .cv-page-title {
+  max-width: 1040px;
+  font-size: clamp(29px, 3.7vw, 46px);
+  line-height: 1.5;
+  letter-spacing: -.025em;
+  overflow-wrap: anywhere;
+}
+.itin-page-head .cv-lede { max-width: 900px; line-height: 1.8; }
+.itin-layout {
+  display: grid;
+  grid-template-columns: 248px minmax(0, 1fr);
+  gap: 60px;
+  align-items: start;
+  padding-top: 44px;
+  padding-bottom: 80px;
+}
+.itin-toc {
+  position: sticky;
+  top: calc(var(--cv-head-total) + 24px);
+  max-height: calc(100dvh - var(--cv-head-total) - 48px);
+  overflow-y: auto;
+  scrollbar-width: thin;
+  scrollbar-color: var(--line-2) transparent;
+  padding-right: 12px;
+  font-size: 12px;
+}
+.itin-toc summary {
+  cursor: pointer;
+  font-size: 13px;
+  font-weight: 600;
+  padding-bottom: 16px;
+  color: var(--ink);
+}
+.itin-toc summary span { color: var(--ink-2); font-weight: 400; margin-left: 8px; }
+.itin-toc nav { display: grid; gap: 0; }
+.itin-toc nav a {
+  display: block;
+  border-left: 1px solid var(--line);
+  padding: 8px 12px;
+  color: var(--ink-2);
+  line-height: 1.65;
+  text-decoration: none;
+}
+.itin-toc nav a:hover,
+.itin-toc nav a:focus-visible { color: var(--coral-deep); border-left-color: var(--coral); background: var(--panel); }
+.lp.itin-essay {
+  min-width: 0;
+  color: var(--ink);
+  font-family: var(--sans);
+  font-size: 16px;
+  line-height: 2;
+  overflow-wrap: anywhere;
+}
+.lp.itin-essay * { box-sizing: border-box; }
+.lp.itin-essay p { margin: 0 0 1.25em; }
+.lp.itin-essay strong { font-weight: 600; }
+.lp.itin-essay .itin-section { margin-top: 48px; }
+.lp.itin-essay h2 {
+  margin: 0 0 24px;
+  font-family: var(--serif);
+  font-size: clamp(21px, 2vw, 26px);
+  font-weight: 700;
+  line-height: 1.65;
+  letter-spacing: -.01em;
+  text-wrap: pretty;
+  scroll-margin-top: calc(var(--cv-head-total) + 24px);
+}
+.lp.itin-essay .itin-source-list {
+  list-style: none;
+  margin: 0 0 1.25em;
+  padding: 0;
+}
+.lp.itin-essay .itin-source-list li { margin: .6em 0; padding: 0; }
+.lp.itin-essay .itin-table-scroll {
+  max-width: 100%;
+  overflow-x: auto;
+  margin: 24px 0;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-s);
+  background: var(--card);
+}
+.lp.itin-essay table {
+  width: 100%;
+  min-width: 480px;
+  border-collapse: collapse;
+  table-layout: fixed;
+  font-size: 14px;
+  line-height: 1.85;
+}
+.lp.itin-essay caption {
+  /* 表名已作为原文章节标题显示，此处保留可访问名称。 */
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+.lp.itin-essay th,
+.lp.itin-essay td {
+  padding: 15px 16px;
+  border-right: 1px solid var(--line);
+  border-bottom: 1px solid var(--line);
+  text-align: left;
+  vertical-align: top;
+  font-weight: 400;
+}
+.lp.itin-essay thead th { background: var(--panel); font-weight: 600; }
+.lp.itin-essay tbody th { font-weight: 600; }
+.lp.itin-essay tbody tr:nth-child(even) { background: var(--paper); }
+.lp.itin-essay tr > :last-child { border-right: 0; }
+.lp.itin-essay tbody tr:last-child > * { border-bottom: 0; }
+.lp.itin-essay td p,
+.lp.itin-essay th p { margin: 0; }
+.lp.itin-essay .itin-end {
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 16px;
+  margin-top: 56px;
+  padding-top: 24px;
+  border-top: 1px solid var(--line);
+  font-size: 13px;
+}
+.lp.itin-essay .itin-end a { color: var(--coral-deep); text-decoration: none; }
+.lp.itin-essay .itin-end a:hover { text-decoration: underline; }
+@media (max-width: 960px) {
+  .itin-layout { grid-template-columns: 1fr; gap: 32px; padding-top: 28px; padding-bottom: 56px; }
+  .itin-toc {
+    position: static;
+    max-height: none;
+    overflow: visible;
+    padding: 18px 20px;
+    border: 1px solid var(--line);
+    border-radius: var(--radius-s);
+  }
+  .itin-toc nav { max-height: 260px; overflow-y: auto; }
+  .itin-toc details:not([open]) summary { padding-bottom: 0; }
+}
+@media (max-width: 600px) {
+  .itin-page-head .cv-page-title { font-size: 28px; line-height: 1.55; }
+  .itin-page-head .cv-lede { font-size: 15px; }
+  .lp.itin-essay { font-size: 16px; line-height: 1.95; }
+  .lp.itin-essay .itin-source-note { padding: 16px; }
+  .lp.itin-essay .itin-section { margin-top: 38px; }
+}
+@media print {
+  body:has(.itin-layout) { padding-top: 0; }
+  body:has(.itin-layout) .cv-site-head,
+  body:has(.itin-layout) .cv-site-foot,
+  .itin-toc,
+  .itin-page-head .cv-crumb-back,
+  .lp.itin-essay .itin-end { display: none !important; }
+  .itin-layout { display: block; max-width: none; padding: 0; }
+  .itin-page-head { padding-top: 0; }
+  .lp.itin-essay h2 { break-after: avoid; }
+  .lp.itin-essay table { min-width: 0; font-size: 10pt; }
+  .lp.itin-essay .itin-table-scroll { overflow: visible; border-radius: 0; }
+  .lp.itin-essay tr { break-inside: avoid; }
+}
+
+
+.itin-page-links { display: flex; flex-wrap: wrap; align-items: center; gap: 24px; }
+.itin-title-chunk { display: inline-block; max-width: 100%; }
+.lp.itin-essay h3 { margin: 34px 0 18px; font: 600 20px/1.75 var(--serif); }
+.lp.itin-essay ul, .lp.itin-essay ol { margin: 0 0 1.25em; padding-left: 1.5em; }
+.lp.itin-essay li { margin: .7em 0; }
+.lp.itin-essay li p { margin: .35em 0; }
+.lp.itin-essay li > ul, .lp.itin-essay li > ol { margin-top: .6em; }
+.lp.itin-essay code { padding: .12em .3em; border-radius: 4px; background: var(--panel); font: .88em/1.7 var(--mono); overflow-wrap: anywhere; }
+.lp.itin-essay .itin-prompt { margin: 0 0 30px; padding: 18px 22px; border-left: 3px solid var(--coral); background: var(--panel); color: var(--ink-2); }
+.lp.itin-essay .itin-prompt p { margin: 0; }
+.lp.itin-essay .itin-source-ref { display: inline; font: 400 12px/1.7 var(--sans); color: var(--ink-2); }
+.lp.itin-essay .itin-source-ref a { margin-left: 7px; color: var(--coral-deep); text-decoration: underline; text-underline-offset: 3px; overflow-wrap: anywhere; }
+.lp.itin-essay table { min-width: 700px; }
+.lp.itin-essay th:first-child { width: 22%; }
+.lp.itin-essay th:nth-child(2) { width: 36%; }
+.lp.itin-essay th:nth-child(3) { width: 42%; }
+@media(max-width:600px) { .lp.itin-essay .itin-prompt { padding: 16px; } }
+@media print { .lp.itin-essay table { min-width: 0; } .itin-page-links { display: none!important; } }

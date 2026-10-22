@@ -1,0 +1,39 @@
+---
+import Base from '../../../layouts/Base.astro';
+import body from '../../../legacy/investing/research/itin-functions-and-underlying-principles/body.html?raw';
+import '../../../legacy/investing/research/itin-functions-and-underlying-principles/style.css';
+
+const title = "ITIN的作用与底层原理";
+const description = "要理解为什么一个原本仅用于“报税”的号码能衍生出开银行账户、办美卡、过电商审核等一系列功能，首先需要拆解美国金融与行政系统的底层架构。";
+// 目录从原文章节提取，不维护第二份标题文本。
+const headings = Array.from(body.matchAll(/<h2 id="([^"]+)">([^<]+)<\/h2>/g),
+  ([, id, text]) => ({ id, text }));
+---
+<Base title={title + ' · Cavno'} description={description}>
+  <main id="itin-main">
+    <section class="cv-page-head itin-page-head">
+      <div class="cv-wrap">
+        <div class="cv-eyebrow">Investing · Research</div>
+        <h1 class="cv-page-title" id="itin-title">{title.split(/(?<=[，：、])/u).map((part) => <span class="itin-title-chunk">{part}</span>)}</h1>
+        <div class="itin-page-links"><a class="cv-crumb-back" href="/investing/research/">← 返回投资研究栏目</a><a class="cv-crumb-back" href="https://share.gemini.google/A4KkFqs1eKup" target="_blank" rel="noopener noreferrer">原始分享 ↗</a></div>
+      </div>
+    </section>
+    <div class="cv-wrap itin-layout">
+      <aside class="itin-toc" aria-label="文章目录">
+        <details open>
+          <summary>文章目录 <span>{headings.length} 节</span></summary>
+          <nav aria-label="章节导航">
+            {headings.map(({ id, text }) => <a href={'#' + id} set:html={text} />)}
+          </nav>
+        </details>
+      </aside>
+      <article class="lp itin-essay" aria-labelledby="itin-title">
+        <Fragment set:html={body} />
+        <nav class="itin-end" aria-label="文章导航">
+          <a href="/investing/research/">← 返回投资研究栏目</a>
+          <a href="#itin-title">回到顶部 ↑</a>
+        </nav>
+      </article>
+    </div>
+  </main>
+</Base>
