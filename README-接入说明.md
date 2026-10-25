@@ -1,27 +1,35 @@
-# 《ITIN的作用与底层原理》增量接入说明
+# 深圳龙岗11盘置业与学位决策系统 · 增量接入
 
-本包只含 4 个新增源码文件，适用于此前提供的 Cavno Astro 源码。
+本包基于此前提供的 Cavno Astro 源码，只包含 7 个新增文件及本说明，不含全站源码。
 
-## 接入
+## 接入方法
 
-1. 将压缩包中的 src 文件夹合并到网站项目根目录，保持目录结构。
-2. 在项目根目录运行 `npm run build`，再沿用现有流程发布。
-3. 新文章路径：`/investing/research/itin-functions-and-underlying-principles/`。
-4. `/investing/research/` 栏目、Investing 页面和全站搜索会依据新增内容条目自动收录，无需修改现有栏目页、导航或搜索代码。
+1. 将压缩包中的 `src`、`public` 文件夹合并到网站项目根目录，保持目录层级。
+2. 在网站项目根目录运行 `npm run build`，再按原有流程部署。
+3. 新页面地址：`/life/house/longgang-home-school-decision/`。
+4. `/life/house/` 房产栏目、Life 页面和全站搜索通过新增内容条目自动收录，不需修改原栏目页或导航。
 
-## 文件用途
+你的消息里显示的目标是 `/life/house/`，链接实际指向 `/investing/research/`；本次按文字所指的房产栏目接入。
 
-- `src/pages/investing/research/itin-functions-and-underlying-principles.astro`：文章路由，复用站点 Base 布局、导航、页脚与搜索。
-- `src/legacy/investing/research/itin-functions-and-underlying-principles/body.html`：原文 HTML，保留原始提问、正文、4 个主要章节、6 个小节、1 张表格、21 处引用标记与其 22 个原始来源链接。
-- `src/legacy/investing/research/itin-functions-and-underlying-principles/style.css`：仅作用于本篇文章的样式，使用原站字体、配色和布局变量；手机端表格可横向滚动。
-- `src/content/items/investing-research-itin-functions-and-underlying-principles.md`：Research 栏目及搜索索引条目。摘要摘自原文，日期采用分享页显示的发布时间 2026-10-22。
+## 新增文件
 
-## 内容与预览
+- `src/pages/life/house/longgang-home-school-decision.astro`
+- `src/legacy/life/house/longgang-home-school-decision/body.html`
+- `src/legacy/life/house/longgang-home-school-decision/style.css`
+- `src/content/items/life-house-longgang-home-school-decision.md`
+- `public/apps/life/house/longgang-home-school-decision/app.js`
+- `public/apps/life/house/longgang-home-school-decision/chart.umd.min.js`
+- `public/apps/life/house/longgang-home-school-decision/LICENSE-chart.js.txt`
 
-原始分享：https://share.gemini.google/A4KkFqs1eKup
+页面复用 `Base.astro`，沿用全站导航、页脚、搜索、字体、米白底和珊瑚色。工具样式预编译并限定作用域，不依赖 Tailwind CDN；Chart.js 4.4.1 与附件版本相同，已放在本地资源中并保留 MIT 许可。不需要修改 package.json 或安装新运行依赖。
 
-保留原文措辞、顺序、加粗与列表层级，仅做 HTML 语义化和排版；不新增分析或结论。原文 21 处引用已逐一读取其来源弹层并保留实际链接，其中“+ 1”仍可点击查看第二来源。
+## 保留内容与功能
 
-交付中的独立 HTML 可直接双击查看，已内嵌样式和必要脚本；它的搜索仅用于本次文章预览，栏目及其他站点链接指向 cavno.org。正式网站会复用全站搜索。本包不增加运行依赖。
+- 完整保留附件 11 个楼盘、31 组户型数据库及静态文字；价格、学区、评分数据没有重新生成。
+- 保留四项权重、原归一化评分规则、总价区间与预算上限筛选、楼盘/楼栋联动、户型/朝向/临街筛选、TOP 4 推荐、最多 5 项的 PK 台与默认恢复。
+- 保留学校图表数据与原始计算规则，统一图表配色、标签换行和文字样式；表格在窄屏内可横向滚动。
+- 增加表单标签关联、工具区锚点与图表可访问名称；事件与样式隔离在本工具内。
 
-已完成 Astro 构建、正文文本比对、栏目收录、搜索、目录锚点及手机排版检查。尚未发布到线上。
+独立 HTML 预览可直接双击使用，已内嵌必要样式、Chart.js 和交互脚本；该预览中的搜索仅检索本次工具，栏目和其他站点链接指向 cavno.org。正式页面使用全站搜索。
+
+本次交付为增量代码，尚未发布到线上。

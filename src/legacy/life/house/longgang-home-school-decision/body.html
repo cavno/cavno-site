@@ -1,0 +1,347 @@
+<section class="hd-context" aria-label="家庭需求与楼盘范围">
+    <div class="hd-context-inner">
+      <div>
+        <div class="flex items-center gap-2 flex-wrap">
+          <span class="px-2.5 py-0.5 text-xs font-semibold bg-emerald-500/20 text-emerald-300 border border-emerald-500/30 rounded-full">11盘全量覆盖 · 布吉/南湾 + 龙岗大运</span>
+          </div>
+        <p class="text-xs text-slate-400 mt-1">
+          标的：万科麓城三期 · 鸿荣源尚峰 · 特发臻华府 · 佳兆业未来花园 · 京基御景中央 · 颐安都会中央 · 星河时代 · 中海康城 · 中海大运玖章 · 深铁阅云境 · 泰瑞府
+        </p>
+      </div>
+      
+      <div class="hd-family">
+        <div class="hd-family-item">
+          <span class="text-sky-400 font-semibold">老大（3岁半）：</span>
+          <span class="text-slate-300">2026入园 · <strong class="text-white">2029.09幼升小</strong> · 2035小升初</span>
+        </div>
+        <div class="hd-family-item">
+          <span class="text-amber-400 font-semibold">老二（8个月）：</span>
+          <span class="text-slate-300">2029入园 · <strong class="text-white">2032.09幼升小</strong> · 2038小升初</span>
+        </div>
+      </div>
+    </div>
+  </section>
+<div class="hd-content space-y-6">
+
+    
+    <section class="grid grid-cols-1 lg:grid-cols-12 gap-6" id="hd-weights">
+      <div class="lg:col-span-4 bg-white rounded-2xl p-5 card-shadow border border-slate-200/80">
+        <div class="flex items-center justify-between mb-3">
+          <h2 class="text-base font-bold text-slate-800 flex items-center gap-2">
+            <span>⚖️</span> 决策权重实时调节器
+          </h2>
+          <button id="resetWeightsBtn" class="text-xs text-indigo-600 hover:underline font-medium" type="button">恢复默认权重</button>
+        </div>
+        <p class="text-xs text-slate-500 mb-4">拖动滑块调整各项指标权重，右侧 TOP 严选楼栋与下方所有卡片得分将实时重算（受当前总价预算约束）：</p>
+
+        <div class="space-y-3.5 text-sm">
+          <div>
+            <div class="flex justify-between text-xs font-medium mb-1">
+              <label for="wQuiet">🔇 居住静谧度（避开主干道/辅路）</label>
+              <span id="wQuietVal" class="text-indigo-600 font-bold">35%</span>
+            </div>
+            <input id="wQuiet" type="range" min="10" max="60" value="35" class="w-full accent-indigo-600 cursor-pointer">
+          </div>
+          <div>
+            <div class="flex justify-between text-xs font-medium mb-1">
+              <label for="wEdu">🎓 双孩学位与中考升学率确定性</label>
+              <span id="wEduVal" class="text-indigo-600 font-bold">30%</span>
+            </div>
+            <input id="wEdu" type="range" min="10" max="60" value="30" class="w-full accent-indigo-600 cursor-pointer">
+          </div>
+          <div>
+            <div class="flex justify-between text-xs font-medium mb-1">
+              <label for="wSpace">🏠 二胎功能空间（双卫/得房率/阳台朝向）</label>
+              <span id="wSpaceVal" class="text-indigo-600 font-bold">20%</span>
+            </div>
+            <input id="wSpace" type="range" min="5" max="50" value="20" class="w-full accent-indigo-600 cursor-pointer">
+          </div>
+          <div>
+            <div class="flex justify-between text-xs font-medium mb-1">
+              <label for="wComm">🌳 社区品质与总价性价比</label>
+              <span id="wCommVal" class="text-indigo-600 font-bold">15%</span>
+            </div>
+            <input id="wComm" type="range" min="5" max="40" value="15" class="w-full accent-indigo-600 cursor-pointer">
+          </div>
+        </div>
+      </div>
+
+      
+      <div class="lg:col-span-8 bg-white rounded-2xl p-5 card-shadow border border-slate-200/80 flex flex-col justify-between">
+        <div>
+          <div class="flex flex-wrap items-center justify-between gap-2 mb-3">
+            <h2 class="text-base font-bold text-slate-800 flex items-center gap-2">
+              <span>🏆</span> 当前预算与权重下的严选楼栋 TOP 4（自动剔除主干道临街房）
+            </h2>
+            <span id="topBudgetHint" class="text-xs text-emerald-700 bg-emerald-50 px-2.5 py-1 rounded-full font-medium" aria-live="polite">全预算段实时演算</span>
+          </div>
+          <div id="topRecommendations" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 mt-2">
+            
+          </div>
+        </div>
+        <div class="mt-4 pt-3 border-t border-slate-100 flex flex-wrap items-center justify-between text-xs text-slate-500 gap-2">
+          <span>💡 <strong>选房提要：</strong>大运片区整体城市界面、商圈与高校学术氛围更优；布吉水径/南湾片区则在通勤罗湖/福田距离上更近。</span>
+          <span class="text-rose-600 font-medium">⚠️ 中海大运玖章预计2027年底交付，暂未划定固定学区，老大2029入学需留意交房后当年划片</span>
+        </div>
+      </div>
+    </section>
+
+    
+    <section class="bg-white rounded-2xl p-5 card-shadow border border-slate-200/80" id="hd-schools">
+      <div class="flex flex-col md:flex-row md:items-center justify-between gap-2 mb-5">
+        <div>
+          <h2 class="text-base font-bold text-slate-800 flex items-center gap-2">
+            <span>🎓</span> 11盘所属六大教育集团/学区及近三年中考公办普高率对比
+          </h2>
+          <p class="text-xs text-slate-500 mt-0.5">
+            对标“升学率中上”硬指标：涵盖南师大附校、深中龙岗、华附大运、港中大附属知新/道远、龙外集团及石芽岭学校
+          </p>
+        </div>
+        <div class="flex gap-2 text-xs">
+          <span class="px-2.5 py-1 rounded-md bg-indigo-50 text-indigo-700 font-medium">深圳全市公办普高划线率基准：约 52%~54%</span>
+        </div>
+      </div>
+
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-center">
+        
+        <div class="lg:col-span-5 h-80 hd-chart">
+          <canvas id="schoolChart" role="img" aria-label="六大学区近三年中考公办普高录取率均值对比，详细数据见右侧表格"></canvas>
+        </div>
+
+        
+        <div class="lg:col-span-7 overflow-x-auto custom-scroll" tabindex="0" role="region" aria-label="学区对比表，可横向滚动">
+          <table class="w-full text-left border-collapse text-xs hd-school-table" aria-label="11盘学区与升学率对比明细">
+            <thead>
+              <tr class="bg-slate-100 text-slate-700 border-b border-slate-200">
+                <th class="py-2.5 px-3 font-semibold" scope="col">对应楼盘</th>
+                <th class="py-2.5 px-3 font-semibold" scope="col">对口小学 &amp; 初中学区</th>
+                <th class="py-2.5 px-3 font-semibold" scope="col">近三年公办普高率</th>
+                <th class="py-2.5 px-3 font-semibold" scope="col">二胎（2029/2032）入学确定性与接送评估</th>
+              </tr>
+            </thead>
+            <tbody class="divide-y divide-slate-200">
+              <tr class="hover:bg-slate-50/80">
+                <td class="py-2.5 px-3 font-bold text-indigo-900">星河时代花园</td>
+                <td class="py-2.5 px-3">
+                  <div class="font-semibold text-slate-800">深中龙岗小学/龙外星河 + 深圳中学龙岗学校</div>
+                  <div class="text-slate-500">大运老牌名校组合，背靠深中体系</div>
+                </td>
+                <td class="py-2.5 px-3">
+                  <span class="badge-green px-2 py-0.5 rounded font-bold">78.0% ~ 81.5%</span>
+                  <div class="text-slate-500 mt-0.5">龙岗顶尖第一梯队</div>
+                </td>
+                <td class="py-2.5 px-3 text-slate-600">
+                  现房即买即落户，深中龙岗四大/十大率名列前茅，周边COCO Park商圈极其成熟。
+                </td>
+              </tr>
+              <tr class="hover:bg-slate-50/80">
+                <td class="py-2.5 px-3 font-bold text-indigo-900">万科麓城三期<br>鸿荣源尚峰</td>
+                <td class="py-2.5 px-3">
+                  <div class="font-semibold text-slate-800">麓城外国语/水径小学 + 南师大附属龙岗学校</div>
+                  <div class="text-slate-500">新增54班水径九年一贯制学校共享</div>
+                </td>
+                <td class="py-2.5 px-3">
+                  <span class="badge-green px-2 py-0.5 rounded font-bold">76.5% ~ 80.8%</span>
+                  <div class="text-slate-500 mt-0.5">布吉/水径第一梯队</div>
+                </td>
+                <td class="py-2.5 px-3 text-slate-600">
+                  麓城三期步行350m即达麓城外国语小学，生源纯粹；南师大龙岗学校中考发挥极稳。
+                </td>
+              </tr>
+              <tr class="hover:bg-slate-50/80">
+                <td class="py-2.5 px-3 font-bold text-emerald-900">颐安·都会中央<br>深铁阅云境广场</td>
+                <td class="py-2.5 px-3">
+                  <div class="font-semibold text-slate-800">华南师范大学附属龙岗大运学校（九年一贯）</div>
+                  <div class="text-slate-500">阅云境楼下另规划72班九年一贯制公办校</div>
+                </td>
+                <td class="py-2.5 px-3">
+                  <span class="badge-green px-2 py-0.5 rounded font-bold">74.0% ~ 77.5%</span>
+                  <div class="text-slate-500 mt-0.5">大运核心第一梯队</div>
+                </td>
+                <td class="py-2.5 px-3 text-slate-600">
+                  颐安紧邻华附大运学校，接送极近；深铁阅云境2026年底交付，赶老大2029幼升小时间充裕。
+                </td>
+              </tr>
+              <tr class="hover:bg-slate-50/80">
+                <td class="py-2.5 px-3 font-bold text-sky-900">佳兆业未来花园<br>京基御景中央<br>中海康城 / 泰瑞府</td>
+                <td class="py-2.5 px-3">
+                  <div class="font-semibold text-slate-800">港中大(深圳)附属知新学校 / 道远学校</div>
+                  <div class="text-slate-500">九年一贯制高校附属教育集团</div>
+                </td>
+                <td class="py-2.5 px-3">
+                  <span class="badge-green px-2 py-0.5 rounded font-bold">71.5% ~ 76.0%</span>
+                  <div class="text-slate-500 mt-0.5">龙岗优质中上偏头部</div>
+                </td>
+                <td class="py-2.5 px-3 text-slate-600">
+                  知新学校近年中考稳居龙岗前十；泰瑞府自带18班幼且一路之隔即道远学校，目送式上学。
+                </td>
+              </tr>
+              <tr class="hover:bg-slate-50/80">
+                <td class="py-2.5 px-3 font-bold text-purple-900">中海大运玖章</td>
+                <td class="py-2.5 px-3">
+                  <div class="font-semibold text-slate-800">待交房后划片（紧邻龙外本部/知新/自建校）</div>
+                  <div class="text-slate-500">2027.12交付期房，按龙岗政策入伙后划定</div>
+                </td>
+                <td class="py-2.5 px-3">
+                  <span class="badge-amber px-2 py-0.5 rounded font-bold">片区均值 73%+</span>
+                  <div class="text-slate-500 mt-0.5">周边名校环绕但未锁定</div>
+                </td>
+                <td class="py-2.5 px-3 text-slate-600">
+                  周边生源与配套顶级，但因2027年底交房且暂未承诺固定龙外本部学位，需关注2028招生公告。
+                </td>
+              </tr>
+              <tr class="hover:bg-slate-50/80">
+                <td class="py-2.5 px-3 font-bold text-amber-900">特发臻华府</td>
+                <td class="py-2.5 px-3">
+                  <div class="font-semibold text-slate-800">石芽岭学校 + 旁侧规划54班深大附中南湾学校</div>
+                  <div class="text-slate-500">社区自带18班公办幼儿园</div>
+                </td>
+                <td class="py-2.5 px-3">
+                  <span class="badge-amber px-2 py-0.5 rounded font-bold">56.8% ~ 61.5%</span>
+                  <div class="text-slate-500 mt-0.5">全区稳健中上水平</div>
+                </td>
+                <td class="py-2.5 px-3 text-slate-600">
+                  下楼即幼儿园+九年一贯制新校；2028.06精装交付，可衔接老大2029.09入学。
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    
+    <section class="bg-white rounded-2xl p-5 card-shadow border border-slate-200/80" id="hd-filters">
+      <div class="flex flex-col md:flex-row md:items-center justify-between gap-3 pb-4 border-b border-slate-100">
+        <div>
+          <h2 class="text-base font-bold text-slate-800 flex items-center gap-2">
+            <span>🔍</span> 期 · 栋 · 户型 · 阳台朝向 · 临街噪音 · 房屋总价 六维筛选器
+          </h2>
+          <p class="text-xs text-slate-500 mt-0.5">
+            支持按片区/楼盘、具体楼栋、三房一卫/两卫、阳台朝向、主干道/辅路噪音及总价预算区间精准过滤
+          </p>
+        </div>
+        <div class="flex items-center gap-2">
+          <span id="matchCountBadge" class="text-xs font-bold px-3 py-1 bg-slate-900 text-white rounded-full" aria-live="polite">匹配 0 个单元户型</span>
+          <button id="resetFilterBtn" class="text-xs px-3 py-1 rounded-lg border border-slate-300 text-slate-700 hover:bg-slate-100" type="button">重置全部筛选</button>
+        </div>
+      </div>
+
+      
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-6 gap-3.5 mt-4 text-xs">
+        
+        <div>
+          <label class="block text-slate-600 font-semibold mb-1.5" for="filterProject">1. 楼盘 / 期数 (11盘)</label>
+          <select id="filterProject" class="w-full rounded-lg border border-slate-300 px-2.5 py-2 bg-slate-50 focus:outline-none focus:ring-2 focus:ring-indigo-500">
+            <option value="ALL">全部 11 个楼盘</option>
+            <option value="ZONE_DAYUN">【仅看 龙岗大运片区 8盘】</option>
+            <option value="ZONE_BUJI">【仅看 布吉/南湾片区 3盘】</option>
+            <optgroup label="—— 龙岗大运片区 ——">
+              <option value="佳兆业未来花园">佳兆业未来花园 (未来中央花园)</option>
+              <option value="京基御景中央">京基御景中央 (一/二期)</option>
+              <option value="颐安·都会中央">颐安·都会中央 (二/三/四期)</option>
+              <option value="星河时代花园">星河时代花园</option>
+              <option value="中海康城花园">中海康城花园 (一/二期)</option>
+              <option value="中海大运玖章">中海大运玖章 (新盘)</option>
+              <option value="深铁阅云境广场">深铁阅云境广场 (TOD新盘)</option>
+              <option value="泰瑞府">泰瑞府 (深业泰瑞府)</option>
+            </optgroup>
+            <optgroup label="—— 布吉水径 / 南湾片区 ——">
+              <option value="万科麓城三期">万科麓城三期</option>
+              <option value="鸿荣源尚峰">鸿荣源尚峰</option>
+              <option value="特发臻华府">特发臻华府 (新规新盘)</option>
+            </optgroup>
+          </select>
+        </div>
+
+        
+        <div>
+          <label class="block text-slate-600 font-semibold mb-1.5" for="filterBuilding">2. 具体期数与楼栋</label>
+          <select id="filterBuilding" class="w-full rounded-lg border border-slate-300 px-2.5 py-2 bg-slate-50 focus:outline-none focus:ring-2 focus:ring-indigo-500">
+            <option value="ALL">全部楼栋</option>
+          </select>
+        </div>
+
+        
+        <div>
+          <label class="block text-slate-600 font-semibold mb-1.5" for="filterLayout">3. 户型规格（卫浴）</label>
+          <select id="filterLayout" class="w-full rounded-lg border border-slate-300 px-2.5 py-2 bg-slate-50 focus:outline-none focus:ring-2 focus:ring-indigo-500">
+            <option value="ALL">三室两卫 + 三室一卫（全部）</option>
+            <option value="3室2卫">仅看 三室两卫（二胎强烈推荐）</option>
+            <option value="3室1卫">仅看 三室一卫（高性价比上车）</option>
+          </select>
+        </div>
+
+        
+        <div>
+          <label class="block text-slate-600 font-semibold mb-1.5" for="filterOrientation">4. 阳台朝向</label>
+          <select id="filterOrientation" class="w-full rounded-lg border border-slate-300 px-2.5 py-2 bg-slate-50 focus:outline-none focus:ring-2 focus:ring-indigo-500">
+            <option value="VALID_SOUTH">全部南向（正南 / 东南 / 西南）</option>
+            <option value="正南">仅看 正南</option>
+            <option value="东南">仅看 东南（冬暖夏凉首选）</option>
+            <option value="西南">仅看 西南</option>
+          </select>
+        </div>
+
+        
+        <div>
+          <label class="block text-slate-600 font-semibold mb-1.5" for="filterNoise">5. 临街/主干道过滤</label>
+          <select id="filterNoise" class="w-full rounded-lg border border-slate-300 px-2.5 py-2 bg-slate-50 focus:outline-none focus:ring-2 focus:ring-indigo-500">
+            <option value="NO_MAIN" selected>严避主干道（园林内圈+辅路备选）</option>
+            <option value="QUIET_ONLY">极致安静（仅看完全不临街园林）</option>
+            <option value="ALL">显示全部（含临主干道避坑警示）</option>
+          </select>
+        </div>
+
+        
+        <div>
+          <label class="block text-indigo-700 font-bold mb-1.5" for="filterPriceBracket">6. 房屋总价区间</label>
+          <select id="filterPriceBracket" class="w-full rounded-lg border border-indigo-300 px-2.5 py-2 bg-indigo-50/50 text-indigo-950 font-medium focus:outline-none focus:ring-2 focus:ring-indigo-500">
+            <option value="ALL">全部总价段 (195万 ~ 710万)</option>
+            <option value="0-280">280万以内（中海康城高性价比）</option>
+            <option value="280-350">280万 ~ 350万（刚需优选段）</option>
+            <option value="350-410">350万 ~ 410万（主力品质三房两卫）</option>
+            <option value="410-500">410万 ~ 500万（核心名校/楼王改善）</option>
+            <option value="500-999">500万以上（大运玖章奢阔改善）</option>
+          </select>
+        </div>
+      </div>
+
+      
+      <div class="mt-3 pt-3 border-t border-slate-100 flex flex-col sm:flex-row sm:items-center justify-between gap-3 bg-slate-50/80 px-3.5 py-2.5 rounded-xl text-xs">
+        <div class="hd-budget-inputs">
+          <label class="font-semibold text-slate-700 shrink-0" for="filterMaxPriceSlider">💰 家庭最高总价预算上限滑块：</label>
+          <input id="filterMaxPriceSlider" type="range" min="220" max="720" step="10" value="720" class="w-full max-w-md accent-indigo-600 cursor-pointer">
+          <span id="maxPriceLabel" class="font-bold text-indigo-700 bg-indigo-100 px-2.5 py-0.5 rounded-full shrink-0" aria-live="polite">不限上限 (≤720万)</span>
+        </div>
+        <div class="text-slate-500 text-[11px]">
+          提示：只要户型最低门槛价 ≤ 您的预算上限且落在所选总价区间内，即会纳入展示与TOP推荐。
+        </div>
+      </div>
+
+      
+      <div id="unitCardsContainer" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mt-5">
+        
+      </div>
+    </section>
+
+    
+    <section class="bg-white rounded-2xl p-5 card-shadow border border-slate-200/80" id="hd-compare">
+      <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 mb-4">
+        <div>
+          <h2 class="text-base font-bold text-slate-800 flex items-center gap-2">
+            <span>📊</span> 跨片区候选楼栋同屏 PK 决策台（点击上方卡片“加入PK对比台”可自由替换，最多5项）
+          </h2>
+          <p class="text-xs text-slate-500 mt-0.5">支持将大运片区与布吉/南湾片区的具体楼栋、总价、噪音分贝、阳台朝向与双孩学位同屏比对</p>
+        </div>
+        <button id="clearCompareBtn" class="text-xs text-rose-600 hover:underline self-start sm:self-auto" type="button">恢复默认跨片区精选PK</button>
+      </div>
+
+      <div class="overflow-x-auto custom-scroll" tabindex="0" role="region" aria-label="楼栋对比表，可横向滚动">
+        <table id="compareTable" class="w-full text-left border-collapse text-xs" aria-label="候选楼栋同屏对比">
+          
+        </table>
+      </div>
+    </section>
+
+  </div>
