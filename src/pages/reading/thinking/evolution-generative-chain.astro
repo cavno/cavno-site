@@ -1,0 +1,19 @@
+---
+import Base from '../../../layouts/Base.astro';
+import body from '../../../legacy/reading/thinking/evolution-generative-chain/body.html?raw';
+import '../../../legacy/reading/thinking/evolution-generative-chain/style.css';
+const title="演化生成链：从物理约束到反身自由";
+const description="九环演化生成链、算子Ω检验、物质演化11阶段、社会哲学与四份原文精读库";
+---
+<Base title={title+' · Cavno'} description={description}>
+ <section class="cv-page-head ep-page-head"><div class="cv-wrap">
+  <div class="cv-eyebrow">Reading &amp; Thinking · Thinking</div>
+  <h1 class="cv-page-title" id="ep-title">{title}</h1>
+  <a class="cv-crumb-back" href="/reading/thinking/">← 返回思考栏目</a>
+ </div></section>
+ <article id="evo-app" class="lp ep-app" aria-labelledby="ep-title"><Fragment set:html={body} />
+  <noscript><p>请启用 JavaScript，以使用 Canvas 仿真、理论对照、原文检索与本页源码下载。</p></noscript>
+ </article>
+ <nav class="cv-wrap ep-end" aria-label="页面导航"><a href="/reading/thinking/">← 返回思考栏目</a><a href="#ep-title">回到顶部 ↑</a></nav>
+ <script is:inline src="/apps/reading/thinking/evolution-generative-chain/app.js?v=3763d2f3021f" defer></script>
+</Base>
