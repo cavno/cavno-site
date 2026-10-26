@@ -1,0 +1,19 @@
+---
+import Base from '../../../layouts/Base.astro';
+import body from '../../../legacy/life/places/shenzhen-family-weekend-outing/body.html?raw';
+import '../../../legacy/life/places/shenzhen-family-weekend-outing/style.css';
+const title="山海策 · 布吉×坂田双娃周末自驾决策系统";
+const description="山海策 · 深圳布吉×坂田双娃周末自驾游决策与分时路书系统";
+---
+<Base title={title+' · Cavno'} description={description}>
+ <section class="cv-page-head ot-page-head"><div class="cv-wrap">
+  <div class="cv-eyebrow">Life &amp; Skills · Places</div>
+  <h1 class="cv-page-title" id="ot-title">{title}</h1>
+  <a class="cv-crumb-back" href="/life/places/">← 返回地点栏目</a>
+ </div></section>
+ <article id="outing-app" class="lp ot-app" aria-labelledby="ot-title"><Fragment set:html={body} />
+  <noscript><p>请启用 JavaScript，以使用路线筛选、预算沙盘、分时路书、路线 PK 与装备清单。</p></noscript>
+ </article>
+ <nav class="cv-wrap ot-end" aria-label="页面导航"><a href="/life/places/">← 返回地点栏目</a><a href="#ot-title">回到顶部 ↑</a></nav>
+ <script is:inline src="/apps/life/places/shenzhen-family-weekend-outing/app.js?v=70bd9cf4b608" defer></script>
+</Base>
