@@ -1,698 +1,216 @@
-<section class="ot-context" aria-label="出游范围与家庭配置">
-    <div class="ot-context-inner">
-      <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-3">
-        
-        <div class="flex items-center gap-3.5">
-          <div class="w-11 h-11 rounded-lg bg-tealDeep text-cream flex items-center justify-center shrink-0 shadow-sm border border-tealDeep/20">
-            
-            <svg class="w-7 h-7" viewbox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <path d="M3 22L10.5 11L16.5 19L21.5 13L29 22H3Z" fill="#FAF9F5" fill-opacity="0.2" stroke="#FAF9F5" stroke-width="1.8" stroke-linejoin="round"></path>
-              <circle cx="24" cy="8" r="2.5" fill="#D97757"></circle>
-              <path d="M3 26C7 24.5 11 27.5 16 26C21 24.5 25 27.5 29 26" stroke="#D97757" stroke-width="2" stroke-linecap="round"></path>
-            </svg>
-          </div>
-          <div>
-            <div class="flex items-center gap-2 flex-wrap">
-              <span class="text-[11px] font-mono uppercase tracking-widest px-2 py-0.5 rounded bg-tealDeep/10 text-tealDeep font-semibold">SHENZHEN FAMILY OVERLAND ATLAS</span>
-              <span class="text-[11px] font-mono px-2 py-0.5 rounded bg-terracotta/15 text-terracotta font-semibold">周五下午至周日 · 3天2晚</span>
-            </div>
-            </div>
+<section class="top-header" aria-label="双娃配置与出发模式">
+    <div class="container header-grid">
+      <div>
+        <div class="header-title-badge">
+          <span>🚗 布吉出发 × 坂田接太太</span>
+          <span>|</span>
+          <span>👦 3.5岁大宝 + 👶 8月龄二宝</span>
+          <span>|</span>
+          <span>⚡ 纯电SUV友好</span>
         </div>
+        <p class="header-sub">
+          专为双娃作息设计：涵盖深圳 10 大行政区、26 个细分片区（公园/博物馆/栈道/湿地/森林湖泊/山水）与 6 条跨城 3天2晚微度假线
+        </p>
+      </div>
 
-        
-        <div class="flex flex-wrap items-center gap-2 sm:gap-3">
-          <div class="flex items-center gap-2 bg-parchment/80 border border-sandBorder px-3 py-1.5 rounded-lg text-xs">
-            <span class="inline-flex items-center gap-1 font-medium text-tealDeep">
-              <svg class="w-3.5 h-3.5 text-terracotta" fill="currentColor" viewbox="0 0 20 20"><path d="M10.707 2.293a1 1 0 00-1.414 0l-7 7a1 1 0 001.414 1.414L4 10.414V17a1 1 0 001 1h2a1 1 0 001-1v-2a1 1 0 011-1h2a1 1 0 011 1v2a1 1 0 001 1h2a1 1 0 001-1v-6.586l.293.293a1 1 0 001.414-1.414l-7-7z"></path></svg>
-              布吉住家 + 坂田接太太
-            </span>
-            <span class="text-sandDark">|</span>
-            <span class="font-medium text-ink">大宝 <strong class="font-mono text-tealDeep">3.5Y</strong></span>
-            <span class="text-sandDark">+</span>
-            <span class="font-medium text-ink">二宝 <strong class="font-mono text-terracotta">8M</strong></span>
-          </div>
-
-          <nav class="flex items-center gap-1.5 text-xs font-medium">
-            <a href="#section-routes" class="px-2.5 py-1.5 rounded-md bg-tealDeep text-cream hover:bg-tealLight transition">精选8线</a>
-            <a href="#section-budget" class="px-2.5 py-1.5 rounded-md bg-parchment hover:bg-sandBorder/60 text-ink transition border border-sandBorder">预算沙盘</a>
-            <a href="#section-checklist" class="px-2.5 py-1.5 rounded-md bg-parchment hover:bg-sandBorder/60 text-ink transition border border-sandBorder flex items-center gap-1">
-              <span>装备清单</span>
-              <span id="nav-checklist-badge" class="font-mono text-[10px] bg-terracotta text-cream px-1.5 py-0.2 rounded-full">0%</span>
-            </a>
-            <a href="#section-rules" class="px-2.5 py-1.5 rounded-md bg-parchment hover:bg-sandBorder/60 text-ink transition border border-sandBorder hidden sm:inline-block">避坑法则</a>
-          </nav>
+      
+      <div class="depart-mode-box">
+        <div class="depart-mode-label">
+          <span>📍 <strong>出发汇合拓扑模式</strong>（实时联动车程与高速路线）</span>
+          <span id="currentModeHint" style="color:#FFD166;font-weight:600;">当前：坂田顺路接太太</span>
+        </div>
+        <div class="depart-btns">
+          <button class="depart-btn active" id="modeBtnA" data-action="setDepartMode" data-event="click" data-arg1="A" data-type1="string" type="button">
+            🅰️ 模式A：布吉带娃 → 坂田接太太出发
+            <small>周五15:30趁二宝小睡接上太太直上G94/坂银/机荷（适合西/北/南向）</small>
+          </button>
+          <button class="depart-btn" id="modeBtnB" data-action="setDepartMode" data-event="click" data-arg1="B" data-type1="string" type="button">
+            🅱️ 模式B：太太回布吉汇合 → 东向出发
+            <small>地铁5/10号线回布吉直上丹平快速/水官/盐排（适合罗湖/盐田/龙岗/坪山/惠州）</small>
+          </button>
         </div>
       </div>
     </div>
   </section>
-<div class="ot-content space-y-8">
-
-    
-    <section class="bg-cream rounded-2xl editorial-border overflow-hidden" id="section-departure">
-      
-      <div class="bg-tealDeep text-cream px-4 sm:px-6 py-3 flex flex-col lg:flex-row lg:items-center lg:justify-between gap-2 border-b border-tealDeep">
-        <div class="flex items-start sm:items-center gap-2.5">
-          <span class="inline-flex items-center justify-center w-6 h-6 rounded-full bg-terracotta text-cream shrink-0 mt-0.5 sm:mt-0 pulse-dot">
-            <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
-          </span>
-          <p class="text-xs sm:text-sm leading-relaxed">
-            <strong class="font-serif text-amber-200 tracking-wide">周五黄金错峰窗口提示：</strong>
-            强烈建议 <span class="font-mono font-bold underline decoration-terracotta decoration-2">15:30 - 16:30</span> 趁 <strong>8月龄二宝下午小睡窗口</strong> 启程上高速，完美避开 <span class="font-mono">17:30</span> 后坂田五和大道、布龙路、南坪快速及丹平快速晚高峰拥堵！
-          </p>
-        </div>
-        <div class="flex items-center gap-2 shrink-0 text-xs font-mono text-amber-100/90 bg-white/10 px-3 py-1 rounded-md self-start lg:self-auto">
-          <span>二宝安全提篮哄睡率 ↑85%</span>
-          <span>·</span>
-          <span>省时 35-50 分钟</span>
-        </div>
-      </div>
-
-      
-      <div class="p-5 sm:p-6 grid grid-cols-1 lg:grid-cols-12 gap-6 items-center">
-        
-        <div class="lg:col-span-7 space-y-4">
-          <div class="flex items-center justify-between">
-            <div>
-              <span class="text-xs font-mono uppercase tracking-wider text-terracotta font-semibold">DEPARTURE DISPATCH STRATEGY</span>
-              <h2 class="font-serif text-lg sm:text-xl font-bold text-ink mt-0.5">第一步：选择周五下午「布吉住家 × 坂田接太太」出发联动模式</h2>
-            </div>
-            <span class="text-xs text-inkMuted hidden sm:inline">切换模式将实时重算下方8条路线耗时与推荐度</span>
-          </div>
-
-          <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-            
-            <button id="btn-mode-a" class="text-left p-4 rounded-xl border-2 transition-all relative group bg-tealDeep/5 border-tealDeep shadow-sm" type="button" data-action="setDepartureMode" data-event="click" data-arg1="A" data-type1="string">
-              <div class="flex items-center justify-between mb-2">
-                <span class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-md text-xs font-mono font-bold bg-tealDeep text-cream" id="badge-mode-a">
-                  ● 当前激活 · 模式 A
-                </span>
-                <span class="text-xs font-mono text-tealDeep font-semibold">西北/南山/跨海优选</span>
-              </div>
-              <h3 class="font-serif font-bold text-base text-ink mb-1.5">
-                周五下午 布吉出发 → 坂田顺路接太太 → 直接上高速
-              </h3>
-              <p class="text-xs text-inkMuted leading-relaxed mb-3">
-                爸爸先在布吉装齐双娃推车与行李，15:30带两娃出发，15:50抵达坂田太太公司楼下，<strong>秒上南坪快速 / 坂银通道 / 珠三角环线(G94)</strong>，不走回头路。
-              </p>
-              <div class="pt-2.5 border-t border-sandBorder/80 flex flex-wrap gap-1.5 text-[11px] font-medium text-tealDeep">
-                <span class="bg-cream px-2 py-0.5 rounded border border-sandBorder">松山湖 (-20min)</span>
-                <span class="bg-cream px-2 py-0.5 rounded border border-sandBorder">光明 (-15min)</span>
-                <span class="bg-cream px-2 py-0.5 rounded border border-sandBorder">南山前海 (-15min)</span>
-                <span class="bg-cream px-2 py-0.5 rounded border border-sandBorder">中山/南沙 (-20min)</span>
-              </div>
-            </button>
-
-            
-            <button id="btn-mode-b" class="text-left p-4 rounded-xl border-2 transition-all relative group bg-parchment/50 border-sandBorder hover:border-tealDeep/60" type="button" data-action="setDepartureMode" data-event="click" data-arg1="B" data-type1="string">
-              <div class="flex items-center justify-between mb-2">
-                <span class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-md text-xs font-mono font-bold bg-sandBorder text-ink" id="badge-mode-b">
-                  ○ 点击切换 · 模式 B
-                </span>
-                <span class="text-xs font-mono text-terracotta font-semibold">东部盐田/大鹏/惠州优选</span>
-              </div>
-              <h3 class="font-serif font-bold text-base text-ink mb-1.5">
-                周五傍晚 太太地铁/打车回布吉汇合 → 布吉直接出发
-              </h3>
-              <p class="text-xs text-inkMuted leading-relaxed mb-3">
-                太太从坂田乘地铁5号线/10号线或打车20分钟回布吉家中汇合，避开坂田往东拥堵，直接从布吉上<strong>丹平快速 / 水官高速 / 盐排高速</strong>一路向东。
-              </p>
-              <div class="pt-2.5 border-t border-sandBorder/80 flex flex-wrap gap-1.5 text-[11px] font-medium text-terracotta">
-                <span class="bg-cream px-2 py-0.5 rounded border border-sandBorder">盐田云海 (-18min)</span>
-                <span class="bg-cream px-2 py-0.5 rounded border border-sandBorder">大鹏坝光 (-20min)</span>
-                <span class="bg-cream px-2 py-0.5 rounded border border-sandBorder">惠州西湖 (-15min)</span>
-              </div>
-            </button>
-          </div>
-        </div>
-
-        
-        <div class="lg:col-span-5 bg-parchment/70 rounded-xl p-4 border border-sandBorder relative">
-          <div class="flex items-center justify-between mb-2">
-            <span class="text-xs font-serif font-bold text-tealDeep flex items-center gap-1.5">
-              <svg class="w-4 h-4 text-terracotta" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 20l-5.447-2.724A1 1 0 013 16.382V5.618a1 1 0 011.447-.894L9 7m0 13l6-3m-6 3V7m6 10l4.553 2.276A1 1 0 0021 18.382V7.618a1 1 0 00-.553-.894L15 4m0 13V4m0 0L9 7"></path></svg>
-              布吉×坂田高速走廊实时拓扑图
-            </span>
-            <span id="topology-mode-label" class="text-[11px] font-mono bg-tealDeep text-cream px-2 py-0.5 rounded">模式A：西/北走廊优先</span>
-          </div>
-
-          
-          <div class="w-full overflow-hidden rounded-lg bg-cream border border-sandBorder p-2">
-            <svg id="svg-topology" viewbox="0 0 420 205" class="w-full h-auto" role="img" aria-label="布吉与坂田出发模式及东、西走廊路线示意">
-              <defs>
-                <pattern id="gridPattern" width="20" height="20" patternunits="userSpaceOnUse">
-                  <path d="M 20 0 L 0 0 0 20" fill="none" stroke="#E3E0D5" stroke-width="0.5" stroke-dasharray="2,2"></path>
-                </pattern>
-                <marker id="arrowTeal" viewbox="0 0 10 10" refx="6" refy="5" markerwidth="5" markerheight="5" orient="auto-start-reverse">
-                  <path d="M 0 1 L 10 5 L 0 9 z" fill="#527766"></path>
-                </marker>
-                <marker id="arrowTerra" viewbox="0 0 10 10" refx="6" refy="5" markerwidth="5" markerheight="5" orient="auto-start-reverse">
-                  <path d="M 0 1 L 10 5 L 0 9 z" fill="#D97757"></path>
-                </marker>
-              </defs>
-              <rect width="420" height="205" fill="url(#gridPattern)"></rect>
-
-              
-              <g id="topo-west-group" opacity="1">
-                
-                <path d="M 165 95 Q 130 45 75 32" fill="none" stroke="#527766" stroke-width="3" stroke-dasharray="5,3" marker-end="url(#arrowTeal)"></path>
-                
-                <path d="M 165 95 Q 100 95 45 95" fill="none" stroke="#527766" stroke-width="3" marker-end="url(#arrowTeal)"></path>
-                
-                <path d="M 165 95 Q 130 145 78 168" fill="none" stroke="#527766" stroke-width="3" marker-end="url(#arrowTeal)"></path>
-                
-                <path d="M 255 112 L 175 97" fill="none" stroke="#D97757" stroke-width="3.2" marker-end="url(#arrowTerra)"></path>
-              </g>
-
-              
-              <g id="topo-east-group" opacity="0.38">
-                
-                <path d="M 175 88 Q 215 72 252 102" fill="none" stroke="#D97757" stroke-width="2.5" stroke-dasharray="4,3" marker-end="url(#arrowTerra)"></path>
-                
-                <path d="M 265 112 Q 315 55 365 38" fill="none" stroke="#799886" stroke-width="3" marker-end="url(#arrowTeal)"></path>
-                
-                <path d="M 265 112 Q 325 135 375 155" fill="none" stroke="#799886" stroke-width="3" marker-end="url(#arrowTeal)"></path>
-              </g>
-
-              
-              <g transform="translate(12, 16)">
-                <rect x="0" y="0" width="82" height="26" rx="4" fill="#527766"></rect>
-                <text x="41" y="16" text-anchor="middle" fill="#FAF9F5" font-size="10" font-weight="600">松山湖 / 光明</text>
-              </g>
-              <g transform="translate(8, 82)">
-                <rect x="0" y="0" width="82" height="26" rx="4" fill="#527766"></rect>
-                <text x="41" y="16" text-anchor="middle" fill="#FAF9F5" font-size="10" font-weight="600">深中通道/南沙</text>
-              </g>
-              <g transform="translate(18, 155)">
-                <rect x="0" y="0" width="76" height="26" rx="4" fill="#527766"></rect>
-                <text x="38" y="16" text-anchor="middle" fill="#FAF9F5" font-size="10" font-weight="600">南山 / 前海</text>
-              </g>
-
-              
-              <g transform="translate(332, 22)">
-                <rect x="0" y="0" width="78" height="26" rx="4" fill="#799886"></rect>
-                <text x="39" y="16" text-anchor="middle" fill="#FAF9F5" font-size="10" font-weight="600">惠州西湖/植物园</text>
-              </g>
-              <g transform="translate(332, 145)">
-                <rect x="0" y="0" width="78" height="26" rx="4" fill="#799886"></rect>
-                <text x="39" y="16" text-anchor="middle" fill="#FAF9F5" font-size="10" font-weight="600">盐田 / 大鹏半岛</text>
-              </g>
-
-              
-              <g transform="translate(165, 95)">
-                <circle r="18" fill="#FAF9F5" stroke="#527766" stroke-width="3"></circle>
-                <circle r="6" fill="#D97757"></circle>
-                <text x="0" y="-23" text-anchor="middle" fill="#527766" font-size="11" font-weight="700">坂田 (接太太)</text>
-                <text x="0" y="31" text-anchor="middle" fill="#63615B" font-size="9">珠三角环线/坂银入口</text>
-              </g>
-
-              
-              <g transform="translate(262, 112)">
-                <circle r="18" fill="#FAF9F5" stroke="#D97757" stroke-width="3"></circle>
-                <circle r="6" fill="#527766"></circle>
-                <text x="0" y="-23" text-anchor="middle" fill="#D97757" font-size="11" font-weight="700">布吉 (住家大本营)</text>
-                <text x="0" y="31" text-anchor="middle" fill="#63615B" font-size="9">丹平/水官/盐排入口</text>
-              </g>
-            </svg>
-          </div>
-          <p id="topology-desc" class="text-[11px] text-inkMuted mt-2 leading-normal">
-            当前示意图：<strong>模式A</strong> 下，15:30从布吉带两娃出发，20分钟到坂田接上太太直入G94珠三角环线或坂银通道，绕开布吉往东晚高峰。
-          </p>
-        </div>
-      </div>
-    </section>
-
-    
-    <section id="section-budget" class="grid grid-cols-1 lg:grid-cols-12 gap-6">
-      
-      <div class="lg:col-span-8 bg-cream rounded-2xl editorial-border p-5 sm:p-6 space-y-5">
-        <div class="flex flex-wrap items-center justify-between gap-2 border-b border-sandBorder pb-3">
-          <div>
-            <span class="text-xs font-mono uppercase tracking-wider text-tealDeep font-semibold">MULTI-DIMENSIONAL SMART FILTER</span>
-            <h2 class="font-serif text-lg sm:text-xl font-bold text-ink">第二步：多维度智能筛选器（专为3.5Y+8M双娃定制）</h2>
-          </div>
-          <button class="text-xs font-medium text-terracotta hover:underline flex items-center gap-1" type="button" data-action="resetAllFilters" data-event="click">
-            <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path></svg>
-            重置全部筛选条件
-          </button>
-        </div>
-
-        
-        <div class="space-y-2">
-          <label class="text-xs font-bold text-inkMuted uppercase tracking-wider block">目的地片区</label>
-          <div class="flex flex-wrap gap-2" id="filter-region">
-            <button data-val="all" class="filter-chip-region px-3 py-1.5 rounded-lg text-xs font-medium bg-tealDeep text-cream transition" type="button" data-action="setFilter" data-event="click" data-arg1="region" data-type1="string" data-arg2="all" data-type2="string">全部片区 (8)</button>
-            <button data-val="west" class="filter-chip-region px-3 py-1.5 rounded-lg text-xs font-medium bg-parchment text-ink hover:bg-sandBorder/60 border border-sandBorder transition" type="button" data-action="setFilter" data-event="click" data-arg1="region" data-type1="string" data-arg2="west" data-type2="string">深圳西部与中心 (南山·光明)</button>
-            <button data-val="east" class="filter-chip-region px-3 py-1.5 rounded-lg text-xs font-medium bg-parchment text-ink hover:bg-sandBorder/60 border border-sandBorder transition" type="button" data-action="setFilter" data-event="click" data-arg1="region" data-type1="string" data-arg2="east" data-type2="string">深圳东部滨海 (盐田·大鹏)</button>
-            <button data-val="dongguan" class="filter-chip-region px-3 py-1.5 rounded-lg text-xs font-medium bg-parchment text-ink hover:bg-sandBorder/60 border border-sandBorder transition" type="button" data-action="setFilter" data-event="click" data-arg1="region" data-type1="string" data-arg2="dongguan" data-type2="string">东莞生态圈 (松山湖)</button>
-            <button data-val="huizhou" class="filter-chip-region px-3 py-1.5 rounded-lg text-xs font-medium bg-parchment text-ink hover:bg-sandBorder/60 border border-sandBorder transition" type="button" data-action="setFilter" data-event="click" data-arg1="region" data-type1="string" data-arg2="huizhou" data-type2="string">惠州山水圈 (博罗·西湖)</button>
-            <button data-val="bay" class="filter-chip-region px-3 py-1.5 rounded-lg text-xs font-medium bg-parchment text-ink hover:bg-sandBorder/60 border border-sandBorder transition" type="button" data-action="setFilter" data-event="click" data-arg1="region" data-type1="string" data-arg2="bay" data-type2="string">跨海湾区 (中山·南沙)</button>
-          </div>
-        </div>
-
-        
-        <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
-          
-          <div>
-            <label class="text-xs font-bold text-inkMuted uppercase tracking-wider block mb-1.5" for="select-combo">场所组合偏好</label>
-            <select id="select-combo" class="w-full bg-parchment border border-sandBorder rounded-lg px-3 py-2 text-xs font-medium text-ink focus:outline-none focus:border-tealDeep" aria-label="场所组合" data-action="setFilter" data-event="change" data-arg1="combo" data-type1="string" data-arg2="this.value" data-type2="value">
-              <option value="all">全部组合类型</option>
-              <option value="自然公园+博物馆">自然公园 + 博物馆</option>
-              <option value="滨海栈道+湿地">滨海栈道 + 湿地</option>
-              <option value="森林湖泊+科普馆">森林湖泊 + 科普馆</option>
-              <option value="室内恒温避暑避雨优先">室内恒温避暑避雨优先</option>
-            </select>
-          </div>
-
-          
-          <div>
-            <label class="text-xs font-bold text-inkMuted uppercase tracking-wider block mb-1.5" for="select-time">单程车程上限 (按当前模式)</label>
-            <select id="select-time" class="w-full bg-parchment border border-sandBorder rounded-lg px-3 py-2 text-xs font-medium text-ink focus:outline-none focus:border-tealDeep" aria-label="单程车程上限" data-action="setFilter" data-event="change" data-arg1="maxTime" data-type1="string" data-arg2="this.value" data-type2="value">
-              <option value="999">不限车程 (全部≤90分钟)</option>
-              <option value="45">45分钟内 (极速微度假)</option>
-              <option value="60">60分钟内 (二宝单觉极限)</option>
-              <option value="90">90分钟内 (跨城黄金圈)</option>
-            </select>
-          </div>
-
-          
-          <div>
-            <label class="text-xs font-bold text-inkMuted uppercase tracking-wider block mb-1.5" for="select-budget-tier">周末总预算区间 (实时联动)</label>
-            <select id="select-budget-tier" class="w-full bg-parchment border border-sandBorder rounded-lg px-3 py-2 text-xs font-medium text-ink focus:outline-none focus:border-tealDeep" aria-label="总预算档位" data-action="setFilter" data-event="change" data-arg1="budgetTier" data-type1="string" data-arg2="this.value" data-type2="value">
-              <option value="all">全部预算区间</option>
-              <option value="light">轻量周末 (&lt; ¥1,200)</option>
-              <option value="quality">品质微度假 (¥1,200 - ¥2,500)</option>
-              <option value="luxury">轻奢躺平 (¥2,500+)</option>
-            </select>
-          </div>
-        </div>
-
-        
-        <div class="space-y-2">
-          <div class="flex items-center justify-between">
-            <label class="text-xs font-bold text-inkMuted uppercase tracking-wider">双娃核心刚需筛选标签（可多选叠加）</label>
-            <span class="text-[11px] text-inkMuted">点击勾选核心痛点保障</span>
-          </div>
-          <div class="grid grid-cols-2 sm:grid-cols-4 gap-2.5" id="filter-tags">
-            <button data-tag="全程无障碍推车" class="tag-filter-btn flex items-center gap-2 p-2.5 rounded-xl border border-sandBorder bg-parchment/60 text-left hover:border-tealDeep transition" type="button" data-action="toggleTag" data-event="click" data-arg1="全程无障碍推车" data-type1="string">
-              <span class="w-4 h-4 rounded border border-sandDark flex items-center justify-center text-[10px] text-cream shrink-0 tag-check-box">✓</span>
-              <div>
-                <div class="text-xs font-bold text-ink">全程无障碍推车</div>
-                <div class="text-[10px] text-inkMuted">0台阶平路/连廊栈道</div>
-              </div>
-            </button>
-            <button data-tag="五星母婴室配置" class="tag-filter-btn flex items-center gap-2 p-2.5 rounded-xl border border-sandBorder bg-parchment/60 text-left hover:border-tealDeep transition" type="button" data-action="toggleTag" data-event="click" data-arg1="五星母婴室配置" data-type1="string">
-              <span class="w-4 h-4 rounded border border-sandDark flex items-center justify-center text-[10px] text-cream shrink-0 tag-check-box">✓</span>
-              <div>
-                <div class="text-xs font-bold text-ink">五星母婴室配置</div>
-                <div class="text-[10px] text-inkMuted">恒温水/独立哺乳/护理台</div>
-              </div>
-            </button>
-            <button data-tag="3.5岁高能放电" class="tag-filter-btn flex items-center gap-2 p-2.5 rounded-xl border border-sandBorder bg-parchment/60 text-left hover:border-tealDeep transition" type="button" data-action="toggleTag" data-event="click" data-arg1="3.5岁高能放电" data-type1="string">
-              <span class="w-4 h-4 rounded border border-sandDark flex items-center justify-center text-[10px] text-cream shrink-0 tag-check-box">✓</span>
-              <div>
-                <div class="text-xs font-bold text-ink">3.5岁高能放电</div>
-                <div class="text-[10px] text-inkMuted">无动力乐园/挖沙赶海/科普</div>
-              </div>
-            </button>
-            <button data-tag="充电桩与大车位友好" class="tag-filter-btn flex items-center gap-2 p-2.5 rounded-xl border border-sandDark bg-parchment/60 text-left hover:border-tealDeep transition" type="button" data-action="toggleTag" data-event="click" data-arg1="充电桩与大车位友好" data-type1="string">
-              <span class="w-4 h-4 rounded border border-sandDark flex items-center justify-center text-[10px] text-cream shrink-0 tag-check-box">✓</span>
-              <div>
-                <div class="text-xs font-bold text-ink">充电桩与大车位友好</div>
-                <div class="text-[10px] text-inkMuted">超充桩/地库宽敞好开门</div>
-              </div>
-            </button>
-          </div>
-        </div>
-      </div>
-
-      
-      <div class="lg:col-span-4 bg-cream rounded-2xl editorial-double-border p-5 sm:p-6 flex flex-col justify-between">
-        <div class="space-y-4">
-          <div class="border-b border-sandBorder pb-3">
-            <div class="flex items-center justify-between">
-              <span class="text-xs font-mono uppercase tracking-wider text-terracotta font-semibold">DYNAMIC COST SANDBOX</span>
-              <span class="text-[11px] font-mono bg-tealDeep/10 text-tealDeep px-2 py-0.5 rounded font-semibold">3天2晚 · 2大2小</span>
-            </div>
-            <h2 class="font-serif text-lg font-bold text-ink mt-0.5">动态周末预算测算沙盘</h2>
-            <p class="text-xs text-inkMuted mt-0.5">调节下方标准，实时重算全部路线的2晚总花费明细</p>
-          </div>
-
-          
-          <div>
-            <div class="flex justify-between text-xs mb-1.5">
-              <span class="font-bold text-ink">1. 两晚住宿档次设定</span>
-              <span id="label-hotel-rate" class="font-mono font-bold text-tealDeep">¥850 / 晚</span>
-            </div>
-            <div class="grid grid-cols-3 gap-1.5" id="sandbox-hotel">
-              <button data-hotel="450" class="sandbox-hotel-btn py-2 px-2 rounded-lg border border-sandBorder bg-parchment text-center transition" type="button" data-action="setBudgetSandbox" data-event="click" data-arg1="hotel" data-type1="string" data-arg2="450" data-type2="number">
-                <div class="text-xs font-bold">舒适型</div>
-                <div class="text-[10px] font-mono text-inkMuted">¥450/晚</div>
-              </button>
-              <button data-hotel="850" class="sandbox-hotel-btn py-2 px-2 rounded-lg border-2 border-tealDeep bg-tealDeep text-cream text-center transition" type="button" data-action="setBudgetSandbox" data-event="click" data-arg1="hotel" data-type1="string" data-arg2="850" data-type2="number">
-                <div class="text-xs font-bold">品质亲子</div>
-                <div class="text-[10px] font-mono opacity-90">¥850/晚</div>
-              </button>
-              <button data-hotel="1500" class="sandbox-hotel-btn py-2 px-2 rounded-lg border border-sandBorder bg-parchment text-center transition" type="button" data-action="setBudgetSandbox" data-event="click" data-arg1="hotel" data-type1="string" data-arg2="1500" data-type2="number">
-                <div class="text-xs font-bold">高端度假</div>
-                <div class="text-[10px] font-mono text-inkMuted">¥1500/晚</div>
-              </button>
-            </div>
-          </div>
-
-          
-          <div>
-            <div class="flex justify-between text-xs mb-1.5">
-              <span class="font-bold text-ink">2. 全家餐饮标准 (3天2晚)</span>
-              <span id="label-dining-rate" class="font-mono font-bold text-tealDeep">地道粤菜 ¥500/天</span>
-            </div>
-            <div class="grid grid-cols-3 gap-1.5" id="sandbox-dining">
-              <button data-dining="320" class="sandbox-dining-btn py-2 px-2 rounded-lg border border-sandBorder bg-parchment text-center transition" type="button" data-action="setBudgetSandbox" data-event="click" data-arg1="dining" data-type1="string" data-arg2="320" data-type2="number">
-                <div class="text-xs font-bold">商场简餐</div>
-                <div class="text-[10px] font-mono text-inkMuted">¥320/天</div>
-              </button>
-              <button data-dining="500" class="sandbox-dining-btn py-2 px-2 rounded-lg border-2 border-tealDeep bg-tealDeep text-cream text-center transition" type="button" data-action="setBudgetSandbox" data-event="click" data-arg1="dining" data-type1="string" data-arg2="500" data-type2="number">
-                <div class="text-xs font-bold">地道粤菜</div>
-                <div class="text-[10px] font-mono opacity-90">¥500/天</div>
-              </button>
-              <button data-dining="850" class="sandbox-dining-btn py-2 px-2 rounded-lg border border-sandBorder bg-parchment text-center transition" type="button" data-action="setBudgetSandbox" data-event="click" data-arg1="dining" data-type1="string" data-arg2="850" data-type2="number">
-                <div class="text-xs font-bold">星级海鲜</div>
-                <div class="text-[10px] font-mono text-inkMuted">¥850/天</div>
-              </button>
-            </div>
-          </div>
-
-          
-          <div class="flex items-center justify-between bg-parchment/80 p-3 rounded-xl border border-sandBorder">
-            <div>
-              <div class="text-xs font-bold text-ink">3. 收费景区/乐园套票</div>
-              <div class="text-[11px] text-inkMuted">关闭则仅去公立免费公园与博物馆</div>
-            </div>
-            <button id="btn-ticket-toggle" class="px-3 py-1.5 rounded-lg text-xs font-mono font-bold bg-tealDeep text-cream transition" type="button" data-action="toggleTicketSandbox" data-event="click">
-              已含精选套票
-            </button>
-          </div>
-        </div>
-
-        
-        <div class="mt-4 pt-3 border-t border-sandBorder flex items-center justify-between">
-          <div>
-            <span class="text-[11px] text-inkMuted block">当前8条路线周末预估均价</span>
-            <span id="sandbox-avg-total" class="font-mono text-xl font-bold text-terracotta" aria-live="polite">¥2,860</span>
-          </div>
-          <div class="text-right text-[11px] text-inkMuted font-mono">
-            <div>含2晚住宿 + 2.5天餐饮</div>
-            <div>+ 往返路桥电费 + 门票</div>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    
-    <section id="section-routes" class="space-y-4">
-      
-      <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 bg-cream px-5 py-3.5 rounded-xl editorial-border">
-        <div class="flex items-center gap-3">
-          <h2 class="font-serif text-lg sm:text-xl font-bold text-ink">精选双日自驾方案矩阵</h2>
-          <span id="route-count-badge" class="px-2.5 py-0.5 rounded-full text-xs font-mono font-bold bg-tealDeep text-cream" aria-live="polite">共匹配 8 条路线</span>
-        </div>
-
-        <div class="flex items-center gap-2 flex-wrap">
-          <span class="text-xs text-inkMuted font-medium">排序方式：</span>
-          <div class="flex flex-wrap gap-1.5" id="sort-buttons">
-            <button data-sort="score" class="sort-btn px-3 py-1.5 rounded-lg text-xs font-medium bg-tealDeep text-cream transition" type="button" data-action="setSortBy" data-event="click" data-arg1="score" data-type1="string">双娃综合推荐度 ↓</button>
-            <button data-sort="time" class="sort-btn px-3 py-1.5 rounded-lg text-xs font-medium bg-parchment text-ink hover:bg-sandBorder/60 border border-sandBorder transition" type="button" data-action="setSortBy" data-event="click" data-arg1="time" data-type1="string">车程最短 ↑</button>
-            <button data-sort="stroller" class="sort-btn px-3 py-1.5 rounded-lg text-xs font-medium bg-parchment text-ink hover:bg-sandBorder/60 border border-sandBorder transition" type="button" data-action="setSortBy" data-event="click" data-arg1="stroller" data-type1="string">推车友好度最高 ↓</button>
-            <button data-sort="cost" class="sort-btn px-3 py-1.5 rounded-lg text-xs font-medium bg-parchment text-ink hover:bg-sandBorder/60 border border-sandBorder transition" type="button" data-action="setSortBy" data-event="click" data-arg1="cost" data-type1="string">总预算从低到高 ↑</button>
-          </div>
-        </div>
-      </div>
-
-      
-      <div id="routes-grid" class="grid grid-cols-1 md:grid-cols-2 gap-6">
-        
-      </div>
-    </section>
-
-    
-    <section id="section-checklist" class="bg-cream rounded-2xl editorial-border p-5 sm:p-7 space-y-6">
-      <div class="flex flex-col lg:flex-row lg:items-center justify-between gap-4 border-b border-sandBorder pb-4">
-        <div>
-          <div class="flex items-center gap-2">
-            <span class="text-xs font-mono uppercase tracking-wider text-tealDeep font-semibold">DUAL-KID TRUNK GEAR CHECKLIST</span>
-            <span class="text-[11px] font-mono px-2 py-0.5 rounded bg-olive/15 text-olive font-semibold">自动本地保存进度</span>
-          </div>
-          <h2 class="font-serif text-xl sm:text-2xl font-bold text-ink mt-1">双娃后备箱装备核对清单（3.5岁大宝 + 8月龄二宝 3天2晚标准）</h2>
-          <p class="text-xs text-inkMuted mt-0.5">建议周四晚完成除生鲜辅食外的 80% 装箱，周五下午从容出发</p>
-        </div>
-
-        
-        <div class="flex flex-wrap items-center gap-3">
-          <div class="flex items-center gap-2 bg-parchment px-3.5 py-2 rounded-xl border border-sandBorder">
-            <div class="text-right">
-              <div class="text-[11px] text-inkMuted">后备箱装载就绪度</div>
-              <div id="checklist-total-text" class="font-mono text-sm font-bold text-tealDeep" aria-live="polite">0 / 28 项 (0%)</div>
-            </div>
-            <div class="w-10 h-10 relative flex items-center justify-center">
-              <svg class="w-10 h-10 -rotate-90" viewbox="0 0 36 36">
-                <circle cx="18" cy="18" r="15" fill="none" stroke="#E3E0D5" stroke-width="3.5"></circle>
-                <circle id="checklist-progress-ring" cx="18" cy="18" r="15" fill="none" stroke="#D97757" stroke-width="3.5" stroke-dasharray="94.2" stroke-dashoffset="94.2" stroke-linecap="round"></circle>
-              </svg>
-            </div>
-          </div>
-
-          <div class="flex items-center gap-1.5">
-            <button id="btn-pack-light" class="px-3 py-2 rounded-lg text-xs font-medium bg-parchment hover:bg-sandBorder/60 text-ink border border-sandBorder transition" type="button" data-action="setPackingMode" data-event="click" data-arg1="light" data-type1="string">
-              轻装模式 (仅核心必带)
-            </button>
-            <button id="btn-pack-full" class="px-3 py-2 rounded-lg text-xs font-medium bg-tealDeep text-cream transition" type="button" data-action="setPackingMode" data-event="click" data-arg1="full" data-type1="string">
-              全装模式 (3天2晚满配)
-            </button>
-            <button class="px-3 py-2 rounded-lg text-xs font-medium bg-olive text-cream hover:opacity-90 transition" type="button" data-action="checkAllGear" data-event="click" data-arg1="true" data-type1="boolean">
-              一键全选
-            </button>
-            <button class="px-3 py-2 rounded-lg text-xs font-medium bg-terracotta/15 text-terracotta hover:bg-terracotta/25 transition" type="button" data-action="checkAllGear" data-event="click" data-arg1="false" data-type1="boolean">
-              重置
-            </button>
-          </div>
-        </div>
-      </div>
-
-      
-      <div id="checklist-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-5">
-        
-      </div>
-    </section>
-
-    
-    <section id="section-rules" class="space-y-4">
-      <div class="flex flex-col sm:flex-row sm:items-end justify-between gap-2">
-        <div>
-          <span class="text-xs font-mono uppercase tracking-wider text-terracotta font-semibold">GOLDEN OVERLAND RULES &amp; PITFALL AVOIDANCE</span>
-          <h2 class="font-serif text-xl sm:text-2xl font-bold text-ink mt-0.5">布吉×坂田双娃自驾黄金法则与避坑看板</h2>
-        </div>
-        <span class="text-xs text-inkMuted">实战总结 · 专治二胎家庭周末出行手忙脚乱</span>
-      </div>
-
-      <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
-        
-        <div class="bg-cream rounded-2xl editorial-border p-5 flex gap-4">
-          <div class="w-12 h-12 rounded-xl bg-tealDeep/10 border border-tealDeep/20 flex items-center justify-center shrink-0 text-tealDeep">
-            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg>
-          </div>
-          <div class="space-y-1.5">
-            <div class="flex items-center gap-2">
-              <span class="text-[11px] font-mono px-2 py-0.5 rounded bg-tealDeep text-cream font-bold">法则 01</span>
-              <h3 class="font-serif font-bold text-base text-ink">布吉-坂田周五晚高峰逃离路线图解</h3>
-            </div>
-            <p class="text-xs text-inkMuted leading-relaxed">
-              周五 <strong class="text-terracotta">17:15后</strong> 坂田五和大道、布龙路、坂雪岗大道极易瘫痪。若去西北线（松山湖/光明/中山），<strong>爸爸务必15:30从布吉带娃出发</strong>，太太提前将工作收尾，在坂田公司地库或路口即停即上车，直接切入<strong>坂银通道或珠三角环线高速坂田入口</strong>；若去东部（盐田/大鹏/惠州），千万别开车进坂田接人，让太太坐地铁5号线/10号线回布吉站/百鸽笼站汇合，省下至少45分钟堵车煎熬。
-            </p>
-          </div>
-        </div>
-
-        
-        <div class="bg-cream rounded-2xl editorial-border p-5 flex gap-4">
-          <div class="w-12 h-12 rounded-xl bg-terracotta/10 border border-terracotta/20 flex items-center justify-center shrink-0 text-terracotta">
-            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"></path></svg>
-          </div>
-          <div class="space-y-1.5">
-            <div class="flex items-center gap-2">
-              <span class="text-[11px] font-mono px-2 py-0.5 rounded bg-terracotta text-cream font-bold">法则 02</span>
-              <h3 class="font-serif font-bold text-base text-ink">3.5岁大宝与8月龄二宝「睡眠错位」应对法</h3>
-            </div>
-            <p class="text-xs text-inkMuted leading-relaxed">
-              8月龄二宝每天需 <strong>上午(10:00-11:15) + 下午(14:30-16:00)</strong> 两次小睡；而3.5岁大宝上午精力最旺盛、仅需午后一觉(13:30-15:30)。<strong>黄金解法：</strong>上午9:00-11:00选树荫浓密的平坦绿道，二宝在减震婴儿车里拉上防晒帘睡上午觉，爸爸陪大宝在草坪骑平衡车/挖沙放电；中午13:00退房或转场时，利用<strong>高速行车白噪音</strong>让两娃在安全座椅上同步睡午觉！
-            </p>
-          </div>
-        </div>
-
-        
-        <div class="bg-cream rounded-2xl editorial-border p-5 flex gap-4">
-          <div class="w-12 h-12 rounded-xl bg-olive/15 border border-olive/30 flex items-center justify-center shrink-0 text-olive">
-            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"></path></svg>
-          </div>
-          <div class="space-y-1.5">
-            <div class="flex items-center gap-2">
-              <span class="text-[11px] font-mono px-2 py-0.5 rounded bg-olive text-cream font-bold">法则 03</span>
-              <h3 class="font-serif font-bold text-base text-ink">博物馆预约、推车推行与「腰凳替补」策略</h3>
-            </div>
-            <p class="text-xs text-inkMuted leading-relaxed">
-              广东科学中心、南山博物馆、中山市博物馆等热门场馆，请于<strong>周四晚20:00前</strong>在公众号完成预约。馆内冷气通常较足（约22-24℃），<strong>8月龄二宝进馆必盖薄纱巾或穿连体长袖</strong>。遇到跨楼层电梯排队时，<strong>爸爸用透气腰凳背二宝，大宝自己走，妈妈推空车放妈咪包坐扶梯或等直梯</strong>，机动性直接翻倍。
-            </p>
-          </div>
-        </div>
-
-        
-        <div class="bg-cream rounded-2xl editorial-border p-5 flex gap-4">
-          <div class="w-12 h-12 rounded-xl bg-tealDeep/10 border border-tealDeep/20 flex items-center justify-center shrink-0 text-tealDeep">
-            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
-          </div>
-          <div class="space-y-1.5">
-            <div class="flex items-center gap-2">
-              <span class="text-[11px] font-mono px-2 py-0.5 rounded bg-tealDeep text-cream font-bold">法则 04</span>
-              <h3 class="font-serif font-bold text-base text-ink">周日下午 15:00 前返程黄金窗口提醒</h3>
-            </div>
-            <p class="text-xs text-inkMuted leading-relaxed">
-              周日下午 16:30 后，深中通道往深圳方向、机荷高速清湖段、盐坝高速小梅沙段及水官高速布吉出口必逢返程车流高峰。<strong>周日午餐后 14:30 - 15:00 准时发动车辆返程</strong>：此时大宝上午已充分放电，二宝刚喝完奶，两娃上车即睡，16:00前丝滑回到布吉地库，全家人周日晚还能轻松洗漱、早睡迎接周一上班。
-            </p>
-          </div>
-        </div>
-      </div>
-    </section>
-
-  </div>
-<div id="compare-dock" class="fixed bottom-0 inset-x-0 z-40 transform translate-y-full transition-transform duration-300 pointer-events-none">
-    <div class="max-w-5xl mx-auto px-4 pb-4 pointer-events-auto">
-      <div class="bg-tealDeep text-cream rounded-2xl shadow-2xl border-2 border-sandBorder p-3.5 sm:px-6 flex flex-col sm:flex-row items-center justify-between gap-3">
-        <div class="flex items-center gap-3 flex-wrap">
-          <span class="text-xs font-mono uppercase tracking-wider bg-terracotta px-2.5 py-1 rounded font-bold">路线PK台 (<span id="compare-count">0</span>/3)</span>
-          <div id="compare-pills" class="flex items-center gap-2 flex-wrap">
-            
-          </div>
-        </div>
-        <div class="flex items-center gap-2 shrink-0 w-full sm:w-auto justify-end">
-          <button class="px-3 py-1.5 rounded-lg text-xs text-cream/80 hover:text-cream hover:bg-white/10 transition" type="button" data-action="clearCompare" data-event="click">清空</button>
-          <button class="px-4 py-2 rounded-xl text-xs font-bold bg-cream text-tealDeep hover:bg-parchment shadow transition flex items-center gap-1.5" type="button" data-action="openCompareModal" data-event="click">
-            <svg class="w-4 h-4 text-terracotta" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path></svg>
-            开启多维雷达对比
-          </button>
-        </div>
-      </div>
-    </div>
-  </div>
-<div id="detail-modal" class="fixed inset-0 z-50 hidden overflow-y-auto bg-ink/70 backdrop-blur-sm flex items-center justify-center p-2 sm:p-4" role="dialog" aria-modal="true" aria-labelledby="modal-title" tabindex="-1">
-    <div class="bg-cream w-full max-w-5xl rounded-2xl editorial-double-border shadow-2xl overflow-hidden my-auto max-h-[92vh] flex flex-col">
-      
-      <div class="bg-tealDeep text-cream px-5 py-4 flex items-start justify-between gap-4 shrink-0">
-        <div>
-          <div class="flex items-center gap-2 flex-wrap">
-            <span id="modal-region-badge" class="text-[11px] font-mono uppercase px-2 py-0.5 rounded bg-terracotta text-cream font-bold">片区</span>
-            <span id="modal-drive-badge" class="text-[11px] font-mono px-2 py-0.5 rounded bg-white/15 text-cream">车程</span>
-            <span id="modal-combo-badge" class="text-[11px] font-mono px-2 py-0.5 rounded bg-white/15 text-amber-200">场所组合</span>
-          </div>
-          <h2 id="modal-title" class="font-serif text-xl sm:text-2xl font-bold mt-1">路线名称</h2>
-        </div>
-        <button class="p-2 rounded-lg bg-white/10 hover:bg-white/20 text-cream transition shrink-0" aria-label="关闭详情" type="button" data-action="closeDetailModal" data-event="click">
-          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+<nav class="perspective-bar">
+    <div class="container perspective-inner">
+      <div class="perspective-tabs">
+        <button class="p-tab active" id="tabLocalSpots" data-action="switchPerspective" data-event="click" data-arg1="localSpots" data-type1="string" type="button">
+          🏞️ 视角一：深圳本地全区宝藏图谱（高频主力）
+          <span class="badge">10大行政区 · 32个精选点位</span>
+        </button>
+        <button class="p-tab" id="tabLocalPacks" data-action="switchPerspective" data-event="click" data-arg1="localPacks" data-type1="string" type="button">
+          🗺️ 深圳本地周末连玩打包路书
+          <span class="badge">6条不离深2日游组合</span>
+        </button>
+        <button class="p-tab" id="tabCrossCity" data-action="switchPerspective" data-event="click" data-arg1="crossCity" data-type1="string" type="button">
+          🌉 视角二：环深跨城 3天2晚微度假（低频精选）
+          <span class="badge">松山湖/惠州/深中通道/南沙/顺德/珠海</span>
+        </button>
+        <button class="p-tab" id="tabGear" data-action="switchPerspective" data-event="click" data-arg1="gear" data-type1="string" type="button">
+          🎒 双娃随车装备与安全核对单
+          <span class="badge" id="gearProgressBadge" aria-live="polite">已备 0%</span>
         </button>
       </div>
 
-      
-      <div class="p-5 sm:p-6 overflow-y-auto space-y-6">
-        
-        <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-center bg-parchment/60 p-4 sm:p-5 rounded-2xl border border-sandBorder">
-          
-          <div class="lg:col-span-5 flex flex-col items-center">
-            <div class="text-xs font-serif font-bold text-tealDeep mb-1">专属六维双娃友好度雷达图</div>
-            <div id="modal-radar-container" class="w-64 h-64 flex items-center justify-center" role="img" aria-label="本路线六维双娃友好度雷达图">
-              
-            </div>
-          </div>
-
-          
-          <div class="lg:col-span-7 space-y-3.5">
-            
-            <div class="bg-cream p-3.5 rounded-xl border border-sandBorder">
-              <div class="flex items-center gap-2 text-xs font-bold text-tealDeep mb-1">
-                <span class="w-5 h-5 rounded bg-tealDeep text-cream font-mono flex items-center justify-center text-[11px]">P</span>
-                精确停车定位与无障碍直梯点位（避免推车绕路）
-              </div>
-              <p id="modal-parking-info" class="text-xs text-ink leading-relaxed"></p>
-            </div>
-
-            
-            <div class="bg-cream p-3.5 rounded-xl border border-sandBorder">
-              <div class="flex items-center gap-2 text-xs font-bold text-terracotta mb-1">
-                <span class="w-5 h-5 rounded bg-terracotta text-cream font-mono flex items-center justify-center text-[11px]">♥</span>
-                五星母婴室精确点位（8月龄二宝冲奶/换尿布/哺乳）
-              </div>
-              <p id="modal-nursing-info" class="text-xs text-ink leading-relaxed"></p>
-            </div>
-
-            
-            <div class="bg-cream p-3.5 rounded-xl border-2 border-tealDeep/30">
-              <div class="flex flex-wrap items-center justify-between gap-2 mb-2">
-                <span class="text-xs font-bold text-ink flex items-center gap-1.5">
-                  <svg class="w-4 h-4 text-terracotta" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 15a4 4 0 004 4h9a5 5 0 10-.1-9.999 5.002 5.002 0 10-9.78 2.096A4.001 4.001 0 003 15z"></path></svg>
-                  天气应急预案切换（晴天 vs 阴雨/高温暴晒）
-                </span>
-                <div class="flex rounded-lg overflow-hidden border border-sandBorder text-[11px] font-medium">
-                  <button id="btn-weather-sunny" class="px-2.5 py-1 bg-tealDeep text-cream transition" type="button" data-action="setModalWeather" data-event="click" data-arg1="sunny" data-type1="string">☀️ 晴朗舒适模式</button>
-                  <button id="btn-weather-rainy" class="px-2.5 py-1 bg-parchment text-ink hover:bg-sandBorder/50 transition" type="button" data-action="setModalWeather" data-event="click" data-arg1="rainy" data-type1="string">🌧️ 阴雨/暴晒B计划</button>
-                </div>
-              </div>
-              <p id="modal-weather-text" class="text-xs text-inkMuted leading-relaxed bg-parchment/70 p-2.5 rounded-lg border border-sandBorder"></p>
-            </div>
-          </div>
-        </div>
-
-        
-        <div class="space-y-4">
-          <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-sandBorder pb-2">
-            <div>
-              <span class="text-xs font-mono uppercase tracking-wider text-terracotta font-semibold">DUAL-KID BIO-RHYTHM SYNC TIMELINE</span>
-              <h3 class="font-serif text-lg font-bold text-ink">三天两晚分时作息级路书（Friday 15:30 — Sunday 17:00）</h3>
-            </div>
-            <div class="flex items-center gap-2 text-[11px]">
-              <span class="px-2 py-0.5 rounded bg-tealDeep/15 text-tealDeep font-semibold">● 3.5岁大宝节奏</span>
-              <span class="px-2 py-0.5 rounded bg-terracotta/15 text-terracotta font-semibold">● 8月龄二宝作息</span>
-            </div>
-          </div>
-
-          <div id="modal-timeline-container" class="space-y-5">
-            
-          </div>
-        </div>
-      </div>
-
-      
-      <div class="bg-parchment px-5 py-3.5 border-t border-sandBorder flex flex-wrap items-center justify-between gap-3 shrink-0">
-        <div class="flex items-center gap-4 text-xs">
-          <span>当前沙盘预估总费用：<strong id="modal-total-cost" class="font-mono text-base text-terracotta">¥0</strong></span>
-          <span id="modal-cost-detail" class="text-inkMuted font-mono hidden sm:inline"></span>
-        </div>
-        <div class="flex items-center gap-2">
-          <button class="px-4 py-2 rounded-xl text-xs font-bold bg-tealDeep text-cream hover:bg-tealLight transition" type="button" data-action="closeDetailModal" data-event="click">
-            完成查阅
-          </button>
-        </div>
+      <div style="font-size:12.5px; color:var(--ink-secondary);">
+        💡 <strong>双娃黄金公式：</strong>上午户外栈道/湿地放电（09:00-11:30）+ 中午恒温商场/酒店午休 + 下午博物馆/美术馆推车漫游
       </div>
     </div>
+  </nav>
+<div class="container main-workspace">
+    
+    <aside class="sidebar">
+      
+      <div class="panel-card" id="filterPanel">
+        <div class="panel-title">
+          <span>🔍 多维精准筛选器</span>
+          <button style="border:none;background:none;color:var(--terracotta);font-size:12px;cursor:pointer;font-weight:600;" data-action="resetFilters" data-event="click" type="button">重置全部</button>
+        </div>
+
+        <input type="text" id="searchInput" class="search-input" placeholder="搜索公园、湿地、栈道、博物馆名称..." aria-label="搜索本地点位" data-action="renderMainContent" data-event="input">
+
+        
+        <div class="filter-group" id="catFilterGroup">
+          <span class="filter-label">🌲 景观与场所形态（可切换）</span>
+          <div class="chip-list" id="categoryChips">
+            <button class="chip active" data-cat="ALL" data-action="selectCategory" data-event="click" data-arg1="ALL" data-type1="string" type="button">全部形态</button>
+            <button class="chip" data-cat="城市/森林公园" data-action="selectCategory" data-event="click" data-arg1="城市/森林公园" data-type1="string" type="button">🌳 城市/森林公园</button>
+            <button class="chip" data-cat="博物馆/科技馆" data-action="selectCategory" data-event="click" data-arg1="博物馆/科技馆" data-type1="string" type="button">🏛️ 博物馆/科技馆</button>
+            <button class="chip" data-cat="滨海/环湖栈道" data-action="selectCategory" data-event="click" data-arg1="滨海/环湖栈道" data-type1="string" type="button">🌊 滨海/环湖/空中栈道</button>
+            <button class="chip" data-cat="红树林/河湖湿地" data-action="selectCategory" data-event="click" data-arg1="红树林/河湖湿地" data-type1="string" type="button">🦢 红树林/河湖湿地</button>
+            <button class="chip" data-cat="森林湖泊/山水" data-action="selectCategory" data-event="click" data-arg1="森林湖泊/山水" data-type1="string" type="button">🏞️ 森林湖泊/水库山水</button>
+            <button class="chip" data-cat="儿童专类乐园" data-action="selectCategory" data-event="click" data-arg1="儿童专类乐园" data-type1="string" type="button">🎠 儿童专类乐园</button>
+          </div>
+        </div>
+
+        
+        <div class="filter-group">
+          <span class="filter-label">⏱️ 单程车程上限（8月龄二宝耐受度）</span>
+          <div class="chip-list" id="driveChips">
+            <button class="chip active" data-drive="999" data-action="selectMaxDrive" data-event="click" data-arg1="999" data-type1="number" type="button">不限时长</button>
+            <button class="chip" data-drive="25" data-action="selectMaxDrive" data-event="click" data-arg1="25" data-type1="number" type="button">≤ 25分钟（家门口）</button>
+            <button class="chip" data-drive="40" data-action="selectMaxDrive" data-event="click" data-arg1="40" data-type1="number" type="button">≤ 40分钟（黄金圈）</button>
+            <button class="chip" data-drive="60" data-action="selectMaxDrive" data-event="click" data-arg1="60" data-type1="number" type="button">≤ 60分钟（全市圈）</button>
+          </div>
+        </div>
+
+        
+        <div class="filter-group">
+          <span class="filter-label">👶 双娃核心刚需标签（可叠加多选）</span>
+          <div class="chip-list" id="needChips">
+            <button class="chip terracotta" data-need="zeroStep" data-action="toggleNeed" data-event="click" data-arg1="zeroStep" data-type1="string" type="button">🚼 全程0台阶推车丝滑</button>
+            <button class="chip terracotta" data-need="nursingRoom" data-action="toggleNeed" data-event="click" data-arg1="nursingRoom" data-type1="string" type="button">🍼 独立五星母婴室</button>
+            <button class="chip terracotta" data-need="kidEnergy" data-action="toggleNeed" data-event="click" data-arg1="kidEnergy" data-type1="string" type="button">⚡ 3.5岁高能放电/挖沙</button>
+            <button class="chip terracotta" data-need="indoorCool" data-action="toggleNeed" data-event="click" data-arg1="indoorCool" data-type1="string" type="button">❄️ 室内恒温/林荫避晒</button>
+            <button class="chip terracotta" data-need="easyPark" data-action="toggleNeed" data-event="click" data-arg1="easyPark" data-type1="string" type="button">🅿️ 极易停车+超充友好</button>
+            <button class="chip terracotta" data-need="noReserve" data-action="toggleNeed" data-event="click" data-arg1="noReserve" data-type1="string" type="button">🟢 免预约说走就走</button>
+          </div>
+        </div>
+      </div>
+
+      
+      <div class="panel-card">
+        <div class="panel-title">
+          <span>💰 周末两天动态预算沙盘</span>
+          <span style="font-size:11px;color:var(--ink-muted);">实时重算</span>
+        </div>
+
+        <div class="budget-row">
+          <label for="stayModeSelect"><span>🌙 周末过夜模式</span></label>
+          <select id="stayModeSelect" class="budget-select" data-action="updateBudgetAndRender" data-event="change">
+            <option value="0">周六+周日走读回布吉睡（0房费·最省心）</option>
+            <option value="1" selected>周五/周六住1晚亲子酒店（2天1晚微度假）</option>
+            <option value="2">周五下午出发连住2晚（3天2晚深度游）</option>
+          </select>
+        </div>
+
+        <div class="budget-row">
+          <label for="hotelTierSelect"><span>🏨 酒店/民宿档次（含婴儿床）</span></label>
+          <select id="hotelTierSelect" class="budget-select" data-action="updateBudgetAndRender" data-event="change">
+            <option value="450">高性价比舒适型（¥450/晚）</option>
+            <option value="850" selected>品质亲子/湖景度假酒店（¥850/晚）</option>
+            <option value="1450">豪华リゾート/五星亲子房（¥1450/晚）</option>
+          </select>
+        </div>
+
+        <div class="budget-row">
+          <label for="foodTierSelect"><span>🍲 两大两小餐饮标准（两天）</span></label>
+          <select id="foodTierSelect" class="budget-select" data-action="updateBudgetAndRender" data-event="change">
+            <option value="500">简餐+商场连锁餐饮（¥500/周末）</option>
+            <option value="850" selected>特色农家菜/粤菜早茶（¥850/周末）</option>
+            <option value="1300">海鲜大餐+酒店自助（¥1300/周末）</option>
+          </select>
+        </div>
+
+        <div class="budget-summary-box">
+          <div style="font-size:12px;color:var(--ink-secondary);display:flex;justify-content:space-between;">
+            <span>预计周末总花费基准：</span>
+            <span id="budgetBreakdownText">房¥850 + 餐¥850 + 行¥90</span>
+          </div>
+          <div class="budget-total" id="budgetTotalDisplay" aria-live="polite">¥ 1,790</div>
+          <div style="font-size:11px;color:var(--ink-muted);margin-top:4px;">
+            * 纯电SUV家充/超充折算约 ¥0.18/km，深圳本地90%市政公园与博物馆免门票
+          </div>
+        </div>
+      </div>
+    </aside>
+
+    
+    <section class="content-area">
+      
+      <div class="district-matrix" id="districtMatrixBox">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;">
+          <span style="font-size:14px;font-weight:800;color:var(--teal-primary);">📍 深圳 10 大行政区 × 26 个细分片区导航（按离布吉/坂田车程由近及远排序）</span>
+          <span style="font-size:12px;color:var(--ink-muted);">点击行政区可展开对应片区</span>
+        </div>
+        <div class="district-tabs" id="districtTabs"></div>
+        <div class="subarea-bar" id="subareaBar"></div>
+      </div>
+
+      
+      <div class="toolbar" id="mainToolbar">
+        <div id="resultCountText" style="font-size:13.5px;font-weight:700;color:var(--ink-primary);" aria-live="polite">
+          正在加载数据...
+        </div>
+        <div style="display:flex;align-items:center;gap:8px;font-size:12.5px;">
+          <span>排序维度：</span>
+          <select id="sortSelect" class="budget-select" style="width:auto;" aria-label="点位排序" data-action="renderMainContent" data-event="change">
+            <option value="score">🌟 双娃综合友好度最高</option>
+            <option value="drive">🚗 离布吉/坂田车程最近</option>
+            <option value="stroller">🚼 8月龄推车丝滑度最高</option>
+            <option value="energy">⚡ 3.5岁大宝放电指数最高</option>
+          </select>
+        </div>
+      </div>
+
+      
+      <div id="mainCardsContainer" class="cards-grid"></div>
+    </section>
   </div>
-<div id="compare-modal" class="fixed inset-0 z-50 hidden overflow-y-auto bg-ink/70 backdrop-blur-sm flex items-center justify-center p-2 sm:p-4" role="dialog" aria-modal="true" aria-labelledby="ot-compare-title" tabindex="-1">
-    <div class="bg-cream w-full max-w-5xl rounded-2xl editorial-double-border shadow-2xl overflow-hidden my-auto max-h-[92vh] flex flex-col">
-      <div class="bg-tealDeep text-cream px-5 py-4 flex items-center justify-between shrink-0">
-        <div>
-          <span class="text-[11px] font-mono uppercase tracking-wider text-amber-200">MULTI-ROUTE SIDE-BY-SIDE COMPARISON</span>
-          <h2 class="font-serif text-xl font-bold" id="ot-compare-title">双娃自驾路线多维对比台</h2>
+<footer class="floating-planner">
+    <div class="planner-inner">
+      <div class="planner-slots">
+        <span style="font-weight:800;font-size:13.5px;color:#FFD166;">🗓️ 周末两日自由拼装篮：</span>
+        <div class="day-slot">
+          <strong>周六：</strong>
+          <div id="satSlotList" style="display:flex;gap:6px;flex-wrap:wrap;">
+            <span style="opacity:0.7;font-size:12px;">点击卡片「+周六」加入（建议1户外+1室内）</span>
+          </div>
         </div>
-        <button class="p-2 rounded-lg bg-white/10 hover:bg-white/20 text-cream transition" type="button" aria-label="关闭路线对比" data-action="closeCompareModal" data-event="click">
-          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
-        </button>
+        <div class="day-slot">
+          <strong>周日：</strong>
+          <div id="sunSlotList" style="display:flex;gap:6px;flex-wrap:wrap;">
+            <span style="opacity:0.7;font-size:12px;">点击卡片「+周日」加入</span>
+          </div>
+        </div>
       </div>
-
-      <div id="compare-modal-body" class="p-5 sm:p-6 overflow-y-auto space-y-6">
-        
+      <div style="display:flex;gap:8px;align-items:center;">
+        <button class="btn btn-accent" style="flex:none;" data-action="openCustomPlanModal" data-event="click" type="button">📋 生成周末路书与预约提醒</button>
+        <button class="btn" style="flex:none;background:rgba(255,255,255,0.15);color:#fff;border:none;" data-action="clearCustomPlan" data-event="click" type="button">清空</button>
       </div>
     </div>
+  </footer>
+<div class="modal-backdrop" id="detailModal" role="dialog" aria-modal="true" aria-labelledby="ot-modal-title" tabindex="-1">
+    <div class="modal-content" id="modalBodyContent"></div>
   </div>

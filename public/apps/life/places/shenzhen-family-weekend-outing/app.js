@@ -1,1341 +1,1885 @@
-/* 附件原始内容与预算规则；样式及事件限定到本页。 */
+/* 附件原始点位、路书与预算规则；仅隔离 DOM 查询和按钮事件。 */
 (() => {
  const root=document.getElementById('outing-app');
- if (!root) return;
+ if(!root) return;
  const byId=id=>root.querySelector('#'+id);
 
-  let returnFocus = null;
-  let previousOverflow = '';
-  function showModal(id) {
-    returnFocus = document.activeElement;
-    previousOverflow = document.body.style.overflow;
-    const modal = byId(id);
-    modal.classList.remove('hidden');
-    document.body.style.overflow = 'hidden';
-    (modal.querySelector('button') || modal).focus();
+  let returnFocus=null, previousOverflow='';
+  function readGear() {
+    try {const ids=JSON.parse(localStorage.getItem('sz_dual_kid_gear') || '[]');return new Set(Array.isArray(ids)?ids:[]);}
+    catch {return new Set();}
   }
-  function hideModal(id) {
-    byId(id).classList.add('hidden');
-    document.body.style.overflow = previousOverflow;
-    if (returnFocus?.isConnected) returnFocus.focus({preventScroll:true});
+  function saveGear(ids) {try {localStorage.setItem('sz_dual_kid_gear',JSON.stringify(ids));} catch {}}
+  function showDialog() {
+    const modal=byId('detailModal'), content=byId('modalBodyContent');
+    returnFocus=document.activeElement;previousOverflow=document.body.style.overflow;
+    content.querySelector('h2')?.setAttribute('id','ot-modal-title');
+    modal.classList.add('open');document.body.style.overflow='hidden';content.scrollTop=0;
+    (content.querySelector('button') || modal).focus();
+  }
+  function hideDialog() {
+    byId('detailModal').classList.remove('open');document.body.style.overflow=previousOverflow;
+    if(returnFocus?.isConnected) returnFocus.focus({preventScroll:true});
+  }
+  function syncButtons() {
+    root.querySelectorAll('.p-tab,.depart-btn,.d-tab,button.chip').forEach(el=>el.setAttribute('aria-pressed',String(el.classList.contains('active'))));
   }
   function bindActions() {
-    const actions = {checkAllGear,clearCompare,closeCompareModal,closeDetailModal,openCompareModal,openDetailModal,resetAllFilters,setBudgetSandbox,setDepartureMode,setFilter,setModalWeather,setPackingMode,setSortBy,toggleCompare,toggleGearItem,toggleTag,toggleTicketSandbox};
+    const actions={addToPlan,clearCustomPlan,closeModal,openCrossModal,openCustomPlanModal,openPackModal,openSpotModal,removeFromPlan,renderMainContent,resetFilters,selectCategory,selectDistrict,selectMaxDrive,selectSubarea,setDepartMode,switchPerspective,toggleGearItem,toggleNeed,updateBudgetAndRender};
     function handle(event) {
-      const el = event.target.closest('[data-action]');
-      if (!el || !root.contains(el) || el.dataset.event !== event.type) return;
-      const action = actions[el.dataset.action];
-      if (!action) return;
-      const args = [];
-      for (let i=1; el.hasAttribute('data-type'+i); i++) {
+      if(event.type==='click' && event.target===byId('detailModal')) {closeModal();return;}
+      const el=event.target.closest('[data-action]');
+      if(!el || !root.contains(el) || el.dataset.event!==event.type) return;
+      const action=actions[el.dataset.action];if(!action) return;
+      const args=[];
+      for(let i=1;el.hasAttribute('data-type'+i);i++) {
         const type=el.dataset['type'+i], value=el.dataset['arg'+i];
-        args.push(type==='number' ? Number(value) : type==='boolean' ? value==='true' : type==='value' ? el.value : value);
+        args.push(type==='number'?Number(value):type==='boolean'?value==='true':type==='value'?el.value:value);
       }
-      action(...args);
+      action(...args);syncButtons();
     }
-    root.addEventListener('click', handle);
-    root.addEventListener('change', handle);
-    document.addEventListener('keydown', event => {
-      const modal = ['detail-modal','compare-modal'].map(byId).find(el=>!el.classList.contains('hidden'));
-      if (!modal) return;
-      if (event.key==='Escape') { event.preventDefault(); hideModal(modal.id); return; }
-      if (event.key!=='Tab') return;
-      const focusable=Array.from(modal.querySelectorAll('button,a[href],select,input,[tabindex="0"]')).filter(el=>el.getClientRects().length);
-      if (!focusable.length) {event.preventDefault();modal.focus();return;}
-      const first=focusable[0], last=focusable.at(-1);
-      if (event.shiftKey && (document.activeElement===first || !modal.contains(document.activeElement))) {event.preventDefault();last.focus();}
-      else if (!event.shiftKey && (document.activeElement===last || !modal.contains(document.activeElement))) {event.preventDefault();first.focus();}
+    ['click','change','input'].forEach(event=>root.addEventListener(event,handle));
+    document.addEventListener('keydown',event=>{
+      const modal=byId('detailModal');if(!modal.classList.contains('open')) return;
+      if(event.key==='Escape') {event.preventDefault();closeModal();return;}
+      if(event.key!=='Tab') return;
+      const items=Array.from(modal.querySelectorAll('button,a[href],input,select,[tabindex="0"]')).filter(el=>el.getClientRects().length);
+      const first=items[0],last=items.at(-1);
+      if(!first) {event.preventDefault();modal.focus();return;}
+      if(event.shiftKey && (document.activeElement===first || !modal.contains(document.activeElement))) {event.preventDefault();last.focus();}
+      else if(!event.shiftKey && (document.activeElement===last || !modal.contains(document.activeElement))) {event.preventDefault();first.focus();}
     });
   }
 
-    // =========================================================================
-    // 1. STATE MANAGEMENT
-    // =========================================================================
-    const state = {
-      departureMode: 'A', // 'A': Buji -> Bantian pickup -> Highway; 'B': Wife back to Buji -> Highway
-      filters: {
-        region: 'all',
-        combo: 'all',
-        maxTime: 999,
-        budgetTier: 'all',
-        tags: []
+    /********************************************************************
+     * 1. 全量数据库：深圳本地10大行政区32个细分点位 + 6条本地打包线 + 6条跨城微度假
+     ********************************************************************/
+    const DISTRICT_META = [
+      { id: 'ALL', name: '深圳全区总览', subareas: [] },
+      { id: '龙岗区', name: '龙岗区 (15-30m)', subareas: ['布吉/坂田/平湖圈', '大运/龙城中心圈'] },
+      { id: '罗湖区', name: '罗湖区 (15-25m)', subareas: ['翠竹/洪湖圈', '仙湖/东湖/梧桐山圈'] },
+      { id: '福田区', name: '福田区 (20-30m)', subareas: ['中心区/莲花山圈', '香蜜湖/农科圈', '红树林/深圳湾圈'] },
+      { id: '龙华区', name: '龙华区 (20-35m)', subareas: ['红山/北站圈', '观澜/石凹水库圈'] },
+      { id: '盐田区', name: '盐田区 (30-40m)', subareas: ['沙头角/海山圈', '梅沙/云海森林圈'] },
+      { id: '南山区', name: '南山区 (30-45m)', subareas: ['华侨城圈', '后海/深圳湾圈', '西丽湖/大沙河圈', '蛇口/前海圈'] },
+      { id: '光明区', name: '光明区 (35-45m)', subareas: ['光明科学城圈', '公明/光明湖圈'] },
+      { id: '坪山区', name: '坪山区 (35-45m)', subareas: ['坪山中心圈', '马峦山/聚龙山/燕子湖圈'] },
+      { id: '宝安区', name: '宝安区 (40-50m)', subareas: ['宝中/前海湾圈', '福永/立新湖圈', '石岩湖圈'] },
+      { id: '大鹏新区', name: '大鹏新区 (50-70m)', subareas: ['坝光银叶树圈', '大鹏所城/金沙湾圈'] }
+    ];
+
+    const LOCAL_SPOTS = [
+      // ==================== 龙岗区 ====================
+      {
+        id: 'lg-1',
+        name: '坂田雪象体育公园（环湖栈道+儿童沙池）',
+        district: '龙岗区',
+        subarea: '布吉/坂田/平湖圈',
+        category: '滨海/环湖栈道',
+        score: 9.5,
+        driveA: 10, // 坂田出发
+        driveB: 18, // 布吉出发
+        routeA: '坂田街道内直达（雪岗北路）',
+        routeB: '布吉走布澜路→坂李大道直达',
+        parking: '公园1号/2号停车场（美丽深圳预约，充电桩充足，车位宽）',
+        nursing: '游客服务中心独立母婴室（恒温水+护理台）',
+        strollerScore: 9.8,
+        energyScore: 9.4,
+        zeroStep: true,
+        nursingRoom: true,
+        kidEnergy: true,
+        indoorCool: false,
+        easyPark: true,
+        noReserve: false,
+        reserveTip: '周末需提前在「美丽深圳」预约停车位',
+        ticketCost: 0,
+        kid35: '超大无动力攀爬网、白沙池挖沙、阳光草坪踢球骑平衡车',
+        kid08: '3.2公里全平缓水上环湖栈道+树荫廊架，推车哄睡零颠簸',
+        planB: '遇雨或暴晒5分钟车程转场【坂田万科广场】（2.7万㎡森林中庭+奈尔宝+五星母婴室）',
+        radar: [98, 92, 95, 96, 85, 95] // 推车丝滑, 母婴设施, 3.5岁放电, 停车便利, 遮阳恒温, 性价比
       },
-      sortBy: 'score', // 'score', 'time', 'stroller', 'cost'
-      budgetSandbox: {
-        hotelRate: 850,   // per night (2 nights)
-        diningRate: 500,  // per day (2.5 days calculated)
-        includeTickets: true
+      {
+        id: 'lg-2',
+        name: '甘坑古镇湿地与都市田园栈道',
+        district: '龙岗区',
+        subarea: '布吉/坂田/平湖圈',
+        category: '红树林/河湖湿地',
+        score: 9.1,
+        driveA: 14,
+        driveB: 15,
+        routeA: '坂李大道→甘李路',
+        routeB: '布澜路→甘李路',
+        parking: '甘坑北门立体停车场/都市田园停车场（早9:30前到极空）',
+        nursing: '甘坑游客中心标准母婴室',
+        strollerScore: 8.8,
+        energyScore: 9.2,
+        zeroStep: true,
+        nursingRoom: true,
+        kidEnergy: true,
+        indoorCool: false,
+        easyPark: true,
+        noReserve: true,
+        reserveTip: '古镇及外围湿地栈道免预约，小凉帽农场需现场购票',
+        ticketCost: 0,
+        kid35: '喂水鸭、看竹林水车、二十四史书院外围湿地木栈道寻宝',
+        kid08: '建议避开主街中午人流，直接去北侧甘坑湿地公园环湖平缓步道推车',
+        planB: '转场【万达广场（龙岗平湖店）】室内恒温溜娃',
+        radar: [88, 86, 92, 88, 82, 92]
       },
-      compareList: [], // max 3 route IDs
-      activeModalRouteId: null,
-      modalWeatherMode: 'sunny',
-      packingMode: 'full',
-      checkedGear: {}
+      {
+        id: 'lg-3',
+        name: '大运公园（神仙岭水库湖泊+叠溪谷栈道）',
+        district: '龙岗区',
+        subarea: '大运/龙城中心圈',
+        category: '森林湖泊/山水',
+        score: 9.6,
+        driveA: 26,
+        driveB: 22,
+        routeA: '水官高速→盐龙大道（全程免费）',
+        routeB: '丹平快速→水官高速→龙翔大道',
+        parking: '大运公园神仙岭停车场 / 大运天地地下停车场（带超充）',
+        nursing: '紧邻大运天地商业区高配母婴室（温奶器/饮水机齐备）',
+        strollerScore: 9.7,
+        energyScore: 9.6,
+        zeroStep: true,
+        nursingRoom: true,
+        kidEnergy: true,
+        indoorCool: true,
+        easyPark: true,
+        noReserve: true,
+        reserveTip: '无需预约，大运天地与公园无缝连通，黑天鹅湖就在商场旁',
+        ticketCost: 0,
+        kid35: '8公里环神仙岭水库森林绿道骑行、大运天地看黑天鹅与梅花鹿',
+        kid08: '森林氧吧树荫浓密，玩累直接推车进大运天地吹空调喝奶午睡',
+        planB: '直接进入旁边的【大运天地】或5分钟到【龙岗红立方科技馆】',
+        radar: [97, 96, 96, 95, 92, 98]
+      },
+      {
+        id: 'lg-4',
+        name: '深圳·红立方（龙岗科技馆+青少年宫）',
+        district: '龙岗区',
+        subarea: '大运/龙城中心圈',
+        category: '博物馆/科技馆',
+        score: 9.7,
+        driveA: 28,
+        driveB: 24,
+        routeA: '水官高速→龙翔大道',
+        routeB: '水官高速→龙城大道',
+        parking: '红立方地下停车场或旁边万科广场/世贸百货地下车库',
+        nursing: '馆内每层设母婴室，旁侧龙城万科广场有五星级母婴中心',
+        strollerScore: 9.9,
+        energyScore: 9.8,
+        zeroStep: true,
+        nursingRoom: true,
+        kidEnergy: true,
+        indoorCool: true,
+        easyPark: true,
+        noReserve: false,
+        reserveTip: '⚠️ 必抢！需提前7天凌晨0点在「深圳红立方」公众号免费预约门票',
+        ticketCost: 0,
+        kid35: 'B1层「寰宇之梦」与1-3层科学互动装置（小球王国、水力互动、机械迷城），3.5岁能玩3小时不走',
+        kid08: '全馆垂直电梯宽敞、恒温25℃、声光温和区适合推车观察',
+        planB: '本就是顶级室内恒温场馆，风雨无阻',
+        radar: [99, 96, 98, 90, 100, 99]
+      },
+      {
+        id: 'lg-5',
+        name: '龙岗儿童公园（森林山谷摩天轮+无动力乐园）',
+        district: '龙岗区',
+        subarea: '大运/龙城中心圈',
+        category: '儿童专类乐园',
+        score: 9.3,
+        driveA: 28,
+        driveB: 25,
+        routeA: '水官高速→盐龙大道辅路',
+        routeB: '丹平快速→水官高速→盐龙大道',
+        parking: '龙岗儿童公园地下停车场（需提前预约车位）',
+        nursing: '园区客服中心及森林家庭中心配有大型母婴室',
+        strollerScore: 9.2,
+        energyScore: 9.9,
+        zeroStep: true,
+        nursingRoom: true,
+        kidEnergy: true,
+        indoorCool: false,
+        easyPark: false,
+        noReserve: false,
+        reserveTip: '入园免费免预约，但自驾停车位必须在「龙岗儿童公园」小程序提前预约',
+        ticketCost: 0,
+        kid35: '湾区最高海拔星空摩天轮、超大免费无动力森林攀爬部落、水动力沙池',
+        kid08: '山谷环线设无障碍电梯与缓坡步道，二宝可一起坐恒温摩天轮轿厢',
+        planB: '转场10分钟车程的【龙城万科里/红立方】',
+        radar: [92, 94, 99, 82, 84, 95]
+      },
+
+      // ==================== 罗湖区 ====================
+      {
+        id: 'lh-1',
+        name: '洪湖公园（百亩荷塘湿地水上栈道+儿童沙池）',
+        district: '罗湖区',
+        subarea: '翠竹/洪湖圈',
+        category: '红树林/河湖湿地',
+        score: 9.4,
+        driveA: 22,
+        driveB: 14,
+        routeA: '清平高速→泥岗东路→文锦北路',
+        routeB: '布吉路→文锦北路直达（距布吉仅5公里）',
+        parking: '洪湖公园东门/西门停车场（美丽深圳预约，或停旁边KK TIME商场）',
+        nursing: '公园自然教育中心母婴室 + 隔壁KK TIME商场五星母婴室',
+        strollerScore: 9.6,
+        energyScore: 9.2,
+        zeroStep: true,
+        nursingRoom: true,
+        kidEnergy: true,
+        indoorCool: false,
+        easyPark: true,
+        noReserve: true,
+        reserveTip: '强烈建议直接导航停【KK TIME京基百纳时光】地下车库，吃完饭过天桥/连廊直入公园',
+        ticketCost: 0,
+        kid35: '湖心岛落羽杉木栈道看白鹭水鸟、南区大树下儿童游乐沙池',
+        kid08: '全园湖畔步道平坦宽阔，大榕树遮阴率超80%，推车极度舒适',
+        planB: '无缝步行进入隔壁【KK TIME商场】室内吹空调、用餐、逛玩具反斗城',
+        radar: [96, 95, 92, 94, 88, 97]
+      },
+      {
+        id: 'lh-2',
+        name: '淘金山绿道（翠荫驿站环深圳水库山水栈道）',
+        district: '罗湖区',
+        subarea: '翠竹/洪湖圈',
+        category: '滨海/环湖栈道',
+        score: 9.3,
+        driveA: 24,
+        driveB: 16,
+        routeA: '丹平快速→布心路→翠荫路',
+        routeB: '丹平快速九尾岭隧道出口即达',
+        parking: '翠荫驿站停车场（需美丽深圳预约）或周边小区商业车场',
+        nursing: '翠荫驿站及童趣园驿站配有基础母婴护理间',
+        strollerScore: 9.4,
+        energyScore: 9.3,
+        zeroStep: true,
+        nursingRoom: true,
+        kidEnergy: true,
+        indoorCool: false,
+        easyPark: false,
+        noReserve: true,
+        reserveTip: '绿道免预约，推荐走「翠荫驿站→童趣园」精华平缓段（往返约3km）',
+        ticketCost: 0,
+        kid35: '专门设有「童趣园」沙坑与攀爬滑梯，俯瞰深圳水库与梧桐山倒影',
+        kid08: '全柏油路面无台阶，山风凉爽，林木茂密不晒',
+        planB: '8分钟车程转场【罗湖天河城（金啤坊）】',
+        radar: [94, 85, 93, 82, 90, 96]
+      },
+      {
+        id: 'lh-3',
+        name: '仙湖植物园 + 深圳古生物博物馆（天上人间湖泊）',
+        district: '罗湖区',
+        subarea: '仙湖/东湖/梧桐山圈',
+        category: '森林湖泊/山水',
+        score: 9.6,
+        driveA: 26,
+        driveB: 18,
+        routeA: '清平高速→布心路→罗沙路→仙湖路',
+        routeB: '丹平快速→罗沙路→仙湖路',
+        parking: '仙湖植物园立体停车库（周末必提前在公众号抢车位！）',
+        nursing: '大门游客中心、天上人间驿站均设标准母婴室',
+        strollerScore: 9.1,
+        energyScore: 9.7,
+        zeroStep: true,
+        nursingRoom: true,
+        kidEnergy: true,
+        indoorCool: true,
+        easyPark: false,
+        noReserve: false,
+        reserveTip: '⚠️ 周末自驾必须提前在「深圳市仙湖植物园」公众号预约立体车库车位+购票（成人¥15，儿童免费）。进园后直接坐大巴（¥3）上天上人间，省去爬坡！',
+        ticketCost: 30,
+        kid35: '深圳古生物博物馆看霸王龙化石、天上人间大草坪奔跑、仙人掌温室迷宫、化石森林',
+        kid08: '乘坐接驳大巴折叠推车直达湖区，环仙湖栈道平坦凉爽，温室与古生物馆室内可避暑',
+        planB: '古生物博物馆+阴生植物区，或下山去【莲塘盒马鲜生/岁宝邻里】',
+        radar: [91, 92, 97, 78, 90, 94]
+      },
+
+      // ==================== 福田区 ====================
+      {
+        id: 'ft-1',
+        name: '深圳博物馆（金田路历史民俗馆）+ 当代艺术与城市规划馆',
+        district: '福田区',
+        subarea: '中心区/莲花山圈',
+        category: '博物馆/科技馆',
+        score: 9.8,
+        driveA: 22,
+        driveB: 25,
+        routeA: '坂银通道→北环大道→彩田路（出坂银即达！）',
+        routeB: '清平高速→泥岗路→彩田路',
+        parking: '市民中心地下停车场 / 当代艺术馆停车场 / 领展中心城车库（超充极多）',
+        nursing: '深博与两馆内均设五星级母婴室（带独立哺乳隔间、温奶器）',
+        strollerScore: 10.0,
+        energyScore: 9.4,
+        zeroStep: true,
+        nursingRoom: true,
+        kidEnergy: true,
+        indoorCool: true,
+        easyPark: true,
+        noReserve: true,
+        reserveTip: '深圳博物馆目前已免预约直接刷身份证入场；两馆可在公众号随约随进',
+        ticketCost: 0,
+        kid35: '深博一楼野生动物标本展（长颈鹿、非洲狮、北极熊、鲸鱼骨骼）是3.5岁娃最爱；两馆看未来深圳沙盘与巨型飞艇模型',
+        kid08: '全程室内25℃恒温、超大无障碍电梯、推车畅行无阻，二宝随时可安静睡大觉',
+        planB: '地下连廊直通【深业上城/领展中心城/皇庭广场】用餐休息',
+        radar: [100, 99, 94, 96, 100, 100]
+      },
+      {
+        id: 'ft-2',
+        name: '笔架山体育公园 + 莲花山幸福廊桥空中栈道',
+        district: '福田区',
+        subarea: '中心区/莲花山圈',
+        category: '城市/森林公园',
+        score: 9.7,
+        driveA: 18,
+        driveB: 22,
+        routeA: '坂银通道南出口出来3分钟即到！（距坂田最近的核心大公园）',
+        routeB: '丹平/清平→北环→皇岗路',
+        parking: '深业上城地下停车场（强烈推荐！车位3000+，停好直接走空中廊桥进笔架山或莲花山）',
+        nursing: '深业上城L2/L3五星母婴室 + 笔架山游客中心母婴室',
+        strollerScore: 9.8,
+        energyScore: 9.7,
+        zeroStep: true,
+        nursingRoom: true,
+        kidEnergy: true,
+        indoorCool: true,
+        easyPark: true,
+        noReserve: true,
+        reserveTip: '停深业上城免预约，3楼小镇东侧直接走无障碍空中幸福廊桥进两个公园',
+        ticketCost: 0,
+        kid35: '笔架山超大沙池与平衡车泵道、福田河戏水浅滩、莲花山风筝草坪放风筝',
+        kid08: '1.2公里空中廊桥100%无台阶，树冠层微风习习，随时推回深业上城吹空调喂奶',
+        planB: '无缝退回【深业上城】室内逛蒙特梭利亲子空间与绘本馆',
+        radar: [98, 99, 97, 98, 94, 99]
+      },
+      {
+        id: 'ft-3',
+        name: '香蜜公园（荔枝林空中栈道+玫瑰园+三座儿童乐园）',
+        district: '福田区',
+        subarea: '香蜜湖/农科圈',
+        category: '滨海/环湖栈道',
+        score: 9.6,
+        driveA: 25,
+        driveB: 28,
+        routeA: '坂银通道→北环大道→香蜜湖路',
+        routeB: '清平高速→北环大道→香蜜湖路',
+        parking: '印力中心（山姆会员店）地下停车场（过天桥有垂直电梯直达香蜜公园）',
+        nursing: '香蜜公园自然书吧母婴室 + 印力中心五星母婴室',
+        strollerScore: 9.7,
+        energyScore: 9.6,
+        zeroStep: true,
+        nursingRoom: true,
+        kidEnergy: true,
+        indoorCool: false,
+        easyPark: true,
+        noReserve: true,
+        reserveTip: '公园自身车位少，直接停【深国投广场/印力中心】，顺便山姆采购宝宝辅食牛奶',
+        ticketCost: 0,
+        kid35: '荔枝树冠空中栈道穿梭、蝴蝶滑梯、沙池与绳索攀爬三大儿童游乐区、花蜜湖看天鹅',
+        kid08: '空中栈道全程坡道无台阶，荔枝林浓荫蔽日，推车极其顺滑',
+        planB: '过天桥回【印力中心】逛山姆或室内用餐',
+        radar: [97, 95, 96, 94, 88, 98]
+      },
+      {
+        id: 'ft-4',
+        name: '福田红树林生态公园（科普展馆+观鸟湿地栈道）',
+        district: '福田区',
+        subarea: '红树林/深圳湾圈',
+        category: '红树林/河湖湿地',
+        score: 9.5,
+        driveA: 26,
+        driveB: 28,
+        routeA: '坂银通道→北环→新洲路到底',
+        routeB: '清平→滨河大道→新洲路',
+        parking: '公园配套停车场（美丽深圳预约）或旁边绿景佐阾红树林购物中心',
+        nursing: '科普展馆内配有温馨母婴室',
+        strollerScore: 9.6,
+        energyScore: 9.3,
+        zeroStep: true,
+        nursingRoom: true,
+        kidEnergy: true,
+        indoorCool: true,
+        easyPark: true,
+        noReserve: true,
+        reserveTip: '注意区分：导航「福田红树林生态公园」（新洲路南端），人比深圳湾海滨栈道少一半且有室内科普馆！',
+        ticketCost: 0,
+        kid35: '室内红树林科普互动馆看弹涂鱼和招潮蟹、户外湿地栈道用望远镜看黑脸琵鹭、沙坑区',
+        kid08: '室内馆+平缓湿地木栈道组合，海风习习且不嘈杂',
+        planB: '园内红树林科普展馆 + 隔壁佐阾商场',
+        radar: [96, 92, 93, 91, 90, 97]
+      },
+
+      // ==================== 龙华区 ====================
+      {
+        id: 'lhua-1',
+        name: '深圳美术馆新馆 + 深圳图书馆北馆 + 北站中心公园云顶栈道',
+        district: '龙华区',
+        subarea: '红山/北站圈',
+        category: '博物馆/科技馆',
+        score: 9.6,
+        driveA: 16,
+        driveB: 25,
+        routeA: '坂田五和大道→布龙路→腾龙路（坂田过去仅15分钟！）',
+        routeB: '机荷高速/布龙路→民治大道→腾龙路',
+        parking: '两馆地下停车场（车位宽敞）或红山6979商业中心地下车库',
+        nursing: '美术馆与图书馆一楼均设高标准母婴室，红山6979配有豪华母婴中心',
+        strollerScore: 9.9,
+        energyScore: 9.1,
+        zeroStep: true,
+        nursingRoom: true,
+        kidEnergy: true,
+        indoorCool: true,
+        easyPark: true,
+        noReserve: true,
+        reserveTip: '两馆免预约直接入场（图书馆少儿服务区非常适合3.5岁翻立体绘本）',
+        ticketCost: 0,
+        kid35: '图书馆北馆一楼少儿绘本馆、北站中心公园看复兴号高铁飞驰+星球乐园滑梯',
+        kid08: '美术馆新馆建筑空间挑高极度安静、全无障碍电梯、推车逛展审美启蒙两不误',
+        planB: '过马路即达【红山6979】与【龙华天虹购物中心】',
+        radar: [99, 97, 91, 96, 98, 98]
+      },
+      {
+        id: 'lhua-2',
+        name: '观澜中国版画博物馆 + 版画村油菜花/水田湿地 + 石凹水库碧道',
+        district: '龙华区',
+        subarea: '观澜/石凹水库圈',
+        category: '红树林/河湖湿地',
+        score: 9.2,
+        driveA: 25,
+        driveB: 32,
+        routeA: '珠三角环线高速(G94)坂田入口→观澜出口（全程高速极快）',
+        routeB: '清平高速→机荷高速→梅观高速',
+        parking: '中国版画博物馆地面/地下停车场或版画村1号停车场',
+        nursing: '版画博物馆及版画村游客中心均设母婴室',
+        strollerScore: 9.3,
+        energyScore: 9.2,
+        zeroStep: true,
+        nursingRoom: true,
+        kidEnergy: true,
+        indoorCool: true,
+        easyPark: true,
+        noReserve: true,
+        reserveTip: '版画博物馆与版画村目前均免预约免费入园',
+        ticketCost: 0,
+        kid35: '版画村看客家碉楼、水田花海木栈道、草莓采摘；版画博物馆看儿童版画互动展',
+        kid08: '先逛恒温版画博物馆，傍晚推车走版画村外围平坦水田栈道',
+        planB: '中国版画博物馆室内展厅 + 10分钟到【观澜湖新城MH MALL】（含冰场与室内乐园）',
+        radar: [93, 90, 92, 95, 89, 95]
+      },
+
+      // ==================== 盐田区 ====================
+      {
+        id: 'yt-1',
+        name: '盐田海滨栈道（海山段灯塔图书馆+中央公园大草坪）',
+        district: '盐田区',
+        subarea: '沙头角/海山圈',
+        category: '滨海/环湖栈道',
+        score: 9.7,
+        driveA: 34,
+        driveB: 26,
+        routeA: '水官高速→盐排高速→深盐路（全程无红绿灯）',
+        routeB: '丹平快速→罗沙路→东部沿海高速海山出口',
+        parking: '盐田壹海城ONE MALL地下停车场（停好车步行150米即上海滨栈道！）',
+        nursing: '壹海城商场母婴室 + 灯塔图书馆旁公用无障碍卫生间',
+        strollerScore: 9.9,
+        energyScore: 9.5,
+        zeroStep: true,
+        nursingRoom: true,
+        kidEnergy: true,
+        indoorCool: true,
+        easyPark: true,
+        noReserve: true,
+        reserveTip: '不进梅沙片区，因此即使5-10月旺季也【完全不需要大鹏/梅沙车辆通行预约】！',
+        ticketCost: 0,
+        kid35: '零距离看巨型远洋集装箱轮船、中央公园巨型章鱼雕塑草坪奔跑、灯塔图书馆看海景绘本',
+        kid08: '海山段栈道全石板无台阶，海风轻柔，午饭午休无缝退回壹海城商场',
+        planB: '紧邻【盐田壹海城】商场，吃饭、吹空调、喂奶一步到位',
+        radar: [99, 95, 95, 97, 92, 99]
+      },
+      {
+        id: 'yt-2',
+        name: '云海森林服务站 + 三洲田水库高山湖泊草甸',
+        district: '盐田区',
+        subarea: '梅沙/云海森林圈',
+        category: '森林湖泊/山水',
+        score: 9.3,
+        driveA: 42,
+        driveB: 35,
+        routeA: '水官高速→盐排高速→北山道→茶溪谷停车场转云海专线',
+        routeB: '丹平快速→盐排高速→东部华侨城茶溪谷停车场',
+        parking: '自驾停【东部华侨城茶溪谷停车场】，换乘云海专线D巴（8月龄建议折叠轻便推车上大巴）',
+        nursing: '云海森林服务站一楼设有洗手间及基础母婴护理台',
+        strollerScore: 8.6,
+        energyScore: 9.5,
+        zeroStep: true,
+        nursingRoom: true,
+        kidEnergy: true,
+        indoorCool: true,
+        easyPark: true,
+        noReserve: true,
+        reserveTip: '社会车辆禁入三洲田核心段，在茶溪谷坐接驳专线15分钟直达山顶白色邮轮建筑',
+        ticketCost: 30,
+        kid35: '360°俯瞰盐田港巨轮与三洲田蓝宝石水库、高山草甸打滚、白色天空之城建筑群',
+        kid08: '山顶服务站2-3楼为恒温M Stand咖啡书吧，铺有软垫可让二宝爬行休息',
+        planB: '下山去【大梅沙奥特莱斯8号仓】室内用餐游乐',
+        radar: [86, 86, 95, 90, 90, 92]
+      },
+      {
+        id: 'yt-3',
+        name: '大梅沙海滨公园（内湖湿地栈道+免费细腻白沙滩）',
+        district: '盐田区',
+        subarea: '梅沙/云海森林圈',
+        category: '红树林/河湖湿地',
+        score: 9.4,
+        driveA: 38,
+        driveB: 30,
+        routeA: '水官→盐排→盐坝高速大梅沙出口',
+        routeB: '丹平→罗沙路→盐坝高速大梅沙出口',
+        parking: '大梅沙海滨公园配套车场或旁侧大梅沙京基洲际/奥特莱斯车库',
+        nursing: '公园太阳广场游客中心配五星母婴室（还有温水冲淋房）',
+        strollerScore: 9.4,
+        energyScore: 9.8,
+        zeroStep: true,
+        nursingRoom: true,
+        kidEnergy: true,
+        indoorCool: false,
+        easyPark: true,
+        noReserve: true,
+        reserveTip: '10月下旬已过旺季限行期，车辆免预约直达；公园现已免预约免费入园',
+        ticketCost: 0,
+        kid35: '内湖湿地坐天鹅脚踏船、看黑天鹅、海边挖沙踏浪、海滨西栈道看海浪拍岸',
+        kid08: '内湖木栈道平缓无沙，二宝推车在内湖树荫下散步，大宝在前面沙滩挖沙',
+        planB: '马路对面即【大梅沙8号仓奥特莱斯】与栖息图书馆',
+        radar: [94, 95, 98, 92, 85, 96]
+      },
+
+      // ==================== 南山区 ====================
+      {
+        id: 'ns-1',
+        name: '华侨城国家湿地公园 + 欢乐海岸心湖栈道',
+        district: '南山区',
+        subarea: '华侨城圈',
+        category: '红树林/河湖湿地',
+        score: 9.7,
+        driveA: 28,
+        driveB: 32,
+        routeA: '坂银通道→北环大道→侨城东路',
+        routeB: '清平高速→滨河大道→侨城东路',
+        parking: '欢乐海岸地下停车场（G区/E区离湿地公园北门及海洋奇梦馆最近，带特斯拉超充）',
+        nursing: '欢乐海岸购物中心L1/L2超豪华母婴室（独立哺乳室+尿布台+温水）',
+        strollerScore: 9.7,
+        energyScore: 9.5,
+        zeroStep: true,
+        nursingRoom: true,
+        kidEnergy: true,
+        indoorCool: true,
+        easyPark: true,
+        noReserve: false,
+        reserveTip: '⚠️ 华侨城湿地是中国唯一都市中心国家级湿地，需提前在「华侨城湿地」公众号免费预约（每日限额，人极少极清幽！）',
+        ticketCost: 0,
+        kid35: '近距离观察滩涂招潮蟹、弹涂鱼、观鸟屋看苍鹭，出园后在欢乐海岸看水秀或逛海洋奇梦馆',
+        kid08: '因为严格限流，湿地内完全没有飞驰自行车，5公里平坦绿道非常适合8月龄推车安睡',
+        planB: '无缝进入隔壁【欢乐海岸海洋奇梦馆】（看水母/海狮表演）及购物中心',
+        radar: [97, 98, 95, 96, 94, 98]
+      },
+      {
+        id: 'ns-2',
+        name: '深圳湾公园（白鹭坡书吧+人才公园星光栈道+流花山花海）',
+        district: '南山区',
+        subarea: '后海/深圳湾圈',
+        category: '滨海/环湖栈道',
+        score: 9.6,
+        driveA: 32,
+        driveB: 35,
+        routeA: '坂银通道→滨海大道→深圳湾公园/人才公园',
+        routeB: '清平高速→滨河大道→沙河西路',
+        parking: '深圳湾万象城地下车库（无需抢公园车位，走空中天桥带电梯直达人才公园！）',
+        nursing: '深圳湾万象城高奢级母婴室 + 白鹭坡书吧母婴间',
+        strollerScore: 9.9,
+        energyScore: 9.5,
+        zeroStep: true,
+        nursingRoom: true,
+        kidEnergy: true,
+        indoorCool: true,
+        easyPark: true,
+        noReserve: true,
+        reserveTip: '强烈建议停【深圳湾万象城】或【海岸城】，免去美丽深圳抢位烦恼，推车走无障碍天桥入园',
+        ticketCost: 0,
+        kid35: '人才公园「嬉乐园」超大沙坑与滑梯、海边看候鸟群飞、春笋大厦下大草坪奔跑',
+        kid08: '内湖环湖步道全胶跑道零震感，万象城母婴室体验全市天花板',
+        planB: '退回【深圳湾万象城】或10分钟到【南山博物馆】',
+        radar: [99, 100, 95, 95, 92, 97]
+      },
+      {
+        id: 'ns-3',
+        name: '环西丽湖绿道（问山叠水驿站+白芒河湿地+百旺百亩草坪）',
+        district: '南山区',
+        subarea: '西丽湖/大沙河圈',
+        category: '森林湖泊/山水',
+        score: 9.5,
+        driveA: 26,
+        driveB: 32,
+        routeA: '坂田走布龙路→留仙大道→丽水路（不堵车仅25分钟！）',
+        routeB: '南坪快速一期→沙河西路→西丽湖路',
+        parking: '西丽湖牌坊停车场 / 问山叠水周边停车场 / 西丽生态公园车场',
+        nursing: '绿道各大一级驿站均设无障碍母婴卫生间',
+        strollerScore: 9.6,
+        energyScore: 9.7,
+        zeroStep: true,
+        nursingRoom: true,
+        kidEnergy: true,
+        indoorCool: false,
+        easyPark: true,
+        noReserve: true,
+        reserveTip: '2025-2026年全线贯通的深圳顶流山水碧道，推荐走「问山叠水—大磡燕栖」段，有溪水浅滩与稻田湿地',
+        ticketCost: 0,
+        kid35: '问山叠水浅溪踩水捞小鱼、看白鹭与水牛、大草坪滑步车放电',
+        kid08: '依山傍水，高架森林栈道平缓无阶梯，空气负氧离子极高',
+        planB: '10分钟车程转场【西丽宝能环球汇】或【益田假日里】',
+        radar: [96, 90, 97, 92, 88, 97]
+      },
+      {
+        id: 'ns-4',
+        name: '蛇口海上世界文化艺术中心 + 滨海文化栈道 + 四海公园',
+        district: '南山区',
+        subarea: '蛇口/前海圈',
+        category: '博物馆/科技馆',
+        score: 9.6,
+        driveA: 38,
+        driveB: 42,
+        routeA: '坂银通道→滨海大道→南海大道→望海路',
+        routeB: '南坪快速→沙河西路→望海路',
+        parking: '海上世界文化艺术中心地下车库 / 海上世界A区车库',
+        nursing: '文化艺术中心1-2层设计感母婴室 + 汇港购物中心母婴室',
+        strollerScore: 9.8,
+        energyScore: 9.4,
+        zeroStep: true,
+        nursingRoom: true,
+        kidEnergy: true,
+        indoorCool: true,
+        easyPark: true,
+        noReserve: true,
+        reserveTip: '艺术中心公共空间及海滨步道免费免预约；旁边明华轮巨轮夜景绝佳',
+        ticketCost: 0,
+        kid35: '看明华轮大邮轮、海边草坪滑梯、艺术中心儿童工坊、5分钟车程可去四海公园看湖景黑天鹅',
+        kid08: '美术馆室内恒温看海景，出门即是平坦防波堤栈道，推车听海浪极易入睡',
+        planB: '艺术中心室内展馆 + 汇港购物中心二期',
+        radar: [98, 96, 94, 94, 96, 96]
+      },
+      {
+        id: 'ns-5',
+        name: '南山博物馆 + 南头古城微型展馆群 + 中山公园古树草坪',
+        district: '南山区',
+        subarea: '蛇口/前海圈',
+        category: '博物馆/科技馆',
+        score: 9.4,
+        driveA: 34,
+        driveB: 38,
+        routeA: '坂银通道→北环大道→南山大道',
+        routeB: '清平→北环大道→南山大道',
+        parking: '南山文体中心地下停车场（车位极多，就在南山博物馆隔壁）',
+        nursing: '南山博物馆一楼服务中心旁设有标准母婴室',
+        strollerScore: 9.7,
+        energyScore: 9.0,
+        zeroStep: true,
+        nursingRoom: true,
+        kidEnergy: false,
+        indoorCool: true,
+        easyPark: true,
+        noReserve: true,
+        reserveTip: '常设展免预约入场，特展水平极高；逛完步行10分钟可去中山公园大草坪放电',
+        ticketCost: 0,
+        kid35: '看古代战船模型、青铜器与海洋贸易沙盘，下午去隔壁中山公园3万㎡草坪跑跳',
+        kid08: '南博电梯宽敞、冷气充足，非常适合午后13:30-16:00最热时段推车避暑',
+        planB: '南山博物馆本就是室内核心馆，旁有南山欢乐颂商场',
+        radar: [97, 94, 90, 95, 98, 96]
+      },
+
+      // ==================== 光明区 ====================
+      {
+        id: 'gm-1',
+        name: '虹桥公园（4公里森林红飘带空中栈道+月在庭湖泊+滑板沙池）',
+        district: '光明区',
+        subarea: '光明科学城圈',
+        category: '滨海/环湖栈道',
+        score: 9.6,
+        driveA: 32,
+        driveB: 38,
+        routeA: '坂田直上珠三角环线高速(G94)→光明出口→光侨路（全程高速30分钟！）',
+        routeB: '机荷高速→龙大高速→观光路',
+        parking: '虹桥公园北广场/南广场地下停车场（车位超1000个，带快充）',
+        nursing: '北广场游客中心及月在庭驿站配有空调母婴室',
+        strollerScore: 9.8,
+        energyScore: 9.6,
+        zeroStep: true,
+        nursingRoom: true,
+        kidEnergy: true,
+        indoorCool: false,
+        easyPark: true,
+        noReserve: true,
+        reserveTip: '免预约免费入园！推车直接从入口上虹桥，坡度小于5°，全程无一级台阶穿过森林树冠',
+        ticketCost: 0,
+        kid35: '在红色空中廊桥上奔跑俯瞰森林湖泊、入口处大型儿童沙池与攀爬架放电',
+        kid08: '虹桥桥面全塑胶平缓坡道，碧眼水库段视野开阔，推车毫不费力',
+        planB: '8分钟车程转场【光明蓝鲸世界/万达广场】或【光明文化艺术中心美术馆】',
+        radar: [98, 93, 96, 97, 86, 97]
+      },
+      {
+        id: 'gm-2',
+        name: '深圳科技馆（光明新馆·数字文明科学方舟）+ 科学公园',
+        district: '光明区',
+        subarea: '光明科学城圈',
+        category: '博物馆/科技馆',
+        score: 9.8,
+        driveA: 34,
+        driveB: 40,
+        routeA: '珠三角环线高速(G94)→龙大高速→光明大道',
+        routeB: '机荷→龙大高速楼村出口',
+        parking: '科技馆新馆配套地下车库 / 科学公园南翼停车场',
+        nursing: '场馆每层配备全新智慧母婴室（自动门、恒温冲奶机、独立哺乳舱）',
+        strollerScore: 10.0,
+        energyScore: 9.9,
+        zeroStep: true,
+        nursingRoom: true,
+        kidEnergy: true,
+        indoorCool: true,
+        easyPark: true,
+        noReserve: false,
+        reserveTip: '⚠️ 深圳最新地标级科技大馆，需提前在官方小程序预约入场；门前即是光明科学公园北翼儿童友好区',
+        ticketCost: 0,
+        kid35: '宇宙探索、太空舱体验、儿童科学启蒙专厅、户外科学公园声学与水力学无动力装置',
+        kid08: '全新场馆无障碍设计满分，婴儿推车通道宽敞，室内外动静皆宜',
+        planB: '全天候恒温巨型室内科技馆，完全不受天气影响',
+        radar: [100, 99, 99, 94, 100, 99]
+      },
+      {
+        id: 'gm-3',
+        name: '光明湖水利风景区 + 欢乐田园（千亩花海稻田+明湖鹅颈水湿地）',
+        district: '光明区',
+        subarea: '公明/光明湖圈',
+        category: '森林湖泊/山水',
+        score: 9.3,
+        driveA: 35,
+        driveB: 42,
+        routeA: 'G94珠三角环线→龙大高速→楼村一号路',
+        routeB: '机荷→龙大高速→圳园路',
+        parking: '欢乐田园1号/2号生态停车场（车位极多）',
+        nursing: '游客服务中心设有母婴室',
+        strollerScore: 9.4,
+        energyScore: 9.5,
+        zeroStep: true,
+        nursingRoom: true,
+        kidEnergy: true,
+        indoorCool: false,
+        easyPark: true,
+        noReserve: true,
+        reserveTip: '免门票免预约，园区很大，可租家庭四人遮阳代步车（二宝坐妈妈怀里，3.5岁大宝超爱）',
+        ticketCost: 0,
+        kid35: '光明湖大坝看浩瀚湖景、欢乐田园坐观光小火车、鹿鸣园喂梅花鹿与羊驼',
+        kid08: '租一辆电动遮阳敞篷代步车环田园兜风，免去烈日暴走',
+        planB: '去光明招待所吃正宗乳鸽+玉米汁，下午逛【光明文化艺术中心图书馆/美术馆】',
+        radar: [94, 88, 95, 96, 84, 94]
+      },
+
+      // ==================== 坪山区 ====================
+      {
+        id: 'ps-1',
+        name: '聚龙山生态湿地公园 + 坪山儿童公园（森林溪谷滑梯）',
+        district: '坪山区',
+        subarea: '马峦山/聚龙山/燕子湖圈',
+        category: '红树林/河湖湿地',
+        score: 9.6,
+        driveA: 38,
+        driveB: 32,
+        routeA: '水官高速→南坪快速三期（全程免费高速，极少堵车！）',
+        routeB: '丹平快速→水官高速→南坪三期→绿梓大道',
+        parking: '聚龙山北门/南门停车场（免预约，车位极其充裕！）',
+        nursing: '聚龙山游客中心及坪山儿童公园服务站均配标准母婴室',
+        strollerScore: 9.7,
+        energyScore: 9.6,
+        zeroStep: true,
+        nursingRoom: true,
+        kidEnergy: true,
+        indoorCool: false,
+        easyPark: true,
+        noReserve: true,
+        reserveTip: '深圳东部宝藏！人少景美免预约，环湖湿地路宽6米以上，3.5岁骑行+8月龄推车天堂',
+        ticketCost: 0,
+        kid35: '聚龙山环湖湿地看水鸟、捞小蝌蚪，下午开车10分钟去【坪山儿童公园】玩原木攀爬与沙池',
+        kid08: '完全避开市区人潮，湖风清凉，推车在樱花谷与落羽杉湿地安睡',
+        planB: '10分钟车程转场【坪山文化聚落（美术馆+图书馆+展览馆）】',
+        radar: [97, 92, 96, 99, 88, 98]
+      },
+      {
+        id: 'ps-2',
+        name: '坪山文化聚落（坪山美术馆+少儿图书馆+中心公园大草坪）',
+        district: '坪山区',
+        subarea: '坪山中心圈',
+        category: '博物馆/科技馆',
+        score: 9.5,
+        driveA: 36,
+        driveB: 30,
+        routeA: '水官高速→南坪快速三期→坪山大道',
+        routeB: '丹平快速→水官高速→横坪路',
+        parking: '坪山文化聚落地下停车场（车位极多，电梯直达各馆与公园）',
+        nursing: '坪山图书馆一楼少儿区旁设五星母婴室',
+        strollerScore: 9.9,
+        energyScore: 9.3,
+        zeroStep: true,
+        nursingRoom: true,
+        kidEnergy: true,
+        indoorCool: true,
+        easyPark: true,
+        noReserve: true,
+        reserveTip: '美术馆、图书馆、文创体验馆、大剧院与中心公园连成一片，免预约直接进',
+        ticketCost: 0,
+        kid35: '坪山少儿图书馆看绘本、中心公园湖畔喂锦鲤、玩无动力儿童沙池',
+        kid08: '室内馆群与户外草坪无缝切换，推车从地下车库直通各馆0台阶',
+        planB: '旁边即是【坪山益田假日世界】商场',
+        radar: [99, 96, 93, 98, 98, 98]
+      },
+      {
+        id: 'ps-3',
+        name: '金龟自然书房 + 马峦山碧岭瀑布群山水溪谷栈道',
+        district: '坪山区',
+        subarea: '马峦山/聚龙山/燕子湖圈',
+        category: '森林湖泊/山水',
+        score: 9.2,
+        driveA: 35,
+        driveB: 28,
+        routeA: '水官高速→南坪快速三期碧岭出口即到！（布吉过去仅28分钟）',
+        routeB: '丹平快速→水官高速→南坪三期',
+        parking: '马峦山郊野公园西北门（碧岭入口）停车场（需在马峦山小程序预约车位）',
+        nursing: '西北门游客中心配有母婴室',
+        strollerScore: 8.5,
+        energyScore: 9.6,
+        zeroStep: false,
+        nursingRoom: true,
+        kidEnergy: true,
+        indoorCool: false,
+        easyPark: true,
+        noReserve: false,
+        reserveTip: '碧岭瀑布段前半程1.5公里平缓水泥路可推车，后段有少量台阶建议备腰凳；金龟村自然书房免预约',
+        ticketCost: 0,
+        kid35: '溪谷浅滩玩水、看叠水瀑布、森林自然博物步道认识植物昆虫',
+        kid08: '森林峡谷比市区低3-4℃，负氧离子极高，听到流水声白噪音秒睡',
+        planB: '下山10分钟去【坪山燕子湖国际会展中心/坪山中心文化聚落】',
+        radar: [85, 88, 96, 92, 92, 95]
+      },
+
+      // ==================== 宝安区 ====================
+      {
+        id: 'ba-1',
+        name: '立新湖公园（8.8公里绝美湖上木栈道+简阅书吧）',
+        district: '宝安区',
+        subarea: '福永/立新湖圈',
+        category: '森林湖泊/山水',
+        score: 9.6,
+        driveA: 42,
+        driveB: 48,
+        routeA: '坂田上机荷高速→鹤洲立交→京港澳高速→福永大道',
+        routeB: '清平→机荷高速→福永出口',
+        parking: '立新湖公园东门/北门停车场（车位宽敞）',
+        nursing: '景区简阅书吧旁及游客中心设母婴室',
+        strollerScore: 9.9,
+        energyScore: 9.5,
+        zeroStep: true,
+        nursingRoom: true,
+        kidEnergy: true,
+        indoorCool: false,
+        easyPark: true,
+        noReserve: true,
+        reserveTip: '被称为「深圳小西湖」，8.8公里环湖空中木栈道穿行于水杉林与湖面之上，比深圳湾人少太多！',
+        ticketCost: 0,
+        kid35: '水上迷宫木栈道探险、看飞机低空掠过湖面、儿童游乐场滑梯与白沙池',
+        kid08: '木栈道铺设极其平整密实（不卡推车轮子），水杉树荫覆盖率高',
+        planB: '10分钟车程转场【深圳国际会展中心希尔顿/皇冠假日】或【同泰时代广场】',
+        radar: [99, 91, 95, 95, 89, 97]
+      },
+      {
+        id: 'ba-2',
+        name: '欢乐港湾（湾区之光摩天轮+西岸滨海栈道+童乐园）',
+        district: '宝安区',
+        subarea: '宝中/前海湾圈',
+        category: '滨海/环湖栈道',
+        score: 9.7,
+        driveA: 36,
+        driveB: 42,
+        routeA: '坂银通道→北环大道→月亮湾大道→海天路',
+        routeB: '机荷/南坪→北环大道→宝安中心区',
+        parking: '欢乐港湾P1/P5地下停车场（P5离童乐园和摩天轮最近，充电桩极多）',
+        nursing: '东岸/西岸商业街区均配五星级智能母婴室（带温奶器、紫外线消毒、独立沙发）',
+        strollerScore: 9.9,
+        energyScore: 9.7,
+        zeroStep: true,
+        nursingRoom: true,
+        kidEnergy: true,
+        indoorCool: true,
+        easyPark: true,
+        noReserve: true,
+        reserveTip: '公园与海滨步道免费免预约；摩天轮1米以下儿童免费（可推婴儿车直接进16㎡超大恒温轿厢！）',
+        ticketCost: 0,
+        kid35: '西岸「童乐园」大型无动力攀爬网与沙池、看海边日落与音乐喷泉、逛钟书阁螺旋书店',
+        kid08: '推车可直接推进摩天轮轿厢升空看前海全景，商业街与海滨公园0台阶连通',
+        planB: '逛欢乐港湾室内钟书阁 + 5分钟去【宝安青少年宫/宝安图书馆/壹方城】',
+        radar: [99, 99, 97, 96, 95, 97]
+      },
+
+      // ==================== 大鹏新区 ====================
+      {
+        id: 'dp-1',
+        name: '坝光银叶树湿地园 + 白沙湾海滨栈道（盐灶古村自然博物馆）',
+        district: '大鹏新区',
+        subarea: '坝光银叶树圈',
+        category: '红树林/河湖湿地',
+        score: 9.5,
+        driveA: 52,
+        driveB: 45,
+        routeA: '水官高速→盐排高速→盐坝高速坝光出口（高速直达！）',
+        routeB: '丹平快速→罗沙路→盐坝高速坝光出口',
+        parking: '银叶树湿地园生态停车场 / 白沙湾公园P1停车场（完全免费且空旷！）',
+        nursing: '白沙湾公园游客中心及银叶树湿地服务站均设母婴室',
+        strollerScore: 9.6,
+        energyScore: 9.7,
+        zeroStep: true,
+        nursingRoom: true,
+        kidEnergy: true,
+        indoorCool: false,
+        easyPark: true,
+        noReserve: true,
+        reserveTip: '💡 独家秘笈：坝光片区属于大鹏预约通行豁免区外围（且10月后全区免预约），盐坝高速下来2分钟即到，绝不堵车！',
+        ticketCost: 0,
+        kid35: '滩涂赶海抓小螃蟹、千年古银叶树林木栈道探险、盐灶客家古村6个微型乡村自然博物馆、白沙湾草坪露营',
+        kid08: '海湾风平浪静，白沙湾海滨绿道宽阔平坦，古树群浓荫遮蔽',
+        planB: '参观盐灶古村室内乡村博物馆群，或走高速20分钟回坪山/盐田商圈',
+        radar: [96, 90, 97, 99, 86, 98]
+      },
+      {
+        id: 'dp-2',
+        name: '深圳大鹏半岛国家地质公园博物馆 + 禾塘山水湿地园',
+        district: '大鹏新区',
+        subarea: '大鹏所城/金沙湾圈',
+        category: '博物馆/科技馆',
+        score: 9.4,
+        driveA: 65,
+        driveB: 58,
+        routeA: '水官→盐排→盐坝高速→坪西路→地质公园路',
+        routeB: '丹平→盐坝高速→坪西路',
+        parking: '国家地质公园博物馆地面停车场（免费，车位充足）',
+        nursing: '地质博物馆一楼游客中心设独立母婴室',
+        strollerScore: 9.6,
+        energyScore: 9.6,
+        zeroStep: true,
+        nursingRoom: true,
+        kidEnergy: true,
+        indoorCool: true,
+        easyPark: true,
+        noReserve: true,
+        reserveTip: '免预约免费入馆（周一闭馆），非常适合作为大鹏2天1晚周末游的核心科普站',
+        ticketCost: 0,
+        kid35: '逼真火山喷发体验厅、巨型恐龙骨架与矿物宝石洞穴展，门口就是七娘山脚下的禾塘湿地溪流栈道',
+        kid08: '博物馆内清凉安静、坡道与电梯完善，门外湿地平坦适合傍晚推车散步',
+        planB: '博物馆室内展厅 + 金沙湾中信度假区室内恒温空间',
+        radar: [96, 92, 96, 95, 95, 96]
+      }
+    ];
+
+    // 深圳本地周末2日连玩打包路书（6条）
+    const LOCAL_PACKS = [
+      {
+        id: 'pack-1',
+        title: '【盐田山海栈道 + 仙湖古生物】东部森海2日连玩线',
+        area: '罗湖区 + 盐田区',
+        modeRec: '模式B（布吉出发向东最顺，单程20-30分钟，可回布吉睡或住大梅沙洲际/凯悦）',
+        driveA: 34,
+        driveB: 25,
+        score: 9.7,
+        spotsIncluded: ['仙湖植物园+古生物博物馆', '盐田海滨栈道灯塔图书馆', '大梅沙内湖湿地与沙滩'],
+        summary: '周六上午趁凉爽逛仙湖天上人间湖泊与古生物恐龙馆，下午回壹海城午休后推车走海山灯塔海滨栈道看大轮船；周日畅玩大梅沙内湖湿地黑天鹅与沙滩挖沙。',
+        timeline: [
+          { time: '周六 09:00-12:00', title: '仙湖植物园 + 深圳古生物博物馆', desc: '停仙湖立体车库，坐大巴直达天上人间草坪；3.5岁大宝看霸王龙化石，8月龄二宝推车环仙湖栈道吸氧小睡。' },
+          { time: '周六 12:30-15:30', title: '盐田壹海城午餐 + 车载/酒店午睡', desc: '走罗沙路15分钟到盐田壹海城吃粤菜，五星母婴室护理二宝，下午高温时段室内休息或入住海景酒店。' },
+          { time: '周六 16:00-18:00', title: '海山段海滨栈道 + 灯塔图书馆 + 中央公园大草坪', desc: '全平缓石板海滨栈道推车吹海风，看巨型集装箱轮船。' },
+          { time: '周日 09:30-15:00', title: '大梅沙内湖湿地栈道 + 8号仓奥莱返程', desc: '上午在大梅沙内湖湿地看黑天鹅、沙滩挖沙，中午在8号仓奥莱用餐午休后走盐排高速25分钟回布吉。' }
+        ],
+        planB: '若遇降雨，周六改去【深圳博物馆+深业上城】，周日去【小梅沙海洋世界室内馆】',
+        radar: [96, 95, 98, 92, 90, 97]
+      },
+      {
+        id: 'pack-2',
+        title: '【坂银直达·福田顶配馆群 + 香蜜湖/红树林】都市绿洲2日线',
+        area: '福田区全境',
+        modeRec: '模式A（坂田出发走坂银通道18分钟直达，强烈推荐走读回布吉睡！）',
+        driveA: 18,
+        driveB: 22,
+        score: 9.8,
+        spotsIncluded: ['笔架山+莲花山幸福廊桥', '深圳博物馆+两馆', '香蜜公园空中栈道', '福田红树林生态公园'],
+        summary: '把坂银通道的地理优势发挥到极致！20分钟内无缝切换森林空中栈道、野生动物标本馆与国家级红树林湿地。',
+        timeline: [
+          { time: '周六 09:30-12:00', title: '停深业上城 → 幸福廊桥 → 笔架山沙池与福田河', desc: '推车从深业上城3楼直接上无障碍空中廊桥，大宝在笔架山超大沙池放电，二宝在树冠廊桥推车小睡。' },
+          { time: '周六 12:00-17:00', title: '深业上城午餐午休 → 深圳博物馆（历史民俗馆）', desc: '下午最晒时段进入深博恒温展厅看非洲狮、长颈鹿、北极熊标本，全程0台阶。' },
+          { time: '周日 09:30-12:00', title: '香蜜公园荔枝林空中栈道 + 山姆采购', desc: '停印力中心，走天桥电梯进香蜜公园玩三大儿童游乐区，顺便山姆补给双娃物资。' },
+          { time: '周日 15:00-17:30', title: '福田红树林生态公园科普馆 + 观鸟栈道', desc: '看弹涂鱼、招潮蟹与黑脸琵鹭，傍晚走坂银通道20分钟轻松返家。' }
+        ],
+        planB: '全程紧贴深业上城、领展中心城、印力中心三大商场与深圳博物馆，随时切换纯室内模式',
+        radar: [100, 99, 96, 97, 98, 99]
+      },
+      {
+        id: 'pack-3',
+        title: '【南山华侨城国家级湿地 + 西丽湖碧道 + 欢乐港湾】湖海双栖2日线',
+        area: '南山区 + 宝安中心区',
+        modeRec: '模式A（周五15:30坂田接太太走北环/留仙大道，可住华侨城洲际或西丽湖紫荆山庄1晚）',
+        driveA: 28,
+        driveB: 34,
+        score: 9.7,
+        spotsIncluded: ['环西丽湖山水碧道(问山叠水)', '华侨城国家湿地公园', '欢乐海岸海洋奇梦馆', '宝安欢乐港湾摩天轮'],
+        summary: '兼顾山水溪流、都市秘境湿地与海滨摩天轮，推车友好度与母婴室配置均属深圳天花板级别。',
+        timeline: [
+          { time: '周六 09:30-12:00', title: '环西丽湖绿道（问山叠水段）溪水草坪放电', desc: '坂田走留仙大道25分钟即达，大宝在浅溪捞鱼、草坪骑车，二宝在湖畔森林栈道推车。' },
+          { time: '周六 13:00-17:30', title: '欢乐海岸午餐 + 海洋奇梦馆 + 华侨城国家湿地', desc: '中午在欢乐海岸吹空调看水母海狮，15:30进入提前预约好的华侨城湿地，清幽无自行车。' },
+          { time: '周日 10:00-16:30', title: '欢乐港湾童乐园 + 推婴儿车坐摩天轮 + 钟书阁', desc: '上午海边无动力乐园放电，中午西岸用餐，下午带二宝推车直入恒温摩天轮轿厢看海。' }
+        ],
+        planB: '欢乐海岸海洋奇梦馆 + 南山博物馆 + 壹方城室内乐园',
+        radar: [98, 99, 97, 95, 95, 96]
+      },
+      {
+        id: 'pack-4',
+        title: '【光明科学城新馆 + 虹桥森林栈道 + 光明湖田园】森科微度假2日线',
+        area: '光明区全境',
+        modeRec: '模式A（坂田直接上珠三角环线G94，32分钟直达光明！推荐住光明美爵或天安云谷温德姆1晚）',
+        driveA: 32,
+        driveB: 38,
+        score: 9.6,
+        spotsIncluded: ['虹桥公园森林空中栈道', '深圳科技馆光明新馆+科学公园', '光明湖+欢乐田园小火车'],
+        summary: '从坂田上G94高速一路畅通无阻，森林红飘带栈道、全新巨型科技馆与千亩湖泊稻田一次集齐，吃正宗光明三宝。',
+        timeline: [
+          { time: '周五 15:30-18:00', title: '坂田接太太上G94 → 32分钟抵光明入住 + 吃光明乳鸽', desc: '趁二宝下午小睡直达光明酒店，晚餐品尝光明招待所红烧乳鸽、牛初乳、甜玉米汁（非常适合3.5岁大宝）。' },
+          { time: '周六 09:00-17:00', title: '上午虹桥公园空中森林栈道 → 下午深圳科技馆新馆', desc: '上午0台阶推车走虹桥看碧眼水库，下午进入恒温科技馆新馆沉浸式互动。' },
+          { time: '周日 09:30-15:00', title: '光明湖大坝 + 欢乐田园租代步车看花海喂小鹿', desc: '租四人电动遮阳代步车轻松环游千亩田园，午睡点走G94高速30分钟返家。' }
+        ],
+        planB: '深圳科技馆（光明新馆）+ 光明文化艺术中心美术馆/图书馆 + 蓝鲸世界商场',
+        radar: [98, 96, 98, 97, 94, 97]
+      },
+      {
+        id: 'pack-5',
+        title: '【龙岗大运神仙岭 + 红立方 + 坪山聚龙山湿地】东部零拥堵2日线',
+        area: '龙岗区 + 坪山区',
+        modeRec: '模式B（布吉出发走水官+南坪三期全程免费高速，20-32分钟即达，绝不塞车！）',
+        driveA: 26,
+        driveB: 22,
+        score: 9.6,
+        spotsIncluded: ['大运公园神仙岭湖泊+大运天地', '龙岗红立方科技馆', '坪山聚龙山湿地+坪山文化聚落'],
+        summary: '专为讨厌找车位与排队的父母设计：水官接南坪三期一路绿灯，森林水库、黑天鹅湖、红立方科技馆与坪山湿地全覆盖。',
+        timeline: [
+          { time: '周六 09:30-17:00', title: '上午大运公园神仙岭水库看黑天鹅 → 下午红立方科技馆', desc: '上午在大运公园森林绿道推车看梅花鹿与黑天鹅，中午大运天地用餐午休，下午玩转红立方科技馆。' },
+          { time: '周日 09:30-16:30', title: '上午坪山聚龙山生态湿地 → 下午坪山美术馆+少儿图书馆', desc: '聚龙山车位随到随停，下午在坪山文化聚落吹空调看绘本，中心公园草坪收尾返程。' }
+        ],
+        planB: '红立方科技馆 + 坪山美术馆/图书馆 + 大运天地室内区',
+        radar: [98, 96, 97, 98, 95, 99]
+      },
+      {
+        id: 'pack-6',
+        title: '【大鹏坝光银叶树湿地 + 国家地质博物馆 + 金沙湾】山海秘境2日1晚线',
+        area: '大鹏新区',
+        modeRec: '模式B（周五下午或周六早从布吉走盐坝高速，住金沙湾佳兆业万豪或坝光周边美宿1晚）',
+        driveA: 52,
+        driveB: 45,
+        score: 9.4,
+        spotsIncluded: ['坝光银叶树湿地园+白沙湾栈道', '大鹏国家地质公园博物馆', '禾塘山水湿地+金沙湾鹏飞公园'],
+        summary: '避开较场尾/杨梅坑拥堵段，主打坝光千年银叶树湿地赶海与七娘山国家地质博物馆看恐龙火山。',
+        timeline: [
+          { time: '周六 09:30-12:30', title: '盐坝高速直达坝光 → 白沙湾海滨栈道 + 银叶树湿地赶海', desc: '从布吉出发45分钟直达坝光出口，大宝在滩涂抓小螃蟹，二宝在古银叶树林栈道推车。' },
+          { time: '周六 14:00-18:00', title: '入住金沙湾亲子酒店午睡 + 鹏飞公园儿童乐园看海景日落', desc: '下午回酒店睡饱，傍晚在金沙湾草坪与鹏飞公园无动力沙池玩耍。' },
+          { time: '周日 09:30-14:30', title: '大鹏国家地质公园博物馆 + 禾塘湿地栈道 → 返程', desc: '上午看恐龙化石与火山喷发模型，漫步七娘山脚禾塘湿地，午后趁二宝车载睡眠返程。' }
+        ],
+        planB: '大鹏国家地质博物馆 + 盐灶古村室内自然博物馆群 + 酒店室内恒温儿童乐园',
+        radar: [95, 92, 97, 96, 90, 94]
+      }
+    ];
+
+    // 视角二：环深跨城 3天2晚微度假精选（6条低频跨市线）
+    const CROSS_CITY_ROUTES = [
+      {
+        id: 'cross-1',
+        name: '东莞松山湖（松湖烟雨环湖栈道 + 欧式小火车远眺 + 科学公园 + 望野博物馆）',
+        city: '东莞 · 松山湖生态园',
+        score: 9.8,
+        driveA: 40, // 坂田直上G94珠三角环线仅40分钟！
+        driveB: 48,
+        routeA: '坂田入口直上珠三角环线高速(G94) → 松山湖出口（全程高速仅40分钟，比去南山蛇口还快！）',
+        routeB: '机荷高速 → 珠三角环线高速(G94) → 松山湖大朗出口',
+        tollCost: 36,
+        hotelRec: '松山湖悦榕庄 / 松山湖凯悦酒店（湖景大草坪+儿童泳池+步行直入松湖烟雨栈道）',
+        spots: '松湖烟雨湖畔栈道、华为溪流背坡村康桥红砖小火车观景点、松山湖科学公园（儿童友好专馆）、松山湖望野博物馆、黄花风铃木林湾畔',
+        kid35: '在康桥大桥看红色复古小火车穿梭欧式城堡与湖面、松山湖科学公园玩巨型无动力科学游乐设施、租家庭亲子脚踏车环湖',
+        kid08: '30公里环湖绿道柏油路面如丝绸般顺滑，凯悦/悦榕庄酒店直通湖边栈道，二宝随时回房间午睡喂奶',
+        planB: '松山湖望野博物馆 + 松山湖万象汇（室内顶级母婴室+MELAND儿童乐园）',
+        timeline: [
+          { time: '周五 15:30', title: '布吉出发 → 15:50坂田接太太直上G94 → 16:35抵松山湖酒店', desc: '完美卡位二宝下午小睡，避开五和大道晚高峰，傍晚在酒店湖畔草坪散步用晚餐。' },
+          { time: '周六 全天', title: '上午松湖烟雨栈道+看康桥红色小火车 → 午休 → 下午松山湖科学公园', desc: '上午推车走湖岸树荫道看小火车，中午回酒店午睡，下午去松山湖科学公园儿童友好区放电。' },
+          { time: '周日 半天', title: '上午松山湖望野博物馆 + 万象汇午餐 → 14:00返程回布吉', desc: '周日轻松逛室内文博馆与万象汇，趁午睡窗口40分钟回到深圳布吉。' }
+        ],
+        radar: [99, 98, 98, 97, 94, 96]
+      },
+      {
+        id: 'cross-2',
+        name: '惠州西湖丰渚园荷花湿地 + 惠州植物园温室玻璃球 + 红花湖绿道',
+        city: '惠州 · 惠城区',
+        score: 9.5,
+        driveA: 65,
+        driveB: 55,
+        routeA: '机荷高速 → 盐排高速 → 武深高速 → 惠大高速',
+        routeB: '布吉直上水官/盐排 → 仁深高速/武深高速（东向出发完全不堵！）',
+        tollCost: 52,
+        hotelRec: '惠州西湖皇冠假日 / 康帝国际酒店（出门即是西湖平湖栈道与丰渚园）',
+        spots: '惠州植物园（巨型温室玻璃球科普馆）、西湖丰渚园（岭南园林荷花湿地栈道）、红花湖环湖绿道、惠州市博物馆',
+        kid35: '惠州植物园太阳广场沙池与热带雨林温室寻宝、丰渚园喂锦鲤看白鹭、西湖坐电动画舫游船',
+        kid08: '惠州植物园温室与科普馆全无障碍电梯直达；丰渚园比主景区清静10倍，长廊遮阳避雨',
+        planB: '惠州植物园室内科普馆 + 惠州市博物馆/科技馆 + 华贸天地商场',
+        timeline: [
+          { time: '周五 16:00', title: '太太回布吉汇合出发 → 55分钟抵惠州西湖畔酒店', desc: '走盐排转武深高速一路畅通，晚上吃东江盐焗鸡与酿豆腐。' },
+          { time: '周六 全天', title: '上午惠州植物园（温室玻璃球+儿童园）→ 午休 → 下午西湖丰渚园湿地+游船', desc: '植物园就在西湖旁10分钟车程，温室恒温且推车0台阶；下午坐西湖游船微风拂面。' },
+          { time: '周日 半天', title: '上午红花湖绿道骑行/推车 或 惠州市博物馆 → 午后返深', desc: '红花湖可租带棚家庭电动车环湖18公里，午饭后轻松返程。' }
+        ],
+        radar: [95, 92, 95, 95, 92, 97]
+      },
+      {
+        id: 'cross-3',
+        name: '中山深中通道线（金钟湖环湖栈道 + 中山市博物馆 + 孙中山故居 + 崖口湿地）',
+        city: '中山 · 翠亨/东区',
+        score: 9.4,
+        driveA: 68,
+        driveB: 75,
+        routeA: '坂田上机荷高速直连深中通道 → 翠亨东出口（一桥飞架伶仃洋！）',
+        routeB: '清平高速 → 机荷高速 → 深中通道',
+        tollCost: 132,
+        hotelRec: '中山温泉宾馆（岭南园林亲子别墅+儿童乐园）或 中山利和威斯汀',
+        spots: '深中通道海中大桥景观、金钟湖公园（水杉湿地栈道）+ 儿童公园、中山市博物馆新馆、孙中山故居纪念馆、崖口稻田红树林湿地',
+        kid35: '开车跨越深中通道看大海巨轮、金钟湖旁的古香林儿童公园超大无动力设施、崖口湿地看稻田小火车',
+        kid08: '中山市博物馆新馆园林与现代展馆结合，推车极度顺滑；金钟湖环湖栈道平坦舒适',
+        planB: '中山市博物馆新馆 + 孙中山故居博物馆 + 中山利和广场/万象汇',
+        timeline: [
+          { time: '周五 15:30', title: '坂田出发直上机荷接深中通道 → 欣赏伶仃洋日落抵中山', desc: '周五下午3点半走深中通道车流平稳，吃正宗石岐乳鸽与脆肉鲩。' },
+          { time: '周六 全天', title: '上午金钟湖环湖栈道+儿童公园 → 午休 → 下午中山市博物馆新馆', desc: '动静结合，上午森林湖泊放电，下午恒温博物馆避晒。' },
+          { time: '周日 半天', title: '上午孙中山故居纪念馆 + 崖口红树林海堤栈道 → 午后返深', desc: '建议周日13:30前上深中通道返程，避开周日傍晚返深车流高峰。' }
+        ],
+        radar: [95, 93, 96, 92, 93, 91]
+      },
+      {
+        id: 'cross-4',
+        name: '广州南沙湿地观鸟游船 + 水鸟世界 + 广东科学中心（亚洲最大科技馆）',
+        city: '广州 · 南沙/番禺',
+        score: 9.5,
+        driveA: 72,
+        driveB: 78,
+        routeA: '坂田上G94/机荷 → 广深沿江高速/南沙大桥 → 南沙万顷沙',
+        routeB: '清平 → 机荷 → 广深高速 → 南沙港快速',
+        tollCost: 95,
+        hotelRec: '广州南沙花园酒店（自带万平山海园林、室内外恒温泳池、透明旋转楼梯推车坡道、儿童俱乐部）',
+        spots: '南沙湿地公园（红树林摇橹船观候鸟）、南沙水鸟世界生态园（看火烈鸟/鹈鹕）、南沙天后宫滨海栈道、广东科学中心',
+        kid35: '在南沙水鸟世界零距离看成群火烈鸟、鹈鹕与黑天鹅；坐电动游船穿行万亩红树林芦苇荡；周日打卡广东科学中心儿童天地',
+        kid08: '南沙湿地游船平稳有遮阳棚，南沙花园酒店本身就是一座零台阶山海大公园',
+        planB: '广东科学中心（全天逛不完的航母级室内馆）+ 南沙花园酒店室内儿童乐园',
+        timeline: [
+          { time: '周五 15:30', title: '坂田出发 → 70分钟抵南沙花园酒店入住', desc: '酒店依山傍海，推车可在酒店私家海岸线步道散步。' },
+          { time: '周六 全天', title: '上午南沙湿地游船 + 水鸟世界看火烈鸟 → 下午酒店恒温泳池与草坪', desc: '湿地与水鸟世界仅一路之隔，上午看完鸟回酒店午睡玩水。' },
+          { time: '周日 全天', title: '广东科学中心（儿童科学馆）→ 下午返深', desc: '提前预约广东科学中心，玩转专为低幼儿童设计的互动展厅后返深。' }
+        ],
+        radar: [94, 96, 98, 94, 95, 93]
+      },
+      {
+        id: 'cross-5',
+        name: '佛山顺德（顺峰山公园汀溪湖栈道 + 顺德博物馆 + 清晖园 + 欢乐海岸PLUS）',
+        city: '佛山 · 顺德大良',
+        score: 9.6,
+        driveA: 78,
+        driveB: 85,
+        routeA: '坂田上G94/机荷 → 南沙大桥 → 广珠西线高速顺德出口',
+        routeB: '清平 → 机荷 → 南沙大桥 → 顺德大良',
+        tollCost: 98,
+        hotelRec: '顺德美的万豪酒店（就在顺峰山公园正对面，下楼过马路即入环湖绿道！）',
+        spots: '顺峰山公园（桂畔湖湿地栈道+莫比乌斯环桥+盒子美术馆）、顺德区博物馆、清晖园、顺德华侨城欢乐海岸PLUS',
+        kid35: '顺峰山8公里环湖绿道、巨大草坪与儿童攀爬乐园、欢乐海岸曲水湾看状元牌坊与坐摩天轮、吃双皮奶与鱼生粥底火锅',
+        kid08: '顺峰山公园平缓程度堪比深圳湾且有盒马/美术馆配套，顺德博物馆恒温清静',
+        planB: '顺德区博物馆 + 顺峰山盒子美术馆 + 欢乐海岸O-PLAZA室内购物中心',
+        timeline: [
+          { time: '周五 15:30', title: '坂田出发 → 78分钟抵顺德大良美的万豪 + 寻味顺德晚餐', desc: '晚餐吃毋米粥（清淡米汤底极其适合给8月龄二宝做辅食粥，大宝吃嫩滑鱼片牛肉）。' },
+          { time: '周六 全天', title: '上午顺峰山公园青云湖湿地栈道 → 午休 → 下午顺德博物馆 + 欢乐海岸PLUS', desc: '住顺峰山对面，随时推车回酒店午睡。' },
+          { time: '周日 半天', title: '上午早茶（珍之宝/味可道）+ 清晖园岭南园林 → 午后返深', desc: '叹正宗顺德早茶后趁二宝午睡返深。' }
+        ],
+        radar: [97, 96, 96, 95, 94, 95]
+      },
+      {
+        id: 'cross-6',
+        name: '珠海淇澳岛红树林湿地栈道 + 珠海博物馆新馆 + 海天公园温室植物馆',
+        city: '珠海 · 唐家湾/香洲情侣路',
+        score: 9.5,
+        driveA: 90,
+        driveB: 95,
+        routeA: '机荷高速 → 深中通道 → 广澳高速珠海支线 → 淇澳大桥',
+        routeB: '清平 → 机荷 → 深中通道 → 珠海唐家湾',
+        tollCost: 145,
+        hotelRec: '珠海仁恒洲际酒店 或 珠海凤凰湾悦椿酒店（一线海景+高配母婴服务）',
+        spots: '淇澳岛红树林国家级自然保护区木栈道、海天公园（名树古树区+温室植物馆+海景大草坪）、珠海博物馆与规划展览馆双馆、香炉湾城市阳台',
+        kid35: '淇澳岛红树林木栈道满地招潮蟹与弹涂鱼、海天公园看名车馆与热带植物温室、香炉湾沙滩挖沙看日月贝大剧院',
+        kid08: '海天公园与珠海博物馆隔情侣路通过无障碍空中连廊相连，推车从博物馆直达海边公园0红绿灯0台阶！',
+        planB: '珠海博物馆 + 珠海规划展览馆 + 城市阳台百货商场 + 海天公园温室馆',
+        timeline: [
+          { time: '周五 15:30', title: '坂田出发经深中通道 → 90分钟抵珠海情侣路酒店', desc: '傍晚在香炉湾城市阳台推车吹海风看日月贝亮灯。' },
+          { time: '周六 全天', title: '上午淇澳岛红树林湿地栈道看螃蟹 → 午休 → 下午海天公园+珠海博物馆', desc: '上午趁退潮去淇澳岛红树林栈道，下午在珠海博物馆与海天公园温室避晒。' },
+          { time: '周日 半天', title: '上午唐家湾共乐园古树林或日月贝海韵城 → 13:30前返深', desc: '轻松慢游后经深中通道返深。' }
+        ],
+        radar: [96, 95, 96, 93, 94, 92]
+      }
+    ];
+
+    // 双娃随车装备核对清单
+    const GEAR_CATEGORIES = [
+      {
+        title: '👶 8月龄二宝专属（睡眠·哺乳·辅食）',
+        items: [
+          { id: 'g1', text: '轻便一键折叠避震婴儿推车 + 推车防晒遮阳棚/透气防蚊纱罩' },
+          { id: 'g2', text: '人体工学省力腰凳背带（应对局部少量台阶或二宝闹觉抱睡）' },
+          { id: 'g3', text: '恒温调奶保温杯（50℃温水）+ 分装奶粉盒/母乳防溢垫 + 哺乳遮羞巾' },
+          { id: 'g4', text: '成品果泥/肉泥辅食袋×4 + 一次性硅胶围兜 + 磨牙米饼（车上安抚神器）' },
+          { id: 'g5', text: '纸尿裤（按每天8片备足）+ 便携隔尿垫 + 婴儿手口湿巾2大包 + 护臀膏' },
+          { id: 'g6', text: '车载后排安抚玩具 + 便携白噪音机 + 纯棉纱布盖毯（应对博物馆强冷气）' }
+        ]
+      },
+      {
+        title: '👦 3.5岁大宝专属（放电·观察·换洗）',
+        items: [
+          { id: 'g7', text: '儿童滑步车/折叠滑板车 + 护具头盔（后备箱常备，环湖绿道神器）' },
+          { id: 'g8', text: '折叠硅胶挖沙桶铲套装 + 捞鱼小网兜 + 生态观察小桶（湿地/海边必用）' },
+          { id: 'g9', text: '儿童双筒望远镜 + 放大镜（红树林看候鸟、弹涂鱼、博物馆看标本）' },
+          { id: 'g10', text: '3套快干换洗衣服 + 备用防滑溯溪鞋/洞洞鞋 + 速干浴巾（玩水玩沙后秒换）' },
+          { id: 'g11', text: '便携折叠小马桶圈/车载应急尿壶（高速堵车或公园排队应急）' }
+        ]
+      },
+      {
+        title: '🚗 车载与双娃出行安全应急包',
+        items: [
+          { id: 'g12', text: '双安全座椅检查（8月龄反向安装半躺角，3.5岁正向五点式）+ 侧窗遮阳帘' },
+          { id: 'g13', text: '派卡瑞丁成分婴儿防蚊液（6个月以上可用，湿地/植物园必喷）+ 炉甘石洗剂' },
+          { id: 'g14', text: '儿童物理防晒霜 + 大宝遮阳帽 + 婴儿耳温枪 + 退热贴 + 碘伏棉签创可贴' },
+          { id: 'g15', text: '野餐防潮垫（2m×2m）+ 推车挂钩×2 + 大容量妈咪包 + 充电宝' }
+        ]
+      }
+    ];
+
+    /********************************************************************
+     * 2. 全局状态管理
+     ********************************************************************/
+    let state = {
+      departMode: 'A', // 'A': 坂田顺路接太太, 'B': 太太回布吉汇合
+      perspective: 'localSpots', // 'localSpots' | 'localPacks' | 'crossCity' | 'gear'
+      selectedDistrict: 'ALL',
+      selectedSubarea: 'ALL',
+      selectedCategory: 'ALL',
+      maxDrive: 999,
+      needs: new Set(),
+      customPlan: {
+        sat: [],
+        sun: []
+      },
+      checkedGear: readGear()
     };
 
-    // =========================================================================
-    // 2. 8 DEEPLY CRAFTED ROUTES DATABASE (Tailored for Buji/Bantian + 3.5Y & 8M)
-    // =========================================================================
-    const routesData = [
-      {
-        id: 'songshanhu',
-        name: '【东莞松山湖+同沙线】松湖烟雨环湖绿道 × 科技博物慢游',
-        shortName: '东莞松山湖+同沙线',
-        region: 'dongguan',
-        regionLabel: '东莞生态圈 · 松山湖',
-        comboType: '森林湖泊+科普馆',
-        distanceKm: 52,
-        driveTimeModeA: 45, // Direct from Bantian via G94 Pearl River Delta Ring Expy
-        driveTimeModeB: 65, // From Buji
-        highwayRouteA: '布吉出发 → 坂田接太太 → 坂澜大道/珠三角环线高速(G94)直达松山湖收费站',
-        highwayRouteB: '太太回布吉 → 清平高速转珠三角环线高速(G94)直达松山湖',
-        tollAndEv: '单程高速费 ¥28 · 园区及万象汇配备蔚来/理想/华为超充桩，地面+地库大车位极多',
-        parks: '松山湖中心公园（松湖烟雨全平路绿道）+ 同沙生态公园映翠湖大草坪',
-        museums: '东莞科技馆（儿童科学启蒙互动区）+ 松山湖望野博物馆（位于文化艺术街区，人少清幽）',
-        tags: ['全程无障碍推车', '五星母婴室配置', '3.5岁高能放电', '充电桩与大车位友好'],
-        baseScore: 98,
-        metrics: {
-          stroller: 99,  // 推车无障碍度
-          nursing: 94,   // 母婴室评级
-          toddler: 96,   // 3.5岁趣味度
-          infant: 98,    // 8月龄舒适度
-          parking: 97,   // 停车补能便利
-          scenery: 96    // 景观与出片度
-        },
-        costs: {
-          tollAndEvCost: 110,
-          ticketCost: 75, // Dongguan Science Museum + sightseeing train
-          hotelCoeff: 1.0 // Multiplier on base hotel tier
-        },
-        parkingPinpoint: '【松山湖烟雨】导航“松山湖大学路停车场”或“松山湖万象汇地库B1母婴车位”，出电梯即达平坦环湖绿道，0台阶；【同沙生态公园】需提前在公众号预约入园车辆，直接开到“映翠湖停车场”，后备箱秒拿推车与天幕。',
-        nursingPinpoint: '【松山湖万象汇】L2/L3层设高星级独立母婴室（配恒温调奶器、温水洗手池、独立哺乳沙发间及温奶器）；【东莞科技馆】一楼游客服务中心旁设独立母婴室。',
-        weatherSunny: '☀️ 晴朗模式：周六上午在松湖烟雨树荫绿道推二宝、大宝骑平衡车过查理大桥；周日上午在同沙生态公园映翠湖大草坪支帐篷吹泡泡。',
-        weatherRainy: '🌧️ 阴雨/暴晒B计划：直接转入【东莞科技馆】（全室内3层互动展项，3.5岁大宝可玩半天）+【松山湖万象汇室内儿童游乐区】+【松山湖望野博物馆】，全程地库连通不淋雨。',
-        schedule: {
-          fri: [
-            { time: '15:30 - 16:35', title: '布吉出发 → 坂田接太太 → G94珠三角环线直奔松山湖', toddler: '在安全座椅听故事机、看窗外风景', infant: '上车喝奶后伴随高速白噪音进入下午小睡（约50分钟）', note: '15:50在坂田华为/天安云谷周边接上太太，完美避开五和大道17:30晚高峰。' },
-            { time: '17:00 - 19:30', title: '入住松山湖滨湖酒店/凯悦或万象汇周边亲子酒店 + 湖畔粤菜晚餐', toddler: '酒店草坪看黑天鹅、吃松湖特色焖鹅/蒸水蛋', infant: '房间内铺隔尿垫练习爬行翻身，18:00吃晚间米粉辅食', note: '晚餐后沿酒店私家湖岸散步30分钟，20:30准时给两娃洗澡哄睡。' }
-          ],
-          sat: [
-            { time: '09:00 - 11:30', title: '松湖烟雨核心段（大学路—查理大桥段平路绿道）', toddler: '全程平路骑平衡车/滑板车，在小火车站看红色复古小火车', infant: '10:00-11:15在婴儿车内拉起遮阳棚，吹着湖风睡上午觉', note: '推车天花板级别！树荫覆盖率超80%，路面丝滑无任何台阶。' },
-            { time: '12:00 - 14:30', title: '松山湖万象汇午餐 + 回酒店午休充电', toddler: '午餐后回酒店大床睡午觉（13:15-15:00）', infant: '万象汇五星母婴室换尿布哺乳，回房与哥哥同步午睡', note: '趁孩子午睡，大人可在阳台喝咖啡休整，车辆在酒店地库慢充补能。' },
-            { time: '15:30 - 18:00', title: '松山湖望野博物馆 + 文化艺术街区夕阳漫步', toddler: '看古代陶瓷文物展、在街区浅水景观池边玩泡泡', infant: '睡醒精神饱满，爸爸用腰凳面朝前背着看光影建筑', note: '馆内恒温清静、推车直梯全覆盖，夕阳下湖面出片率极高。' }
-          ],
-          sun: [
-            { time: '09:30 - 12:00', title: '同沙生态公园（映翠湖大草坪）或 东莞科技馆', toddler: '大草坪奔跑踢球，或科技馆一楼儿童馆动手操作齿轮水车', infant: '草坪野餐垫坐玩牙胶摇铃，10:30推车内小睡', note: '同沙生态公园可开车直达湖边草坪旁停车，免去搬运装备之苦。' },
-            { time: '12:30 - 15:00', title: '午餐退房 → 14:30准时踏上返程高速', toddler: '上午放电充分，上车10分钟即秒睡到布吉', infant: '14:15喝饱奶换好干爽尿不湿，安全提篮内一路安睡', note: '走G94珠三角环线约15:20即抵布吉地库，避开周日晚高峰。' }
-          ]
-        }
-      },
-      {
-        id: 'guangming',
-        name: '【深圳光明科学自然线】光明科学公园栈道 × 美术馆乳鸽慢度假',
-        shortName: '深圳光明科学自然线',
-        region: 'west',
-        regionLabel: '深圳西部与中心 · 光明',
-        comboType: '自然公园+博物馆',
-        distanceKm: 36,
-        driveTimeModeA: 36, // Very fast via Nanping / Longda from Bantian
-        driveTimeModeB: 48,
-        highwayRouteA: '布吉出发 → 坂田接太太 → 布龙路/南坪快速转龙大高速(S31)直达光明凤凰城',
-        highwayRouteB: '太太回布吉 → 水官高速转沈海/龙大高速至光明',
-        tollAndEv: '全程高速免费段为主(路桥费¥0-¥10) · 光明文化艺术中心及蓝鲸世界超充桩密集',
-        parks: '光明科学公园（北翼无障碍森林空中栈道+科学顶大草坪）+ 欢乐田园/虹桥公园平路段',
-        museums: '光明文化艺术中心美术馆（纯白旋转楼梯建筑美学）+ 光明图书馆儿童绘本区',
-        tags: ['全程无障碍推车', '五星母婴室配置', '3.5岁高能放电', '充电桩与大车位友好'],
-        baseScore: 96,
-        metrics: {
-          stroller: 96,
-          nursing: 95,
-          toddler: 93,
-          infant: 97,
-          parking: 98,
-          scenery: 95
-        },
-        costs: {
-          tollAndEvCost: 45,
-          ticketCost: 40,
-          hotelCoeff: 0.92
-        },
-        parkingPinpoint: '【光明科学公园】导航“光明科学公园北翼停车场”，停靠后走无障碍缓坡直接上空中森林栈道（切勿带推车爬科学顶最后一段阶梯，栈道至观景平台全程平缓）；【光明文化艺术中心】地下停车场车位极宽，直梯直通1楼美术馆与图书馆。',
-        nursingPinpoint: '【光明文化艺术中心】1楼及图书馆少儿区旁配备标准母婴室（冷热水、软包护理台、独立哺乳隔间）；旁边的【光明蓝鲸世界/万达广场】每层均有高配母婴室。',
-        weatherSunny: '☀️ 晴朗模式：周六上午漫步光明科学公园无障碍森林栈道与荔枝林草坪；周日上午前往欢乐田园看四季花海与稻田小火车。',
-        weatherRainy: '🌧️ 阴雨/暴晒B计划：常驻【光明文化艺术中心美术馆+少儿图书馆绘本馆】（安静恒温、推车极度丝滑），下午转场【蓝鲸世界室内亲子乐园】，无缝衔接正宗光明三宝（乳鸽、牛初乳、甜玉米）。',
-        schedule: {
-          fri: [
-            { time: '15:40 - 16:20', title: '布吉出发 → 坂田接太太 → 龙大高速36分钟极速抵光明', toddler: '车程极短，还没坐腻就到达酒店', infant: '小睡片刻即达，完全不会出现长途哭闹', note: '距离坂田最近的宝藏微度假区，周五下班毫无疲惫感。' },
-            { time: '17:00 - 19:30', title: '入住光明美爵/希尔顿欢朋酒店 + 光明招待所品尝正宗红烧乳鸽', toddler: '大口喝温热的甜玉米汁与双皮奶牛初乳', infant: '餐椅坐立吃果泥与婴儿米粉，餐厅空间宽敞可停推车', note: '周五傍晚吃乳鸽完全不用排长队，体验感远胜周六中午。' }
-          ],
-          sat: [
-            { time: '09:00 - 11:30', title: '光明科学公园（北翼无障碍森林栈道 + 雾森景观 + 芳草地）', toddler: '在巨型草坪奔跑、观察空中栈道树冠层昆虫与定时喷雾', infant: '推车行进在宽阔平缓的木塑栈道上，10:15安稳睡上午觉', note: '新建成的科学公园人少景美，无障碍坡道设计对双娃推车极友好。' },
-            { time: '12:00 - 15:00', title: '蓝鲸世界午餐 + 回近邻酒店午睡休整', toddler: '午睡充沛，恢复体力', infant: '吹空调睡午觉，避开正午阳光', note: '光明各景点之间车程均在8-10分钟内，回酒店午睡成本极低。' },
-            { time: '15:30 - 18:00', title: '光明文化艺术中心（美术馆看展 + 少儿图书馆亲子共读）', toddler: '在少儿绘本馆挑选立体书，在户外网红镜面水池看倒影', infant: '美术馆内极其安静凉爽，推车推行0障碍', note: '黑白几何旋转楼梯建筑非常出片，适合拍全家福。' }
-          ],
-          sun: [
-            { time: '09:30 - 12:00', title: '光明欢乐田园（观景小火车 + 农耕科普区）', toddler: '坐田园观光车看彩色稻田、喂小动物、采摘时令蔬果', infant: '妈妈用背带或推车在遮阳棚下乘凉看风景', note: '园区道路平坦宽阔，建议直接租乘园区代步电瓶车省力。' },
-            { time: '12:30 - 14:45', title: '午餐再吃一顿光明乳鸽 → 35分钟轻松返程布吉', toddler: '带两包光明牛初乳糕点路上分享', infant: '吃饱喝足午睡返程', note: '15:00前已回到布吉家中，堪称最省妈省爸的轻量级路线。' }
-          ]
-        }
-      },
-      {
-        id: 'nanshan',
-        name: '【深圳南山前海人文海风线】深圳湾人才公园 × 南山博物蛇口看海',
-        shortName: '深圳南山前海人文海风线',
-        region: 'west',
-        regionLabel: '深圳西部与中心 · 南山前海',
-        comboType: '自然公园+博物馆',
-        distanceKm: 32,
-        driveTimeModeA: 35, // Via Banyin Tunnel -> Beihuan / Binhai
-        driveTimeModeB: 45,
-        highwayRouteA: '布吉出发 → 坂田接太太 → 坂银通道转北环大道/沙河西路直达后海深圳湾',
-        highwayRouteB: '太太回布吉 → 丹平/罗沙或水官转南坪快速至南山',
-        tollAndEv: '全程城市快速路 ¥0过路费 · 深圳湾万象城/海上世界超充与母婴车位顶级配置',
-        parks: '深圳人才公园（星级母婴室+无敌海景平路+儿童嬉乐园）+ 前海演艺公园日落草坪',
-        museums: '南山博物馆（国家级常设大展）+ 蛇口海上世界文化艺术中心（V&A展馆+海边白色建筑）',
-        tags: ['全程无障碍推车', '五星母婴室配置', '3.5岁高能放电', '充电桩与大车位友好'],
-        baseScore: 95,
-        metrics: {
-          stroller: 98,
-          nursing: 99,
-          toddler: 92,
-          infant: 97,
-          parking: 94,
-          scenery: 97
-        },
-        costs: {
-          tollAndEvCost: 35,
-          ticketCost: 60, // Special exhibition at Sea World Culture Arts Center
-          hotelCoeff: 1.15
-        },
-        parkingPinpoint: '【人才公园】若周末公园P1停车场需预约排队，强烈建议直接停隔壁“深圳湾万象城地库B2”，走连廊或地面过马路3分钟即入园，车位极多且含顶级母婴室；【海上世界文化艺术中心】直接停本馆地下车库，直梯直达展厅与海滨步道。',
-        nursingPinpoint: '【深圳人才公园求贤阁旁】拥有深圳公园界标杆级独立母婴室（刷脸/按铃进入，恒温空调、饮水机、尿布台一应俱全）；【深圳湾万象城】B1/L2/L3旗舰级母婴中心（提供免费温奶器、防溢乳垫、爽身粉）。',
-        weatherSunny: '☀️ 晴朗模式：周六上午在深圳人才公园儿童沙池与深圳湾海滨栈道吹海风看海鸥；周六傍晚在前海演艺公园看摩天轮海景日落。',
-        weatherRainy: '🌧️ 阴雨/暴晒B计划：上午【南山博物馆】（室内大体量展厅，推车无障碍直梯）+ 下午【蛇口海上世界文化艺术中心】（室内看展、海景咖啡厅小憩、儿童美育工坊），全天候恒温优雅。',
-        schedule: {
-          fri: [
-            { time: '15:45 - 16:25', title: '布吉出发 → 坂田接太太 → 坂银通道转北环直达南山后海/蛇口', toddler: '穿行坂银通道长隧道数灯光', infant: '小睡35分钟即抵酒店', note: '16:00前通过坂银通道完全不堵车，一路畅通。' },
-            { time: '17:00 - 19:30', title: '入住蛇口希尔顿南海/后海木棉花或前海JEN酒店 + 海上世界晚餐', toddler: '看明华轮巨型游轮灯光秀与音乐喷泉', infant: '沿平坦海滨木栈道推车散步吹微风', note: '海上世界餐饮选择极其丰富，各国料理与粤式早茶俱全。' }
-          ],
-          sat: [
-            { time: '09:00 - 11:30', title: '深圳人才公园（星光桥平路 + 嬉乐园无动力沙池 + 深圳湾栈道）', toddler: '在嬉乐园挖沙、爬攀爬网，看春笋大厦倒影', infant: '10:00在海风树荫下推车小睡，醒来去公园五星母婴室换洗', note: '全深圳母婴设施最完善的市政公园，没有之一。' },
-            { time: '12:00 - 15:00', title: '深圳湾万象城午餐 + 酒店午睡', toddler: '品尝亲子餐厅美食后回房午睡', infant: '享受万象城VIP级母婴室护理服务，回酒店安睡', note: '商业配套成熟度满分，忘带任何母婴用品5分钟内均可买齐。' },
-            { time: '15:30 - 18:30', title: '蛇口海上世界文化艺术中心 + 前海演艺公园摩天轮日落', toddler: '在文化艺术中心门前草坪阶梯跑跳，傍晚看前海之眼摩天轮', infant: '在馆内看色彩鲜艳的艺术装置，傍晚海边吹风', note: '设计大师桢文彦作品，白墙碧海与夕阳同框，出片惊艳。' }
-          ],
-          sun: [
-            { time: '09:30 - 12:00', title: '南山博物馆（古代南山史 + 国家级特展）', toddler: '观看古代船模、恐龙/青铜器或多媒体互动沙盘', infant: '馆内宽敞安静，推车全程走无障碍大电梯', note: '记得提前在“南山博物馆”公众号预约入馆名额。' },
-            { time: '12:30 - 14:30', title: '南头古城外围老字号粤式点心午餐 → 坂银通道返程布吉', toddler: '吃虾饺烧卖叉烧包', infant: '午后上车秒睡，35分钟直回布吉', note: '市内微度假标杆，既有度假感又免去长途奔波。' }
-          ]
-        }
-      },
-      {
-        id: 'yantian',
-        name: '【深圳盐田云海山海线】恩上湿地森林会客厅 × 盐田海滨栈道',
-        shortName: '深圳盐田云海山海线',
-        region: 'east',
-        regionLabel: '深圳东部滨海 · 盐田',
-        comboType: '滨海栈道+湿地',
-        distanceKm: 28,
-        driveTimeModeA: 48, // Have to go Bantian -> Buji -> Yantian
-        driveTimeModeB: 32, // Direct from Buji via Danping / Yanpai Expy!
-        highwayRouteA: '坂田接太太后绕行布龙路/水官转盐排高速至盐田（晚高峰易缓行）',
-        highwayRouteB: '【强烈推荐模式B】太太地铁5号线回布吉百鸽笼/布吉站 → 直接上丹平快速转罗沙/盐排高速32分钟直达盐田',
-        tollAndEv: '高速过路费约 ¥10 · 盐田壹海城Mall及大梅沙洲际/凯悦地库超充与车位充足',
-        parks: '恩上湿地公园（梧桐山森林会客厅高山大草坪+古树群）+ 盐田海滨栈道（海山段平坦亲海栈道）',
-        museums: '深圳博物馆（同心路古代艺术馆/金田路馆顺路串联）+ 盐田灯塔图书馆/大梅沙室内海洋科普角',
-        tags: ['全程无障碍推车', '3.5岁高能放电', '充电桩与大车位友好'],
-        baseScore: 93,
-        metrics: {
-          stroller: 93,
-          nursing: 88,
-          toddler: 95,
-          infant: 92,
-          parking: 92,
-          scenery: 98
-        },
-        costs: {
-          tollAndEvCost: 40,
-          ticketCost: 50,
-          hotelCoeff: 1.05
-        },
-        parkingPinpoint: '【恩上湿地公园】车停“盐田壹海城地下停车场”，步行至“海山路云海专线巴士总站”，坐云海专线巴士上山（婴儿车可折叠上车，省去盘山徒步，下车即是全平路森林湿地与大草坪）；【盐田海滨栈道】壹海城出地面过天桥/连廊直达灯塔图书馆段平路栈道。',
-        nursingPinpoint: '【盐田壹海城One Mall】L2层设有独立母婴室（紧邻海滨栈道入口，补给极其方便）；【大梅沙京基洲际/凯悦酒店】大堂公区配备高规格母婴护理间。',
-        weatherSunny: '☀️ 晴朗模式：周六上午登恩上湿地公园在半山云端大草坪野餐放电、俯瞰盐田港巨轮；下午推车漫步盐田海滨栈道灯塔图书馆段。',
-        weatherRainy: '🌧️ 阴雨/暴晒B计划：顺路先去【深圳博物馆（金田路/同心路馆）】室内看展，抵达盐田后入住【凯悦/大梅沙洲际】，畅玩酒店恒温室内儿童俱乐部与海洋生物科普体验馆。',
-        schedule: {
-          fri: [
-            { time: '16:30 - 17:05', title: '太太回布吉汇合 → 丹平快速/盐排高速32分钟直抵盐田沙头角', toddler: '在隧道里看集装箱卡车与远处大海', infant: '短途30分钟车程，情绪极佳', note: '布吉住家去盐田有着天然地理优势，走盐排高速一路下坡即见大海。' },
-            { time: '17:30 - 20:00', title: '入住盐田凯悦酒店（云端海景房）+ 盐田海鲜街/壹海城晚餐', toddler: '在酒店落地窗前看盐田港彩色集装箱与巨轮进出港', infant: '房间宽敞安静，海景浴缸温水洗澡', note: '壹海城就在酒店楼下，下楼即达海滨栈道。' }
-          ],
-          sat: [
-            { time: '09:00 - 12:00', title: '恩上湿地公园（梧桐山森林会客厅 · 高山草坪 + 鸳鸯谷湿地）', toddler: '在超大高山草坪追泡泡、在湿地木栈道找蝌蚪与蜻蜓', infant: '半山森林负氧离子极高，温度比市区低3℃，推车睡上午觉超香', note: '务必乘坐云海专线巴士直达恩上湿地站，下车后环湖步道全平无台阶。' },
-            { time: '12:30 - 15:30', title: '壹海城午餐 + 回酒店午睡', toddler: '吃海鲜粥与粤式茶点，回房午睡', infant: '吃辅食泥后午睡2小时', note: '酒店与商场无缝连接，正午完全不用晒太阳。' },
-            { time: '16:00 - 18:30', title: '盐田海滨栈道（灯塔图书馆 — 背仔角亲海平路段）', toddler: '在灯塔图书馆看绘本、在观海平台用望远镜看大轮船', infant: '推车在宽阔石板海滨栈道推行，听海浪声', note: '海山段栈道平坦宽敞，护栏坚固安全，傍晚海风极舒服。' }
-          ],
-          sun: [
-            { time: '09:30 - 12:00', title: '深圳博物馆（顺路罗湖/福田段）或 酒店室内儿童乐园+金色海岸游船', toddler: '乘盐田金色海岸双层观光游船近距离看集装箱巨轮（55分钟航程平稳）', infant: '游船一楼室内空调舱平稳舒适，可推车登船', note: '3.5岁男宝/女宝对巨型货轮与塔吊毫无抵抗力，科普感拉满。' },
-            { time: '12:30 - 14:30', title: '沙头角乳鸽/肠粉午餐 → 盐排高速30分钟返抵布吉', toddler: '轻松返程不堵车', infant: '车内午睡，到家移至婴儿床继续睡', note: '距离布吉里程最短的山海微度假路线。' }
-          ]
-        }
-      },
-      {
-        id: 'dapeng',
-        name: '【深圳大鹏坝光生态慢游线】白沙湾赶海银叶树 × 国家地质博物馆',
-        shortName: '深圳大鹏坝光生态慢游线',
-        region: 'east',
-        regionLabel: '深圳东部滨海 · 大鹏',
-        comboType: '滨海栈道+湿地',
-        distanceKm: 56,
-        driveTimeModeA: 82,
-        driveTimeModeB: 62, // From Buji via Shuiguan -> Shenhai -> Yanba -> Baguang
-        highwayRouteA: '坂田接太太 → 水官高速转盐坝高速直达坝光出口',
-        highwayRouteB: '【强烈推荐模式B】太太回布吉 → 丹平/水官转盐坝高速至葵涌/坝光出口（避开大鹏所城拥堵段）',
-        tollAndEv: '高速费单程约 ¥15 · 坝光白沙湾公园各停车场极大且永远有空位，配慢充/快充桩',
-        parks: '坝光白沙湾公园（极少人、全平路推车、大宝退潮赶海抓小螃蟹）+ 坝光银叶树湿地园',
-        museums: '深圳大鹏半岛国家地质公园博物馆（恐龙化石+火山喷发科普及巨型地球厅）+ 坝光水翁湿地科普馆',
-        tags: ['全程无障碍推车', '3.5岁高能放电', '充电桩与大车位友好'],
-        baseScore: 91,
-        metrics: {
-          stroller: 95,
-          nursing: 85,
-          toddler: 99,
-          infant: 90,
-          parking: 96,
-          scenery: 97
-        },
-        costs: {
-          tollAndEvCost: 70,
-          ticketCost: 30,
-          hotelCoeff: 1.08
-        },
-        parkingPinpoint: '【坝光白沙湾公园】直接导航“白沙湾公园2号停车场”，车位距离海边平路绿道、儿童无动力沙池仅20米！完全不用像杨梅坑/较场尾那样忍受堵车和天价停车费；【国家地质公园博物馆】导航博物馆地面生态停车场，免费停车，无障碍坡道直入一楼展厅。',
-        nursingPinpoint: '【大鹏半岛国家地质公园博物馆】一楼游客中心旁设独立母婴室；【坝光白沙湾公园】主游客服务中心配母婴护理间（建议随车携带恒温调奶壶，户外随时冲奶）。',
-        weatherSunny: '☀️ 晴朗模式：周六上午在坝光白沙湾公园无动力沙池挖沙、退潮滩涂带3.5岁大宝抓小螃蟹拾贝壳；周日上午漫步百年古银叶树湿地园。',
-        weatherRainy: '🌧️ 阴雨/暴晒B计划：重点深度游玩【大鹏半岛国家地质公园博物馆】（免费免预约，大型恐龙骨骼、矿物宝石与火山溶洞体验）+【坝光水翁湿地室内科普展馆】+ 桔钓沙莱华/浪骑瞻云酒店室内儿童乐园。',
-        schedule: {
-          fri: [
-            { time: '16:00 - 17:05', title: '布吉出发 → 盐坝高速一路向东直达大鹏葵涌/坝光', toddler: '期待周末去海边挖沙抓螃蟹', infant: '在安全提篮内睡下午觉，60分钟准时抵达', note: '五一至十月旺季请提前在“深圳交警”预约大鹏通行（坝光片区很多时候不在核心拥堵区，通行极顺畅）。' },
-            { time: '17:30 - 20:00', title: '入住大鹏佳兆业万豪/浪骑瞻云或葵涌高品质亲子美宿 + 海鲜晚餐', toddler: '在酒店儿童泳池戏水、吃窑鸡与海胆炒饭', infant: '酒店提供免费婴儿床、婴儿澡盆与奶瓶消毒锅（预订时备注）', note: '提前致电酒店礼宾部备好婴儿三件套，解放后备箱。' }
-          ],
-          sat: [
-            { time: '09:00 - 11:45', title: '坝光白沙湾公园（沿海平路栈道 + 巨型儿童沙池 + 浅滩赶海）', toddler: '提着小桶铲子在浅滩石头下找小螃蟹、在树荫沙池玩滑梯', infant: '在海边榕树荫下的平坦绿道推车睡觉，安静无人吵闹', note: '深圳最被低估的宝藏溜娃公园！人少、免费、车位贴着沙滩草坪。' },
-            { time: '12:15 - 15:15', title: '葵涌/大鹏午餐 + 回酒店睡午觉', toddler: '上午赶海大放电后秒睡2小时', infant: '洗净手脚后喝奶安睡', note: '海边紫外线强，正午12:00-15:00务必回室内休整。' },
-            { time: '15:45 - 18:00', title: '大鹏半岛国家地质公园博物馆（火山与恐龙科普之旅）', toddler: '看巨型恐龙模型、摸火山石、看地球演变光影秀', infant: '馆内冷气舒适、通道极宽，推车畅行无阻', note: '博物馆就在七娘山脚下，建筑宏伟且游客密度适中，科普互动性强。' }
-          ],
-          sun: [
-            { time: '09:30 - 11:45', title: '坝光银叶树湿地园（300年古银叶树群 + 盐灶客家古村科普馆）', toddler: '观察奇特的银叶树板状根、在海防科普馆看古船模型', infant: '全程木栈道与平路绿道，古树参天完全不晒', note: '既有自然湿地野趣，又有小型室内科普展馆群。' },
-            { time: '12:00 - 14:30', title: '品尝大鹏特色将军鸭/窑鸡 → 13:45提前走盐坝高速返程布吉', toddler: '车上听故事睡午觉', infant: '避开周日16:00后东部沿海高速返程车流大军', note: '大鹏返程切记在14:00-14:30前上盐坝高速，55分钟丝滑回布吉。' }
-          ]
-        }
-      },
-      {
-        id: 'zhongshan',
-        name: '【深中通道·中山金钟湖人文线】跨海大桥奇观 × 金钟湖与中山新博',
-        shortName: '深中通道·中山金钟湖线',
-        region: 'bay',
-        regionLabel: '跨海湾区 · 中山',
-        comboType: '自然公园+博物馆',
-        distanceKm: 88,
-        driveTimeModeA: 72, // Bantian -> Jihe -> Shenzhong Link -> Zhongshan Urban
-        driveTimeModeB: 85,
-        highwayRouteA: '布吉出发 → 坂田接太太 → 机荷高速(G15)直接连通深中通道跨海大桥直达中山城区',
-        highwayRouteB: '太太回布吉 → 水官转机荷高速经深中通道至中山',
-        tollAndEv: '深中通道+机荷单程过路费约 ¥86 · 中山利和/金钟湖及温泉酒店超充桩齐全，停车费极便宜',
-        parks: '金钟湖公园（大型无动力儿童乐园+绝美环湖平路步道）+ 岐江公园（工业遗址亲水草坪）',
-        museums: '中山市博物馆新馆（园林式现代建筑群+华侨历史馆）+ 孙中山故居纪念馆/香山商业文化博物馆',
-        tags: ['全程无障碍推车', '五星母婴室配置', '3.5岁高能放电', '充电桩与大车位友好'],
-        baseScore: 94,
-        metrics: {
-          stroller: 96,
-          nursing: 93,
-          toddler: 96,
-          infant: 92,
-          parking: 97,
-          scenery: 95
-        },
-        costs: {
-          tollAndEvCost: 220, // Includes Shenzhong Link round-trip tolls
-          ticketCost: 30,
-          hotelCoeff: 0.78 // Zhongshan 5-star hotels are super cost-effective!
-        },
-        parkingPinpoint: '【金钟湖公园】导航“金钟湖公园主入口立体停车楼”或“儿童公园P1停车场”，下楼过连廊直接进入环湖无障碍绿道与儿童游乐区；【中山市博物馆新馆】导航博物馆地下停车场，电梯直达一楼大厅，馆内空间极其阔绰。',
-        nursingPinpoint: '【中山市博物馆新馆】一楼游客服务中心内设高标准独立母婴室（恒温饮水机、自动感应门、软包护理台）；【金钟湖公园】游客驿站内设标准母婴室。',
-        weatherSunny: '☀️ 晴朗模式：周五下午驰骋深中通道看海上日落与西人工岛；周六上午在金钟湖公园环湖步道推车、大宝畅玩无动力儿童游乐园。',
-        weatherRainy: '🌧️ 阴雨/暴晒B计划：深度打卡【中山市博物馆新馆群】（主馆+侨史馆+收音机博物馆，室内连通且展陈极佳）+ 入住【中山温泉宾馆/喜来登/保利艾美】享室内恒温泳池与高性价比石岐乳鸽粤式早茶。',
-        schedule: {
-          fri: [
-            { time: '15:30 - 16:45', title: '布吉出发 → 坂田接太太 → 机荷高速直上深中通道跨海大桥', toddler: '在深中大桥上看伶仃洋巨轮、飞机起降与海底沉管隧道灯光顶', infant: '机荷转深中通道全程高速平稳，睡醒刚好跨过伶仃洋', note: '周五下午16:00上深中通道完全不堵车，还能邂逅绝美珠江口海上夕阳！' },
-            { time: '17:15 - 20:00', title: '入住中山保利艾美/喜来登或永安新城皇冠假日 + 石岐佬乳鸽大餐', toddler: '吃脆皮石岐乳鸽、菠萝包与菊花水榄', infant: '中山五星级酒店房价仅为深圳一半，房间超大（45㎡+），二宝爬行超宽敞', note: '强烈建议用小程序提前取号石岐佬或煲煲掂，性价比极高。' }
-          ],
-          sat: [
-            { time: '09:00 - 11:45', title: '金钟湖公园（环湖无障碍绿道 + 门前大型免费儿童游乐园）', toddler: '在巨型攀爬架、滑梯群与沙池放电2小时', infant: '金钟湖步道极其平坦宽阔，湖风习习，推车睡上午觉满分', note: '金钟湖公园是中山溜娃天花板，绿化与母婴设施均为新近高标准建设。' },
-            { time: '12:15 - 15:15', title: '地道粤式茶楼早茶/午茶 + 回五星酒店午睡', toddler: '吃尽兴后回酒店睡午觉', infant: '酒店婴儿床安稳午睡', note: '跨城自驾务必保证周六中午2小时酒店午休，大人小孩都不累。' },
-            { time: '15:45 - 18:15', title: '中山市博物馆新馆 + 岐江公园看红色大轮船遗址', toddler: '在博物馆看老式有轨电车、粤港澳轮船模型与收音机展', infant: '新馆建筑融合岭南园林与现代极简风，全程无障碍直梯推车极丝滑', note: '中山市博物馆新馆荣获多项建筑大奖，人少好逛，冷气充足。' }
-          ],
-          sun: [
-            { time: '09:30 - 11:45', title: '孙中山故居纪念馆（翠亨村古建园林 + 树荫平路）', toddler: '看民国中西合璧小洋楼、酸子树与民俗展示', infant: '园区古树参天、全平路石板道，推车阴凉舒适', note: '翠亨村就在深中通道翠亨东入口旁，游览完5分钟即可上高速返深！' },
-            { time: '12:00 - 14:45', title: '崖口煲仔饭/海鲜午餐 → 13:45从翠亨东上深中通道返程布吉', toddler: '带着中山杏仁饼特产上车秒睡', infant: '避开周日16:00后深中通道返深高峰，70分钟直回布吉', note: '早去早回策略让跨海自驾比市内堵车还轻松。' }
-          ]
-        }
-      },
-      {
-        id: 'huizhou',
-        name: '【惠州植物园温室+西湖博物线】恒温玻璃温室 × 丰渚园荷花湖景',
-        shortName: '惠州植物园温室+西湖线',
-        region: 'huizhou',
-        regionLabel: '惠州山水圈 · 惠城西湖',
-        comboType: '室内恒温避暑避雨优先',
-        distanceKm: 76,
-        driveTimeModeA: 82,
-        driveTimeModeB: 68, // From Buji via Shuiguan -> Boshen/Wushen Expy (G0422)
-        highwayRouteA: '坂田接太太 → 机荷转武深高速(博深段)直达惠州西湖/植物园',
-        highwayRouteB: '【推荐模式B】太太回布吉 → 丹平/水官转武深高速(G0422)一路畅通无阻至惠州城区',
-        tollAndEv: '单程高速费约 ¥38 · 武深高速车流极少不堵车，惠州植物园及康帝/皇冠假日地库车位充裕',
-        parks: '惠州植物园（巨型室内恒温玻璃温室馆，全平路推车天花板）+ 惠州西湖丰渚园（岭南水乡荷花平路）',
-        museums: '惠州科技馆 + 惠州博物馆（刘氏大宗祠/东坡文化展，两馆紧邻同享地库）',
-        tags: ['全程无障碍推车', '五星母婴室配置', '3.5岁高能放电', '充电桩与大车位友好'],
-        baseScore: 94,
-        metrics: {
-          stroller: 97,
-          nursing: 91,
-          toddler: 94,
-          infant: 96,
-          parking: 96,
-          scenery: 95
-        },
-        costs: {
-          tollAndEvCost: 115,
-          ticketCost: 20, // Botanical garden & West Lake are FREE!
-          hotelCoeff: 0.75 // Extremely high value 5-star lake-view hotels
-        },
-        parkingPinpoint: '【惠州植物园】直接导航“惠州植物园地下停车场”，电梯上来就是游客中心与核心景点“巨型室内温室馆”，推车完全不用淋雨晒太阳；【惠州西湖丰渚园】建议停“丰渚园北门停车场”（比西湖平湖门人少太多，且紧邻惠州植物园，车程仅5分钟）。',
-        nursingPinpoint: '【惠州植物园游客中心】一楼设独立母婴室（配冷热水与护理台）；【惠州博物馆/科技馆】一楼服务中心设标准母婴哺乳间。',
-        weatherSunny: '☀️ 晴朗模式：周六上午逛惠州植物园室内温室+户外儿童科普园，下午泛舟惠州西湖丰渚园喂锦鲤；周日上午打卡惠州科技馆。',
-        weatherRainy: '🌧️ 阴雨/暴晒B计划：本路线天生自带室内恒温属性！【惠州植物园巨型玻璃温室】+【惠州科技馆】+【惠州博物馆】三大室内场馆全部地库直梯直达，狂风暴雨或35℃酷暑也能优雅溜双娃。',
-        schedule: {
-          fri: [
-            { time: '16:00 - 17:10', title: '布吉出发 → 水官转武深高速(博深段)一路向北直抵惠州西湖', toddler: '沿途穿越青山绿水隧道群', infant: '武深高速路况极好、货车少，二宝睡完整觉即达', note: '从布吉走武深高速去惠州城区，是深圳出城最不堵的一条宝藏高速走廊。' },
-            { time: '17:30 - 20:00', title: '入住惠州康帝国际酒店（西湖全景房）或富力万丽 + 客家盐焗鸡晚餐', toddler: '在房间直接俯瞰整个惠州西湖与泗洲塔夜景', infant: '吃客家山水豆腐花与肉沫蒸蛋辅食', note: '康帝酒店出门过马路即是西湖平湖栈道，地理位置无敌且性价比极高。' }
-          ],
-          sat: [
-            { time: '09:00 - 11:45', title: '惠州植物园（巨型室内恒温沙生/热带雨林温室馆 + 儿童园）', toddler: '在巨型玻璃温室看空中瀑布、食虫植物、巨型仙人掌与儿童迷宫', infant: '温室馆内全无障碍平缓坡道直通到底，推车推行丝滑度100分', note: '完全免费！温室馆造型如生态太空舱，既有科普性又非常出片。' },
-            { time: '12:15 - 15:15', title: '西湖畔顺德/客家菜午餐 + 回西湖景酒店午睡', toddler: '回酒店午休，大人在窗边泡茶看西湖游船', infant: '安静午睡2小时', note: '植物园距离西湖酒店仅8分钟车程，转场极快。' },
-            { time: '15:30 - 18:00', title: '惠州西湖·丰渚园（荷花池平路长廊 + 锦鲤投喂 + 电动画舫船）', toddler: '在五龙亭买鱼食喂成群大锦鲤，坐平稳电动船游湖', infant: '丰渚园三面环湖、亭台连廊遮阴，推车散步微风拂面', note: '避开游客扎堆的西湖主大门，从丰渚园进出清静雅致、推车无台阶。' }
-          ],
-          sun: [
-            { time: '09:30 - 12:00', title: '惠州科技馆 + 惠州博物馆（江北市民乐园双馆联游）', toddler: '在科技馆玩宇宙飞船模拟、声光电互动与恐龙展厅', infant: '两馆并排相邻，冷气充足、母婴室齐备，二宝推车或腰凳轻松逛', note: '公立大馆免费开放，展品维护好且排队极少。' },
-            { time: '12:30 - 15:00', title: '品尝横沥汤粉/东江酿豆腐 → 武深高速68分钟轻松回布吉', toddler: '满载客家小吃特产上车午睡', infant: '一路顺畅回深，完全不塞车', note: '预算最友好、室内恒温保障最强的跨城路线。' }
-          ]
-        }
-      },
-      {
-        id: 'nansha',
-        name: '【广州南沙/番禺科普滨海线】慧谷超级堤挖沙 × 广东科学中心/水鸟世界',
-        shortName: '广州南沙科普滨海线',
-        region: 'bay',
-        regionLabel: '跨海湾区 · 广州南沙',
-        comboType: '森林湖泊+科普馆',
-        distanceKm: 82,
-        driveTimeModeA: 72, // Via G94 -> Nansha Bridge / Humen Bridge -> Nansha
-        driveTimeModeB: 85,
-        highwayRouteA: '布吉出发 → 坂田接太太 → 珠三角环线(G94)转莞佛/南沙大桥直下南沙灵山岛/慧谷',
-        highwayRouteB: '太太回布吉 → 机荷转广深沿江/南沙大桥至南沙',
-        tollAndEv: '单程过路过桥费约 ¥68 · 南沙花园酒店、环宇城及广东科学中心超充桩与超大地面车位极多',
-        parks: '南沙慧谷超级堤（7公里沿海平坦绿道+大草坪+免费海边沙池）+ 灵山岛尖儿童公园',
-        museums: '广东科学中心（吉尼斯世界最大科技馆，专设儿童天地馆）+ 南沙水鸟世界生态园（东南亚竹构建筑+散养火烈鸟鹈鹕）',
-        tags: ['全程无障碍推车', '五星母婴室配置', '3.5岁高能放电', '充电桩与大车位友好'],
-        baseScore: 95,
-        metrics: {
-          stroller: 97,
-          nursing: 96,
-          toddler: 99,
-          infant: 93,
-          parking: 97,
-          scenery: 94
-        },
-        costs: {
-          tollAndEvCost: 180,
-          ticketCost: 130, // Guangdong Science Center / Waterbird World tickets
-          hotelCoeff: 0.90
-        },
-        parkingPinpoint: '【南沙慧谷超级堤】导航“南沙花园酒店”或“明珠湾大桥西侧慧谷超级堤停车场”，停好车过绿道0台阶直达海边大草坪与挖沙区；【广东科学中心】导航科学中心西门大型停车场，步行至正门坐无障碍直梯进二楼展厅。',
-        nursingPinpoint: '【广东科学中心】每层展馆旁均设大型星级母婴室（尤其是二楼“儿童天地”展馆旁，配多个独立哺乳间、温水台与婴儿床）；【南沙环宇城/南沙花园酒店】配备五星级母婴护理间。',
-        weatherSunny: '☀️ 晴朗模式：周六上午在南沙慧谷超级堤7公里滨海绿道骑平衡车、挖沙看虎门大桥；下午在南沙水鸟世界看火烈鸟与黑天鹅。',
-        weatherRainy: '🌧️ 阴雨/暴晒B计划：全天沉浸式畅玩【广东科学中心】（吉尼斯世界纪录最大科技馆，仅“儿童天地”与“飞天之梦”两个馆就够3.5岁大宝玩足一整天！）+ 入住【南沙花园酒店】畅玩室内外恒温泳池与透明旋转滑梯。',
-        schedule: {
-          fri: [
-            { time: '15:30 - 16:45', title: '布吉出发 → 坂田接太太 → G94转南沙大桥直抵广州南沙湾', toddler: '跨越宏伟的南沙大桥/虎门大桥看珠江口繁忙航道', infant: '趁15:30下午小睡窗口出发，过桥后即抵达酒店', note: '南沙紧邻虎门/南沙大桥西岸，一下桥就是景区和酒店，无需进入广州拥堵市区！' },
-            { time: '17:15 - 20:00', title: '入住广州南沙花园酒店（邮轮造型设计酒店）或南沙越秀喜来登 + 十四涌海鲜晚餐', toddler: '在南沙花园酒店室内儿童乐园与旋转滑梯放电', infant: '酒店由克罗地亚设计师操刀，园区全无障碍连廊直通海滨绿道', note: '南沙花园酒店本身就像一座现代建筑艺术馆，且紧贴慧谷超级堤。' }
-          ],
-          sat: [
-            { time: '09:00 - 11:30', title: '南沙慧谷超级堤（7公里全平路滨海绿道 + 鸭利沙大草坪 + 海边挖沙）', toddler: '骑滑板车/平衡车、在海边细沙池挖沙、看邮轮母港大船', infant: '在极其宽阔平整的超级堤绿道推车睡上午觉，海风清爽人极少', note: '相比深圳湾周末的人山人海，南沙慧谷超级堤宽阔清静10倍，溜娃极爽。' },
-            { time: '12:00 - 15:00', title: '南沙环宇城粤式茶点午餐 + 回酒店睡午觉', toddler: '午睡养精蓄锐', infant: '环宇城高配母婴室换洗，回酒店安睡', note: '保证午睡质量，下午游园不哭闹。' },
-            { time: '15:30 - 18:00', title: '南沙水鸟世界生态园（巴厘岛风竹构建筑 + 零距离看火烈鸟/孔雀/鹈鹕）', toddler: '近距离观察散养的红鹳火烈鸟、斑嘴鹈鹕与黑天鹅，趣味性爆棚', infant: '园区全平坦木栈道与东南亚竹子编织拱廊，阴凉遮阳且出片极美', note: '水鸟世界紧邻十九涌湿地，生态温和不费腿，非常适合3.5岁+8月龄组合。' }
-          ],
-          sun: [
-            { time: '09:30 - 13:00', title: '广东科学中心（全球最大科技馆 · 二楼“儿童天地”专馆）', toddler: '在人体探秘、戏水湾、小小建筑师、感知花园动手玩足3小时', infant: '场馆极其宏大、冷气恒温、五星母婴室随处可见，推车畅行无阻', note: '3.5岁大宝的科普天堂！建议直奔二楼C区“儿童天地”与“交通世界”。' },
-            { time: '13:30 - 15:15', title: '科学中心简餐/番禺美食 → 14:15上南沙大桥返程布吉', toddler: '上午高强度科普放电，上车即沉睡到深圳', infant: '喝饱奶伴随车行摇晃睡下午觉', note: '15:30前即可回到布吉地库，避开周日傍晚大桥返程车流。' }
-          ]
-        }
-      }
-    ];
-
-    // =========================================================================
-    // 3. DUAL-KID TRUNK GEAR CHECKLIST DATA (4 Categories, 28 Items)
-    // =========================================================================
-    const gearCategories = [
-      {
-        id: 'infant',
-        title: '8月龄二宝专区',
-        subtitle: '睡眠、喂养与移动护理核心',
-        badgeColor: 'bg-terracotta text-cream',
-        items: [
-          { id: 'inf_1', name: '高避震轻便婴儿推车 + 防晒遮光帘', essential: true, desc: '实现上午户外绿道推车小睡的核心装备' },
-          { id: 'inf_2', name: '人体工学透气腰凳 / 婴儿背带', essential: true, desc: '博物馆跨层、上下接驳车及二宝粘人时救命神器' },
-          { id: 'inf_3', name: '便携恒温调奶水壶 (带电量显示) + 奶粉分装盒', essential: true, desc: '车载/酒店随时45℃恒温冲奶，不求人' },
-          { id: 'inf_4', name: '成品辅食果泥/肉泥×6袋 + 便携米粉 + 硅胶软勺', essential: true, desc: '8月龄外出首选巴氏杀菌成品泥，安全省心' },
-          { id: 'inf_5', name: '纸尿裤/拉拉裤×18片 + 便携隔尿垫×4张', essential: true, desc: '三天两晚日均6片+冗余备用，换尿布干净卫生' },
-          { id: 'inf_6', name: '安抚奶嘴/防掉链 + 熟悉的安抚巾/牙胶摇铃×3', essential: true, desc: '高速行车与陌生酒店入睡安抚必备' },
-          { id: 'inf_7', name: '连体包屁衣×4套 + 博物馆防空调薄纱巾/防风披肩', essential: false, desc: '应对室内博物馆22℃冷气与海边傍晚微风' }
-        ]
-      },
-      {
-        id: 'toddler',
-        title: '3.5岁大宝专区',
-        subtitle: '高能户外放电与旅途自娱',
-        badgeColor: 'bg-tealDeep text-cream',
-        items: [
-          { id: 'tod_1', name: '儿童平衡车 / 折叠滑板车 + 护具头盔', essential: true, desc: '松山湖/人才公园/慧谷超级堤平路放电神器' },
-          { id: 'tod_2', name: '折叠硅胶挖沙桶 + 小铲子 + 赶海小蟹钳', essential: true, desc: '白沙湾赶海、公园沙池玩2小时不费爸妈' },
-          { id: 'tod_3', name: '全自动防漏泡泡机 + 昆虫观察放大镜', essential: false, desc: '大草坪拍照出片与森林栈道自然科普利器' },
-          { id: 'tod_4', name: '速干吸汗换洗内衣汗衫×4套 + 隔汗巾×5条', essential: true, desc: '3.5岁跑跳极易出汗，及时换衣防吹风感冒' },
-          { id: 'tod_5', name: '车载应急便携小尿壶 (男女宝通用密封款)', essential: true, desc: '专治高速堵车或大型公园找不到厕所的十万火急' },
-          { id: 'tod_6', name: '车载故事机 / 熏听机 + 3本最爱的轻薄绘本', essential: true, desc: '保护视力不看手机，高速路上安静听故事' },
-          { id: 'tod_7', name: '大宝专属保温吸管水杯 + 独立小零食包', essential: true, desc: '海苔、山楂棒、奶酪棒，随时补充体力' }
-        ]
-      },
-      {
-        id: 'car',
-        title: '车载与安全移动舱',
-        subtitle: '双安全座椅与座舱秩序管理',
-        badgeColor: 'bg-olive text-cream',
-        items: [
-          { id: 'car_1', name: '双安全座椅安装检查 (二宝反向安装45°躺角)', essential: true, desc: '出发前确认ISOFIX卡扣锁紧，二宝躺角舒适易睡' },
-          { id: 'car_2', name: '后排双侧磁吸遮阳帘 + 二宝座椅观察反光镜', essential: true, desc: '遮挡午后西晒阳光，前排随时观察二宝睡眠状态' },
-          { id: 'car_3', name: '大宝安全座椅便携软质小桌板', essential: false, desc: '行车途中放绘本、贴纸书与小水杯' },
-          { id: 'car_4', name: '80抽厚款婴儿纯水湿巾×3大包 + 柔纸巾×3包', essential: true, desc: '前排中控1包、妈咪包1包、后备箱1包' },
-          { id: 'car_5', name: '粘贴式车载垃圾袋×1卷 + 免洗抑菌洗手液', essential: true, desc: '随时处理果皮、用过的纸尿裤与户外挖沙后清洁' },
-          { id: 'car_6', name: '折叠户外野餐垫 (防水铝膜底) / 速开遮阳帐篷', essential: false, desc: '铺在公园草坪，大宝休息、二宝练习坐爬' },
-          { id: 'car_7', name: '新能源充放电枪 / 手机多口快充线 + 大容量充电宝', essential: true, desc: '保障导航、相机与温奶器全天候不断电' }
-        ]
-      },
-      {
-        id: 'medical',
-        title: '家庭医疗与避坑应急包',
-        subtitle: '双娃跨城过夜定心丸',
-        badgeColor: 'bg-ink text-cream',
-        items: [
-          { id: 'med_1', name: '博朗/红外耳温枪 + 退热贴×4片', essential: true, desc: '过夜必带！随时监测两娃体温变化' },
-          { id: 'med_2', name: '美林(布洛芬混悬液) / 泰诺林 (注意核对保质期)', essential: true, desc: '应对小儿突发夜间发热的底线保障' },
-          { id: 'med_3', name: '生理性海盐水鼻喷 + 婴儿吸鼻器', essential: true, desc: '缓解酒店空调房干燥或轻微鼻塞流涕' },
-          { id: 'med_4', name: '派卡瑞丁物理防蚊液 (8月龄可用款) + 无比滴/紫草膏', essential: true, desc: '湿地公园、植物园草坪防蚊虫叮咬刚需' },
-          { id: 'med_5', name: '独立包装碘伏棉签×15支 + 防水卡通创可贴', essential: true, desc: '3.5岁大宝骑车跑跳擦伤、赶海划伤即时消毒' },
-          { id: 'med_6', name: '口服补液盐III + 蒙脱石散 + 益生菌', essential: false, desc: '预防水土不服或外食轻微肠胃不适' },
-          { id: 'med_7', name: '两娃电子医保凭证确认 + 身份证/出生证明照片备份', essential: true, desc: '酒店办理入住登记及异地就医备用' }
-        ]
-      }
-    ];
-
-    // =========================================================================
-    // 4. CORE HELPER FUNCTIONS & CALCULATIONS
-    // =========================================================================
-
-    // Calculate dynamic drive time based on Mode A or Mode B
-    function getRouteDriveTime(route) {
-      return state.departureMode === 'A' ? route.driveTimeModeA : route.driveTimeModeB;
+    /********************************************************************
+     * 3. 初始化与交互控制函数
+     ********************************************************************/
+    function initApp() {
+      bindActions();
+      renderDistrictMatrix();
+      updateBudgetAndRender();
+      updateGearBadge();
+      renderCustomPlanBar();
+      syncButtons();
     }
 
-    // Calculate dynamic total cost based on Budget Sandbox
-    function calculateRouteCost(route) {
-      const hotelCost = Math.round(state.budgetSandbox.hotelRate * 2 * route.costs.hotelCoeff);
-      const diningCost = Math.round(state.budgetSandbox.diningRate * 2.5);
-      const ticketCost = state.budgetSandbox.includeTickets ? route.costs.ticketCost * 2 : 0;
-      const tollAndEv = route.costs.tollAndEvCost;
-      const total = hotelCost + diningCost + ticketCost + tollAndEv;
-      return { hotelCost, diningCost, ticketCost, tollAndEv, total };
+    function setDepartMode(mode) {
+      state.departMode = mode;
+      byId('modeBtnA').classList.toggle('active', mode === 'A');
+      byId('modeBtnB').classList.toggle('active', mode === 'B');
+      byId('currentModeHint').textContent =
+        mode === 'A' ? '当前：模式A 坂田顺路接太太出发' : '当前：模式B 太太回布吉汇合出发';
+      renderMainContent();
     }
 
-    // Calculate dynamic recommendation score based on current departure mode
-    function getDynamicScore(route) {
-      const driveTime = getRouteDriveTime(route);
-      // Slight bonus if route aligns with selected departure mode saving time
-      const timeBonus = driveTime <= 45 ? 2 : (driveTime <= 65 ? 1 : -1);
-      return Math.min(99, route.baseScore + timeBonus);
+    function switchPerspective(p) {
+      state.perspective = p;
+      ['localSpots', 'localPacks', 'crossCity', 'gear'].forEach(key => {
+        const btnId = 'tab' + key.charAt(0).toUpperCase() + key.slice(1);
+        const el = byId(btnId);
+        if (el) el.classList.toggle('active', key === p);
+      });
+
+      byId('districtMatrixBox').style.display = (p === 'localSpots') ? 'block' : 'none';
+      byId('catFilterGroup').style.display = (p === 'localSpots') ? 'block' : 'none';
+      byId('mainToolbar').style.display = (p === 'gear') ? 'none' : 'flex';
+
+      renderMainContent();
     }
 
-    // =========================================================================
-    // 5. DEPARTURE MODE SWITCHER (Mode A vs Mode B)
-    // =========================================================================
-    function setDepartureMode(mode) {
-      state.departureMode = mode;
+    function renderDistrictMatrix() {
+      const tabsContainer = byId('districtTabs');
+      const subareaBar = byId('subareaBar');
 
-      const btnA = byId('btn-mode-a');
-      const btnB = byId('btn-mode-b');
-      const badgeA = byId('badge-mode-a');
-      const badgeB = byId('badge-mode-b');
-      const westGroup = byId('topo-west-group');
-      const eastGroup = byId('topo-east-group');
-      const topoLabel = byId('topology-mode-label');
-      const topoDesc = byId('topology-desc');
+      tabsContainer.innerHTML = DISTRICT_META.map(d => {
+        const count = d.id === 'ALL'
+          ? LOCAL_SPOTS.length
+          : LOCAL_SPOTS.filter(s => s.district === d.id).length;
+        const activeClass = state.selectedDistrict === d.id ? 'active' : '';
+        return `
+          <button type="button" class="d-tab ${activeClass}" data-action="selectDistrict" data-event="click" data-arg1="${d.id}" data-type1="string">
+            <span>${d.name}</span>
+            <span class="count">${count}</span>
+          </button>
+        `;
+      }).join('');
 
-      if (mode === 'A') {
-        btnA.className = 'text-left p-4 rounded-xl border-2 transition-all relative group bg-tealDeep/5 border-tealDeep shadow-sm';
-        btnB.className = 'text-left p-4 rounded-xl border-2 transition-all relative group bg-parchment/50 border-sandBorder hover:border-tealDeep/60';
-        badgeA.className = 'inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-md text-xs font-mono font-bold bg-tealDeep text-cream';
-        badgeA.textContent = '● 当前激活 · 模式 A';
-        badgeB.className = 'inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-md text-xs font-mono font-bold bg-sandBorder text-ink';
-        badgeB.textContent = '○ 点击切换 · 模式 B';
-
-        westGroup.setAttribute('opacity', '1');
-        eastGroup.setAttribute('opacity', '0.32');
-        topoLabel.textContent = '模式A：西/北走廊优先';
-        topoLabel.className = 'text-[11px] font-mono bg-tealDeep text-cream px-2 py-0.5 rounded';
-        topoDesc.innerHTML = '当前示意图：<strong>模式A</strong> 下，15:30从布吉带两娃出发，20分钟到坂田接上太太直入G94珠三角环线或坂银通道，西北线与南山线耗时大幅缩短。';
+      const currentObj = DISTRICT_META.find(d => d.id === state.selectedDistrict);
+      if (!currentObj || currentObj.id === 'ALL') {
+        subareaBar.innerHTML = `
+          <span style="font-size:12px;color:var(--ink-secondary);font-weight:700;">细分片区快选：</span>
+          <span class="chip active">当前展示深圳全部 26 个细分片区（点击上方具体行政区可按片区聚焦）</span>
+        `;
       } else {
-        btnB.className = 'text-left p-4 rounded-xl border-2 transition-all relative group bg-terracotta/5 border-terracotta shadow-sm';
-        btnA.className = 'text-left p-4 rounded-xl border-2 transition-all relative group bg-parchment/50 border-sandBorder hover:border-tealDeep/60';
-        badgeB.className = 'inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-md text-xs font-mono font-bold bg-terracotta text-cream';
-        badgeB.textContent = '● 当前激活 · 模式 B';
-        badgeA.className = 'inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-md text-xs font-mono font-bold bg-sandBorder text-ink';
-        badgeA.textContent = '○ 点击切换 · 模式 A';
-
-        westGroup.setAttribute('opacity', '0.32');
-        eastGroup.setAttribute('opacity', '1');
-        topoLabel.textContent = '模式B：东部山海走廊优先';
-        topoLabel.className = 'text-[11px] font-mono bg-terracotta text-cream px-2 py-0.5 rounded';
-        topoDesc.innerHTML = '当前示意图：<strong>模式B</strong> 下，太太乘地铁5号线/10号线回布吉汇合，直接从布吉上丹平快速/盐排高速或武深高速，去盐田、大鹏、惠州省时15-20分钟！';
+        subareaBar.innerHTML = `
+          <span style="font-size:12px;color:var(--ink-secondary);font-weight:700;">${currentObj.id}细分片区：</span>
+          <button type="button" class="chip ${state.selectedSubarea === 'ALL' ? 'active' : ''}" data-action="selectSubarea" data-event="click" data-arg1="ALL" data-type1="string">全部片区</button>
+          ${currentObj.subareas.map(sub => `
+            <button type="button" class="chip ${state.selectedSubarea === sub ? 'active' : ''}" data-action="selectSubarea" data-event="click" data-arg1="${sub}" data-type1="string">${sub}</button>
+          `).join('')}
+        `;
       }
-
-      renderRoutes();
     }
 
-    // =========================================================================
-    // 6. SMART FILTERS & BUDGET SANDBOX HANDLERS
-    // =========================================================================
-    function setFilter(key, value) {
-      if (key === 'maxTime') {
-        state.filters.maxTime = parseInt(value, 10);
-      } else {
-        state.filters[key] = value;
-      }
+    function selectDistrict(districtId) {
+      state.selectedDistrict = districtId;
+      state.selectedSubarea = 'ALL';
+      renderDistrictMatrix();
+      renderMainContent();
+    }
 
-      if (key === 'region') {
-        root.querySelectorAll('.filter-chip-region').forEach(btn => {
-          if (btn.dataset.val === value) {
-            btn.className = 'filter-chip-region px-3 py-1.5 rounded-lg text-xs font-medium bg-tealDeep text-cream transition';
-          } else {
-            btn.className = 'filter-chip-region px-3 py-1.5 rounded-lg text-xs font-medium bg-parchment text-ink hover:bg-sandBorder/60 border border-sandBorder transition';
+    function selectSubarea(sub) {
+      state.selectedSubarea = sub;
+      renderDistrictMatrix();
+      renderMainContent();
+    }
+
+    function selectCategory(cat) {
+      state.selectedCategory = cat;
+      root.querySelectorAll('#categoryChips .chip').forEach(el => {
+        el.classList.toggle('active', el.dataset.cat === cat);
+      });
+      renderMainContent();
+    }
+
+    function selectMaxDrive(mins) {
+      state.maxDrive = mins;
+      root.querySelectorAll('#driveChips .chip').forEach(el => {
+        el.classList.toggle('active', Number(el.dataset.drive) === mins);
+      });
+      renderMainContent();
+    }
+
+    function toggleNeed(needKey) {
+      if (state.needs.has(needKey)) {
+        state.needs.delete(needKey);
+      } else {
+        state.needs.add(needKey);
+      }
+      root.querySelectorAll('#needChips .chip').forEach(el => {
+        el.classList.toggle('active', state.needs.has(el.dataset.need));
+      });
+      renderMainContent();
+    }
+
+    function resetFilters() {
+      state.selectedDistrict = 'ALL';
+      state.selectedSubarea = 'ALL';
+      state.selectedCategory = 'ALL';
+      state.maxDrive = 999;
+      state.needs.clear();
+      byId('searchInput').value = '';
+      selectCategory('ALL');
+      selectMaxDrive(999);
+      root.querySelectorAll('#needChips .chip').forEach(el => el.classList.remove('active'));
+      renderDistrictMatrix();
+      renderMainContent();
+    }
+
+    function getBudgetParams() {
+      const stayNights = Number(byId('stayModeSelect').value);
+      const hotelRate = Number(byId('hotelTierSelect').value);
+      const foodCost = Number(byId('foodTierSelect').value);
+      const hotelTotal = stayNights * hotelRate;
+      const baseTransport = 90; // 充电+停车基准
+      return { stayNights, hotelRate, foodCost, hotelTotal, baseTransport, total: hotelTotal + foodCost + baseTransport };
+    }
+
+    function updateBudgetAndRender() {
+      const b = getBudgetParams();
+      byId('budgetBreakdownText').textContent =
+        `房¥${b.hotelTotal} + 餐¥${b.foodCost} + 车电停¥${b.baseTransport}`;
+      byId('budgetTotalDisplay').textContent = `¥ ${b.total.toLocaleString()}`;
+      renderMainContent();
+    }
+
+    /********************************************************************
+     * 4. 核心视图渲染器
+     ********************************************************************/
+    function renderMainContent() {
+      const container = byId('mainCardsContainer');
+      const query = (byId('searchInput').value || '').trim().toLowerCase();
+      const sortBy = byId('sortSelect').value;
+
+      if (state.perspective === 'localSpots') {
+        container.className = 'cards-grid';
+        let list = LOCAL_SPOTS.filter(item => {
+          const driveMins = state.departMode === 'A' ? item.driveA : item.driveB;
+          if (state.selectedDistrict !== 'ALL' && item.district !== state.selectedDistrict) return false;
+          if (state.selectedSubarea !== 'ALL' && item.subarea !== state.selectedSubarea) return false;
+          if (state.selectedCategory !== 'ALL' && item.category !== state.selectedCategory) return false;
+          if (driveMins > state.maxDrive) return false;
+          for (let n of state.needs) {
+            if (!item[n]) return false;
           }
+          if (query) {
+            const hay = `${item.name} ${item.district} ${item.subarea} ${item.category} ${item.kid35} ${item.kid08}`.toLowerCase();
+            if (!hay.includes(query)) return false;
+          }
+          return true;
         });
-      }
 
-      renderRoutes();
-    }
-
-    function toggleTag(tagName) {
-      const idx = state.filters.tags.indexOf(tagName);
-      if (idx > -1) {
-        state.filters.tags.splice(idx, 1);
-      } else {
-        state.filters.tags.push(tagName);
-      }
-
-      root.querySelectorAll('.tag-filter-btn').forEach(btn => {
-        const isSelected = state.filters.tags.includes(btn.dataset.tag);
-        const checkBox = btn.querySelector('.tag-check-box');
-        if (isSelected) {
-          btn.className = 'tag-filter-btn flex items-center gap-2 p-2.5 rounded-xl border-2 border-tealDeep bg-tealDeep/10 text-left transition';
-          checkBox.className = 'w-4 h-4 rounded bg-tealDeep border border-tealDeep flex items-center justify-center text-[10px] text-cream shrink-0 tag-check-box';
-        } else {
-          btn.className = 'tag-filter-btn flex items-center gap-2 p-2.5 rounded-xl border border-sandBorder bg-parchment/60 text-left hover:border-tealDeep transition';
-          checkBox.className = 'w-4 h-4 rounded border border-sandDark flex items-center justify-center text-[10px] text-cream shrink-0 tag-check-box';
-        }
-      });
-
-      renderRoutes();
-    }
-
-    function resetAllFilters() {
-      state.filters = {
-        region: 'all',
-        combo: 'all',
-        maxTime: 999,
-        budgetTier: 'all',
-        tags: []
-      };
-      byId('select-combo').value = 'all';
-      byId('select-time').value = '999';
-      byId('select-budget-tier').value = 'all';
-      setFilter('region', 'all');
-
-      root.querySelectorAll('.tag-filter-btn').forEach(btn => {
-        const checkBox = btn.querySelector('.tag-check-box');
-        btn.className = 'tag-filter-btn flex items-center gap-2 p-2.5 rounded-xl border border-sandBorder bg-parchment/60 text-left hover:border-tealDeep transition';
-        checkBox.className = 'w-4 h-4 rounded border border-sandDark flex items-center justify-center text-[10px] text-cream shrink-0 tag-check-box';
-      });
-
-      renderRoutes();
-    }
-
-    function setSortBy(sortType) {
-      state.sortBy = sortType;
-      root.querySelectorAll('.sort-btn').forEach(btn => {
-        if (btn.dataset.sort === sortType) {
-          btn.className = 'sort-btn px-3 py-1.5 rounded-lg text-xs font-medium bg-tealDeep text-cream transition';
-        } else {
-          btn.className = 'sort-btn px-3 py-1.5 rounded-lg text-xs font-medium bg-parchment text-ink hover:bg-sandBorder/60 border border-sandBorder transition';
-        }
-      });
-      renderRoutes();
-    }
-
-    function setBudgetSandbox(type, value) {
-      if (type === 'hotel') {
-        state.budgetSandbox.hotelRate = value;
-        byId('label-hotel-rate').textContent = `¥${value} / 晚`;
-        root.querySelectorAll('.sandbox-hotel-btn').forEach(btn => {
-          const isSelected = parseInt(btn.dataset.hotel, 10) === value;
-          btn.className = isSelected
-            ? 'sandbox-hotel-btn py-2 px-2 rounded-lg border-2 border-tealDeep bg-tealDeep text-cream text-center transition'
-            : 'sandbox-hotel-btn py-2 px-2 rounded-lg border border-sandBorder bg-parchment text-center transition';
+        list.sort((a, b) => {
+          const da = state.departMode === 'A' ? a.driveA : a.driveB;
+          const db = state.departMode === 'A' ? b.driveA : b.driveB;
+          if (sortBy === 'drive') return da - db;
+          if (sortBy === 'stroller') return b.strollerScore - a.strollerScore;
+          if (sortBy === 'energy') return b.energyScore - a.energyScore;
+          return b.score - a.score;
         });
-      } else if (type === 'dining') {
-        state.budgetSandbox.diningRate = value;
-        const labels = { 320: '商场简餐 ¥320/天', 500: '地道粤菜 ¥500/天', 850: '星级海鲜 ¥850/天' };
-        byId('label-dining-rate').textContent = labels[value];
-        root.querySelectorAll('.sandbox-dining-btn').forEach(btn => {
-          const isSelected = parseInt(btn.dataset.dining, 10) === value;
-          btn.className = isSelected
-            ? 'sandbox-dining-btn py-2 px-2 rounded-lg border-2 border-tealDeep bg-tealDeep text-cream text-center transition'
-            : 'sandbox-dining-btn py-2 px-2 rounded-lg border border-sandBorder bg-parchment text-center transition';
-        });
-      }
-      updateSandboxAverage();
-      renderRoutes();
-    }
 
-    function toggleTicketSandbox() {
-      state.budgetSandbox.includeTickets = !state.budgetSandbox.includeTickets;
-      const btn = byId('btn-ticket-toggle');
-      if (state.budgetSandbox.includeTickets) {
-        btn.textContent = '已含精选套票';
-        btn.className = 'px-3 py-1.5 rounded-lg text-xs font-mono font-bold bg-tealDeep text-cream transition';
-      } else {
-        btn.textContent = '仅免费公立馆 (¥0)';
-        btn.className = 'px-3 py-1.5 rounded-lg text-xs font-mono font-bold bg-parchment text-ink border border-sandDark transition';
-      }
-      updateSandboxAverage();
-      renderRoutes();
-    }
+        byId('resultCountText').innerHTML =
+          `🎯 深圳本地图谱筛选出 <span style="color:var(--terracotta);font-size:16px;">${list.length}</span> 个宝藏点位（点击「+周六 / +周日」可自由拼装两日游）`;
 
-    function updateSandboxAverage() {
-      const sum = routesData.reduce((acc, r) => acc + calculateRouteCost(r).total, 0);
-      const avg = Math.round(sum / routesData.length);
-      byId('sandbox-avg-total').textContent = `¥${avg.toLocaleString()}`;
-    }
-
-    // =========================================================================
-    // 7. RENDER ROUTE CARDS MATRIX
-    // =========================================================================
-    function renderRoutes() {
-      const grid = byId('routes-grid');
-      const countBadge = byId('route-count-badge');
-
-      // Filter routes
-      let filtered = routesData.filter(route => {
-        const driveTime = getRouteDriveTime(route);
-        const costObj = calculateRouteCost(route);
-
-        if (state.filters.region !== 'all' && route.region !== state.filters.region) return false;
-        if (state.filters.combo !== 'all' && route.comboType !== state.filters.combo) return false;
-        if (driveTime > state.filters.maxTime) return false;
-
-        if (state.filters.budgetTier !== 'all') {
-          if (state.filters.budgetTier === 'light' && costObj.total >= 1200) return false;
-          if (state.filters.budgetTier === 'quality' && (costObj.total < 1200 || costObj.total > 2500)) return false;
-          if (state.filters.budgetTier === 'luxury' && costObj.total <= 2500) return false;
+        if (list.length === 0) {
+          container.innerHTML = `<div class="panel-card" style="grid-column:1/-1;text-align:center;padding:40px;">未找到符合当前叠加筛选条件的点位，请点击左侧「重置全部」放宽条件。</div>`;
+          return;
         }
 
-        for (const reqTag of state.filters.tags) {
-          if (!route.tags.includes(reqTag)) return false;
-        }
-
-        return true;
-      });
-
-      // Sort routes
-      filtered.sort((a, b) => {
-        if (state.sortBy === 'score') return getDynamicScore(b) - getDynamicScore(a);
-        if (state.sortBy === 'time') return getRouteDriveTime(a) - getRouteDriveTime(b);
-        if (state.sortBy === 'stroller') return b.metrics.stroller - a.metrics.stroller;
-        if (state.sortBy === 'cost') return calculateRouteCost(a).total - calculateRouteCost(b).total;
-        return 0;
-      });
-
-      countBadge.textContent = `共匹配 ${filtered.length} 条路线`;
-
-      if (filtered.length === 0) {
-        grid.innerHTML = `
-          <div class="col-span-full bg-cream rounded-2xl editorial-border p-10 text-center space-y-3">
-            <div class="text-base font-serif font-bold text-ink">当前严苛筛选条件下暂无匹配路线</div>
-            <p class="text-xs text-inkMuted">您可以尝试调高住宿/预算区间，或点击下方按钮一键恢复全部 8 条精选路线</p>
-            <button data-action="resetAllFilters" data-event="click" class="px-4 py-2 rounded-xl text-xs font-bold bg-tealDeep text-cream hover:bg-tealLight transition">
-              重置全部筛选条件
-            </button>
-          </div>
-        `;
-        return;
-      }
-
-      grid.innerHTML = filtered.map(route => {
-        const driveTime = getRouteDriveTime(route);
-        const otherModeTime = state.departureMode === 'A' ? route.driveTimeModeB : route.driveTimeModeA;
-        const timeDiff = otherModeTime - driveTime;
-        const costObj = calculateRouteCost(route);
-        const score = getDynamicScore(route);
-        const isCompared = state.compareList.includes(route.id);
-        const activeHighway = state.departureMode === 'A' ? route.highwayRouteA : route.highwayRouteB;
-
-        return `
-          <article class="bg-cream rounded-2xl editorial-border card-transition flex flex-col justify-between overflow-hidden">
-            <div>
-              <!-- Card Top Header -->
-              <div class="bg-parchment/80 px-5 py-3.5 border-b border-sandBorder flex items-center justify-between gap-2">
-                <div class="flex items-center gap-2 flex-wrap">
-                  <span class="px-2.5 py-0.5 rounded text-[11px] font-mono font-bold bg-tealDeep text-cream">${route.regionLabel}</span>
-                  <span class="px-2 py-0.5 rounded text-[11px] font-medium bg-cream border border-sandBorder text-inkMuted">${route.comboType}</span>
-                </div>
-                <div class="flex items-center gap-1.5 shrink-0">
-                  <span class="text-[11px] text-inkMuted">双娃推荐度</span>
-                  <span class="px-2 py-0.5 rounded-md font-mono text-sm font-bold bg-terracotta text-cream">${score}分</span>
-                </div>
-              </div>
-
-              <!-- Main Content Body -->
-              <div class="p-5 space-y-4">
-                <!-- Route Title & Drive Info -->
-                <div>
-                  <h3 class="font-serif text-lg sm:text-xl font-bold text-ink leading-snug">${route.name}</h3>
-                  <div class="mt-2.5 flex flex-wrap items-center gap-y-1.5 gap-x-3 text-xs bg-parchment/60 px-3 py-2 rounded-xl border border-sandBorder">
-                    <span class="font-mono font-bold text-tealDeep flex items-center gap-1">
-                      <svg class="w-3.5 h-3.5 text-terracotta" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
-                      单程 ${driveTime} 分钟 (${route.distanceKm}km)
-                    </span>
-                    ${timeDiff > 0
-                      ? `<span class="text-[11px] font-mono px-1.5 py-0.5 rounded bg-olive/15 text-olive font-semibold">当前模式省 ${timeDiff} 分钟</span>`
-                      : `<span class="text-[11px] font-mono px-1.5 py-0.5 rounded bg-terracotta/15 text-terracotta font-semibold">建议切模式${state.departureMode === 'A' ? 'B' : 'A'}省 ${Math.abs(timeDiff)}分</span>`
-                    }
-                  </div>
-                  <p class="text-[11px] text-inkMuted mt-1.5 line-clamp-1">
-                    <strong>高速走法：</strong>${activeHighway}
-                  </p>
-                  <p class="text-[11px] text-inkMuted mt-0.5">
-                    <strong>路桥补能：</strong>${route.tollAndEv}
-                  </p>
-                </div>
-
-                <!-- Park + Museum Combo Box -->
-                <div class="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
-                  <div class="bg-parchment/50 p-3 rounded-xl border border-sandBorder">
-                    <div class="text-[11px] font-bold text-tealDeep flex items-center gap-1 mb-1">
-                      <span>🌲 自然公园 / 滨海景观</span>
-                    </div>
-                    <p class="text-xs text-ink leading-relaxed">${route.parks}</p>
-                  </div>
-                  <div class="bg-parchment/50 p-3 rounded-xl border border-sandBorder">
-                    <div class="text-[11px] font-bold text-terracotta flex items-center gap-1 mb-1">
-                      <span>🏛️ 博物馆 / 室内科普馆</span>
-                    </div>
-                    <p class="text-xs text-ink leading-relaxed">${route.museums}</p>
-                  </div>
-                </div>
-
-                <!-- 6-Dimension Rating Mini Progress Bars -->
-                <div class="bg-parchment/40 p-3.5 rounded-xl border border-sandBorder space-y-2">
-                  <div class="flex items-center justify-between text-[11px] text-inkMuted font-medium mb-1">
-                    <span>六维双娃友好度评级</span>
-                    <span class="font-mono">推车 ${route.metrics.stroller} · 母婴室 ${route.metrics.nursing} · 8M舒适 ${route.metrics.infant}</span>
-                  </div>
-                  <div class="grid grid-cols-3 gap-x-3 gap-y-2 text-[11px]">
-                    ${renderMiniMetricBar('推车无障碍', route.metrics.stroller, 'bg-tealDeep')}
-                    ${renderMiniMetricBar('母婴室评级', route.metrics.nursing, 'bg-terracotta')}
-                    ${renderMiniMetricBar('3.5Y趣味度', route.metrics.toddler, 'bg-tealDeep')}
-                    ${renderMiniMetricBar('8M舒适度', route.metrics.infant, 'bg-terracotta')}
-                    ${renderMiniMetricBar('停车与超充', route.metrics.parking, 'bg-olive')}
-                    ${renderMiniMetricBar('景观出片度', route.metrics.scenery, 'bg-olive')}
-                  </div>
-                </div>
-
-                <!-- Tags Row -->
-                <div class="flex flex-wrap gap-1.5">
-                  ${route.tags.map(t => `<span class="text-[11px] px-2 py-0.5 rounded-md bg-tealDeep/10 text-tealDeep font-medium">✓ ${t}</span>`).join('')}
-                </div>
-              </div>
-            </div>
-
-            <!-- Card Footer: Cost Breakdown & Actions -->
-            <div class="bg-parchment/90 px-5 py-3.5 border-t border-sandBorder flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+        container.innerHTML = list.map(spot => {
+          const drive = state.departMode === 'A' ? spot.driveA : spot.driveB;
+          const route = state.departMode === 'A' ? spot.routeA : spot.routeB;
+          return `
+            <article class="spot-card">
               <div>
-                <div class="flex items-baseline gap-2">
-                  <span class="text-xs text-inkMuted">3天2晚预估总计</span>
-                  <span class="font-mono text-lg font-bold text-terracotta">¥${costObj.total.toLocaleString()}</span>
+                <div class="card-top-badges">
+                  <span class="district-pill">${spot.district} · ${spot.subarea}</span>
+                  <span class="cat-pill">${spot.category}</span>
                 </div>
-                <div class="text-[10px] font-mono text-inkMuted">
-                  住¥${costObj.hotelCost} + 餐¥${costObj.diningCost} + 票¥${costObj.ticketCost} + 路电¥${costObj.tollAndEv}
+                <div class="spot-title">
+                  <span>${spot.name}</span>
+                  <span class="spot-score">★ ${spot.score}</span>
+                </div>
+                <div class="drive-info-bar">
+                  <span>🚗 <strong>${drive} 分钟</strong>（${route}）</span>
+                  <span>🎫 门票：${spot.ticketCost === 0 ? '免费' : '¥'+spot.ticketCost}</span>
+                </div>
+                <div class="kid-dual-box">
+                  <div class="kid-cell">
+                    <strong>👦 3.5岁大宝玩点（放电 ${spot.energyScore}）</strong>
+                    <span>${spot.kid35}</span>
+                  </div>
+                  <div class="kid-cell baby">
+                    <strong>👶 8月龄二宝友好（推车 ${spot.strollerScore}）</strong>
+                    <span>${spot.kid08}</span>
+                  </div>
+                </div>
+                <div class="meta-list">
+                  <div>🅿️ <strong>停车指引：</strong>${spot.parking}</div>
+                  <div>🍼 <strong>母婴配套：</strong>${spot.nursing}</div>
+                  <div>☔ <strong>阴雨/暴晒B计划：</strong>${spot.planB}</div>
+                </div>
+                <div class="tag-row">
+                  <span class="mini-tag ${spot.noReserve ? '' : 'warn'}">${spot.noReserve ? '🟢 免预约直达' : '🔔 ' + spot.reserveTip}</span>
                 </div>
               </div>
-
-              <div class="flex items-center gap-2 shrink-0">
-                <button data-action="toggleCompare" data-event="click" data-arg1="${route.id}" data-type1="string" class="px-3 py-2 rounded-xl text-xs font-bold border transition ${isCompared ? 'bg-terracotta text-cream border-terracotta' : 'bg-cream text-ink border-sandDark hover:border-tealDeep'}">
-                  ${isCompared ? '✓ 已加对比' : '+ 加入对比'}
-                </button>
-                <button data-action="openDetailModal" data-event="click" data-arg1="${route.id}" data-type1="string" class="px-3.5 py-2 rounded-xl text-xs font-bold bg-tealDeep text-cream hover:bg-tealLight shadow-sm transition flex items-center gap-1">
-                  <span>三天两晚分时路书</span>
-                  <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
-                </button>
+              <div class="card-actions">
+                <button type="button" class="btn btn-primary" data-action="openSpotModal" data-event="click" data-arg1="${spot.id}" data-type1="string">📊 雷达图与攻略</button>
+                <button type="button" class="btn btn-accent" data-action="addToPlan" data-event="click" data-arg1="sat" data-type1="string" data-arg2="${spot.id}" data-type2="string">+ 加入周六</button>
+                <button type="button" class="btn btn-accent" data-action="addToPlan" data-event="click" data-arg1="sun" data-type1="string" data-arg2="${spot.id}" data-type2="string">+ 加入周日</button>
               </div>
-            </div>
-          </article>
-        `;
-      }).join('');
-    }
-
-    function renderMiniMetricBar(label, val, colorClass) {
-      return `
-        <div>
-          <div class="flex justify-between mb-0.5">
-            <span class="text-ink">${label}</span>
-            <span class="font-mono font-bold">${val}</span>
-          </div>
-          <div class="w-full h-1.5 bg-sandBorder rounded-full overflow-hidden">
-            <div class="${colorClass} h-full rounded-full" style="width: ${val}%"></div>
-          </div>
-        </div>
-      `;
-    }
-
-    // =========================================================================
-    // 8. SVG 6-AXIS RADAR CHART GENERATOR
-    // =========================================================================
-    function generateRadarSVG(metricsList, labels, colors) {
-      const size = 240;
-      const cx = size / 2;
-      const cy = size / 2;
-      const maxR = 82;
-      const axes = ['stroller', 'nursing', 'toddler', 'infant', 'parking', 'scenery'];
-      const axisNames = ['推车无障碍', '母婴室配置', '3.5Y趣味', '8M舒适度', '停车补能', '景观出片'];
-
-      const getPoint = (idx, value) => {
-        const angle = (Math.PI * 2 * idx) / 6 - Math.PI / 2;
-        const r = (value / 100) * maxR;
-        return {
-          x: (cx + r * Math.cos(angle)).toFixed(1),
-          y: (cy + r * Math.sin(angle)).toFixed(1)
-        };
-      };
-
-      // Concentric hexagon grids
-      const levels = [40, 60, 80, 100];
-      const gridPolygons = levels.map(lv => {
-        const pts = axes.map((_, i) => {
-          const p = getPoint(i, lv);
-          return `${p.x},${p.y}`;
-        }).join(' ');
-        return `<polygon points="${pts}" fill="none" stroke="#E3E0D5" stroke-width="1"/>`;
-      }).join('');
-
-      // Axis lines and labels
-      const axisLines = axes.map((key, i) => {
-        const outer = getPoint(i, 100);
-        const labelPt = getPoint(i, 123);
-        return `
-          <line x1="${cx}" y1="${cy}" x2="${outer.x}" y2="${outer.y}" stroke="#CFCCC0" stroke-width="1" stroke-dasharray="2,2"/>
-          <text x="${labelPt.x}" y="${labelPt.y}" text-anchor="middle" dominant-baseline="middle" fill="#141413" font-size="10.5" font-weight="600">${axisNames[i]}</text>
-        `;
-      }).join('');
-
-      // Data polygons
-      const dataPolygons = metricsList.map((m, idx) => {
-        const pts = axes.map((k, i) => {
-          const p = getPoint(i, m[k]);
-          return `${p.x},${p.y}`;
-        }).join(' ');
-        const color = colors[idx] || '#527766';
-        const dots = axes.map((k, i) => {
-          const p = getPoint(i, m[k]);
-          return `<circle cx="${p.x}" cy="${p.y}" r="3" fill="${color}"/>`;
+            </article>
+          `;
         }).join('');
-        return `
-          <polygon points="${pts}" fill="${color}" fill-opacity="0.22" stroke="${color}" stroke-width="2.2"/>
-          ${dots}
-        `;
+
+      } else if (state.perspective === 'localPacks') {
+        container.className = 'cards-grid';
+        byId('resultCountText').innerHTML =
+          `🗺️ 深圳本地不离深周末连玩打包路线（共 <span style="color:var(--terracotta);">${LOCAL_PACKS.length}</span> 条黄金组合）`;
+        const b = getBudgetParams();
+
+        container.innerHTML = LOCAL_PACKS.map(pack => {
+          const drive = state.departMode === 'A' ? pack.driveA : pack.driveB;
+          return `
+            <article class="spot-card">
+              <div>
+                <div class="card-top-badges">
+                  <span class="district-pill">📍 ${pack.area}</span>
+                  <span class="cat-pill">周末2日连玩打包线</span>
+                </div>
+                <div class="spot-title">
+                  <span>${pack.title}</span>
+                  <span class="spot-score">★ ${pack.score}</span>
+                </div>
+                <div class="drive-info-bar">
+                  <span>🚗 首站车程：约 <strong>${drive} 分钟</strong></span>
+                  <span>💰 预算估算：<strong>¥${b.total}</strong></span>
+                </div>
+                <p style="font-size:12.5px;color:var(--ink-secondary);margin:8px 0;">${pack.summary}</p>
+                <div class="meta-list">
+                  <div>🧭 <strong>汇合建议：</strong>${pack.modeRec}</div>
+                  <div>🏞️ <strong>串联点位：</strong>${pack.spotsIncluded.join(' → ')}</div>
+                  <div>☔ <strong>全天候B计划：</strong>${pack.planB}</div>
+                </div>
+              </div>
+              <div class="card-actions">
+                <button type="button" class="btn btn-primary" data-action="openPackModal" data-event="click" data-arg1="${pack.id}" data-type1="string">🕒 查看两天分时作息级路书 & 雷达图</button>
+              </div>
+            </article>
+          `;
+        }).join('');
+
+      } else if (state.perspective === 'crossCity') {
+        container.className = 'cards-grid';
+        byId('resultCountText').innerHTML =
+          `🌉 环深跨城 3天2晚微度假精选（周五15:30出发 → 周日返程，共 <span style="color:var(--terracotta);">${CROSS_CITY_ROUTES.length}</span> 条低频精品线）`;
+        const b = getBudgetParams();
+
+        container.innerHTML = CROSS_CITY_ROUTES.map(route => {
+          const drive = state.departMode === 'A' ? route.driveA : route.driveB;
+          const road = state.departMode === 'A' ? route.routeA : route.routeB;
+          const estTotal = b.total + route.tollCost;
+          return `
+            <article class="spot-card">
+              <div>
+                <div class="card-top-badges">
+                  <span class="district-pill">🏙️ ${route.city}</span>
+                  <span class="cat-pill">跨城 3天2晚/2天1晚</span>
+                </div>
+                <div class="spot-title">
+                  <span>${route.name}</span>
+                  <span class="spot-score">★ ${route.score}</span>
+                </div>
+                <div class="drive-info-bar">
+                  <span>🚗 单程：<strong>${drive} 分钟</strong></span>
+                  <span>🛣️ 往返过路费：¥${route.tollCost} | 总预算约 <strong>¥${estTotal}</strong></span>
+                </div>
+                <div class="kid-dual-box">
+                  <div class="kid-cell">
+                    <strong>👦 3.5岁大宝核心体验</strong>
+                    <span>${route.kid35}</span>
+                  </div>
+                  <div class="kid-cell baby">
+                    <strong>👶 8月龄二宝睡眠与推车</strong>
+                    <span>${route.kid08}</span>
+                  </div>
+                </div>
+                <div class="meta-list">
+                  <div>🛣️ <strong>高速走法：</strong>${road}</div>
+                  <div>🏨 <strong>亲子酒店推荐：</strong>${route.hotelRec}</div>
+                  <div>☔ <strong>室内B计划：</strong>${route.planB}</div>
+                </div>
+              </div>
+              <div class="card-actions">
+                <button type="button" class="btn btn-primary" data-action="openCrossModal" data-event="click" data-arg1="${route.id}" data-type1="string">📅 查看周五至周日 3天2晚分时路书</button>
+              </div>
+            </article>
+          `;
+        }).join('');
+
+      } else if (state.perspective === 'gear') {
+        container.className = 'checklist-grid';
+        container.innerHTML = GEAR_CATEGORIES.map(cat => `
+          <div class="panel-card">
+            <div class="panel-title"><span>${cat.title}</span></div>
+            <div>
+              ${cat.items.map(it => {
+                const isChecked = state.checkedGear.has(it.id);
+                return `
+                  <label class="check-item ${isChecked ? 'checked' : ''}">
+                    <input type="checkbox" ${isChecked ? 'checked' : ''} data-action="toggleGearItem" data-event="change" data-arg1="${it.id}" data-type1="string" />
+                    <span>${it.text}</span>
+                  </label>
+                `;
+              }).join('')}
+            </div>
+          </div>
+        `).join('');
+      }
+    }
+
+    /********************************************************************
+     * 5. SVG 六维雷达图生成器与弹窗路书
+     ********************************************************************/
+    function buildRadarSVG(scores) {
+      // scores: [推车丝滑, 母婴设施, 3.5岁放电, 停车便利, 遮阳恒温, 性价比]
+      const labels = ['8月龄推车丝滑', '五星母婴室', '3.5岁放电指数', '停车/超充便利', '林荫/恒温避晒', '免票性价比'];
+      const cx = 130, cy = 125, r = 80;
+      const angles = [0, 60, 120, 180, 240, 300].map(a => (a - 90) * Math.PI / 180);
+
+      const gridPolygons = [0.35, 0.7, 1.0].map(scale => {
+        const pts = angles.map(ang => `${cx + r * scale * Math.cos(ang)},${cy + r * scale * Math.sin(ang)}`).join(' ');
+        return `<polygon points="${pts}" fill="none" stroke="#D6C9B1" stroke-width="1"/>`;
+      }).join('');
+
+      const dataPts = scores.map((val, idx) => {
+        const ratio = val / 100;
+        const x = cx + r * ratio * Math.cos(angles[idx]);
+        const y = cy + r * ratio * Math.sin(angles[idx]);
+        return `${x.toFixed(1)},${y.toFixed(1)}`;
+      }).join(' ');
+
+      const labelNodes = labels.map((lb, idx) => {
+        const lx = cx + (r + 24) * Math.cos(angles[idx]);
+        const ly = cy + (r + 18) * Math.sin(angles[idx]);
+        return `<text x="${lx}" y="${ly}" text-anchor="middle" dominant-baseline="middle" font-size="11" fill="#141413" font-weight="600">${lb}(${scores[idx]})</text>`;
       }).join('');
 
       return `
-        <svg viewBox="0 0 ${size} ${size}" class="w-full h-full">
+        <svg width="260" height="250" viewBox="0 0 260 250">
           ${gridPolygons}
-          ${axisLines}
-          ${dataPolygons}
+          <polygon points="${dataPts}" fill="rgba(82, 119, 102, 0.22)" stroke="#527766" stroke-width="2.5"/>
+          ${labelNodes}
         </svg>
       `;
     }
 
-    // =========================================================================
-    // 9. DETAIL MODAL (3D2N BIO-RHYTHM ROADBOOK)
-    // =========================================================================
-    function openDetailModal(routeId) {
-      const route = routesData.find(r => r.id === routeId);
-      if (!route) return;
+    function openSpotModal(spotId) {
+      const spot = LOCAL_SPOTS.find(s => s.id === spotId);
+      if (!spot) return;
+      const drive = state.departMode === 'A' ? spot.driveA : spot.driveB;
+      const route = state.departMode === 'A' ? spot.routeA : spot.routeB;
 
-      state.activeModalRouteId = routeId;
-      state.modalWeatherMode = 'sunny';
-
-      const driveTime = getRouteDriveTime(route);
-      const costObj = calculateRouteCost(route);
-
-      byId('modal-region-badge').textContent = route.regionLabel;
-      byId('modal-drive-badge').textContent = `模式${state.departureMode}单程约 ${driveTime} 分钟 (${route.distanceKm}km)`;
-      byId('modal-combo-badge').textContent = route.comboType;
-      byId('modal-title').textContent = route.name;
-
-      byId('modal-radar-container').innerHTML = generateRadarSVG([route.metrics], [route.shortName], ['#527766']);
-      byId('modal-parking-info').textContent = route.parkingPinpoint;
-      byId('modal-nursing-info').textContent = route.nursingPinpoint;
-
-      setModalWeather('sunny');
-
-      // Render Friday, Saturday, Sunday Dual-Kid Timeline
-      const dayConfigs = [
-        { key: 'fri', label: 'DAY 1 · 周五下午错峰启程与入住 (Friday 15:30 - 20:30)', badge: '黄金错峰日' },
-        { key: 'sat', label: 'DAY 2 · 周六全天：上午自然放电 + 午睡充电 + 下午人文慢游 (Saturday)', badge: '双轨核心日' },
-        { key: 'sun', label: 'DAY 3 · 周日半日探索 + 15:00前黄金窗口返程 (Sunday)', badge: '轻松返深日' }
-      ];
-
-      byId('modal-timeline-container').innerHTML = dayConfigs.map(day => {
-        const items = route.schedule[day.key] || [];
-        return `
-          <div class="bg-parchment/50 rounded-2xl border border-sandBorder overflow-hidden">
-            <div class="bg-tealDeep/10 px-4 py-2.5 border-b border-sandBorder flex items-center justify-between">
-              <span class="font-serif font-bold text-sm text-tealDeep">${day.label}</span>
-              <span class="text-[11px] font-mono px-2 py-0.5 rounded bg-tealDeep text-cream">${day.badge}</span>
-            </div>
-            <div class="p-4 space-y-4">
-              ${items.map(slot => `
-                <div class="relative pl-5 border-l-2 border-tealDeep/40 space-y-2">
-                  <div class="w-2.5 h-2.5 rounded-full bg-terracotta absolute -left-[6px] top-1.5"></div>
-                  <div class="flex flex-wrap items-center gap-2">
-                    <span class="font-mono text-xs font-bold px-2 py-0.5 rounded bg-ink text-cream">${slot.time}</span>
-                    <h4 class="font-serif font-bold text-sm text-ink">${slot.title}</h4>
-                  </div>
-                  <div class="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
-                    <div class="bg-cream p-2.5 rounded-xl border border-sandBorder text-xs">
-                      <span class="font-bold text-tealDeep block mb-0.5">👦 3.5岁大宝节奏：</span>
-                      <span class="text-ink">${slot.toddler}</span>
-                    </div>
-                    <div class="bg-cream p-2.5 rounded-xl border border-sandBorder text-xs">
-                      <span class="font-bold text-terracotta block mb-0.5">👶 8月龄二宝作息：</span>
-                      <span class="text-ink">${slot.infant}</span>
-                    </div>
-                  </div>
-                  <div class="text-[11px] text-inkMuted bg-cream/70 px-3 py-1.5 rounded-lg border border-sandBorder/70">
-                    💡 <strong>避坑执行提示：</strong>${slot.note}
-                  </div>
-                </div>
-              `).join('')}
-            </div>
+      byId('modalBodyContent').innerHTML = `
+        <button type="button" class="modal-close" aria-label="关闭详情" data-action="closeModal" data-event="click">×</button>
+        <div class="card-top-badges" style="justify-content:flex-start;">
+          <span class="district-pill">${spot.district} · ${spot.subarea}</span>
+          <span class="cat-pill">${spot.category}</span>
+        </div>
+        <h2 class="serif" style="font-size:22px;margin-bottom:6px;">${spot.name}</h2>
+        <p style="font-size:13px;color:var(--ink-secondary);">
+          🚗 <strong>自驾路线：</strong>${route}（单程约 ${drive} 分钟） | 🔔 <strong>预约提示：</strong>${spot.reserveTip}
+        </p>
+        <div class="modal-grid">
+          <div style="background:var(--bg-elevated);border:1px solid var(--border-soft);border-radius:10px;padding:12px;text-align:center;">
+            <h4 style="font-size:14px;color:var(--teal-primary);margin-bottom:4px;">六维双娃友好度雷达测评</h4>
+            ${buildRadarSVG(spot.radar)}
           </div>
-        `;
-      }).join('');
-
-      byId('modal-total-cost').textContent = `¥${costObj.total.toLocaleString()}`;
-      byId('modal-cost-detail').textContent = `(2晚住宿 ¥${costObj.hotelCost} · 餐饮 ¥${costObj.diningCost} · 门票 ¥${costObj.ticketCost} · 路电 ¥${costObj.tollAndEv})`;
-
-      showModal('detail-modal');
-    }
-
-    function setModalWeather(mode) {
-      state.modalWeatherMode = mode;
-      const route = routesData.find(r => r.id === state.activeModalRouteId);
-      if (!route) return;
-
-      const btnSunny = byId('btn-weather-sunny');
-      const btnRainy = byId('btn-weather-rainy');
-      const textEl = byId('modal-weather-text');
-
-      if (mode === 'sunny') {
-        btnSunny.className = 'px-2.5 py-1 bg-tealDeep text-cream transition';
-        btnRainy.className = 'px-2.5 py-1 bg-parchment text-ink hover:bg-sandBorder/50 transition';
-        textEl.textContent = route.weatherSunny;
-      } else {
-        btnRainy.className = 'px-2.5 py-1 bg-terracotta text-cream transition';
-        btnSunny.className = 'px-2.5 py-1 bg-parchment text-ink hover:bg-sandBorder/50 transition';
-        textEl.textContent = route.weatherRainy;
-      }
-    }
-
-    function closeDetailModal() {
-      hideModal('detail-modal');
-    }
-
-    // =========================================================================
-    // 10. ROUTE COMPARISON SYSTEM (Up to 3 Routes)
-    // =========================================================================
-    function toggleCompare(routeId) {
-      const idx = state.compareList.indexOf(routeId);
-      if (idx > -1) {
-        state.compareList.splice(idx, 1);
-      } else {
-        if (state.compareList.length >= 3) {
-          state.compareList.shift(); // Keep latest 3 smoothly without intrusive popups
-        }
-        state.compareList.push(routeId);
-      }
-      updateCompareDock();
-      renderRoutes();
-    }
-
-    function clearCompare() {
-      state.compareList = [];
-      updateCompareDock();
-      renderRoutes();
-    }
-
-    function updateCompareDock() {
-      const dock = byId('compare-dock');
-      const countEl = byId('compare-count');
-      const pillsEl = byId('compare-pills');
-
-      countEl.textContent = state.compareList.length;
-
-      if (state.compareList.length === 0) {
-        dock.classList.add('translate-y-full');
-        return;
-      }
-
-      dock.classList.remove('translate-y-full');
-      pillsEl.innerHTML = state.compareList.map(id => {
-        const r = routesData.find(item => item.id === id);
-        return `
-          <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg text-xs bg-white/15 text-cream border border-white/20">
-            <span>${r.shortName}</span>
-            <button data-action="toggleCompare" data-event="click" data-arg1="${r.id}" data-type1="string" class="hover:text-terracotta font-bold">×</button>
-          </span>
-        `;
-      }).join('');
-    }
-
-    function openCompareModal() {
-      if (state.compareList.length === 0) return;
-
-      const selectedRoutes = state.compareList.map(id => routesData.find(r => r.id === id));
-      const colors = ['#527766', '#D97757', '#799886'];
-
-      const radarSvg = generateRadarSVG(
-        selectedRoutes.map(r => r.metrics),
-        selectedRoutes.map(r => r.shortName),
-        colors
-      );
-
-      const body = byId('compare-modal-body');
-      body.innerHTML = `
-        <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-center bg-parchment/60 p-4 rounded-2xl border border-sandBorder">
-          <div class="lg:col-span-5 flex flex-col items-center">
-            <div class="w-64 h-64">${radarSvg}</div>
-            <div class="flex flex-wrap justify-center gap-3 mt-2">
-              ${selectedRoutes.map((r, i) => `
-                <span class="inline-flex items-center gap-1.5 text-xs font-bold" style="color:${colors[i]}">
-                  <span class="w-3 h-3 rounded-full inline-block" style="background:${colors[i]}"></span>
-                  ${r.shortName}
-                </span>
-              `).join('')}
+          <div class="timeline-box">
+            <div class="timeline-item">
+              <div class="timeline-time">👦 3.5岁大宝高能放电攻略</div>
+              <div style="font-size:13px;margin-top:4px;">${spot.kid35}</div>
             </div>
-          </div>
-          <div class="lg:col-span-7 overflow-x-auto">
-            <table class="w-full text-left border-collapse text-xs">
-              <thead>
-                <tr class="border-b-2 border-tealDeep text-tealDeep font-serif">
-                  <th class="py-2.5 pr-3">对比维度</th>
-                  ${selectedRoutes.map((r, i) => `<th class="py-2.5 px-3 font-bold" style="color:${colors[i]}">${r.shortName}</th>`).join('')}
-                </tr>
-              </thead>
-              <tbody class="divide-y divide-sandBorder">
-                <tr>
-                  <td class="py-2.5 pr-3 font-bold text-inkMuted">当前模式单程耗时</td>
-                  ${selectedRoutes.map(r => `<td class="py-2.5 px-3 font-mono font-bold">${getRouteDriveTime(r)} 分钟 (${r.distanceKm}km)</td>`).join('')}
-                </tr>
-                <tr>
-                  <td class="py-2.5 pr-3 font-bold text-inkMuted">双娃综合评分</td>
-                  ${selectedRoutes.map(r => `<td class="py-2.5 px-3 font-mono font-bold text-terracotta">${getDynamicScore(r)} 分</td>`).join('')}
-                </tr>
-                <tr>
-                  <td class="py-2.5 pr-3 font-bold text-inkMuted">推车无障碍 / 母婴室</td>
-                  ${selectedRoutes.map(r => `<td class="py-2.5 px-3 font-mono">推车 ${r.metrics.stroller} / 母婴室 ${r.metrics.nursing}</td>`).join('')}
-                </tr>
-                <tr>
-                  <td class="py-2.5 pr-3 font-bold text-inkMuted">3.5Y趣味 / 8M舒适</td>
-                  ${selectedRoutes.map(r => `<td class="py-2.5 px-3 font-mono">大宝 ${r.metrics.toddler} / 二宝 ${r.metrics.infant}</td>`).join('')}
-                </tr>
-                <tr>
-                  <td class="py-2.5 pr-3 font-bold text-inkMuted">3天2晚总预算</td>
-                  ${selectedRoutes.map(r => `<td class="py-2.5 px-3 font-mono font-bold text-tealDeep">¥${calculateRouteCost(r).total.toLocaleString()}</td>`).join('')}
-                </tr>
-                <tr>
-                  <td class="py-2.5 pr-3 font-bold text-inkMuted">核心公园 + 博物馆</td>
-                  ${selectedRoutes.map(r => `<td class="py-2.5 px-3 leading-relaxed">${r.parks}<br/><span class="text-terracotta">${r.museums}</span></td>`).join('')}
-                </tr>
-              </tbody>
-            </table>
+            <div class="timeline-item" style="border-left-color:var(--terracotta);">
+              <div class="timeline-time" style="color:var(--terracotta);">👶 8月龄二宝推车与睡眠指引</div>
+              <div style="font-size:13px;margin-top:4px;">${spot.kid08}</div>
+            </div>
+            <div class="timeline-item">
+              <div class="timeline-time">🅿️ 停车位与五星母婴室精确点位</div>
+              <div style="font-size:13px;margin-top:4px;">
+                <strong>停车：</strong>${spot.parking}<br/>
+                <strong>母婴室：</strong>${spot.nursing}
+              </div>
+            </div>
+            <div class="timeline-item" style="background:var(--terracotta-light);">
+              <div class="timeline-time" style="color:var(--terracotta);">☔ 晴雨/高温暴晒即时切换 B 计划</div>
+              <div style="font-size:13px;margin-top:4px;">${spot.planB}</div>
+            </div>
           </div>
         </div>
       `;
-
-      showModal('compare-modal');
+      showDialog();
     }
 
-    function closeCompareModal() {
-      hideModal('compare-modal');
+    function openPackModal(packId) {
+      const pack = LOCAL_PACKS.find(p => p.id === packId);
+      if (!pack) return;
+      byId('modalBodyContent').innerHTML = `
+        <button type="button" class="modal-close" aria-label="关闭详情" data-action="closeModal" data-event="click">×</button>
+        <span class="district-pill">${pack.area}</span>
+        <h2 class="serif" style="font-size:22px;margin:6px 0;">${pack.title}</h2>
+        <p style="font-size:13px;color:var(--ink-secondary);">${pack.modeRec}</p>
+        <div class="modal-grid">
+          <div style="background:var(--bg-elevated);border:1px solid var(--border-soft);border-radius:10px;padding:12px;text-align:center;">
+            <h4 style="font-size:14px;color:var(--teal-primary);">打包路线六维综合评分</h4>
+            ${buildRadarSVG(pack.radar)}
+            <div style="text-align:left;font-size:12px;margin-top:8px;padding:8px;background:var(--bg-panel);border-radius:6px;">
+              <strong>☔ 恶劣天气备选：</strong><br/>${pack.planB}
+            </div>
+          </div>
+          <div class="timeline-box">
+            ${pack.timeline.map(t => `
+              <div class="timeline-item">
+                <div class="timeline-time">🕒 ${t.time} | ${t.title}</div>
+                <div style="font-size:13px;margin-top:4px;">${t.desc}</div>
+              </div>
+            `).join('')}
+          </div>
+        </div>
+      `;
+      showDialog();
     }
 
-    // =========================================================================
-    // 11. DUAL-KID TRUNK GEAR CHECKLIST (LocalStorage Persistent)
-    // =========================================================================
-    const STORAGE_KEY = 'sz_buji_bantian_dualkid_gear_v1';
+    function openCrossModal(crossId) {
+      const route = CROSS_CITY_ROUTES.find(r => r.id === crossId);
+      if (!route) return;
+      byId('modalBodyContent').innerHTML = `
+        <button type="button" class="modal-close" aria-label="关闭详情" data-action="closeModal" data-event="click">×</button>
+        <span class="district-pill">${route.city} · 3天2晚微度假</span>
+        <h2 class="serif" style="font-size:22px;margin:6px 0;">${route.name}</h2>
+        <p style="font-size:13px;color:var(--ink-secondary);">🏨 <strong>推荐下榻：</strong>${route.hotelRec}</p>
+        <div class="modal-grid">
+          <div style="background:var(--bg-elevated);border:1px solid var(--border-soft);border-radius:10px;padding:12px;text-align:center;">
+            <h4 style="font-size:14px;color:var(--teal-primary);">跨城微度假六维评分</h4>
+            ${buildRadarSVG(route.radar)}
+            <div style="text-align:left;font-size:12px;margin-top:8px;padding:8px;background:var(--bg-panel);border-radius:6px;">
+              <strong>☔ 室内B计划：</strong><br/>${route.planB}
+            </div>
+          </div>
+          <div class="timeline-box">
+            ${route.timeline.map(t => `
+              <div class="timeline-item">
+                <div class="timeline-time">📅 ${t.time} | ${t.title}</div>
+                <div style="font-size:13px;margin-top:4px;">${t.desc}</div>
+              </div>
+            `).join('')}
+          </div>
+        </div>
+      `;
+      showDialog();
+    }
 
-    function loadChecklistState() {
-      try {
-        const saved = localStorage.getItem(STORAGE_KEY);
-        if (saved) {
-          state.checkedGear = JSON.parse(saved);
-        }
-      } catch (e) {
-        state.checkedGear = {};
+    function closeModal() {
+      hideDialog();
+    }
+
+    /********************************************************************
+     * 6. 周末两日自由拼装工作台 & 装备持久化
+     ********************************************************************/
+    function addToPlan(day, spotId) {
+      const arr = state.customPlan[day];
+      if (!arr.includes(spotId)) {
+        arr.push(spotId);
       }
+      renderCustomPlanBar();
     }
 
-    function saveChecklistState() {
-      try {
-        localStorage.setItem(STORAGE_KEY, JSON.stringify(state.checkedGear));
-      } catch (e) {}
+    function removeFromPlan(day, spotId) {
+      state.customPlan[day] = state.customPlan[day].filter(id => id !== spotId);
+      renderCustomPlanBar();
+    }
+
+    function clearCustomPlan() {
+      state.customPlan.sat = [];
+      state.customPlan.sun = [];
+      renderCustomPlanBar();
+    }
+
+    function renderCustomPlanBar() {
+      ['sat', 'sun'].forEach(day => {
+        const container = byId(day + 'SlotList');
+        const ids = state.customPlan[day];
+        if (ids.length === 0) {
+          container.innerHTML = `<span style="opacity:0.7;font-size:12px;">点击卡片「+${day === 'sat' ? '周六' : '周日'}」加入</span>`;
+        } else {
+          container.innerHTML = ids.map(id => {
+            const sp = LOCAL_SPOTS.find(s => s.id === id);
+            return `
+              <span class="slot-pill">
+                ${sp.name.split('（')[0]}
+                <button type="button" data-action="removeFromPlan" data-event="click" data-arg1="${day}" data-type1="string" data-arg2="${id}" data-type2="string">×</button>
+              </span>
+            `;
+          }).join('');
+        }
+      });
+    }
+
+    function openCustomPlanModal() {
+      const satSpots = state.customPlan.sat.map(id => LOCAL_SPOTS.find(s => s.id === id)).filter(Boolean);
+      const sunSpots = state.customPlan.sun.map(id => LOCAL_SPOTS.find(s => s.id === id)).filter(Boolean);
+
+      if (satSpots.length === 0 && sunSpots.length === 0) {
+        alert('请先在深圳本地图谱卡片上点击「+ 加入周六」或「+ 加入周日」添加点位！');
+        return;
+      }
+
+      const allSelected = [...satSpots, ...sunSpots];
+      const reserveAlerts = allSelected.filter(s => !s.noReserve);
+
+      byId('modalBodyContent').innerHTML = `
+        <button type="button" class="modal-close" aria-label="关闭详情" data-action="closeModal" data-event="click">×</button>
+        <h2 class="serif" style="font-size:22px;color:var(--teal-primary);margin-bottom:8px;">📋 您的专属定制周末两日自驾路书</h2>
+        ${reserveAlerts.length > 0 ? `
+          <div style="background:#FFF3CD;border:1px solid #FFEEBA;color:#856404;padding:10px 14px;border-radius:8px;margin-bottom:14px;font-size:13px;">
+            <strong>🔔 出发前必办预约提醒（共 ${reserveAlerts.length} 项）：</strong>
+            <ul style="margin-left:18px;margin-top:4px;">
+              ${reserveAlerts.map(r => `<li><strong>${r.name}：</strong>${r.reserveTip}</li>`).join('')}
+            </ul>
+          </div>
+        ` : `<div style="background:var(--teal-light);padding:8px 12px;border-radius:8px;margin-bottom:12px;font-size:13px;color:var(--teal-primary);">✅ 您所选的点位全部免预约，周末可随时说走就走！</div>`}
+
+        <div class="timeline-box">
+          <h3 class="serif" style="font-size:17px;color:var(--terracotta);">🗓️ 周六行程安排（${satSpots.length} 个点位）</h3>
+          ${satSpots.length === 0 ? `<p style="font-size:13px;color:var(--ink-muted);">暂未添加周六点位</p>` : satSpots.map((s, idx) => `
+            <div class="timeline-item">
+              <div class="timeline-time">第 ${idx + 1} 站（建议 ${idx === 0 ? '09:30-12:00 上午精力高峰' : '14:30-17:30 午睡后'}）：${s.name}</div>
+              <div style="font-size:12.5px;margin-top:4px;">
+                🅿️ <strong>停车：</strong>${s.parking} | 🍼 <strong>母婴室：</strong>${s.nursing}<br/>
+                👦 <strong>3.5岁：</strong>${s.kid35} | 👶 <strong>8月龄：</strong>${s.kid08}
+              </div>
+            </div>
+          `).join('')}
+
+          <h3 class="serif" style="font-size:17px;color:var(--terracotta);margin-top:10px;">🗓️ 周日行程安排（${sunSpots.length} 个点位）</h3>
+          ${sunSpots.length === 0 ? `<p style="font-size:13px;color:var(--ink-muted);">暂未添加周日点位</p>` : sunSpots.map((s, idx) => `
+            <div class="timeline-item">
+              <div class="timeline-time">第 ${idx + 1} 站（建议 ${idx === 0 ? '09:30-12:00 上午' : '14:30-17:30 下午'}）：${s.name}</div>
+              <div style="font-size:12.5px;margin-top:4px;">
+                🅿️ <strong>停车：</strong>${s.parking} | 🍼 <strong>母婴室：</strong>${s.nursing}<br/>
+                👦 <strong>3.5岁：</strong>${s.kid35} | 👶 <strong>8月龄：</strong>${s.kid08}
+              </div>
+            </div>
+          `).join('')}
+        </div>
+      `;
+      showDialog();
     }
 
     function toggleGearItem(itemId) {
-      state.checkedGear[itemId] = !state.checkedGear[itemId];
-      saveChecklistState();
-      renderChecklist();
-    }
-
-    function setPackingMode(mode) {
-      state.packingMode = mode;
-      const btnLight = byId('btn-pack-light');
-      const btnFull = byId('btn-pack-full');
-
-      if (mode === 'light') {
-        btnLight.className = 'px-3 py-2 rounded-lg text-xs font-medium bg-tealDeep text-cream transition';
-        btnFull.className = 'px-3 py-2 rounded-lg text-xs font-medium bg-parchment hover:bg-sandBorder/60 text-ink border border-sandBorder transition';
+      if (state.checkedGear.has(itemId)) {
+        state.checkedGear.delete(itemId);
       } else {
-        btnFull.className = 'px-3 py-2 rounded-lg text-xs font-medium bg-tealDeep text-cream transition';
-        btnLight.className = 'px-3 py-2 rounded-lg text-xs font-medium bg-parchment hover:bg-sandBorder/60 text-ink border border-sandBorder transition';
+        state.checkedGear.add(itemId);
       }
-      renderChecklist();
+      saveGear([...state.checkedGear]);
+      updateGearBadge();
+      renderMainContent();
     }
 
-    function checkAllGear(status) {
-      gearCategories.forEach(cat => {
-        cat.items.forEach(item => {
-          if (state.packingMode === 'light' && !item.essential) return;
-          state.checkedGear[item.id] = status;
-        });
-      });
-      saveChecklistState();
-      renderChecklist();
+    function updateGearBadge() {
+      const total = GEAR_CATEGORIES.reduce((acc, c) => acc + c.items.length, 0);
+      const pct = Math.round((state.checkedGear.size / total) * 100);
+      byId('gearProgressBadge').textContent = `已备 ${pct}%`;
     }
 
-    function renderChecklist() {
-      const container = byId('checklist-grid');
-      let totalActiveItems = 0;
-      let totalCheckedItems = 0;
-
-      container.innerHTML = gearCategories.map(cat => {
-        const visibleItems = state.packingMode === 'light'
-          ? cat.items.filter(i => i.essential)
-          : cat.items;
-
-        const catChecked = visibleItems.filter(i => state.checkedGear[i.id]).length;
-        const catTotal = visibleItems.length;
-        const catPct = catTotal > 0 ? Math.round((catChecked / catTotal) * 100) : 0;
-
-        totalActiveItems += catTotal;
-        totalCheckedItems += catChecked;
-
-        return `
-          <div class="bg-parchment/60 rounded-2xl border border-sandBorder p-4 flex flex-col justify-between space-y-3">
-            <div class="space-y-2">
-              <div class="flex items-center justify-between">
-                <span class="px-2.5 py-0.5 rounded text-xs font-serif font-bold ${cat.badgeColor}">${cat.title}</span>
-                <span class="font-mono text-xs font-bold text-tealDeep">${catChecked}/${catTotal}</span>
-              </div>
-              <p class="text-[11px] text-inkMuted">${cat.subtitle}</p>
-              <!-- Category Progress Bar -->
-              <div class="w-full h-1.5 bg-sandBorder rounded-full overflow-hidden">
-                <div class="bg-tealDeep h-full transition-all duration-300" style="width: ${catPct}%"></div>
-              </div>
-
-              <!-- Items List -->
-              <div class="pt-2 space-y-2">
-                ${visibleItems.map(item => {
-                  const isChecked = !!state.checkedGear[item.id];
-                  return `
-                    <label class="flex items-start gap-2.5 p-2 rounded-xl bg-cream border border-sandBorder/80 hover:border-tealDeep cursor-pointer transition select-none">
-                      <input type="checkbox" class="sr-only custom-checkbox" ${isChecked ? 'checked' : ''} data-action="toggleGearItem" data-event="change" data-arg1="${item.id}" data-type1="string"/>
-                      <div class="w-4 h-4 mt-0.5 rounded border border-sandDark flex items-center justify-center shrink-0 transition">
-                        <svg class="w-3 h-3 text-cream hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7"/></svg>
-                      </div>
-                      <div class="text-xs leading-snug">
-                        <div class="font-bold ${isChecked ? 'line-through text-inkMuted' : 'text-ink'}">
-                          ${item.name}
-                          ${item.essential ? '<span class="text-[10px] font-mono text-terracotta ml-1">[必带]</span>' : ''}
-                        </div>
-                        <div class="text-[11px] text-inkMuted mt-0.5">${item.desc}</div>
-                      </div>
-                    </label>
-                  `;
-                }).join('')}
-              </div>
-            </div>
-          </div>
-        `;
-      }).join('');
-
-      const overallPct = totalActiveItems > 0 ? Math.round((totalCheckedItems / totalActiveItems) * 100) : 0;
-      byId('checklist-total-text').textContent = `${totalCheckedItems} / ${totalActiveItems} 项 (${overallPct}%)`;
-      byId('nav-checklist-badge').textContent = `${overallPct}%`;
-
-      const ring = byId('checklist-progress-ring');
-      const circumference = 94.2;
-      const offset = circumference - (overallPct / 100) * circumference;
-      ring.style.strokeDashoffset = offset;
-    }
-
-    // =========================================================================
-    // 12. INITIALIZE ON WINDOW LOAD
-    // =========================================================================
-    function init() {
-      loadChecklistState();
-      updateSandboxAverage();
-      renderRoutes();
-      renderChecklist();
-      bindActions();
-    }
-    if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init, {once:true});
-    else init();
-
+    if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', initApp, {once:true});
+    else initApp();
+  
 })();
