@@ -2,27 +2,29 @@
 import Base from '../../../layouts/Base.astro';
 import body from '../../../legacy/life/house/longgang-home-school-decision/body.html?raw';
 import '../../../legacy/life/house/longgang-home-school-decision/style.css';
-const title = "二胎家庭置业 · 学位 · 地铁通勤多维决策平台";
-const description = "15盘全覆盖 · 坂田 + 布吉/南湾 + 龙岗大运 · 贝尔路站地铁通勤";
+const title = "二胎家庭置业深度工程级决策分析系统";
+const description = "宏观小区 × 微观户号 双视角审视 · 15盘全库 · 坂田 + 布吉南湾 + 大运";
 ---
 <Base title={title + ' · Cavno'} description={description}>
-  <main id="hd-main">
+  <div id="hd-main">
     <section class="cv-page-head hd-page-head">
       <div class="cv-wrap">
         <div class="cv-eyebrow">Life &amp; Skills · House</div>
         <h1 class="cv-page-title" id="hd-title">{title}</h1>
         <a class="cv-crumb-back" href="/life/house/">← 返回房产栏目</a>
         <nav class="hd-jump" aria-label="工具导航">
-          <a href="#hd-weights">权重与严选推荐</a><a href="#hd-schools">学区对比</a><a href="#hd-filters">七维筛选</a><a href="#hd-compare">楼栋 PK</a>
-        </nav>
+        <a href="#section-glossary">💡 户型/新规概念百科</a>
+        <a href="#hd-weights">五维权重与严选推荐</a><a href="#section-macro">🏢 1. 整体视角(小区横评)</a>
+        <a href="#section-micro">🔍 2. 具体视角(户号筛选)</a>
+        <a href="#section-pk">📊 3. 同屏PK台</a>
+      </nav>
       </div>
     </section>
     <article id="lg-house-app" class="lp hd-app" aria-labelledby="hd-title">
       <Fragment set:html={body} />
-      <noscript><p class="hd-no-script">请启用 JavaScript，以使用权重调节、户型筛选、PK 对比和学校图表。</p></noscript>
+      <noscript><p class="hd-no-script">请启用 JavaScript，以使用宏观筛选、楼盘下钻、五维权重、户号筛选和 PK 对比。</p></noscript>
     </article>
     <nav class="cv-wrap hd-end" aria-label="页面导航"><a href="/life/house/">← 返回房产栏目</a><a href="#hd-title">回到顶部 ↑</a></nav>
-  </main>
-  <script is:inline src="/apps/life/house/longgang-home-school-decision/chart.umd.min.js" defer></script>
-  <script is:inline src="/apps/life/house/longgang-home-school-decision/app.js?v=62c1a112915e" defer></script>
+  </div>
+  <script is:inline src="/apps/life/house/longgang-home-school-decision/app.js?v=6cc541f6abf9" defer></script>
 </Base>
