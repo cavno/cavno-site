@@ -1,35 +1,37 @@
-# 演化生成链：从物理约束到反身自由 · 增量接入
+# 演化生成链 · 从约束到自由（原文核对版）· 增量接入
 
-本包基于此前提供的 Cavno Astro 源码，只包含本页 6 个新增文件和本说明，不含全站源码。
+本包用于在 Cavno 的 `/reading/thinking/` 栏目新增独立页面，仅含本页 5 个新增文件及本说明，不含全站源码。
 
-## 接入
+## 接入方法
 
-1. 将压缩包中的 `src`、`public` 文件夹合并到网站项目根目录，保持层级。
-2. 运行 `npm run build`，按原有网站流程部署。
-3. 新页面地址：`/reading/thinking/evolution-generative-chain/`。
-4. 内容条目会自动加入 `/reading/thinking/`、Reading 页面和全站搜索，不需要修改公共导航或栏目模板。
+1. 将 `src`、`public` 合并到网站项目根目录，保持目录层级。
+2. 运行 `npm run build`，按原有流程部署。
+3. 新页面地址：`/reading/thinking/evolution-chain/`。
+4. 内容条目会自动加入思考栏目、Reading 页面与全站搜索；无需修改公共导航或栏目模板。
+5. 本页为新附件的单篇原文核对版，与此前 `/reading/thinking/evolution-generative-chain/` 四文献交互实验室分别存在，不覆盖旧页。
 
 ## 新增文件
 
-- `src/pages/reading/thinking/evolution-generative-chain.astro`
-- `src/legacy/reading/thinking/evolution-generative-chain/body.html`
-- `src/legacy/reading/thinking/evolution-generative-chain/style.css`
-- `src/content/items/reading-thinking-evolution-generative-chain.md`
-- `public/apps/reading/thinking/evolution-generative-chain/app.js`
-- `public/apps/reading/thinking/evolution-generative-chain/standalone.html`
+- `src/pages/reading/thinking/evolution-chain.astro`
+- `src/legacy/reading/thinking/evolution-chain/body.html`
+- `src/legacy/reading/thinking/evolution-chain/style.css`
+- `src/content/items/reading-thinking-evolution-chain.md`
+- `public/apps/reading/thinking/evolution-chain/app.js`
 
-## 内容与交互
+## 保留内容与功能
 
-- 保留九环生成链、Ω 组成、四种理论检验方案、物质演化 11 阶段、五类约束悖论实体、五种自由伪装及五项反思问题的原始数据。
-- 保留附件内嵌的 4 份完整原文，合计 515 个段落/表格块；不重新撰写原文或理论说明。
-- 保留阶段选择、前进/后退、自动播放、螺旋拓扑、三项参数滑块、扰动与重置、P/S 对照、批判准则高亮、社会哲学反思及精读库检索跳转。
-- 三个 Canvas 沿用附件的动画与计算规则，窄屏在图示区域内横向滑动查看，避免标注挤压。动画区域保持深色背景以确保粒子、连线和标注可读；外围页面复用 Cavno 的字体、导航、页脚、搜索、米白底和珊瑚色。
-- 默认使用 Cavno 浅色；深浅切换仅作用于本页工具区，不改变全站页面。CSS 与 DOM 事件均限定在本页，Tailwind 已预编译，无需安装新运行依赖或加载 Tailwind CDN。
+- 保留附件内嵌的全部 202 个非空段落、15 页缓存索引、跨页片段、DOCX 标题与原有 SHA-256 字段；这些数据与附件 HTML 中保存的内容一致，本次没有重新核验外部 DOCX 文件。
+- 保留九环节点、八次跃迁、螺旋/展开布局、自由回返说明、前后步进与键盘左右键操作。
+- 保留三拍模式、Ω 五项状态、P/S 区分、四种历史方案及横向比较、非必然跳跃、文内张力与终章结论。
+- 保留原文依据弹窗、从依据跳至全文、正文关键词检索、部分/缓存页筛选与内容覆盖索引。
+- 未重新生成原文或论证，也未增补外部事实；保留附件对“原文主张”“保留意见”“结论”和阅读并置的区分。
 
-## 本页源码与独立预览
+## Cavno 样式与实现
 
-附件的源码查看/复制/下载功能保留，名称调整为“本页 HTML 源码”，指本页可独立运行的 HTML，不是 Cavno 全站源码。`standalone.html` 是此功能需要的资源，请一并上传。
+复用 `Base.astro` 的导航、页脚、搜索及字体，统一米白底、珊瑚色和克制的绿色。原始 CSS 选择器、变量、DOM 查询及事件均限定在本页，避免影响全站；无需新增项目依赖或外部脚本。
 
-另附同内容的独立 HTML 预览，内嵌所需样式、交互脚本、理论数据及四份原文，可直接打开。预览的搜索仅检索本页，其余栏目链接指向 cavno.org；正式接入版使用全站搜索。
+手机端采用单列，宽图示和表格在局部横向滚动。原文弹窗沿用浏览器原生 dialog，支持 Esc、焦点管理与遮罩点击关闭；页内定位避开固定导航。交互脚本带内容哈希参数。
 
-完成原文数据一致性、构建、主要交互和手机布局检查。本次交付为本地增量代码，尚未发布到线上。
+另附独立 HTML 预览，可直接打开。预览已内嵌必要样式、脚本及全部原文数据，搜索仅检索本页，其余栏目链接指向 cavno.org；正式接入版使用全站搜索。
+
+完成内嵌原文及模型数据一致性核对、构建、主要交互与手机布局检查。本次交付为本地增量代码，尚未发布到线上。

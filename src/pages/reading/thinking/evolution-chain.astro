@@ -1,0 +1,19 @@
+---
+import Base from '../../../layouts/Base.astro';
+import body from '../../../legacy/reading/thinking/evolution-chain/body.html?raw';
+import '../../../legacy/reading/thinking/evolution-chain/style.css';
+const title="生成如何发生，目的性从何而来？";
+const description="依据完整 DOCX 制作的九环演化生成链离线交互阅读程序，保留机制、形式化边界、目的性困境与全文依据。";
+---
+<Base title={"演化生成链 · 从约束到自由"+' · Cavno'} description={description}>
+ <section class="cv-page-head ec-page-head"><div class="cv-wrap">
+  <div class="cv-eyebrow">Reading &amp; Thinking · Thinking</div>
+  <h1 class="cv-page-title" id="ec-title">{title}</h1>
+  <a class="cv-crumb-back" href="/reading/thinking/">← 返回思考栏目</a>
+ </div></section>
+ <article id="ec-app" class="lp ec-app" aria-labelledby="ec-title"><Fragment set:html={body} />
+  <noscript><p>请启用 JavaScript，以使用九环路径、逐段依据、形式化对照与全文检索。</p></noscript>
+ </article>
+ <nav class="cv-wrap ec-end" aria-label="页面导航"><a href="/reading/thinking/">← 返回思考栏目</a><a href="#ec-title">回到顶部 ↑</a></nav>
+ <script is:inline src="/apps/reading/thinking/evolution-chain/app.js?v=214bf5bcaa48" defer></script>
+</Base>
