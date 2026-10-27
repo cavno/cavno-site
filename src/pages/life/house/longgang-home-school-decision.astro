@@ -2,31 +2,21 @@
 import Base from '../../../layouts/Base.astro';
 import body from '../../../legacy/life/house/longgang-home-school-decision/body.html?raw';
 import '../../../legacy/life/house/longgang-home-school-decision/style.css';
-const title = "二胎家庭置业 · 产权与城中村排雷 · 宏观微观双视角决策系统";
-const description = "20盘全量库 × 回迁房与保障房甄别 × 城中村距离 · 小初学位、微观户号与同屏PK";
+const title="深圳二胎家庭置业全维度工程与投研决策平台";
+const description="20盘31组完整记录 · 工程与配套补全 · 12项宏观筛选、16维户号筛选、五层PK及HTML/CSV导出";
 ---
-<Base title={title + ' · Cavno'} description={description}>
-  <div id="hd-main">
-    <section class="cv-page-head hd-page-head">
-      <div class="cv-wrap">
-        <div class="cv-eyebrow">Life &amp; Skills · House</div>
-        <h1 class="cv-page-title" id="hd-title">{title.split(' · ').map((part, i, parts) => <span class="hd-title-part">{part}{i < parts.length - 1 ? ' · ' : ''}</span>)}</h1>
-        <a class="cv-crumb-back" href="/life/house/">← 返回房产栏目</a>
-        <nav class="hd-jump" aria-label="工具导航">
-        <a href="#section-glossary">产权与城中村排雷指南</a><a href="#hd-weights">六维权重与严选推荐</a><a href="#section-edu">🎓 1. 小初学位看板</a>
-        <a href="#section-sector">📈 2. 板块天花板与抗跌</a>
-        <a href="#section-macro">🏢 3. 整体视角(回迁/城中村横评)</a>
-        <a href="#section-micro">🔍 4. 具体视角(户号筛选)</a>
-        <a href="#section-pk">📊 5. 终极PK台</a>
-      </nav>
-      </div>
-    </section>
-    <article id="lg-house-app" class="lp hd-app" aria-labelledby="hd-title">
-      <Fragment set:html={body} />
-      <noscript><p class="hd-no-script">请启用 JavaScript，以使用宏观筛选、楼盘下钻、六维权重、户号筛选和 PK 对比。</p></noscript>
-    </article>
-    <nav class="cv-wrap hd-end" aria-label="页面导航"><a href="/life/house/">← 返回房产栏目</a><a href="#hd-title">回到顶部 ↑</a></nav>
-  </div>
-  <script is:inline src="/apps/life/house/longgang-home-school-decision/chart.umd.min.js" defer></script>
-  <script is:inline src="/apps/life/house/longgang-home-school-decision/app.js?v=448ac8ea8d93" defer></script>
+<Base title={title+' · Cavno'} description={description}>
+ <div id="hd-main"><section class="cv-page-head hd-page-head"><div class="cv-wrap">
+  <div class="cv-eyebrow">Life &amp; Skills · House</div><h1 class="cv-page-title" id="hd-title">{title}</h1>
+  <a class="cv-crumb-back" href="/life/house/">← 返回房产栏目</a><nav class="hd-jump" aria-label="工具导航">
+          <a href="#section-glossary">🧭 0.概念与排雷百科</a>
+          <a href="#hd-weights">六维权重与严选推荐</a><a href="#section-edu">🎓 1.小初学位双图看板</a>
+          <a href="#section-sector">📈 2.十年Beta与抗跌</a>
+          <a href="#section-macro">🏢 3.整体视角(13列全表)</a>
+          <a href="#section-micro">🔍 4.具体视角(31户/16维筛选)</a>
+          <a href="#section-pk">📊 5.五层穿透PK台</a>
+        </nav>
+ </div></section><article id="lg-house-app" class="lp hd-app" aria-labelledby="hd-title"><Fragment set:html={body} /><noscript><p>请启用 JavaScript 使用筛选、图表和导出。</p></noscript></article>
+ <nav class="cv-wrap hd-end" aria-label="页面导航"><a href="/life/house/">← 返回房产栏目</a><a href="#hd-title">回到顶部 ↑</a></nav></div>
+ <script is:inline src="/apps/life/house/longgang-home-school-decision/chart.umd.min.js" defer></script><script is:inline src="/apps/life/house/longgang-home-school-decision/app.js?v=f8c0e7d00e01" defer></script>
 </Base>
