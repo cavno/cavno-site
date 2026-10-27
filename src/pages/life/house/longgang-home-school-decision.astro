@@ -2,21 +2,22 @@
 import Base from '../../../layouts/Base.astro';
 import body from '../../../legacy/life/house/longgang-home-school-decision/body.html?raw';
 import '../../../legacy/life/house/longgang-home-school-decision/style.css';
-const title = "二胎家庭置业与资产投研级决策平台";
-const description = "板块十年Beta × 中观社区圈层 × 微观楼栋户号 · 15盘全库 · 六维权重与十二维筛选";
+const title = "二胎家庭置业 · 小初升学投研 · 宏观微观双视角决策系统";
+const description = "20盘全量库 × 四大片区 × 九个教育学区 · 六维权重、户号筛选与同屏PK";
 ---
 <Base title={title + ' · Cavno'} description={description}>
   <div id="hd-main">
     <section class="cv-page-head hd-page-head">
       <div class="cv-wrap">
         <div class="cv-eyebrow">Life &amp; Skills · House</div>
-        <h1 class="cv-page-title" id="hd-title">{title}</h1>
+        <h1 class="cv-page-title" id="hd-title">{title.split(' · ').map((part, i, parts) => <span class="hd-title-part">{part}{i < parts.length - 1 ? ' · ' : ''}</span>)}</h1>
         <a class="cv-crumb-back" href="/life/house/">← 返回房产栏目</a>
         <nav class="hd-jump" aria-label="工具导航">
-        <a href="#section-glossary">投研概念词典</a><a href="#hd-weights">六维权重与严选推荐</a><a href="#section-sector">📈 1. 板块天花板与抗跌验证</a>
-        <a href="#section-macro">🏢 2. 整体视角(15盘圈层/工程表)</a>
-        <a href="#section-micro">🔍 3. 具体视角(户号十二维筛选)</a>
-        <a href="#section-pk">📊 4. 终极同屏PK台</a>
+        <a href="#hd-weights">六维权重与严选推荐</a><a href="#section-edu">🎓 1. 小初学位深度看板</a>
+        <a href="#section-sector">📈 2. 板块天花板与抗跌</a>
+        <a href="#section-macro">🏢 3. 整体视角(20盘横评)</a>
+        <a href="#section-micro">🔍 4. 具体视角(户号筛选)</a>
+        <a href="#section-pk">📊 5. 终极PK台</a>
       </nav>
       </div>
     </section>
@@ -27,5 +28,5 @@ const description = "板块十年Beta × 中观社区圈层 × 微观楼栋户�
     <nav class="cv-wrap hd-end" aria-label="页面导航"><a href="/life/house/">← 返回房产栏目</a><a href="#hd-title">回到顶部 ↑</a></nav>
   </div>
   <script is:inline src="/apps/life/house/longgang-home-school-decision/chart.umd.min.js" defer></script>
-  <script is:inline src="/apps/life/house/longgang-home-school-decision/app.js?v=9f07f84004f4" defer></script>
+  <script is:inline src="/apps/life/house/longgang-home-school-decision/app.js?v=a621a28e3813" defer></script>
 </Base>
