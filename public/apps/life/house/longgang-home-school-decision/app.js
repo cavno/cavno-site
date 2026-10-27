@@ -19,7 +19,7 @@
         top4Rate: 7.5,
         top10Rate: 18.5,
         cutoffScore: "小一约96.5分 / 初一约98.2分（一类购房落户，需提前约2~2.5年）",
-        peerGrade: "S级·纯正中产与别墅圈层生源",
+        peerGrade: "S级·纯正中产与别墅圈层，学区几乎无城中村租户生源",
         lockPolicy: "小一锁6年/初一锁3年（二胎同父母通用不限）",
         highlight: "龙岗公办初中天花板之一，四大率与十大率常年领跑，现房买入落户稳赶2029老大幼升小。"
       },
@@ -32,7 +32,7 @@
         top4Rate: 5.8,
         top10Rate: 15.2,
         cutoffScore: "麓城外国语小一约88分 / 南师大龙岗初一约82分（一类购房提前1年落户100%稳录）",
-        peerGrade: "S级·麓城外国语生源极纯粹，南师大附校小班化精研",
+        peerGrade: "S级·麓城外国语仅招收麓城等商品房生源，极纯粹无城中村干扰",
         lockPolicy: "小一锁6年/初一锁3年（2026水径九年一贯新校投用后学位更充裕）",
         highlight: "公办普高率连续三年稳居78%~80.8%第一梯队！积分门槛比大运/坂田更友好，2029/2032双孩100%稳上。"
       },
@@ -45,7 +45,7 @@
         top4Rate: 6.2,
         top10Rate: 16.0,
         cutoffScore: "小一约92~95分 / 初一校内直升为主（外考需一类95分+，提前1.5~2年落户）",
-        peerGrade: "A+级·坂田鸡娃风气最浓，华为家长深度参与家委会",
+        peerGrade: "A级·一类商品房业主子女占主体（因积分门槛高，城中村租户极难考入）",
         lockPolicy: "九年一贯锁定（小一入学锁9年或分段锁，二胎同套房通用）",
         highlight: "四大名校深圳实验学校本部直管，九年一贯制免去小升初排位焦虑，四大/十大率极强。"
       },
@@ -58,20 +58,20 @@
         top4Rate: 5.5,
         top10Rate: 14.8,
         cutoffScore: "小一约91.5分 / 初一直升为主（一类购房提前1~1.5年落户稳录）",
-        peerGrade: "S级·纯粹改善大盘与高校教师子女，零城中村生源",
+        peerGrade: "S级·100%纯粹大运改善商品房与高校教师子女，零城中村生源",
         lockPolicy: "九年一贯锁定（深铁阅云境另有楼下72班九年一贯制公办新校双保险）",
         highlight: "颐安家门口目送式九年一贯名校，生源纯粹度与硬件设施全大运一流。"
       },
       "CUHK_ZHIXIN": {
         name: "香港中文大学(深圳)附属知新学校 / 道远学校（九年一贯制）",
         shortName: "港中大附属知新/道远",
-        covers: "佳兆业未来花园、京基御景中央、中海康城花园、泰瑞府",
+        covers: "佳兆业未来花园、京基御景中央、中海康城花园、泰瑞府、大运玖章(待划片)",
         systemType: "九年一贯制 (高校附属教育集团直升)",
         publicHighRate: 75.0,
         top4Rate: 5.0,
         top10Rate: 14.2,
         cutoffScore: "知新小一约90.5分(提前1~1.5年落户) / 道远小一约78分(一类购房即稳录)",
-        peerGrade: "A+级·大运科教城纯净生源，知新与道远共享港中深教研资源",
+        peerGrade: "S级·大运科教城商品房生源，无城中村握手楼租户分流",
         lockPolicy: "九年一贯锁定（泰瑞府一路之隔即道远学校，目送式入学）",
         highlight: "背靠港中大(深圳)学术资源，近年中考稳居龙岗前十，九年一贯直升省心。"
       },
@@ -84,9 +84,9 @@
         top4Rate: 4.9,
         top10Rate: 13.8,
         cutoffScore: "小一约91.0分（一类购房+坂田户籍，提前1~1.5年落户稳录）",
-        peerGrade: "S级·信义嘉御山百万方纯商品房大社区生源占主体",
+        peerGrade: "S级·信义嘉御山百万方商品房大社区业主子女占90%以上",
         lockPolicy: "九年一贯锁定（学校就在嘉御山社区旁，真正下楼目送式）",
-        highlight: "坂田本土口碑最稳的九年一贯制公办强校，生源几乎全来自嘉御山业主子女。"
+        highlight: "坂田本土口碑最稳的九年一贯制公办强校，生源高度集中在嘉御山业主。"
       },
       "XIANYI_BGL": {
         name: "贤义外国语学校(九年一贯制) + 春蕾小学/百合外国语生态圈",
@@ -97,7 +97,7 @@
         top4Rate: 4.8,
         top10Rate: 13.5,
         cutoffScore: "贤义小一约84~89分 / 初一直升+积分（一类购房提前1年落户100%稳录）",
-        peerGrade: "S级·百鸽笼纯现代商圈大盘生源，全深圳“考百外”培优氛围最浓片区",
+        peerGrade: "A+级·信义金御半山/万科红等商品房大盘生源为主，全深圳考百外氛围最浓",
         lockPolicy: "九年一贯锁定（万科红部分期数共享信义实验小学）",
         highlight: "进可攻（下楼即春蕾小学+深圳第一民办初中百合外国语，四大率超35%）、退可守（公办贤义外国语九年一贯制公办率73.5%稳保底）！"
       },
@@ -110,9 +110,9 @@
         top4Rate: 3.6,
         top10Rate: 10.8,
         cutoffScore: "2026小一录取线91.05分(迁户时间2025.05，即提前1年落户100%稳录)",
-        peerGrade: "A级·华为研发家庭生源比例极高，理科思维与家风优良",
+        peerGrade: "A级·一类91分高门槛将周边岗头村租户拦截在外，实际录取全为佳兆业/大族业主子女",
         lockPolicy: "九年一贯锁定（学校紧邻佳兆业与大族云峰，接送零距离）",
-        highlight: "公办普高率66.5%稳居全市中上（高出全市均值13个百分点），且就在家门口无需过马路。"
+        highlight: "公办普高率66.5%稳居全市中上，且一类91分录取线保证了入读生源全为商品房业主。"
       },
       "SHIYALING_NW": {
         name: "石芽岭学校(九年一贯制) + 规划54班深大附中南湾学校",
@@ -123,14 +123,14 @@
         top4Rate: 2.8,
         top10Rate: 8.5,
         cutoffScore: "小一约72~78分（学位充裕，一类购房落户当年即可100%稳录）",
-        peerGrade: "A-级·石芽岭公园周边商品房生源为主，特发旁新增54班名校集团新校",
-        lockPolicy: "九年一贯锁定（健康花城步行至石芽岭学校仅300米）",
-        highlight: "公办普高率约61.5%达标中上水平，积分门槛最宽松，且特发旁54班深大附中南湾新校带来强劲增量预期。"
+        peerGrade: "A-级·健康花城/中海怡瑞等商品房为主，含少量周边社区生源",
+        lockPolicy: "九年一贯锁定（健康花城步行至石芽岭学校仅300米，不经城中村）",
+        highlight: "公办普高率约61.5%达标中上水平，积分门槛最宽松，且特发旁54班深大附中南湾新校带来增量预期。"
       }
     };
 
     // =========================================================================
-    // 2. 宏观与中观数据库：20个小区整体工程、圈层、民房界面、学位映射与抗跌验证
+    // 2. 宏观与中观数据库：20个小区整体工程、回迁房甄别、城中村距离、学位映射与抗跌验证
     // =========================================================================
     const COMMUNITIES_MACRO = {
       // ---------------- A. 坂田片区 (4盘) ----------------
@@ -150,17 +150,22 @@
         buildingSpacing: "约 55~90米",
         parkingRatio: 1.05,
         parkingLabel: "1:1.05 (充裕)",
-        purityGrade: "S",
-        subsidizedRatio: "0% (三期纯商品房)",
-        purityLabel: "S级·纯商品房大城",
+        // 内部回迁房与保障房甄别
+        purityGrade: "A",
+        hasResettlement: "PHASE_ISOLATED", // ZERO: 全盘0回迁, PHASE_ISOLATED: 分期隔离(所选期0回迁), MIXED: 混居
+        hasSubsidized: false,
+        resettlementDetail: "旧改大盘：一期含较多象角塘村民回迁房；但【三期】为独立围合100%纯商品房，0回迁0保障！",
+        purityLabel: "分期纯粹·三期0回迁0保障 (一期含回迁)",
         assetTier: "品质改善",
-        residentProfile: "华为总部研发工程师、中层主管及科技企业白领家庭为主，高学历高收入圈层",
+        residentProfile: "华为总部研发工程师、中层主管及科技白领家庭为主，高学历高收入圈层",
+        // 外部城中村距离与动线
         villageGrade: "B",
-        urbanInterface: "B级·半现代半旧村交织（社区内豪华园林，外围东北侧仍有岗头/雪象民房待旧改）",
+        villageDistText: "距岗头村/禾坪岗民房约 120~180米 (马路相隔)",
+        urbanInterface: "B级·半现代半旧村（三期内部豪华园林，东/北侧隔路有岗头民房，去地铁与深大附坂田学校走现代市政路不穿村）",
         tenYearBeta: "背靠华为全球总部20万科创购买力，10号线双地铁口+百万方旧改兑现中；三房天花板520~580万。",
         resilienceGrade: "MID",
         drawdownPct: 24,
-        priceCeilingVerify: "2021峰值6.3万→2026企稳于4.8万/㎡(回撤24%)；华为自住承接力强。",
+        priceCeilingVerify: "三期纯商品房从2021峰值6.3万→2026企稳于4.8万/㎡(回撤24%)，比一期回迁房源抗跌性高出8个百分点。",
         propertyInfo: "佳兆业物业 · 3.8元/㎡",
         metroStation: "10号线岗头站/华为站",
         metroDist: "约 300米 (步行5分钟)",
@@ -184,17 +189,20 @@
         buildingSpacing: "约 65~110米 (皇家园林)",
         parkingRatio: 1.02,
         parkingLabel: "1:1.02 (达标)",
-        purityGrade: "S",
-        subsidizedRatio: "0% (纯商品房大盘)",
-        purityLabel: "S级·100%纯商品房标杆大盘",
+        purityGrade: "A",
+        hasResettlement: "PHASE_ISOLATED",
+        hasSubsidized: false,
+        resettlementDetail: "旧改大盘：一、二期含部分坂田村民回迁房；【五期、七期】为独立大花园100%纯商品房，0回迁0保障！",
+        purityLabel: "分期纯粹·五期/七期0回迁纯商品房",
         assetTier: "品质改善",
         residentProfile: "华为资深员工、福田/北站外溢改善中产、重视教育的二胎家庭",
         villageGrade: "B",
-        urbanInterface: "B级·内优外杂（内部百米楼距皇家园林极纯粹，出小区外围仍有坂田老民房街区）",
+        villageDistText: "外围距坂田村/杨美民房约 80~200米",
+        urbanInterface: "B级·内优外杂（五期百米楼距皇家园林极纯粹，出小区西/南外围有坂田老村街区，但科外学校紧邻社区无需穿村）",
         tenYearBeta: "紧邻五和国际交通枢纽（深大/深惠城际交汇）+ 坂雪岗科技城南扩；三房天花板550~620万。",
         resilienceGrade: "HIGH",
         drawdownPct: 22,
-        priceCeilingVerify: "五期89㎡从2021峰值6.8万→2026稳定在5.3万/㎡(回撤仅22%)，坂田抗跌硬通货。",
+        priceCeilingVerify: "五期纯商品房89㎡从2021峰值6.8万→2026稳定在5.3万/㎡(回撤仅22%)，坂田抗跌硬通货。",
         propertyInfo: "信义物业 · 3.6元/㎡",
         metroStation: "10号线坂田北站 / 5号线五和站",
         metroDist: "约 450米 (步行6分钟)",
@@ -219,16 +227,19 @@
         parkingRatio: 0.96,
         parkingLabel: "1:0.96 (略紧)",
         purityGrade: "A",
-        subsidizedRatio: "约10% (一期少量配建)",
-        purityLabel: "A级·二期为纯正商品房",
+        hasResettlement: "PHASE_ISOLATED",
+        hasSubsidized: true,
+        resettlementDetail: "一期含少量旧改回迁房及配建；【二期】以纯正商品房为主，管理独立。",
+        purityLabel: "二期纯商品房为主 (一期含少量回迁/配建)",
         assetTier: "主流刚改",
         residentProfile: "冲着“深圳实验学校坂田部”买入的鸡娃中产家庭、坂田/福田双职工",
         villageGrade: "B",
-        urbanInterface: "B级·紧邻城中村（东南侧紧贴光雅园村农民房，低层外向视野受影响）",
-        tenYearBeta: "五和大道城市更新带+深实验名校集团加持；总价天花板约530万。",
+        villageDistText: "⚠️ 零距离贴临光雅园村 (距东/南边界仅15~30米)",
+        urbanInterface: "B级·紧贴城中村（东南侧紧贴光雅园村握手楼，外圈低层直看农民房，日常去地铁口经过城中村底商）",
+        tenYearBeta: "五和大道城市更新带+深实验名校集团加持；受限于周边光雅园村界面，总价天花板约530万。",
         resilienceGrade: "LOW",
         drawdownPct: 35,
-        priceCeilingVerify: "2021年炒至7.5万/㎡，2026回归至4.9万/㎡(回撤35%)，学区溢价泡沫已挤干。",
+        priceCeilingVerify: "2021年炒至7.5万/㎡，2026回归至4.9万/㎡(回撤35%)，验证了贴临城中村的学区盘在退潮期回撤较深，目前泡沫已挤干。",
         propertyInfo: "诺德物业 · 3.8元/㎡",
         metroStation: "10号线光雅园站",
         metroDist: "约 400米 (步行5分钟)",
@@ -253,12 +264,15 @@
         parkingRatio: 1.08,
         parkingLabel: "1:1.08 (充裕)",
         purityGrade: "A",
-        subsidizedRatio: "约12% (独立楼栋配建)",
-        purityLabel: "A级·次新商品房为主",
+        hasResettlement: "PHASE_ISOLATED",
+        hasSubsidized: true,
+        resettlementDetail: "旧改次新盘：含约12%回迁房及少量人才配建（集中于特定边角单元，一期3/5栋及二期中心栋为纯商品房）。",
+        purityLabel: "次新商品房为主 (特定单元含少量回迁/配建)",
         assetTier: "品质改善",
         residentProfile: "偏好次新外立面与大园林的年轻科技新贵、华为及北站商务区改善客群",
         villageGrade: "A",
-        urbanInterface: "A级·现代综合体界面（自带4.5万㎡商业与学校，整体界面崭新整洁）",
+        villageDistText: "距外围民房约 150米+ (自带商业MALL隔离)",
+        urbanInterface: "A级·现代综合体界面（自带4.5万㎡商业与深大附坂田学校，仅西北远端有少量民房，上学与生活完全不进村）",
         tenYearBeta: "坂田南连接北站超核的门户位置，2020年次新折旧慢。",
         resilienceGrade: "MID",
         drawdownPct: 25,
@@ -271,7 +285,7 @@
         schoolKey: "SHENDA_BT"
       },
 
-      // ---------------- B. 水径 / 石芽岭片区 (4盘：含新增健康花城) ----------------
+      // ---------------- B. 水径 / 石芽岭片区 (4盘) ----------------
       "万科麓城三期": {
         zone: "水径/石芽岭",
         isNewBuild: false,
@@ -289,16 +303,19 @@
         parkingRatio: 0.86,
         parkingLabel: "⚠️ 1:0.86 (偏紧)",
         purityGrade: "S",
-        subsidizedRatio: "0% (100%纯商品房)",
-        purityLabel: "S级·100%纯商品房标杆大城",
+        hasResettlement: "ZERO",
+        hasSubsidized: false,
+        resettlementDetail: "🏆 三期为100%纯商品房独立组团，0村民回迁房、0配建保障房，产权与邻居极其纯粹！",
+        purityLabel: "★ S级·0回迁+0保障 (100%纯商品房)",
         assetTier: "主流刚改",
         residentProfile: "罗湖/福田/坂田通勤的教师、医生、公务员、跨境电商及科技白领，生源极纯粹",
         villageGrade: "A",
-        urbanInterface: "A级·山体公园隔离界面（北靠银湖山郊野公园及体育公园，隔绝下水径民房）",
+        villageDistText: "山体与大路隔绝，距下水径民房超 250米+",
+        urbanInterface: "A级·山体公园隔离界面（三期北靠银湖山及社区体育公园，孩子步行350m去麓城外国语小学走内部天桥，完全不接触城中村！）",
         tenYearBeta: "万科物业+南师大附校80.8%普高率稳坐片区龙头；水径三房总价天花板约460~480万。",
         resilienceGrade: "MID",
         drawdownPct: 27,
-        priceCeilingVerify: "2021峰值6.5万→2026回调至4.7~4.9万/㎡(415~445万，回撤27%)，底部坚实。",
+        priceCeilingVerify: "2021峰值6.5万→2026回调至4.7~4.9万/㎡(415~445万，回撤27%)，纯商品房护城河深厚。",
         propertyInfo: "万科物业 · 3.98元/㎡",
         metroStation: "5号线上水径站",
         metroDist: "约 400米 (步行6分钟)",
@@ -323,16 +340,19 @@
         parkingRatio: 1.05,
         parkingLabel: "1:1.05 (充裕)",
         purityGrade: "S",
-        subsidizedRatio: "0% (100%纯商品房)",
-        purityLabel: "S级·100%纯商品房豪宅园林",
+        hasResettlement: "ZERO",
+        hasSubsidized: false,
+        resettlementDetail: "🏆 招拍挂净地开发：全盘100%纯商品房，0村民回迁房、0配建保障房，无任何回迁砸盘风险！",
+        purityLabel: "★ S级·0回迁+0保障 (100%纯招拍挂商品房)",
         assetTier: "主流刚改",
-        residentProfile: "看重鸿荣源建筑品质与园林的改善自住家庭及罗湖/福田/坂田白领",
+        residentProfile: "看重鸿荣源建筑品质与园林的改善自住家庭及罗湖/福田/坂田白领，自住率超85%",
         villageGrade: "A",
-        urbanInterface: "A级·背山半隔离界面（南靠三联山体公园极幽静，台地围合隔绝外部村落）",
+        villageDistText: "高台地围合，距西侧水径民房约 120米(物理隔离)",
+        urbanInterface: "A级·背山高台地隔离（南靠三联山体公园，西侧虽有水径民房但小区抬高约10米且封闭围合，去上水径地铁站走市政大路不穿村）",
         tenYearBeta: "共享南师大龙岗学区+新建54班水径九年一贯制学校，车位与园林稳居水径第一。",
         resilienceGrade: "HIGH",
         drawdownPct: 22,
-        priceCeilingVerify: "2021峰值5.7万→2026稳定在4.4~4.7万/㎡(回撤仅22%)，抗跌表现极佳。",
+        priceCeilingVerify: "2021峰值5.7万→2026稳定在4.4~4.7万/㎡(回撤仅22%)，0回迁0保障+豪宅园林使其极抗跌。",
         propertyInfo: "鸿荣源物业 · 3.9元/㎡",
         metroStation: "5号线上水径站 / 下水径站",
         metroDist: "约 500米 (步行7分钟)",
@@ -353,25 +373,28 @@
         densityLabel: "🌟 公园低密社区 (容积率3.8!)",
         totalFloors: "28~32层",
         elevatorRatio: "2梯4户 / 2梯5户",
-        buildingSpacing: "约 60~95米 (中心泳池大园林)",
+        buildingSpacing: "约 60~95米",
         parkingRatio: 0.95,
         parkingLabel: "1:0.95 (基本平衡)",
         purityGrade: "S",
-        subsidizedRatio: "0% (100%纯商品房)",
-        purityLabel: "S级·100%纯商品房公园社区",
+        hasResettlement: "ZERO",
+        hasSubsidized: false,
+        resettlementDetail: "🏆 全盘100%纯商品房，0村民回迁房、0配建保障房，自住家庭纯粹！",
+        purityLabel: "★ S级·0回迁+0保障 (100%纯商品房)",
         assetTier: "主流刚改",
-        residentProfile: "罗湖/福田/坂田务实自住家庭、退休长辈协助带娃的二胎家庭，居住氛围极浓",
+        residentProfile: "罗湖/福田/坂田务实自住家庭、退休长辈协助带娃的二胎家庭",
         villageGrade: "A",
-        urbanInterface: "A级·78万㎡石芽岭生态公园北门户（南侧直面石芽岭山体公园与体育中心，无民房遮挡）",
-        tenYearBeta: "坐拥14号快线石芽岭站+78万㎡石芽岭公园+石芽岭学校(步行300米)+旁侧54班深大附中南湾新校，345万起买低密纯商品房三房两卫，性价比极高！",
+        villageDistText: "南向直面78万㎡石芽岭公园，距东侧局部民房约110米",
+        urbanInterface: "A级·石芽岭生态公园北门户（南排6/7/8栋永久无遮挡看山体公园，步行300米去石芽岭学校及地铁站完全不经过城中村）",
+        tenYearBeta: "坐拥14号快线石芽岭站+78万㎡公园+石芽岭学校+旁侧54班深大附中南湾新校，345万起买低密纯商品房三房两卫。",
         resilienceGrade: "HIGH",
         drawdownPct: 23,
-        priceCeilingVerify: "2021峰值约5.2万→2026稳定在3.9~4.2万/㎡(回撤约23%)，因总价门槛低(310~375万)且低密宜居，换手极稳。",
+        priceCeilingVerify: "2021峰值5.2万→2026稳定在3.9~4.2万/㎡(回撤约23%)，0回迁+低总价换手极稳。",
         propertyInfo: "金地/自有物业 · 3.2元/㎡",
         metroStation: "14号线石芽岭站 / 5号线上水径站",
-        metroDist: "约 450米 (步行6分钟达石芽岭站)",
+        metroDist: "约 450米 (步行6分钟)",
         commuteMins: 28,
-        commuteRoute: "步行至石芽岭站(或骑行至上水径5号线) → 五和转10号线 → 贝尔路(约26~30分钟)",
+        commuteRoute: "石芽岭站(或上水径5号线) → 五和转10号线 → 贝尔路(约28分钟)",
         schoolKey: "SHIYALING_NW"
       },
       "特发臻华府": {
@@ -391,16 +414,19 @@
         parkingRatio: 0.73,
         parkingLabel: "🚨 1:0.73 (严重偏紧)",
         purityGrade: "B",
-        subsidizedRatio: "约42% (含回迁房与保障房)",
-        purityLabel: "B级·商品房与回迁/保障混居",
+        hasResettlement: "MIXED",
+        hasSubsidized: true,
+        resettlementDetail: "⚠️ 旧改综合盘：小区内含高比例村民回迁房及公租/保障房（合计占约42%），虽3栋为纯商品房，但共享花园与紧张车位。",
+        purityLabel: "⚠️ B级·高比例回迁房+保障房同园混居(占42%)",
         assetTier: "主流刚改",
-        residentProfile: "看重98%超高得房率与14号快线的年轻刚改家庭 + 回迁户 + 保障房住户",
+        residentProfile: "看重98%超高得房率与14号快线的年轻刚改家庭 + 原村民回迁户 + 保障房住户",
         villageGrade: "B",
-        urbanInterface: "B级·工业区旧改过渡界面（南近石芽岭公园，北近广深铁路，周边厂房待更新）",
-        tenYearBeta: "14号快线石芽岭站+旁侧规划54班深大附中南湾学校；但受限于7.1容积率与0.73车位比，未来二手溢价受限。",
+        villageDistText: "距周边旧厂房及上李朗民房约 60~100米",
+        urbanInterface: "B级·工业区旧改过渡界面（南近石芽岭公园，北近广深铁路，周边仍有旧厂房与民房交织）",
+        tenYearBeta: "14号快线石芽岭站+旁侧规划54班深大附中南湾学校；但受限于高比例回迁房抛盘压力与7.1容积率，二手溢价天花板受限。",
         resilienceGrade: "HIGH",
         drawdownPct: 15,
-        priceCeilingVerify: "新盘折后约4.1万/㎡，按97%得房率折算套内单价仅相当于老盘3.4万/㎡，具备新规折算安全垫。",
+        priceCeilingVerify: "新盘折后约4.1万/㎡，按97%得房率折算套内单价仅相当于老盘3.4万/㎡，已通过低价补偿回迁混居短板。",
         propertyInfo: "特发服务 · 约4.2元/㎡",
         metroStation: "14号线快线石芽岭站G口",
         metroDist: "约 400米 (步行5分钟)",
@@ -409,7 +435,7 @@
         schoolKey: "SHIYALING_NW"
       },
 
-      // ---------------- C. 布吉百鸽笼片区 (新增4盘：万象汇商圈·贤义外国语+百外生态) ----------------
+      // ---------------- C. 布吉百鸽笼片区 (4盘) ----------------
       "信义金御半山": {
         zone: "布吉百鸽笼",
         isNewBuild: false,
@@ -423,23 +449,26 @@
         densityLabel: "中低密半山大城 (容积率4.0)",
         totalFloors: "31~33层",
         elevatorRatio: "2梯4户 / 2梯5户",
-        buildingSpacing: "约 65~110米 (半山双泳池皇家园林)",
+        buildingSpacing: "约 65~110米",
         parkingRatio: 1.02,
         parkingLabel: "1:1.02 (达标)",
-        purityGrade: "S",
-        subsidizedRatio: "0% (一至三期100%纯商品房)",
-        purityLabel: "S级·100%纯商品房半山豪宅大盘",
+        purityGrade: "A",
+        hasResettlement: "PHASE_ISOLATED",
+        hasSubsidized: false,
+        resettlementDetail: "罗岗旧改大盘：一期/二期含部分原村民回迁房；【三期半山组团】为独立门禁的100%纯商品房，0回迁0保障！",
+        purityLabel: "分期纯粹·三期0回迁纯商品房 (一二期含回迁)",
         assetTier: "品质改善",
-        residentProfile: "罗湖/福田企业主、医生、珠宝黄金商圈高净值家庭及冲刺百合外国语的陪读中产",
+        residentProfile: "罗湖/福田企业主、医生、珠宝商圈高净值家庭及冲刺百合外国语的陪读中产",
         villageGrade: "S",
-        urbanInterface: "S级·零民房万象汇都会半山界面（背靠求水山/荔山生态公园，下楼即32万㎡华润万象汇，无农民房）",
-        tenYearBeta: "布吉/罗湖交界最高端居住综合体（万象汇+贤义外国语+百外名校圈+百鸽笼地铁上盖），地位无可替代；三房天花板520~600万。",
+        villageDistText: "S级·核心区零城中村 (背靠荔山公园+万象汇)",
+        urbanInterface: "S级·零民房万象汇半山界面（信义连片旧改极彻底，三期背靠求水山/荔山公园，下楼即32万㎡万象汇与贤义外国语，完全不接触城中村）",
+        tenYearBeta: "布吉/罗湖交界最高端居住综合体（万象汇+贤义外国语+百外名校圈+百鸽笼地铁上盖）；三房天花板520~600万。",
         resilienceGrade: "HIGH",
         drawdownPct: 23,
-        priceCeilingVerify: "三期89㎡从2021峰值约6.9万→2026稳定在5.2~5.5万/㎡(回撤仅23%)，百鸽笼绝对龙头。",
+        priceCeilingVerify: "三期纯商品房89㎡从2021峰值6.9万→2026稳定在5.2~5.5万/㎡(回撤仅23%)，百鸽笼绝对龙头。",
         propertyInfo: "信义物业 · 3.6元/㎡",
         metroStation: "5号线百鸽笼站 (万象汇直通)",
-        metroDist: "约 200~450米 (步行3~6分钟)",
+        metroDist: "约 300米 (步行4分钟)",
         commuteMins: 26,
         commuteRoute: "5号线百鸽笼站 → 4站直达五和转10号线 → 2站至贝尔路站(约26分钟)",
         schoolKey: "XIANYI_BGL"
@@ -447,7 +476,7 @@
       "信义金御半山·珑门": {
         zone: "布吉百鸽笼",
         isNewBuild: true,
-        phaseSummary: "金御半山四期/珑门 (共3栋现房新盘)",
+        phaseSummary: "金御半山四期/珑门 (3栋现房新盘)",
         buildYear: "2025.11交付(全新现房)",
         regGen: "GEN2",
         regLabel: "✨ 第2代·新规精装现房",
@@ -460,17 +489,20 @@
         buildingSpacing: "约 50~75米",
         parkingRatio: 1.05,
         parkingLabel: "1:1.05 (充裕)",
-        purityGrade: "S",
-        subsidizedRatio: "0% (纯商品房现房组团)",
-        purityLabel: "S级·纯商品房全新现房",
+        purityGrade: "A",
+        hasResettlement: "PHASE_ISOLATED",
+        hasSubsidized: false,
+        resettlementDetail: "含约10%~15%罗岗旧改回迁选房房源，无政府公租房；2栋中心园景主力户号以纯商品房买家为主。",
+        purityLabel: "A级·全新精装现房 (含约12%回迁房源，0公租房)",
         assetTier: "品质改善",
-        residentProfile: "既想要百鸽笼万象汇+贤义/百外学区、又嫌弃二手房楼龄老的罗湖/坂田年轻改善家庭",
+        residentProfile: "既想要百鸽笼万象汇+贤义/百外学区、又偏好全新精装现房的罗湖/坂田年轻改善家庭",
         villageGrade: "S",
-        urbanInterface: "S级·万象汇商圈+半山公园界面（与金御半山大社区连片，周边现代繁华）",
-        tenYearBeta: "2025年底全新竣工现房，折后均价约5.1万/㎡，比旁边10年楼龄的金御半山三期二手房还便宜，享受全新精装与次新保值周期！",
+        villageDistText: "S级·万象汇半山核心 (距外围民房超200米)",
+        urbanInterface: "S级·万象汇商圈+半山公园界面（与金御半山大社区连片，周边现代繁华，上学与乘地铁全程现代步道）",
+        tenYearBeta: "2025年底全新竣工现房，折后约5.1万/㎡比旁边10年楼龄的金御半山三期二手还便宜。",
         resilienceGrade: "HIGH",
         drawdownPct: 14,
-        priceCeilingVerify: "开盘备案7万/㎡，2025-2026现房折后约5.0~5.2万/㎡（86㎡一卫约415万、95㎡两卫约465万），一二手倒挂安全垫极厚。",
+        priceCeilingVerify: "现房折后约5.0~5.2万/㎡（86㎡一卫约415万、95㎡两卫约465万），一二手倒挂安全垫厚。",
         propertyInfo: "信义高定物业 · 4.2元/㎡",
         metroStation: "5号线百鸽笼站",
         metroDist: "约 350米 (步行5分钟)",
@@ -481,7 +513,7 @@
       "百合世纪广场": {
         zone: "布吉百鸽笼",
         isNewBuild: true,
-        phaseSummary: "共2期 (百外教育系开发准现房/现房)",
+        phaseSummary: "共2期 (百外教育系开发新房)",
         buildYear: "2025-2026交付(新房)",
         regGen: "GEN2",
         regLabel: "✨ 第2代·百外系新盘",
@@ -491,20 +523,23 @@
         densityLabel: "都市综合体密 (容积率5.6)",
         totalFloors: "43~46层",
         elevatorRatio: "3梯5户 / 3梯6户",
-        buildingSpacing: "约 50~80米 (中央园林)",
+        buildingSpacing: "约 50~80米",
         parkingRatio: 1.08,
         parkingLabel: "1:1.08 (充裕)",
-        purityGrade: "A",
-        subsidizedRatio: "约20% (含部分回迁房源，商品房独立栋)",
-        purityLabel: "A级·百外集团开发综合体",
+        purityGrade: "B",
+        hasResettlement: "MIXED",
+        hasSubsidized: false,
+        resettlementDetail: "⚠️ 百鸽笼旧改项目：一期含较多回迁房；二期2/3栋虽以商品房为主，但全盘回迁房占比约22%~25%。",
+        purityLabel: "B级·旧改盘含约22%村民回迁房 (二期2/3栋较纯粹)",
         assetTier: "品质改善",
-        residentProfile: "冲着百合控股(百合外国语/春蕾小学母公司)教育基因与万象汇商圈买入的改善及鸡娃家庭",
-        villageGrade: "S",
-        urbanInterface: "S级·百鸽笼核心商圈界面（紧邻万象汇、百外世纪小学、信义荔山公园，无民房）",
-        tenYearBeta: "由深圳民办第一名校“百合外国语”母公司百合集团倾力打造，紧邻百外世纪小学，公办对口贤义外国语/信义实验，教育光环极强。",
+        residentProfile: "冲着百合控股(百合外国语/春蕾小学母公司)教育基因与万象汇商圈买入的鸡娃家庭",
+        villageGrade: "A",
+        villageDistText: "东靠万象汇/荔山，西距京南老街区约100米",
+        urbanInterface: "A级·百鸽笼商圈界面（东侧紧邻万象汇与百外世纪小学界面极好，西侧局部靠近老旧街区）",
+        tenYearBeta: "由深圳民办第一名校“百合外国语”母公司开发，紧邻百外世纪小学，公办对口贤义外国语。",
         resilienceGrade: "HIGH",
         drawdownPct: 15,
-        priceCeilingVerify: "二期折后约4.7~5.2万/㎡（98㎡三房两卫约461万起），在百鸽笼核心区新房市场极具号召力。",
+        priceCeilingVerify: "二期折后约4.7~5.2万/㎡（98㎡大横厅三房两卫约461万起），价格已消化回迁因素。",
         propertyInfo: "百合物业 · 4.3元/㎡",
         metroStation: "5号线百鸽笼站",
         metroDist: "约 300米 (步行4分钟)",
@@ -515,7 +550,7 @@
       "万科红": {
         zone: "布吉百鸽笼",
         isNewBuild: false,
-        phaseSummary: "共4期成熟大盘 (主力三期花园大社区)",
+        phaseSummary: "共4期成熟大盘 (主力三期花园社区)",
         buildYear: "2011-2014年",
         regGen: "GEN0",
         regLabel: "第0代·高赠送实用规",
@@ -527,21 +562,24 @@
         elevatorRatio: "2梯4户 / 2梯6户",
         buildingSpacing: "约 50~80米",
         parkingRatio: 0.88,
-        parkingLabel: "⚠️ 1:0.88 (三期较好，一二期略紧)",
-        purityGrade: "S",
-        subsidizedRatio: "0% (纯商品房社区)",
-        purityLabel: "S级·万科纯商品房成熟大盘",
+        parkingLabel: "⚠️ 1:0.88 (三期较好)",
+        purityGrade: "A",
+        hasResettlement: "PHASE_ISOLATED",
+        hasSubsidized: false,
+        resettlementDetail: "罗岗旧改项目：一、二、四期含较多回迁房及小户型公寓（租客多）；但【三期】为独立大花园纯正商品房住区！",
+        purityLabel: "分期纯粹·三期纯正商品房 (一二四期含回迁/小户)",
         assetTier: "主流刚改",
-        residentProfile: "罗湖/福田/坂田年轻首置与刚改白领家庭，看重万科物业、楼下商业与百鸽笼地铁商圈",
-        villageGrade: "A",
-        urbanInterface: "A级·成熟都会街区界面（楼下自带万科红生活广场盒马鲜生，步行400米达万象汇）",
-        tenYearBeta: "百鸽笼330~410万级性价比最高的万科物业大盘，共享万象汇商圈与贤义外国语/百外教育圈，流通性极好。",
+        residentProfile: "罗湖/福田/坂田年轻首置与刚改白领家庭，看重万科物业、楼下盒马商业与百鸽笼地铁",
+        villageGrade: "B",
+        villageDistText: "西/北侧距罗岗村/锦龙民房约 60~110米",
+        urbanInterface: "B级·成熟街区与局部民房交织（楼下自带盒马鲜生商业街，往东步行400m达万象汇，西侧外围靠近罗岗旧村）",
+        tenYearBeta: "百鸽笼330~410万级性价比最高的万科物业大盘，共享万象汇与贤义外国语/百外教育圈。",
         resilienceGrade: "MID",
         drawdownPct: 26,
-        priceCeilingVerify: "2021峰值约5.8万→2026回调至4.2~4.5万/㎡(回撤26%)；三期89㎡三房两卫380~410万成交极快。",
+        priceCeilingVerify: "三期89㎡三房两卫从2021峰值5.8万→2026回调至4.3万/㎡(380~410万，回撤26%)，流通性极好。",
         propertyInfo: "万科物业 · 3.2元/㎡",
         metroStation: "5号线百鸽笼站",
-        metroDist: "约 350~500米 (步行5分钟)",
+        metroDist: "约 400米 (步行5分钟)",
         commuteMins: 27,
         commuteRoute: "5号线百鸽笼站 → 五和转10号线 → 贝尔路站(约27分钟)",
         schoolKey: "XIANYI_BGL"
@@ -564,13 +602,16 @@
         buildingSpacing: "约 50~75米",
         parkingRatio: 1.05,
         parkingLabel: "1:1.05 (达标)",
-        purityGrade: "S",
-        subsidizedRatio: "0% (纯商品房)",
-        purityLabel: "S级·100%纯商品房次新社区",
+        purityGrade: "A",
+        hasResettlement: "PHASE_ISOLATED",
+        hasSubsidized: false,
+        resettlementDetail: "含少量旧改回迁房源（集中于外围1/6栋局部，中央3/4栋为纯商品房业主）。",
+        purityLabel: "A级·次新商品房为主 (外围含少量回迁，0保障房)",
         assetTier: "主流刚改",
         residentProfile: "大运高校教职工、龙岗中心城体制内人员、东部年轻改善家庭",
         villageGrade: "S",
-        urbanInterface: "S级·零民房大运新城界面（紧邻大运中心体育场与大运天地商圈，无农民房）",
+        villageDistText: "S级·大运核心区 (周边无典型握手楼城中村)",
+        urbanInterface: "S级·大运新城界面（紧邻大运中心体育场、大运天地华润商圈与港中大知新学校，上学与地铁全程现代大道）",
         tenYearBeta: "享大运天地华润商圈与港中深附属知新名校，城市界面稳居东部第一梯队。",
         resilienceGrade: "MID",
         drawdownPct: 26,
@@ -599,13 +640,16 @@
         parkingRatio: 1.11,
         parkingLabel: "🌟 1:1.11 (充裕)",
         purityGrade: "S",
-        subsidizedRatio: "0% (100%纯商品房)",
-        purityLabel: "S级·100%纯商品房低密社区",
+        hasResettlement: "ZERO",
+        hasSubsidized: false,
+        resettlementDetail: "🏆 招拍挂净地开发：全盘100%纯商品房，0村民回迁房、0配建保障房，低密纯粹！",
+        purityLabel: "★ S级·0回迁+0保障 (100%纯招拍挂低密商品房)",
         assetTier: "品质改善",
         residentProfile: "高校学者、医生、公务员、大运科教城研发人员及改善二胎家庭",
         villageGrade: "S",
-        urbanInterface: "S级·零民房纯净新城界面（位于国际大学园与体育中心腹地，无城中村）",
-        tenYearBeta: "3.2超低容积率+2梯4户+纯商品房属于不可再生稀缺孤品，长线保值力极强。",
+        villageDistText: "🏆 S级·方圆800米+零城中村 (高校与公园环绕)",
+        urbanInterface: "S级·零城中村纯净新城界面（位于国际大学园与大运体育中心腹地，视野与动线100%纯净现代）",
+        tenYearBeta: "3.2超低容积率+2梯4户+0回迁0保障纯商品房属于不可再生稀缺孤品，长线保值力极强。",
         resilienceGrade: "MID",
         drawdownPct: 24,
         priceCeilingVerify: "2021峰值5.3万→2026约4.0万/㎡(回撤24%)；97㎡双龙抱珠户型承接力极强。",
@@ -633,12 +677,15 @@
         parkingRatio: 1.15,
         parkingLabel: "🌟 1:1.15 (优渥)",
         purityGrade: "S",
-        subsidizedRatio: "0% (100%纯商品房)",
-        purityLabel: "S级·100%纯商品房百万方旗舰",
+        hasResettlement: "ZERO",
+        hasSubsidized: false,
+        resettlementDetail: "🏆 二、三、四期主力住宅区为100%纯商品房，0村民回迁混居、0保障房配建！",
+        purityLabel: "★ S级·0回迁+0保障 (100%纯商品房旗舰)",
         assetTier: "品质改善",
         residentProfile: "龙岗改善型中产、企业高管、华附大运及港中深教职工",
         villageGrade: "S",
-        urbanInterface: "S级·零民房都会核心界面（与大运枢纽、COCO Park、华附大运连成现代摩天界面）",
+        villageDistText: "🏆 S级·方圆800米+零城中村 (摩天都会核心)",
+        urbanInterface: "S级·零城中村都会核心界面（与大运枢纽、COCO Park、华附大运连成现代摩天都市界面，完全无农民房）",
         tenYearBeta: "大运枢纽四轨交汇(含深大城际)+10万㎡商业+华附大运名校，大运确定性最高标杆。",
         resilienceGrade: "HIGH",
         drawdownPct: 21,
@@ -667,13 +714,16 @@
         parkingRatio: 1.25,
         parkingLabel: "🏆 1:1.25 (豪宅配比)",
         purityGrade: "S",
-        subsidizedRatio: "0% (100%纯商品房+别墅)",
-        purityLabel: "S级·100%纯商品房+别墅社区",
+        hasResettlement: "ZERO",
+        hasSubsidized: false,
+        resettlementDetail: "🏆 招拍挂净地开发：100%纯商品房高层+联排别墅，0回迁房、0保障房！",
+        purityLabel: "★ S级·0回迁+0保障 (100%纯商品房+别墅)",
         assetTier: "品质改善",
         residentProfile: "别墅区为企业主，高层区为资深中产与深中龙岗陪读高净值家庭",
         villageGrade: "S",
-        urbanInterface: "S级·零民房山姆商圈界面（下楼即星河COCO Park与山姆会员店，完全无民房）",
-        tenYearBeta: "占据“深中龙岗第一名校+山姆商圈+2.6超低容积率+大运枢纽”四大核心锚点。",
+        villageDistText: "🏆 S级·零城中村山姆商圈界面 (>600米无民房)",
+        urbanInterface: "S级·零城中村山姆商圈界面（下楼即星河COCO Park与山姆会员店，跨过马路即大运枢纽，完全无民房）",
+        tenYearBeta: "占据“深中龙岗第一名校+山姆商圈+2.6超低容积率+0回迁纯商品房”四大核心锚点。",
         resilienceGrade: "HIGH",
         drawdownPct: 19,
         priceCeilingVerify: "🏆 全表二手抗跌总冠军！2021峰值6.3万→2026稳定在5.1万/㎡(回撤仅19%)。",
@@ -701,13 +751,16 @@
         parkingRatio: 0.90,
         parkingLabel: "⚠️ 1:0.90 (略紧)",
         purityGrade: "S",
-        subsidizedRatio: "0% (100%纯商品房)",
-        purityLabel: "S级·100%纯商品房成熟大盘",
+        hasResettlement: "ZERO",
+        hasSubsidized: false,
+        resettlementDetail: "🏆 招拍挂净地开发：全盘100%纯商品房，0村民回迁房、0配建保障房！",
+        purityLabel: "★ S级·0回迁+0保障 (100%纯招拍挂商品房)",
         assetTier: "刚需上车",
         residentProfile: "看重港中大知新学位的年轻首置刚需家庭、本地上班族及带娃老人",
         villageGrade: "A",
-        urbanInterface: "A级·南优北杂界面（南靠大运体育馆与公园，北靠盐龙大道）",
-        tenYearBeta: "大运200~260万级低门槛港中大知新学区大盘，刚需接盘底座极大。",
+        villageDistText: "南近大运公园，东北距黄阁坑旧村约 150米+",
+        urbanInterface: "A级·南优北杂界面（南侧靠近大运体育馆与公园界面好，去港中大知新学校与地铁站不穿城中村）",
+        tenYearBeta: "大运200~260万级低门槛0回迁纯商品房+港中大知新学区大盘，刚需接盘底座极大。",
         resilienceGrade: "LOW",
         drawdownPct: 33,
         priceCeilingVerify: "2021峰值4.3万→2026回调至2.85万/㎡(回撤33%)，目前240万买三房两卫已见底企稳。",
@@ -735,16 +788,19 @@
         parkingRatio: 1.73,
         parkingLabel: "🏆 1:1.73 (全表第一!)",
         purityGrade: "S",
-        subsidizedRatio: "0% (100%纯商品房，零配建!)",
-        purityLabel: "🏆 S级·100%纯商品房高定改善",
+        hasResettlement: "ZERO",
+        hasSubsidized: false,
+        resettlementDetail: "🏆 2024招拍挂纯商品房净地：0村民回迁房、0人才房、0公租房，起步即126㎡纯大户！",
+        purityLabel: "★ S级·0回迁+0保障 (100%纯大户型商品房)",
         assetTier: "品质改善",
         residentProfile: "企业主、科技高管、大学教授、龙岗终极改善换房家庭(126㎡/555万起)",
         villageGrade: "S",
-        urbanInterface: "S级·零民房顶配新城界面（紧邻大运天地商圈、大运公园与龙外本部）",
-        tenYearBeta: "大运绝版纯商品房宅地+2024二批新规+1:1.73车位比，定义龙岗未来10年豪宅新天花板。",
+        villageDistText: "🏆 S级·方圆800米+零城中村 (大运天地商圈旁)",
+        urbanInterface: "S级·零城中村顶配新城界面（紧邻大运天地商圈、大运公园与龙外本部，100%纯净现代豪宅区）",
+        tenYearBeta: "大运绝版0回迁0保障宅地+2024二批新规+1:1.73车位比，定义龙岗未来10年豪宅新天花板。",
         resilienceGrade: "HIGH",
         drawdownPct: 10,
-        priceCeilingVerify: "2025.12开盘新盘逆市热销，验证顶端改善客群对纯粹好房的支付力。",
+        priceCeilingVerify: "2025.12开盘新盘逆市热销，验证顶端改善客群对“零回迁零保障”纯粹好房的支付力。",
         propertyInfo: "中海高定物业 · 5.98元/㎡",
         metroStation: "16号线大运中心站 / 文曲站",
         metroDist: "约 400米 (步行5分钟)",
@@ -769,12 +825,15 @@
         parkingRatio: 1.15,
         parkingLabel: "🌟 1:1.15 (充裕)",
         purityGrade: "A",
-        subsidizedRatio: "约22% (1栋独立人才房)",
-        purityLabel: "A级·国企TOD社区(独立成栋)",
+        hasResettlement: "ZERO",
+        hasSubsidized: true,
+        resettlementDetail: "招拍挂TOD净地：全盘【0村民回迁房】！仅含1栋独立可售型人才房(约22%)，无回迁抛盘压价风险。",
+        purityLabel: "A级·0村民回迁房 (含1栋独立人才房，无回迁抛盘)",
         assetTier: "主流刚改",
         residentProfile: "依赖14号快线/深大城际跨区通勤的年轻中产家庭、深铁及国企员工",
         villageGrade: "S",
-        urbanInterface: "S级·零民房TOD枢纽界面（大运综合交通枢纽上盖，旁侧规划72班新校）",
+        villageDistText: "🏆 S级·零城中村TOD枢纽界面 (>600米无民房)",
+        urbanInterface: "S级·零城中村TOD枢纽界面（大运综合交通枢纽上盖，周边为颐安都会中央与规划72班学校、商业综合体）",
         tenYearBeta: "大运四轨交汇枢纽(3/14/16/深大城际)+自带商业与72班九年一贯制新校。",
         resilienceGrade: "HIGH",
         drawdownPct: 15,
@@ -803,16 +862,19 @@
         parkingRatio: 1.10,
         parkingLabel: "🌟 1:1.10 (充裕)",
         purityGrade: "B",
-        subsidizedRatio: "约38% (含保障房约553套)",
-        purityLabel: "B级·含约38%配建保障房",
+        hasResettlement: "ZERO",
+        hasSubsidized: true,
+        resettlementDetail: "招拍挂净地：全盘【0村民回迁房】（无村民二手抛售砸盘）！但配建有约38%政府保障性租赁/安居房。",
+        purityLabel: "B级·0村民回迁房 / 含约38%配建保障房",
         assetTier: "主流刚改",
         residentProfile: "看重国企现房交付、港中大道远学校目送式教育与大运中心配套的务实刚改家庭",
         villageGrade: "S",
-        urbanInterface: "S级·零民房大运科教城界面（一路之隔即港中大附属道远学校，无农民房）",
-        tenYearBeta: "享大运中心配套与高校附属教育红利；但因含38%保障房且3梯6户，二手上限略受制约。",
+        villageDistText: "🏆 S级·方圆800米+零城中村 (大运科教城腹地)",
+        urbanInterface: "S级·零城中村大运科教城界面（一路之隔即港中大附属道远学校，近大运天地与体育中心，完全无农民房）",
+        tenYearBeta: "享大运中心配套与高校附属教育红利；虽含38%保障房，但0村民回迁且城市界面极佳。",
         resilienceGrade: "HIGH",
         drawdownPct: 16,
-        priceCeilingVerify: "深业国企现房折后299万买89㎡一卫、337万买99㎡大横厅两卫，自住性价比高。",
+        priceCeilingVerify: "深业国企现房折后299万买89㎡一卫、337万买99㎡大横厅两卫，自住性价比突出。",
         propertyInfo: "深业物业 · 约4.3元/㎡",
         metroStation: "16号线大运中心站",
         metroDist: "约 400米 (步行5分钟)",
@@ -823,7 +885,7 @@
     };
 
     // =========================================================================
-    // 3. 微观数据库：20盘具体楼栋、单元、户号、厅型格局、距主干道米数、噪音源、得房率
+    // 3. 微观数据库：20盘具体楼栋、户号、本栋回迁核验、本户城中村视野核验
     // =========================================================================
     const UNITS_DATA = [
       // ==================== A. 坂田片区 (4盘) ====================
@@ -843,11 +905,13 @@
         noiseLabel: "不临街 · 距主干道185米",
         roadDistMeters: "距坂澜大道约185米、距雪岗北路约160米",
         specialNoise: "无铁路/无高架/无地铁地上轨，仅日间泳池轻微水声（约41~44dB）",
+        unitResettleCheck: "✅ 三期2/3栋为100%纯商品房（已避开一期回迁房楼栋）",
+        unitVillageCheck: "✅ 朝向三期内部中央泳池园林，完全看不到外围岗头民房",
         minPrice: 455,
         maxPrice: 498,
         priceRange: "455~498 万",
-        twoKidsNote: "华为研发圈层核心盘！三期正中央南北通透楼王，太太10号线1~2站（或骑车8分钟）直达贝尔路站，对口深大附坂田九年一贯制(2026录取线91.05分，提前1年落户稳录)。",
-        scores: { quiet: 95, edu: 85, commute: 99, space: 88, comm: 91, asset: 89 }
+        twoKidsNote: "华为研发圈层核心盘！选三期2/3栋完美避开一期回迁房与外围民房视野；太太10号线1~2站直达贝尔路站，对口深大附坂田九年一贯制。",
+        scores: { quiet: 95, edu: 85, commute: 99, space: 88, comm: 90, asset: 89 }
       },
       {
         id: "bt-kaisa-1-88",
@@ -865,11 +929,13 @@
         noiseLabel: "临辅路 · 距宝吉支路35米",
         roadDistMeters: "距坂澜大道主干道150米，距宝吉路社区支路约35米",
         specialNoise: "无高铁/高架，上下学时段学校周边支路有轻微接送车流声（约49~53dB）",
+        unitResettleCheck: "⚠️ 二期纯商品房为主，一期含部分村民回迁房（建议优先选二期2栋）",
+        unitVillageCheck: "✅ 阳台看花园内侧，距外围民房超150米",
         minPrice: 415,
         maxPrice: 448,
         priceRange: "415~448 万",
         twoKidsNote: "比三期楼王省40万，紧邻深大附坂田学校与10号线地铁口，太太通勤仅10分钟。",
-        scores: { quiet: 80, edu: 85, commute: 98, space: 78, comm: 88, asset: 87 }
+        scores: { quiet: 80, edu: 85, commute: 98, space: 78, comm: 84, asset: 87 }
       },
       {
         id: "bt-xinyi-5-89",
@@ -887,10 +953,12 @@
         noiseLabel: "不临街 · 距五和大道210米+",
         roadDistMeters: "距五和大道主干道约210米、距吉华路约190米",
         specialNoise: "无高铁/高架/地铁噪音，深居百万方大盘中心园林（约41~44dB）",
+        unitResettleCheck: "✅ 五期/七期为独立围合100%纯商品房（已避开一二期回迁房）",
+        unitVillageCheck: "✅ 深居百米楼距皇家园林正中央，距外围坂田民房超200米零干扰",
         minPrice: 495,
         maxPrice: 548,
         priceRange: "495~548 万",
-        twoKidsNote: "坂田改善与抗跌王牌(回撤仅22%)！100%纯商品房+自带科技城外国语学校(九年一贯直升，公办率74.5%)+10号线坂田北站2站直达贝尔路站。",
+        twoKidsNote: "坂田改善与抗跌王牌(回撤仅22%)！五期0回迁0保障+自带科技城外国语学校(九年一贯直升，公办率74.5%)+10号线坂田北站2站直达贝尔路站。",
         scores: { quiet: 95, edu: 92, commute: 96, space: 89, comm: 93, asset: 94 }
       },
       {
@@ -909,11 +977,13 @@
         noiseLabel: "不临街 · 距主干道145米",
         roadDistMeters: "距吉华路约145米，由外圈1~3栋完整遮挡道路噪音",
         specialNoise: "无特殊噪音源，内园安静（约43~46dB）",
+        unitResettleCheck: "⚠️ 三期纯商品房，二期含少量回迁房源（建议优先挑三期8栋）",
+        unitVillageCheck: "✅ 朝向内部花园，由外围楼栋隔离外部民房街区",
         minPrice: 435,
         maxPrice: 472,
         priceRange: "435~472 万",
-        twoKidsNote: "450万级入主信义嘉御山纯商品房内园+科技城外国语九年一贯制+14分钟贝尔路通勤。",
-        scores: { quiet: 91, edu: 92, commute: 95, space: 78, comm: 91, asset: 92 }
+        twoKidsNote: "450万级入主信义嘉御山内园+科技城外国语九年一贯制+14分钟贝尔路通勤。",
+        scores: { quiet: 91, edu: 92, commute: 95, space: 78, comm: 88, asset: 92 }
       },
       {
         id: "bt-nuode-2-89",
@@ -931,11 +1001,13 @@
         noiseLabel: "不临街 · 距五和大道130米",
         roadDistMeters: "距五和大道主干道约130米、距雅园路约115米",
         specialNoise: "无铁路/高架，外围楼栋阻隔五和大道车流（约43~47dB）",
+        unitResettleCheck: "✅ 二期为纯正商品房（已避开一期配建/回迁楼栋）",
+        unitVillageCheck: "⚠️ 小区东南侧紧贴光雅园村(20米)，务必选2/3栋中高区看内园户号以避开民房视野",
         minPrice: 475,
         maxPrice: 525,
         priceRange: "475~525 万",
-        twoKidsNote: "对口四大名校直管【深实验坂田校区】(九年一贯直升，公办率77.5%、十大率16%)+10号线3站到贝尔路；前期泡沫已挤干。",
-        scores: { quiet: 91, edu: 96, commute: 94, space: 86, comm: 80, asset: 82 }
+        twoKidsNote: "对口四大名校直管【深实验坂田校区】(九年一贯直升，公办率77.5%)+10号线3站到贝尔路；唯外部紧贴光雅园城中村。",
+        scores: { quiet: 91, edu: 96, commute: 94, space: 86, comm: 76, asset: 82 }
       },
       {
         id: "bt-dazu-1-96",
@@ -953,14 +1025,16 @@
         noiseLabel: "不临街 · 距坂雪岗大道160米",
         roadDistMeters: "距坂雪岗大道约160米、距永香路约120米",
         specialNoise: "无铁路/高架，围合式中央园林极安静（约42~45dB）",
+        unitResettleCheck: "✅ 一期3/5栋及二期2栋为纯正商品房楼栋（与边角回迁单元分离）",
+        unitVillageCheck: "✅ 楼下即4.5万㎡现代MALL与深大附坂田学校，上学与地铁动线完全不经过城中村",
         minPrice: 465,
         maxPrice: 515,
         priceRange: "465~515 万",
-        twoKidsNote: "坂田界面最干净的次新大盘(自带商业MALL)，96㎡实得78.7㎡，家门口深大附坂田九年一贯制，通勤16分钟。",
-        scores: { quiet: 94, edu: 85, commute: 95, space: 92, comm: 93, asset: 90 }
+        twoKidsNote: "坂田界面最干净的次新大盘，96㎡实得78.7㎡，家门口深大附坂田九年一贯制，太太通勤16分钟。",
+        scores: { quiet: 94, edu: 85, commute: 95, space: 92, comm: 92, asset: 90 }
       },
 
-      // ==================== B. 水径 / 石芽岭片区 (4盘：含新增健康花城) ====================
+      // ==================== B. 水径 / 石芽岭片区 (4盘) ====================
       {
         id: "vanke-3-89",
         project: "万科麓城三期",
@@ -977,11 +1051,13 @@
         noiseLabel: "不临街 · 距布龙路195米",
         roadDistMeters: "距布龙路主干道及高架约195米、距水径路约110米",
         specialNoise: "无铁路/无高架直射，前后双园林及5/6栋遮挡布龙路噪音（约41~45dB）",
+        unitResettleCheck: "🏆 三期全盘0村民回迁房、0保障房（100%纯商品房）",
+        unitVillageCheck: "🏆 北靠银湖山与体育公园，孩子过内部天桥350m直达麓城外国语小学，完全隔绝城中村！",
         minPrice: 415,
         maxPrice: 445,
         priceRange: "415~445 万",
-        twoKidsNote: "100%纯商品房+山体公园隔绝民房！步行350m达麓城外国语小学+对口南师大龙岗初中(公办率80.8%、十大率15.2%)，一类购房稳录，去贝尔路仅23分钟！",
-        scores: { quiet: 96, edu: 95, commute: 88, space: 86, comm: 92, asset: 88 }
+        twoKidsNote: "0回迁+0保障+山体公园隔绝城中村！步行350m达麓城外国语小学+对口南师大龙岗初中(公办率80.8%)，去贝尔路仅23分钟！",
+        scores: { quiet: 96, edu: 95, commute: 88, space: 86, comm: 95, asset: 88 }
       },
       {
         id: "vanke-1-88",
@@ -999,11 +1075,13 @@
         noiseLabel: "临辅路 · 距水径支路40米",
         roadDistMeters: "距布龙路主干道约170米，距水径社区支路约40米",
         specialNoise: "无铁路/高架，早晚接送时段支路有轻微车流声（关窗约38dB）",
+        unitResettleCheck: "🏆 三期全盘0村民回迁房、0保障房（100%纯商品房）",
+        unitVillageCheck: "✅ 周边为万科四期大城与山体公园，不靠近城中村握手楼",
         minPrice: 375,
         maxPrice: 398,
         priceRange: "375~398 万",
-        twoKidsNote: "380万级上车万科纯商品房+麓城外国语+南师大龙岗学校(公办率80.8%)，唯单卫需错峰。",
-        scores: { quiet: 76, edu: 95, commute: 88, space: 74, comm: 90, asset: 87 }
+        twoKidsNote: "380万级上车万科0回迁纯商品房+麓城外国语+南师大龙岗学校(公办率80.8%)，唯单卫需错峰。",
+        scores: { quiet: 76, edu: 95, commute: 88, space: 74, comm: 93, asset: 87 }
       },
       {
         id: "horoy-6-89",
@@ -1021,11 +1099,13 @@
         noiseLabel: "不临街 · 距布龙路220米+",
         roadDistMeters: "距北侧布龙路主干道达220米、距东侧西环路约150米",
         specialNoise: "无任何铁路/高架/干道干扰，后靠山体前看泳池（40~44dB全片区最静）",
+        unitResettleCheck: "🏆 招拍挂净地：全盘0村民回迁房、0保障房（100%纯商品房）",
+        unitVillageCheck: "🏆 6A/6B/5栋南靠三联山体公园、北看中央泳池，高台地物理隔绝西侧远端水径民房",
         minPrice: 395,
         maxPrice: 435,
         priceRange: "395~435 万",
-        twoKidsNote: "水径抗跌王(回撤仅22%)！100%纯商品房+车位比1:1.05+南师大附校学区(公办率80.8%)，去贝尔路仅24分钟。",
-        scores: { quiet: 97, edu: 92, commute: 87, space: 89, comm: 95, asset: 91 }
+        twoKidsNote: "水径抗跌王(回撤仅22%)！0回迁0保障纯商品房+车位比1:1.05+南师大附校学区(公办率80.8%)，去贝尔路仅24分钟。",
+        scores: { quiet: 97, edu: 92, commute: 87, space: 89, comm: 96, asset: 91 }
       },
       {
         id: "horoy-7-88",
@@ -1043,13 +1123,14 @@
         noiseLabel: "不临街 · 距布龙路180米",
         roadDistMeters: "7栋距布龙路180米靠南侧山体；3A栋距西环路支线约45米但看内园",
         specialNoise: "无铁路/高架，7栋伴山听鸟鸣极安静（约43~47dB）",
+        unitResettleCheck: "🏆 全盘0村民回迁房、0保障房（100%纯商品房）",
+        unitVillageCheck: "✅ 高台地封闭大花园，7栋直看南侧山体公园与内园",
         minPrice: 360,
         maxPrice: 390,
         priceRange: "360~390 万",
-        twoKidsNote: "360~385万买鸿荣源纯商品房园林+南师大附校共享学区+24分钟贝尔路通勤。",
-        scores: { quiet: 91, edu: 92, commute: 87, space: 77, comm: 93, asset: 90 }
+        twoKidsNote: "360~385万买鸿荣源0回迁纯商品房园林+南师大附校共享学区+24分钟贝尔路通勤。",
+        scores: { quiet: 91, edu: 92, commute: 87, space: 77, comm: 94, asset: 90 }
       },
-      // 新增：石芽岭·健康花城
       {
         id: "jkhc-6-89",
         project: "健康花城",
@@ -1064,57 +1145,15 @@
         orientation: "正南",
         noiseLevel: "QUIET",
         noiseLabel: "不临街 · 距布龙路210米+",
-        roadDistMeters: "位于小区南侧及中央腹地，距北侧布龙路主干道超210米，南向直望石芽岭山体公园",
+        roadDistMeters: "位于小区南侧及中央腹地，距北侧布龙路主干道超210米（另有3/5/9栋86㎡一卫308~338万）",
         specialNoise: "无铁路/无高架，背靠78万㎡石芽岭生态公园鲜氧环绕（约41~44dB）",
+        unitResettleCheck: "🏆 全盘0村民回迁房、0保障房（100%纯商品房低密住区）",
+        unitVillageCheck: "🏆 6/7/8栋南向直面78万㎡石芽岭山体公园与学校，视野与上学动线100%无城中村！",
         minPrice: 345,
         maxPrice: 380,
-        priceRange: "345~380 万",
-        twoKidsNote: "石芽岭隐藏宝藏盘！容积率仅3.8低密纯商品房(0保障房)，仅350~375万即可买到正南不临街三房两卫楼王！步行300米即达九年一贯制石芽岭学校，下楼即石芽岭公园带二宝遛娃。",
-        scores: { quiet: 95, edu: 82, commute: 82, space: 88, comm: 93, asset: 89 }
-      },
-      {
-        id: "jkhc-3-86",
-        project: "健康花城",
-        phase: "一期围合",
-        building: "3栋 / 5栋 / 9栋 (内园侧)",
-        unitCode: "03/04户 (东南向看花园)",
-        layoutType: "3室2厅1卫",
-        structureType: "竖厅·动静分区",
-        area: 86,
-        usableRateNum: 84,
-        usableArea: 72.2,
-        orientation: "东南",
-        noiseLevel: "QUIET",
-        noiseLabel: "不临街 · 距布龙路150米",
-        roadDistMeters: "位于社区中圈，由北侧1/2/11栋阻挡布龙路车流，阳台朝内园",
-        specialNoise: "无铁路/高架，社区内部花园安静宜居（约43~47dB）",
-        minPrice: 308,
-        maxPrice: 338,
-        priceRange: "308~338 万",
-        twoKidsNote: "310~335万极低门槛拿下3.8低密纯商品房+石芽岭公园+14号线石芽岭站+九年一贯制学位。",
-        scores: { quiet: 90, edu: 82, commute: 82, space: 78, comm: 91, asset: 88 }
-      },
-      {
-        id: "jkhc-1-main",
-        project: "健康花城",
-        phase: "一期外围",
-        building: "1栋 / 2栋 / 11栋 (北排临路)",
-        unitCode: "北侧近布龙路单元",
-        layoutType: "3室2厅1卫",
-        structureType: "竖厅·动静分区",
-        area: 86,
-        usableRateNum: 83,
-        usableArea: 71.4,
-        orientation: "东南",
-        noiseLevel: "MAIN_ROAD",
-        noiseLabel: "⚠️ 临主干道 · 距布龙路仅30米",
-        roadDistMeters: "北侧紧贴布龙路主干道，距主路仅28~35米",
-        specialNoise: "⚠️ 布龙路货车与快速车流噪音明显（65~71dB），看健康花城务必避开北排1/2/11栋！",
-        minPrice: 290,
-        maxPrice: 312,
-        priceRange: "290~312 万",
-        twoKidsNote: "虽总价不到310万，但临布龙路主干道噪音大，建议加35万选南排6/7/8栋。",
-        scores: { quiet: 32, edu: 82, commute: 82, space: 76, comm: 85, asset: 82 }
+        priceRange: "345~380 万 (86㎡版308万起)",
+        twoKidsNote: "石芽岭宝藏盘！容积率3.8低密+0回迁0保障纯商品房，仅350~375万买正南看石芽岭公园三房两卫楼王！步行300米达石芽岭学校。",
+        scores: { quiet: 95, edu: 82, commute: 82, space: 88, comm: 94, asset: 89 }
       },
       {
         id: "tefa-3-96",
@@ -1132,14 +1171,16 @@
         noiseLabel: "不临街 · 距盛宝路130米/距铁路180米",
         roadDistMeters: "位于小区正中央，距南侧盛宝路约130米、距北侧广深铁路约180米（87㎡三开间朝南355万起）",
         specialNoise: "3栋由北侧4/5栋遮挡铁路声、南侧遮挡盛宝路声（约43~46dB）",
+        unitResettleCheck: "🚨 3栋本栋为纯商品房，但小区整体含约42%回迁房与保障房（共享花园与0.73车位）",
+        unitVillageCheck: "⚠️ 3栋看社区内园，但小区外围北/西侧靠近旧工业区与上李朗民房过渡带",
         minPrice: 355,
         maxPrice: 430,
         priceRange: "355~430 万 (87㎡~96㎡)",
-        twoKidsNote: "微观户型满分（96㎡套内实得94㎡大横厅！）；但整体视角需接受：约42%回迁/保障房混居、容积率7.1、车位比1:0.73。",
-        scores: { quiet: 93, edu: 82, commute: 75, space: 99, comm: 72, asset: 83 }
+        twoKidsNote: "微观户型满分（96㎡套内实得94㎡大横厅！）；但若您介意小区内有高比例回迁房混居及0.73车位比，建议慎选或对比旁侧健康花城。",
+        scores: { quiet: 93, edu: 82, commute: 75, space: 99, comm: 68, asset: 83 }
       },
 
-      // ==================== C. 布吉百鸽笼片区 (新增4盘：万象汇商圈·贤义外国语+百外生态) ====================
+      // ==================== C. 布吉百鸽笼片区 (4盘) ====================
       {
         id: "bgl-banshan-3-89",
         project: "信义金御半山",
@@ -1154,35 +1195,15 @@
         orientation: "正南",
         noiseLevel: "QUIET",
         noiseLabel: "不临街 · 背靠荔山距干道180米+",
-        roadDistMeters: "背靠求水山/荔山生态公园，距罗岗路及龙岗大道均超180米",
+        roadDistMeters: "背靠求水山/荔山生态公园，距罗岗路及龙岗大道均超180米（一期86㎡一卫395万起）",
         specialNoise: "无任何铁路/高架/干道干扰，半山台地森林环抱（40~43dB极静）",
+        unitResettleCheck: "✅ 三期为独立门禁的100%纯商品房豪宅组团（已完美隔离一期罗岗回迁房）",
+        unitVillageCheck: "🏆 背靠荔山公园、下楼即32万㎡万象汇与贤义外国语学校，视野与动线零城中村！",
         minPrice: 460,
         maxPrice: 510,
-        priceRange: "460~510 万",
-        twoKidsNote: "百鸽笼二手品质天花板！100%纯商品房+零民房万象汇商圈+对口贤义外国语(九年一贯制，公办率73.5%)+下楼即百合外国语/春蕾小学名校圈，去贝尔路26分钟！",
+        priceRange: "460~510 万 (一期一卫395万起)",
+        twoKidsNote: "百鸽笼二手品质天花板！三期0回迁纯商品房+零民房万象汇商圈+贤义外国语(公办率73.5%)+下楼百合外国语/春蕾小学名校圈，去贝尔路26分钟！",
         scores: { quiet: 96, edu: 93, commute: 85, space: 90, comm: 96, asset: 94 }
-      },
-      {
-        id: "bgl-banshan-1-86",
-        project: "信义金御半山",
-        phase: "一期 / 二期",
-        building: "一期 3栋 / 二期 5栋 (内园侧)",
-        unitCode: "03/05户 (东南向看花园)",
-        layoutType: "3室2厅1卫",
-        structureType: "竖厅·动静分区",
-        area: 86,
-        usableRateNum: 85,
-        usableArea: 73.1,
-        orientation: "东南",
-        noiseLevel: "QUIET",
-        noiseLabel: "不临街 · 距罗岗路130米",
-        roadDistMeters: "位于一期/二期围合花园内侧，距外围道路约130米",
-        specialNoise: "无铁路/高架，社区人车分流极安静（约43~46dB）",
-        minPrice: 395,
-        maxPrice: 435,
-        priceRange: "395~435 万",
-        twoKidsNote: "400万出头即可入主信义金御半山+万象汇电梯直达+贤义外国语九年一贯制学位。",
-        scores: { quiet: 92, edu: 93, commute: 85, space: 79, comm: 94, asset: 92 }
       },
       {
         id: "bgl-longmen-2-95",
@@ -1198,13 +1219,15 @@
         orientation: "东南",
         noiseLevel: "QUIET",
         noiseLabel: "不临街 · 距罗岗路125米",
-        roadDistMeters: "位于珑门组团内侧，看半山园林，距外围道路约125米（1/3栋另有86㎡一卫约415~438万）",
+        roadDistMeters: "位于珑门组团内侧，看半山园林，距外围道路约125米（86㎡一卫约415~438万）",
         specialNoise: "无铁路/高架，全新精装现房配高标双层中空隔音玻璃（约42~45dB）",
+        unitResettleCheck: "✅ 0公租/保障房，含约12%旧改回迁选房房源，2栋中心园景以纯商品房买家为主",
+        unitVillageCheck: "🏆 位于金御半山与万象汇之间，现代都市界面，远离城中村握手楼",
         minPrice: 448,
         maxPrice: 485,
         priceRange: "448~485 万 (86㎡版415万起)",
-        twoKidsNote: "2025年底全新竣工现房！单价5.1万/㎡比旁边金御半山三期二手还便宜，95㎡新规实得83.6㎡，即买即办证落户赶2029幼升小，享万象汇+贤义外国语+百外生态！",
-        scores: { quiet: 92, edu: 93, commute: 85, space: 92, comm: 92, asset: 93 }
+        twoKidsNote: "2025年底全新竣工现房！单价5.1万/㎡比金御半山三期二手还便宜，95㎡新规实得83.6㎡，享万象汇+贤义外国语+百外生态！",
+        scores: { quiet: 92, edu: 93, commute: 85, space: 92, comm: 91, asset: 93 }
       },
       {
         id: "bgl-baihe-2-98",
@@ -1222,11 +1245,13 @@
         noiseLabel: "不临街 · 距翔鸽路130米",
         roadDistMeters: "朝向小区中央大园林，距翔鸽路及罗岗路约130米",
         specialNoise: "无铁路/高架，紧邻百外世纪小学与万象汇商圈（约43~47dB）",
+        unitResettleCheck: "⚠️ 旧改盘全盘含约22%村民回迁房（主要集中在一期，选房建议锁定二期2/3栋纯商品房楼座）",
+        unitVillageCheck: "✅ 东侧紧邻万象汇与百外世纪小学现代界面，二期2/3栋看内园避开了西侧老街区",
         minPrice: 455,
         maxPrice: 489,
         priceRange: "455~489 万",
-        twoKidsNote: "由深圳传奇名校【百合外国语】母公司百合集团开发！楼下即百外世纪小学+万象汇+5号线百鸽笼站，98㎡大横厅三房两卫，鸡娃家庭心头好。",
-        scores: { quiet: 91, edu: 93, commute: 86, space: 92, comm: 89, asset: 91 }
+        twoKidsNote: "由深圳第一民办名校【百合外国语】母公司开发！楼下即百外世纪小学+万象汇+5号线百鸽笼站，98㎡大横厅三房两卫。",
+        scores: { quiet: 91, edu: 93, commute: 86, space: 92, comm: 84, asset: 91 }
       },
       {
         id: "bgl-vankered-3-89",
@@ -1242,13 +1267,15 @@
         orientation: "东南",
         noiseLevel: "QUIET",
         noiseLabel: "不临街 · 距惠康路130米",
-        roadDistMeters: "位于万科红三期围合大花园中心，距惠康路及锦龙路约130米（一/四期另有83㎡一卫330万起）",
+        roadDistMeters: "位于万科红三期围合大花园中心，距惠康路及锦龙路约130米（一/四期83㎡一卫330万起）",
         specialNoise: "无铁路/高架，楼下自带盒马鲜生商业但住宅抬高隔音佳（约44~47dB）",
+        unitResettleCheck: "✅ 三期为独立围合大花园纯正商品房住区（已避开一、二、四期回迁房与小户型公寓）",
+        unitVillageCheck: "✅ 三期2/3栋看中心花园，往东步行400m去万象汇与贤义外国语学校走市政大道不进村",
         minPrice: 375,
         maxPrice: 415,
         priceRange: "375~415 万 (83㎡一卫330万起)",
-        twoKidsNote: "380~410万即可拥有：万科物业纯商品房 + 步行5分钟达万象汇/百鸽笼地铁站 + 贤义外国语九年一贯制学位 + 27分钟达贝尔路站！",
-        scores: { quiet: 90, edu: 92, commute: 84, space: 86, comm: 89, asset: 88 }
+        twoKidsNote: "380~410万即可拥有：万科红三期纯商品房花园 + 步行5分钟达万象汇/百鸽笼地铁站 + 贤义外国语九年一贯制 + 27分钟达贝尔路站！",
+        scores: { quiet: 90, edu: 92, commute: 84, space: 86, comm: 87, asset: 88 }
       },
 
       // ==================== D. 龙岗大运片区 (8盘) ====================
@@ -1268,11 +1295,13 @@
         noiseLabel: "不临街 · 距如意路140米",
         roadDistMeters: "距如意路主干道约140米、距龙飞大道约160米（2/5栋靠支路350万起）",
         specialNoise: "无铁路/无地铁高架，内园安静（约42~46dB）",
+        unitResettleCheck: "✅ 3/4栋中心楼座为纯商品房（仅外围局部楼栋含少量旧改回迁房源，0保障房）",
+        unitVillageCheck: "🏆 S级大运中心核心界面，周边为大运场馆、大运天地商圈与港中大知新学校，无握手楼城中村",
         minPrice: 350,
         maxPrice: 405,
         priceRange: "350~405 万",
-        twoKidsNote: "S级零民房大运新城界面 + 100%纯商品房次新 + 港中大知新九年一贯制(公办率75%、十大率14.2%)！唯太太去贝尔路地铁需52分钟。",
-        scores: { quiet: 93, edu: 91, commute: 48, space: 86, comm: 92, asset: 89 }
+        twoKidsNote: "S级大运新城界面 + 次新花园 + 港中大知新九年一贯制(公办率75%、十大率14.2%)！唯太太去贝尔路地铁需52分钟。",
+        scores: { quiet: 93, edu: 91, commute: 48, space: 86, comm: 91, asset: 89 }
       },
       {
         id: "kk-3-97",
@@ -1290,11 +1319,13 @@
         noiseLabel: "不临街 · 距主干道160米+",
         roadDistMeters: "位于3.2低容积率大花园中央，距如意路/飞扬路均超150米（另有86㎡一卫305~339万）",
         specialNoise: "无铁路/高架，百米楼间距中央水景园林（约41~44dB）",
+        unitResettleCheck: "🏆 招拍挂净地：全盘0村民回迁房、0配建保障房（100%纯商品房）",
+        unitVillageCheck: "🏆 方圆800米内全是大运场馆、国际大学园与公园，100%零城中村纯净界面！",
         minPrice: 360,
         maxPrice: 406,
         priceRange: "360~406 万 (86㎡版305万起)",
-        twoKidsNote: "社区纯粹度与低密满分：100%纯商品房+零民房高校界面+3.2超低容积率+2梯4户+1:1.11车位比+97㎡正南双龙抱珠+港中大知新/道远学位！",
-        scores: { quiet: 95, edu: 91, commute: 47, space: 93, comm: 97, asset: 92 }
+        twoKidsNote: "纯粹度与低密满分：0回迁+0保障+零城中村高校界面+3.2超低容积率+2梯4户+1:1.11车位比+97㎡正南双龙抱珠+港中大知新/道远学位！",
+        scores: { quiet: 95, edu: 91, commute: 47, space: 93, comm: 98, asset: 92 }
       },
       {
         id: "yian-3-89",
@@ -1312,11 +1343,13 @@
         noiseLabel: "不临街 · 距龙岗大道200米+",
         roadDistMeters: "深居二/三期园林内侧，距龙岗大道及3号线高架超200米、距黄阁路140米",
         specialNoise: "彻底隔绝3号线地铁高架轨行噪音与大道车流（约42~45dB）",
+        unitResettleCheck: "🏆 二期/三期/四期全盘0村民回迁房、0配建保障房（100%纯商品房改善大盘）",
+        unitVillageCheck: "🏆 方圆800米内全为摩天综合体、大运枢纽与华附大运学校，100%零城中村！",
         minPrice: 385,
         maxPrice: 430,
         priceRange: "385~430 万",
-        twoKidsNote: "大运抗跌标杆(回撤仅21%)！100%纯商品房+零民房都会界面+车位比1:1.15+下楼即华附大运九年一贯制(公办率77.5%)，14号快线去贝尔路44分钟。",
-        scores: { quiet: 94, edu: 94, commute: 60, space: 88, comm: 96, asset: 96 }
+        twoKidsNote: "大运抗跌标杆(回撤仅21%)！0回迁0保障+零城中村都会界面+车位比1:1.15+下楼即华附大运九年一贯制(公办率77.5%)，14号快线去贝尔路44分钟。",
+        scores: { quiet: 94, edu: 94, commute: 60, space: 88, comm: 97, asset: 96 }
       },
       {
         id: "galaxy-6-89",
@@ -1334,11 +1367,13 @@
         noiseLabel: "不临街 · 俯瞰别墅距干道230米",
         roadDistMeters: "南向跨越整个低密联排别墅区，距龙岗大道及黄阁南路均超220米",
         specialNoise: "无任何干道/高架遮挡与噪音，视野与静音全区顶级（40~43dB）",
+        unitResettleCheck: "🏆 招拍挂净地：全盘0村民回迁房、0配建保障房（100%纯商品房+别墅）",
+        unitVillageCheck: "🏆 南向俯瞰联排别墅区，下楼即山姆与COCO Park，方圆600米+零城中村！",
         minPrice: 430,
         maxPrice: 475,
         priceRange: "430~475 万",
-        twoKidsNote: "全表二手抗跌总冠军(回撤仅19%)！容积率2.6别墅级低密+100%纯商品房+车位比1:1.25+楼下山姆会员店+深中龙岗顶级学位(公办率81.5%、十大率18.5%)！",
-        scores: { quiet: 96, edu: 98, commute: 58, space: 91, comm: 98, asset: 98 }
+        twoKidsNote: "全表二手抗跌总冠军(回撤仅19%)！容积率2.6别墅级低密+0回迁0保障+车位比1:1.25+楼下山姆+深中龙岗顶级学位(公办率81.5%)！",
+        scores: { quiet: 96, edu: 98, commute: 58, space: 91, comm: 99, asset: 98 }
       },
       {
         id: "cohl-kc-89",
@@ -1356,11 +1391,13 @@
         noiseLabel: "不临街 · 距盐龙大道200米+",
         roadDistMeters: "位于25栋大社区正中心，距盐龙大道及黄阁路均超200米",
         specialNoise: "无高架/干道干扰，成熟大花园极安静（约42~45dB）",
+        unitResettleCheck: "🏆 招拍挂净地：全盘0村民回迁房、0配建保障房（100%纯商品房）",
+        unitVillageCheck: "✅ 中心楼栋看大花园，去港中大知新学校与地铁站走市政大路不经过城中村",
         minPrice: 235,
         maxPrice: 268,
         priceRange: "235~268 万 (一卫版205万起)",
-        twoKidsNote: "240~265万买容积率3.6纯商品房正南双龙抱珠三房两卫+港中大知新九年一贯制名校(公办率75%)！适合严控预算留足教育金的家庭。",
-        scores: { quiet: 92, edu: 91, commute: 42, space: 84, comm: 86, asset: 82 }
+        twoKidsNote: "240~265万买容积率3.6、0回迁0保障纯商品房正南双龙抱珠三房两卫+港中大知新名校(公办率75%)！",
+        scores: { quiet: 92, edu: 91, commute: 42, space: 84, comm: 89, asset: 82 }
       },
       {
         id: "cohl-jz-126",
@@ -1378,10 +1415,12 @@
         noiseLabel: "不临街 · 距黄阁路150米+",
         roadDistMeters: "位于社区中心，距黄阁路主干道约150米（4栋靠支路555万起）",
         specialNoise: "无铁路/高架，全屋配三玻两腔豪宅级隔音系统（40~43dB）",
+        unitResettleCheck: "🏆 2024纯招拍挂净地：0村民回迁房、0人才房、0公租房（100%纯大户型商品房）",
+        unitVillageCheck: "🏆 S级大运天地商圈与大运公园旁，方圆800米+零城中村握手楼！",
         minPrice: 555,
         maxPrice: 708,
         priceRange: "555~708 万",
-        twoKidsNote: "龙岗终极改善天花板！100%纯商品房(0保障房)+126㎡高净值圈层+零民房大运核心+车位比1:1.73+套内实得118㎡（学区待2028交房后划片）。",
+        twoKidsNote: "龙岗终极改善天花板！0回迁0保障+126㎡高净值圈层+零城中村大运核心+车位比1:1.73+套内实得118㎡！",
         scores: { quiet: 97, edu: 80, commute: 48, space: 99, comm: 99, asset: 97 }
       },
       {
@@ -1400,11 +1439,13 @@
         noiseLabel: "不临街 · 距龙岗大道120米(内院向)",
         roadDistMeters: "2/3单元朝向抬高式空中花园内侧，距龙岗大道约120米",
         specialNoise: "14/16号线均为地下隧道无噪音；外侧商业裙楼遮挡大道车流（约44~48dB）",
+        unitResettleCheck: "✅ 招拍挂TOD净地：全盘0村民回迁房（无回迁抛盘压价，仅含1栋独立可售人才房）",
+        unitVillageCheck: "🏆 大运四轨枢纽上盖，周边为颐安都会中央与72班规划新校，零城中村！",
         minPrice: 336,
         maxPrice: 435,
         priceRange: "336~435 万",
-        twoKidsNote: "S级零民房大运枢纽上盖(步行2分钟入站)+车位比1:1.15+大横厅实得88㎡+华附大运/楼下72班新校！去贝尔路42分钟。",
-        scores: { quiet: 90, edu: 90, commute: 63, space: 93, comm: 88, asset: 92 }
+        twoKidsNote: "0村民回迁房+零城中村大运枢纽上盖(步行2分钟入站)+车位比1:1.15+大横厅实得88㎡！去贝尔路42分钟。",
+        scores: { quiet: 90, edu: 90, commute: 63, space: 93, comm: 90, asset: 92 }
       },
       {
         id: "sy-trf-99",
@@ -1422,19 +1463,21 @@
         noiseLabel: "不临街 · 距龙飞大道130米",
         roadDistMeters: "2/3栋位于园林中央，距龙飞大道及如意路约130米",
         specialNoise: "无铁路/无高架，国企现房双层中空LOW-E隔音玻璃（约41~45dB）",
+        unitResettleCheck: "✅ 招拍挂净地：全盘0村民回迁房（2/3/6栋为纯商品房，其它楼座含约38%政府保障房）",
+        unitVillageCheck: "🏆 大运国际大学园与体育中心腹地，马路对面即港中大道远学校，方圆800米+零城中村！",
         minPrice: 337,
         maxPrice: 415,
         priceRange: "337~415 万 (89㎡版299万起)",
-        twoKidsNote: "S级零民房科教城界面+国企现房+车位比1:1.10+一路之隔港中大道远学校(九年一贯直升，一类购房稳录)；注意含约38%保障房。",
-        scores: { quiet: 95, edu: 89, commute: 48, space: 92, comm: 82, asset: 88 }
+        twoKidsNote: "0村民回迁房+零城中村科教城界面+国企现房+一路之隔港中大道远学校(九年一贯直升)；注意含约38%配建保障房。",
+        scores: { quiet: 95, edu: 89, commute: 48, space: 92, comm: 83, asset: 88 }
       }
     ];
 
-    // 默认四大片区代表盘 PK 池（坂田嘉御山 + 水径麓城 + 石芽岭健康花城 + 百鸽笼信义半山/珑门 + 大运星河/京基）
-    let compareIds = ["bt-xinyi-5-89", "vanke-3-89", "jkhc-6-89", "bgl-banshan-3-89", "bgl-longmen-2-95"];
+    // 默认四大片区代表盘 PK 池
+    let compareIds = ["bt-xinyi-5-89", "vanke-3-89", "horoy-6-89", "jkhc-6-89", "bgl-banshan-3-89"];
 
     // =========================================================================
-    // 4. 六维权重计算与过滤逻辑
+    // 4. 六维权重计算与过滤逻辑（含回迁房与城中村精准过滤）
     // =========================================================================
     function getWeights() {
       const e = parseInt(byId("wEdu").value, 10);
@@ -1464,6 +1507,14 @@
         unit.scores.comm * weights.comm +
         unit.scores.asset * weights.asset;
       return Math.round(rawScore * 10) / 10;
+    }
+
+    function matchPurityFilter(macro, filterVal) {
+      if (filterVal === "ALL") return true;
+      if (filterVal === "PURE_ZERO") return macro.hasResettlement === "ZERO" && !macro.hasSubsidized;
+      if (filterVal === "NO_RESETTLE") return macro.hasResettlement === "ZERO";
+      if (filterVal === "CLEAN_PHASE") return macro.purityGrade === "S" || macro.purityGrade === "A";
+      return true;
     }
 
     function matchPriceFilter(unit) {
@@ -1504,7 +1555,7 @@
             <div class="text-slate-600">十大率：~${s.top10Rate}%</div>
           </td>
           <td class="py-2.5 px-2.5 align-top max-w-[220px] text-slate-700">${s.cutoffScore}</td>
-          <td class="py-2.5 px-2.5 align-top max-w-[190px]">
+          <td class="py-2.5 px-2.5 align-top max-w-[195px]">
             <div class="font-semibold text-emerald-800">${s.peerGrade}</div>
             <div class="text-[11px] text-slate-500 mt-0.5">${s.lockPolicy}</div>
           </td>
@@ -1514,7 +1565,7 @@
     }
 
     // =========================================================================
-    // 6. 渲染视角二：20盘宏观整体工程、圈层、民房界面、学位横评表
+    // 6. 渲染视角二：20盘宏观整体表（突出回迁房甄别与城中村距离）
     // =========================================================================
     function renderMacroTable() {
       const zoneF = byId("macroZoneFilter").value;
@@ -1529,8 +1580,7 @@
       const entries = Object.entries(COMMUNITIES_MACRO).filter(([name, m]) => {
         const sch = SCHOOL_DISTRICTS[m.schoolKey];
         if (zoneF !== "ALL" && m.zone !== zoneF) return false;
-        if (pureF === "S" && m.purityGrade !== "S") return false;
-        if (pureF === "A" && m.purityGrade === "B") return false;
+        if (!matchPurityFilter(m, pureF)) return false;
         if (vilF === "S" && m.villageGrade !== "S") return false;
         if (vilF === "A" && m.villageGrade === "B") return false;
         if (denF === "LOW" && m.densityGrade !== "LOW") return false;
@@ -1545,7 +1595,7 @@
 
       const tbody = byId("macroTableBody");
       if (entries.length === 0) {
-        tbody.innerHTML = `<tr><td colspan="10" class="py-8 text-center text-slate-400">暂无符合该组合条件的小区，请放宽上方筛选选项。</td></tr>`;
+        tbody.innerHTML = `<tr><td colspan="9" class="py-8 text-center text-slate-400">暂无符合该组合条件的小区，请放宽上方筛选选项。</td></tr>`;
         return;
       }
 
@@ -1563,17 +1613,17 @@
               </div>
               <span class="text-[10px] px-1.5 py-0.5 rounded bg-slate-200 text-slate-700">${m.zone} · ${m.buildYear}</span>
             </td>
-            <td class="py-2.5 px-2 align-top">
-              <span class="px-2 py-0.5 rounded text-[11px] font-bold ${purityBadge}">保障房：${m.subsidizedRatio.split(" ")[0]}</span>
-              <div class="text-slate-600 mt-1 text-[11px]">${m.purityLabel}</div>
+            <td class="py-2.5 px-2 align-top max-w-[215px]">
+              <span class="px-2 py-0.5 rounded text-[11px] font-bold ${purityBadge}">${m.purityLabel}</span>
+              <div class="text-slate-600 mt-1 text-[11px] leading-snug">${m.resettlementDetail}</div>
             </td>
-            <td class="py-2.5 px-2 align-top max-w-[175px]">
+            <td class="py-2.5 px-2 align-top max-w-[210px]">
+              <span class="px-2 py-0.5 rounded text-[11px] font-bold ${vilBadge}">${m.villageDistText}</span>
+              <div class="text-slate-500 mt-1 text-[11px] leading-snug">${m.urbanInterface}</div>
+            </td>
+            <td class="py-2.5 px-2 align-top max-w-[165px]">
               <span class="px-2 py-0.5 rounded text-[11px] font-bold badge-purple">${m.assetTier}</span>
               <div class="text-slate-600 mt-1 text-[11px] leading-snug">${m.residentProfile}</div>
-            </td>
-            <td class="py-2.5 px-2 align-top max-w-[180px]">
-              <span class="px-2 py-0.5 rounded text-[11px] font-bold ${vilBadge}">${m.urbanInterface.split("（")[0]}</span>
-              <div class="text-slate-500 mt-1 text-[11px] leading-snug">${m.urbanInterface.includes("（") ? m.urbanInterface.substring(m.urbanInterface.indexOf("（")) : ""}</div>
             </td>
             <td class="py-2.5 px-2 align-top">
               <div class="font-bold ${m.plotRatio <= 3.8 ? 'text-emerald-700' : m.plotRatio >= 6.0 ? 'text-rose-600' : 'text-slate-800'}">${m.densityLabel}</div>
@@ -1583,16 +1633,13 @@
               <div class="font-bold ${m.parkingRatio < 1 ? 'text-rose-600' : 'text-emerald-700'}">🅿️ ${m.parkingLabel}</div>
               <div class="text-slate-500 text-[11px] mt-0.5">${m.regLabel} (${m.usableAvg})</div>
             </td>
-            <td class="py-2.5 px-2 align-top max-w-[190px]">
+            <td class="py-2.5 px-2 align-top max-w-[180px]">
               <div class="font-bold text-indigo-950">${sch.shortName}</div>
               <div class="mt-0.5">
                 <span class="px-1.5 py-0.5 rounded font-bold badge-green text-[10px]">公办率 ${sch.publicHighRate}%</span>
                 <span class="px-1.5 py-0.5 rounded font-semibold badge-purple text-[10px]">十大率 ${sch.top10Rate}%</span>
               </div>
-              <div class="text-[10px] text-slate-500 mt-0.5">${sch.systemType}</div>
-            </td>
-            <td class="py-2.5 px-2 align-top max-w-[185px] text-[11px] text-slate-600 leading-snug">
-              ${sch.cutoffScore}
+              <div class="text-[10px] text-slate-500 mt-0.5">${sch.systemType.split(" ")[0]}</div>
             </td>
             <td class="py-2.5 px-2 align-top">
               <div class="font-bold text-pink-700">🚇 贝尔路 ${m.commuteMins}分</div>
@@ -1616,7 +1663,7 @@
     };
 
     // =========================================================================
-    // 7. 渲染顶部 TOP 4 严选推荐
+    // 7. 渲染顶部 TOP 4 严选推荐（联动回迁房与城中村筛选）
     // =========================================================================
     function renderTopRecommendations() {
       const weights = getWeights();
@@ -1628,11 +1675,20 @@
       byId("wAssetVal").textContent = `${weights.raw.a}%`;
 
       const minRate = parseFloat(byId("filterSchoolRate").value);
+      const purityF = byId("filterPurity").value;
+      const villageF = byId("filterVillage").value;
 
       const eligible = UNITS_DATA
         .filter(u => {
-          const sch = SCHOOL_DISTRICTS[COMMUNITIES_MACRO[u.project].schoolKey];
-          return u.noiseLevel !== "MAIN_ROAD" && matchPriceFilter(u) && matchCommuteFilter(u) && sch.publicHighRate >= minRate;
+          const m = COMMUNITIES_MACRO[u.project];
+          const sch = SCHOOL_DISTRICTS[m.schoolKey];
+          if (u.noiseLevel === "MAIN_ROAD") return false;
+          if (!matchPriceFilter(u) || !matchCommuteFilter(u)) return false;
+          if (sch.publicHighRate < minRate) return false;
+          if (!matchPurityFilter(m, purityF)) return false;
+          if (villageF === "S" && m.villageGrade !== "S") return false;
+          if (villageF === "A" && m.villageGrade === "B") return false;
+          return true;
         })
         .map(u => ({
           ...u,
@@ -1647,7 +1703,7 @@
       const container = byId("topRecommendations");
 
       if (eligible.length === 0) {
-        container.innerHTML = `<div class="col-span-full text-center py-6 text-xs text-slate-400">当前预算与通勤条件下暂无非主干道房源，请放宽下方总价或通勤筛选。</div>`;
+        container.innerHTML = `<div class="col-span-full text-center py-6 text-xs text-slate-400">当前筛选组合下暂无匹配房源，请适当放宽回迁房/城中村或总价预算条件。</div>`;
         return;
       }
 
@@ -1667,7 +1723,7 @@
               <span class="font-semibold text-pink-700">🚇 贝尔路${u.macro.commuteMins}分</span>
             </div>
             <div class="truncate font-semibold text-indigo-900">🎓 ${u.sch.shortName} (公办率${u.sch.publicHighRate}%)</div>
-            <div class="truncate text-emerald-800">🏢 ${u.macro.purityLabel.split("·")[1]} ｜ 回撤${u.macro.drawdownPct}%</div>
+            <div class="truncate text-emerald-800">🏠 ${u.macro.purityLabel}</div>
           </div>
         </div>
       `).join("");
@@ -1733,8 +1789,7 @@
         if (noise === "QUIET_ONLY" && u.noiseLevel !== "QUIET") return false;
         if (noise === "NO_MAIN" && u.noiseLevel === "MAIN_ROAD") return false;
         if (sch.publicHighRate < minSchoolRate) return false;
-        if (purity === "S" && m.purityGrade !== "S") return false;
-        if (purity === "A" && m.purityGrade === "B") return false;
+        if (!matchPurityFilter(m, purity)) return false;
         if (village === "S" && m.villageGrade !== "S") return false;
         if (village === "A" && m.villageGrade === "B") return false;
         if (density === "LOW" && m.densityGrade !== "LOW") return false;
@@ -1755,7 +1810,7 @@
       if (filtered.length === 0) {
         container.innerHTML = `
           <div class="col-span-full py-12 text-center text-slate-500 text-sm bg-slate-50 rounded-xl border border-dashed border-slate-300">
-            当前十二维筛选条件下暂无匹配户号，建议放宽“周边有无民房”、“高低密度”或“总价区间”选项。
+            当前十二维筛选条件下暂无匹配户号，建议放宽“回迁房/保障房”、“靠近城中村”或“总价区间”选项。
           </div>
         `;
         return;
@@ -1810,36 +1865,31 @@
                 </span>
               </div>
 
-              <!-- 区块1：【微观户号级】空间实得与噪音源解剖 -->
-              <div class="mt-3 pt-2 border-t border-slate-100 text-xs text-slate-600 space-y-1">
-                <div class="font-bold text-emerald-800 text-[11px]">🔍 ① 微观户号空间与噪音解剖</div>
+              <!-- 区块1：【回迁房 & 城中村排雷核验】（本次核心升级！） -->
+              <div class="mt-3 pt-2 border-t border-slate-100 text-[11px] text-slate-700 space-y-1 bg-emerald-50/50 p-2.5 rounded-lg border border-emerald-200/60">
+                <div class="font-bold text-emerald-950">🛡️ ① 本栋回迁房/保障房 & 城中村距离核验</div>
+                <div><strong>内部回迁/保障：</strong>${u.unitResettleCheck}</div>
+                <div><strong>外部城中村距离：</strong><span class="font-semibold">${m.villageDistText}</span></div>
+                <div><strong>本户视野与动线：</strong>${u.unitVillageCheck}</div>
+              </div>
+
+              <!-- 区块2：【微观户号级】空间实得与噪音源解剖 -->
+              <div class="mt-2 pt-2 text-xs text-slate-600 space-y-1 px-1">
+                <div class="font-bold text-slate-800 text-[11px]">🔍 ② 微观空间实得与道路/铁路噪音解剖</div>
                 <div><strong class="text-slate-800">建面与实得：</strong>建面 <strong>${u.area}㎡</strong> × 得房率 <strong>${u.usableRateNum}%</strong> ≈ 套内实得 <strong class="text-indigo-700">${u.usableArea}㎡</strong></div>
                 <div><strong class="text-slate-800">主干道距离：</strong>${u.roadDistMeters}</div>
                 <div><strong class="text-slate-800">特殊噪音源：</strong>${u.specialNoise}</div>
               </div>
 
-              <!-- 区块2：【小初学位专项】普高率、四大十大率、积分线与学制 -->
-              <div class="mt-2 pt-2 border-t border-dashed border-slate-200 text-[11px] text-slate-700 space-y-1 bg-indigo-50/60 p-2.5 rounded-lg">
+              <!-- 区块3：【小初学位专项】普高率、四大十大率、积分线 -->
+              <div class="mt-2 pt-2 border-t border-dashed border-slate-200 text-[11px] text-slate-700 space-y-1 bg-indigo-50/50 p-2.5 rounded-lg">
                 <div class="flex items-center justify-between">
-                  <span class="font-bold text-indigo-950">🎓 ② 对口小初学位硬核指标</span>
+                  <span class="font-bold text-indigo-950">🎓 ③ 对口小初学位 (${sch.systemType.split(" ")[0]})</span>
                   <span class="px-1.5 py-0.2 rounded font-bold badge-green text-[10px]">公办率 ${sch.publicHighRate}%</span>
                 </div>
-                <div><strong>对口学校：</strong>${sch.name}</div>
-                <div><strong>名校上限：</strong><span class="text-purple-800 font-semibold">四大率 ~${sch.top4Rate}% ｜ 十大率 ~${sch.top10Rate}%</span> ｜ ${sch.systemType.split(" ")[0]}</div>
-                <div><strong>录取积分线：</strong>${sch.cutoffScore}</div>
-                <div><strong>生源纯粹度：</strong>${sch.peerGrade}</div>
-              </div>
-
-              <!-- 区块3：【中观社区+宏观资产】纯粹度、圈层、民房界面、密度与通勤 -->
-              <div class="mt-2 pt-2 border-t border-dashed border-slate-200 text-[11px] text-slate-600 space-y-1 bg-slate-50/90 p-2.5 rounded-lg">
-                <div class="font-bold text-slate-800">🏢 ③ 社区纯粹度 · 民房界面 · 密度 · 贝尔路通勤</div>
-                <div><strong>保障房/纯粹度：</strong><span class="${m.purityGrade === 'S' ? 'text-emerald-700 font-bold' : 'text-amber-700 font-bold'}">${m.purityLabel} (${m.subsidizedRatio.split(" ")[0]})</span></div>
-                <div><strong>周边有无民房：</strong>${m.urbanInterface.split("（")[0]}</div>
-                <div class="grid grid-cols-2 gap-1 pt-0.5">
-                  <div><strong>密度：</strong>${m.densityLabel}</div>
-                  <div><strong>车位：</strong><span class="${m.parkingRatio < 1 ? 'text-rose-600 font-bold' : 'text-emerald-700 font-bold'}">${m.parkingLabel}</span></div>
-                </div>
-                <div class="text-pink-800 font-medium"><strong>🚇 太太通勤：</strong>距${m.metroStation.split(" ")[0]}${distanceMetric(m.metroDist)} → <strong>${m.commuteMins}分钟</strong>达贝尔路</div>
+                <div><strong>学校：</strong>${sch.shortName} ｜ <span class="text-purple-800 font-semibold">四大率~${sch.top4Rate}% / 十大率~${sch.top10Rate}%</span></div>
+                <div><strong>积分线：</strong>${sch.cutoffScore}</div>
+                <div class="text-pink-800 font-medium"><strong>🚇 太太通勤：</strong>距${m.metroStation.split(" ")[0]}${distanceMetric(m.metroDist)} → <strong>${m.commuteMins}分钟</strong>达贝尔路 ｜ 车位 ${leadingMetric(m.parkingLabel)}</div>
               </div>
 
               <!-- 二胎点评 -->
@@ -1850,7 +1900,7 @@
 
             <!-- 底部操作按钮 -->
             <div class="mt-3 pt-2.5 border-t border-slate-100 flex items-center justify-between">
-              <span class="text-[11px] text-slate-400">${m.propertyInfo} ｜ 21-26回撤${m.drawdownPct}%</span>
+              <span class="text-[11px] text-slate-400">${m.densityLabel} ｜ 21-26回撤${m.drawdownPct}%</span>
               <button type="button" data-compare-id="${u.id}" class="px-3 py-1 rounded-lg text-xs font-semibold transition ${
                 isCompared
                   ? 'bg-indigo-600 text-white hover:bg-indigo-700'
@@ -1909,20 +1959,19 @@
         { label: "🔇 距主干道精确米数", render: u => `<div class="font-semibold text-emerald-800">${u.noiseLabel}</div><div class="text-slate-500 mt-0.5">${u.roadDistMeters}</div>` },
         { label: "🚨 铁路/高架/特殊噪音排查", render: u => u.specialNoise },
 
-        // 第二层：小初学位八维核心指标（全新强化！）
-        { section: "【第二层：小、初学位八维指标视角】公办普高率、四大/十大率、录取积分线、直升学制与生源", label: "🎓 对口小学 & 初中名称", render: u => `<span class="font-bold text-indigo-950">${u.sch.name}</span>` },
+        // 第二层：内部回迁房/保障房 & 外部靠近城中村排雷（本次核心强化！）
+        { section: "【第二层：内外纯粹度排雷视角】小区有无回迁房/保障房、靠近城中村距离与本栋视野核验", label: "🏠 小区整体回迁/保障房结构", render: u => `<div class="font-bold ${u.macro.purityGrade === 'S' ? 'text-emerald-700' : 'text-indigo-900'}">${u.macro.purityLabel}</div><div class="text-slate-500 mt-0.5">${u.macro.resettlementDetail}</div>` },
+        { label: "✅ 本期/本栋回迁房核验", render: u => `<span class="font-semibold">${u.unitResettleCheck}</span>` },
+        { label: "🏘️ 距最近城中村距离", render: u => `<div class="font-bold ${u.macro.villageGrade === 'S' ? 'text-emerald-700' : 'text-slate-800'}">${u.macro.villageDistText}</div><div class="text-slate-500 mt-0.5">${u.macro.urbanInterface}</div>` },
+        { label: "👀 本户视野与上学穿村核验", render: u => `<span class="font-semibold">${u.unitVillageCheck}</span>` },
+        { label: "🌳 高低密度 & 车位比", render: u => `<div><strong>${u.macro.densityLabel}</strong> (${u.macro.elevatorRatio})</div><div class="font-bold ${u.macro.parkingRatio < 1 ? 'text-rose-600' : 'text-emerald-700'}">车位 ${u.macro.parkingLabel}</div>` },
+
+        // 第三层：小初学位八维核心指标
+        { section: "【第三层：小、初学位八维指标视角】公办普高率、四大/十大率、录取积分线、直升学制与城中村生源干扰", label: "🎓 对口小学 & 初中名称", render: u => `<span class="font-bold text-indigo-950">${u.sch.name}</span>` },
         { label: "🏆 中考公办普高录取率", render: u => `<span class="px-2 py-0.5 rounded badge-green font-bold text-xs">约 ${u.sch.publicHighRate}%</span> <span class="text-slate-400">(全市基准53.5%)</span>` },
         { label: "🌟 四大名校率 & 十大率", render: u => `<div class="font-bold text-purple-800">四大率：约 ${u.sch.top4Rate}%</div><div class="font-semibold text-indigo-700">十大率：约 ${u.sch.top10Rate}%</div>` },
         { label: "📊 近3年录取积分线 & 门槛", render: u => u.sch.cutoffScore },
-        { label: "🔄 学制模式 (小升初衔接)", render: u => `<span class="font-semibold text-teal-800">${u.sch.systemType}</span>` },
-        { label: "👥 生源纯粹度 & 锁定政策", render: u => `<div class="font-semibold">${u.sch.peerGrade}</div><div class="text-slate-500 mt-0.5">${u.sch.lockPolicy}</div>` },
-
-        // 第三层：中观社区纯粹度、圈层、民房界面、密度与车位
-        { section: "【第三层：整体社区视角】保障房比例、业主圈层、周边有无民房、高低密度与车位", label: "🏢 产权纯粹度 & 保障房比", render: u => `<div class="font-bold ${u.macro.purityGrade === 'S' ? 'text-emerald-700' : 'text-amber-700'}">${u.macro.purityLabel}</div><div class="text-slate-500">配建比：${u.macro.subsidizedRatio}</div>` },
-        { label: "👥 刚需/改善定位 & 圈层", render: u => `<span class="px-2 py-0.5 rounded badge-indigo font-bold">${u.macro.assetTier}</span><div class="mt-1 text-slate-600">${u.macro.residentProfile}</div>` },
-        { label: "🏙️ 周边城市界面 (有无民房)", render: u => u.macro.urbanInterface },
-        { label: "🌳 高低密度 & 梯户比", render: u => `<div class="font-bold">${u.macro.densityLabel}</div><div class="text-slate-500">${u.macro.totalFloors} · ${u.macro.elevatorRatio}</div>` },
-        { label: "🅿️ 车位比 & 建筑代际", render: u => `<div class="font-bold ${u.macro.parkingRatio < 1 ? 'text-rose-600' : 'text-emerald-700'}">车位 ${u.macro.parkingLabel}</div><div class="text-slate-500">${u.macro.regLabel}</div>` },
+        { label: "👥 学区生源纯粹度(有无租户分流)", render: u => `<div class="font-semibold text-emerald-800">${u.sch.peerGrade}</div><div class="text-slate-500 mt-0.5">${u.sch.systemType}</div>` },
 
         // 第四层：宏观板块十年Beta、历史抗跌验证与贝尔路通勤
         { section: "【第四层：宏观资产与通勤视角】十年产业规划Beta、历史抗跌天花板验证与贝尔路通勤", label: "📈 片区十年发展Beta & 天花板", render: u => u.macro.tenYearBeta },
@@ -1975,7 +2024,6 @@
     // 10. 初始化图表：学区双指标图 + 历史抗跌性对比图 (Chart.js)
     // =========================================================================
     function initCharts() {
-      // 图表1：9大学区公办普高率 vs 十大名校率
       const ctxSchool = byId("schoolMetricsChart").getContext("2d");
       const schList = Object.values(SCHOOL_DISTRICTS).sort((a, b) => b.publicHighRate - a.publicHighRate);
       Chart.defaults.font.family = getComputedStyle(root).fontFamily;
@@ -2017,22 +2065,21 @@
         }
       });
 
-      // 图表2：二手代表盘2021-2026回撤率对比
       const ctxRes = byId("resilienceChart").getContext("2d");
       const labels = [
-        "星河时代(大运)",
-        "颐安都会(大运)",
-        "鸿荣源尚峰(水径)",
-        "信义嘉御山(坂田)",
-        "健康花城(石芽岭)",
-        "信义金御半山(百鸽笼)",
-        "佳兆业中央(坂田)",
-        "京基御景(大运)",
-        "大族云峰(坂田)",
-        "万科红(百鸽笼)",
-        "万科麓城三期(水径)",
-        "中海康城(大运)",
-        "诺德中央道(坂田)"
+        "星河时代(0回迁·零民房)",
+        "颐安都会(0回迁·零民房)",
+        "鸿荣源尚峰(0回迁·山体隔离)",
+        "信义嘉御山五期(分期0回迁)",
+        "健康花城(0回迁·公园旁)",
+        "信义金御半山三期(分期0回迁)",
+        "佳兆业中央三期(分期0回迁)",
+        "京基御景(0回迁·零民房)",
+        "大族云峰(次新分栋)",
+        "万科红三期(分期商品房)",
+        "万科麓城三期(0回迁·山体隔离)",
+        "中海康城(0回迁·老龄大盘)",
+        "诺德中央道(贴光雅园村)"
       ];
       const drawdowns = [19, 21, 22, 22, 23, 23, 24, 24, 25, 26, 27, 33, 35];
 
@@ -2042,7 +2089,7 @@
           labels,
           datasets: [
             {
-              label: "2021历史峰值→2026真实成交回撤幅度 (%，数值越小代表周期抗跌性越强)",
+              label: "2021历史峰值→2026真实成交回撤幅度 (%，验证“0回迁+远离城中村”楼盘显著更抗跌)",
               data: drawdowns,
               backgroundColor: drawdowns.map(d =>
                 d <= 23 ? "rgba(72, 115, 90, 0.88)" : d <= 27 ? "rgba(193, 95, 60, 0.84)" : "rgba(177, 138, 68, 0.88)"
@@ -2107,12 +2154,12 @@
 
       [
         "filterBuilding", "filterLayout", "filterStructure", "filterOrientation",
-        "filterNoise", "filterPurity", "filterVillage", "filterDensity"
+        "filterNoise", "filterDensity"
       ].forEach(id => {
         byId(id).addEventListener("change", renderUnitCards);
       });
 
-      ["filterSchoolRate", "filterPriceBracket", "filterCommute"].forEach(id => {
+      ["filterPurity", "filterVillage", "filterSchoolRate", "filterPriceBracket", "filterCommute"].forEach(id => {
         byId(id).addEventListener("change", () => {
           renderTopRecommendations();
           renderUnitCards();
@@ -2132,9 +2179,9 @@
         byId("filterStructure").value = "ALL";
         byId("filterOrientation").value = "VALID_SOUTH";
         byId("filterNoise").value = "NO_MAIN";
-        byId("filterSchoolRate").value = "0";
         byId("filterPurity").value = "ALL";
         byId("filterVillage").value = "ALL";
+        byId("filterSchoolRate").value = "0";
         byId("filterDensity").value = "ALL";
         byId("filterPriceBracket").value = "ALL";
         byId("filterCommute").value = "ALL";
@@ -2144,7 +2191,7 @@
       });
 
       byId("clearCompareBtn").addEventListener("click", () => {
-        compareIds = ["bt-xinyi-5-89", "vanke-3-89", "jkhc-6-89", "bgl-banshan-3-89", "bgl-longmen-2-95"];
+        compareIds = ["bt-xinyi-5-89", "vanke-3-89", "horoy-6-89", "jkhc-6-89", "bgl-banshan-3-89"];
         renderUnitCards();
         renderCompareTable();
       });
