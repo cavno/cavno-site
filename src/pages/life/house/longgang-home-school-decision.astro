@@ -2,8 +2,8 @@
 import Base from '../../../layouts/Base.astro';
 import body from '../../../legacy/life/house/longgang-home-school-decision/body.html?raw';
 import '../../../legacy/life/house/longgang-home-school-decision/style.css';
-const title = "二胎家庭置业深度工程级决策分析系统";
-const description = "宏观小区 × 微观户号 双视角审视 · 15盘全库 · 坂田 + 布吉南湾 + 大运";
+const title = "二胎家庭置业与资产投研级决策平台";
+const description = "板块十年Beta × 中观社区圈层 × 微观楼栋户号 · 15盘全库 · 六维权重与十二维筛选";
 ---
 <Base title={title + ' · Cavno'} description={description}>
   <div id="hd-main">
@@ -13,18 +13,19 @@ const description = "宏观小区 × 微观户号 双视角审视 · 15盘全库
         <h1 class="cv-page-title" id="hd-title">{title}</h1>
         <a class="cv-crumb-back" href="/life/house/">← 返回房产栏目</a>
         <nav class="hd-jump" aria-label="工具导航">
-        <a href="#section-glossary">💡 户型/新规概念百科</a>
-        <a href="#hd-weights">五维权重与严选推荐</a><a href="#section-macro">🏢 1. 整体视角(小区横评)</a>
-        <a href="#section-micro">🔍 2. 具体视角(户号筛选)</a>
-        <a href="#section-pk">📊 3. 同屏PK台</a>
+        <a href="#section-glossary">投研概念词典</a><a href="#hd-weights">六维权重与严选推荐</a><a href="#section-sector">📈 1. 板块天花板与抗跌验证</a>
+        <a href="#section-macro">🏢 2. 整体视角(15盘圈层/工程表)</a>
+        <a href="#section-micro">🔍 3. 具体视角(户号十二维筛选)</a>
+        <a href="#section-pk">📊 4. 终极同屏PK台</a>
       </nav>
       </div>
     </section>
     <article id="lg-house-app" class="lp hd-app" aria-labelledby="hd-title">
       <Fragment set:html={body} />
-      <noscript><p class="hd-no-script">请启用 JavaScript，以使用宏观筛选、楼盘下钻、五维权重、户号筛选和 PK 对比。</p></noscript>
+      <noscript><p class="hd-no-script">请启用 JavaScript，以使用宏观筛选、楼盘下钻、六维权重、户号筛选和 PK 对比。</p></noscript>
     </article>
     <nav class="cv-wrap hd-end" aria-label="页面导航"><a href="/life/house/">← 返回房产栏目</a><a href="#hd-title">回到顶部 ↑</a></nav>
   </div>
-  <script is:inline src="/apps/life/house/longgang-home-school-decision/app.js?v=6cc541f6abf9" defer></script>
+  <script is:inline src="/apps/life/house/longgang-home-school-decision/chart.umd.min.js" defer></script>
+  <script is:inline src="/apps/life/house/longgang-home-school-decision/app.js?v=9f07f84004f4" defer></script>
 </Base>

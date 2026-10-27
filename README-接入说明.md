@@ -1,37 +1,37 @@
-# 演化生成链 · 从约束到自由（原文核对版）· 增量接入
+# 深圳15盘二胎置业与资产投研决策平台 · 替换增量代码
 
-本包用于在 Cavno 的 `/reading/thinking/` 栏目新增独立页面，仅含本页 5 个新增文件及本说明，不含全站源码。
+本包针对 Cavno 现有 Astro 源码，仅包含本页的 7 个替换文件及本说明，不含全站源码。
 
-## 接入方法
+## 使用方法
 
-1. 将 `src`、`public` 合并到网站项目根目录，保持目录层级。
-2. 运行 `npm run build`，按原有流程部署。
-3. 新页面地址：`/reading/thinking/evolution-chain/`。
-4. 内容条目会自动加入思考栏目、Reading 页面与全站搜索；无需修改公共导航或栏目模板。
-5. 本页为新附件的单篇原文核对版，与此前 `/reading/thinking/evolution-generative-chain/` 四文献交互实验室分别存在，不覆盖旧页。
+1. 备份现有同名文件，将本包的 `src`、`public` 合并到项目根目录，按原路径覆盖。
+2. 运行 `npm run build`，按原有网站流程部署。
+3. 页面地址保持 `/life/house/longgang-home-school-decision/`，栏目仍为 `/life/house/`。
+4. 同名内容条目更新栏目卡片与全站搜索，不另建条目，避免重复收录。
 
-## 新增文件
+## 替换文件
 
-- `src/pages/reading/thinking/evolution-chain.astro`
-- `src/legacy/reading/thinking/evolution-chain/body.html`
-- `src/legacy/reading/thinking/evolution-chain/style.css`
-- `src/content/items/reading-thinking-evolution-chain.md`
-- `public/apps/reading/thinking/evolution-chain/app.js`
+- `src/pages/life/house/longgang-home-school-decision.astro`
+- `src/legacy/life/house/longgang-home-school-decision/body.html`
+- `src/legacy/life/house/longgang-home-school-decision/style.css`
+- `src/content/items/life-house-longgang-home-school-decision.md`
+- `public/apps/life/house/longgang-home-school-decision/app.js`
+- `public/apps/life/house/longgang-home-school-decision/chart.umd.min.js`
+- `public/apps/life/house/longgang-home-school-decision/LICENSE-chart.js.txt`
 
-## 保留内容与功能
+## 内容与样式
 
-- 保留附件内嵌的全部 202 个非空段落、15 页缓存索引、跨页片段、DOCX 标题与原有 SHA-256 字段；这些数据与附件 HTML 中保存的内容一致，本次没有重新核验外部 DOCX 文件。
-- 保留九环节点、八次跃迁、螺旋/展开布局、自由回返说明、前后步进与键盘左右键操作。
-- 保留三拍模式、Ω 五项状态、P/S 区分、四种历史方案及横向比较、非必然跳跃、文内张力与终章结论。
-- 保留原文依据弹窗、从依据跳至全文、正文关键词检索、部分/缓存页筛选与内容覆盖索引。
-- 未重新生成原文或论证，也未增补外部事实；保留附件对“原文主张”“保留意见”“结论”和阅读并置的区分。
+- 保留本次 index.html 的 15 个小区宏观数据库、23 组楼栋户号数据、投研概念词典及原始文案。保留三大片区看板、11组历史回撤图表数据与原计算规则；未重新生成价格、指标或评分。
+- 保留宏观八项筛选、楼盘下钻联动、户号十二维筛选、预算上限、六维权重、TOP 4 推荐和最多 5 项 PK 对比。TOP 4 沿用附件规则，联动预算/价格区间和通勤条件，默认排除主干道房源；不强制跟随全部户号筛选项。
+- 修正带图标地铁距离字段的显示，保留原始距离，避免只显示“约”字。两个数据库与加权公式、筛选判断及PK规则保持一致。
+- 复用 `Base.astro` 的导航、页脚、搜索、米白底、珊瑚色和字体。页面样式和按钮事件限定在工具内，宽表格局部滚动，手机端筛选与卡片自动换行。
+- 不需要修改 `package.json` 或安装新运行依赖。Tailwind 样式已预编译并限定在本工具内；Chart.js 4.4.1 及 MIT 许可证随增量包本地提供，沿用附件版本。图表字体和配色与 Cavno 一致，不再使用外部脚本 CDN。
+- 交互脚本 URL 带内容哈希，更新后避免复用旧版缓存。
 
-## Cavno 样式与实现
+## 检查
 
-复用 `Base.astro` 的导航、页脚、搜索及字体，统一米白底、珊瑚色和克制的绿色。原始 CSS 选择器、变量、DOM 查询及事件均限定在本页，避免影响全站；无需新增项目依赖或外部脚本。
+完成静态文字、两个数据库及计算规则一致性检查、Astro 构建，以及图表、宏观筛选、下钻联动、户号筛选、六维权重与 PK 的浏览器检查；栏目和搜索使用同一条记录。
 
-手机端采用单列，宽图示和表格在局部横向滚动。原文弹窗沿用浏览器原生 dialog，支持 Esc、焦点管理与遮罩点击关闭；页内定位避开固定导航。交互脚本带内容哈希参数。
+独立 HTML 预览内嵌样式和交互脚本，可直接打开；其搜索仅检索本次页面，栏目等站点链接指向 cavno.org。正式接入版使用全站搜索。
 
-另附独立 HTML 预览，可直接打开。预览已内嵌必要样式、脚本及全部原文数据，搜索仅检索本页，其余栏目链接指向 cavno.org；正式接入版使用全站搜索。
-
-完成内嵌原文及模型数据一致性核对、构建、主要交互与手机布局检查。本次交付为本地增量代码，尚未发布到线上。
+本包为本地替换代码，尚未发布到线上。
