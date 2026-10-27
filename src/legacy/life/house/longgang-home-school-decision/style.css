@@ -230,10 +230,17 @@
 #lg-house-app .hd-macro-table th:nth-child(12) {width:320px;}
 #lg-house-app .hd-macro-table th:last-child {width:140px;}
 #lg-house-app #topRecommendations .truncate {white-space:normal;overflow:visible;text-overflow:clip;}
+#lg-house-app .hd-budget-section {display:grid;grid-template-columns:minmax(0,1fr);gap:12px;align-items:start;}
+#lg-house-app .hd-budget-inputs {width:100%;grid-template-columns:auto minmax(160px,1fr) auto;gap:14px;flex:initial;}
+#lg-house-app .hd-budget-inputs > label,#lg-house-app #maxPriceLabel {white-space:nowrap;}
+#lg-house-app .hd-budget-inputs input[type=range] {width:100%;max-width:none;min-width:0;}
+#lg-house-app .hd-budget-note {min-width:0;line-height:1.8;}
 @media(max-width:639px){
  #lg-house-app .hd-toolbar {display:grid;grid-template-columns:minmax(0,1fr);}
  #lg-house-app .hd-toolbar button {justify-content:center;text-align:center;}
  #lg-house-app .hd-macro-table th:first-child {width:140px;}
+ #lg-house-app .hd-budget-inputs {grid-template-columns:minmax(0,1fr);gap:10px;}
+ #lg-house-app #maxPriceLabel {justify-self:start;}
 }
 
 #lg-house-app [class~="text-[11px]"] {font-size:12px;line-height:1.65;}
