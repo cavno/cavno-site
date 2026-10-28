@@ -3,7 +3,7 @@
       <div class="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-2">
         <div>
           <div class="flex items-center gap-2 flex-wrap">
-            <span class="px-2.5 py-0.5 text-xs font-semibold bg-emerald-500/20 text-emerald-300 border border-emerald-500/30 rounded-full">全盘无损审计整合版 · 20盘 31组细分户号</span>
+            <span class="px-2.5 py-0.5 text-xs font-semibold bg-emerald-500/20 text-emerald-300 border border-emerald-500/30 rounded-full">架构去重整合版 · 12维宏观全局过滤 × 9维微观户号专筛</span>
             <span class="px-2.5 py-0.5 text-xs font-semibold bg-amber-500/20 text-amber-300 border border-amber-500/30 rounded-full">🛒 山姆/MALL/菜场/底商 × 🚇 地铁米数/贝尔路通勤</span>
             <span class="px-2.5 py-0.5 text-xs font-semibold bg-indigo-500/20 text-indigo-300 border border-indigo-500/30 rounded-full">🏠 回迁房/保障房/城中村 × 🎓 小初八维指标</span>
             </div>
@@ -14,7 +14,7 @@
             <span>💾</span> 一键下载本系统完整HTML文件
           </button>
           <button class="px-3 py-1.5 bg-indigo-600 hover:bg-indigo-500 text-white text-xs font-bold rounded-lg shadow flex items-center gap-1 transition" type="button" data-house-action="exportUnitsCsv">
-            <span>📊</span> 导出31组户号全量CSV表
+            <span>📊</span> 导出全量户号CSV表
           </button>
         </div>
       </div>
@@ -148,14 +148,14 @@
         <div>
           <div class="flex flex-wrap items-center justify-between gap-2 mb-2.5">
             <h2 class="text-sm font-bold text-slate-800 flex items-center gap-1.5">
-              <span>🏆</span> 20盘31组户号实时加权严选 TOP 4（自动剔除主干道/铁路/高架噪音房）
+              <span>🏆</span> 实时加权严选 TOP 4（自动同步下方【宏观社区过滤】与【微观户号专筛】）
             </h2>
-            <span id="topBudgetHint" class="text-xs text-emerald-700 bg-emerald-50 px-2.5 py-0.5 rounded-full font-medium">实时联动下方16维筛选条件</span>
+            <span id="topBudgetHint" class="text-xs text-emerald-700 bg-emerald-50 px-2.5 py-0.5 rounded-full font-medium">全局单一数据源实时演算</span>
           </div>
           <div id="topRecommendations" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3"></div>
         </div>
         <div class="mt-3 pt-2.5 border-t border-slate-100 flex flex-wrap items-center justify-between text-[11px] text-slate-500 gap-2">
-          <span>💡 <strong>全盘审计提示：</strong>已载入附件内嵌31组细分户号（含三房两卫楼王、三房一卫高性价比内园、临辅路备选及临主干道避坑警示户号），可在下方自由切换对比。</span>
+          <span>💡 <strong>架构升级说明：</strong>已消除宏观与微观视角的7项重复下拉框。在<strong>【视角二：宏观社区过滤】</strong>设定的片区、回迁房、城中村、商业、地铁距离、密度、学区等条件，会自动向下穿透过滤<strong>【视角三：微观户号池】</strong>！</span>
         </div>
       </div>
     </section>
@@ -180,10 +180,10 @@
       
       <div class="grid grid-cols-1 lg:grid-cols-12 gap-5 items-center mt-4 mb-5">
         <div class="lg:col-span-7 h-72 border border-slate-100 rounded-xl p-2 bg-slate-50/40 hd-resilience-chart">
-          <canvas id="schoolMetricsChart" role="img" aria-label="附件中的九个学区公办普高率、四大及十大高中录取率；详细数值见下方学校表。"></canvas>
+          <canvas id="schoolMetricsChart" role="img" aria-label="附件中的九个学区公办普高率、四大及十大高中录取率；详细数值见学校表。"></canvas>
         </div>
         <div class="lg:col-span-5 h-72 border border-slate-100 rounded-xl p-2 bg-slate-50/40 hd-trend-frame">
-          <canvas id="schoolTrendChart" aria-label="2024—2026 三年趋势；附件未提供逐年数据点；原有近年区间已保留在下方学校表中" role="img"></canvas>
+          <canvas id="schoolTrendChart" role="img" aria-label="附件所列2024至2026年公办普高率趋势；保留原始序列与分组。"></canvas>
         </div>
       </div>
 
@@ -298,19 +298,26 @@
     
     
     <section id="section-macro" class="bg-white rounded-2xl p-5 card-shadow border border-slate-200">
-      <div class="flex flex-col lg:flex-row lg:items-center justify-between gap-3 pb-4 border-b border-slate-100">
+      <div class="flex flex-col lg:flex-row lg:items-center justify-between gap-3 pb-4 border-b border-slate-100 hd-macro-heading">
         <div>
-          <div class="flex items-center gap-2">
-            <span class="px-2 py-0.5 text-xs font-bold bg-sky-600 text-white rounded">视角二：整体视角 (Macro 20盘全量13列矩阵)</span>
-            <h2 class="text-base font-bold text-slate-800">20盘整体工程与配套全表：期数规模 · 新规代际 · 容积率/层高/梯户/楼距 · 车位比 · 回迁/保障房 · 城中村距离 · 商业/山姆/菜场 · 地铁米数 · 学位 · 十年Beta · 抗跌验证</h2>
+          <div class="flex items-center gap-2 flex-wrap">
+            <span class="px-2 py-0.5 text-xs font-bold bg-sky-600 text-white rounded">视角二：整体视角 (Macro 12维社区级全局过滤控制台)</span>
+            <h2 class="text-base font-bold text-slate-800">20盘社区工程与配套主控台（此处设定的社区条件只出现一次，自动同步过滤下方具体户号池）</h2>
           </div>
+          <p class="text-xs text-slate-500 mt-1">
+            涵盖片区、新房/二手、建筑代际、回迁/保障房、靠近城中村、商业/山姆/菜场、地铁距离、容积率密度、车位比、改善定位、初中普高率、历史抗跌性
+          </p>
+        </div>
+        <div class="flex items-center gap-2 shrink-0">
+          <span id="macroMatchBadge" class="text-xs font-bold px-3 py-1 bg-sky-900 text-white rounded-full" aria-live="polite">入围 20 / 20 个小区</span>
+          <button id="resetMacroBtn" class="text-xs px-3 py-1 rounded-lg border border-slate-300 text-slate-700 hover:bg-slate-100 font-medium" type="button">重置社区过滤</button>
         </div>
       </div>
 
       
       <div class="hd-macro-filters">
         <div>
-          <label class="block text-slate-600 font-semibold mb-1" for="macroZoneFilter">1. 所属片区 (20盘)</label>
+          <label class="block text-slate-600 font-semibold mb-1" for="macroZoneFilter">1. 所属片区 (全局联动)</label>
           <select id="macroZoneFilter" class="w-full rounded-lg border border-slate-300 px-2 py-1.5 bg-slate-50">
             <option value="ALL">全部四大片区 (20盘)</option>
             <option value="坂田片区">坂田片区 (4盘)</option>
@@ -328,7 +335,7 @@
           </select>
         </div>
         <div>
-          <label class="block text-purple-700 font-bold mb-1" for="macroRegFilter">3. 建筑新规代际 (恢复)</label>
+          <label class="block text-purple-700 font-bold mb-1" for="macroRegFilter">3. 建筑新规代际</label>
           <select id="macroRegFilter" class="w-full rounded-lg border border-purple-300 px-2 py-1.5 bg-purple-50/40 font-medium">
             <option value="ALL">全部建筑代际</option>
             <option value="GEN3">第3代·2024二批新规(93~98%)</option>
@@ -406,7 +413,7 @@
           </select>
         </div>
         <div>
-          <label class="block text-slate-700 font-semibold mb-1" for="macroResilienceFilter">12. 历史抗跌性等级 (恢复)</label>
+          <label class="block text-slate-700 font-semibold mb-1" for="macroResilienceFilter">12. 历史抗跌性等级</label>
           <select id="macroResilienceFilter" class="w-full rounded-lg border border-slate-300 px-2 py-1.5 bg-slate-50">
             <option value="ALL">全部抗跌表现</option>
             <option value="HIGH">强抗跌 (回撤≤23%或新规折让)</option>
@@ -446,66 +453,36 @@
     <section id="section-micro" class="bg-white rounded-2xl p-5 card-shadow border border-slate-200">
       <div class="flex flex-col md:flex-row md:items-center justify-between gap-3 pb-4 border-b border-slate-100">
         <div>
-          <div class="flex items-center gap-2">
-            <span class="px-2 py-0.5 text-xs font-bold bg-emerald-600 text-white rounded">视角三：具体视角 (Micro Unit 全量31组细分户号库)</span>
-            <h2 class="text-base font-bold text-slate-800">具体楼栋 · 单元户号 · 厅型流派 · 得房率 · 商业/底商 · 地铁米数 · 回迁/城中村 · 噪音距离 十六维联动筛选器</h2>
+          <div class="flex items-center gap-2 flex-wrap">
+            <span class="px-2 py-0.5 text-xs font-bold bg-emerald-600 text-white rounded">视角三：具体视角 (Micro 9维户号级专属筛选器)</span>
+            <h2 class="text-base font-bold text-slate-800">具体楼栋 · 单元户号 · 房卫规格 · 厅型流派 · 阳台朝向 · 临街噪音 · 得房率 · 通勤与总价专筛</h2>
           </div>
           <p class="text-xs text-slate-500 mt-1">
-            本次附件内嵌 31 组完整细分户号（含中央楼王两卫、内园一卫、辅路备选及临主干道/铁路/高架避坑警示户号）
+            已自动继承上方【视角二】的社区过滤结果（当前入围小区：<strong id="inheritedMacroHint" class="text-indigo-700" aria-live="polite">全部20个小区</strong>），此处仅针对单套房源的微观属性进行二次精选
           </p>
         </div>
         <div class="flex items-center gap-2 shrink-0">
-          <span id="matchCountBadge" class="text-xs font-bold px-3 py-1 bg-slate-900 text-white rounded-full" aria-live="polite">匹配 28 个具体楼栋户号</span>
-          <button id="resetFilterBtn" class="text-xs px-3 py-1 rounded-lg border border-slate-300 text-slate-700 hover:bg-slate-100 font-medium" type="button">重置全部16维筛选</button>
+          <span id="matchCountBadge" class="text-xs font-bold px-3 py-1 bg-slate-900 text-white rounded-full" aria-live="polite">匹配 0 个具体楼栋户号</span>
+          <button id="resetFilterBtn" class="text-xs px-3 py-1 rounded-lg border border-slate-300 text-slate-700 hover:bg-slate-100 font-medium" type="button">重置全站筛选</button>
         </div>
       </div>
 
       
-      <div class="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-8 gap-2.5 mt-4 text-xs hd-filter-grid">
+      <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-9 gap-2.5 mt-4 text-xs hd-filter-grid">
         
         <div>
-          <label class="block text-slate-600 font-semibold mb-1" for="filterProject">1. 片区 / 楼盘 (20盘)</label>
+          <label class="block text-slate-600 font-semibold mb-1" for="filterProject">1. 聚焦入围楼盘</label>
           <select id="filterProject" class="w-full rounded-lg border border-slate-300 px-2 py-1.5 bg-slate-50">
-            <option value="ALL">全部 20 个楼盘</option>
-            <option value="ZONE_BANTIAN">【仅看 坂田片区 4盘】</option>
-            <option value="ZONE_SHUIJING">【仅看 水径/石芽岭 4盘】</option>
-            <option value="ZONE_BAIGELONG">【仅看 布吉百鸽笼 4盘】</option>
-            <option value="ZONE_DAYUN">【仅看 龙岗大运 8盘】</option>
-            <optgroup label="—— 坂田片区 (4盘) ——">
-              <option value="佳兆业中央广场">佳兆业中央广场</option>
-              <option value="信义嘉御山">信义嘉御山</option>
-              <option value="诺德中央道">诺德中央道</option>
-              <option value="大族云峰">大族云峰</option>
-            </optgroup>
-            <optgroup label="—— 水径 / 石芽岭片区 (4盘) ——">
-              <option value="万科麓城三期">万科麓城三期</option>
-              <option value="鸿荣源尚峰">鸿荣源尚峰</option>
-              <option value="健康花城">健康花城 (石芽岭公园旁)</option>
-              <option value="特发臻华府">特发臻华府 (新规新房)</option>
-            </optgroup>
-            <optgroup label="—— 布吉百鸽笼片区 (4盘) ——">
-              <option value="信义金御半山">信义金御半山 (一至三期二手)</option>
-              <option value="信义金御半山·珑门">信义珑门 (百鸽笼精装现房)</option>
-              <option value="百合世纪广场">百合世纪广场 (百鸽笼新房)</option>
-              <option value="万科红">万科红 (一至四期二手)</option>
-            </optgroup>
-            <optgroup label="—— 龙岗大运片区 (8盘) ——">
-              <option value="佳兆业未来花园">佳兆业未来花园</option>
-              <option value="京基御景中央">京基御景中央</option>
-              <option value="颐安·都会中央">颐安·都会中央</option>
-              <option value="星河时代花园">星河时代花园</option>
-              <option value="中海康城花园">中海康城花园</option>
-              <option value="中海大运玖章">中海大运玖章 (新房)</option>
-              <option value="深铁阅云境广场">深铁阅云境广场 (新房)</option>
-              <option value="泰瑞府">泰瑞府 (国企现房)</option>
-            </optgroup>
+            <option value="ALL">全部入围楼盘</option>
           </select>
         </div>
 
         
         <div>
           <label class="block text-slate-600 font-semibold mb-1" for="filterBuilding">2. 具体期数与楼栋</label>
-          <select id="filterBuilding" class="w-full rounded-lg border border-slate-300 px-2 py-1.5 bg-slate-50"><option value="ALL">全部楼栋 (31组)</option><option value="佳兆业中央广场 - 三期 2栋 / 3栋">佳兆业中央广场 - 三期 2栋 / 3栋</option><option value="佳兆业中央广场 - 一期 3栋 / 二期 2栋">佳兆业中央广场 - 一期 3栋 / 二期 2栋</option><option value="信义嘉御山 - 五期 12栋·13栋 / 七期 2栋">信义嘉御山 - 五期 12栋·13栋 / 七期 2栋</option><option value="信义嘉御山 - 二期 5栋·6栋 / 三期 8栋">信义嘉御山 - 二期 5栋·6栋 / 三期 8栋</option><option value="诺德中央道 - 二期 2栋 / 3栋">诺德中央道 - 二期 2栋 / 3栋</option><option value="大族云峰 - 一期 3栋·5栋 / 二期 2栋">大族云峰 - 一期 3栋·5栋 / 二期 2栋</option><option value="万科麓城三期 - 3栋 / 4栋">万科麓城三期 - 3栋 / 4栋</option><option value="万科麓城三期 - 1栋A座 / 1栋B座">万科麓城三期 - 1栋A座 / 1栋B座</option><option value="鸿荣源尚峰 - 6栋A座 / 6栋B座 / 5栋">鸿荣源尚峰 - 6栋A座 / 6栋B座 / 5栋</option><option value="鸿荣源尚峰 - 7栋 (内园) / 3栋A座 (辅路)">鸿荣源尚峰 - 7栋 (内园) / 3栋A座 (辅路)</option><option value="健康花城 - 6栋 / 7栋 / 8栋 (中央园景楼王)">健康花城 - 6栋 / 7栋 / 8栋 (中央园景楼王)</option><option value="特发臻华府 - 3栋 (纯商品房中央楼王)">特发臻华府 - 3栋 (纯商品房中央楼王)</option><option value="信义金御半山 - 三期 5栋 / 6栋 / 8栋 (半山园景楼王)">信义金御半山 - 三期 5栋 / 6栋 / 8栋 (半山园景楼王)</option><option value="信义金御半山·珑门 - 2栋 (中央园林栋)">信义金御半山·珑门 - 2栋 (中央园林栋)</option><option value="百合世纪广场 - 二期 2栋 / 3栋 (内园央座)">百合世纪广场 - 二期 2栋 / 3栋 (内园央座)</option><option value="万科红 - 三期 2栋 / 3栋 (园林内圈)">万科红 - 三期 2栋 / 3栋 (园林内圈)</option><option value="佳兆业未来花园 - 3栋 / 4栋 (中央园景)">佳兆业未来花园 - 3栋 / 4栋 (中央园景)</option><option value="京基御景中央 - 一期 3栋·4栋 / 二期 3栋">京基御景中央 - 一期 3栋·4栋 / 二期 3栋</option><option value="颐安·都会中央 - 二期 2栋·3栋 / 三期 3栋">颐安·都会中央 - 二期 2栋·3栋 / 三期 3栋</option><option value="星河时代花园 - 5栋 / 6栋 / 7栋 (南向看别墅)">星河时代花园 - 5栋 / 6栋 / 7栋 (南向看别墅)</option><option value="中海康城花园 - 一期 3栋·4栋 / 二期 12栋·15栋">中海康城花园 - 一期 3栋·4栋 / 二期 12栋·15栋</option><option value="中海大运玖章 - 3栋A座(3T4) / 3栋B座(2T4) / 4栋">中海大运玖章 - 3栋A座(3T4) / 3栋B座(2T4) / 4栋</option><option value="深铁阅云境广场 - 1栋2单元(3T5) / 3单元(2T5) / 4单元">深铁阅云境广场 - 1栋2单元(3T5) / 3单元(2T5) / 4单元</option><option value="泰瑞府 - 2栋 / 3栋 (纯商品房中央栋)">泰瑞府 - 2栋 / 3栋 (纯商品房中央栋)</option><option value="健康花城 - 3栋 / 5栋 / 9栋 (内园侧)">健康花城 - 3栋 / 5栋 / 9栋 (内园侧)</option><option value="健康花城 - 1栋 / 2栋 / 11栋 (北排临路)">健康花城 - 1栋 / 2栋 / 11栋 (北排临路)</option><option value="信义金御半山 - 一期 3栋 / 二期 5栋 (内园侧)">信义金御半山 - 一期 3栋 / 二期 5栋 (内园侧)</option><option value="佳兆业中央广场 - 三期 1栋 / 6栋 / 7栋">佳兆业中央广场 - 三期 1栋 / 6栋 / 7栋</option><option value="万科麓城三期 - 5栋 / 6栋">万科麓城三期 - 5栋 / 6栋</option><option value="特发臻华府 - 3栋 (内圈) / 1栋·6栋 (辅路)">特发臻华府 - 3栋 (内圈) / 1栋·6栋 (辅路)</option><option value="京基御景中央 - 一期 2栋A·2B / 二期 2栋">京基御景中央 - 一期 2栋A·2B / 二期 2栋</option></select>
+          <select id="filterBuilding" class="w-full rounded-lg border border-slate-300 px-2 py-1.5 bg-slate-50">
+            <option value="ALL">全部楼栋</option>
+          </select>
         </div>
 
         
@@ -544,17 +521,17 @@
 
         
         <div>
-          <label class="block text-emerald-700 font-bold mb-1" for="filterNoise">6. 🔇 临街距离与噪音</label>
+          <label class="block text-emerald-700 font-bold mb-1" for="filterNoise">6. 🔇 本栋临街与噪音</label>
           <select id="filterNoise" class="w-full rounded-lg border border-emerald-300 px-2 py-1.5 bg-emerald-50/50 text-emerald-950 font-medium">
-            <option value="NO_MAIN" selected>严避主干道/铁路/高架 (内园+辅路)</option>
-            <option value="QUIET_ONLY">极致安静 (仅看内园且距干道&gt;120m)</option>
-            <option value="ALL">显示全部31户 (含临主干道避坑警示)</option>
+            <option value="NO_MAIN" selected>严避主干道/铁路/高架</option>
+            <option value="QUIET_ONLY">极致安静 (仅看中央内园)</option>
+            <option value="ALL">显示全部 (含临干道警示)</option>
           </select>
         </div>
 
         
         <div>
-          <label class="block text-slate-700 font-semibold mb-1" for="filterUsableRate">7. 📏 实际得房率(恢复)</label>
+          <label class="block text-slate-700 font-semibold mb-1" for="filterUsableRate">7. 📏 户号实际得房率</label>
           <select id="filterUsableRate" class="w-full rounded-lg border border-slate-300 px-2 py-1.5 bg-slate-50">
             <option value="0">不限得房率 (80%~98%)</option>
             <option value="83">≥ 83% (高拓/次新)</option>
@@ -565,29 +542,7 @@
 
         
         <div>
-          <label class="block text-amber-700 font-bold mb-1" for="filterCommercial">8. 🛒 商业/山姆/菜场</label>
-          <select id="filterCommercial" class="w-full rounded-lg border border-amber-300 px-2 py-1.5 bg-amber-50/50 text-amber-950 font-medium">
-            <option value="ALL">全部商业配套</option>
-            <option value="S_MALL">★ 下楼即山姆/万象汇/大运天地/MALL</option>
-            <option value="SAM_WALK">步行可达山姆会员店实体店</option>
-            <option value="PURE_PODIUM">纯住宅架空层(无餐饮底商油烟)</option>
-          </select>
-        </div>
-
-        
-        <div>
-          <label class="block text-sky-700 font-bold mb-1" for="filterMetroDist">9. 🚶 距最近地铁站(米)</label>
-          <select id="filterMetroDist" class="w-full rounded-lg border border-sky-300 px-2 py-1.5 bg-sky-50/50 text-sky-950 font-medium">
-            <option value="9999">全部地铁距离 (150m~650m)</option>
-            <option value="350">★ ≤350米 (地铁上盖/步行≤5分钟)</option>
-            <option value="450">≤450米 (黄金步行圈/步行≤6分钟)</option>
-            <option value="550">≤550米 (舒适步行圈/步行≤7分钟)</option>
-          </select>
-        </div>
-
-        
-        <div>
-          <label class="block text-pink-700 font-bold mb-1" for="filterCommute">10. 🚇 至贝尔路站通勤</label>
+          <label class="block text-pink-700 font-bold mb-1" for="filterCommute">8. 🚇 至贝尔路站通勤</label>
           <select id="filterCommute" class="w-full rounded-lg border border-pink-300 px-2 py-1.5 bg-pink-50/50 text-pink-950 font-medium">
             <option value="ALL">全部时长 (10~56分钟)</option>
             <option value="20">≤20分钟 (坂田0换乘)</option>
@@ -598,59 +553,7 @@
 
         
         <div>
-          <label class="block text-indigo-700 font-bold mb-1" for="filterPurity">11. 🏠 回迁房/保障房过滤</label>
-          <select id="filterPurity" class="w-full rounded-lg border border-indigo-300 px-2 py-1.5 bg-indigo-50/50 text-indigo-950 font-medium">
-            <option value="ALL">全部产权结构</option>
-            <option value="PURE_ZERO">★ 全盘0回迁+0保障 (纯招拍挂)</option>
-            <option value="NO_RESETTLE">全盘0村民回迁房 (净地开发)</option>
-            <option value="CLEAN_PHASE">所选期数/楼栋0回迁混居</option>
-          </select>
-        </div>
-
-        
-        <div>
-          <label class="block text-teal-700 font-bold mb-1" for="filterVillage">12. 🏘️ 靠近城中村过滤</label>
-          <select id="filterVillage" class="w-full rounded-lg border border-teal-300 px-2 py-1.5 bg-teal-50/50 text-teal-950 font-medium">
-            <option value="ALL">全部周边界面</option>
-            <option value="S">★ S级·远离城中村(&gt;500m零民房)</option>
-            <option value="A">S+A级·山体/宽路隔离(不贴城中村)</option>
-          </select>
-        </div>
-
-        
-        <div>
-          <label class="block text-slate-700 font-semibold mb-1" for="filterSchoolRate">13. 🎓 初中公办普高率</label>
-          <select id="filterSchoolRate" class="w-full rounded-lg border border-slate-300 px-2 py-1.5 bg-slate-50">
-            <option value="0">全部中上学位 (61%~81.5%)</option>
-            <option value="72">≥ 72% (含贤义/科外/知新等)</option>
-            <option value="76">≥ 76% (南师大/深实验/华附/深中)</option>
-          </select>
-        </div>
-
-        
-        <div>
-          <label class="block text-slate-700 font-semibold mb-1" for="filterDensity">14. 🌳 高低密度(容积率)</label>
-          <select id="filterDensity" class="w-full rounded-lg border border-slate-300 px-2 py-1.5 bg-slate-50">
-            <option value="ALL">全部密度 (容积率2.6~7.1)</option>
-            <option value="LOW">仅看 低密舒居 (容积率≤3.8)</option>
-            <option value="MID">中低密舒适社区 (容积率≤4.8)</option>
-          </select>
-        </div>
-
-        
-        <div>
-          <label class="block text-slate-700 font-semibold mb-1" for="filterTier">15. 👥 刚需/改善(恢复)</label>
-          <select id="filterTier" class="w-full rounded-lg border border-slate-300 px-2 py-1.5 bg-slate-50">
-            <option value="ALL">全部定位 (刚需/刚改/改善)</option>
-            <option value="品质改善">品质改善 / 终极改善</option>
-            <option value="主流刚改">主流刚改 (科创/鸡娃中产)</option>
-            <option value="刚需上车">刚需上车</option>
-          </select>
-        </div>
-
-        
-        <div>
-          <label class="block text-rose-700 font-bold mb-1" for="filterPriceBracket">16. 💰 房屋总价区间</label>
+          <label class="block text-rose-700 font-bold mb-1" for="filterPriceBracket">9. 💰 户号总价区间</label>
           <select id="filterPriceBracket" class="w-full rounded-lg border border-rose-300 px-2 py-1.5 bg-rose-50/40 text-rose-950 font-medium">
             <option value="ALL">全部总价 (195~710万)</option>
             <option value="0-320">320万以内</option>
@@ -670,7 +573,7 @@
           <span id="maxPriceLabel" class="font-bold text-indigo-700 bg-indigo-100 px-2.5 py-0.5 rounded-full shrink-0" aria-live="polite">不限上限 (≤720万)</span>
         </div>
         <div class="text-slate-500 text-[11px] hd-budget-note">
-          每张卡片均完整包含 5 大审计区块：<strong>① 商业/底商/菜场/地铁米数</strong> + <strong>② 回迁/城中村核验</strong> + <strong>③ 微观建面/实得/主干道米数</strong> + <strong>④ 宏观容积率/层高/梯户/楼距/车位</strong> + <strong>⑤ 小初学位细项与二胎点评</strong>。
+          卡片已精简去重：聚焦展示<strong>【本户空间实得与道路/铁路噪音】</strong>与<strong>【本栋底商/回迁/城中村视野核验】</strong>，宏观工程指标可点击卡片“查看宏观详情”或加入PK台比对。
         </div>
       </div>
 
@@ -685,9 +588,9 @@
       <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 mb-4">
         <div>
           <h2 class="text-base font-bold text-slate-800 flex items-center gap-2">
-            <span>📊</span> 五层穿透式（25项指标无删减）终极同屏 PK 决策台（最多同时对比5项）
+            <span>📊</span> 五层穿透式（户号微观 × 商业地铁 × 回迁城中村 × 小初学位 × 板块抗跌）终极同屏 PK 台（最多5项）
           </h2>
-          <p class="text-xs text-slate-500 mt-0.5">涵盖微观户号空间与噪音、商业/山姆/菜场与地铁步行米数、内部回迁与外部城中村、宏观工程底盘(容积率/层高/梯户/楼距/车位/物业)、小初学位八维指标、十年Beta与历史抗跌验证</p>
+          <p class="text-xs text-slate-500 mt-0.5">在此处将入围的最终候选房源进行宏观+微观22项全指标同屏像素级比对</p>
         </div>
         <button id="clearCompareBtn" class="text-xs text-rose-600 hover:underline font-medium self-start sm:self-auto" type="button">恢复默认四大片区代表PK</button>
       </div>
