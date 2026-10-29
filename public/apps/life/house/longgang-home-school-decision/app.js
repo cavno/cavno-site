@@ -1,4 +1,4 @@
-/* V10附件三段脚本与全部数据保留；将页面状态限定在本工具中。 */
+/* V11附件四段脚本与全部数据保留；将页面状态限定在本工具中。 */
 (() => {
 'use strict';
 const root=document.getElementById('lg-house-app');if(!root)return;const byId=id=>root.querySelector('#'+id);
@@ -2686,11 +2686,11 @@ const readyCallbacks=[];const onReady=callback=>readyCallbacks.push(callback);le
 
     async function downloadSelfHtml(){
       if(root.dataset.standalone==='true'){
-        saveLocalFile('Cavno_深圳25盘_V10_独立页面.html','<!DOCTYPE html>\n'+document.documentElement.outerHTML,'text/html;charset=utf-8');
+        saveLocalFile('Cavno_深圳25盘_V11_独立页面.html','<!DOCTYPE html>\n'+document.documentElement.outerHTML,'text/html;charset=utf-8');
       }else{
         const response=await fetch('/apps/life/house/longgang-home-school-decision/standalone.html');
         if(!response.ok){alert('独立HTML文件未就绪，请确认增量包中的standalone.html已部署。');return;}
-        saveLocalFile('Cavno_深圳25盘_V10_独立页面.html',await response.text(),'text/html;charset=utf-8');
+        saveLocalFile('Cavno_深圳25盘_V11_独立页面.html',await response.text(),'text/html;charset=utf-8');
       }
     }
     function exportUnitsCsv() {
@@ -2708,7 +2708,7 @@ const readyCallbacks=[];const onReady=callback=>readyCallbacks.push(callback);le
         const s = SCHOOL_DISTRICTS[m.schoolKey];
         return [...unitFields.map(k => u[k]), ...macroFields.map(k => m[k]), ...schoolFields.map(k => s[k])];
       });
-      saveLocalFile("深圳25盘_V10_全量户号数据.csv", "\uFEFF" + [header, ...rows].map(row => row.map(cell).join(",")).join("\r\n"), "text/csv;charset=utf-8");
+      saveLocalFile("深圳25盘_V11_全量户号数据.csv", "\uFEFF" + [header, ...rows].map(row => row.map(cell).join(",")).join("\r\n"), "text/csv;charset=utf-8");
     };
 
     onReady(() => {
@@ -3972,6 +3972,483 @@ const readyCallbacks=[];const onReady=callback=>readyCallbacks.push(callback);le
 
     // 5. 更新总数文案并触发全站重绘
     document.title = "深圳二胎家庭置业全维度工程与投研决策平台 · Cavno";
+    renderSchoolTable();
+    renderMacroTable();
+    redrawUnitViews();
+  });
+})();
+
+
+(function v11BrowserPatch() {
+  onReady(function() {
+    // 1. 定义 10 大教育学区的【网评综合梯队、小学梯队、初中梯队、全市排位分位】字典
+    const SCHOOL_TIER_DICT = {
+      "SHENZHONG_LG": {
+        overallTierCode: "T1_TOP",
+        overallTierBadge: "🏆 T1 第一梯队·王牌名校",
+        tierColorClass: "badge-purple",
+        cityRankNote: "龙岗公办头把交椅 · 全市公办前 8%",
+        primaryTierCode: "T1",
+        primaryTierLabel: "小学 T1 顶尖 (深中龙岗小学/龙外星河)",
+        primaryDesc: "深中与龙外两大名校集团加持，别墅与改善大盘纯粹生源，英语与科创素养极强",
+        middleTierCode: "T1",
+        middleTierLabel: "初中 T1 王牌 (深圳中学龙岗学校)",
+        middleDesc: "四大率7.5% / 十大率18.5% / 公办率81.5%，共享深中本部教研与竞赛体系"
+      },
+      "FUTIAN_WAI_JT": {
+        overallTierCode: "T1_TOP",
+        overallTierBadge: "🏆 T1 第一梯队·福田王牌",
+        tierColorClass: "badge-purple",
+        cityRankNote: "福田四大名校集团本部 · 全市公办前 8%",
+        primaryTierCode: "T1",
+        primaryTierLabel: "小学 T1 顶尖 (福外小学部/景秀小学)",
+        primaryDesc: "福田中心区市直机关、金融律所高管子女聚集，外语特色鲜明，家长圈层全城顶尖",
+        middleTierCode: "T1",
+        middleTierLabel: "初中 T1 王牌 (福田外国语本部/景秀中学)",
+        middleDesc: "四大率6.8% / 十大率16.5% / 公办率76.8%，福田传统老牌名校，外语保送与培优极强"
+      },
+      "SHIYAN_BT": {
+        overallTierCode: "T1_TOP",
+        overallTierBadge: "🏆 T1 第一梯队·四大直管",
+        tierColorClass: "badge-purple",
+        cityRankNote: "坂田公办第一名校 · 全市公办前 10%",
+        primaryTierCode: "T1",
+        primaryTierLabel: "小学 T1 顶尖 (深实验坂田小学部·直升)",
+        primaryDesc: "四大名校深圳实验学校本部直管，一类高积分门槛过滤租户，华为研发家长鸡娃风气极浓",
+        middleTierCode: "T1",
+        middleTierLabel: "初中 T1 王牌 (深实验坂田初中部)",
+        middleDesc: "四大率6.2% / 十大率16.0% / 公办率77.5%，九年一贯校内直升免二次排位焦虑"
+      },
+      "NNU_LG": {
+        overallTierCode: "T1_TOP",
+        overallTierBadge: "🏆 T1 第一梯队·片区龙头",
+        tierColorClass: "badge-purple",
+        cityRankNote: "布吉水径断层第一 · 全市公办前 10%",
+        primaryTierCode: "T1_OR_T2",
+        primaryTierLabel: "麓城外国语(T1顶尖) / 水径小学(T2稳健)",
+        primaryDesc: "万科麓城外国语小学为片区公认T1口碑王牌(100%纯商品房生源)；水径小学为T2稳健公办",
+        middleTierCode: "T1",
+        middleTierLabel: "初中 T1 王牌 (南师大附属龙岗学校)",
+        middleDesc: "公办率高达80.8% / 十大率15.2% / 四大率5.8%，小班化精细管理，加工能力极强"
+      },
+      "HUAZHU_DY": {
+        overallTierCode: "T1_5_STRONG",
+        overallTierBadge: "🌟 T1.5 准一梯队·核心强校",
+        tierColorClass: "badge-indigo",
+        cityRankNote: "大运核心强校 · 全市公办前 12%",
+        primaryTierCode: "T1_5",
+        primaryTierLabel: "小学 T1.5 强校 (华附大运小学部·直升)",
+        primaryDesc: "100%大运改善商品房与高校教职工生源，零城中村租户分流，硬件与师资一流",
+        middleTierCode: "T1_5",
+        middleTierLabel: "初中 T1.5 强校 (华附大运初中部)",
+        middleDesc: "公办率77.5% / 十大率14.8% / 四大率5.5%，九年一贯直升，稳居大运第一梯队"
+      },
+      "CUHK_ZHIXIN": {
+        overallTierCode: "T1_5_STRONG",
+        overallTierBadge: "🌟 T1.5 准一梯队·高校附校",
+        tierColorClass: "badge-indigo",
+        cityRankNote: "港中深直属集团 · 全市公办前 15%",
+        primaryTierCode: "T1_5",
+        primaryTierLabel: "小学 T1.5 强校 (港中大知新/道远小学部)",
+        primaryDesc: "依托香港中文大学(深圳)教育集团打造，国际大学园学术氛围浓厚，生源纯净",
+        middleTierCode: "T1_5",
+        middleTierLabel: "初中 T1.5 强校 (港中大知新/道远初中部)",
+        middleDesc: "公办率75.0% / 十大率14.2% / 四大率5.0%，近年中考稳居龙岗前十，直升省心"
+      },
+      "KEWAI_BT": {
+        overallTierCode: "T1_5_STRONG",
+        overallTierBadge: "🌟 T1.5 准一梯队·口碑强校",
+        tierColorClass: "badge-indigo",
+        cityRankNote: "坂田本土口碑王 · 全市公办前 16%",
+        primaryTierCode: "T1_5",
+        primaryTierLabel: "小学 T1.5 强校 (科技城外国语小学部)",
+        primaryDesc: "信义嘉御山百万方纯商品房大盘业主子女占90%以上，同学圈层高度一致，家校共育极佳",
+        middleTierCode: "T1_5",
+        middleTierLabel: "初中 T1.5 强校 (科技城外国语初中部)",
+        middleDesc: "公办率74.5% / 十大率13.8% / 四大率4.9%，九年一贯目送式直升，成绩极其稳定"
+      },
+      "XIANYI_BGL": {
+        overallTierCode: "T1_5_STRONG",
+        overallTierBadge: "🌟 T1.5 公办强校 + 🔥T0 百外圈",
+        tierColorClass: "badge-teal",
+        cityRankNote: "公办全市前18% + 深圳民办T0传奇名校圈",
+        primaryTierCode: "T1_5_PLUS_T0",
+        primaryTierLabel: "公办 T1.5 (贤义) + 民办 T0 (春蕾/百外世纪)",
+        primaryDesc: "公办贤义外国语小学部生源优质；片区内更有深圳鸡娃传奇【春蕾小学/百外世纪小学】",
+        middleTierCode: "T1_5_PLUS_T0",
+        middleTierLabel: "公办 T1.5 (贤义73.5%) + 民办 T0 (百合外国语)",
+        middleDesc: "进可考家门口T0神校【百合外国语(四大率35%+)】，退有公办贤义外国语(公办率73.5%)稳保底"
+      },
+      "SHENDA_BT": {
+        overallTierCode: "T2_SOLID",
+        overallTierBadge: "🛡️ T2 第二梯队·稳健中上",
+        tierColorClass: "badge-blue",
+        cityRankNote: "华为码农生源加持 · 超全市均值 13%",
+        primaryTierCode: "T2",
+        primaryTierLabel: "小学 T2 优质 (深大附坂田小学部·直升)",
+        primaryDesc: "2026录取线91.05分，高积分门槛将岗头村租户拦截在外，实际入读全为华为/科技业主子女",
+        middleTierCode: "T2",
+        middleTierLabel: "初中 T2 稳健中上 (深大附坂田初中部)",
+        middleDesc: "公办率66.5% / 十大率10.8% / 四大率3.6%，高于深圳全市公办普高率基准13个百分点"
+      },
+      "SHIYALING_NW": {
+        overallTierCode: "T2_SOLID",
+        overallTierBadge: "🛡️ T2 第二梯队·潜力中上",
+        tierColorClass: "badge-blue",
+        cityRankNote: "稳健达标中上 + 深大附中54班新校预期",
+        primaryTierCode: "T2",
+        primaryTierLabel: "小学 T2 稳健 (石芽岭小学部 + 深大附新校)",
+        primaryDesc: "石芽岭公园周边商品房生源为主，积分门槛宽松(一类购房即稳录)，旁侧新增54班名校集团新校",
+        middleTierCode: "T2",
+        middleTierLabel: "初中 T2 稳健中上 (石芽岭初中部)",
+        middleDesc: "公办率61.5% / 十大率8.5%，高出全市基准线8个百分点，符合“升学率中上”硬指标"
+      }
+    };
+
+    Object.entries(SCHOOL_TIER_DICT).forEach(function(pair) {
+      const k = pair[0];
+      const v = pair[1];
+      if (SCHOOL_DISTRICTS[k]) Object.assign(SCHOOL_DISTRICTS[k], v);
+    });
+
+    // 2. 为每个小区绑定精确的【本盘对口小学梯队 & 初中梯队】专属标签
+    Object.entries(COMMUNITIES_MACRO).forEach(function(pair) {
+      const name = pair[0];
+      const m = pair[1];
+      const sch = SCHOOL_DISTRICTS[m.schoolKey] || {};
+      m.schoolTierCode = sch.overallTierCode || "T2_SOLID";
+      m.schoolOverallBadge = sch.overallTierBadge || "T2 稳健中上";
+      m.primaryTierBadge = sch.primaryTierLabel || "T2 小学";
+      m.middleTierBadge = sch.middleTierLabel || "T2 初中";
+      m.isDualT1 = (sch.overallTierCode === "T1_TOP");
+
+      if (name === "万科麓城三期") {
+        m.primaryTierBadge = "🏆 小学 T1 顶尖 (万科麓城外国语小学·家门口)";
+        m.middleTierBadge = "🏆 初中 T1 王牌 (南师大附属龙岗学校·80.8%)";
+        m.schoolTierSummary = "双T1王牌满配 (T1麓城外国语小学 + T1南师大龙岗初中)";
+        m.isDualT1 = true;
+      } else if (name === "鸿荣源尚峰") {
+        m.primaryTierBadge = "🛡️ 小学 T2 稳健 (水径小学/水径九年一贯新校·共享麓城)";
+        m.middleTierBadge = "🏆 初中 T1 王牌 (南师大附属龙岗学校·80.8%)";
+        m.schoolTierSummary = "T2小学 + T1王牌初中 (初中享南师大80.8%高升学率红利)";
+        m.isDualT1 = false;
+      } else if (m.schoolKey === "XIANYI_BGL") {
+        m.primaryTierBadge = "🌟 公办 T1.5 (贤义) + 🔥民办 T0 (春蕾/百外世纪)";
+        m.middleTierBadge = "🌟 公办 T1.5 (贤义73.5%) + 🔥民办 T0 (百合外国语)";
+        m.schoolTierSummary = "T1.5公办九年一贯保底 + T0深圳第一民办百外冲刺圈";
+      } else {
+        m.schoolTierSummary = (sch.overallTierBadge || "") + " (" + (sch.cityRankNote || "") + ")";
+      }
+    });
+
+    // 3. 在【专章模块1：#section-edu】顶部插入可视化的「小学 & 初中网评等级梯队金字塔全景图」
+    const eduSection = byId("section-edu");
+    const schoolTableBody = byId("schoolTableBody");
+    const schoolTableWrap = schoolTableBody ? schoolTableBody.closest(".overflow-x-auto") : null;
+    if (eduSection && schoolTableWrap && !byId("schoolTierPyramid")) {
+      const pyramidDiv = document.createElement("div");
+      pyramidDiv.id = "schoolTierPyramid";
+      pyramidDiv.className = "mb-5 grid grid-cols-1 md:grid-cols-4 gap-3 text-xs";
+      pyramidDiv.innerHTML = [
+        '<div class="rounded-xl p-3.5 bg-purple-50/70 border border-purple-200 space-y-1.5">',
+        '  <div class="flex items-center justify-between">',
+        '    <span class="font-bold text-purple-950 text-sm">🏆 T1 第一梯队 (王牌顶尖)</span>',
+        '    <span class="px-2 py-0.5 bg-purple-700 text-white rounded font-bold text-[10px]">全市前 8%~10%</span>',
+        '  </div>',
+        '  <p class="text-slate-600 text-[11px]">标准：公办普高率 <strong>76.8%~81.5%</strong>，十大率 <strong>15.2%~18.5%</strong>，四大率 <strong>5.8%~7.5%</strong>。</p>',
+        '  <div class="bg-white p-2 rounded border border-purple-100 space-y-1 text-[11px]">',
+        '    <div><strong>• 大运：</strong>深中龙岗学校+深中小学 <em>(星河时代)</em></div>',
+        '    <div><strong>• 景田：</strong>福田外国语本部+景秀 <em>(金色家园/天健/天然居/岁宝/翔名苑)</em></div>',
+        '    <div><strong>• 坂田：</strong>深实验坂田校区九年一贯 <em>(诺德中央道)</em></div>',
+        '    <div><strong>• 水径：</strong>麓城外国语小学[T1]+南师大龙岗[T1] <em>(万科麓城三期/尚峰共享初中)</em></div>',
+        '  </div>',
+        '</div>',
+        '<div class="rounded-xl p-3.5 bg-indigo-50/70 border border-indigo-200 space-y-1.5">',
+        '  <div class="flex items-center justify-between">',
+        '    <span class="font-bold text-indigo-950 text-sm">🌟 T1.5 准一梯队 (片区强校)</span>',
+        '    <span class="px-2 py-0.5 bg-indigo-700 text-white rounded font-bold text-[10px]">全市前 12%~16%</span>',
+        '  </div>',
+        '  <p class="text-slate-600 text-[11px]">标准：公办普高率 <strong>74.5%~77.5%</strong>，十大率 <strong>13.8%~14.8%</strong>，均为<strong>九年一贯制直升</strong>且生源高度纯粹。</p>',
+        '  <div class="bg-white p-2 rounded border border-indigo-100 space-y-1 text-[11px]">',
+        '    <div><strong>• 大运枢纽：</strong>华附大运学校九年一贯 <em>(颐安都会/深铁阅云境)</em></div>',
+        '    <div><strong>• 大运中心：</strong>港中大附属知新/道远学校 <em>(京基/佳兆业未来/康城/泰瑞府)</em></div>',
+        '    <div><strong>• 坂田北：</strong>科技城外国语学校九年一贯 <em>(信义嘉御山)</em></div>',
+        '  </div>',
+        '</div>',
+        '<div class="rounded-xl p-3.5 bg-teal-50/70 border border-teal-200 space-y-1.5">',
+        '  <div class="flex items-center justify-between">',
+        '    <span class="font-bold text-teal-950 text-sm">🔥 T1.5 公办 + T0 百外特殊圈</span>',
+        '    <span class="px-2 py-0.5 bg-teal-700 text-white rounded font-bold text-[10px]">公办保底+民办天花板</span>',
+        '  </div>',
+        '  <p class="text-slate-600 text-[11px]">标准：既有公办九年一贯强校保底，又处于深圳第一民办传奇名校<strong>【百合外国语】</strong>500米生活圈。</p>',
+        '  <div class="bg-white p-2 rounded border border-teal-100 space-y-1 text-[11px]">',
+        '    <div><strong>• 公办保底(T1.5)：</strong>贤义外国语九年一贯制 <em>(公办普高率73.5% · 十大率13.5%)</em></div>',
+        '    <div><strong>• 民办冲刺(T0)：</strong>下楼即春蕾小学/百外世纪小学 + 百合外国语初中<em>(四大率超35%!)</em></div>',
+        '    <div><strong>• 覆盖：</strong><em>信义金御半山、信义珑门、百合世纪、万科红</em></div>',
+        '  </div>',
+        '</div>',
+        '<div class="rounded-xl p-3.5 bg-sky-50/70 border border-sky-200 space-y-1.5">',
+        '  <div class="flex items-center justify-between">',
+        '    <span class="font-bold text-sky-950 text-sm">🛡️ T2 第二梯队 (稳健中上)</span>',
+        '    <span class="px-2 py-0.5 bg-sky-700 text-white rounded font-bold text-[10px]">超全市基准 8%~13%</span>',
+        '  </div>',
+        '  <p class="text-slate-600 text-[11px]">标准：公办普高率 <strong>61.5%~66.5%</strong>（深圳全市基准约53.5%），九年一贯直升，积分友好且具新校增量。</p>',
+        '  <div class="bg-white p-2 rounded border border-sky-100 space-y-1 text-[11px]">',
+        '    <div><strong>• 坂田华为圈：</strong>深大附属坂田学校九年一贯 <em>(公办率66.5% · 佳兆业中央/大族云峰)</em></div>',
+        '    <div><strong>• 石芽岭公园圈：</strong>石芽岭学校九年一贯(61.5%) + 旁侧规划54班深大附中南湾新校 <em>(健康花城/特发臻华府)</em></div>',
+        '  </div>',
+        '</div>'
+      ].join("");
+      schoolTableWrap.parentElement.insertBefore(pyramidDiv, schoolTableWrap);
+    }
+
+    // 4. 重写 renderSchoolTable()：在学区对比表中加入【网评综合梯队 · 小学梯队 vs 初中梯队】详细列
+    renderSchoolTable = function() {
+      const theadTr = root.querySelector("#section-edu table thead tr");
+      if (theadTr) {
+        theadTr.innerHTML = [
+          '<th class="py-2.5 px-2.5 font-bold">🏅 网评综合梯队 & 全市排位</th>',
+          '<th class="py-2.5 px-2.5 font-bold">对口学校 / 教育集团</th>',
+          '<th class="py-2.5 px-2.5 font-semibold">🏫 小学梯队评级 vs 初中梯队评级</th>',
+          '<th class="py-2.5 px-2.5 font-semibold">覆盖本库楼盘 (25盘映射)</th>',
+          '<th class="py-2.5 px-2.5 font-semibold">🏆 中考公办普高率</th>',
+          '<th class="py-2.5 px-2.5 font-semibold">🌟 四大率 / 十大率</th>',
+          '<th class="py-2.5 px-2.5 font-semibold">📊 近3年录取积分线</th>',
+          '<th class="py-2.5 px-2.5 font-semibold">👥 生源纯粹度 & 锁定政策</th>'
+        ].join("");
+      }
+
+      const tbody = byId("schoolTableBody");
+      const list = Object.values(SCHOOL_DISTRICTS).sort(function(a, b) {
+        return b.publicHighRate - a.publicHighRate;
+      });
+
+      tbody.innerHTML = list.map(function(s) {
+        const badgeCls = s.tierColorClass || "badge-indigo";
+        const sysCls = (s.systemType || "").includes("九年一贯") ? "badge-teal" : "badge-indigo";
+        const rateCls = s.publicHighRate >= 75 ? "badge-green" : "badge-blue";
+        return [
+          '<tr class="hover:bg-indigo-50/40 transition">',
+          '  <td class="py-2.5 px-2.5 align-top whitespace-nowrap">',
+          '    <span class="px-2 py-0.5 rounded text-[11px] font-bold ' + badgeCls + '">' + (s.overallTierBadge || "T1.5 强校") + '</span>',
+          '    <div class="text-[10px] text-slate-500 font-medium mt-1">' + (s.cityRankNote || "") + '</div>',
+          '  </td>',
+          '  <td class="py-2.5 px-2.5 align-top">',
+          '    <div class="font-bold text-indigo-950">' + s.name + '</div>',
+          '    <span class="inline-block mt-1 px-2 py-0.5 rounded text-[10px] font-semibold ' + sysCls + '">' + s.systemType + '</span>',
+          '  </td>',
+          '  <td class="py-2.5 px-2.5 align-top max-w-[250px]">',
+          '    <div class="font-bold text-emerald-800 text-[11px]">👦 ' + (s.primaryTierLabel || "") + '</div>',
+          '    <div class="text-[10px] text-slate-500 mb-1">' + (s.primaryDesc || "") + '</div>',
+          '    <div class="font-bold text-indigo-900 text-[11px]">🎓 ' + (s.middleTierLabel || "") + '</div>',
+          '    <div class="text-[10px] text-slate-500">' + (s.middleDesc || "") + '</div>',
+          '  </td>',
+          '  <td class="py-2.5 px-2.5 align-top font-medium text-slate-800 max-w-[170px]">' + s.covers + '</td>',
+          '  <td class="py-2.5 px-2.5 align-top whitespace-nowrap">',
+          '    <span class="px-2 py-0.5 rounded font-bold ' + rateCls + '">约 ' + s.publicHighRate + '%</span>',
+          '    <div class="text-[10px] text-slate-500 mt-1">三年：' + s.rateRange + '</div>',
+          '  </td>',
+          '  <td class="py-2.5 px-2.5 align-top whitespace-nowrap">',
+          '    <div class="font-bold text-purple-800">四大率：~' + s.top4Rate + '%</div>',
+          '    <div class="text-slate-600 font-semibold">十大率：~' + s.top10Rate + '%</div>',
+          '  </td>',
+          '  <td class="py-2.5 px-2.5 align-top max-w-[195px] text-slate-700">' + s.cutoffScore + '</td>',
+          '  <td class="py-2.5 px-2.5 align-top max-w-[195px]">',
+          '    <div class="font-semibold text-emerald-800">' + s.peerGrade + '</div>',
+          '    <div class="text-[10px] text-slate-500 mt-0.5">' + s.highlight + '</div>',
+          '  </td>',
+          '</tr>'
+        ].join("");
+      }).join("");
+    };
+
+    // 5. 在【视角二：宏观全局过滤控制台】新增【15. 🏅 小初学区网评梯队】多选筛选器
+    const macroZoneEl = byId("macroZoneFilter");
+    const macroGrid = macroZoneEl ? macroZoneEl.parentElement.parentElement : null;
+    if (macroGrid && !byId("macroSchoolTierFilter")) {
+      const tierDiv = document.createElement("div");
+      tierDiv.innerHTML = [
+        '<label class="block text-purple-700 font-bold mb-1">15. 🏅 小初学区网评梯队</label>',
+        '<select id="macroSchoolTierFilter" class="w-full rounded-lg border border-purple-300 px-2 py-1.5 bg-purple-50/40 font-medium">',
+        '  <option value="ALL">全部网评学区梯队 (T1~T2)</option>',
+        '  <option value="DUAL_T1">★ 双T1满配 (小学T1顶尖 + 初中T1王牌)</option>',
+        '  <option value="T1_TOP">🏆 T1 第一梯队名校 (深中/福外/深实验/南师大)</option>',
+        '  <option value="T1_5_STRONG">🌟 T1.5 准一梯队强校 (华附/港中大/科外/贤义)</option>',
+        '  <option value="T0_BAIHE">🔥 含T0百合外国语/春蕾特殊冲刺圈 (百鸽笼)</option>',
+        '  <option value="T2_SOLID">🛡️ T2 第二梯队稳健中上 (深大附坂田/石芽岭)</option>',
+        '</select>'
+      ].join("");
+      macroGrid.appendChild(tierDiv);
+      if (typeof buildMultiSelectUI === "function") {
+        buildMultiSelectUI("macroSchoolTierFilter");
+      }
+    }
+
+    // 6. 拦截 isCommunityPassingMacro 加入学区梯队多选过滤判定
+    const origPassMacro = isCommunityPassingMacro;
+    isCommunityPassingMacro = function(projectName) {
+      if (!origPassMacro(projectName)) return false;
+      const m = COMMUNITIES_MACRO[projectName];
+      const tiers = typeof getMultiValues === "function"
+        ? getMultiValues("macroSchoolTierFilter")
+        : ["ALL"];
+      if (!tiers.includes("ALL")) {
+        const passTier = tiers.some(function(t) {
+          if (t === "DUAL_T1") return m.isDualT1 === true;
+          if (t === "T1_TOP") return m.schoolTierCode === "T1_TOP";
+          if (t === "T1_5_STRONG") return m.schoolTierCode === "T1_5_STRONG";
+          if (t === "T0_BAIHE") return m.schoolKey === "XIANYI_BGL";
+          if (t === "T2_SOLID") return m.schoolTierCode === "T2_SOLID";
+          return true;
+        });
+        if (!passTier) return false;
+      }
+      return true;
+    };
+
+    // 7. 增强宏观表格第10列：清晰展示【网评综合梯队 + 小学梯队 + 初中梯队】
+    const origRenderMacro = renderMacroTable;
+    renderMacroTable = function() {
+      origRenderMacro();
+      const rows = root.querySelectorAll("#macroTableBody tr");
+      const passingEntries = Object.entries(COMMUNITIES_MACRO).filter(function(pair) {
+        return isCommunityPassingMacro(pair[0]);
+      });
+      const badgeEl = byId("macroMatchBadge");
+      if (badgeEl) {
+        badgeEl.textContent = "入围 " + passingEntries.length + " / " + Object.keys(COMMUNITIES_MACRO).length + " 个小区";
+      }
+
+      rows.forEach(function(tr, idx) {
+        const entry = passingEntries[idx];
+        if (!entry) return;
+        const m = entry[1];
+        const sch = SCHOOL_DISTRICTS[m.schoolKey] || {};
+        const schoolTd = tr.children[9];
+        if (schoolTd) {
+          const badgeCls = sch.tierColorClass || "badge-indigo";
+          schoolTd.innerHTML = [
+            '<div class="mb-1">',
+            '  <span class="px-2 py-0.5 rounded text-[10px] font-bold ' + badgeCls + '">' + m.schoolOverallBadge + '</span>',
+            '</div>',
+            '<div class="text-[11px] font-semibold text-emerald-800">' + m.primaryTierBadge + '</div>',
+            '<div class="text-[11px] font-bold text-indigo-950 mt-0.5">' + m.middleTierBadge + '</div>',
+            '<div class="mt-1">',
+            '  <span class="px-1.5 py-0.5 rounded font-bold badge-green text-[10px]">公办率 ' + sch.publicHighRate + '%</span> ',
+            '  <span class="px-1.5 py-0.5 rounded font-semibold badge-purple text-[10px]">十大率 ' + sch.top10Rate + '%</span>',
+            '</div>'
+          ].join("");
+        }
+      });
+    };
+
+    // 8. 增强微观户号卡片：在卡片内直接显示【小学梯队 vs 初中梯队】对比区块
+    const origRenderCards = renderUnitCards;
+    renderUnitCards = function() {
+      origRenderCards();
+      const cards = root.querySelectorAll("#unitCardsContainer > div");
+      const weights = getWeights();
+      const filtered = getFilteredUnits(false).map(function(u) {
+        return Object.assign({}, u, { totalScore: calcWeightedScore(u, weights) });
+      }).sort(function(a, b) {
+        return b.totalScore - a.totalScore;
+      });
+
+      cards.forEach(function(card, idx) {
+        const u = filtered[idx];
+        if (!u) return;
+        const m = COMMUNITIES_MACRO[u.project];
+        const sch = SCHOOL_DISTRICTS[m.schoolKey] || {};
+        const badgeCls = sch.tierColorClass || "badge-indigo";
+        const eduTierBlock = [
+          '<div class="mt-2 text-[11px] text-slate-700 space-y-0.5 bg-purple-50/50 p-2.5 rounded-lg border border-purple-200/60 v11-tier-box">',
+          '  <div class="flex items-center justify-between">',
+          '    <span class="font-bold text-purple-950">🎓 ③ 对口小初网评梯队分级</span>',
+          '    <span class="px-1.5 py-0.2 rounded font-bold ' + badgeCls + ' text-[10px]">' + (sch.overallTierBadge || "") + '</span>',
+          '  </div>',
+          '  <div><strong>小学评级：</strong><span class="text-emerald-800 font-semibold">' + m.primaryTierBadge + '</span></div>',
+          '  <div><strong>初中评级：</strong><span class="text-indigo-900 font-bold">' + m.middleTierBadge + '</span> (十大率~' + sch.top10Rate + '%/四大率~' + sch.top4Rate + '%)</div>',
+          '</div>'
+        ].join("");
+
+        const noteBlock = card.querySelector(".bg-indigo-50\\/40");
+        if (noteBlock && !card.querySelector(".v11-tier-box")) {
+          noteBlock.insertAdjacentHTML("beforebegin", eduTierBlock);
+        }
+      });
+    };
+
+    // 9. 增强底部五层穿透 PK 台：在第四层加入【网评综合梯队、小学梯队评级、初中梯队评级】对比行
+    const origRenderPK = renderCompareTable;
+    renderCompareTable = function() {
+      origRenderPK();
+      const selectedUnits = compareIds
+        .map(function(id) { return UNITS_DATA.find(function(u) { return u.id === id; }); })
+        .filter(Boolean)
+        .map(function(u) {
+          return Object.assign({}, u, {
+            macro: COMMUNITIES_MACRO[u.project],
+            sch: SCHOOL_DISTRICTS[COMMUNITIES_MACRO[u.project].schoolKey]
+          });
+        });
+      if (!selectedUnits.length) return;
+
+      const tbody = root.querySelector("#compareTable tbody");
+      if (!tbody) return;
+      const allTrs = Array.from(tbody.querySelectorAll("tr"));
+      const targetTr = allTrs.find(function(tr) {
+        return tr.textContent.includes("对口小学 & 初中名称");
+      });
+      if (targetTr && !tbody.querySelector(".v11-pk-tier-row")) {
+        const colsHtml = selectedUnits.map(function(u) {
+          return [
+            '<td class="py-2 px-3 align-top">',
+            '  <div><span class="px-2 py-0.5 rounded font-bold text-[11px] ' + (u.sch.tierColorClass || "badge-indigo") + '">' + (u.sch.overallTierBadge || "") + '</span></div>',
+            '  <div class="text-emerald-800 font-semibold mt-1">' + u.macro.primaryTierBadge + '</div>',
+            '  <div class="text-indigo-950 font-bold mt-0.5">' + u.macro.middleTierBadge + '</div>',
+            '  <div class="text-[10px] text-slate-500 mt-0.5">' + (u.sch.cityRankNote || "") + '</div>',
+            '</td>'
+          ].join("");
+        }).join("");
+
+        const tierTrHtml = [
+          '<tr class="bg-purple-50/40 hover:bg-purple-50/70 v11-pk-tier-row">',
+          '  <td class="py-2 px-3 font-bold text-purple-950 bg-purple-100/50 w-44">🏅 小初网评等级梯队对比</td>',
+          colsHtml,
+          '</tr>'
+        ].join("");
+        targetTr.insertAdjacentHTML("beforebegin", tierTrHtml);
+      }
+    };
+
+    // 10. 绑定重置按钮包含新增的 macroSchoolTierFilter
+    const resetMacroBtn = byId("resetMacroBtn");
+    if (resetMacroBtn) {
+      resetMacroBtn.addEventListener("click", function() {
+        const sel = byId("macroSchoolTierFilter");
+        if (sel) sel.value = "ALL";
+        if (typeof buildMultiSelectUI === "function") {
+          buildMultiSelectUI("macroSchoolTierFilter");
+        }
+        renderMacroTable();
+        redrawUnitViews();
+      });
+    }
+
+    const resetFilterBtn = byId("resetFilterBtn");
+    if (resetFilterBtn) {
+      resetFilterBtn.addEventListener("click", function() {
+        const sel = byId("macroSchoolTierFilter");
+        if (sel) sel.value = "ALL";
+        if (typeof buildMultiSelectUI === "function") {
+          buildMultiSelectUI("macroSchoolTierFilter");
+        }
+        renderMacroTable();
+        redrawUnitViews();
+      });
+    }
+
+    // 立即执行重绘
     renderSchoolTable();
     renderMacroTable();
     redrawUnitViews();
