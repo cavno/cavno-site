@@ -1,10 +1,10 @@
 ---
-title: "深圳20盘二胎置业决策平台（社区与户号联动版）"
+title: "深圳25盘置业决策系统（V10完整终极版）"
 section: life
 subsection: house
 href: "/life/house/longgang-home-school-decision/"
-date: 2026-10-28
-uploadedAt: 2026-10-28
+date: 2026-10-29
+uploadedAt: 2026-10-29
 tags: ["深圳", "置业", "社区过滤", "户号筛选", "工程指标", "学位", "联动"]
-summary: "保留20盘、31组户号和9个学区；12维宏观条件向下同步到9维户号筛选与TOP4，支持三率/趋势/抗跌图表、五层PK及HTML/CSV导出。"
+summary: "保留25盘、45组户号和10个学区；支持五大片区、14维宏观与10维微观多选、声学与本栋梯户比、四房专筛、TOP4、五层PK及HTML/CSV导出。"
 ---

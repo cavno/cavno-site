@@ -1,6 +1,8 @@
-/* 附件数据与宏观/微观联动筛选规则保持一致；隔离事件与页面样式。 */
+/* V10附件三段脚本与全部数据保留；将页面状态限定在本工具中。 */
 (() => {
+'use strict';
 const root=document.getElementById('lg-house-app');if(!root)return;const byId=id=>root.querySelector('#'+id);
+const readyCallbacks=[];const onReady=callback=>readyCallbacks.push(callback);let multiSelectState,getMultiValues,buildMultiSelectUI,drillDownProject,toggleCompare;
 
     // =========================================================================
     // 1. 教育学区专项数据库：9大核心学区八维指标库 (SCHOOL_DISTRICTS)
@@ -1989,12 +1991,12 @@ const root=document.getElementById('lg-house-app');if(!root)return;const byId=id
     // =========================================================================
     function renderMacroTable() {
       const passingEntries = Object.entries(COMMUNITIES_MACRO).filter(([name]) => isCommunityPassingMacro(name));
-      byId("macroMatchBadge").textContent = `入围 ${passingEntries.length} / 20 个小区`;
+      byId("macroMatchBadge").textContent = `入围 ${passingEntries.length} / ${Object.keys(COMMUNITIES_MACRO).length} 个小区`;
 
       // 更新视角三顶部的继承提示与入围楼盘下拉框
       const hintEl = byId("inheritedMacroHint");
-      if (passingEntries.length === 20) {
-        hintEl.textContent = "全部 20 个小区";
+      if (passingEntries.length === Object.keys(COMMUNITIES_MACRO).length) {
+        hintEl.textContent = `全部 ${Object.keys(COMMUNITIES_MACRO).length} 个小区`;
       } else if (passingEntries.length === 0) {
         hintEl.textContent = "0 个小区（请放宽上方社区过滤条件）";
       } else {
@@ -2117,11 +2119,11 @@ const root=document.getElementById('lg-house-app');if(!root)return;const byId=id
       }
     }
 
-    function drillDownProject(projectName) {
+    drillDownProject = function(projectName) {
       byId("filterProject").value = projectName;
       updateBuildingOptions();
       redrawUnitViews();
-      byId("section-micro").scrollIntoView({ behavior: "smooth" });
+      byId("section-micro").scrollIntoView({ behavior: "smooth", block:"start" });
     };
 
     // =========================================================================
@@ -2184,7 +2186,7 @@ const root=document.getElementById('lg-house-app');if(!root)return;const byId=id
       const weights = getWeights();
 
       byId("maxPriceLabel").textContent =
-        maxSlider >= 720 ? "不限上限 (≤720万)" : `预算上限 ≤ ${maxSlider} 万`;
+        maxSlider >= 1500 ? "不限上限 (≤1500万)" : `预算上限 ≤ ${maxSlider} 万`;
 
       const filtered = getFilteredUnits(false).map(u => ({
         ...u,
@@ -2293,7 +2295,7 @@ const root=document.getElementById('lg-house-app');if(!root)return;const byId=id
     // =========================================================================
     // 9. 渲染视角四：五层穿透终极同屏 PK 对比台
     // =========================================================================
-    function toggleCompare(id) {
+    toggleCompare = function(id) {
       if (compareIds.includes(id)) {
         compareIds = compareIds.filter(item => item !== id);
       } else {
@@ -2608,7 +2610,7 @@ const root=document.getElementById('lg-house-app');if(!root)return;const byId=id
         filterUsableRate: "0",
         filterCommute: "ALL",
         filterPriceBracket: "ALL",
-        filterMaxPriceSlider: "720"
+        filterMaxPriceSlider: "1500"
       };
       Object.entries(microDefaults).forEach(([id, val]) => {
         byId(id).value = val;
@@ -2684,11 +2686,11 @@ const root=document.getElementById('lg-house-app');if(!root)return;const byId=id
 
     async function downloadSelfHtml(){
       if(root.dataset.standalone==='true'){
-        saveLocalFile('Cavno_社区户号联动_独立页面.html','<!DOCTYPE html>\n'+document.documentElement.outerHTML,'text/html;charset=utf-8');
+        saveLocalFile('Cavno_深圳25盘_V10_独立页面.html','<!DOCTYPE html>\n'+document.documentElement.outerHTML,'text/html;charset=utf-8');
       }else{
         const response=await fetch('/apps/life/house/longgang-home-school-decision/standalone.html');
         if(!response.ok){alert('独立HTML文件未就绪，请确认增量包中的standalone.html已部署。');return;}
-        saveLocalFile('Cavno_社区户号联动_独立页面.html',await response.text(),'text/html;charset=utf-8');
+        saveLocalFile('Cavno_深圳25盘_V10_独立页面.html',await response.text(),'text/html;charset=utf-8');
       }
     }
     function exportUnitsCsv() {
@@ -2706,10 +2708,10 @@ const root=document.getElementById('lg-house-app');if(!root)return;const byId=id
         const s = SCHOOL_DISTRICTS[m.schoolKey];
         return [...unitFields.map(k => u[k]), ...macroFields.map(k => m[k]), ...schoolFields.map(k => s[k])];
       });
-      saveLocalFile("深圳20盘_全量户号数据.csv", "\uFEFF" + [header, ...rows].map(row => row.map(cell).join(",")).join("\r\n"), "text/csv;charset=utf-8");
+      saveLocalFile("深圳25盘_V10_全量户号数据.csv", "\uFEFF" + [header, ...rows].map(row => row.map(cell).join(",")).join("\r\n"), "text/csv;charset=utf-8");
     };
 
-    function init(){
+    onReady(() => {
       renderSchoolTable();
       renderMacroTable();
       renderTopRecommendations();
@@ -2717,7 +2719,1349 @@ const root=document.getElementById('lg-house-app');if(!root)return;const byId=id
       renderCompareTable();
       bindEvents();
       initCharts();
-    
+    });
+  
+
+(function() {
+  // ==========================================================================
+  // 1. 新增【福田区·景田片区】教育学区与 4 大标杆一二手楼盘数据
+  // ==========================================================================
+  SCHOOL_DISTRICTS["FUTIAN_WAI_JT"] = {
+    name: "福田区外国语学校(景田南/北校区) / 景秀小学 + 景秀中学",
+    shortName: "福田外国语本部/景秀",
+    covers: "天健天骄北庐、万科金色家园、天然居、岁宝壹品(邻近)",
+    systemType: "九年一贯制/6+3双优 (福田头部名校集团)",
+    publicHighRate: 76.8,
+    rateRange: "74.5% ~ 78.2%",
+    trend3Y: [74.5, 75.8, 76.8],
+    top4Rate: 6.8,
+    top10Rate: 16.5,
+    cutoffScore: "福外本部小一约82~86分 / 初一约85分（福田一类购房落户提前1~1.5年稳录）",
+    peerGrade: "S级·福田中心区公务员、金融高管、律所合伙人及资深中产生源，圈层极纯粹",
+    lockPolicy: "小一锁6年/初一锁3年（同一父母二胎同套房通用不限）",
+    highlight: "福田中心区老牌王牌名校，外语特色与四大/十大率极强，且无城中村握手楼租户分流。"
+  };
+
+  const JINGTIAN_COMMUNITIES = {
+    "天健天骄北庐": {
+      zone: "福田景田",
+      isNewBuild: false,
+      phaseSummary: "北庐/南苑共2期11栋纯粹豪宅",
+      buildYear: "2020-2021年",
+      regGen: "GEN1",
+      regLabel: "第1代·福田国企高定规",
+      usableAvg: "81%~83%",
+      plotRatio: 5.2,
+      maxFloorNum: 42,
+      elevatorGrade: "COMFORT",
+      densityGrade: "HIGH",
+      densityLabel: "中心区次新豪宅 (容积率5.2)",
+      totalFloors: "37~42层 (准超高层)",
+      elevatorRatio: "🌟 2梯2户 / 2梯3户 / 3梯4户",
+      buildingSpacing: "约 65~95米 (中心大园林)",
+      parkingRatio: 1.55,
+      parkingLabel: "🏆 1:1.55 (车位极其充裕)",
+      purityGrade: "S",
+      hasResettlement: "ZERO",
+      hasSubsidized: false,
+      resettlementDetail: "🏆 北庐主力组团为純大户型商品房（配建人才房位于独立地块），圈层纯粹度福田顶尖！",
+      purityLabel: "★ S级·纯大户豪宅 (独立地块隔离配建)",
+      assetTier: "品质改善",
+      residentProfile: "福田金融街高管、私募基金经理、律所合伙人、企业主，千万级顶豪圈层",
+      villageGrade: "S",
+      villageDistText: "🏆 S级·景田纯粹政商住区 (>800米零城中村)",
+      urbanInterface: "S级·零城中村福田中心界面（紧邻香蜜湖豪宅板块与莲花山公园，绿树成荫、棋盘式街区）",
+      commGrade: "S_MALL",
+      samWalk: true,
+      purePodium: true,
+      podiumType: "北庐塔楼下为纯高定会所架空层(0餐饮底商油烟)，街区对面即商业综合体",
+      supermarketInfo: "🏆 步行900米/驱车3分钟即达【山姆会员店(福田印力中心店)实体店】+ 景田岁宝盒马鲜生！",
+      wetMarketInfo: "福田农批市场(深圳最大最全生鲜市场，800米)+盒马鲜生+山姆实体店，买菜天花板",
+      metroMeters: 300,
+      metroStation: "2号线/9号线景田站",
+      metroDist: "★ 约 300米 (步行4分钟入站)",
+      commuteMins: 24,
+      commuteRoute: "9号线景田站 → 3站至孖岭站同台转10号线 → 4站直达贝尔路站(反向通勤不挤，全程约24分钟!)",
+      tenYearBeta: "紧邻香蜜湖新金融中心（深圳未来十年核心金融街规划），福田中心区绝版次新豪宅，保值力全城顶尖。",
+      resilienceGrade: "HIGH",
+      drawdownPct: 16,
+      priceCeilingVerify: "🏆 福田抗跌标杆！2021至今仅温和回调约16%，120~166㎡三房/四房在1250~1650万区间极度坚挺。",
+      propertyInfo: "天健物业 · 6.8元/㎡",
+      schoolKey: "FUTIAN_WAI_JT"
+    },
+    "万科金色家园": {
+      zone: "福田景田",
+      isNewBuild: false,
+      phaseSummary: "共3期围合花园 (景田经典标杆)",
+      buildYear: "2001-2003年",
+      regGen: "GEN0",
+      regLabel: "🌟 第0代·低公摊板式规",
+      usableAvg: "85%~88%",
+      plotRatio: 3.1,
+      maxFloorNum: 24,
+      elevatorGrade: "COMFORT",
+      densityGrade: "LOW",
+      densityLabel: "🏆 福田罕见低密 (容积率3.1!)",
+      totalFloors: "12~24层 (小高层/高层)",
+      elevatorRatio: "🌟 1梯2户 / 2梯4户 (极舒适)",
+      buildingSpacing: "约 55~80米",
+      parkingRatio: 0.92,
+      parkingLabel: "1:0.92 (中心区老盘中等水平)",
+      purityGrade: "S",
+      hasResettlement: "ZERO",
+      hasSubsidized: false,
+      resettlementDetail: "🏆 招拍挂净地开发：100%纯商品房社区，0村民回迁房、0保障房！",
+      purityLabel: "★ S级·0回迁+0保障 (100%纯商品房)",
+      assetTier: "品质改善",
+      residentProfile: "深圳市直机关公务员、医生、教师、金融白领及福外陪读中产家庭，人文素质极高",
+      villageGrade: "S",
+      villageDistText: "🏆 S级·景田核心零城中村 (近莲花山公园)",
+      urbanInterface: "S级·零城中村花园街区（东近莲花山公园，西接香蜜湖，周边全是图书馆、妇儿大厦与商品房）",
+      commGrade: "S_MALL",
+      samWalk: false,
+      purePodium: true,
+      podiumType: "一期/二期/三期各自围合封闭管理，内圈楼栋下无重餐饮底商",
+      supermarketInfo: "下楼即华润万家/妇儿大厦亲子MALL + 驱车5分钟达【印力中心山姆会员店】+ 盒马鲜生",
+      wetMarketInfo: "步行350米达景田综合肉菜市场+钱大妈+距离福田农批市场仅1.2公里",
+      metroMeters: 200,
+      metroStation: "2号线/9号线景田站 (地铁口就在家门口)",
+      metroDist: "🏆 约 200米 (下楼步行3分钟入景田站!)",
+      commuteMins: 23,
+      commuteRoute: "9号线景田站 → 3站至孖岭转10号线 → 贝尔路站(全程仅23分钟，早晚高峰反向坐车都有座位!)",
+      tenYearBeta: "坐拥“福田外国语学校本部+景田双地铁口+莲花山/香蜜湖双核辐射”，容积率仅3.1，流通性常年位居景田第一。",
+      resilienceGrade: "HIGH",
+      drawdownPct: 21,
+      priceCeilingVerify: "2021峰值约10.5万→2026稳定在8.0~8.4万/㎡(回撤约21%)，88~98㎡三房在720~820万区间成交极稳。",
+      propertyInfo: "万科物业 · 3.5元/㎡",
+      schoolKey: "FUTIAN_WAI_JT"
+    },
+    "天然居": {
+      zone: "福田景田",
+      isNewBuild: false,
+      phaseSummary: "共1期5栋围合大花园",
+      buildYear: "2004年",
+      regGen: "GEN0",
+      regLabel: "🌟 第0代·大阳台高实得规",
+      usableAvg: "85%~87%",
+      plotRatio: 3.6,
+      maxFloorNum: 28,
+      elevatorGrade: "COMFORT",
+      densityGrade: "LOW",
+      densityLabel: "🌟 舒居低密 (容积率3.6)",
+      totalFloors: "26~28层",
+      elevatorRatio: "🌟 2梯3户 / 2梯4户",
+      buildingSpacing: "约 60~85米 (超大中心花园)",
+      parkingRatio: 1.0,
+      parkingLabel: "1:1.0 (景田次新老盘中车位较充裕)",
+      purityGrade: "S",
+      hasResettlement: "ZERO",
+      hasSubsidized: false,
+      resettlementDetail: "🏆 100%纯商品房净地社区，0回迁房、0保障房，纯粹大平面改善住区！",
+      purityLabel: "★ S级·0回迁+0保障 (100%纯商品房)",
+      assetTier: "品质改善",
+      residentProfile: "福田改善型中产、公务员及二胎换房家庭，自住率超过90%",
+      villageGrade: "S",
+      villageDistText: "🏆 S级·景田北零城中村纯净街区",
+      urbanInterface: "S级·零城中村静谧文教界面（紧邻福田外国语学校校区，周边无任何城中村握手楼）",
+      commGrade: "S_MALL",
+      samWalk: false,
+      purePodium: true,
+      podiumType: "围合花园全架空层设计，无嘈杂底商油烟",
+      supermarketInfo: "步行350米即达岁宝壹品【盒马鲜生旗舰店】+ 驱车5分钟达【印力山姆会员店】",
+      wetMarketInfo: "步行600米即达深圳最大的【福田农批市场】+ 盒马鲜生，生鲜品质全城最高",
+      metroMeters: 350,
+      metroStation: "9号线梅景站 / 2号线景田站",
+      metroDist: "★ 约 350米 (步行5分钟达梅景站)",
+      commuteMins: 22,
+      commuteRoute: "9号线梅景站 → 2站至孖岭转10号线 → 贝尔路站(全程仅22分钟，到坂田贝尔路极快!)",
+      tenYearBeta: "福田外国语学校旁低密纯商品房大盘，容积率3.6且户型方正，家庭改善终极自住优选。",
+      resilienceGrade: "HIGH",
+      drawdownPct: 22,
+      priceCeilingVerify: "2021峰值约10.2万→2026稳定在7.8~8.2万/㎡(回撤约22%)，105㎡三房两卫约820万。",
+      propertyInfo: "信和物业 · 3.5元/㎡",
+      schoolKey: "FUTIAN_WAI_JT"
+    },
+    "翔名苑": {
+      zone: "福田景田",
+      isNewBuild: false,
+      phaseSummary: "共1期3栋精致空中花园社区",
+      buildYear: "2003年",
+      regGen: "GEN0",
+      regLabel: "第0代·实用紧凑规",
+      usableAvg: "83%~85%",
+      plotRatio: 4.2,
+      maxFloorNum: 28,
+      elevatorGrade: "BALANCE",
+      densityGrade: "MID",
+      densityLabel: "中密社区 (容积率4.2)",
+      totalFloors: "28层",
+      elevatorRatio: "2梯5户 / 2梯6户",
+      buildingSpacing: "约 40~55米",
+      parkingRatio: 0.80,
+      parkingLabel: "⚠️ 1:0.80 (车位偏紧)",
+      purityGrade: "S",
+      hasResettlement: "ZERO",
+      hasSubsidized: false,
+      resettlementDetail: "🏆 100%纯商品房社区，0回迁房、0保障房！",
+      purityLabel: "★ S级·0回迁+0保障 (100%纯商品房)",
+      assetTier: "主流刚改",
+      residentProfile: "冲着“500万级上车福田中心区+景秀/福外学区+双地铁口”的年轻中产与鸡娃家庭",
+      villageGrade: "S",
+      villageDistText: "🏆 S级·景田零城中村核心街区",
+      urbanInterface: "S级·零城中村现代街区（周边为万科金色家园、景田酒店及市政公园，无民房）",
+      commGrade: "S_MALL",
+      samWalk: false,
+      purePodium: false,
+      podiumType: "裙楼带社区便民商业与银行，3楼为空中花园",
+      supermarketInfo: "步行300米达华润万家/盒马鲜生，驱车6分钟达印力山姆会员店",
+      wetMarketInfo: "步行300米达景田肉菜市场+钱大妈，买菜极便利",
+      metroMeters: 250,
+      metroStation: "2号线/9号线景田站",
+      metroDist: "★ 约 250米 (步行3~4分钟)",
+      commuteMins: 23,
+      commuteRoute: "9号线景田站 → 3站至孖岭转10号线 → 贝尔路站(约23分钟)",
+      tenYearBeta: "福田景田板块500~580万总价段唯一能买到正规三房的纯商品房电梯社区，上车门槛极友好。",
+      resilienceGrade: "MID",
+      drawdownPct: 24,
+      priceCeilingVerify: "76~85㎡三房总价在510~575万区间，在福田中心区具备极强的刚需底座。",
+      propertyInfo: "城建物业 · 3.2元/㎡",
+      schoolKey: "FUTIAN_WAI_JT"
+    }
+  };
+
+  Object.assign(COMMUNITIES_MACRO, JINGTIAN_COMMUNITIES);
+
+  // 为原有 20 个楼盘补齐【最高楼层数 maxFloorNum】与【梯户比舒适度分级 elevatorGrade】
+  const FLOOR_ELEVATOR_META = {
+    "佳兆业中央广场": { maxFloorNum: 33, elevatorGrade: "COMFORT" },
+    "信义嘉御山": { maxFloorNum: 33, elevatorGrade: "COMFORT" },
+    "诺德中央道": { maxFloorNum: 33, elevatorGrade: "COMFORT" },
+    "大族云峰": { maxFloorNum: 33, elevatorGrade: "COMFORT" },
+    "万科麓城三期": { maxFloorNum: 34, elevatorGrade: "COMFORT" },
+    "鸿荣源尚峰": { maxFloorNum: 33, elevatorGrade: "COMFORT" },
+    "健康花城": { maxFloorNum: 32, elevatorGrade: "COMFORT" },
+    "特发臻华府": { maxFloorNum: 47, elevatorGrade: "DENSE" },
+    "信义金御半山": { maxFloorNum: 33, elevatorGrade: "COMFORT" },
+    "信义金御半山·珑门": { maxFloorNum: 45, elevatorGrade: "DENSE" },
+    "百合世纪广场": { maxFloorNum: 46, elevatorGrade: "DENSE" },
+    "万科红": { maxFloorNum: 32, elevatorGrade: "BALANCE" },
+    "佳兆业未来花园": { maxFloorNum: 33, elevatorGrade: "COMFORT" },
+    "京基御景中央": { maxFloorNum: 30, elevatorGrade: "COMFORT" },
+    "颐安·都会中央": { maxFloorNum: 33, elevatorGrade: "COMFORT" },
+    "星河时代花园": { maxFloorNum: 32, elevatorGrade: "COMFORT" },
+    "中海康城花园": { maxFloorNum: 32, elevatorGrade: "BALANCE" },
+    "中海大运玖章": { maxFloorNum: 48, elevatorGrade: "COMFORT" },
+    "深铁阅云境广场": { maxFloorNum: 46, elevatorGrade: "BALANCE" },
+    "泰瑞府": { maxFloorNum: 47, elevatorGrade: "DENSE" }
+  };
+
+  Object.entries(FLOOR_ELEVATOR_META).forEach(([k, v]) => {
+    if (COMMUNITIES_MACRO[k]) Object.assign(COMMUNITIES_MACRO[k], v);
+  });
+
+  // 新增景田片区具体楼栋户号数据
+  const JINGTIAN_UNITS = [
+    {
+      id: "jt-vanke-2-89",
+      project: "万科金色家园",
+      phase: "二期 / 三期",
+      building: "二期 3栋 / 三期 5栋 (花园内圈)",
+      unitCode: "02/03户 (低密板式通透三房)",
+      layoutType: "3室2厅2卫",
+      structureType: "南北通透·板式",
+      area: 92,
+      usableRateNum: 86,
+      usableArea: 79.1,
+      orientation: "正南",
+      noiseLevel: "QUIET",
+      acousticGrade: "ABSOLUTE_QUIET",
+      arterialDistMeters: 210,
+      bldgFloors: 18,
+      bldgElevator: "1梯2户 / 2梯4户",
+      noiseLabel: "★ 真极致静谧 · 内园且距干道210m",
+      roadDistMeters: "位于景田棋盘支路内侧，距北环大道超450米、距红荔西路超350米、距新洲路约210米",
+      specialNoise: "无铁路/无高架/无货车干道，18层小高层被百年大树环绕（实测约39~42dB）",
+      minPrice: 695,
+      maxPrice: 760,
+      priceRange: "695~760 万",
+      twoKidsNote: "福田景田标杆！18层小高层1梯2户/2梯4户（告别超高层等电梯），下楼200m入景田地铁站，太太9转10号线反向通勤23分钟直达贝尔路站（全程有座）！",
+      scores: { quiet: 97, edu: 95, commute: 90, space: 89, comm: 96, asset: 95 },
+      unitResettleCheck: "🏆 100%纯商品房净地社区（0回迁0保障）",
+      unitVillageCheck: "🏆 福田中心政商住区，方圆800米零城中村",
+      unitCommNoiseCheck: "✅ 二/三期内园楼座无餐饮底商油烟"
+    },
+    {
+      id: "jt-tianjian-3-122",
+      project: "天健天骄北庐",
+      phase: "北庐",
+      building: "B座 / C座 (中央园景央座)",
+      unitCode: "01/02户 (奢阔大横厅三房两卫)",
+      layoutType: "3室2厅2卫",
+      structureType: "大横厅·LDKB一体",
+      area: 122,
+      usableRateNum: 82,
+      usableArea: 100.0,
+      orientation: "东南",
+      noiseLevel: "QUIET",
+      acousticGrade: "ABSOLUTE_QUIET",
+      arterialDistMeters: 230,
+      bldgFloors: 40,
+      bldgElevator: "2梯3户 (专梯入户)",
+      noiseLabel: "★ 真极致静谧 · 距干道230m+三玻隔音",
+      roadDistMeters: "位于景田路与莲花路内侧，距北环大道超600米、距新洲路主干道约230米",
+      specialNoise: "无铁路/高架，配顶豪级三玻两腔系统窗，室内极静（约38~41dB）",
+      minPrice: 1180,
+      maxPrice: 1350,
+      priceRange: "1180~1350 万",
+      twoKidsNote: "福田景田终极改善天花板！专梯入户+车位比1:1.55+福田外国语本部+步行逛山姆/盒马+24分钟反向地铁直达贝尔路站。",
+      scores: { quiet: 96, edu: 96, commute: 89, space: 97, comm: 99, asset: 98 },
+      unitResettleCheck: "🏆 北庐组团100%纯大户商品房",
+      unitVillageCheck: "🏆 香蜜湖与莲花山之间，零城中村顶豪界面",
+      unitCommNoiseCheck: "🏆 纯高定会所架空层，0底商油烟"
+    },
+    {
+      id: "jt-tianran-2-102",
+      project: "天然居",
+      phase: "一期围合",
+      building: "2栋 / 3栋 (超大中心花园栋)",
+      unitCode: "02/03户 (正南看花园大三房两卫)",
+      layoutType: "3室2厅2卫",
+      structureType: "竖厅·动静分区",
+      area: 102,
+      usableRateNum: 86,
+      usableArea: 87.7,
+      orientation: "正南",
+      noiseLevel: "QUIET",
+      acousticGrade: "INNER_CANYON_ECHO",
+      arterialDistMeters: 145,
+      bldgFloors: 27,
+      bldgElevator: "2梯3户 / 2梯4户",
+      noiseLabel: "内园安静 · 距北环辅路约145m",
+      roadDistMeters: "虽朝向社区中央大花园不临街，但小区北外围距北环大道约145米（由北排1栋遮挡）",
+      specialNoise: "属于典型围合式小区：2/3栋看内园无直射噪音，但高区夜间开窗有轻微远端北环大道低频背景声（约46dB，关窗36dB）",
+      minPrice: 760,
+      maxPrice: 835,
+      priceRange: "760~835 万",
+      twoKidsNote: "27层2梯3户舒适梯户比+102㎡实得87.7㎡+家门口福外本部+步行350m入9号线梅景站（仅22分钟直达坂田贝尔路站）！",
+      scores: { quiet: 88, edu: 95, commute: 92, space: 92, comm: 95, asset: 94 },
+      unitResettleCheck: "🏆 100%纯商品房净地（0回迁0保障）",
+      unitVillageCheck: "🏆 紧邻福外校区，零城中村",
+      unitCommNoiseCheck: "✅ 全架空层围合花园，无底商油烟"
+    },
+    {
+      id: "jt-xiangming-2-80",
+      project: "翔名苑",
+      phase: "一期",
+      building: "B栋 (空中花园内侧)",
+      unitCode: "03/05户 (紧凑实用三房一卫)",
+      layoutType: "3室2厅1卫",
+      structureType: "竖厅·动静分区",
+      area: 80,
+      usableRateNum: 84,
+      usableArea: 67.2,
+      orientation: "东南",
+      noiseLevel: "SUB_ROAD",
+      acousticGrade: "SUB_ROAD",
+      arterialDistMeters: 95,
+      bldgFloors: 28,
+      bldgElevator: "2梯5户",
+      noiseLabel: "临景田支路 · 距新洲路约95m",
+      roadDistMeters: "朝向空中花园与景田内街，距新洲路主干道约95米",
+      specialNoise: "无铁路/高架，日间有温和市政街区车流声（约49~52dB）",
+      minPrice: 515,
+      maxPrice: 565,
+      priceRange: "515~565 万",
+      twoKidsNote: "500万级上车福田景田双地铁口+福外/景秀学区+23分钟直达贝尔路站的最高性价比跳板！",
+      scores: { quiet: 79, edu: 93, commute: 91, space: 76, comm: 86, asset: 89 },
+      unitResettleCheck: "🏆 100%纯商品房（0回迁0保障）",
+      unitVillageCheck: "🏆 景田中心街区，零城中村",
+      unitCommNoiseCheck: "⚠️ 裙楼带银行与便民商铺，建议选8层以上"
+    }
+  ];
+
+  UNITS_DATA.push(...JINGTIAN_UNITS);
+
+  // ==========================================================================
+  // 2. 为全部存量户号补充【本栋层高 bldgFloors、本栋梯户比 bldgElevator】与【五级声学直线距离模型 acousticGrade】
+  //    解决“围合式小区虽看中央内园，但距外围主干道/高架/铁路仅100余米仍有低频反射噪音”的痛点
+  // ==========================================================================
+  const UNIT_ACOUSTIC_AND_BLDG_PATCH = {
+    "bt-kaisa-3-89":    { bldgFloors: 32, bldgElevator: "2梯4户", arterialDistMeters: 185, acousticGrade: "ABSOLUTE_QUIET", echoNote: "三期正中央且由外圈1/6/7栋360度闭环阻隔，距坂澜大道185米，无低频反射（≤42dB）" },
+    "bt-kaisa-1-88":    { bldgFloors: 32, bldgElevator: "2梯5户", arterialDistMeters: 150, acousticGrade: "SUB_ROAD", echoNote: "靠宝吉路支路35米，距坂澜大道150米" },
+    "bt-kaisa-main":    { bldgFloors: 33, bldgElevator: "2梯5户", arterialDistMeters: 25,  acousticGrade: "MAIN_ROAD", echoNote: "直面坂澜大道仅25米，重度干道胎噪" },
+    "bt-xinyi-5-89":    { bldgFloors: 32, bldgElevator: "2梯4户", arterialDistMeters: 215, acousticGrade: "ABSOLUTE_QUIET", echoNote: "深居百万方大城腹地，距五和大道215米+百米楼距，真极致静谧（≤41dB）" },
+    "bt-xinyi-2-86":    { bldgFloors: 32, bldgElevator: "2梯5户", arterialDistMeters: 145, acousticGrade: "INNER_CANYON_ECHO", echoNote: "虽朝内园不临街，但距吉华路约145米，高区开窗有轻微远端道路背景音（约46dB）" },
+    "bt-nuode-2-89":    { bldgFloors: 33, bldgElevator: "2梯4户", arterialDistMeters: 130, acousticGrade: "INNER_CANYON_ECHO", echoNote: "⚠️ 典型围合式痛点：虽朝内园，但小区紧凑，距五和大道130米，存在一定高区低频反射声（约47dB）" },
+    "bt-dazu-1-96":     { bldgFloors: 32, bldgElevator: "2梯4户", arterialDistMeters: 165, acousticGrade: "INNER_CANYON_ECHO", echoNote: "围合式大花园内向，距坂雪岗大道165米，中低区极静，25层以上有轻微远端低频背景声" },
+    "vanke-3-89":       { bldgFloors: 33, bldgElevator: "2梯4户", arterialDistMeters: 195, acousticGrade: "ABSOLUTE_QUIET", echoNote: "北靠银湖山体，南由5/6栋及双层园林隔绝布龙路(距195米)，实测≤43dB" },
+    "vanke-1-88":       { bldgFloors: 33, bldgElevator: "2梯5户", arterialDistMeters: 170, acousticGrade: "SUB_ROAD", echoNote: "临水径支路40米，距布龙路170米" },
+    "vanke-6-88":       { bldgFloors: 34, bldgElevator: "2梯5户", arterialDistMeters: 35,  acousticGrade: "MAIN_ROAD", echoNote: "距布龙路快速路及高架引桥仅35米，重度大车低频噪音" },
+    "horoy-6-89":       { bldgFloors: 32, bldgElevator: "2梯4户", arterialDistMeters: 225, acousticGrade: "ABSOLUTE_QUIET", echoNote: "背靠三联山体公园，距北侧布龙路长达225米且由北排1/2/8栋完整屏蔽，真极致静谧（≤41dB）" },
+    "horoy-7-88":       { bldgFloors: 32, bldgElevator: "2梯5户", arterialDistMeters: 185, acousticGrade: "ABSOLUTE_QUIET", echoNote: "7栋紧靠南侧山体距布龙路185米极静；3A栋则靠西环路辅路" },
+    "jkhc-6-89":        { bldgFloors: 30, bldgElevator: "2梯4户", arterialDistMeters: 215, acousticGrade: "ABSOLUTE_QUIET", echoNote: "南向直面78万㎡石芽岭山体公园，距北侧布龙路超215米，真极致静谧（≤41dB）" },
+    "jkhc-3-86":        { bldgFloors: 30, bldgElevator: "2梯4户", arterialDistMeters: 150, acousticGrade: "INNER_CANYON_ECHO", echoNote: "围合中圈朝内园，距北侧布龙路150米，高区有轻微远端道路混响（约46dB）" },
+    "jkhc-1-main":      { bldgFloors: 32, bldgElevator: "2梯5户", arterialDistMeters: 30,  acousticGrade: "MAIN_ROAD", echoNote: "北排距布龙路仅30米，货车噪音明显" },
+    "tefa-3-96":        { bldgFloors: 46, bldgElevator: "3梯5户", arterialDistMeters: 130, acousticGrade: "INNER_CANYON_ECHO", echoNote: "⚠️ 典型高密围合痛点：3栋虽在中央看内园，但南距盛宝路130m、北距广深铁路180m，高区开窗仍能听到远端列车与干道低频反射声（约46~48dB）" },
+    "tefa-3-87":        { bldgFloors: 47, bldgElevator: "3梯6户", arterialDistMeters: 115, acousticGrade: "INNER_CANYON_ECHO", echoNote: "⚠️ 47层超高层3梯6户；虽看内园/支路，但距盛宝路115米、距铁路190米，存在一定围合低频回音" },
+    "bgl-banshan-3-89": { bldgFloors: 32, bldgElevator: "2梯4户", arterialDistMeters: 190, acousticGrade: "ABSOLUTE_QUIET", echoNote: "半山台地后靠荔山森林公园，距外围干道超190米，真极致静谧（≤41dB）" },
+    "bgl-banshan-1-86": { bldgFloors: 32, bldgElevator: "2梯5户", arterialDistMeters: 130, acousticGrade: "INNER_CANYON_ECHO", echoNote: "一期/二期围合内园，距罗岗路130米，有轻微商圈背景音" },
+    "bgl-longmen-2-95": { bldgFloors: 44, bldgElevator: "3梯5户", arterialDistMeters: 125, acousticGrade: "INNER_CANYON_ECHO", echoNote: "⚠️ 44层超高层3梯5户；虽朝内园，但距罗岗路125米，高区有轻微城市干道低频背景音" },
+    "bgl-baihe-2-98":   { bldgFloors: 45, bldgElevator: "3梯5户", arterialDistMeters: 130, acousticGrade: "INNER_CANYON_ECHO", echoNote: "⚠️ 45层超高层3梯5户；围合内园距翔鸽路130米，高区有轻微商圈车流混响" },
+    "bgl-vankered-3-89":{ bldgFloors: 31, bldgElevator: "2梯4户", arterialDistMeters: 135, acousticGrade: "INNER_CANYON_ECHO", echoNote: "三期围合花园内圈，距惠康路135米，整体安静但高区有轻微街区背景声" },
+    "kaisa-3-89":       { bldgFloors: 32, bldgElevator: "2梯4户", arterialDistMeters: 140, acousticGrade: "INNER_CANYON_ECHO", echoNote: "围合小区内园向，距如意路140米、龙飞大道160米，高区夜间有轻微干道反射音" },
+    "kk-3-97":          { bldgFloors: 29, bldgElevator: "2梯4户", arterialDistMeters: 165, acousticGrade: "ABSOLUTE_QUIET", echoNote: "29层低密2梯4户，百米楼距大花园中央，距周边干道165米+，实测≤43dB" },
+    "kk-2-86":          { bldgFloors: 29, bldgElevator: "2梯4户", arterialDistMeters: 115, acousticGrade: "INNER_CANYON_ECHO", echoNote: "虽朝中央水景花园不临街，但本栋属于外围围合楼座，距飞扬路/如意路约115米，背向走廊侧及高区有轻微干道低频声" },
+    "yian-3-89":        { bldgFloors: 32, bldgElevator: "2梯4户", arterialDistMeters: 205, acousticGrade: "ABSOLUTE_QUIET", echoNote: "深居二/三期园林内侧，距龙岗大道及3号线高架超205米，真极致静谧" },
+    "galaxy-6-89":      { bldgFloors: 31, bldgElevator: "2梯4户", arterialDistMeters: 235, acousticGrade: "ABSOLUTE_QUIET", echoNote: "南向跨越整个低密别墅区，距龙岗大道及黄阁路超235米，真极致静谧（≤40dB）" },
+    "cohl-kc-89":       { bldgFloors: 30, bldgElevator: "2梯4户", arterialDistMeters: 210, acousticGrade: "ABSOLUTE_QUIET", echoNote: "25栋超大社区正中央3/4/12/15栋，距盐龙大道超210米，四周三层楼栋屏蔽，极静" },
+    "cohl-jz-126":      { bldgFloors: 31, bldgElevator: "2梯4户(3B栋)/3梯4户(3A栋)", arterialDistMeters: 155, acousticGrade: "ABSOLUTE_QUIET", echoNote: "3B栋仅31层2梯4户，距黄阁路155米且全屋配豪宅级三玻两腔隔音幕墙，室内≤38dB" },
+    "szt-yyj-98":       { bldgFloors: 45, bldgElevator: "2梯5户(3单元)/3梯5户(2单元)", arterialDistMeters: 120, acousticGrade: "INNER_CANYON_ECHO", echoNote: "⚠️ 典型围合TOD特征：虽朝空中花园内院不临街，但外圈距龙岗大道仅120米，高区开窗仍有大道低频车流混响（关窗37dB）" },
+    "sy-trf-99":        { bldgFloors: 46, bldgElevator: "3梯6户", arterialDistMeters: 130, acousticGrade: "INNER_CANYON_ECHO", echoNote: "⚠️ 46层超高层3梯6户；围合小区内园向，距龙飞大道与如意路约130米，高区开窗有轻微干道低频反射声" }
+  };
+
+  UNITS_DATA.forEach(u => {
+    if (UNIT_ACOUSTIC_AND_BLDG_PATCH[u.id]) {
+      Object.assign(u, UNIT_ACOUSTIC_AND_BLDG_PATCH[u.id]);
+    }
+  });
+
+  // ==========================================================================
+  // 3. 动态注入新增的筛选器 DOM（宏观：13.最高层高、14.梯户比；微观：重构6.五级声学与直线距离、新增本栋层高/梯户比）
+  //    并将所有下拉框一键升级为【可多选 Multi-Select 组件】
+  // ==========================================================================
+  onReady(() => {
+    // 3.1 更新宏观片区下拉框，加入【福田景田】
+    const macroZoneSel = byId("macroZoneFilter");
+    if (macroZoneSel && !macroZoneSel.querySelector('option[value="福田景田"]')) {
+      macroZoneSel.options[0].textContent = "全部五大片区 (25盘)";
+      const opt = document.createElement("option");
+      opt.value = "福田景田";
+      opt.textContent = "★ 福田景田片区 (5盘·福外本部/反向通勤)";
+      macroZoneSel.appendChild(opt);
+    }
+
+    // 3.2 在宏观过滤网格中新增【13. 超高层/总层高控制】与【14. 舒适梯户比】
+    const macroGrid = byId("macroZoneFilter")?.parentElement.parentElement;
+    if (macroGrid) {
+      const floorDiv = document.createElement("div");
+      floorDiv.innerHTML = `
+        <label class="block text-rose-700 font-bold mb-1">13. 🏙️ 超高层/总层高控制</label>
+        <select id="macroFloorFilter" class="w-full rounded-lg border border-rose-300 px-2 py-1.5 bg-rose-50/40 font-medium">
+          <option value="ALL">全部楼层高度 (18~48层)</option>
+          <option value="LOW_MID">★ 严避超高层：≤33层标准高层/小高层</option>
+          <option value="SEMI_HIGH">34~42层准超高层</option>
+          <option value="SUPER_HIGH">≥43层超高层 (43~48层)</option>
+        </select>
+      `;
+      const elevDiv = document.createElement("div");
+      elevDiv.innerHTML = `
+        <label class="block text-indigo-700 font-bold mb-1">14. 🛗 社区梯户比舒适度</label>
+        <select id="macroElevatorFilter" class="w-full rounded-lg border border-indigo-300 px-2 py-1.5 bg-indigo-50/40 font-medium">
+          <option value="ALL">全部梯户比</option>
+          <option value="COMFORT">★ 舒适候梯：1梯2户 / 2梯3户 / 2梯4户</option>
+          <option value="BALANCE">平衡候梯：2梯5户 / 3梯4户</option>
+          <option value="DENSE">高密候梯：3梯5户 / 3梯6户</option>
+        </select>
+      `;
+      macroGrid.appendChild(floorDiv);
+      macroGrid.appendChild(elevDiv);
+    }
+
+    // 3.3 升级微观视角【6. 临街与声学直线距离模型】下拉框选项，并新增【本栋层高/梯户比】筛选项
+    const noiseSel = byId("filterNoise");
+    if (noiseSel) {
+      noiseSel.innerHTML = `
+        <option value="NO_MAIN" selected>严避主干道/铁路直冲 (含内园+支路)</option>
+        <option value="ABSOLUTE_QUIET">★ S级真极致静谧 (内园且距干道/高架/铁路>180m)</option>
+        <option value="INNER_CANYON_ECHO">A-级围合内园 (不临街但距干道110~170m有轻微低频混响)</option>
+        <option value="SUB_ROAD">B级临生活辅路/支路</option>
+        <option value="MAIN_ROAD">⚠️ C级直面主干道/高架/铁路 (避坑警示)</option>
+        <option value="ALL">显示全部声学等级</option>
+      `;
+    }
+
+    const microGrid = byId("filterProject")?.parentElement.parentElement;
+    if (microGrid) {
+      const bldgSpecDiv = document.createElement("div");
+      bldgSpecDiv.innerHTML = `
+        <label class="block text-indigo-700 font-bold mb-1">10. 🛗 本栋层高与梯户比</label>
+        <select id="filterBldgSpec" class="w-full rounded-lg border border-indigo-300 px-2 py-1.5 bg-indigo-50/40 font-medium">
+          <option value="ALL">全部本栋规格</option>
+          <option value="NO_SUPER_2T4">★ 本栋≤33层 且 ≤2梯4户(秒等电梯)</option>
+          <option value="NO_SUPER">本栋≤33层标准高层 (拒45层+超高层)</option>
+          <option value="SUPER_HIGH">本栋>40层超高层新规盘</option>
+        </select>
+      `;
+      microGrid.appendChild(bldgSpecDiv);
+    }
+
+    // ========================================================================
+    // 4. 核心多选组件引擎：将全站所有筛选 <select> 转换为支持多选的 Checkbox 下拉组件
+    // ========================================================================
+    const MULTI_SELECT_IDS = [
+      "macroZoneFilter", "macroNewOldFilter", "macroRegFilter", "macroPurityFilter",
+      "macroVillageFilter", "macroCommFilter", "macroMetroDistFilter", "macroDensityFilter",
+      "macroParkingFilter", "macroTierFilter", "macroSchoolRateFilter", "macroResilienceFilter",
+      "macroFloorFilter", "macroElevatorFilter",
+      "filterProject", "filterBuilding", "filterLayout", "filterStructure",
+      "filterOrientation", "filterNoise", "filterUsableRate", "filterCommute",
+      "filterPriceBracket", "filterBldgSpec"
+    ];
+
+    multiSelectState = {};
+
+    getMultiValues = function(id) {
+      const st = multiSelectState[id];
+      if (!st || st.selected.size === 0 || st.selected.has("ALL") || st.selected.has("9999") || st.selected.has("0")) {
+        return ["ALL"];
+      }
+      return Array.from(st.selected);
+    };
+
+    buildMultiSelectUI = function(selectId) {
+      const sel = byId(selectId);
+      if (!sel) return;
+
+      const defaultOption = sel.options[0]?.value || "ALL";
+      const initialSelected = new Set();
+      Array.from(sel.options).forEach(opt => {
+        if (opt.selected) initialSelected.add(opt.value);
+      });
+      if (initialSelected.size === 0) initialSelected.add(defaultOption);
+
+      multiSelectState[selectId] = {
+        defaultVal: defaultOption,
+        selected: initialSelected
+      };
+
+      // 若已包装过则仅刷新内部列表
+      let wrapper = sel.parentElement.querySelector(".ms-wrapper");
+      if (!wrapper) {
+        sel.style.display = "none";
+        wrapper = document.createElement("div");
+        wrapper.className = "ms-wrapper";
+        sel.parentElement.appendChild(wrapper);
+      }
+
+      const renderDropdownContent = () => {
+        const st = multiSelectState[selectId];
+        const opts = Array.from(sel.options);
+        const nonDefaultSelected = Array.from(st.selected).filter(v => v !== st.defaultVal);
+
+        let btnLabel = opts[0]?.textContent || "全部";
+        let isActive = false;
+        if (nonDefaultSelected.length === 1) {
+          const found = opts.find(o => o.value === nonDefaultSelected[0]);
+          btnLabel = found ? found.textContent : nonDefaultSelected[0];
+          isActive = true;
+        } else if (nonDefaultSelected.length > 1) {
+          const firstText = opts.find(o => o.value === nonDefaultSelected[0])?.textContent.slice(0, 8) || "";
+          btnLabel = `已选 ${nonDefaultSelected.length} 项 (${firstText}...)`;
+          isActive = true;
+        }
+
+        wrapper.innerHTML = `
+          <button type="button" class="ms-btn ${isActive ? 'active-filter' : ''}">
+            <span class="truncate pr-1">${btnLabel}</span>
+            <span class="text-[10px] text-slate-400 shrink-0">▼ 多选</span>
+          </button>
+          <div class="ms-dropdown custom-scroll">
+            <div class="ms-actions">
+              <span class="text-indigo-600 font-semibold cursor-pointer hover:underline" data-act="all">✓ 恢复全部(不限)</span>
+              <span class="text-slate-400">可勾选多项并集</span>
+            </div>
+            ${opts.map((o, idx) => {
+              const checked = st.selected.has(o.value) ? "checked" : "";
+              const isDef = idx === 0;
+              return `
+                <label class="ms-item ${isDef ? 'font-semibold text-indigo-900 bg-slate-50/80' : ''}">
+                  <input type="checkbox" value="${o.value}" ${checked} data-def="${isDef ? '1' : '0'}" class="accent-indigo-600 rounded cursor-pointer" />
+                  <span class="leading-tight">${o.textContent}</span>
+                </label>
+              `;
+            }).join("")}
+          </div>
+        `;
+
+        const btn = wrapper.querySelector(".ms-btn");
+        const drop = wrapper.querySelector(".ms-dropdown");
+
+        btn.addEventListener("click", e => {
+          e.stopPropagation();
+          root.querySelectorAll(".ms-dropdown.open").forEach(d => {
+            if (d !== drop) d.classList.remove("open");
+          });
+          drop.classList.toggle("open");btn.setAttribute("aria-expanded",String(drop.classList.contains("open")));
+        });
+
+        drop.addEventListener("click", e => e.stopPropagation());
+
+        wrapper.querySelector('[data-act="all"]').addEventListener("click", () => {
+          st.selected.clear();
+          st.selected.add(st.defaultVal);
+          renderDropdownContent();
+          triggerFilterUpdate(selectId);
+        });
+
+        wrapper.querySelectorAll('input[type="checkbox"]').forEach(cb => {
+          cb.addEventListener("change", () => {
+            const val = cb.value;
+            const isDef = cb.getAttribute("data-def") === "1";
+            if (isDef) {
+              st.selected.clear();
+              st.selected.add(st.defaultVal);
+            } else {
+              if (cb.checked) {
+                st.selected.delete(st.defaultVal);
+                st.selected.add(val);
+              } else {
+                st.selected.delete(val);
+                if (st.selected.size === 0) st.selected.add(st.defaultVal);
+              }
+            }
+            renderDropdownContent();
+            wrapper.querySelector(".ms-dropdown").classList.add("open");
+            triggerFilterUpdate(selectId);
+          });
+        });
+      };
+
+      renderDropdownContent();
+      wrapper.refreshUI = renderDropdownContent;
+    };
+
+    document.addEventListener("click", () => {
+      root.querySelectorAll(".ms-dropdown.open").forEach(d => d.classList.remove("open"));
+    });
+
+    function triggerFilterUpdate(changedId) {
+      if (changedId.startsWith("macro")) {
+        renderMacroTable();
+        redrawUnitViews();
+      } else if (changedId === "filterProject") {
+        updateBuildingOptions();
+        buildMultiSelectUI("filterBuilding");
+        redrawUnitViews();
+      } else {
+        redrawUnitViews();
+      }
+    }
+
+    // ========================================================================
+    // 5. 重写支持多选并集判定的宏观与微观过滤引擎
+    // ========================================================================
+    isCommunityPassingMacro = function(projectName) {
+      const m = COMMUNITIES_MACRO[projectName];
+      if (!m) return false;
+      const school = SCHOOL_DISTRICTS[m.schoolKey];
+
+      const zones = getMultiValues("macroZoneFilter");
+      if (!zones.includes("ALL") && !zones.includes(m.zone)) return false;
+
+      const newOlds = getMultiValues("macroNewOldFilter");
+      if (!newOlds.includes("ALL")) {
+        const passNewOld = newOlds.some(v => (v === "NEW" && m.isNewBuild) || (v === "SECOND" && !m.isNewBuild));
+        if (!passNewOld) return false;
+      }
+
+      const regs = getMultiValues("macroRegFilter");
+      if (!regs.includes("ALL") && !regs.includes(m.regGen)) return false;
+
+      const purities = getMultiValues("macroPurityFilter");
+      if (!purities.includes("ALL")) {
+        const passPure = purities.some(v => matchPurityFilter(m, v));
+        if (!passPure) return false;
+      }
+
+      const villages = getMultiValues("macroVillageFilter");
+      if (!villages.includes("ALL")) {
+        const passVil = villages.some(v =>
+          (v === "S" && m.villageGrade === "S") ||
+          (v === "A" && (m.villageGrade === "S" || m.villageGrade === "A"))
+        );
+        if (!passVil) return false;
+      }
+
+      const comms = getMultiValues("macroCommFilter");
+      if (!comms.includes("ALL")) {
+        const passComm = comms.some(v => matchCommercialFilter(m, v));
+        if (!passComm) return false;
+      }
+
+      const metros = getMultiValues("macroMetroDistFilter");
+      if (!metros.includes("ALL")) {
+        const maxM = Math.max(...metros.map(Number));
+        if (m.metroMeters > maxM) return false;
+      }
+
+      const densities = getMultiValues("macroDensityFilter");
+      if (!densities.includes("ALL")) {
+        const passDen = densities.some(v =>
+          (v === "LOW" && m.plotRatio <= 3.8) ||
+          (v === "MID" && m.plotRatio <= 4.8)
+        );
+        if (!passDen) return false;
+      }
+
+      const parkings = getMultiValues("macroParkingFilter");
+      if (!parkings.includes("ALL")) {
+        const minP = Math.min(...parkings.map(Number));
+        if (m.parkingRatio < minP) return false;
+      }
+
+      const tiers = getMultiValues("macroTierFilter");
+      if (!tiers.includes("ALL") && !tiers.includes(m.assetTier)) return false;
+
+      const sRates = getMultiValues("macroSchoolRateFilter");
+      if (!sRates.includes("ALL")) {
+        const minR = Math.min(...sRates.map(Number));
+        if (school.publicHighRate < minR) return false;
+      }
+
+      const resiliences = getMultiValues("macroResilienceFilter");
+      if (!resiliences.includes("ALL")) {
+        const passRes = resiliences.some(v =>
+          (v === "HIGH" && m.resilienceGrade === "HIGH") ||
+          (v === "MID" && (m.resilienceGrade === "HIGH" || m.resilienceGrade === "MID"))
+        );
+        if (!passRes) return false;
+      }
+
+      // 新增宏观 13：超高层/总层高多选过滤
+      const floors = getMultiValues("macroFloorFilter");
+      if (!floors.includes("ALL")) {
+        const passFloor = floors.some(v =>
+          (v === "LOW_MID" && m.maxFloorNum <= 33) ||
+          (v === "SEMI_HIGH" && m.maxFloorNum >= 34 && m.maxFloorNum <= 42) ||
+          (v === "SUPER_HIGH" && m.maxFloorNum >= 43)
+        );
+        if (!passFloor) return false;
+      }
+
+      // 新增宏观 14：社区梯户比舒适度多选过滤
+      const elevs = getMultiValues("macroElevatorFilter");
+      if (!elevs.includes("ALL") && !elevs.includes(m.elevatorGrade)) return false;
+
+      return true;
+    };
+
+    getFilteredUnits = function(ignoreMainRoadForTop = false) {
+      const projs = getMultiValues("filterProject");
+      const blds = getMultiValues("filterBuilding");
+      const layouts = getMultiValues("filterLayout");
+      const structs = getMultiValues("filterStructure");
+      const orients = getMultiValues("filterOrientation");
+      const noises = getMultiValues("filterNoise");
+      const usableRates = getMultiValues("filterUsableRate");
+      const commutes = getMultiValues("filterCommute");
+      const brackets = getMultiValues("filterPriceBracket");
+      const bldgSpecs = getMultiValues("filterBldgSpec");
+      const maxSlider = Number(byId("filterMaxPriceSlider").value);
+
+      return UNITS_DATA.filter(u => {
+        if (!isCommunityPassingMacro(u.project)) return false;
+        if (!projs.includes("ALL") && !projs.includes(u.project)) return false;
+        if (!blds.includes("ALL") && !blds.includes(`${u.project} - ${u.building}`)) return false;
+        if (!layouts.includes("ALL") && !layouts.includes(u.layoutType)) return false;
+        if (!structs.includes("ALL") && !structs.includes(u.structureType)) return false;
+
+        if (!orients.includes("ALL") && !orients.includes("VALID_SOUTH")) {
+          if (!orients.includes(u.orientation)) return false;
+        }
+
+        if (ignoreMainRoadForTop && u.noiseLevel === "MAIN_ROAD") return false;
+
+        // 五级声学与直线距离多选判定
+        if (!noises.includes("ALL")) {
+          const passNoise = noises.some(n => {
+            if (n === "NO_MAIN") return u.noiseLevel !== "MAIN_ROAD";
+            if (n === "ABSOLUTE_QUIET") return u.acousticGrade === "ABSOLUTE_QUIET";
+            if (n === "INNER_CANYON_ECHO") return u.acousticGrade === "INNER_CANYON_ECHO";
+            if (n === "SUB_ROAD") return u.acousticGrade === "SUB_ROAD" || u.noiseLevel === "SUB_ROAD";
+            if (n === "MAIN_ROAD") return u.noiseLevel === "MAIN_ROAD";
+            return true;
+          });
+          if (!passNoise) return false;
+        }
+
+        // 本栋层高与梯户比多选判定
+        if (!bldgSpecs.includes("ALL")) {
+          const passBldg = bldgSpecs.some(b => {
+            if (b === "NO_SUPER_2T4") return (u.bldgFloors || 32) <= 33 && !(u.bldgElevator || "").includes("5户") && !(u.bldgElevator || "").includes("6户");
+            if (b === "NO_SUPER") return (u.bldgFloors || 32) <= 33;
+            if (b === "SUPER_HIGH") return (u.bldgFloors || 32) >= 40;
+            return true;
+          });
+          if (!passBldg) return false;
+        }
+
+        if (!usableRates.includes("ALL")) {
+          const minU = Math.min(...usableRates.map(Number));
+          if (u.usableRateNum < minU) return false;
+        }
+
+        if (!commutes.includes("ALL")) {
+          const maxC = Math.max(...commutes.map(Number));
+          if (COMMUNITIES_MACRO[u.project].commuteMins > maxC) return false;
+        }
+
+        if (u.minPrice > maxSlider) return false;
+        if (!brackets.includes("ALL")) {
+          const passPrice = brackets.some(br => {
+            const [from, to] = br.split("-").map(Number);
+            const high = Math.min(maxSlider, to);
+            return high >= from && u.maxPrice >= from && u.minPrice <= high;
+          });
+          if (!passPrice) return false;
+        }
+
+        return true;
+      });
+    };
+
+    // 增强微观卡片展示：显示本栋层高、本栋梯户比、距干道直线距离及围合低频混响诊断
+    const origRenderUnitCards = renderUnitCards;
+    renderUnitCards = function() {
+      origRenderUnitCards();
+      const cards = root.querySelectorAll("#unitCardsContainer > div");
+      const filtered = getFilteredUnits(false).map(u => ({
+        ...u,
+        totalScore: calcWeightedScore(u, getWeights())
+      })).sort((a, b) => b.totalScore - a.totalScore);
+
+      cards.forEach((card, idx) => {
+        const u = filtered[idx];
+        if (!u) return;
+        const acousticBadge = u.acousticGrade === "ABSOLUTE_QUIET"
+          ? '<span class="px-2 py-0.5 rounded font-bold badge-green">🔇 S级真静谧(距干道' + u.arterialDistMeters + 'm)</span>'
+          : u.acousticGrade === "INNER_CANYON_ECHO"
+          ? '<span class="px-2 py-0.5 rounded font-bold badge-amber">🔉 A-级内园但有远端低频混响(距干道' + u.arterialDistMeters + 'm)</span>'
+          : '';
+        const bldgBadge = '<span class="px-2 py-0.5 rounded font-semibold badge-indigo">🛗 本栋' + (u.bldgFloors || 32) + '层 · ' + (u.bldgElevator || '2梯4户') + '</span>';
+        const tagWrap = card.querySelector('.flex.flex-wrap[class~="gap-1.5"].mt-2');
+        if (tagWrap) {
+          tagWrap.insertAdjacentHTML("beforeend", bldgBadge + acousticBadge);
+        }
+      });
+    };
+
+    // 初始化所有多选下拉菜单
+    MULTI_SELECT_IDS.forEach(id => buildMultiSelectUI(id));
+
+    // 拦截 updateProjectAndBuildingOptions 以同步刷新多选框 UI
+    const origUpdateProj = updateProjectAndBuildingOptions;
+    updateProjectAndBuildingOptions = function(passingNames) {
+      origUpdateProj(passingNames);
+      buildMultiSelectUI("filterProject");
+      buildMultiSelectUI("filterBuilding");
+    };
+
+    // 绑定重置按钮刷新多选状态
+    byId("resetMacroBtn")?.addEventListener("click", () => {
+      MULTI_SELECT_IDS.filter(id => id.startsWith("macro")).forEach(id => buildMultiSelectUI(id));
+      renderMacroTable();
+      redrawUnitViews();
+    });
+
+    byId("resetFilterBtn")?.addEventListener("click", () => {
+      MULTI_SELECT_IDS.forEach(id => buildMultiSelectUI(id));
+      renderMacroTable();
+      redrawUnitViews();
+    });
+
+    // 初次重绘以加载景田片区与多选状态
+    renderSchoolTable();
+    renderMacroTable();
+    redrawUnitViews();
+  });
+})();
+
+
+(function() {
+  onReady(() => {
+    // 1. 新增景田片区新盘/次新综合体代表【岁宝壹品】
+    COMMUNITIES_MACRO["岁宝壹品"] = {
+      zone: "福田景田",
+      isNewBuild: true,
+      phaseSummary: "共1期5栋摩天综合体 (准现房/次新)",
+      buildYear: "2023-2025年",
+      regGen: "GEN2",
+      regLabel: "✨ 第2代·福田中心综合体新盘",
+      usableAvg: "84%~86%",
+      plotRatio: 6.5,
+      maxFloorNum: 46,
+      elevatorGrade: "BALANCE",
+      densityGrade: "HIGH",
+      densityLabel: "地铁上盖综合体 (容积率6.5)",
+      totalFloors: "43~46层",
+      elevatorRatio: "3梯4户 / 3梯5户",
+      buildingSpacing: "约 50~75米 (空中花园)",
+      parkingRatio: 1.15,
+      parkingLabel: "🌟 1:1.15 (充裕)",
+      purityGrade: "A",
+      hasResettlement: "ZERO",
+      hasSubsidized: false,
+      resettlementDetail: "商业与住宅分区明确，无村民握手楼回迁砸盘。",
+      purityLabel: "A级·福田中心次新综合体",
+      assetTier: "品质改善",
+      residentProfile: "福田/罗湖金融科技高管、年轻改善二胎家庭",
+      villageGrade: "S",
+      villageDistText: "🏆 S级·景田零城中村核心街区",
+      urbanInterface: "S级·零城中村现代都市界面（楼下即5万㎡岁宝盒马鲜生旗舰MALL）",
+      commGrade: "S_MALL",
+      samWalk: false,
+      purePodium: true,
+      podiumType: "空中花园抬高物理隔离底部5万㎡岁宝商业MALL，电梯直达商场",
+      supermarketInfo: "🏆 下楼即【岁宝盒马鲜生旗舰店MALL】+ 驱车6分钟达【印力中心山姆会员店】",
+      wetMarketInfo: "下楼即盒马鲜生旗舰店+步行700米达福田农批市场",
+      metroMeters: 100,
+      metroStation: "9号线/6号线银湖站·梅景站",
+      metroDist: "🏆 约 100~250米 (下楼直通地铁!)",
+      commuteMins: 20,
+      commuteRoute: "9号线1~2站至孖岭转10号线 → 4站直达贝尔路站(全程约20分钟!)",
+      tenYearBeta: "福田景田/笔架山片区罕见次新大盘，享受福田中心配套与超快10号线换乘。",
+      resilienceGrade: "HIGH",
+      drawdownPct: 15,
+      priceCeilingVerify: "次新房源护城河稳固，三房/四房在750~1050万区间极具竞争力。",
+      propertyInfo: "岁宝高定物业 · 5.8元/㎡",
+      schoolKey: "FUTIAN_WAI_JT"
+    };
+
+    // 2. 修正中海大运玖章 126㎡ 为标准【4室2厅2卫】，并扩充全库 12 组典型【4室2厅2卫 / 3+1室2厅2卫 / 4室2厅3卫】户号
+    const jzUnit = UNITS_DATA.find(u => u.id === "cohl-jz-126");
+    if (jzUnit) {
+      jzUnit.layoutType = "4室2厅2卫";
+      jzUnit.unitCode = "01/02户 (126㎡新规奢阔四房大横厅)";
+    }
+
+    const FOUR_BEDROOM_UNITS = [
+      {
+        id: "cohl-jz-139-4b3w",
+        project: "中海大运玖章",
+        phase: "一期 (2024二批新规)",
+        building: "3栋B座 (2梯4户中央楼王)",
+        unitCode: "01/02户 (139㎡双套房四房三卫)",
+        layoutType: "4室2厅3卫",
+        structureType: "南北通透·板式",
+        area: 139,
+        usableRateNum: 95,
+        usableArea: 132.1,
+        orientation: "东南",
+        noiseLevel: "QUIET",
+        acousticGrade: "ABSOLUTE_QUIET",
+        arterialDistMeters: 165,
+        bldgFloors: 31,
+        bldgElevator: "2梯4户",
+        noiseLabel: "★ 真极致静谧 · 31层2梯4户央座",
+        roadDistMeters: "位于社区正中央，距黄阁路主干道约165米",
+        specialNoise: "无铁路/高架，全屋配三玻两腔豪宅级隔音系统（室内≤38dB）",
+        minPrice: 635,
+        maxPrice: 720,
+        priceRange: "635~720 万",
+        twoKidsNote: "31层2梯4户纯板式！2024二批新规139㎡实得高达132㎡（堪比老盘165㎡），主卧+长辈房双套房三卫设计，二胎+老人同住终极形态！",
+        scores: { quiet: 98, edu: 80, commute: 50, space: 100, comm: 99, asset: 98 },
+        unitResettleCheck: "🏆 2024纯招拍挂净地：0回迁房、0保障房",
+        unitVillageCheck: "🏆 大运天地商圈旁，方圆800米零城中村",
+        unitCommNoiseCheck: "🏆 100%纯住宅会所架空层，零底商油烟"
+      },
+      {
+        id: "vanke-3-112-4b",
+        project: "万科麓城三期",
+        phase: "三期",
+        building: "2栋 / 3栋 (园林央座)",
+        unitCode: "01/02户 (112㎡南北通透四房两卫)",
+        layoutType: "4室2厅2卫",
+        structureType: "南北通透·板式",
+        area: 112,
+        usableRateNum: 84,
+        usableArea: 94.1,
+        orientation: "正南",
+        noiseLevel: "QUIET",
+        acousticGrade: "ABSOLUTE_QUIET",
+        arterialDistMeters: 195,
+        bldgFloors: 33,
+        bldgElevator: "2梯4户",
+        noiseLabel: "★ 真极致静谧 · 距布龙路195m",
+        roadDistMeters: "深居三期中央园林，距布龙路主干道约195米",
+        specialNoise: "无铁路/高架，南北双阳台穿堂风极静（约41~44dB）",
+        minPrice: 515,
+        maxPrice: 555,
+        priceRange: "515~555 万",
+        twoKidsNote: "万科麓城三期罕见一步到位四房两卫！老大老二各一间儿童房+独立书房/老人房，对口麓城外国语小学+南师大龙岗初中(公办率80.8%)，去贝尔路23分钟。",
+        scores: { quiet: 96, edu: 95, commute: 90, space: 94, comm: 95, asset: 89 },
+        unitResettleCheck: "🏆 三期全盘0村民回迁房、0保障房",
+        unitVillageCheck: "🏆 北靠银湖山与体育公园，完全隔绝城中村",
+        unitCommNoiseCheck: "🏆 纯架空层泛会所0底商油烟"
+      },
+      {
+        id: "horoy-6-118-4b",
+        project: "鸿荣源尚峰",
+        phase: "一期围合",
+        building: "5栋 / 6栋A座 (泳池山景楼王)",
+        unitCode: "01/02户 (118㎡高拓展四房两卫)",
+        layoutType: "4室2厅2卫",
+        structureType: "南北通透·板式",
+        area: 118,
+        usableRateNum: 86,
+        usableArea: 101.5,
+        orientation: "正南",
+        noiseLevel: "QUIET",
+        acousticGrade: "ABSOLUTE_QUIET",
+        arterialDistMeters: 225,
+        bldgFloors: 32,
+        bldgElevator: "2梯4户",
+        noiseLabel: "★ 真极致静谧 · 背山面水距干道225m",
+        roadDistMeters: "距北侧布龙路长达225米，南靠三联山体公园",
+        specialNoise: "无任何干道/高架/铁路干扰，实测≤41dB全片区最静楼王",
+        minPrice: 510,
+        maxPrice: 550,
+        priceRange: "510~550 万",
+        twoKidsNote: "套内实得超101㎡的正南向板式四房两卫楼王！500万出头即可拥有鸿荣源豪宅园林+自带益田MALL+南师大附校学区+24分钟达贝尔路站。",
+        scores: { quiet: 98, edu: 92, commute: 88, space: 96, comm: 97, asset: 92 },
+        unitResettleCheck: "🏆 全盘0村民回迁房、0保障房",
+        unitVillageCheck: "🏆 南靠山体公园、高台地物理隔绝民房",
+        unitCommNoiseCheck: "🏆 纯住宅高台架空层0底商油烟"
+      },
+      {
+        id: "tefa-3-114-4b",
+        project: "特发臻华府",
+        phase: "一期 (2024二批新规)",
+        building: "3栋 (纯商品房中央楼王)",
+        unitCode: "01户 (114㎡新规奢阔四房两卫)",
+        layoutType: "4室2厅2卫",
+        structureType: "大横厅·LDKB一体",
+        area: 114,
+        usableRateNum: 98,
+        usableArea: 111.7,
+        orientation: "东南",
+        noiseLevel: "QUIET",
+        acousticGrade: "INNER_CANYON_ECHO",
+        arterialDistMeters: 130,
+        bldgFloors: 46,
+        bldgElevator: "3梯5户",
+        noiseLabel: "内园安静 · 距盛宝路130m/铁路180m",
+        roadDistMeters: "位于小区正中央3栋，距盛宝路约130米、距北侧铁路约180米",
+        specialNoise: "虽朝内园不临街，但高区开窗有轻微远端干道/轨道低频背景声（关窗36dB）",
+        minPrice: 468,
+        maxPrice: 510,
+        priceRange: "468~510 万",
+        twoKidsNote: "470万级买套内实得111.7㎡的2024新规精装大四房两卫（相当于传统138㎡大四房尺度）！四个房间全明宽敞，二胎家庭空间感拉满。",
+        scores: { quiet: 91, edu: 82, commute: 78, space: 100, comm: 70, asset: 84 },
+        unitResettleCheck: "🚨 3栋本栋为纯商品房，但小区整体含约42%回迁/保障房",
+        unitVillageCheck: "⚠️ 周边处于工业区旧改过渡阶段",
+        unitCommNoiseCheck: "✅ 3栋中央纯架空层无底商油烟"
+      },
+      {
+        id: "bt-xinyi-5-113-4b",
+        project: "信义嘉御山",
+        phase: "五期 / 六期",
+        building: "五期 11栋·12栋 (中央皇家园林王)",
+        unitCode: "01/02户 (113~118㎡南北通四房两卫)",
+        layoutType: "4室2厅2卫",
+        structureType: "南北通透·板式",
+        area: 115,
+        usableRateNum: 85,
+        usableArea: 97.8,
+        orientation: "正南",
+        noiseLevel: "QUIET",
+        acousticGrade: "ABSOLUTE_QUIET",
+        arterialDistMeters: 215,
+        bldgFloors: 32,
+        bldgElevator: "2梯4户",
+        noiseLabel: "★ 真极致静谧 · 百米楼距距干道215m",
+        roadDistMeters: "深居五期中心大花园，距五和大道约215米、距吉华路约190米",
+        specialNoise: "无铁路/高架，百米楼距中心泳池园林极静（≤41dB）",
+        minPrice: 630,
+        maxPrice: 695,
+        priceRange: "630~695 万",
+        twoKidsNote: "坂田一步到位改善四房标杆！五期100%纯商品房+2梯4户+家门口科技城外国语学校九年一贯制+太太10号线2站14分钟直达贝尔路站。",
+        scores: { quiet: 96, edu: 92, commute: 96, space: 96, comm: 95, asset: 95 },
+        unitResettleCheck: "✅ 五期独立围合100%纯商品房（0回迁）",
+        unitVillageCheck: "✅ 百米楼距皇家园林中央，零民房视野干扰",
+        unitCommNoiseCheck: "✅ 中央纯住架空层0底商油烟"
+      },
+      {
+        id: "bgl-longmen-2-112-4b",
+        project: "信义金御半山·珑门",
+        phase: "四期/珑门 (2025.11全新现房)",
+        building: "2栋 (中央园景栋)",
+        unitCode: "01户 (112㎡新规精装四房两卫)",
+        layoutType: "4室2厅2卫",
+        structureType: "大横厅·LDKB一体",
+        area: 112,
+        usableRateNum: 88,
+        usableArea: 98.6,
+        orientation: "东南",
+        noiseLevel: "QUIET",
+        acousticGrade: "INNER_CANYON_ECHO",
+        arterialDistMeters: 125,
+        bldgFloors: 44,
+        bldgElevator: "3梯5户",
+        noiseLabel: "内园安静 · 距罗岗路125m",
+        roadDistMeters: "朝向半山园林内侧，距外围罗岗路约125米",
+        specialNoise: "全新精装双层中空LOW-E隔音窗，室内安静",
+        minPrice: 545,
+        maxPrice: 585,
+        priceRange: "545~585 万",
+        twoKidsNote: "550万级买百鸽笼万象汇旁全新精装现房四房两卫！即买即住，下楼300米达32万㎡万象汇与百鸽笼地铁站(26分钟达贝尔路)，对口贤义外国语+百外生态。",
+        scores: { quiet: 92, edu: 93, commute: 87, space: 96, comm: 94, asset: 93 },
+        unitResettleCheck: "✅ 0公租房，2栋以纯商品房改善买家为主",
+        unitVillageCheck: "🏆 万象汇与半山公园现代界面，无城中村",
+        unitCommNoiseCheck: "✅ 内园无重餐饮底商油烟"
+      },
+      {
+        id: "szt-yyj-115-4b",
+        project: "深铁阅云境广场",
+        phase: "一期 (2023首批新规)",
+        building: "1栋3单元 (32层2梯5户最佳楼栋)",
+        unitCode: "01户 (115㎡精装大横厅四房两卫)",
+        layoutType: "4室2厅2卫",
+        structureType: "大横厅·LDKB一体",
+        area: 115,
+        usableRateNum: 90,
+        usableArea: 103.5,
+        orientation: "东南",
+        noiseLevel: "QUIET",
+        acousticGrade: "INNER_CANYON_ECHO",
+        arterialDistMeters: 135,
+        bldgFloors: 32,
+        bldgElevator: "2梯5户",
+        noiseLabel: "空中花园内侧 · 32层非超高层",
+        roadDistMeters: "1栋3单元仅32层(全盘唯一非超高层单元)，朝空中花园内院，距龙岗大道约135米",
+        specialNoise: "深铁高标隔音窗，避开大道直射噪音",
+        minPrice: 445,
+        maxPrice: 495,
+        priceRange: "445~495 万",
+        twoKidsNote: "强烈关注！1栋3单元是深铁阅云境唯一仅32层、2梯5户的舒适楼座，450万级买大运四轨枢纽上盖(步行150m入站)精装115㎡真四房两卫，步行600m逛山姆实体店！",
+        scores: { quiet: 91, edu: 90, commute: 68, space: 97, comm: 94, asset: 93 },
+        unitResettleCheck: "✅ 招拍挂TOD净地：全盘0村民回迁房",
+        unitVillageCheck: "🏆 大运枢纽核心，零城中村",
+        unitCommNoiseCheck: "🏆 空中花园物理隔离底部商业MALL"
+      },
+      {
+        id: "galaxy-5-122-3p1",
+        project: "星河时代花园",
+        phase: "一期高层区",
+        building: "5栋 / 6栋 (南向看别墅楼王)",
+        unitCode: "01户 (122㎡高偷面积3+1室两卫)",
+        layoutType: "3+1室2厅2卫",
+        structureType: "南北通透·板式",
+        area: 122,
+        usableRateNum: 88,
+        usableArea: 107.4,
+        orientation: "正南",
+        noiseLevel: "QUIET",
+        acousticGrade: "ABSOLUTE_QUIET",
+        arterialDistMeters: 235,
+        bldgFloors: 31,
+        bldgElevator: "2梯4户",
+        noiseLabel: "★ 真极致静谧 · 俯瞰别墅距干道235m",
+        roadDistMeters: "南向跨越联排别墅区，距龙岗大道及黄阁南路超235米",
+        specialNoise: "无任何遮挡与干道噪音，实测≤40dB",
+        minPrice: 565,
+        maxPrice: 620,
+        priceRange: "565~620 万",
+        twoKidsNote: "星河时代传世楼王！2梯4户南北双阳台，实得超107㎡的3+1房两卫，下楼200米即山姆会员店实体店，对口深中龙岗顶级名校(公办率81.5%)！",
+        scores: { quiet: 97, edu: 98, commute: 60, space: 96, comm: 99, asset: 98 },
+        unitResettleCheck: "🏆 全盘0回迁房、0保障房（纯商品房+别墅）",
+        unitVillageCheck: "🏆 山姆商圈核心，方圆600米零城中村",
+        unitCommNoiseCheck: "🏆 纯住宅0底商油烟"
+      },
+      {
+        id: "jt-suibao-2-115-4b",
+        project: "岁宝壹品",
+        phase: "一期 (次新综合体)",
+        building: "A座 / B座 (空中花园内侧)",
+        unitCode: "01/02户 (115㎡精装四房两卫)",
+        layoutType: "4室2厅2卫",
+        structureType: "大横厅·LDKB一体",
+        area: 115,
+        usableRateNum: 85,
+        usableArea: 97.8,
+        orientation: "东南",
+        noiseLevel: "QUIET",
+        acousticGrade: "INNER_CANYON_ECHO",
+        arterialDistMeters: 140,
+        bldgFloors: 45,
+        bldgElevator: "3梯4户",
+        noiseLabel: "空中花园内园 · 距主干道140m",
+        roadDistMeters: "位于空中花园内侧，距北环/红岭路约140米",
+        specialNoise: "配高规格双层中空隔音幕墙，室内静谧",
+        minPrice: 820,
+        maxPrice: 910,
+        priceRange: "820~910 万",
+        twoKidsNote: "福田次新综合体四房两卫！下楼即5万㎡岁宝盒马鲜生MALL，步行150米入9号线地铁站，太太20分钟直达坂田贝尔路站。",
+        scores: { quiet: 90, edu: 92, commute: 94, space: 95, comm: 93, asset: 93 },
+        unitResettleCheck: "✅ 商业与住宅分区独立，无村民握手楼回迁",
+        unitVillageCheck: "🏆 福田中心界面，零城中村",
+        unitCommNoiseCheck: "✅ 空中花园隔离底部盒马MALL"
+      },
+      {
+        id: "jt-vanke-3-116-4b",
+        project: "万科金色家园",
+        phase: "三期",
+        building: "三期 2栋 / 6栋 (中央花园板楼)",
+        unitCode: "01/02户 (116㎡一梯两户板式四房两卫)",
+        layoutType: "4室2厅2卫",
+        structureType: "南北通透·板式",
+        area: 116,
+        usableRateNum: 87,
+        usableArea: 100.9,
+        orientation: "正南",
+        noiseLevel: "QUIET",
+        acousticGrade: "ABSOLUTE_QUIET",
+        arterialDistMeters: 215,
+        bldgFloors: 18,
+        bldgElevator: "1梯2户 (稀缺小高层板楼)",
+        noiseLabel: "★ 真极致静谧 · 18层1梯2户距干道215m",
+        roadDistMeters: "位于景田内街花园中央，距新洲路主干道超215米",
+        specialNoise: "无任何干道/高架噪音，18层1梯2户南北对流（≤40dB）",
+        minPrice: 890,
+        maxPrice: 960,
+        priceRange: "890~960 万",
+        twoKidsNote: "福田景田极其稀缺的18层1梯2户纯板式南北通透四房两卫！容积率仅3.1，下楼200米入景田站(23分钟反向通勤贝尔路)，对口福田外国语本部。",
+        scores: { quiet: 98, edu: 95, commute: 90, space: 95, comm: 97, asset: 96 },
+        unitResettleCheck: "🏆 100%纯商品房净地（0回迁0保障）",
+        unitVillageCheck: "🏆 景田政商核心，零城中村",
+        unitCommNoiseCheck: "✅ 花园中央板楼0底商油烟"
+      }
+    ];
+
+    FOUR_BEDROOM_UNITS.forEach(nu => {
+      if (!UNITS_DATA.some(u => u.id === nu.id)) {
+        UNITS_DATA.push(nu);
+      }
+    });
+
+    // 3. 重新构建所有多选下拉菜单 UI（使重排后的建筑新规代际、新增的四房规格、扩容的价格段立即生效）
+    [
+      "macroZoneFilter", "macroNewOldFilter", "macroRegFilter", "macroPurityFilter",
+      "macroVillageFilter", "macroCommFilter", "macroMetroDistFilter", "macroDensityFilter",
+      "macroParkingFilter", "macroTierFilter", "macroSchoolRateFilter", "macroResilienceFilter",
+      "macroFloorFilter", "macroElevatorFilter",
+      "filterProject", "filterBuilding", "filterLayout", "filterStructure",
+      "filterOrientation", "filterNoise", "filterUsableRate", "filterCommute",
+      "filterPriceBracket", "filterBldgSpec"
+    ].forEach(id => {
+      if (typeof buildMultiSelectUI === "function") {
+        buildMultiSelectUI(id);
+      }
+    });
+
+    // 4. 销毁并重绘 3 张 Chart.js 图表，使福田外国语学校及景田各楼盘完整呈现在图表中
+    if (typeof Chart !== "undefined") {
+      ["schoolMetricsChart", "schoolTrendChart", "resilienceChart"].forEach(cid => {
+        const inst = Chart.getChart(byId(cid));
+        if (inst) inst.destroy();
+      });
+
+      // 重绘包含 10 大教育学区与 25 盘的完整图表
+      initCharts();
+      const trendInst = Chart.getChart(byId("schoolTrendChart"));
+      if (trendInst && SCHOOL_DISTRICTS.FUTIAN_WAI_JT) {
+        trendInst.data.datasets.splice(2, 0, {
+          label: "福田外国语本部(景田)",
+          data: SCHOOL_DISTRICTS.FUTIAN_WAI_JT.trend3Y,
+          borderColor: "#94734E",
+          backgroundColor: "#94734E",
+          tension: 0.25
+        });
+        trendInst.update();
+      }
+    }
+
+    // 5. 更新总数文案并触发全站重绘
+    document.title = "深圳二胎家庭置业全维度工程与投研决策平台 · Cavno";
+    renderSchoolTable();
+    renderMacroTable();
+    redrawUnitViews();
+  });
+})();
+
+// Keep the attachment's union filter logic; synchronize native options with its checkbox state.
+function finishIntegration(){
+  const ids=Object.keys(multiSelectState);
+  function refreshSelect(id,values){
+    const sel=byId(id);if(!sel)return;
+    const allowed=new Set(Array.from(sel.options,o=>o.value));
+    const retained=values.filter(v=>allowed.has(v));
+    const selected=retained.length?retained:[sel.options[0].value];
+    Array.from(sel.options).forEach(o=>{o.selected=selected.includes(o.value);});
+    buildMultiSelectUI(id);
+    // Native single-selects can only store one value; retain the full union in the component.
+    multiSelectState[id].selected=new Set(selected);
+    byId(id).parentElement.querySelector('.ms-wrapper').refreshUI();
+    decorateSelect(id);
+  }
+  function decorateSelect(id){
+    const sel=byId(id), wrapper=sel?.parentElement.querySelector('.ms-wrapper');if(!wrapper)return;
+    wrapper.dataset.selectId=id;
+    const label=sel.parentElement.querySelector('label');
+    if(label){label.htmlFor=id;label.id=id+'Label';}
+    const btn=wrapper.querySelector('.ms-btn'),drop=wrapper.querySelector('.ms-dropdown');
+    if(!btn||!drop)return;
+    btn.id=id+'Button';btn.setAttribute('aria-labelledby',id+'Label '+btn.id);
+    btn.setAttribute('aria-expanded',String(drop.classList.contains('open')));
+    btn.setAttribute('aria-controls',id+'Options');drop.id=id+'Options';
+    wrapper.querySelectorAll('[data-act="all"]').forEach(e=>{e.setAttribute('role','button');e.tabIndex=0;e.addEventListener('keydown',event=>{if(event.key==='Enter'||event.key===' '){event.preventDefault();e.click();}});});
+  }
+  const originalBuild=buildMultiSelectUI;
+  buildMultiSelectUI=function(id){originalBuild(id);decorateSelect(id);};
+  updateBuildingOptions=function(){
+    const previous=multiSelectState.filterBuilding?getMultiValues('filterBuilding'):['ALL'];
+    const projects=getMultiValues('filterProject');
+    const buildings=Array.from(new Set(UNITS_DATA.filter(u=>isCommunityPassingMacro(u.project)&&(projects.includes('ALL')||projects.includes(u.project))).map(u=>`${u.project} - ${u.building}`)));
+    const sel=byId('filterBuilding');sel.replaceChildren();
+    const add=(value,text)=>{const option=document.createElement('option');option.value=value;option.textContent=text;sel.appendChild(option);};
+    add('ALL',`全部入围楼栋 (${buildings.length}组)`);buildings.forEach(b=>add(b,b));
+    refreshSelect('filterBuilding',previous);
+  };
+  updateProjectAndBuildingOptions=function(passingNames){
+    const previous=multiSelectState.filterProject?getMultiValues('filterProject'):['ALL'];
+    const sel=byId('filterProject');sel.replaceChildren();
+    const add=(value,text)=>{const option=document.createElement('option');option.value=value;option.textContent=text;sel.appendChild(option);};
+    add('ALL',`全部入围楼盘 (${passingNames.length}盘)`);
+    passingNames.forEach(p=>add(p,`${p} (${COMMUNITIES_MACRO[p].zone})`));
+    refreshSelect('filterProject',previous);updateBuildingOptions();
+  };
+  drillDownProject=function(projectName){
+    refreshSelect('filterProject',[projectName]);refreshSelect('filterBuilding',['ALL']);
+    updateBuildingOptions();redrawUnitViews();byId('section-micro').scrollIntoView({behavior:'smooth',block:'start'});
+  };
+  const originalResetMacro=resetMacroFilters;
+  resetMacroFilters=function(){originalResetMacro();byId('macroFloorFilter').value='ALL';byId('macroElevatorFilter').value='ALL';};
+  const originalResetMicro=resetMicroFilters;
+  resetMicroFilters=function(){originalResetMicro();byId('filterBldgSpec').value='ALL';};
+  // Replace the attachment's single-value reset listeners with one complete reset.
+  for(const [id,resetAll] of [['resetMacroBtn',false],['resetFilterBtn',true]]){
+    const old=byId(id),button=old.cloneNode(true);old.replaceWith(button);
+    button.addEventListener('click',()=>{
+      resetMacroFilters();if(resetAll)resetMicroFilters();
+      for(const sid of ids){if(resetAll||sid.startsWith('macro'))refreshSelect(sid,[byId(sid).options[0].value]);}
+      renderMacroTable();redrawUnitViews();
+    });
+  }
+  root.addEventListener('click',()=>{
+    for(const id of ids)decorateSelect(id);
+  });
+  document.addEventListener('click',()=>{for(const id of ids)decorateSelect(id);});
+  root.addEventListener('change',event=>{
+    if(event.target.matches('.ms-item input')){
+      const wrapper=event.target.closest('.ms-wrapper');
+      if(wrapper?.dataset.selectId==='filterProject')updateBuildingOptions();
+      for(const id of ids)decorateSelect(id);
+    }
+  });
+  root.addEventListener('keydown',event=>{
+    if(event.key==='Escape')root.querySelectorAll('.ms-dropdown.open').forEach(e=>{e.classList.remove('open');e.parentElement.querySelector('.ms-btn').setAttribute('aria-expanded','false');});
+  });
+  ids.forEach(decorateSelect);
+  renderMacroTable();redrawUnitViews();
+}
+
+    function init(){
+      for(const callback of readyCallbacks)callback();
+      finishIntegration();
       root.addEventListener('click',event=>{
         const button=event.target.closest('button[data-compare-id],button[data-drill-project],button[data-house-action]');
         if(!button||!root.contains(button))return;
