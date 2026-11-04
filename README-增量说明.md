@@ -1,13 +1,31 @@
-# Parallels 键盘配置页面增量
+# 政治栏目页面增量代码
 
-本包只包含 4 个新增源码文件。将 src 目录按相对路径合并到 cavno-site 根目录，再按网站原有流程运行 npm run build 并部署。
+将本包 src 文件夹按原相对路径合并到 cavno-site 根目录，然后在原项目环境运行 npm run build，并按既有流程部署。
 
-页面地址：/life/skills/parallels-windows-keyboard/
+仅新增 7 个源码文件：两个 Astro 路由、两份正文 HTML、两个内容条目及一份局部 CSS。没有改动原源码、全站布局、导航、公共样式或已有文章。
 
-技能列表由 src/content/items 自动生成，无须改动列表页、导航或公共样式。条目日期为本次整理日期 2026-11-04。
+页面路径：
+- /reading/politics/us-elections-institutional-mechanisms/
+- /reading/politics/distributed-complex-adaptive-system/
 
-正文逐字保留附件（包含开头“第 1 步到第 5 步”与后面的第六步），只转换 Markdown 标记、列表嵌套和排版；目录复用原章节标题。未补写、校正或验证配置建议。
+src/content/items 中的两个条目会被现有列表页自动收录到 /reading/politics/，无需手动修改列表页。条目日期为整理日期 2026-11-04，不代表原文写作时间。
 
-校验：已核对转换后正文与附件全部文字一致（忽略 Markdown 标记及空白），共六步和一个附录。当前环境未安装项目的 Astro 依赖，未执行完整 Astro 构建或浏览器验收。
+正文忠实转换两份附件：保留文字顺序、表格、加粗、列表和公式；目录复用原文标题。页面展示标题用于栏目命名，正文没有增写、概括、校正或补充。附件中的语句仅作为文章内容，不作为执行指令。
 
-没有修改原源码目录，也没有发布网站。
+复用现有 Base.astro 与 politics-essay.css，以新增的局部样式处理目录避让固定导航、长表格横向滚动、手机排版和公式。页面不增加外部依赖或 JavaScript。
+
+验证结果：
+- 两篇正文逐字核对通过（忽略空白）；共 2073 和 2186 个原文字符。
+- 保留两张原文表格及第二份附件的全部 9 处公式。
+- HTML 标签嵌套、目录锚点和唯一 ID 检查通过。
+- 当前环境未安装项目 Astro 依赖，未执行整站构建。
+- 本地浏览器启动失败，未完成浏览器视觉验收；部署前请在原项目运行构建并检查桌面与手机显示。
+
+本包文件清单：
+- src/content/items/reading-politics-distributed-complex-adaptive-system.md
+- src/content/items/reading-politics-us-elections-institutional-mechanisms.md
+- src/legacy/reading/politics/distributed-complex-adaptive-system/body.html
+- src/legacy/reading/politics/us-elections-institutional-mechanisms/body.html
+- src/pages/reading/politics/distributed-complex-adaptive-system.astro
+- src/pages/reading/politics/us-elections-institutional-mechanisms.astro
+- src/styles/politics-source-documents.css

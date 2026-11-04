@@ -1,0 +1,19 @@
+/* 仅作用于两份附件页面，复用政治栏目原有设计令牌。 */
+.lp.politics-essay.source-document aside{top:calc(var(--cv-head-total) + 20px);max-height:calc(100dvh - var(--cv-head-total) - 40px)}
+.source-document .source-content{min-width:0;overflow-wrap:anywhere}
+.source-document section{scroll-margin-top:calc(var(--cv-head-total) + 24px)}
+.source-document .source-intro{border-left:3px solid var(--pe-accent);background:linear-gradient(135deg,var(--pe-accent-soft),transparent 80%),var(--pe-card)}
+.source-document h2{line-height:1.55}
+.source-document strong{font-weight:650}
+.source-document ul,.source-document ol{padding-left:1.5em;margin:20px 0}
+.source-document li{padding-left:.3em;margin:0 0 18px;line-height:1.95}
+.source-document li::marker{color:var(--pe-accent)}
+.source-document .source-math{font-family:var(--mono);white-space:nowrap;font-size:.95em}
+.source-document .source-table{max-width:100%;overflow-x:auto;margin:22px 0;overscroll-behavior-x:contain}
+.source-document .source-table table{min-width:700px;margin:0}
+.source-document .source-table th{white-space:nowrap}
+.source-document .source-table p{margin:0;line-height:1.85}
+.source-document p{line-height:1.95}
+@media(max-width:980px){.lp.politics-essay.source-document aside{position:static;max-height:none}}
+@media(max-width:600px){.source-document section{padding:24px 20px}.source-document h2{font-size:22px}.source-document .source-table table{font-size:14px}}
+@media print{.source-document aside{display:none}.source-document .layout{display:block}.source-document .source-table{overflow:visible}.source-document .source-table table{min-width:0}.source-document section{border:0;box-shadow:none}.source-document h2{break-after:avoid}}

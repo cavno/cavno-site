@@ -1,0 +1,18 @@
+---
+import Base from '../../../layouts/Base.astro';
+import body from '../../../legacy/reading/politics/us-elections-institutional-mechanisms/body.html?raw';
+import '../../../styles/politics-essay.css';
+import '../../../styles/politics-source-documents.css';
+---
+<Base title="美国政治与选举制度的底层逻辑 · Cavno" description="美国政治与选举制度的底层逻辑">
+  <section class="cv-page-head">
+    <div class="cv-wrap">
+      <div class="cv-eyebrow">Reading &amp; Thinking · Politics</div>
+      <h1 class="cv-page-title">美国政治与选举制度的底层逻辑</h1>
+      <a class="cv-crumb-back" href="/reading/politics/">← 返回政治栏目</a>
+    </div>
+  </section>
+  <article class="lp politics-essay source-document">
+    <Fragment set:html={body} />
+  </article>
+</Base>

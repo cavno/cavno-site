@@ -1,0 +1,72 @@
+<div class="layout"><aside><details open><summary>目录</summary><nav aria-label="文章目录"><a href="#part-1">核心架构要素：正交解耦与多维制衡</a><a href="#part-2">输入端收敛：双稳态吸引子（Bistable Attractors）</a><a href="#part-3">时间节律：多频采样与错峰负反馈</a><a href="#part-4">运行常态：以“局部死锁”换取“全局安全”</a></nav></details></aside><div class="source-content"><section class="source-intro">
+<p>如果剥离所有社会与人文标签，这套机制本质上是一个<strong>以“极高容错率（鲁棒性）”为最高目标、刻意牺牲“瞬时吞吐效率”的分布式复杂自适应系统（Complex Adaptive System）</strong>。</p>
+<p>在系统论与控制论视角下，该系统的设计假设是：<strong>系统内的任何单一节点都存在发生故障、过载或试图吞噬全局资源的趋势</strong>。因此，系统的核心目标函数不是“最快速度执行指令”，而是“防止单点故障演变为全局崩溃，阻断任何失控的正反馈循环”。</p>
+</section>
+<section id="part-1" aria-labelledby="part-1-title"><h2 id="part-1-title">核心架构要素：正交解耦与多维制衡</h2>
+<p>为了防止单一控制器垄断系统权限，系统在横向上将核心算力拆解为三个相互正交、互锁的平级模块，并在纵向上采用“中心协调器—边缘自治节点”的分布式架构：</p>
+<div class="source-table" role="region" aria-label="系统模块对照表" tabindex="0"><table>
+<thead><tr>
+<th scope="col"><p><strong>系统模块</strong></p></th>
+<th scope="col"><p><strong>核心功能</strong></p></th>
+<th scope="col"><p><strong>节点规模与权重</strong></p></th>
+<th scope="col"><p><strong>刷新周期</strong></p></th>
+<th scope="col"><p><strong>信号处理特性</strong></p></th>
+</tr></thead>
+<tbody><tr>
+<td><p><strong>高频规则发生器</strong></p></td>
+<td><p>采集底层信号、控制资源阀门、生成初始指令集</p></td>
+<td><p>435个子单元，按底层数据密度动态分配权重</p></td>
+<td><p><span class="source-math">1T</span>（每2年全量重置）</p></td>
+<td><p>高灵敏度、高噪点，紧贴环境瞬时变化</p></td>
+</tr>
+<tr>
+<td><p><strong>低频规则滤波器</strong></p></td>
+<td><p>二次审议指令、审批关键节点配置、长周期校验</p></td>
+<td><p>100个子单元，每个边缘节点固定分配2个配额</p></td>
+<td><p><span class="source-math">3T</span>（每2年滚动重置三分之一）</p></td>
+<td><p>低通滤波，平滑短期脉冲，保护小体量节点</p></td>
+</tr>
+<tr>
+<td><p><strong>中央执行器</strong></p></td>
+<td><p>调度全局资源、响应外部突发环境、执行指令集</p></td>
+<td><p>1个主控核心（最多连续运行2个周期）</p></td>
+<td><p><span class="source-math">2T</span>（每4年重置一次）</p></td>
+<td><p>高响应速度，但受制于资源阀门与规则集边界</p></td>
+</tr>
+<tr>
+<td><p><strong>底层协议校验器</strong></p></td>
+<td><p>比对新指令与系统底层元协议的兼容性</p></td>
+<td><p>9个静态校验单元</p></td>
+<td><p>硬件生命周期内恒定不变</p></td>
+<td><p>绝缘于周期性信号波动，具备一票熔断权</p></td>
+</tr>
+</tbody></table></div>
+<ul>
+<li><strong>串联“与门（AND Gate）”逻辑</strong>：任何一条全局规则的生成，必须先后通过高频发生器和低频滤波器的双道编译，且两者的输出代码必须完全一致，最后经由中央执行器签名确认才能生效。</li>
+<li><strong>双向熔断与反向覆写</strong>：中央执行器可以驳回规则发生器的输出；但若高频与低频模块同时达到三分之二以上的极高共识阈值，则可强行绕过执行器直接写入系统。反之，若底层校验器判定某项指令违反系统初始元协议（Root Protocol），可直接将其清零。</li>
+<li><strong>纵向边缘计算（分布式自治）</strong>：系统由50个半独立的边缘局域网组成。中心节点仅处理跨区域通信与全局安全协议，其余大量算力与规则定义权保留在边缘节点内部，从而将局部试错的风险隔离在局域网内，避免污染全局系统。</li>
+</ul>
+</section>
+<section id="part-2" aria-labelledby="part-2-title"><h2 id="part-2-title">输入端收敛：双稳态吸引子（Bistable Attractors）</h2>
+<p>由于系统在信号采集端普遍采用“最高峰值通吃（Winner-Take-All）”的非线性竞争算法，任何处于中间状态的微小信号都会在迭代中被迅速边缘化，最终迫使庞大的底层输入收敛为两个宏观竞争策略集（即系统演化出的两个“双稳态吸引子”）：</p>
+<ul>
+<li><strong>策略集 A（全局均衡与阻尼模式）</strong>：倾向于调高中心节点的资源抽成比例，通过中心化算法向抗风险能力弱的底层单元进行二次分配；主张增加系统安全冗余与运行护栏，以降低局部极端波动的风险。</li>
+<li><strong>策略集 B（局部增益与去中心化模式）</strong>：倾向于降低中心节点的抽成与干预开销，让各个子单元在低摩擦环境中自主竞争与演化；主张维持系统历史基准参数，减少人为写入的新规则，依靠局部节点的自发活力驱动增长。</li>
+</ul>
+<p>这两个策略集围绕“系统效率与系统安全”、“中心调控与边缘自治”的参数边界展开持续拉锯，使系统在动态震荡中寻找平衡点。</p>
+</section>
+<section id="part-3" aria-labelledby="part-3-title"><h2 id="part-3-title">时间节律：多频采样与错峰负反馈</h2>
+<p>为了防止系统在某一时刻受极端环境噪点（突发情绪或短期危机）冲击而发生结构性偏移，系统设计了精妙的<strong>多采样率（Multi-rate Sampling）与异步重置机制</strong>：</p>
+<ol>
+<li><strong>相位差与低通滤波</strong>：高频发生器（周期 <span class="source-math">1T</span>）、中央执行器（周期 <span class="source-math">2T</span>）、低频滤波器（周期 <span class="source-math">3T</span>）与底层校验器（周期 <span class="source-math">∞</span>）处于不同的时间相位上。即便某一时刻外部环境出现剧烈脉冲，最多只能瞬间替换高频模块，而无法在单次采样周期内同时改写所有模块的底层参数。</li>
+<li><strong>空间加权聚合算法</strong>：在重置中央执行器（<span class="source-math">2T</span>周期）时，系统不直接累加全局底层的原始脉冲总量，而是先在50个边缘节点内部进行局部归并，再按预设权重（共538个权重单位，满270即触发切换）汇总。这种空间加权算法防止了高密度数据区彻底淹没低密度边缘区的信号。</li>
+<li><strong>半周期负反馈（阻尼校准）</strong>：在中央执行器运行至半程（即 <span class="source-math">1T</span> 节点）时，系统会强制触发一次高频模块的全量重置与低频模块的局部重置。由于系统运行必然伴随熵增与预期偏差，这一半周期采样往往会引入反向输入信号，将规则模块的控制器交由另一策略集接管，从而对中央执行器施加即时的负反馈阻尼。</li>
+</ol>
+</section>
+<section id="part-4" aria-labelledby="part-4-title"><h2 id="part-4-title">运行常态：以“局部死锁”换取“全局安全”</h2>
+<p>在系统实际运行中，不同模块同时被两个互斥的策略集分别接管是高概率事件。此时系统会进入一种独特的运作状态：</p>
+<ul>
+<li><strong>建设性死锁（Constructive Deadlock）</strong>：当中央执行器与规则发生器持有相反的参数偏好时，系统的规则产出率会大幅下降，甚至在资源分配协议到期时触发局部非核心进程挂起（休眠待机）。在效率至上的系统看来这是严重故障，但在该系统的设计逻辑中，<strong>“无共识即挂起”是核心安全特性</strong>——它强制要求任何重大系统变更必须跨越极高的共识门槛，否则系统宁可维持原有基准状态空转，也不执行未经充分验证的激进指令。</li>
+<li><strong>冗余容错与渐进迭代</strong>：因为边缘节点高度自治，即便中央协调层陷入死锁，50个边缘局域网依然能各自正常运转并独立测试不同的参数组合。表现优异的局部参数会被其他节点模仿并最终上传至全局，表现糟糕的局部崩溃则被限制在单一节点内自然出清。</li>
+</ul>
+</section></div></div>
