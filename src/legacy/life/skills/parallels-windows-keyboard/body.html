@@ -1,0 +1,151 @@
+<div class="pk-intro"><p>为了让你对照着屏幕点击就能一次配好，下面把整个过程拆解到<strong>每一个菜单按钮的位置和名称</strong>。请按照从第 1 步到第 5 步的顺序依次操作：</p></div>
+<div class="pk-layout">
+<nav class="pk-toc" aria-label="文章目录"><p class="pk-toc-label">目录</p><ol>
+<li><a href="#step-1">第一步：检查并还原 macOS 系统的键盘底层设置</a></li>
+<li><a href="#step-2">第二步：清空 Parallels 的“画蛇添足”键位转换</a></li>
+<li><a href="#step-3">第三步：让 Win11 独占所有系统级组合键</a></li>
+<li><a href="#step-4">第四步：开启键盘底层硬件直通（消除按键粘滞与冲突）</a></li>
+<li><a href="#step-5">第五步：关闭 Mac 与 Win11 的输入法互相干扰</a></li>
+<li><a href="#step-6">第六步：10 秒钟现场验收测试</a></li>
+<li><a href="#step-7">附：日常使用小贴士（鼠标如何切回 Mac？）</a></li>
+</ol></nav>
+<div class="pk-content">
+<section class="pk-section" id="step-1" aria-labelledby="heading-1">
+<h2 id="heading-1">第一步：检查并还原 macOS 系统的键盘底层设置</h2>
+<p><em>（目的：确保 Mac 没有在底层把你的物理按键调换，如果之前没改过也建议看一眼确认）</em></p>
+<ol class="pk-steps">
+<li>点击屏幕<strong>左上角苹果图标</strong>  -&gt; 选择 <strong>系统设置 (System Settings)</strong>。
+</li>
+<li>在左侧边栏往下滑，找到并点击 <strong>键盘 (Keyboard)</strong>。
+</li>
+<li>在右侧页面中，点击 <strong>键盘快捷键... (Keyboard Shortcuts...)</strong> 按钮（会弹出一个新窗口）。
+</li>
+<li>在弹出窗口的左侧边栏最下方，点击 <strong>修饰键 (Modifier Keys)</strong>。
+</li>
+<li>在右侧顶部的 <strong>选择键盘 (Select keyboard)</strong> 下拉菜单中，<strong>点选你外接的那把 Windows 物理键盘名称</strong>（不要选成内置或其他虚拟设备）。
+</li>
+<li>确认下面几项的对应关系<strong>完全一致</strong>（如果不一致，点击右侧下拉框改回来，或者直接点右下角的 <strong>恢复成默认值</strong>）：
+<ul>
+<li><strong>大写锁定 (⇪) 键</strong> -&gt; ⇪ 大写锁定</li>
+<li><strong>Control (^) 键</strong> -&gt; ^ Control</li>
+<li><strong>Option (⌥) 键</strong> -&gt; ⌥ Option</li>
+<li><strong>Command (⌘) 键</strong> -&gt; ⌘ Command</li>
+</ul>
+</li>
+<li>点击右下角 <strong>完成 (Done)</strong>，关闭 macOS 系统设置。
+</li>
+</ol>
+</section>
+<section class="pk-section" id="step-2" aria-labelledby="heading-2">
+<h2 id="heading-2">第二步：清空 Parallels 的“画蛇添足”键位转换</h2>
+<p><em>（目的：Parallels 默认会把你的物理 Win 键转成 Ctrl，把这一步关掉才能让 Ctrl 归 Ctrl、Win 归 Win）</em></p>
+<ol class="pk-steps">
+<li>先打开 Parallels Desktop 软件。将鼠标移到屏幕<strong>最顶部菜单栏</strong>，点击右上角（时间、Wi-Fi 图标附近）的 <strong>Parallels 图标 ||</strong>（两条竖线）。
+<ul>
+<li><em>注：如果你的 Win11 处于全屏模式看不到顶部菜单栏，请把鼠标移到屏幕最顶端停留 1 秒，菜单栏就会自动滑下来；或者按 Control + Alt (物理键) 释放鼠标后再移到顶部。</em></li>
+</ul>
+</li>
+<li>在弹出的下拉菜单中，点击 <strong>偏好设置... (Preferences... / Settings...)</strong>。
+</li>
+<li>在弹出的窗口顶部，点击第二个标签页：<strong>快捷键 (Shortcuts)</strong>。
+</li>
+<li>在窗口<strong>左侧列表</strong>中，点击选中你的虚拟机名称（通常叫 <strong>Windows 11</strong>）。
+</li>
+<li>看窗口<strong>右侧区域</strong>：
+<ul>
+<li>你会看到一排长长的列表（比如 ⌘ + C -&gt; Ctrl + C、⌘ + V -&gt; Ctrl + V、⌘ -&gt; Win 等），前面都有打勾 ☑。</li>
+<li><strong>操作方法 A（最快）</strong>：点击右上角 <strong>配置文件 (Profile)</strong> 下拉框（当前一般显示为“Windows”），查看是否有 <strong>通用 (Generic)</strong> 或空白配置；如果没有，直接用方法 B。</li>
+<li><strong>操作方法 B（最彻底）</strong>：把右侧列表里<strong>所有打勾 ☑ 的项目全部点击取消勾选 ☐</strong>（重点一定要取消 ⌘ -&gt; Ctrl 相关的所有映射，以及单按 ⌘ -&gt; Win 的映射）。</li>
+<li><em>原理说明：全部取消后，Parallels 就不再篡改按键，你的物理 Ctrl 就会原封不动地作为 Ctrl 传给 Win11，物理 Win 键也会原封不动地作为 Win 键传给 Win11。</em></li>
+</ul>
+</li>
+</ol>
+</section>
+<section class="pk-section" id="step-3" aria-labelledby="heading-3">
+<h2 id="heading-3">第三步：让 Win11 独占所有系统级组合键</h2>
+<p><em>（目的：防止你在 Win11 里按 Win + Space 切输入法或按 Alt + Tab 切窗口时，弹出 Mac 的搜索框）</em></p>
+<ol class="pk-steps">
+<li>保持在刚才的 <strong>Parallels 偏好设置 -&gt; 快捷键 (Shortcuts)</strong> 窗口不要关。
+</li>
+<li>在窗口<strong>左侧列表</strong>的下方，点击 <strong>macOS 系统快捷键 (macOS System Shortcuts)</strong>。
+</li>
+<li>在右侧找到 <strong>发送 macOS 系统快捷键 (Send macOS system shortcuts)</strong> 下拉菜单。
+</li>
+<li>点击下拉菜单，将其改为 <strong>始终 (Always)</strong>。
+</li>
+<li>直接关闭这个“偏好设置”窗口即可（修改会自动保存）。
+</li>
+</ol>
+</section>
+<section class="pk-section" id="step-4" aria-labelledby="heading-4">
+<h2 id="heading-4">第四步：开启键盘底层硬件直通（消除按键粘滞与冲突）</h2>
+<p><em>（目的：确保 Ctrl + Shift + Esc、Win + V、Alt + F4 等多键组合灵敏无延迟）</em></p>
+<ol class="pk-steps">
+<li>再次点击屏幕顶部菜单栏右上角的 <strong>Parallels 图标 ||</strong> -&gt; 点击 <strong>控制中心 (Control Center)</strong>。
+</li>
+<li>在控制中心里找到你的 <strong>Windows 11</strong> 一行，点击右侧的 <strong>齿轮图标 ⚙️（设置）</strong>，打开这台虚拟机的专属<strong>配置 (Configuration)</strong> 窗口。
+</li>
+<li>在弹出窗口的顶部标签栏，点击 <strong>硬件 (Hardware)</strong>。
+</li>
+<li>在左侧边栏中，点击 <strong>鼠标与键盘 (Mouse &amp; Keyboard)</strong>。
+</li>
+<li>在右侧找到 <strong>键盘 (Keyboard)</strong> 下拉菜单：
+<ul>
+<li>将默认的“针对系统快捷键自动优化”改为 <strong>针对游戏进行优化 (Optimize for games)</strong>。</li>
+</ul>
+</li>
+</ol>
+</section>
+<section class="pk-section" id="step-5" aria-labelledby="heading-5">
+<h2 id="heading-5">第五步：关闭 Mac 与 Win11 的输入法互相干扰</h2>
+<p><em>（目的：避免在 Win11 里按 Shift 切换中英文时，被 Mac 系统的输入法状态强行拉回去）</em></p>
+<ol class="pk-steps">
+<li>保持在刚才的第 4 步 <strong>虚拟机配置 (Configuration)</strong> 窗口不要关。
+</li>
+<li>点击窗口顶部标签栏的 <strong>选项 (Options)</strong>。
+</li>
+<li>在左侧边栏中，点击 <strong>更多选项 (More Options)</strong>。
+</li>
+<li>在右侧找到 <strong>键盘：同步键盘布局 (Synchronize keyboard layout)</strong> 这一项：
+<ul>
+<li><strong>取消勾选 ☐</strong>（如果它是个下拉菜单，选择“不切换 / 关闭”）。</li>
+</ul>
+</li>
+<li>关闭配置窗口。
+</li>
+</ol>
+</section>
+<section class="pk-section" id="step-6" aria-labelledby="heading-6">
+<h2 id="heading-6">第六步：10 秒钟现场验收测试</h2>
+<p>现在点进你的 Windows 11 窗口（建议点击左上角绿色全屏按钮进入全屏模式），按顺序按下你物理键盘左下角的三个键进行验证：</p>
+<ol class="pk-steps">
+<li><strong>测试物理 Win 键（左下角第 2 个键）</strong>：
+<ul>
+<li>单独按一下 <strong>Win 键</strong>：Win11 的<strong>开始菜单</strong>应该立即弹出来。</li>
+<li>按 <strong>Win + E</strong>：应该弹出 Windows <strong>文件资源管理器</strong>。</li>
+<li>按 <strong>Win + D</strong>：应该直接显示 Windows <strong>桌面</strong>。</li>
+</ul>
+</li>
+<li><strong>测试物理 Ctrl 键（左下角第 1 个键）</strong>：
+<ul>
+<li>随便选中一个桌面图标或文字，按 <strong>Ctrl + C</strong> 和 <strong>Ctrl + V</strong>：正常复制粘贴。</li>
+<li>按 <strong>Ctrl + Shift + Esc</strong>：直接弹出 Windows <strong>任务管理器</strong>。</li>
+</ul>
+</li>
+<li><strong>测试物理 Alt 键（左下角第 3 个键）</strong>：
+<ul>
+<li>打开两个窗口，按 <strong>Alt + Tab</strong>：在 Windows 内部丝滑切换窗口，不会跳回 Mac。</li>
+<li>按 <strong>Alt + F4</strong>：正常关闭当前 Windows 窗口。</li>
+</ul>
+</li>
+</ol>
+</section>
+<section class="pk-section" id="step-7" aria-labelledby="heading-7">
+<h2 id="heading-7">附：日常使用小贴士（鼠标如何切回 Mac？）</h2>
+<p>因为开启了全套直通和快捷键接管，当你全屏在 Win11 里工作时，所有按键都会留在 Win11 内部。如果你偶尔需要跳回 Mac 桌面：</p>
+<ul>
+<li><strong>方法 1（鼠标滑出）</strong>：把鼠标指针推到屏幕<strong>最顶端边缘并停顿 1 秒</strong>，macOS 的顶部菜单栏或程序坞就会浮现出来。</li>
+<li><strong>方法 2（释放快捷键）</strong>：同时按下物理键盘的 <strong>Ctrl + Alt</strong>，即可把鼠标和键盘焦点暂时交还给 macOS。</li>
+</ul>
+</section>
+</div></div>
