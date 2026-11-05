@@ -1,53 +1,42 @@
-# 深圳25盘置业决策系统 · V11学区梯队版
+# 在裂隙中安居 · Cavno 哲学栏目增量接入
 
-来源附件：深圳25盘置业决策系统_V11学区梯队终极版.html。
-本包仅含本页的8个相关文件和本说明，不含全站源码。
+仅含本页 5 个新增文件及本说明，不包含修改后的全站源码。原附件为桌面 `code_artifact.html`，本页新增于哲学栏目，不替换其他文章。
 
 ## 接入
 
-1. 备份同名文件，将包内 src、public 按原目录合并覆盖到 Cavno 项目。
-2. 运行 npm run build，按原网站流程部署。
-3. 页面继续使用 /life/house/longgang-home-school-decision/，归属 /life/house/；原有内容条目被覆盖，栏目卡片和搜索自动更新，不重复新增。
+1. 将压缩包中的 `src` 和 `public` 文件夹合并到网站项目根目录，保持目录层级。
+2. 在原网站项目运行 `npm run build`。
+3. 按网站原来的方式部署构建结果。
+4. 新页面地址：`/reading/philosophy/dwelling-in-the-crevice/`。
+5. 哲学栏目 `/reading/philosophy/`、阅读总栏目和全站搜索通过内容集合自动收录，无需手工修改栏目模板。
 
-## 文件
+## 文件清单
 
-- `src/pages/life/house/longgang-home-school-decision.astro`
-- `src/legacy/life/house/longgang-home-school-decision/body.html`
-- `src/legacy/life/house/longgang-home-school-decision/style.css`
-- `src/content/items/life-house-longgang-home-school-decision.md`
-- `public/apps/life/house/longgang-home-school-decision/app.js`
-- `public/apps/life/house/longgang-home-school-decision/chart.umd.min.js`
-- `public/apps/life/house/longgang-home-school-decision/LICENSE-chart.js.txt`
-- `public/apps/life/house/longgang-home-school-decision/standalone.html`
+- `src/pages/reading/philosophy/dwelling-in-the-crevice.astro`
+- `src/legacy/reading/philosophy/dwelling-in-the-crevice/body.html`
+- `src/legacy/reading/philosophy/dwelling-in-the-crevice/style.css`
+- `src/content/items/reading-philosophy-dwelling-in-the-crevice.md`
+- `public/apps/reading/philosophy/dwelling-in-the-crevice/app.js`
 
 ## 内容与交互
 
-- 保留附件原文、25个小区、45组户号、10个学区及六大百科、二胎时间轴。完整接入4段脚本与追加数据，没有新增楼盘记录或改写评分数据。
-- 新增学区梯队全景、各小区小学/初中评级及第15项梯队多选，贯通学区表、宏观表、户号卡片、TOP4与PK；保留附件对万科麓城和鸿荣源尚峰的小学评级区分。
-- 保留15维宏观、10维微观多选：同项按并集、不同项叠加过滤；支持五大片区、四房/3+1房、五级声学、本栋层高与梯户比、TOP4、六维权重和最多5项PK。
-- 三率图、2024—2026趋势图（含福田外国语）、18个二手盘回撤图按附件原始序列、分组和数值呈现，没有生成新数据。
-- CSV导出所有45组户号及小区、学校字段，沿用附件的CSV单元格转义；导出不受当前筛选影响。
-- 下载完整HTML获得本页独立版，已内嵌样式、Chart.js、交互脚本和数据，支持离线使用（在线字体不可用时使用系统字体）。独立版搜索仅覆盖本工具，栏目链接指向cavno.org；正式接入版沿用全站搜索。
+原文、章节顺序和原有解释保留，未补写哲学论证或新增外部事实。保留 5 个存在论节点、7 个思想史时期、3 个悲剧历史范式、4 大悲剧原型、4 个复合案例、6 组虚无概念辨析、7 种当代虚无表现、5 层自由、12 条救赎路径及 5 种典型处境。原始数据的文字及数值已逐项比对一致。
 
-## 设计与依赖
+保留裂隙灯火/西西弗斯画布、螺旋上升/单向坠落、现实冲击模拟、概念和案例切换、荒诞模拟双滑块、五种伪自由雷达测评及重置、救赎路径分类、自由地图预设/输入/分类/移除/复制。
 
-复用现有 Base.astro、导航、页脚、字体与米白/珊瑚色风格；表格在自身区域横向滚动，手机端单列筛选。预算标签和金额保持横排、说明独立分行，保留上次布局修复。
+自由地图仅在当前页面内存中编辑，刷新会回到附件默认内容；复制行动卡可保存自己的编辑结果。兼容剪贴板限制，失败时提供手动复制文本框，不再误报成功。用户输入按纯文本显示。
 
-Tailwind样式已预编译并限于本页。Chart.js 4.4.1及MIT许可证本地随包提供，无需新增项目依赖或修改package.json。不要将独立预览HTML直接替代Astro路由文件。
+## 样式适配
 
-## 集成与旧版修复
+使用网站现有 `Base.astro`，复用 Cavno 导航、搜索、页脚和字体。统一米白底、珊瑚色和绿色，保留原有分区和图表。Tailwind 工具样式已预编译，仅作用于本页，不加载 Tailwind CDN，不新增 npm 依赖，不修改全站公共样式。
 
-- 旧版20/24盘、9学区、12/9维统计标签同步为实际25盘、10学区、15/10维。
-- 修复附件中带小数点类名的无效选择器，避免第二段脚本报错而中止最后一段追加数据。
-- 预算最高值及重置统一为附件V10的1500万元，金额标签与滑块一致。
-- 多选楼盘后，只显示所选楼盘的楼栋；宏观条件变化时保留仍有效的选择；下钻按钮同步多选状态。
-- 完整重置新增楼层、梯户比、声学筛选；保留上一版预算栏不挤压、不重叠的布局。
-- 梯队选择器随宏观重置、全站重置一并恢复，所有事件与多选状态限定在本页；梯队全景与卡片手机端单列显示。
+手机上为单列布局，表格局部横向滚动；页内导航避开全站顶栏。按钮、滑块和 SVG 节点补充键盘及可访问性支持。
 
-## 验证
+## 验证与交付
 
-已核对25盘、45户号、10学区及梯队新增字段的最终数据完整性，270个多选筛选组合与附件规则一致，图表数据核对通过。构建217页通过，栏目和搜索中本页链接各保留1条。
+- 原文静态文字及 11 组交互数据的文字、数值一致性核对通过（配色除外）。
+- Astro 构建通过，哲学目录和搜索索引均仅生成一条本页入口。
+- 已检查桌面与手机布局、主要模块切换、滑块联动和重置、路径筛选、自由地图添加/移除/复制。
+- 另附独立 HTML 预览，内嵌页面样式、脚本及数据，可直接打开。其搜索仅检索本页，其他栏目链接指向 cavno.org；正式接入版使用全站搜索。
 
-已验证宏观/微观联动、空结果重置、预算、权重、楼盘下钻、PK，以及1280/768/390/320px布局；浏览器无脚本错误。HTML与CSV均已实际下载，文件哈希与交付预览/预期CSV一致。独立HTML版本的社区过滤也已验证。
-
-学区梯队、排位、升学率等均按附件原文保留，未作为外部核验结果。本次为页面集成与本地代码交付，尚未部署线上。
+本次只交付本地增量代码，尚未部署线上。

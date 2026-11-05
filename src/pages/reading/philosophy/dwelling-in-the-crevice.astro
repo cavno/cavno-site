@@ -1,0 +1,11 @@
+---
+import Base from '../../../layouts/Base.astro';
+import body from '../../../legacy/reading/philosophy/dwelling-in-the-crevice/body.html?raw';
+import '../../../legacy/reading/philosophy/dwelling-in-the-crevice/style.css';
+---
+<Base title="在裂隙中安居 · 悲剧、虚无、荒诞、自由与救赎 · Cavno" description="悲剧、虚无、荒诞、自由与救赎 —— 跨越两千余年西方思想史的五元存在论体系">
+ <div class="cv-wrap ph-breadcrumb"><span class="cv-eyebrow">Reading &amp; Thinking · Philosophy</span><a class="cv-crumb-back" href="/reading/philosophy/">← 返回哲学栏目</a></div>
+ <article class="lp" id="crevice-app"><Fragment set:html={body} /><noscript><p>请启用 JavaScript 以查看交互图谱、诊断结果及行动工作坊。</p></noscript></article>
+ <nav class="cv-wrap ph-end" aria-label="页面导航"><a href="/reading/philosophy/">← 返回哲学栏目</a><a href="#hero">回到顶部 ↑</a></nav>
+ <script is:inline src="/apps/reading/philosophy/dwelling-in-the-crevice/app.js?v=c1be2167afa0" defer></script>
+</Base>
