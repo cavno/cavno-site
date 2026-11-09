@@ -1,0 +1,700 @@
+<!-- 顶部固定章节快速导航栏 -->
+<header class="sticky top-0 z-50 bg-parchment-bg/95 backdrop-blur-md border-b border-parchment-border shadow-sm no-print">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 h-16 flex items-center justify-between gap-2">
+      <!-- 左侧标题徽章 -->
+      <div class="flex items-center gap-3">
+        <div class="w-9 h-9 rounded-lg bg-teal-deep text-parchment-card flex items-center justify-center font-mono font-bold text-sm shadow-inner border border-teal-mid">
+          IP
+        </div>
+        <div>
+          <span class="text-xs font-mono uppercase tracking-widest text-terracotta-mid font-semibold block">Technical Dossier</span>
+          <p class="text-sm sm:text-base font-bold text-ink-primary truncate max-w-[200px] sm:max-w-none">
+            美国静态住宅 Socks5 伪造内幕与鉴伪教程
+          </p>
+        </div>
+      </div>
+
+      <!-- 中部章节导航链接 -->
+      <nav class="hidden md:flex items-center gap-1 lg:gap-2 text-xs lg:text-sm font-medium">
+        <a href="#intro" class="px-2.5 py-1.5 rounded-md hover:bg-parchment-panel text-ink-secondary hover:text-teal-deep transition-colors">导语</a>
+        <a href="#school-1" class="px-2.5 py-1.5 rounded-md hover:bg-parchment-panel text-ink-secondary hover:text-teal-deep transition-colors">流派一：分流劫持</a>
+        <a href="#school-2" class="px-2.5 py-1.5 rounded-md hover:bg-parchment-panel text-ink-secondary hover:text-teal-deep transition-colors">流派二：协议栈与rDNS</a>
+        <a href="#school-3" class="px-2.5 py-1.5 rounded-md hover:bg-parchment-panel text-ink-secondary hover:text-teal-deep transition-colors">流派三：数据库洗白</a>
+        <a href="#defense-guide" class="px-2.5 py-1.5 rounded-md hover:bg-parchment-panel text-ink-secondary hover:text-teal-deep transition-colors">自卫指南</a>
+        <a href="#interactive-sandbox" class="px-3 py-1.5 rounded-md bg-teal-deep text-parchment-card hover:bg-teal-mid transition-colors font-semibold shadow-sm flex items-center gap-1.5">
+          <span class="w-2 h-2 rounded-full bg-amber-300 animate-ping"></span>
+          互动鉴伪沙盘
+        </a>
+      </nav>
+
+      <!-- 右侧工具按钮 -->
+      <div class="flex items-center gap-2">
+        <button class="px-3 py-1.5 rounded-md border border-parchment-darkborder bg-parchment-card hover:bg-parchment-panel text-ink-primary text-xs font-mono flex items-center gap-1.5 transition-colors shadow-sm" title="打印或导出 PDF" data-s5-click="window.print()" type="button">
+          <svg class="w-3.5 h-3.5 text-teal-deep" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z"></path>
+          </svg>
+          <span class="hidden sm:inline">打印卷宗</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- 移动端横向快速跳转栏 -->
+    <div class="md:hidden flex items-center gap-1.5 overflow-x-auto px-4 py-2 bg-parchment-panel/80 border-t border-parchment-border text-xs whitespace-nowrap">
+      <a href="#intro" class="px-2.5 py-1 rounded bg-parchment-card border border-parchment-border text-ink-secondary">导语</a>
+      <a href="#school-1" class="px-2.5 py-1 rounded bg-parchment-card border border-parchment-border text-ink-secondary">流派一：分流</a>
+      <a href="#school-2" class="px-2.5 py-1 rounded bg-parchment-card border border-parchment-border text-ink-secondary">流派二：内核伪装</a>
+      <a href="#school-3" class="px-2.5 py-1 rounded bg-parchment-card border border-parchment-border text-ink-secondary">流派三：洗白</a>
+      <a href="#defense-guide" class="px-2.5 py-1 rounded bg-parchment-card border border-parchment-border text-ink-secondary">自卫指南</a>
+      <a href="#interactive-sandbox" class="px-2.5 py-1 rounded bg-teal-deep text-parchment-card font-semibold">互动沙盘</a>
+    </div>
+  </header>
+<!-- 主体内容容器 -->
+<div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12 space-y-12">
+
+    <!-- 卷宗题头与导语 (Intro) -->
+    <section id="intro" class="scroll-mt-24 bg-parchment-card border-2 border-parchment-darkborder rounded-2xl p-6 sm:p-10 shadow-md relative overflow-hidden">
+      <!-- 装饰性角标 -->
+      <div class="absolute top-0 right-0 bg-terracotta-mid text-parchment-card text-xs font-mono px-4 py-1.5 rounded-bl-xl font-semibold tracking-wider uppercase">
+        内部技术揭秘 · 保姆级复现
+      </div>
+
+      <div class="max-w-3xl">
+        <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-parchment-panel border border-parchment-border text-teal-deep text-xs font-mono mb-4">
+          <span>SOCKS5 RESIDENTIAL PROXY FORGERY ANALYSIS</span>
+        </div>
+        <h1 class="text-2xl sm:text-4xl font-black text-ink-primary leading-tight mb-6 tracking-tight">
+          美国静态住宅 Socks5 IP 伪造内幕与保姆级教程
+        </h1>
+      </div>
+
+      <!-- 导语原文（一字不漏） -->
+      <div class="space-y-4 text-base sm:text-lg leading-relaxed text-ink-primary border-t border-parchment-border pt-6">
+        <p>
+          市面上售卖的廉价“美国静态住宅 Socks5 IP”，绝大多数并非真正从美国本土家庭光猫（如 AT&amp;T、Verizon、Comcast 实体宽带）牵出的线路，而是灰产代理商与二道贩子通过<strong class="text-terracotta-deep font-bold bg-terracotta-light px-1 rounded">分流劫持、协议栈伪装、以及 IP 数据库申诉洗白</strong>三种技术手段在数据中心机房（IDC）服务器上手工“搓”出来的。
+        </p>
+        <p class="text-ink-secondary font-medium">
+          以下是代理商在后台伪造“美国静态住宅 Socks5 IP”的完整技术内幕与保姆级复现教程，按伪造成本从低到高分为三种核心流派：
+        </p>
+      </div>
+
+      <!-- 三大流派速览指标卡 -->
+      <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 mt-8 pt-6 border-t border-parchment-border">
+        <a href="#school-1" class="group p-4 rounded-xl bg-parchment-panel/70 border border-parchment-border hover:border-teal-deep transition-all">
+          <div class="flex items-center justify-between text-xs font-mono text-ink-secondary mb-1">
+            <span>SCHOOL 01</span>
+            <span class="px-2 py-0.5 rounded bg-terracotta-light text-terracotta-deep font-bold">零成本秒级伪造</span>
+          </div>
+          <div class="font-bold text-ink-primary group-hover:text-teal-deep transition-colors">“验IP网站定向分流”劫持</div>
+          <div class="text-xs text-ink-secondary mt-1">俗称“羊头狗肉”，查IP走真家宽，业务走廉价机房</div>
+        </a>
+        <a href="#school-2" class="group p-4 rounded-xl bg-parchment-panel/70 border border-parchment-border hover:border-teal-deep transition-all">
+          <div class="flex items-center justify-between text-xs font-mono text-ink-secondary mb-1">
+            <span>SCHOOL 02</span>
+            <span class="px-2 py-0.5 rounded bg-parchment-card text-teal-deep border border-teal-border font-bold">中级技术流伪造</span>
+          </div>
+          <div class="font-bold text-ink-primary group-hover:text-teal-deep transition-colors">站群多IP + 协议栈 + rDNS欺骗</div>
+          <div class="text-xs text-ink-secondary mt-1">修改 Linux TTL=128 与 PTR 反向解析模仿家宽</div>
+        </a>
+        <a href="#school-3" class="group p-4 rounded-xl bg-parchment-panel/70 border border-parchment-border hover:border-teal-deep transition-all">
+          <div class="flex items-center justify-between text-xs font-mono text-ink-secondary mb-1">
+            <span>SCHOOL 03</span>
+            <span class="px-2 py-0.5 rounded bg-teal-light text-teal-deep font-bold">终极源头洗白</span>
+          </div>
+          <div class="font-bold text-ink-primary group-hover:text-teal-deep transition-colors">ASN借壳 + Geofeed + IP库申诉</div>
+          <div class="text-xs text-ink-secondary mt-1">欺骗五大商业IP数据库，打造市面上90%的“伪双ISP”</div>
+        </a>
+      </div>
+    </section>
+
+    <!-- ========================================== -->
+    <!-- 流派一 -->
+    <!-- ========================================== -->
+    <section id="school-1" class="scroll-mt-24 bg-parchment-card border border-parchment-border rounded-2xl p-6 sm:p-10 shadow-sm space-y-6">
+      <div class="flex flex-wrap items-center justify-between gap-4 border-b-2 border-parchment-border pb-4">
+        <div class="flex items-center gap-3">
+          <span class="px-3 py-1 rounded-lg bg-terracotta-mid text-parchment-card font-mono font-bold text-sm">流派一</span>
+          <h2 class="text-xl sm:text-2xl font-bold text-ink-primary">
+            “验IP网站定向分流”劫持（零成本秒级伪造，俗称“羊头狗肉”）
+          </h2>
+        </div>
+      </div>
+
+      <p class="text-base sm:text-lg font-bold text-terracotta-deep bg-terracotta-light/70 border-l-4 border-terracotta-mid p-4 rounded-r-xl">
+        这是不良商家最暴利的骗术：<strong>你用任何检测工具查都是完美的“双ISP美国家宽”，但你实际访问业务网站时走的却是几毛钱的垃圾机房IP。</strong>
+      </p>
+
+      <!-- 伪造原理 -->
+      <div class="space-y-3">
+        <h3 class="text-lg sm:text-xl font-bold text-teal-deep flex items-center gap-2">
+          <span class="w-2 h-5 bg-teal-deep rounded-sm inline-block"></span>
+          伪造原理
+        </h3>
+        <p class="text-base leading-relaxed text-ink-primary">
+          商家发给你的 Socks5 节点入口其实是一台普通的廉价美国 VPS。商家在服务端的代理核心（Xray 或 Sing-box）里配置了<strong>域名分流（Routing）</strong>：仅把全球十几家主流的 <strong>IP 检测网站域名</strong>（如 <code class="inline-code">ipinfo.io</code>、<code class="inline-code">ping0.cc</code>、<code class="inline-code">whoer.net</code>）劫持转发到一个按流量计费的真住宅代理池；而当你访问 Amazon、PayPal、TikTok 等业务平台时，流量全部从廉价机房 IP 直接发出（Direct）。
+        </p>
+      </div>
+
+      <!-- 保姆级复现步骤 -->
+      <div class="space-y-4 pt-2">
+        <h3 class="text-lg sm:text-xl font-bold text-teal-deep flex items-center gap-2">
+          <span class="w-2 h-5 bg-teal-deep rounded-sm inline-block"></span>
+          保姆级复现步骤（基于 Xray / 3x-ui 服务端）
+        </h3>
+
+        <ol class="space-y-4 list-decimal list-inside text-base leading-relaxed text-ink-primary">
+          <li class="p-4 rounded-xl bg-parchment-panel/50 border border-parchment-border">
+            <strong class="font-bold text-ink-primary">准备资源：</strong>
+            <ul class="list-disc list-inside ml-4 mt-2 space-y-1.5 text-ink-primary">
+              <li>一台最便宜的美国机房 VPS（月付 2 美元即可），安装 <code class="inline-code">3x-ui</code> 面板。</li>
+              <li>购买一个按流量计费的动态美国住宅代理（1GB 仅需 1~2 美元，只用来应付检测网站，1GB 流量够几百个买家查上万次 IP）。</li>
+            </ul>
+          </li>
+
+          <li class="p-4 rounded-xl bg-parchment-panel/50 border border-parchment-border">
+            <strong class="font-bold text-ink-primary">创建入站 Socks5 节点（发放给买家的节点）：</strong>
+            <ul class="list-disc list-inside ml-4 mt-2 space-y-1.5 text-ink-primary">
+              <li>在 3x-ui 的 <strong>入站列表</strong> 中添加一个 <code class="inline-code">Socks</code> 协议节点，设定端口（如 <code class="inline-code">10808</code>）与账号密码。</li>
+            </ul>
+          </li>
+
+          <li class="p-4 rounded-xl bg-parchment-panel/50 border border-parchment-border">
+            <strong class="font-bold text-ink-primary">配置双出站（一个真家宽，一个机房直连）：</strong>
+            <ul class="list-disc list-inside ml-4 mt-2 space-y-1.5 text-ink-primary">
+              <li>进入 <strong>面板设置 → 出站规则</strong>，保留默认的 <code class="inline-code">direct</code>（机房本地直连出站）。</li>
+              <li>点击 <strong>添加出站</strong>，协议选 <code class="inline-code">Socks</code> 或 <code class="inline-code">HTTP</code>，填入按流量计费的<strong>真美国住宅代理</strong>信息，将标签（Tag）命名为 <code class="inline-code">fake_check_resi</code>。</li>
+            </ul>
+          </li>
+
+          <li class="p-4 rounded-xl bg-parchment-panel/50 border border-parchment-border space-y-3">
+            <strong class="font-bold text-ink-primary">配置域名劫持路由（造假核心）：</strong>
+            <ul class="list-disc list-inside ml-4 mt-2 space-y-1.5 text-ink-primary">
+              <li>进入 <strong>面板设置 → 路由规则 → 添加规则</strong>：</li>
+              <li><strong>Outbound Tag（出站标签）：</strong> 选择 <code class="inline-code">fake_check_resi</code>。</li>
+              <li><strong>Domain（匹配域名）：</strong> 填入所有主流查 IP 网站的域名及 API 接口：</li>
+            </ul>
+
+            <!-- 代码块 1 -->
+            <div class="rounded-xl overflow-hidden border border-parchment-darkborder bg-[#1E1B18] text-[#F3EAD3] my-3 shadow-inner">
+              <div class="flex items-center justify-between px-4 py-2 bg-[#2B2622] border-b border-[#3D3630] text-xs font-mono text-[#B8AC99]">
+                <span>text · Xray Routing Domain Rules</span>
+                <button class="px-2.5 py-1 rounded bg-[#3D3630] hover:bg-teal-deep text-[#F3EAD3] transition-colors flex items-center gap-1" data-s5-click="copyCodeBlock(this, 'code-block-1')" type="button">
+                  <span>复制代码</span>
+                </button>
+              </div>
+              <pre id="code-block-1" class="p-4 text-xs sm:text-sm font-mono overflow-x-auto leading-relaxed whitespace-pre-wrap break-all" tabindex="0"><code>domain:ipinfo.io,domain:ping0.cc,domain:whoer.net,domain:scamalytics.com,domain:ip-api.com,domain:browserleaks.com,domain:ipify.org,domain:ip.sb,domain:ippure.com,domain:db-ip.com,domain:maxmind.com</code></pre>
+            </div>
+
+            <ul class="list-disc list-inside ml-4 space-y-1.5 text-ink-primary">
+              <li>保存并重启 Xray。此时买家连上这个 Socks5 去查 <code class="inline-code">ping0.cc</code> 或 <code class="inline-code">ipinfo.io</code>，看到的是 100% 纯净的美国本土家宽；但打开其他任何网站，暴露的都是这台 2 美元 VPS 的机房 IP。</li>
+            </ul>
+          </li>
+        </ol>
+      </div>
+    </section>
+
+    <!-- ========================================== -->
+    <!-- 流派二 -->
+    <!-- ========================================== -->
+    <section id="school-2" class="scroll-mt-24 bg-parchment-card border border-parchment-border rounded-2xl p-6 sm:p-10 shadow-sm space-y-6">
+      <div class="flex flex-wrap items-center justify-between gap-4 border-b-2 border-parchment-border pb-4">
+        <div class="flex items-center gap-3">
+          <span class="px-3 py-1 rounded-lg bg-teal-deep text-parchment-card font-mono font-bold text-sm">流派二</span>
+          <h2 class="text-xl sm:text-2xl font-bold text-ink-primary">
+            站群多IP服务器 + 协议栈伪装 + rDNS 欺骗（中级技术流伪造）
+          </h2>
+        </div>
+      </div>
+
+      <p class="text-base leading-relaxed text-ink-primary">
+        如果买家比较懂行，用自建接口测出了真实出口 IP，第一种方法就会露馅。于是商家采用第二种方案：<strong>租用带有 253 个独立 IP（<code class="inline-code">/24</code> C段）的美国站群服务器，把每个机房 IP 单独包装成一个 Socks5，并通过修改 Linux 内核指纹与反向域名解析（rDNS），骗过基础风控。</strong>
+      </p>
+
+      <h3 class="text-lg sm:text-xl font-bold text-teal-deep flex items-center gap-2 pt-2">
+        <span class="w-2 h-5 bg-teal-deep rounded-sm inline-block"></span>
+        保姆级复现步骤
+      </h3>
+
+      <!-- 步骤 1 -->
+      <div class="p-5 rounded-xl bg-parchment-panel/50 border border-parchment-border space-y-3">
+        <h4 class="text-base sm:text-lg font-bold text-ink-primary">
+          1. 批量绑定整段 <code class="inline-code">/24</code> IP 并实现“一IP一出口”
+        </h4>
+        <p class="text-base leading-relaxed text-ink-primary">
+          租用一台美国洛杉矶或达拉斯的 <code class="inline-code">/24</code> 站群服务器（约 100 美元/月，折合每个静态 IP 成本不到 0.4 美元）。在 Ubuntu/Debian 系统中安装 <code class="inline-code">Sing-box</code> 或 <code class="inline-code">3x-ui</code>，配置 <code class="inline-code">sendThrough</code> / <code class="inline-code">inet4_bind_address</code> 参数，确保从哪个 IP 进来的 Socks5 请求，就强制从哪个 IP 的网卡出去：
+        </p>
+
+        <!-- 代码块 2 -->
+        <div class="rounded-xl overflow-hidden border border-parchment-darkborder bg-[#1E1B18] text-[#F3EAD3] my-3 shadow-inner">
+          <div class="flex items-center justify-between px-4 py-2 bg-[#2B2622] border-b border-[#3D3630] text-xs font-mono text-[#B8AC99]">
+            <span>json · Sing-box Multi-IP Inbound/Outbound Config</span>
+            <button class="px-2.5 py-1 rounded bg-[#3D3630] hover:bg-teal-deep text-[#F3EAD3] transition-colors flex items-center gap-1" data-s5-click="copyCodeBlock(this, 'code-block-2')" type="button">
+              <span>复制代码</span>
+            </button>
+          </div>
+          <pre id="code-block-2" class="p-4 text-xs sm:text-sm font-mono overflow-x-auto leading-relaxed" tabindex="0"><code>{
+  "inbounds": [
+    {
+      "type": "socks",
+      "tag": "in-1",
+      "listen": "23.106.xx.10",
+      "listen_port": 20001,
+      "users": [{ "username": "user1", "password": "pass1" }]
+    }
+  ],
+  "outbounds": [
+    {
+      "type": "direct",
+      "tag": "out-1",
+      "inet4_bind_address": "23.106.xx.10"
+    }
+  ],
+  "route": {
+    "rules": [
+      { "inbound": ["in-1"], "outbound": "out-1" }
+    ]
+  }
+}</code></pre>
+        </div>
+
+        <p class="text-base leading-relaxed text-ink-primary">
+          商家只需写一个简单的 Shell 循环脚本，10 秒钟就能生成 253 个独立的美国静态 Socks5 节点。
+        </p>
+      </div>
+
+      <!-- 步骤 2 -->
+      <div class="p-5 rounded-xl bg-parchment-panel/50 border border-parchment-border space-y-3">
+        <h4 class="text-base sm:text-lg font-bold text-ink-primary">
+          2. 修改 Linux 内核 TCP/IP 协议栈指纹（欺骗 p0f 被动指纹检测）
+        </h4>
+        <p class="text-base leading-relaxed text-ink-primary">
+          目标网站（及 <code class="inline-code">browserleaks.com</code>、<code class="inline-code">whoer.net</code>）会通过分析 TCP 握手包的 <strong>TTL（生存时间）</strong> 和 <strong>Window Size（窗口大小）</strong> 来判断代理背后是机房 Linux 服务器还是美国家庭的 Windows 电脑/路由器：
+        </p>
+        <ul class="list-disc list-inside ml-4 space-y-1.5 text-ink-primary">
+          <li>Linux 机房服务器默认 <code class="inline-code">TTL = 64</code>（一眼假，直接被标记为 Linux Server Proxy）。</li>
+          <li>Windows 系统默认 <code class="inline-code">TTL = 128</code>。</li>
+        </ul>
+        <p class="text-base leading-relaxed text-ink-primary">
+          在站群服务器的 SSH 终端中执行以下命令，将 Linux 伪装成 Windows 终端：
+        </p>
+
+        <!-- 代码块 3 -->
+        <div class="rounded-xl overflow-hidden border border-parchment-darkborder bg-[#1E1B18] text-[#F3EAD3] my-3 shadow-inner">
+          <div class="flex items-center justify-between px-4 py-2 bg-[#2B2622] border-b border-[#3D3630] text-xs font-mono text-[#B8AC99]">
+            <span>bash · Linux sysctl TCP/IP Stack Spoofing</span>
+            <button class="px-2.5 py-1 rounded bg-[#3D3630] hover:bg-teal-deep text-[#F3EAD3] transition-colors flex items-center gap-1" data-s5-click="copyCodeBlock(this, 'code-block-3')" type="button">
+              <span>复制代码</span>
+            </button>
+          </div>
+          <pre id="code-block-3" class="p-4 text-xs sm:text-sm font-mono overflow-x-auto leading-relaxed" tabindex="0"><code># 1. 将默认 TTL 从 64 修改为 128（模仿 Windows TCP/IP 协议栈）
+echo "net.ipv4.ip_default_ttl = 128" &gt;&gt; /etc/sysctl.conf
+
+# 2. 修改 TCP 窗口缩放与时间戳特征，贴近家用宽带路由器与桌面系统
+echo "net.ipv4.tcp_window_scaling = 1" &gt;&gt; /etc/sysctl.conf
+echo "net.ipv4.tcp_timestamps = 0" &gt;&gt; /etc/sysctl.conf
+echo "net.ipv4.tcp_sack = 1" &gt;&gt; /etc/sysctl.conf
+
+# 3. 立即生效
+sysctl -p</code></pre>
+        </div>
+      </div>
+
+      <!-- 步骤 3 -->
+      <div class="p-5 rounded-xl bg-parchment-panel/50 border border-parchment-border space-y-3">
+        <h4 class="text-base sm:text-lg font-bold text-ink-primary">
+          3. 伪造 PTR（rDNS 反向解析）记录
+        </h4>
+        <p class="text-base leading-relaxed text-ink-primary">
+          许多风控系统会反查 IP 对应的域名（PTR 记录）。机房 IP 的 PTR 通常带有 <code class="inline-code">vps</code>、<code class="inline-code">dedicated</code>、<code class="inline-code">host</code>、<code class="inline-code">cloud</code> 字样；而美国真家宽的 PTR 则带有 <code class="inline-code">cpe</code>（客户终端设备）、<code class="inline-code">res</code>（住宅）、<code class="inline-code">pool</code>、<code class="inline-code">dynamic</code> 字样。<br>
+          商家登录机房管理后台（或委托上游 IDC），将该 <code class="inline-code">/24</code> 网段的反向 DNS 解析批量设置为仿美国家宽格式：
+        </p>
+        <ul class="list-disc list-inside ml-4 space-y-2 text-ink-primary">
+          <li><strong>伪造前（暴露机房）：</strong> <code class="inline-code">10.xx.106.23.static.datacenter-la.com</code></li>
+          <li><strong>伪造后（高仿 Spectrum/Charter 家宽）：</strong> <code class="inline-code">cpe-23-106-xx-10.socal.res.rr.com</code></li>
+          <li><strong>伪造后（高仿 Verizon Fios 家宽）：</strong> <code class="inline-code">pool-23-106-xx-10.lsanca.fios.verizon.net</code></li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- ========================================== -->
+    <!-- 流派三 -->
+    <!-- ========================================== -->
+    <section id="school-3" class="scroll-mt-24 bg-parchment-card border border-parchment-border rounded-2xl p-6 sm:p-10 shadow-sm space-y-6">
+      <div class="flex flex-wrap items-center justify-between gap-4 border-b-2 border-parchment-border pb-4">
+        <div class="flex items-center gap-3">
+          <span class="px-3 py-1 rounded-lg bg-teal-deep text-parchment-card font-mono font-bold text-sm">流派三</span>
+          <h2 class="text-xl sm:text-2xl font-bold text-ink-primary">
+            ASN 借壳广播 + Geofeed 注入 + IP 库申诉洗白（终极源头伪造，“伪双ISP”的真正诞生）
+          </h2>
+        </div>
+      </div>
+
+      <div class="space-y-3 text-base leading-relaxed text-ink-primary bg-parchment-panel/60 p-5 rounded-xl border border-parchment-border">
+        <p>
+          你可能会问：<strong>“为什么我买的假住宅 IP，连 <code class="inline-code">ipinfo.io</code> 和 <code class="inline-code">ping0.cc</code> 都明确显示它是 <code class="inline-code">isp</code>（家庭宽带）甚至‘双ISP’？”</strong>
+        </p>
+        <p>
+          因为全球没有任何一家 IP 检测网站能顺着网线去美国看那台机器是不是放在居民家里——它们 <strong>100% 依赖五大商业 IP 数据库（MaxMind、IPinfo、IP2Location、DB-IP、IPdata）的标记</strong>。只要把数据库里的标签从 <code class="inline-code">hosting</code>（机房）改成 <code class="inline-code">isp</code>（宽带），一段插在机房机柜里的服务器 IP 就会变成全网公认的“静态双ISP住宅IP”。
+        </p>
+      </div>
+
+      <h3 class="text-lg sm:text-xl font-bold text-teal-deep flex items-center gap-2 pt-2">
+        <span class="w-2 h-5 bg-teal-deep rounded-sm inline-block"></span>
+        保姆级洗白全流程（IDC 庄家操作手册）
+      </h3>
+
+      <!-- 第一步 -->
+      <div class="p-5 rounded-xl bg-parchment-panel/50 border border-parchment-border space-y-3">
+        <h4 class="text-base sm:text-lg font-bold text-ink-primary">
+          第一步：租用冷门 IPv4 段并借壳 ISP 的 ASN 进行 BGP 宣告
+        </h4>
+        <ol class="list-decimal list-inside space-y-2 text-base leading-relaxed text-ink-primary">
+          <li>庄家去 IP 租用平台（如 IPXO、Heficed 或找 ARIN 会员 LIR）租用一段从未被滥用过的冷门 <code class="inline-code">/24</code> IPv4 地址（月租约 100~130 美元）。</li>
+          <li><strong>打造第一个 ISP 标签（ASN Type = ISP）：</strong> 庄家绝不会用 Vultr (<code class="inline-code">AS20473</code>) 或 DigitalOcean (<code class="inline-code">AS14061</code>) 这种纯机房 ASN 来广播这段 IP，而是找拥有电信运营商资质的上游（最典型的是 <strong>Cogent Communications <code class="inline-code">AS174</code></strong>、<strong>Frontier</strong>、<strong>Windstream</strong> 或 <strong>Zayo</strong>）建立 BGP Session 来宣告这段 IP。因为 <code class="inline-code">AS174</code> 本身在各大数据库里的属性就是 <code class="inline-code">isp</code>，这样 <strong>ASN 层的 ISP 属性</strong>就天然搞定了。</li>
+        </ol>
+      </div>
+
+      <!-- 第二步 -->
+      <div class="p-5 rounded-xl bg-parchment-panel/50 border border-parchment-border space-y-3">
+        <h4 class="text-base sm:text-lg font-bold text-ink-primary">
+          第二步：注册带“宽带/通信”字样的美国壳公司并修改 WHOIS (SWIP)
+        </h4>
+        <p class="text-base leading-relaxed text-ink-primary">
+          为了搞定第二个 ISP 标签（<strong>Company Type = ISP</strong>），庄家花几十美元在美国注册一家名字听起来像本地宽带运营商的 LLC 壳公司（例如 <code class="inline-code">Pacific Fiber Broadband LLC</code> 或 <code class="inline-code">SoCal Residential Telecom Inc.</code>）。<br>
+          接着要求上游通过 ARIN 的 <strong>SWIP（Shared WHOIS Project）</strong> 接口，将该 <code class="inline-code">/24</code> IP 段的 WHOIS 归属（<code class="inline-code">OrgName</code> / <code class="inline-code">CustName</code>）重写为这家壳公司。
+        </p>
+      </div>
+
+      <!-- 第三步 -->
+      <div class="p-5 rounded-xl bg-parchment-panel/50 border border-parchment-border space-y-3">
+        <h4 class="text-base sm:text-lg font-bold text-ink-primary">
+          第三步：部署 RFC 8805 标准的 <code class="inline-code">geofeed.csv</code> 文件
+        </h4>
+        <p class="text-base leading-relaxed text-ink-primary">
+          各大 IP 数据库目前都通过自动化爬虫读取 WHOIS 中的 <strong>Geofeed（RFC 8805 地理信息源协议）</strong> 来更新 IP 归属地。
+        </p>
+        <ol class="list-decimal list-inside space-y-3 text-base leading-relaxed text-ink-primary">
+          <li>
+            庄家在那个壳公司的官网下上传一个公开的 <code class="inline-code">geofeed.csv</code> 文件，内容明确将该段 IP 指向美国目标城市（如加州洛杉矶）：
+            <!-- 代码块 4 -->
+            <div class="rounded-xl overflow-hidden border border-parchment-darkborder bg-[#1E1B18] text-[#F3EAD3] my-3 shadow-inner">
+              <div class="flex items-center justify-between px-4 py-2 bg-[#2B2622] border-b border-[#3D3630] text-xs font-mono text-[#B8AC99]">
+                <span>csv · RFC 8805 geofeed.csv</span>
+                <button class="px-2.5 py-1 rounded bg-[#3D3630] hover:bg-teal-deep text-[#F3EAD3] transition-colors flex items-center gap-1" data-s5-click="copyCodeBlock(this, 'code-block-4')" type="button">
+                  <span>复制代码</span>
+                </button>
+              </div>
+              <pre id="code-block-4" class="p-4 text-xs sm:text-sm font-mono overflow-x-auto leading-relaxed" tabindex="0"><code># 格式: network,alpha2code,region,city,postal_code
+23.106.xx.0/24,US,US-CA,Los Angeles,90001</code></pre>
+            </div>
+          </li>
+          <li>
+            在 ARIN 的 WHOIS 记录 <code class="inline-code">Remarks</code> 或 <code class="inline-code">Geofeed</code> 字段中写入：
+            <!-- 代码块 5 -->
+            <div class="rounded-xl overflow-hidden border border-parchment-darkborder bg-[#1E1B18] text-[#F3EAD3] my-3 shadow-inner">
+              <div class="flex items-center justify-between px-4 py-2 bg-[#2B2622] border-b border-[#3D3630] text-xs font-mono text-[#B8AC99]">
+                <span>text · ARIN WHOIS Geofeed Remark</span>
+                <button class="px-2.5 py-1 rounded bg-[#3D3630] hover:bg-teal-deep text-[#F3EAD3] transition-colors flex items-center gap-1" data-s5-click="copyCodeBlock(this, 'code-block-5')" type="button">
+                  <span>复制代码</span>
+                </button>
+              </div>
+              <pre id="code-block-5" class="p-4 text-xs sm:text-sm font-mono overflow-x-auto leading-relaxed" tabindex="0"><code>Geofeed https://pacificfiberbroadband.com/geofeed.csv</code></pre>
+            </div>
+          </li>
+        </ol>
+      </div>
+
+      <!-- 第四步 -->
+      <div class="p-5 rounded-xl bg-parchment-panel/50 border border-parchment-border space-y-3">
+        <h4 class="text-base sm:text-lg font-bold text-ink-primary">
+          第四步：向五大 IP 数据库提交“ISP 属性纠错工单”
+        </h4>
+        <p class="text-base leading-relaxed text-ink-primary">
+          完成上述铺垫后，庄家以该“宽带公司网络管理员”的身份（使用壳公司企业邮箱），向全球各大 IP 数据库官方提交数据更正申请（Data Correction Request）：
+        </p>
+        <ul class="list-disc list-inside ml-4 space-y-2 text-base leading-relaxed text-ink-primary">
+          <li><strong>MaxMind 申诉入口：</strong> <code class="inline-code">maxmind.com/en/geoip-data-correction-request</code></li>
+          <li><strong>IPinfo 申诉入口：</strong> 登录 IPinfo 提交 <code class="inline-code">ASN / Company Type</code> 修正工单。</li>
+          <li><strong>IP2Location / DB-IP / Scamalytics：</strong> 发送官方纠错邮件。</li>
+          <li>
+            <strong>申诉话术模板：</strong> 声称 <em class="italic bg-parchment-card px-2 py-0.5 rounded border border-parchment-border">“我司是南加州本地的固定无线与光纤宽带接入商（FTTH / Fixed Wireless Access ISP），<code class="inline-code">23.106.xx.0/24</code> 网段已全部分配给本地家庭宽带订阅用户（Residential Subscribers）作为静态家庭网关使用，请将该网段的 <code class="inline-code">Usage Type / Connection Type</code> 从 <code class="inline-code">Data Center (DCH)</code> 更正为 <code class="inline-code">Fixed Line ISP</code>。”</em>
+          </li>
+        </ul>
+        <p class="text-base leading-relaxed text-ink-primary pt-2 border-t border-parchment-border">
+          等待 <strong>2 到 4 周</strong> 数据库同步更新后，奇迹发生了：这段明明插在洛杉矶机房服务器里的 IP，在 <code class="inline-code">ipinfo.io</code> 上会显示完美的双 <code class="inline-code">"type": "isp"</code>，在 <code class="inline-code">ping0.cc</code> 上会变成绿油油的 <strong>“家庭宽带”</strong>。随后庄家将其切成 253 个 Socks5 节点，以每个月 30~80 元人民币的高价卖给跨境电商和撸毛用户。
+        </p>
+      </div>
+    </section>
+
+    <!-- ========================================== -->
+    <!-- 买家自卫指南：对比表格 -->
+    <!-- ========================================== -->
+    <section id="defense-guide" class="scroll-mt-24 bg-parchment-card border-2 border-teal-deep rounded-2xl p-6 sm:p-10 shadow-md space-y-6">
+      <div class="flex flex-wrap items-center justify-between gap-4 border-b border-parchment-border pb-4">
+        <div>
+          <span class="text-xs font-mono uppercase tracking-widest text-terracotta-mid font-bold block">COUNTER-DECEPTION MATRIX</span>
+          <h2 class="text-xl sm:text-2xl font-bold text-ink-primary mt-1">
+            买家自卫指南：3 招一秒识破上述所有伪造
+          </h2>
+        </div>
+      </div>
+
+      <p class="text-base leading-relaxed text-ink-primary">
+        既然连 <code class="inline-code">ipinfo.io</code> 和 <code class="inline-code">ping0.cc</code> 都能被骗过，作为买家该如何验出自己买的 Socks5 到底是不是伪造的？
+      </p>
+
+      <!-- 响应式表格容器 -->
+      <div class="overflow-x-auto rounded-xl border border-parchment-darkborder shadow-sm">
+        <table class="w-full text-left border-collapse">
+          <thead>
+            <tr class="bg-teal-deep text-parchment-card text-sm sm:text-base">
+              <th class="p-4 font-bold border-r border-teal-mid w-1/5 min-w-[160px]">伪造流派</th>
+              <th class="p-4 font-bold border-r border-teal-mid w-2/5 min-w-[240px]">表面检测特征 (<code class="font-mono bg-teal-mid px-1.5 py-0.5 rounded text-xs">ipinfo.io</code> / <code class="font-mono bg-teal-mid px-1.5 py-0.5 rounded text-xs">ping0.cc</code>)</th>
+              <th class="p-4 font-bold w-2/5 min-w-[280px]">一招毙命的验真手段</th>
+            </tr>
+          </thead>
+          <tbody class="divide-y divide-parchment-border text-sm sm:text-base bg-parchment-card">
+            <tr class="hover:bg-parchment-panel/40 transition-colors">
+              <td class="p-4 font-bold text-ink-primary border-r border-parchment-border align-top">
+                流派一：验IP网站分流劫持
+              </td>
+              <td class="p-4 text-ink-primary border-r border-parchment-border align-top leading-relaxed">
+                双 ISP 家庭宽带、风控值极低（因为查 IP 时走的是真家宽）
+              </td>
+              <td class="p-4 text-ink-primary align-top leading-relaxed bg-terracotta-light/30">
+                访问冷门回显接口（如 <code class="inline-code">cloudflare.com/cdn-cgi/trace</code> 或自建 Cloudflare Worker），对比显示的 <code class="inline-code">ip=</code> 是否与 <code class="inline-code">ipinfo.io</code> 一致。只要不一致，100% 是分流假节点。
+              </td>
+            </tr>
+            <tr class="hover:bg-parchment-panel/40 transition-colors">
+              <td class="p-4 font-bold text-ink-primary border-r border-parchment-border align-top">
+                流派二：站群多IP + 协议栈/rDNS伪装
+              </td>
+              <td class="p-4 text-ink-primary border-r border-parchment-border align-top leading-relaxed">
+                往往显示单 ISP 或机房，但 <code class="inline-code">whoer.net</code> 伪装度 100%，PTR 像家宽
+              </td>
+              <td class="p-4 text-ink-primary align-top leading-relaxed bg-terracotta-light/30">
+                对该 IP 的正向解析与反向解析做交叉验证（Forward-confirmed reverse DNS）：真家宽 <code class="inline-code">ping</code> 它的 PTR 域名能解析回原 IP；伪造的 PTR 域名正向解析往往不通。
+              </td>
+            </tr>
+            <tr class="hover:bg-parchment-panel/40 transition-colors">
+              <td class="p-4 font-bold text-ink-primary border-r border-parchment-border align-top">
+                流派三：ASN借壳 + 数据库申诉洗白
+              </td>
+              <td class="p-4 text-ink-primary border-r border-parchment-border align-top leading-relaxed">
+                完美“双 ISP”、家庭宽带、欺诈分为 0（市面上 90% 的廉价静态双ISP均属此类）
+              </td>
+              <td class="p-4 text-ink-primary align-top leading-relaxed bg-terracotta-light/30">
+                <strong>看 ASN 运营商名字与邻居端口：</strong> 真美国本土家宽的 ASN 只有寥寥几家巨头（AT&amp;T <code class="inline-code">AS7018</code>、Verizon <code class="inline-code">AS701</code>、Comcast <code class="inline-code">AS7922</code>、Charter <code class="inline-code">AS20115</code>、Cox <code class="inline-code">AS22773</code>）。凡是挂在 <code class="inline-code">AS174 (Cogent)</code>、各类生僻 Telecom LLC 下，或者把你买的 IP 最后一位改成 <code class="inline-code">.1</code>~<code class="inline-code">.254</code> 扫一下发现隔壁 IP 全开着 <code class="inline-code">22</code> (SSH) 端口的，100% 是机房洗白的伪家宽。
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- ========================================== -->
+    <!-- 底部交互式核心模块：伪住宅 IP 链路与鉴伪互动沙盘 -->
+    <!-- ========================================== -->
+    <section id="interactive-sandbox" class="scroll-mt-20 bg-parchment-card border-2 border-parchment-darkborder rounded-2xl shadow-xl overflow-hidden">
+      <!-- 沙盘顶部标题与导引 -->
+      <div class="bg-parchment-panel border-b border-parchment-border p-5 sm:p-6">
+        <div class="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
+          <div>
+            <div class="inline-flex items-center gap-2 text-xs font-mono uppercase tracking-wider text-teal-deep font-bold mb-1">
+              <span class="w-2.5 h-2.5 rounded-full bg-teal-deep"></span>
+              INTERACTIVE NETWORK FORENSICS SANDBOX
+            </div>
+            <h2 class="text-xl sm:text-2xl font-black text-ink-primary">
+              伪住宅 IP 链路与鉴伪互动沙盘
+            </h2>
+            <p class="text-xs sm:text-sm text-ink-secondary mt-1">
+              通过下方的交互式流程图，你可以逐步切换并直观对比这三种伪造流派在底层网络链路与数据库层面的运作机制：
+            </p>
+          </div>
+
+          <!-- 开启买家透视镜 Toggle Switch -->
+          <div class="flex items-center gap-3 self-start lg:self-center bg-parchment-card px-4 py-2.5 rounded-xl border-2 border-terracotta-border shadow-sm">
+            <label for="xray-toggle" class="flex items-center gap-3 cursor-pointer select-none">
+              <div class="relative">
+                <input type="checkbox" id="xray-toggle" class="sr-only" data-s5-change="toggleBuyerXray(this.checked)" aria-label="开启买家透视镜">
+                <div id="xray-track" class="w-12 h-6 bg-parchment-darkborder rounded-full transition-colors duration-200"></div>
+                <div id="xray-thumb" class="absolute left-1 top-1 bg-parchment-card w-4 h-4 rounded-full transition-transform duration-200 shadow"></div>
+              </div>
+              <div>
+                <div class="text-xs sm:text-sm font-bold text-terracotta-deep flex items-center gap-1.5">
+                  <svg class="w-4 h-4" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path>
+                  </svg>
+                  <span>开启买家透视镜</span>
+                </div>
+                <span class="text-[11px] text-ink-secondary block">显示破局验真方法与终端检测命令</span>
+              </div>
+            </label>
+          </div>
+        </div>
+
+        <!-- 控制栏第2层：3个流派切换选项卡 + 步骤推进控制器 -->
+        <div class="mt-5 pt-4 border-t border-parchment-border flex flex-col md:flex-row items-stretch md:items-center justify-between gap-4">
+          <!-- 流派切换 Tabs -->
+          <div class="grid grid-cols-1 sm:grid-cols-3 gap-2 flex-1" role="group" aria-label="流派切换">
+            <button id="tab-mode-0" class="px-3.5 py-2.5 rounded-xl font-bold text-xs sm:text-sm text-left transition-all border flex items-center justify-between" data-s5-click="selectMode(0)" type="button" aria-pressed="true">
+              <span>流派一：验IP域名分流劫持</span>
+              <span class="font-mono text-[11px] px-1.5 py-0.5 rounded bg-black/10">01</span>
+            </button>
+            <button id="tab-mode-1" class="px-3.5 py-2.5 rounded-xl font-bold text-xs sm:text-sm text-left transition-all border flex items-center justify-between" data-s5-click="selectMode(1)" type="button" aria-pressed="false">
+              <span>流派二：站群内核与rDNS伪装</span>
+              <span class="font-mono text-[11px] px-1.5 py-0.5 rounded bg-black/10">02</span>
+            </button>
+            <button id="tab-mode-2" class="px-3.5 py-2.5 rounded-xl font-bold text-xs sm:text-sm text-left transition-all border flex items-center justify-between" data-s5-click="selectMode(2)" type="button" aria-pressed="false">
+              <span>流派三：ASN借壳与数据库洗白</span>
+              <span class="font-mono text-[11px] px-1.5 py-0.5 rounded bg-black/10">03</span>
+            </button>
+          </div>
+
+          <!-- 步骤控制器 (上一步 / Step 1~4 / 下一步) -->
+          <div class="flex items-center justify-between sm:justify-end gap-2 bg-parchment-card px-3 py-1.5 rounded-xl border border-parchment-border s5-step-controls">
+            <button class="px-3 py-1.5 rounded-lg bg-parchment-panel hover:bg-teal-deep hover:text-parchment-card text-ink-primary font-bold text-xs transition-colors flex items-center gap-1" data-s5-click="prevStep()" type="button">
+              <span>← 上一步</span>
+            </button>
+
+            <div class="flex items-center gap-1 px-1" id="step-dots-container">
+              <!-- 动态渲染 Step 1~4 按钮 -->
+            </div>
+
+            <button class="px-3 py-1.5 rounded-lg bg-teal-deep hover:bg-teal-mid text-parchment-card font-bold text-xs transition-colors flex items-center gap-1" data-s5-click="nextStep()" type="button">
+              <span>下一步 →</span>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- 动态 SVG 拓扑链路画布 -->
+      <div class="relative bg-[#F7F1E1] p-4 sm:p-6 border-b border-parchment-border">
+        <!-- 状态图例说明条 -->
+        <div class="flex flex-wrap items-center justify-between gap-2 mb-3 text-xs font-mono">
+          <div class="flex flex-wrap items-center gap-4">
+            <span class="flex items-center gap-1.5 text-teal-deep font-semibold">
+              <span class="w-3 h-3 rounded-sm bg-teal-deep inline-block"></span>
+              正常/伪装表象链路
+            </span>
+            <span class="flex items-center gap-1.5 text-terracotta-deep font-semibold">
+              <span class="w-3 h-3 rounded-sm bg-terracotta-mid inline-block"></span>
+              欺骗篡改节点 / 真实机房底牌
+            </span>
+            <span id="xray-legend-badge" class="hidden items-center gap-1.5 px-2 py-0.5 rounded bg-terracotta-deep text-parchment-card font-bold animate-pulse">
+              ★ 买家透视镜已激活：点击任意节点或查看底部破局命令
+            </span>
+          </div>
+          <div class="text-ink-secondary" id="canvas-mode-subtitle">
+            <!-- 动态副标题 -->
+          </div>
+        </div>
+
+        <!-- SVG 拓扑主容器 -->
+        <div class="w-full overflow-x-auto rounded-xl border border-parchment-border bg-parchment-card shadow-inner">
+          <div id="svg-canvas-container" class="min-w-[780px] w-full">
+            <!-- 由 JS 根据当前流派、当前步骤、透视镜状态动态渲染高精细度 SVG -->
+          </div>
+        </div>
+      </div>
+
+      <!-- 底部详情面板（双栏联动） -->
+      <div class="p-5 sm:p-6 bg-parchment-card grid grid-cols-1 lg:grid-cols-2 gap-6">
+        <!-- 左栏：庄家后台动作与核心配置/数据包特征 -->
+        <div class="rounded-xl border border-parchment-darkborder bg-parchment-panel/40 p-5 flex flex-col justify-between space-y-4">
+          <div class="space-y-3">
+            <div class="flex items-center justify-between border-b border-parchment-border pb-2.5">
+              <div class="flex items-center gap-2">
+                <span id="detail-step-badge" class="px-2.5 py-0.5 rounded bg-teal-deep text-parchment-card font-mono text-xs font-bold" aria-live="polite">
+                  STEP 1 / 4
+                </span>
+                <h3 id="detail-step-title" class="text-base sm:text-lg font-bold text-ink-primary">
+                  节点标题
+                </h3>
+              </div>
+              <span class="text-xs font-mono text-ink-secondary">庄家后台动作</span>
+            </div>
+
+            <p id="detail-dealer-desc" class="text-sm sm:text-base text-ink-primary leading-relaxed">
+              庄家动作描述...
+            </p>
+          </div>
+
+          <!-- 参数篡改对比条 -->
+          <div class="space-y-2">
+            <div class="text-xs font-mono uppercase text-ink-secondary font-semibold">
+              数据包特征 / 核心参数变化 (Packet &amp; DB Mutation)
+            </div>
+            <div id="detail-mutation-box" class="p-3.5 rounded-lg bg-[#1E1B18] text-[#F3EAD3] font-mono text-xs sm:text-sm overflow-x-auto leading-relaxed border border-parchment-darkborder">
+              <!-- 动态渲染参数对比 -->
+            </div>
+          </div>
+        </div>
+
+        <!-- 右栏：买家视角表象 vs 透视镜下的真实底牌与实操验真命令 -->
+        <div id="buyer-xray-panel" class="rounded-xl border-2 border-parchment-darkborder bg-parchment-panel/40 p-5 flex flex-col justify-between space-y-4 transition-all duration-300">
+          <div class="space-y-3">
+            <div class="flex items-center justify-between border-b border-parchment-border pb-2.5">
+              <div class="flex items-center gap-2">
+                <span id="xray-status-pill" class="px-2.5 py-0.5 rounded bg-terracotta-mid text-parchment-card font-mono text-xs font-bold">
+                  买家鉴伪视角
+                </span>
+                <h3 id="detail-xray-title" class="text-base sm:text-lg font-bold text-ink-primary">
+                  表面假象 vs 真实底牌
+                </h3>
+              </div>
+              <button class="text-xs font-mono text-terracotta-deep underline hover:text-terracotta-mid" data-s5-click="triggerXrayHighlight()" type="button">
+                切换透视对比
+              </button>
+            </div>
+
+            <!-- 表象 vs 真相双盒对比 -->
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs sm:text-sm">
+              <div class="p-3 rounded-lg bg-teal-light/60 border border-teal-border">
+                <div class="font-mono text-[11px] text-teal-deep font-bold uppercase mb-1">表面检测假象 (Surface Illusion)</div>
+                <div id="detail-surface-text" class="text-ink-primary font-medium leading-snug"></div>
+              </div>
+              <div class="p-3 rounded-lg bg-terracotta-light/70 border border-terracotta-border">
+                <div class="font-mono text-[11px] text-terracotta-deep font-bold uppercase mb-1">透视真实底牌 (True Reality)</div>
+                <div id="detail-reality-text" class="text-ink-primary font-medium leading-snug"></div>
+              </div>
+            </div>
+          </div>
+
+          <!-- 实操验真终端命令 -->
+          <div class="space-y-2">
+            <div class="flex items-center justify-between">
+              <span class="text-xs font-mono uppercase text-terracotta-deep font-bold flex items-center gap-1.5">
+                <span>⚡ 一招毙命实操验真命令 (Terminal Verification)</span>
+              </span>
+              <button class="px-2.5 py-1 rounded bg-terracotta-mid hover:bg-terracotta-deep text-parchment-card font-mono text-xs transition-colors" data-s5-click="copyVerifyCommand(this)" type="button">
+                复制检测命令
+              </button>
+            </div>
+            <pre id="detail-verify-cmd" class="p-3.5 rounded-lg bg-[#1E1B18] text-[#F5D0C5] font-mono text-xs sm:text-sm overflow-x-auto leading-relaxed border border-terracotta-border" tabindex="0"></pre>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 页脚区域 -->
+    <footer class="text-center text-xs sm:text-sm text-ink-secondary py-6 border-t border-parchment-border flex flex-col sm:flex-row items-center justify-between gap-2">
+      <div>
+        <span>美国静态住宅 Socks5 IP 伪造内幕与鉴伪沙盘</span>
+        <span class="mx-2">·</span>
+        <span class="font-mono">100% 原始技术卷宗完整收录</span>
+      </div>
+      <div class="font-mono text-xs text-ink-muted">
+        使用顶部导航或沙盘选项卡快速演练三大伪造流派
+      </div>
+    </footer>
+
+  </div>
+<!-- 全局轻提示气泡 (代替 alert) -->
+<div id="toast-notification" class="fixed bottom-6 right-6 z-50 transform translate-y-20 opacity-0 pointer-events-none transition-all duration-300 bg-teal-deep text-parchment-card px-4 py-2.5 rounded-xl shadow-lg border border-teal-border font-mono text-xs sm:text-sm flex items-center gap-2" role="status" aria-live="polite">
+    <svg class="w-4 h-4 text-amber-300 shrink-0" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+    </svg>
+    <span id="toast-message">已复制到剪贴板</span>
+  </div>
+<!-- 交互逻辑与沙盘渲染脚本 -->
