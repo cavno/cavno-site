@@ -1,0 +1,25 @@
+---
+import Base from '../../../layouts/Base.astro';
+import body from '../../../legacy/reading/books/wanli-fifteen-institutional-deadlock/body.html?raw';
+import '../../../legacy/reading/books/wanli-fifteen-institutional-deadlock/style.css';
+---
+<Base
+  title="《万历十五年》：封闭体制与人物路径困局 · Cavno"
+  description="以系统拓扑与反事实路径推演重构黄仁宇《万历十五年》：剖析以道德代替法制、数目字管理缺位、阴阳双轨官场生态，以及万历、张居正、申时行、海瑞、戚继光、李贽六条突围路径的结构性死锁。"
+>
+  <div class="cv-wrap wli-breadcrumb">
+    <span class="cv-eyebrow">Reading &amp; Thinking · Books</span>
+    <a class="cv-crumb-back" href="/reading/books/">← 返回书籍视察栏目</a>
+  </div>
+
+  <article id="wanli-1587-app" class="lp wli-app">
+    <Fragment set:html={body} />
+  </article>
+
+  <nav class="cv-wrap wli-end" aria-label="页面导航">
+    <a href="/reading/books/">← 返回书籍视察栏目</a>
+  </nav>
+
+  <script is:inline src="/reading/books/wanli-fifteen-institutional-deadlock/assets/chart.umd.min.js" defer></script>
+  <script is:inline src="/reading/books/wanli-fifteen-institutional-deadlock/assets/app.js?v=e5d6cdfd5c02" defer></script>
+</Base>

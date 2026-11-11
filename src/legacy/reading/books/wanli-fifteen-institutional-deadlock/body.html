@@ -1,0 +1,471 @@
+<!-- Editorial Book Systems Header -->
+  <header class="wli-hero-head">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 py-6 flex flex-col lg:flex-row lg:items-center justify-between gap-4">
+      <div class="flex items-start sm:items-center gap-3.5">
+        <div class="wli-year-seal shrink-0" aria-hidden="true">
+          <span class="serif-cn font-bold text-base leading-none">丁亥</span>
+        </div>
+        <div class="min-w-0">
+          <div class="flex items-center gap-2.5 flex-wrap">
+            <h1 class="serif-cn font-bold text-stone-900">《万历十五年》：封闭体制与人物路径困局</h1>
+            <span class="wli-edition-pill text-xs px-2.5 py-0.5 rounded-full font-medium">1587 历史系统推演程序</span>
+          </div>
+          <p class="wli-hero-sub text-xs sm:text-sm text-stone-600 mt-1.5">道德代替法制 · 数目字管理缺位 · 阴阳双轨生态 · 六条突围路径的结构性死锁</p>
+        </div>
+      </div>
+
+      <div class="flex items-center gap-2 shrink-0">
+        <button type="button" id="btn-open-quotes" data-wl-click="toggleQuoteDrawer(true)" class="wli-quote-trigger text-xs sm:text-sm px-3.5 py-2 rounded-full font-medium transition inline-flex items-center gap-1.5 whitespace-nowrap">
+          <span>📜</span>
+          <span>原书金句与史料库</span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Sticky 4-Module Sub-Navigation Bar -->
+  <div class="wli-subnav-bar">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 py-2.5 flex items-center gap-2 overflow-x-auto custom-scroll">
+      <button type="button" id="nav-topology" data-wl-click="switchTab('topology')" class="nav-tab-btn tab-btn-active text-xs sm:text-sm font-medium px-3.5 py-1.5 rounded-full border whitespace-nowrap transition">
+        ① 闭环体制拓扑图
+      </button>
+      <button type="button" id="nav-paths" data-wl-click="switchTab('paths')" class="nav-tab-btn wli-tab-idle text-xs sm:text-sm font-medium px-3.5 py-1.5 rounded-full border whitespace-nowrap transition">
+        ② 六人突围路径推演器
+      </button>
+      <button type="button" id="nav-yinyang" data-wl-click="switchTab('yinyang')" class="nav-tab-btn wli-tab-idle text-xs sm:text-sm font-medium px-3.5 py-1.5 rounded-full border whitespace-nowrap transition">
+        ③ 阴阳双轨与人物网络
+      </button>
+      <button type="button" id="nav-macro" data-wl-click="switchTab('macro')" class="nav-tab-btn wli-tab-idle text-xs sm:text-sm font-medium px-3.5 py-1.5 rounded-full border whitespace-nowrap transition">
+        ④ 1587切片与大历史观
+      </button>
+    </div>
+  </div>
+
+  <!-- Core Thesis Banner -->
+  <section class="bg-[#EDE6D6] border-b border-[#D8CEB8]">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 py-2.5 flex flex-col md:flex-row md:items-center justify-between gap-2 text-xs sm:text-sm">
+      <div class="flex items-start sm:items-center gap-2 text-stone-800">
+        <span class="seal-badge px-1.5 py-0.5 rounded text-xs font-bold shrink-0">核心命题</span>
+        <span><strong>“中国二千年来，以道德代替法制，至明代而极，这就是一切问题的症结。”</strong>——缺乏“数目字管理”的静态帝国中，最高统治者无自由、改革派无活路、调和派无空间、道德家无实效、实干家无保障、思想家无出路。</span>
+      </div>
+      <div class="flex items-center gap-2 shrink-0">
+        <span class="text-xs text-stone-500">点击下方模块节点可跨视图联动推演</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- Main Content Container -->
+  <main class="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 py-5 space-y-6">
+
+    <!-- =================================================================== -->
+    <!-- VIEW 1: SYSTEM TOPOLOGY (闭环体制拓扑图)                              -->
+    <!-- =================================================================== -->
+    <section id="view-topology" class="space-y-5">
+      <!-- Loop Selector Bar -->
+      <div class="paper-panel rounded-xl p-4">
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 mb-3">
+          <div>
+            <h2 class="serif-cn text-base sm:text-lg font-bold text-stone-900">大明封闭体制因果闭环与反噬回路追踪</h2>
+            <p class="text-xs text-stone-600">点击图中任意【制度内核节点】或【人物突围节点】查看全书机理剖析；点击下方按钮动态演示体制如何吞噬六种突围路径。</p>
+          </div>
+          <span id="loop-status-pill" class="text-xs px-2.5 py-1 rounded-full bg-amber-100 text-amber-900 border border-amber-300 font-medium self-start sm:self-auto">
+            当前模式：全局系统结构总览
+          </span>
+        </div>
+
+        <div id="loop-buttons-bar" class="flex flex-wrap gap-2">
+          <!-- Populated dynamically via JS -->
+        </div>
+
+        <!-- Active Loop Step Chain Banner -->
+        <div id="loop-chain-banner" class="hidden mt-3 pt-3 border-t border-stone-200">
+          <div class="text-xs font-semibold text-red-900 mb-1.5 flex items-center gap-1.5">
+            <span>⚡ 闭环反噬传导链条：</span>
+            <span id="loop-chain-title" class="font-bold"></span>
+          </div>
+          <div id="loop-chain-steps" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-2 text-xs"></div>
+        </div>
+      </div>
+
+      <!-- Topology Diagram + Right Inspector -->
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-5 items-start">
+        <!-- SVG Interactive Canvas -->
+        <div class="lg:col-span-7 paper-panel rounded-xl p-3 sm:p-4">
+          <div class="flex items-center justify-between text-xs text-stone-500 mb-2 px-1">
+            <div class="flex items-center gap-3 flex-wrap">
+              <span class="inline-flex items-center gap-1"><span class="w-2.5 h-2.5 rounded-sm bg-red-800 inline-block"></span>核心制度枷锁</span>
+              <span class="inline-flex items-center gap-1"><span class="w-2.5 h-2.5 rounded-full bg-stone-800 inline-block"></span>六大人物突围路径</span>
+              <span class="inline-flex items-center gap-1"><span class="w-4 h-0.5 bg-amber-600 inline-block"></span>结构因果锁链</span>
+            </div>
+            <span class="hidden sm:inline">点击节点查看详情</span>
+          </div>
+
+          <div class="w-full overflow-hidden rounded-lg bg-[#F5EFE2] border border-[#E2D9C5]">
+            <svg id="topology-svg" viewBox="0 0 860 560" class="w-full h-auto block select-none" aria-label="万历十五年封闭体制因果拓扑图">
+              <!-- Populated by renderTopologySVG() -->
+            </svg>
+          </div>
+        </div>
+
+        <!-- Right Node Inspector -->
+        <div class="lg:col-span-5 paper-panel rounded-xl p-4 sm:p-5 space-y-4" id="topology-inspector">
+          <!-- Populated by renderTopologyInspector() -->
+        </div>
+      </div>
+
+      <!-- Four Core Pillars Summary Strip (From PDF Attachment) -->
+      <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-4">
+        <div data-wl-click="selectTopologyNode('sys_numeral')" class="paper-panel rounded-xl p-4 cursor-pointer hover:border-red-700 transition group">
+          <div class="flex items-center justify-between mb-1.5">
+            <span class="text-xs font-bold text-amber-800 uppercase tracking-wider">维度一 · 技术缺失</span>
+            <span class="text-xs text-stone-400 group-hover:text-red-700">定位节点 →</span>
+          </div>
+          <h3 class="serif-cn font-bold text-stone-900 text-base mb-1">道德越位与数目字管理缺位</h3>
+          <p class="text-xs text-stone-600 leading-relaxed">朱元璋确立内向静态小农框架，国家缺乏现代财政税收、商业法律与统计机制；文官集团将一切行政、财政与皇位继承问题转化为道德纯粹性检验。</p>
+        </div>
+
+        <div data-wl-click="selectTopologyNode('sys_deadlock')" class="paper-panel rounded-xl p-4 cursor-pointer hover:border-red-700 transition group">
+          <div class="flex items-center justify-between mb-1.5">
+            <span class="text-xs font-bold text-red-800 uppercase tracking-wider">维度二 · 突围皆输</span>
+            <span class="text-xs text-stone-400 group-hover:text-red-700">定位节点 →</span>
+          </div>
+          <h3 class="serif-cn font-bold text-stone-900 text-base mb-1">全员皆输的制度死锁</h3>
+          <p class="text-xs text-stone-600 leading-relaxed">万历、张居正、申时行、海瑞、戚继光、李贽身处权力金字塔不同层级，尝试六条截然不同的突围路径，却无一例外被同一套闭环体制吞噬。</p>
+        </div>
+
+        <div data-wl-click="selectTopologyNode('sys_yinyang')" class="paper-panel rounded-xl p-4 cursor-pointer hover:border-red-700 transition group">
+          <div class="flex items-center justify-between mb-1.5">
+            <span class="text-xs font-bold text-teal-800 uppercase tracking-wider">维度三 · 结构悖论</span>
+            <span class="text-xs text-stone-400 group-hover:text-red-700">定位节点 →</span>
+          </div>
+          <h3 class="serif-cn font-bold text-stone-900 text-base mb-1">阴阳割裂的官场生态</h3>
+          <p class="text-xs text-stone-600 leading-relaxed">正式制度极度理想化且脱离实际（官俸微薄、调拨僵硬）。实干者必借“阴面”潜规则办事，却为政敌日后用“阳面”道德大棒清算自己留下致命把柄。</p>
+        </div>
+
+        <div data-wl-click="switchTab('macro')" class="paper-panel rounded-xl p-4 cursor-pointer hover:border-red-700 transition group">
+          <div class="flex items-center justify-between mb-1.5">
+            <span class="text-xs font-bold text-slate-700 uppercase tracking-wider">维度四 · 治史视野</span>
+            <span class="text-xs text-stone-400 group-hover:text-red-700">进入切片 →</span>
+          </div>
+          <h3 class="serif-cn font-bold text-stone-900 text-base mb-1">超越忠奸的大历史观</h3>
+          <p class="text-xs text-stone-600 leading-relaxed">颠覆传统“褒贬忠奸”审判视角：变法、清流、调停、军改与启蒙火种在1587年前后悉数熄灭，1644年的崩溃早已在平淡无奇的丁亥年注定。</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- =================================================================== -->
+    <!-- VIEW 2: SIX PROTAGONISTS PATH DILEMMA SIMULATOR (六人突围路径推演器)   -->
+    <!-- =================================================================== -->
+    <section id="view-paths" class="hidden space-y-5">
+      <!-- Top Character Selector Cards -->
+      <div class="paper-panel rounded-xl p-4">
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 mb-3">
+          <div>
+            <h2 class="serif-cn text-base sm:text-lg font-bold text-stone-900">权力金字塔六大人物：突围路径与死锁推演模拟器</h2>
+            <p class="text-xs text-stone-600">选择一位历史人物，在其三大人生/政治十字路口切换【原书史实抉择】与【假设变招推演】，观察封闭体制如何封堵每一条出路。</p>
+          </div>
+          <div class="flex items-center gap-2 shrink-0">
+            <button type="button" id="btn-set-all-real" data-wl-click="setAllChoicesForCurrent('real')" class="text-xs px-2.5 py-1.5 rounded-lg bg-red-800 text-amber-50 hover:bg-red-900 transition font-medium">
+              还原史实抉择
+            </button>
+            <button type="button" id="btn-set-all-alt" data-wl-click="setAllChoicesForCurrent('alt')" class="text-xs px-2.5 py-1.5 rounded-lg bg-stone-800 text-amber-200 hover:bg-stone-700 transition font-medium">
+              全试替代变招
+            </button>
+          </div>
+        </div>
+
+        <div id="char-selector-grid" class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-2.5">
+          <!-- Populated by renderCharSelector() -->
+        </div>
+      </div>
+
+      <!-- Main Simulator Split Layout -->
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-5 items-start">
+        <!-- Left Column: Portrait + Structural Profile + 5D Radar -->
+        <div class="lg:col-span-4 space-y-4">
+          <div id="char-profile-card" class="paper-panel rounded-xl p-4 sm:p-5">
+            <!-- Populated by renderCharSimulator() -->
+          </div>
+
+          <div class="paper-panel rounded-xl p-4">
+            <div class="flex items-center justify-between mb-2">
+              <h3 class="serif-cn font-bold text-sm text-stone-900">五维体制处境张力雷达</h3>
+              <span class="text-xs text-stone-500">对比文官均衡基准</span>
+            </div>
+            <div class="relative h-64 w-full">
+              <canvas id="charRadarChart"></canvas>
+            </div>
+            <p id="char-radar-caption" class="text-xs text-stone-600 mt-2 leading-relaxed border-t border-stone-200 pt-2"></p>
+          </div>
+        </div>
+
+        <!-- Right Column: 3-Stage Interactive Crossroads & Terminal Lockout -->
+        <div class="lg:col-span-8 space-y-4">
+          <!-- Live Institutional Lockout Gauge -->
+          <div id="sim-status-bar" class="paper-panel rounded-xl p-4 bg-gradient-to-r from-[#FAF5E8] to-[#F3EADF]">
+            <!-- Populated by renderCharSimulator() -->
+          </div>
+
+          <!-- 3 Crossroads Stages -->
+          <div id="sim-stages-container" class="space-y-4">
+            <!-- Populated by renderCharSimulator() -->
+          </div>
+
+          <!-- Terminal Deadlock Outcome Box -->
+          <div id="sim-terminal-box" class="rounded-xl p-5 bg-stone-900 text-stone-100 border-l-4 border-red-600 shadow-lg">
+            <!-- Populated by renderCharSimulator() -->
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- =================================================================== -->
+    <!-- VIEW 3: YIN-YANG DUAL-TRACK & RELATIONSHIP GRAPH (阴阳双轨与人物网络) -->
+    <!-- =================================================================== -->
+    <section id="view-yinyang" class="hidden space-y-6">
+      <!-- Top Row: Yin-Yang 2D Quadrant Plot + Selected Character Yin-Yang Split -->
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-5 items-start">
+        <div class="lg:col-span-7 paper-panel rounded-xl p-4 sm:p-5">
+          <div class="mb-3">
+            <h2 class="serif-cn text-base sm:text-lg font-bold text-stone-900">“阴阳割裂”二维政治生态坐标图</h2>
+            <p class="text-xs text-stone-600">横轴衡量处事依赖<strong>“阳面道德教条”</strong>还是<strong>“阴面潜规则手腕”</strong>；纵轴衡量对祖制采取<strong>“静态守成调和”</strong>还是<strong>“突破常规冲击”</strong>。点击坐标点查看人物撕裂症结。</p>
+          </div>
+          <div class="w-full rounded-lg bg-[#F5EFE2] border border-[#E2D9C5] overflow-hidden">
+            <svg id="quadrant-svg" viewBox="0 0 700 430" class="w-full h-auto block select-none" aria-label="阴阳双轨二维坐标象限图"></svg>
+          </div>
+        </div>
+
+        <div class="lg:col-span-5 paper-panel rounded-xl p-4 sm:p-5 space-y-3" id="quadrant-detail-panel">
+          <!-- Populated by renderQuadrantDetail() -->
+        </div>
+      </div>
+
+      <!-- Middle Row: 6 Concrete Yin-Yang Institutional Cases Explorer -->
+      <div class="paper-panel rounded-xl p-4 sm:p-5 space-y-4">
+        <div class="flex flex-col md:flex-row md:items-center justify-between gap-3">
+          <div>
+            <h2 class="serif-cn text-base sm:text-lg font-bold text-stone-900">全书六大制度悖论：阳面表态 vs 阴面潜规则解剖台</h2>
+            <p class="text-xs text-stone-600">为什么“想办成实事的人必须动用阴面手段，却给政敌留下阳面清算把柄；完全恪守阳面的人则寸步难行”？选择原书案例透视双轨反差。</p>
+          </div>
+          <div class="flex items-center gap-1.5 bg-stone-200/80 p-1 rounded-lg self-start">
+            <button type="button" id="yy-mode-both" data-wl-click="setYinYangViewMode('both')" class="yy-mode-btn bg-red-800 text-white text-xs px-2.5 py-1 rounded-md font-medium transition">阴阳并排对照</button>
+            <button type="button" id="yy-mode-yang" data-wl-click="setYinYangViewMode('yang')" class="yy-mode-btn text-stone-700 hover:bg-stone-300/60 text-xs px-2.5 py-1 rounded-md font-medium transition">仅看阳面宣称</button>
+            <button type="button" id="yy-mode-yin" data-wl-click="setYinYangViewMode('yin')" class="yy-mode-btn text-stone-700 hover:bg-stone-300/60 text-xs px-2.5 py-1 rounded-md font-medium transition">揭开阴面真相</button>
+          </div>
+        </div>
+
+        <div id="yinyang-case-tabs" class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-2">
+          <!-- Populated by renderYinYangCases() -->
+        </div>
+
+        <div id="yinyang-case-content" class="pt-2">
+          <!-- Populated by renderYinYangCases() -->
+        </div>
+      </div>
+
+      <!-- Bottom Row: 12-Person Historical Interaction Network -->
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-5 items-start">
+        <div class="lg:col-span-7 paper-panel rounded-xl p-4 sm:p-5">
+          <div class="flex flex-wrap items-center justify-between gap-2 mb-3">
+            <div>
+              <h2 class="serif-cn text-base sm:text-lg font-bold text-stone-900">万历朝权力与思想交集关系网（全书12关键人物）</h2>
+              <p class="text-xs text-stone-600">点击任意【人物节点】或【连线关系标签】，查看原书记录的庇护、清算、调停与思想交锋细节。</p>
+            </div>
+            <div class="flex items-center gap-3 text-xs">
+              <span class="inline-flex items-center gap-1"><span class="w-3 h-0.5 bg-teal-700 inline-block"></span>结盟/倚重</span>
+              <span class="inline-flex items-center gap-1"><span class="w-3 h-0.5 bg-red-700 inline-block"></span>弹劾/清算/决裂</span>
+              <span class="inline-flex items-center gap-1"><span class="w-3 h-0.5 bg-amber-700 inline-block"></span>调停/师生牵制</span>
+            </div>
+          </div>
+
+          <div class="w-full rounded-lg bg-[#F5EFE2] border border-[#E2D9C5] overflow-hidden">
+            <svg id="network-svg" viewBox="0 0 760 470" class="w-full h-auto block select-none" aria-label="万历十五年人物交集网络图"></svg>
+          </div>
+        </div>
+
+        <div class="lg:col-span-5 paper-panel rounded-xl p-4 sm:p-5 space-y-3" id="network-detail-panel">
+          <!-- Populated by renderNetworkDetail() -->
+        </div>
+      </div>
+    </section>
+
+    <!-- =================================================================== -->
+    <!-- VIEW 4: 1587 SLICE & MACRO-HISTORY (1587切片与大历史观)              -->
+    <!-- =================================================================== -->
+    <section id="view-macro" class="hidden space-y-6">
+      <!-- Quantitative Evidence: Numeral Management & Ming Bottlenecks -->
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-5 items-stretch">
+        <div class="lg:col-span-6 paper-panel rounded-xl p-4 sm:p-5 flex flex-col justify-between">
+          <div>
+            <div class="flex items-center justify-between gap-2 mb-1">
+              <span class="seal-badge text-xs px-2 py-0.5 rounded font-bold">《自序》核心量化实证</span>
+              <span class="text-xs text-stone-500">十六世纪末农村田赋占比对比</span>
+            </div>
+            <h2 class="serif-cn text-base sm:text-lg font-bold text-stone-900 mb-1">破解“税重民穷”迷思：症结在缺乏“数目字管理”</h2>
+            <p class="text-xs text-stone-600 mb-3 leading-relaxed">黄仁宇通过《明实录》与地方志考证指出：明末全国法定田赋总额比例远低于同期日本大名政权，但因缺乏现代统计、金融流通与中央统筹调拨，税负畸轻畸重、底层火耗摊派横行，致使民穷而国库亦空。</p>
+          </div>
+          <div class="relative h-64 w-full">
+            <canvas id="taxBarChart"></canvas>
+          </div>
+        </div>
+
+        <div class="lg:col-span-6 grid grid-cols-1 sm:grid-cols-2 gap-3.5">
+          <div class="paper-panel rounded-xl p-4 border-l-4 border-red-800">
+            <div class="text-xs text-stone-500 font-medium">军事编制与实兵塌缩（第六章）</div>
+            <div class="serif-cn text-2xl font-bold text-red-900 my-1">200万军户 → 仅剩 2%~3%</div>
+            <p class="text-xs text-stone-600 leading-relaxed">明初设两百万世袭军户以求“兵农自给”，百余年后卫所土地典卖、士兵逃亡，退化最严重的卫所实有兵员仅为规定编制的百分之二至三；南京陪都号称驻军12万，却任由50~70名倭寇绕城掳掠伤杀四千人。</p>
+          </div>
+
+          <div class="paper-panel rounded-xl p-4 border-l-4 border-amber-700">
+            <div class="text-xs text-stone-500 font-medium">碎片化财政与后勤（自序 · 第五/六章）</div>
+            <div class="serif-cn text-2xl font-bold text-amber-900 my-1">1,040 驿站 · 12,000 粮船</div>
+            <p class="text-xs text-stone-600 leading-relaxed">政府预算无官员差旅费，全国1,040个驿站供应全由当地百姓对口摊派；户部仅同记账机关，12万运军驾1.2万艘粮船水滨直收漕粮，一个卫所竟需向十几个府县零星领饷。</p>
+          </div>
+
+          <div class="paper-panel rounded-xl p-4 border-l-4 border-teal-800">
+            <div class="text-xs text-stone-500 font-medium">文官自动控制机器（第二/三章）</div>
+            <div class="serif-cn text-2xl font-bold text-teal-900 my-1">100万+ 应试 → 20,000 文官</div>
+            <p class="text-xs text-stone-600 leading-relaxed">百万读书人经科举筛选出两万名锦袍文官。万历怠政期间，中下级官员升迁派遣竟靠吏部<strong>“掣签（抽竹签）”</strong>决定，不问专业技术，仅靠意识形态惯性维持低水平自动运转。</p>
+          </div>
+
+          <div class="paper-panel rounded-xl p-4 border-l-4 border-slate-800">
+            <div class="text-xs text-stone-500 font-medium">俸禄理想化与皇室庄田反差（第三/五章）</div>
+            <div class="serif-cn text-2xl font-bold text-slate-900 my-1">十余两遗银 vs 400万亩庄田</div>
+            <p class="text-xs text-stone-600 leading-relaxed">正二品右都御史海瑞恪守法定微俸，死时仅余白银十余两不够殓葬；而万历赐福王常洵庄田号称四万顷（400万亩，近全国耕地1%），制度在极端清苦教条与畸形特权间撕裂。</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Historiography Lens Switcher: Traditional Moral Judgment vs Ray Huang's Macro-History -->
+      <div class="paper-panel rounded-xl p-4 sm:p-5 space-y-4">
+        <div class="flex flex-col md:flex-row md:items-center justify-between gap-3">
+          <div>
+            <h2 class="serif-cn text-base sm:text-lg font-bold text-stone-900">治史视角切换器：传统“褒贬忠奸”史观 vs 黄仁宇“大历史观”</h2>
+            <p class="text-xs text-stone-600">切换两种历史滤镜，对比同一批历史事件在“个人善恶勤惰审判”与“数百年制度技术结构演进”下的截然不同解读。</p>
+          </div>
+          <div class="flex items-center gap-2 bg-stone-200 p-1 rounded-lg self-start">
+            <button type="button" id="lens-traditional" data-wl-click="setHistLens('traditional')" class="text-xs sm:text-sm px-3 py-1.5 rounded-md font-medium transition text-stone-700 hover:bg-stone-300/60">
+              传统史观：褒贬忠奸与个人功过
+            </button>
+            <button type="button" id="lens-macro" data-wl-click="setHistLens('macro')" class="text-xs sm:text-sm px-3 py-1.5 rounded-md font-medium transition bg-red-800 text-white shadow">
+              大历史观：技术结构与制度死锁
+            </button>
+          </div>
+        </div>
+
+        <div id="hist-lens-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3.5">
+          <!-- Populated by renderHistLens() -->
+        </div>
+      </div>
+
+      <!-- Interactive Long-Arc Timeline (1368 - 1587 - 1619 - 1644) -->
+      <div class="paper-panel rounded-xl p-4 sm:p-5 space-y-4">
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+          <div>
+            <h2 class="serif-cn text-base sm:text-lg font-bold text-stone-900">长弧时间轴：从洪武建制、1587分水岭到1619萨尔浒与1644覆亡</h2>
+            <p class="text-xs text-stone-600">按领域筛选时间节点，点击任意卡片展开原书因果链条解析。</p>
+          </div>
+          <div id="timeline-filter-bar" class="flex flex-wrap gap-1.5">
+            <!-- Populated by renderTimeline() -->
+          </div>
+        </div>
+
+        <div id="timeline-list" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
+          <!-- Populated by renderTimeline() -->
+        </div>
+      </div>
+
+      <!-- Modern Organizational Dilemma Diagnostic (Grounded in PDF Page 2 Closing Insight) -->
+      <div class="paper-panel rounded-xl p-4 sm:p-5 bg-gradient-to-br from-[#FCF9F2] to-[#EFE8D8]">
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-5 items-center">
+          <div class="lg:col-span-7 space-y-3">
+            <div class="flex items-center gap-2">
+              <span class="seal-badge text-xs px-2 py-0.5 rounded font-bold">现代性映射交互实验</span>
+              <span class="text-xs text-stone-500">基于解读附件“庞大组织现代性困境”模型</span>
+            </div>
+            <h2 class="serif-cn text-base sm:text-lg font-bold text-stone-900">组织系统的“万历十五年综合征”推演仪</h2>
+            <p class="text-xs text-stone-600 leading-relaxed">《万历十五年》借四百年前的历史切片揭示：当任何庞大组织习惯<strong>用泛道德化表态取代清晰权责边界</strong>、<strong>用非正式人情调停替代可量化技术管理</strong>时，身处其中的每个人既是维护者也是牺牲品。拖动下方三项治理滑块，实时观测各角色突围存活空间的变化：</p>
+
+            <div class="space-y-3 pt-1">
+              <div>
+                <div class="flex justify-between text-xs font-medium mb-1">
+                  <span>1. 问题归因方式：<span class="text-teal-800">可量化技术与权责边界</span> ←→ <span class="text-red-800">泛道德化表态审判</span></span>
+                  <span id="val-slider-moral" class="font-bold text-red-800">85%</span>
+                </div>
+                <input id="slider-moral" type="range" min="0" max="100" value="85" data-wl-input="updateOrgDiagnostic()" class="w-full accent-red-800 cursor-pointer" />
+              </div>
+
+              <div>
+                <div class="flex justify-between text-xs font-medium mb-1">
+                  <span>2. 资源调配机制：<span class="text-teal-800">透明预算与数目字管理</span> ←→ <span class="text-red-800">僵化定额+私下人情潜规则</span></span>
+                  <span id="val-slider-informal" class="font-bold text-red-800">90%</span>
+                </div>
+                <input id="slider-informal" type="range" min="0" max="100" value="90" data-wl-input="updateOrgDiagnostic()" class="w-full accent-red-800 cursor-pointer" />
+              </div>
+
+              <div>
+                <div class="flex justify-between text-xs font-medium mb-1">
+                  <span>3. 规则纠偏弹性：<span class="text-teal-800">允许局部试错与制度迭代</span> ←→ <span class="text-red-800">祖制神圣不可微调</span></span>
+                  <span id="val-slider-rigid" class="font-bold text-red-800">88%</span>
+                </div>
+                <input id="slider-rigid" type="range" min="0" max="100" value="88" data-wl-input="updateOrgDiagnostic()" class="w-full accent-red-800 cursor-pointer" />
+              </div>
+
+              <div class="flex flex-wrap gap-2 pt-1">
+                <button type="button" data-wl-click="setOrgPreset(85, 90, 88)" class="text-xs px-2.5 py-1 rounded bg-red-100 text-red-900 border border-red-300 hover:bg-red-200 transition">预设：1587大明闭环状态</button>
+                <button type="button" data-wl-click="setOrgPreset(45, 75, 80)" class="text-xs px-2.5 py-1 rounded bg-amber-100 text-amber-900 border border-amber-300 hover:bg-amber-200 transition">预设：张居正考成法强推期</button>
+                <button type="button" data-wl-click="setOrgPreset(18, 15, 20)" class="text-xs px-2.5 py-1 rounded bg-teal-100 text-teal-900 border border-teal-300 hover:bg-teal-200 transition">预设：数目字法治现代组织</button>
+              </div>
+            </div>
+          </div>
+
+          <div class="lg:col-span-5 bg-stone-900 text-stone-100 rounded-xl p-4 sm:p-5 space-y-3 border border-stone-700" id="org-diagnostic-result">
+            <!-- Populated by updateOrgDiagnostic() -->
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- Slide-Over Drawer: Original Book Quotes & Evidence Library -->
+  <div id="quote-drawer-backdrop" data-wl-click="toggleQuoteDrawer(false)" class="fixed inset-0 bg-black/50 z-40 hidden transition-opacity"></div>
+  <div id="quote-drawer" role="dialog" aria-modal="true" aria-label="《万历十五年》原书金句与史料检索库" class="wli-quote-drawer fixed right-0 w-full max-w-xl shadow-2xl border-l border-stone-300 transform translate-x-full transition-transform duration-300 flex flex-col">
+    <div class="p-4 wli-drawer-head flex items-center justify-between gap-3 border-b border-stone-200">
+      <div class="min-w-0">
+        <h2 class="serif-cn font-bold text-base sm:text-lg text-stone-900">《万历十五年》原书金句与史料检索库</h2>
+        <p class="text-xs text-stone-600 mt-0.5">收录《自序》、正文七章及《神宗实录》《大历史观》附录关键原文</p>
+      </div>
+      <button type="button" id="btn-close-quotes" data-wl-click="toggleQuoteDrawer(false)" class="px-3 py-1.5 rounded-full bg-white hover:bg-stone-100 text-stone-700 text-xs font-medium border border-stone-300 shrink-0 transition">
+        关闭 ✕
+      </button>
+    </div>
+
+    <div class="p-3 bg-[#F1ECE1] border-b border-stone-300 flex flex-col sm:flex-row gap-2">
+      <input id="quote-search-input" type="text" data-wl-input="renderQuoteLibrary()" placeholder="输入关键词检索（如：阴阳、数目字、夺情、海瑞、鸳鸯阵、童心）..." class="flex-1 text-xs sm:text-sm px-3 py-2 rounded-lg border border-stone-300 bg-white focus:outline-none focus:border-red-800" />
+      <select id="quote-chapter-select" data-wl-change="renderQuoteLibrary()" class="text-xs sm:text-sm px-2.5 py-2 rounded-lg border border-stone-300 bg-white focus:outline-none focus:border-red-800">
+        <option value="all">全部章节</option>
+        <option value="自序">自序</option>
+        <option value="第一章 万历皇帝">第一章 万历皇帝</option>
+        <option value="第二章 首辅申时行">第二章 首辅申时行</option>
+        <option value="第三章 世间已无张居正">第三章 世间已无张居正</option>
+        <option value="第四章 活着的祖宗">第四章 活着的祖宗</option>
+        <option value="第五章 海瑞">第五章 海瑞</option>
+        <option value="第六章 戚继光">第六章 戚继光</option>
+        <option value="第七章 李贽">第七章 李贽</option>
+        <option value="附录">附录（实录召对与大历史观）</option>
+      </select>
+    </div>
+
+    <div id="quote-library-list" class="flex-1 overflow-y-auto p-4 space-y-3 custom-scroll">
+      <!-- Populated by renderQuoteLibrary() -->
+    </div>
+  </div>
+
+  <!-- Book Grounding Note -->
+  <div class="wli-source-note border-t border-stone-200 py-4 px-4 mt-8 text-xs text-stone-600" role="contentinfo">
+    <div class="max-w-7xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-2">
+      <span>史料与观点依据：黄仁宇《万历十五年（增订本）》（中华书局版）全书正文、附录及《深度解读〈万历十五年〉》专题评述</span>
+      <span>1587, A Year of No Significance — Interactive Institutional Deadlock Explorer</span>
+    </div>
+  </div>
