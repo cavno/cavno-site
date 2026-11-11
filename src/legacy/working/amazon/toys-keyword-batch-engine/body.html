@@ -1,0 +1,573 @@
+<!-- Toast Notification -->
+<div id="toastContainer" class="fixed top-4 right-4 z-50 flex flex-col gap-2 pointer-events-none"></div>
+<!-- Term Reasoning Detail Modal -->
+<div id="detailModal" class="fixed inset-0 z-40 bg-slate-900/50 backdrop-blur-xs hidden items-center justify-center p-4">
+    <div class="bg-white rounded-2xl shadow-2xl max-w-2xl w-full overflow-hidden border border-slate-200">
+      <div class="px-6 py-4 bg-slate-900 text-white flex items-center justify-between">
+        <div>
+          <span class="text-xs uppercase tracking-wider text-blue-300 font-semibold">底层决策链路透视</span>
+          <h3 id="modalTermTitle" class="text-lg font-bold mt-0.5 font-mono"></h3>
+        </div>
+        <button id="closeModalBtn" type="button" class="text-slate-300 hover:text-white p-1.5 rounded-lg hover:bg-slate-800 transition" data-kwe-click="closeDetailModal()">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+        </button>
+      </div>
+      <div id="modalBodyContent" class="p-6 space-y-4 max-h-[78vh] overflow-y-auto custom-scrollbar text-sm"></div>
+    </div>
+  </div>
+<!-- Top Header -->
+<header class="bg-slate-900 text-white border-b border-slate-800 sticky top-0 z-30">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 py-3 flex flex-wrap items-center justify-between gap-3">
+      <div class="flex items-center gap-3">
+        <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-blue-500 to-indigo-600 flex items-center justify-center shadow-lg shadow-blue-500/20 shrink-0">
+          <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path>
+          </svg>
+        </div>
+        <div>
+          <div class="flex items-center gap-2 flex-wrap">
+            <h1 class="text-base sm:text-lg font-bold tracking-tight">Amazon US Toys · 万级关键词广告策略批处理引擎</h1>
+            <span id="datasetBadge" class="text-xs px-2 py-0.5 rounded-full bg-blue-500/20 text-blue-300 border border-blue-400/30 font-medium">已载入附件真实样本 (10行 / 8唯一词)</span>
+          </div>
+          <p class="text-xs text-slate-400 mt-0.5">针对玩具类目“流量极度分散 + 同Target转化分化 + 旺季词池7倍膨胀收缩”构建的 O(N) 批处理决策系统</p>
+        </div>
+      </div>
+
+      <div class="flex items-center gap-2 flex-wrap">
+        <label for="searchTermFileInput" class="cursor-pointer inline-flex items-center gap-1.5 px-3 py-2 rounded-lg bg-blue-600 hover:bg-blue-500 text-white text-xs font-semibold transition shadow-xs">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"></path></svg>
+          <span>批量导入搜索词表 (.xlsx/.csv)</span>
+        </label>
+        <input id="searchTermFileInput" type="file" accept=".xlsx,.xls,.csv,.tsv" class="hidden" data-kwe-change="handleSearchTermUpload(event)">
+
+        <button id="toggleConfigBtn" type="button" class="inline-flex items-center gap-1.5 px-3 py-2 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 text-xs font-medium transition" data-kwe-click="toggleConfigDrawer()">
+          <svg class="w-4 h-4 text-amber-400" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4"></path></svg>
+          <span>策略参数与季节阈值</span>
+        </button>
+
+        <button id="resetSampleBtn" type="button" class="inline-flex items-center gap-1.5 px-3 py-2 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 border border-slate-700 text-xs font-medium transition" data-kwe-click="resetToAttachmentSample()">
+          <span>重置样本</span>
+        </button>
+
+        <button id="exportExcelBtn" type="button" class="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-lg bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-semibold transition shadow-xs" data-kwe-click="exportFullStrategyWorkbook()">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
+          <span>导出5表策略包 (.xlsx)</span>
+        </button>
+      </div>
+    </div>
+  </header>
+<!-- Seasonality Quick Selector Bar -->
+<section class="bg-white border-b border-slate-200">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 py-3">
+      <div class="flex flex-col lg:flex-row lg:items-center justify-between gap-3">
+        <div class="flex items-center gap-2">
+          <span class="text-xs font-bold uppercase tracking-wider text-slate-500">当前广告节奏阶段：</span>
+          <span id="seasonRuleSummary" class="text-xs text-blue-700 bg-blue-50 px-2.5 py-1 rounded-md font-medium border border-blue-100"></span>
+        </div>
+        <div class="grid grid-cols-2 sm:grid-cols-4 gap-2">
+          <button type="button" id="seasonBtn_off" class="season-btn px-3 py-2 rounded-lg border border-slate-200 text-left transition hover:border-blue-300" data-kwe-click="setSeasonPhase('off')">
+            <div class="text-xs font-bold text-slate-800">1. 平季稳态期 (2-9月)</div>
+            <div class="text-[11px] text-slate-500">锁精准+核心词组 · 禁纯宽泛</div>
+          </button>
+          <button type="button" id="seasonBtn_ramp" class="season-btn px-3 py-2 rounded-lg border border-slate-200 text-left transition hover:border-blue-300" data-kwe-click="setSeasonPhase('ramp')">
+            <div class="text-xs font-bold text-slate-800">2. 旺季启动期 (10-11月初)</div>
+            <div class="text-[11px] text-slate-500">ABA启动拐点 · 提前卡排名</div>
+          </button>
+          <button type="button" id="seasonBtn_peak" class="season-btn px-3 py-2 rounded-lg border border-slate-200 text-left transition hover:border-blue-300" data-kwe-click="setSeasonPhase('peak')">
+            <div class="text-xs font-bold text-slate-800">3. 黑五圣诞爆发 (11中-12.20)</div>
+            <div class="text-[11px] text-slate-500">词池2.89万 · 放礼物与受控宽泛</div>
+          </button>
+          <button type="button" id="seasonBtn_shrink" class="season-btn px-3 py-2 rounded-lg border border-slate-200 text-left transition hover:border-blue-300" data-kwe-click="setSeasonPhase('shrink')">
+            <div class="text-xs font-bold text-slate-800">4. 节后急速收缩 (12.21后)</div>
+            <div class="text-[11px] text-slate-500">断崖回落 · 停宽泛/礼物词保利润</div>
+          </button>
+        </div>
+      </div>
+
+      <!-- Collapsible Threshold & Dictionary Config Drawer -->
+      <div id="configDrawer" class="hidden mt-4 pt-4 border-t border-slate-200">
+        <div class="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-6 gap-3">
+          <div>
+            <label class="block text-xs font-semibold text-slate-700 mb-1" for="cfgTargetAcos">基准目标 ACOS (%)</label>
+            <input id="cfgTargetAcos" type="number" step="1" value="22" class="w-full px-2.5 py-1.5 text-sm rounded-lg border border-slate-300 focus:outline-none focus:border-blue-500" data-kwe-change="applyConfigChanges()">
+          </div>
+          <div>
+            <label class="block text-xs font-semibold text-slate-700 mb-1" for="cfgTargetCpa">基准目标 CPA ($)</label>
+            <input id="cfgTargetCpa" type="number" step="0.2" value="6.80" class="w-full px-2.5 py-1.5 text-sm rounded-lg border border-slate-300 focus:outline-none focus:border-blue-500" data-kwe-change="applyConfigChanges()">
+          </div>
+          <div>
+            <label class="block text-xs font-semibold text-slate-700 mb-1" for="cfgExactMinOrders">升级精准最低单量</label>
+            <input id="cfgExactMinOrders" type="number" step="1" value="5" class="w-full px-2.5 py-1.5 text-sm rounded-lg border border-slate-300 focus:outline-none focus:border-blue-500" data-kwe-change="applyConfigChanges()">
+          </div>
+          <div>
+            <label class="block text-xs font-semibold text-slate-700 mb-1" for="cfgZeroOrderSpend">单点0单否定花费 ($)</label>
+            <input id="cfgZeroOrderSpend" type="number" step="1" value="14" class="w-full px-2.5 py-1.5 text-sm rounded-lg border border-slate-300 focus:outline-none focus:border-blue-500" data-kwe-change="applyConfigChanges()">
+          </div>
+          <div>
+            <label class="block text-xs font-semibold text-slate-700 mb-1" for="cfgRootNegSpend">词根连坐0单否定 ($)</label>
+            <input id="cfgRootNegSpend" type="number" step="1" value="25" class="w-full px-2.5 py-1.5 text-sm rounded-lg border border-slate-300 focus:outline-none focus:border-blue-500" data-kwe-change="applyConfigChanges()">
+          </div>
+          <div>
+            <label class="block text-xs font-semibold text-slate-700 mb-1" for="cfgOwnBrands">自有品牌词根 (逗号分隔)</label>
+            <input id="cfgOwnBrands" type="text" value="kokodi" class="w-full px-2.5 py-1.5 text-sm rounded-lg border border-slate-300 focus:outline-none focus:border-blue-500" data-kwe-change="applyConfigChanges()">
+          </div>
+        </div>
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-3 mt-3">
+          <div>
+            <label class="block text-xs font-semibold text-slate-700 mb-1" for="cfgGoldenAge">核心黄金年龄词根 (高转化主力段)</label>
+            <input id="cfgGoldenAge" type="text" value="toddler, 3-5, 3-6, 4-6, 3-8, 4-8, 3 year, 4 year, 5 year, 6 year" class="w-full px-2.5 py-1.5 text-xs rounded-lg border border-slate-300 focus:outline-none focus:border-blue-500" data-kwe-change="applyConfigChanges()">
+          </div>
+          <div>
+            <label class="block text-xs font-semibold text-slate-700 mb-1" for="cfgSecondaryAge">边缘高龄观察词根 (需独立分流压Bid防拖累)</label>
+            <input id="cfgSecondaryAge" type="text" value="7-12, 8-12, 6-10, 9-12, 7 year, 8 year, 9 year, 10 year" class="w-full px-2.5 py-1.5 text-xs rounded-lg border border-slate-300 focus:outline-none focus:border-blue-500" data-kwe-change="applyConfigChanges()">
+          </div>
+          <div>
+            <label class="block text-xs font-semibold text-slate-700 mb-1" for="cfgCompBrands">竞品品牌词根 (剥离至竞品组或否定)</label>
+            <input id="cfgCompBrands" type="text" value="vtech, leapfrog, momilla, luciros, prograce, gabb, bark, kidizoom" class="w-full px-2.5 py-1.5 text-xs rounded-lg border border-slate-300 focus:outline-none focus:border-blue-500" data-kwe-change="applyConfigChanges()">
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+<!-- Navigation Tabs -->
+<nav class="bg-white border-b border-slate-200 sticky top-[61px] z-20">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 flex overflow-x-auto custom-scrollbar">
+      <button type="button" id="tabBtn_workbench" class="tab-nav-btn tab-btn-active px-4 py-3 text-xs sm:text-sm whitespace-nowrap transition flex items-center gap-1.5" data-kwe-click="switchTab('workbench')">
+        <span>1. 批处理投放与匹配工作台</span>
+      </button>
+      <button type="button" id="tabBtn_ngram" class="tab-nav-btn px-4 py-3 text-xs sm:text-sm text-slate-600 hover:text-slate-900 whitespace-nowrap transition flex items-center gap-1.5" data-kwe-click="switchTab('ngram')">
+        <span>2. 词根N-Gram拆解与广告分舱架构</span>
+      </button>
+      <button type="button" id="tabBtn_negatives" class="tab-nav-btn px-4 py-3 text-xs sm:text-sm text-slate-600 hover:text-slate-900 whitespace-nowrap transition flex items-center gap-1.5" data-kwe-click="switchTab('negatives')">
+        <span>3. 前置与绩效三层否定词库</span>
+        <span id="negCountPill" class="px-1.5 py-0.5 text-[11px] rounded-full bg-rose-100 text-rose-700 font-semibold">0</span>
+      </button>
+      <button type="button" id="tabBtn_seasonality" class="tab-nav-btn px-4 py-3 text-xs sm:text-sm text-slate-600 hover:text-slate-900 whitespace-nowrap transition flex items-center gap-1.5" data-kwe-click="switchTab('seasonality')">
+        <span>4. 旺季流量曲线与ABA三拐点探测器</span>
+      </button>
+      <button type="button" id="tabBtn_architecture" class="tab-nav-btn px-4 py-3 text-xs sm:text-sm text-slate-600 hover:text-slate-900 whitespace-nowrap transition flex items-center gap-1.5" data-kwe-click="switchTab('architecture')">
+        <span>5. 底层算法逻辑与Python万级批处理源码</span>
+      </button>
+    </div>
+  </nav>
+<!-- Main Content Container -->
+<div class="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 py-6 space-y-6">
+
+    <!-- ==================== TAB 1: WORKBENCH ==================== -->
+    <section id="tabPanel_workbench" class="space-y-6">
+      <!-- KPI Strip -->
+      <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-3">
+        <div class="bg-white p-4 rounded-xl border border-slate-200 shadow-2xs">
+          <div class="text-xs text-slate-500 font-medium">处理词规模 / 耗时</div>
+          <div id="kpiScale" class="text-xl font-bold text-slate-900 mt-1">-</div>
+          <div id="kpiSpeed" class="text-[11px] text-emerald-600 font-medium mt-0.5">-</div>
+        </div>
+        <div class="bg-white p-4 rounded-xl border border-slate-200 shadow-2xs">
+          <div class="text-xs text-slate-500 font-medium">广告总花费 / 总销售额</div>
+          <div id="kpiSpendSales" class="text-lg font-bold text-slate-900 mt-1">-</div>
+          <div id="kpiAcosRoas" class="text-[11px] text-slate-600 mt-0.5">-</div>
+        </div>
+        <div class="bg-white p-4 rounded-xl border border-slate-200 shadow-2xs">
+          <div class="text-xs text-slate-500 font-medium">广告总订单 / 综合CPA</div>
+          <div id="kpiOrdersCpa" class="text-xl font-bold text-slate-900 mt-1">-</div>
+          <div id="kpiAvgCvr" class="text-[11px] text-slate-600 mt-0.5">-</div>
+        </div>
+        <div class="bg-white p-4 rounded-xl border border-blue-200 bg-blue-50/40 shadow-2xs">
+          <div class="text-xs text-blue-700 font-semibold">核心精准 + 品牌防御词</div>
+          <div id="kpiExactCount" class="text-xl font-bold text-blue-900 mt-1">-</div>
+          <div id="kpiExactShare" class="text-[11px] text-blue-700 mt-0.5">-</div>
+        </div>
+        <div class="bg-white p-4 rounded-xl border border-indigo-200 bg-indigo-50/40 shadow-2xs">
+          <div class="text-xs text-indigo-700 font-semibold">分层词组 + 限定宽泛 + ASIN</div>
+          <div id="kpiExpandCount" class="text-xl font-bold text-indigo-900 mt-1">-</div>
+          <div id="kpiExpandShare" class="text-[11px] text-indigo-700 mt-0.5">-</div>
+        </div>
+        <div class="bg-white p-4 rounded-xl border border-rose-200 bg-rose-50/40 shadow-2xs">
+          <div class="text-xs text-rose-700 font-semibold">跨活动内耗 &amp; 需否定隔离</div>
+          <div id="kpiIsolateNeg" class="text-xl font-bold text-rose-900 mt-1">-</div>
+          <div id="kpiIsolateSub" class="text-[11px] text-rose-700 mt-0.5">-</div>
+        </div>
+      </div>
+
+      <!-- Charts Row -->
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-4">
+        <div class="bg-white p-4 rounded-xl border border-slate-200 shadow-2xs">
+          <div class="flex items-center justify-between mb-2">
+            <div>
+              <h3 class="text-sm font-bold text-slate-900">推荐匹配方式与策略分舱（花费 vs 销售额分布）</h3>
+              <p class="text-xs text-slate-500">自动识别自有品牌、黄金年龄段、边缘高龄段、泛大词与ASIN定位</p>
+            </div>
+          </div>
+          <div class="relative h-64">
+            <canvas id="strategyBarChart"></canvas>
+          </div>
+        </div>
+
+        <div class="bg-white p-4 rounded-xl border border-slate-200 shadow-2xs">
+          <div class="flex items-center justify-between mb-2">
+            <div>
+              <h3 class="text-sm font-bold text-slate-900">语义意图分层诊断：转化率 CVR (%) vs 获客成本 CPA ($)</h3>
+              <p class="text-xs text-slate-500">直观验证为何“3-5岁词、7-12岁词、泛词、品牌词”绝不能混在同个Broad/Phrase里调价</p>
+            </div>
+          </div>
+          <div class="relative h-64">
+            <canvas id="intentScatterChart"></canvas>
+          </div>
+        </div>
+      </div>
+
+      <!-- Interactive Filter & Batch Table -->
+      <div class="bg-white rounded-xl border border-slate-200 shadow-2xs overflow-hidden">
+        <div class="p-4 border-b border-slate-200 bg-slate-50/60 flex flex-wrap items-center justify-between gap-3">
+          <div class="flex items-center gap-2 flex-wrap">
+            <div class="inline-flex rounded-lg border border-slate-300 bg-white p-0.5">
+              <button type="button" id="viewMode_dedup" class="px-3 py-1.5 text-xs font-semibold rounded-md bg-slate-900 text-white transition" data-kwe-click="setTableViewMode('dedup')">去重合并决策视图 (按唯一词)</button>
+              <button type="button" id="viewMode_raw" class="px-3 py-1.5 text-xs font-medium rounded-md text-slate-600 hover:text-slate-900 transition" data-kwe-click="setTableViewMode('raw')">原始行级流水视图 (含Auto/Manual对比)</button>
+            </div>
+
+            <select id="filterActionSelect" class="px-3 py-1.5 text-xs rounded-lg border border-slate-300 bg-white text-slate-700 font-medium" data-kwe-change="resetPageAndRenderTable()">
+              <option value="ALL">全部推荐动作</option>
+              <option value="BRAND_EXACT">品牌防御 · 精准匹配</option>
+              <option value="CORE_EXACT">主力打排名 · 精准匹配</option>
+              <option value="SEG_PHRASE">受控拓长尾 · 分层词组匹配</option>
+              <option value="PEAK_BROAD">旺季脉冲 · 限定宽泛匹配</option>
+              <option value="PRODUCT_ASIN">商品定位 · 精准ASIN投放</option>
+              <option value="BID_CONTROL">独立分舱控Bid / 旺季后收缩</option>
+              <option value="NEG_STOP">否定止损 (前置词组 / 绩效精准)</option>
+            </select>
+
+            <select id="filterIntentSelect" class="px-3 py-1.5 text-xs rounded-lg border border-slate-300 bg-white text-slate-700 font-medium" data-kwe-change="resetPageAndRenderTable()">
+              <option value="ALL">全部语义标签</option>
+              <option value="自有品牌词">自有品牌词</option>
+              <option value="黄金适龄词">黄金适龄词 (Toddler/3-5)</option>
+              <option value="边缘高龄词">边缘高龄词 (7-12/8-12)</option>
+              <option value="高相关玩具属性词">高相关玩具属性词</option>
+              <option value="核心泛大词">核心泛大词</option>
+              <option value="节日礼物场景词">节日礼物场景词</option>
+              <option value="关联商品ASIN">关联商品ASIN</option>
+              <option value="前置高危否定词">前置高危否定词</option>
+            </select>
+          </div>
+
+          <div class="flex items-center gap-2 flex-wrap">
+            <div class="relative">
+              <input id="searchKeywordInput" type="text" placeholder="搜索关键词 / ASIN / 动作..." class="pl-8 pr-3 py-1.5 text-xs rounded-lg border border-slate-300 bg-white w-56 focus:outline-none focus:border-blue-500" data-kwe-input="resetPageAndRenderTable()">
+              <svg class="w-3.5 h-3.5 text-slate-400 absolute left-2.5 top-2.5" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
+            </div>
+            <select id="sortFieldSelect" class="px-2.5 py-1.5 text-xs rounded-lg border border-slate-300 bg-white text-slate-700" data-kwe-change="resetPageAndRenderTable()">
+              <option value="orders_desc">按广告订单 ↓</option>
+              <option value="spend_desc">按广告花费 ↓</option>
+              <option value="sales_desc">按销售额 ↓</option>
+              <option value="acos_asc">按 ACOS ↑ (最优优先)</option>
+              <option value="cpa_desc">按 CPA ↓ (高成本优先)</option>
+              <option value="cvr_desc">按转化率 CVR ↓</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="overflow-x-auto custom-scrollbar">
+          <table class="w-full text-left border-collapse">
+            <thead>
+              <tr class="bg-slate-100/80 text-[11px] font-semibold uppercase tracking-wider text-slate-600 border-b border-slate-200">
+                <th class="py-2.5 px-3">客户搜索词 / 渠道来源</th>
+                <th class="py-2.5 px-3">语义意图分类</th>
+                <th class="py-2.5 px-3 text-right">花费 ($)</th>
+                <th class="py-2.5 px-3 text-right">订单</th>
+                <th class="py-2.5 px-3 text-right">CVR</th>
+                <th class="py-2.5 px-3 text-right">CPA ($)</th>
+                <th class="py-2.5 px-3 text-right">ACOS</th>
+                <th class="py-2.5 px-3">该打什么匹配方式 &amp; 目标广告组</th>
+                <th class="py-2.5 px-3 text-right">建议竞价 ($)</th>
+                <th class="py-2.5 px-3">源活动隔离 / 否定动作</th>
+                <th class="py-2.5 px-3 text-center">推导详情</th>
+              </tr>
+            </thead>
+            <tbody id="strategyTableBody" class="divide-y divide-slate-100 text-xs"></tbody>
+          </table>
+        </div>
+
+        <!-- Pagination Footer -->
+        <div class="px-4 py-3 bg-slate-50 border-t border-slate-200 flex flex-wrap items-center justify-between gap-2 text-xs text-slate-600">
+          <div id="paginationInfo">显示第 1 - 10 条，共 10 条</div>
+          <div class="flex items-center gap-1.5">
+            <button type="button" id="prevPageBtn" class="px-2.5 py-1 rounded border border-slate-300 bg-white hover:bg-slate-100 disabled:opacity-40" data-kwe-click="changePage(-1)">上一页</button>
+            <span id="pageIndicator" class="px-2 font-semibold text-slate-800">1 / 1</span>
+            <button type="button" id="nextPageBtn" class="px-2.5 py-1 rounded border border-slate-300 bg-white hover:bg-slate-100 disabled:opacity-40" data-kwe-click="changePage(1)">下一页</button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================== TAB 2: N-GRAM & CAMPAIGN ARCHITECTURE ==================== -->
+    <section id="tabPanel_ngram" class="hidden space-y-6">
+      <!-- Grounded PDF Macro Insight Banner -->
+      <div class="bg-gradient-to-r from-slate-900 via-slate-800 to-indigo-950 text-white rounded-2xl p-5 shadow-md">
+        <div class="flex flex-col lg:flex-row lg:items-center justify-between gap-4">
+          <div class="space-y-1 max-w-2xl">
+            <div class="text-xs font-semibold text-amber-300 uppercase tracking-wider">基于《玩具流量分析和管理方向落地.pdf》全账户实盘底座</div>
+            <h2 class="text-base sm:text-lg font-bold">为什么不能只靠人工挑词？—— 77.88% 的广告订单藏在 2.8 万个分散长尾词里</h2>
+            <p class="text-xs text-slate-300 leading-relaxed">
+              全账户总单量 <strong>48,714</strong> 单，广告单 <strong>15,976</strong> 单（占比 32.80%）；其中 TOP10 搜索词仅贡献 <strong>2,845</strong> 单（<strong>17.81%</strong>），TOP20 仅贡献 <strong>3,534</strong> 单（<strong>22.12%</strong>）。如果把年龄词、礼物词、泛词全塞进少数几个 Broad/Phrase Target，降 Bid 会压死高转化词，不降 Bid 差流量持续吃掉利润。必须通过 <strong>N-Gram 词根聚合 + 6大标准广告专案分舱</strong> 管控流量。
+            </p>
+          </div>
+          <div class="grid grid-cols-2 sm:grid-cols-4 gap-2.5 shrink-0">
+            <div class="bg-white/10 backdrop-blur-xs rounded-xl p-3 border border-white/10">
+              <div class="text-[11px] text-slate-300">PHONE 类型词单量</div>
+              <div class="text-lg font-bold text-white mt-0.5">8,697</div>
+              <div class="text-[10px] text-blue-300">占广告单 54.44%</div>
+            </div>
+            <div class="bg-white/10 backdrop-blur-xs rounded-xl p-3 border border-white/10">
+              <div class="text-[11px] text-slate-300">TOYS 属性词单量</div>
+              <div class="text-lg font-bold text-white mt-0.5">2,252</div>
+              <div class="text-[10px] text-emerald-300">精准玩具意图限定</div>
+            </div>
+            <div class="bg-white/10 backdrop-blur-xs rounded-xl p-3 border border-white/10">
+              <div class="text-[11px] text-slate-300">关联 ASIN 单量</div>
+              <div class="text-lg font-bold text-white mt-0.5">1,646</div>
+              <div class="text-[10px] text-purple-300">商品定位高客单流量</div>
+            </div>
+            <div class="bg-white/10 backdrop-blur-xs rounded-xl p-3 border border-white/10">
+              <div class="text-[11px] text-slate-300">GIFT 礼物词单量</div>
+              <div class="text-lg font-bold text-white mt-0.5">602</div>
+              <div class="text-[10px] text-amber-300">11-12月旺季脉冲爆发</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 6 Standardized Campaign Buckets ("不能让运营自己瞎打词") -->
+      <div>
+        <div class="flex items-center justify-between mb-3">
+          <div>
+            <h3 class="text-base font-bold text-slate-900">标准六大广告专案分舱蓝图（自动将当前词表归入标准结构，杜绝运营盲目混投）</h3>
+            <p class="text-xs text-slate-500">解决“第二个散”：按转化确定性与意图纯净度切分 Target 入口，实现独立预算与独立竞价调控</p>
+          </div>
+        </div>
+        <div id="campaignBlueprintGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4"></div>
+      </div>
+
+      <!-- N-Gram Root Aggregation Table -->
+      <div class="bg-white rounded-xl border border-slate-200 shadow-2xs overflow-hidden">
+        <div class="p-4 border-b border-slate-200 bg-slate-50/60 flex flex-wrap items-center justify-between gap-3">
+          <div>
+            <h3 class="text-sm font-bold text-slate-900">1-Gram / 2-Gram 词根穿透聚合诊断表</h3>
+            <p class="text-xs text-slate-500">即使长尾词每个只有 1-2 次点击，按词根汇总后也能瞬间揪出“连坐烧钱词根”与“高转黄金词根”</p>
+          </div>
+          <div class="flex items-center gap-2">
+            <select id="ngramTypeFilter" class="px-3 py-1.5 text-xs rounded-lg border border-slate-300 bg-white font-medium" data-kwe-change="renderNgramTable()">
+              <option value="ALL">全部词根 (1-Gram + 2-Gram)</option>
+              <option value="1">仅看单字词根 (1-Gram)</option>
+              <option value="2">仅看双字词组词根 (2-Gram)</option>
+            </select>
+          </div>
+        </div>
+        <div class="overflow-x-auto custom-scrollbar">
+          <table class="w-full text-left border-collapse">
+            <thead>
+              <tr class="bg-slate-100/80 text-[11px] font-semibold uppercase tracking-wider text-slate-600 border-b border-slate-200">
+                <th class="py-2.5 px-4">词根 (Token / Bi-Gram)</th>
+                <th class="py-2.5 px-3">维度归属</th>
+                <th class="py-2.5 px-3 text-right">覆盖唯一词数</th>
+                <th class="py-2.5 px-3 text-right">聚合点击 (估)</th>
+                <th class="py-2.5 px-3 text-right">聚合花费 ($)</th>
+                <th class="py-2.5 px-3 text-right">聚合订单</th>
+                <th class="py-2.5 px-3 text-right">聚合 CVR</th>
+                <th class="py-2.5 px-3 text-right">聚合 CPA ($)</th>
+                <th class="py-2.5 px-3 text-right">聚合 ACOS</th>
+                <th class="py-2.5 px-4">词根级策略建议</th>
+              </tr>
+            </thead>
+            <tbody id="ngramTableBody" class="divide-y divide-slate-100 text-xs"></tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================== TAB 3: 3-LAYER NEGATIVE ENGINE ==================== -->
+    <section id="tabPanel_negatives" class="hidden space-y-6">
+      <div class="grid grid-cols-1 lg:grid-cols-3 gap-4">
+        <!-- Layer 1: Pre-emptive Negative Dictionary -->
+        <div class="lg:col-span-2 bg-white rounded-xl border border-slate-200 shadow-2xs p-5 space-y-4">
+          <div class="flex flex-wrap items-start justify-between gap-2">
+            <div>
+              <span class="text-[11px] font-bold uppercase tracking-wider px-2 py-0.5 rounded bg-rose-100 text-rose-700">第一层 · 投放前必挂</span>
+              <h3 class="text-base font-bold text-slate-900 mt-1">玩具智能机类目 · 前置坚决否定词库 (Pre-emptive Negative Phrase)</h3>
+              <p class="text-xs text-slate-500 mt-0.5">对应 PDF 管理要求“建前置否定库：什么词坚决不能投放”。在开启词组(Phrase)、宽泛(Broad)及自动广告(Auto)前直接作为<strong>词组否定</strong>挂载，提前拦截非玩具真机流量与错配人群。</p>
+            </div>
+            <button type="button" id="copyPreNegBtn" class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-rose-600 hover:bg-rose-500 text-white text-xs font-semibold transition" data-kwe-click="copyPreemptiveNegatives()">
+              <span>一键复制全部前置否定词</span>
+            </button>
+          </div>
+
+          <div id="preNegCategoryContainer" class="space-y-3"></div>
+
+          <!-- Add custom pre-emptive negative -->
+          <div class="pt-3 border-t border-slate-200 flex flex-wrap items-center gap-2">
+            <select id="newNegCatSelect" class="px-2.5 py-1.5 text-xs rounded-lg border border-slate-300 bg-white">
+              <option value="real_phone">真机/运营商/SIM卡意图</option>
+              <option value="parts_acc">配件/维修/说明书意图</option>
+              <option value="low_val">二手/免费/批发低质流量</option>
+              <option value="wrong_age">严重错配年龄段</option>
+            </select>
+            <input id="newNegWordInput" type="text" placeholder="输入新增前置否定词根 (如: boost mobile)" class="flex-1 min-w-[180px] px-3 py-1.5 text-xs rounded-lg border border-slate-300 focus:outline-none focus:border-rose-500">
+            <button type="button" id="addPreNegBtn" class="px-3 py-1.5 rounded-lg bg-slate-900 hover:bg-slate-800 text-white text-xs font-semibold transition" data-kwe-click="addCustomPreNegative()">添加并重算词表</button>
+          </div>
+        </div>
+
+        <!-- Layer 2 & 3 Rules Card -->
+        <div class="bg-white rounded-xl border border-slate-200 shadow-2xs p-5 space-y-4">
+          <div>
+            <span class="text-[11px] font-bold uppercase tracking-wider px-2 py-0.5 rounded bg-amber-100 text-amber-800">第二层 &amp; 第三层 · 数据驱动</span>
+            <h3 class="text-base font-bold text-slate-900 mt-1">动态否定与渠道隔离准则</h3>
+          </div>
+          <div class="space-y-3 text-xs text-slate-600 leading-relaxed">
+            <div class="p-3 rounded-lg bg-slate-50 border border-slate-200">
+              <div class="font-bold text-slate-900">① 毕业隔离精准否定 (防内部抢单)</div>
+              <p class="mt-1">当搜索词从 <code class="text-blue-700">SP-Auto</code> 或 <code class="text-blue-700">SP-Manual 词组</code> 升级到独立精准活动后（例如样本中的 <code class="font-mono">kokodi kids smart phone</code>），必须在原 Auto/非品牌词组活动中执行<strong>精准否定 (Negative Exact)</strong>，切断内部重复竞价。</p>
+            </div>
+            <div class="p-3 rounded-lg bg-slate-50 border border-slate-200">
+              <div class="font-bold text-slate-900">② N-Gram 词根连坐词组否定</div>
+              <p class="mt-1">针对 4 万长尾词“单点花费低、汇总亏损大”的盲区：若某词根下所有搜索词合计 <strong>0单且总花费 ≥ 词根止损线</strong>，直接对该词根执行<strong>词组否定 (Negative Phrase)</strong>。</p>
+            </div>
+            <div class="p-3 rounded-lg bg-slate-50 border border-slate-200">
+              <div class="font-bold text-slate-900">③ 单点绩效止损精准否定</div>
+              <p class="mt-1">单个长尾词满足 <strong>0单且花费 ≥ 单点止损线</strong>，或出单但 <strong>CPA &gt; 1.8×目标CPA 且 CVR 极低</strong> 时，仅执行<strong>精准否定 (Negative Exact)</strong>，严禁盲目词组否定误伤同词根好词！</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Triggered Negatives & Isolation Execution List -->
+      <div class="bg-white rounded-xl border border-slate-200 shadow-2xs overflow-hidden">
+        <div class="p-4 border-b border-slate-200 bg-slate-50/60 flex flex-wrap items-center justify-between gap-2">
+          <div>
+            <h3 class="text-sm font-bold text-slate-900">当前导入词表触发的【否定词与毕业隔离】执行清单</h3>
+            <p class="text-xs text-slate-500">区分“劣质流量止损否定”与“高转词分舱隔离否定”，可直接导出写入亚马逊批量表</p>
+          </div>
+          <button type="button" id="copyTriggeredNegBtn" class="px-3 py-1.5 rounded-lg bg-slate-900 hover:bg-slate-800 text-white text-xs font-semibold transition" data-kwe-click="copyTriggeredNegatives()">复制当前触发清单</button>
+        </div>
+        <div class="overflow-x-auto custom-scrollbar">
+          <table class="w-full text-left border-collapse">
+            <thead>
+              <tr class="bg-slate-100/80 text-[11px] font-semibold uppercase tracking-wider text-slate-600 border-b border-slate-200">
+                <th class="py-2.5 px-4">目标词 / 词根 / ASIN</th>
+                <th class="py-2.5 px-3">否定类型</th>
+                <th class="py-2.5 px-3">执行否定匹配方式</th>
+                <th class="py-2.5 px-3">作用广告活动范围</th>
+                <th class="py-2.5 px-3 text-right">涉及花费 ($)</th>
+                <th class="py-2.5 px-3 text-right">涉及订单</th>
+                <th class="py-2.5 px-4">触发依据说明</th>
+              </tr>
+            </thead>
+            <tbody id="triggeredNegTableBody" class="divide-y divide-slate-100 text-xs"></tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================== TAB 4: SEASONALITY & ABA INFLECTION ==================== -->
+    <section id="tabPanel_seasonality" class="hidden space-y-6">
+      <div class="grid grid-cols-1 lg:grid-cols-3 gap-4">
+        <div class="lg:col-span-2 bg-white rounded-xl border border-slate-200 shadow-2xs p-5">
+          <div class="flex flex-wrap items-center justify-between gap-2 mb-3">
+            <div>
+              <h3 class="text-sm font-bold text-slate-900">玩具类目全年周度流量入口膨胀与收缩曲线（源自 PDF 图3 实测数据）</h3>
+              <p class="text-xs text-slate-500">10月仅 ~4,000 出单词 → 11.25/12.16 黑五圣诞达峰值 (入口指数 347 / 2.89万词) → 12.23 后断崖下跌至 129 → 92</p>
+            </div>
+          </div>
+          <div class="relative h-72">
+            <canvas id="seasonalityCurveChart"></canvas>
+          </div>
+        </div>
+
+        <div class="bg-white rounded-xl border border-slate-200 shadow-2xs p-5 space-y-3">
+          <span class="text-[11px] font-bold uppercase tracking-wider px-2 py-0.5 rounded bg-blue-100 text-blue-800">PDF 核心方法论落地</span>
+          <h3 class="text-base font-bold text-slate-900">ABA 周度排名三拐点节奏法则</h3>
+          <div class="space-y-2.5 text-xs">
+            <div class="p-3 rounded-lg border-l-4 border-amber-500 bg-amber-50/60">
+              <div class="font-bold text-slate-900">拐点 1：排名启动点 (10月中下旬)</div>
+              <p class="text-slate-600 mt-0.5">信号：目标词从几万名开始<strong>连续 2–3 周上升</strong>。<br>动作：在 CPC 尚未暴涨前，提前创建精准组上调竞价 15%–20% 抢占自然排名坑位。</p>
+            </div>
+            <div class="p-3 rounded-lg border-l-4 border-emerald-500 bg-emerald-50/60">
+              <div class="font-bold text-slate-900">拐点 2：排名加速点 (11月初–黑五)</div>
+              <p class="text-slate-600 mt-0.5">信号：排名斜率变陡、冲入 <strong>Top 5,000–10,000 区间</strong>，转化率翻 2–3 倍。<br>动作：放开核心词组预算，解锁 <code class="font-mono">gift / christmas</code> 场景词与受控宽泛组。</p>
+            </div>
+            <div class="p-3 rounded-lg border-l-4 border-rose-500 bg-rose-50/60">
+              <div class="font-bold text-slate-900">拐点 3：排名峰值回落点 (12月20–23日)</div>
+              <p class="text-slate-600 mt-0.5">信号：圣诞物流截单，ABA 排名达最高点后首次回落。<br>动作：<strong>24小时内暂停纯宽泛与圣诞礼物词</strong>，常规词组竞价回调 25%–35%，锁住旺季利润。</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ABA Weekly Rank File Detector -->
+      <div class="bg-white rounded-xl border border-slate-200 shadow-2xs p-5 space-y-4">
+        <div class="flex flex-wrap items-center justify-between gap-3">
+          <div>
+            <h3 class="text-sm font-bold text-slate-900">ABA 历史周度排名三拐点自动批量识别器</h3>
+            <p class="text-xs text-slate-500">上传去年同期关键词周度 ABA 排名表（格式：首列为关键词，后续列按时间顺序为各周 ABA 排名数字），系统自动定位每个词的【启动周、加速周、峰值回落周】</p>
+          </div>
+          <div class="flex items-center gap-2">
+            <button type="button" id="downloadAbaTplBtn" class="px-3 py-1.5 rounded-lg border border-slate-300 bg-white hover:bg-slate-50 text-slate-700 text-xs font-medium transition" data-kwe-click="downloadAbaTemplate()">下载 ABA 导入模板 (.csv)</button>
+            <label for="abaFileInput" class="cursor-pointer px-3.5 py-1.5 rounded-lg bg-indigo-600 hover:bg-indigo-500 text-white text-xs font-semibold transition">导入 ABA 周度排名表 (.xlsx/.csv)</label>
+            <input id="abaFileInput" type="file" accept=".xlsx,.xls,.csv" class="hidden" data-kwe-change="handleAbaFileUpload(event)">
+          </div>
+        </div>
+
+        <div id="abaResultsContainer" class="rounded-lg border border-dashed border-slate-300 bg-slate-50 p-6 text-center text-xs text-slate-500">
+          尚未上传 ABA 周度排名表。您可点击右上角“下载 ABA 导入模板 (.csv)”查看标准列名格式，或上传任意含关键词与多周排名的 Excel/CSV 表格进行批量拐点计算。
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================== TAB 5: UNDERLYING LOGIC & PYTHON SOURCE ==================== -->
+    <section id="tabPanel_architecture" class="hidden space-y-6">
+      <!-- 5-Step Underlying Logic Pipeline -->
+      <div class="bg-white rounded-xl border border-slate-200 shadow-2xs p-6 space-y-5">
+        <div>
+          <span class="text-xs font-bold uppercase tracking-wider text-blue-600">Core Mathematical &amp; Algorithmic Architecture</span>
+          <h2 class="text-lg font-bold text-slate-900 mt-0.5">万级关键词快速、高效、准确处理的五层底层逻辑</h2>
+          <p class="text-xs text-slate-500 mt-1">针对 40,000+ 搜索词报告设计，时间复杂度严格控制在 O(N·L)，单核处理 5 万行耗时 &lt; 0.3 秒</p>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-5 gap-3 text-xs">
+          <div class="p-4 rounded-xl bg-slate-50 border border-slate-200 space-y-1.5">
+            <div class="font-bold text-blue-700">Step 1 · 归一化与同词归并</div>
+            <p class="text-slate-600 leading-relaxed">清洗大小写与多余空格，合并同一搜索词在 <code class="font-mono">SP-Auto</code> 与多个 <code class="font-mono">SP-Manual</code> 活动中的曝光、点击、花费与订单，还原真实全局 CVR/CPA，同时标记跨活动重叠内耗。</p>
+          </div>
+          <div class="p-4 rounded-xl bg-slate-50 border border-slate-200 space-y-1.5">
+            <div class="font-bold text-blue-700">Step 2 · 7维语义词典切分</div>
+            <p class="text-slate-600 leading-relaxed">基于哈希集合与正则 <code class="font-mono">^b0[a-z0-9]{8}$</code> 毫秒级分离：①自有品牌 ②竞品品牌 ③商品ASIN ④前置高危否词 ⑤黄金适龄词(3-5/toddler) ⑥边缘高龄词(7-12) ⑦礼物与玩具属性词。</p>
+          </div>
+          <div class="p-4 rounded-xl bg-slate-50 border border-slate-200 space-y-1.5">
+            <div class="font-bold text-blue-700">Step 3 · N-Gram 词根聚合</div>
+            <p class="text-slate-600 leading-relaxed">将词干单复数归一（<code class="font-mono">phones→phone</code>）后提取 1-Gram 与 2-Gram 词根矩阵，汇总长尾碎片花费，解决单点长尾词点击不足无法判断好坏的统计稀疏难题。</p>
+          </div>
+          <div class="p-4 rounded-xl bg-slate-50 border border-slate-200 space-y-1.5">
+            <div class="font-bold text-blue-700">Step 4 · 匹配分舱与三层否定</div>
+            <p class="text-slate-600 leading-relaxed">高确定性词打<strong>精准</strong>并在源活动<strong>毕业精准否定</strong>；黄金适龄与核心词根打<strong>受控词组</strong>（必挂前置词组否定库）；高龄/泛词<strong>独立分舱压Bid</strong>；劣质词根<strong>连坐词组否定</strong>。</p>
+          </div>
+          <div class="p-4 rounded-xl bg-slate-50 border border-slate-200 space-y-1.5">
+            <div class="font-bold text-blue-700">Step 5 · 动态平滑竞价公式</div>
+            <p class="text-slate-600 leading-relaxed">采用点击置信度加权的目标转化竞价：<br><code class="font-mono text-[11px] text-slate-800">Bid = CPC × (目标ACOS / 实际ACOS)^α × 季节系数</code>，防止低点击偶然暴单导致盲目高出价。</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Complete Standalone Python Batch Script (Zero Truncation) -->
+      <div class="bg-slate-900 rounded-2xl border border-slate-800 shadow-lg overflow-hidden">
+        <div class="px-5 py-4 border-b border-slate-800 flex flex-wrap items-center justify-between gap-3">
+          <div>
+            <span class="text-xs font-semibold text-emerald-400">独立离线批处理版 (Python 3 + Pandas + OpenPyXL)</span>
+            <h3 class="text-sm sm:text-base font-bold text-white mt-0.5">amazon_toys_kw_batch_processor.py（完整无截断源码，支持百万行级本地命令行自动化运行）</h3>
+          </div>
+          <div class="flex items-center gap-2">
+            <button type="button" id="copyPyCodeBtn" class="px-3 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 text-xs font-semibold transition" data-kwe-click="copyPythonScript()">复制完整 Python 源码</button>
+            <button type="button" id="downloadPyBtn" class="px-3.5 py-1.5 rounded-lg bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-semibold transition" data-kwe-click="downloadPythonScript()">下载 .py 批处理脚本</button>
+          </div>
+        </div>
+        <pre id="pythonCodeBlock" class="p-5 text-xs text-slate-200 font-mono overflow-x-auto max-h-[520px] custom-scrollbar leading-relaxed"></pre>
+      </div>
+    </section>
+
+  </div>
