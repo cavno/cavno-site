@@ -1,0 +1,537 @@
+/* ==========================================================================
+   Cavno Editorial Design Adaptation for Graham-Dodd Valuation Workbench
+   Scoped strictly to #graham-buffett-app — Zero Tailwind CDN dependency, Zero collision
+   ========================================================================== */
+
+.gbv-breadcrumb {
+  padding-top: 26px;
+  padding-bottom: 18px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 14px;
+  flex-wrap: wrap;
+}
+.gbv-breadcrumb a {
+  margin-top: 0;
+}
+.gbv-end {
+  padding-top: 24px;
+  padding-bottom: 48px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 16px;
+  flex-wrap: wrap;
+  font-size: 14px;
+  color: var(--ink-2);
+}
+.gbv-end a {
+  color: var(--ink-2);
+  border-bottom: 1px solid transparent;
+  transition: color 0.15s ease, border-color 0.15s ease;
+}
+.gbv-end a:hover {
+  color: var(--coral-deep);
+  border-bottom-color: var(--coral-deep);
+}
+
+#graham-buffett-app {
+  font-family: var(--sans);
+  background-color: var(--paper);
+  color: var(--ink);
+  line-height: 1.7;
+  min-width: 0;
+  isolation: auto;
+}
+#graham-buffett-app *, #graham-buffett-app *::before, #graham-buffett-app *::after {
+  box-sizing: border-box;
+  border: 0 solid var(--line);
+}
+#graham-buffett-app :where(h1, h2, h3, h4, p, ul, ol, figure, pre) {
+  margin: 0;
+  padding: 0;
+}
+#graham-buffett-app :where(h1, h2, h3, h4) {
+  font-family: var(--serif);
+  letter-spacing: -0.015em;
+}
+#graham-buffett-app :where(button, input, select, textarea) {
+  font: inherit;
+  color: inherit;
+}
+#graham-buffett-app button {
+  cursor: pointer;
+  background-color: transparent;
+}
+#graham-buffett-app code {
+  font-family: var(--mono);
+  font-size: 0.9em;
+}
+#graham-buffett-app table {
+  border-collapse: collapse;
+  text-indent: 0;
+}
+#graham-buffett-app .mono-num {
+  font-family: var(--mono);
+  font-variant-numeric: tabular-nums;
+}
+
+/* Editorial Hero & Sticky Sub-Navigation */
+#graham-buffett-app .gbv-hero-head {
+  background: linear-gradient(180deg, var(--panel) 0%, rgba(240, 238, 230, 0.55) 100%);
+  border-top: 1px solid var(--line);
+  border-bottom: 1px solid var(--line);
+}
+#graham-buffett-app .gbv-hero-head h1 {
+  font-size: clamp(22px, 2.25vw, 29px);
+  line-height: 1.34;
+  font-weight: 700;
+  color: var(--ink);
+  margin-top: 8px;
+  text-wrap: balance;
+}
+#graham-buffett-app :is(h2, h3, h4, button) {
+  text-wrap: balance;
+}
+#graham-buffett-app #btn-open-blueprint {
+  white-space: nowrap;
+  flex-shrink: 0;
+  border-radius: 999px;
+}
+@media (min-width: 768px) {
+  #graham-buffett-app #wb-mode-avepv,
+  #graham-buffett-app #wb-mode-franchise {
+    white-space: nowrap;
+    flex-shrink: 0;
+  }
+}
+#graham-buffett-app .gbv-subnav-bar {
+  position: sticky;
+  top: var(--cv-head-total, 68px);
+  z-index: 35;
+  background: rgba(250, 249, 245, 0.95);
+  -webkit-backdrop-filter: blur(10px);
+  backdrop-filter: blur(10px);
+  border-bottom: 1px solid var(--line);
+}
+#graham-buffett-app .gbv-tab-strip {
+  overflow-x: auto;
+  overscroll-behavior-x: contain;
+  scrollbar-width: none;
+  padding-bottom: 2px;
+}
+#graham-buffett-app .gbv-tab-strip::-webkit-scrollbar {
+  display: none;
+}
+#graham-buffett-app .gbv-tab-strip button {
+  flex: 0 0 auto;
+  white-space: nowrap;
+}
+#graham-buffett-app .gbv-source-note {
+  background: var(--panel);
+  color: var(--ink-2);
+}
+
+/* Interactive Tabs, Sub-Pills, Sliders & Pyramid Tiers */
+#graham-buffett-app .tab-btn-active {
+  background-color: var(--ink);
+  color: var(--paper);
+  border: 1px solid var(--ink);
+  border-radius: 999px;
+}
+#graham-buffett-app .tab-btn-inactive {
+  background-color: var(--card);
+  color: var(--ink-2);
+  border: 1px solid var(--line-2);
+  border-radius: 999px;
+}
+#graham-buffett-app .tab-btn-inactive:hover {
+  background-color: var(--panel);
+  color: var(--ink);
+  border-color: var(--ink-2);
+}
+#graham-buffett-app .sub-pill-active {
+  background-color: var(--coral-deep);
+  color: #FAF9F5;
+  border-color: var(--coral-deep);
+}
+#graham-buffett-app .sub-pill-inactive {
+  background-color: var(--paper);
+  color: var(--ink-2);
+  border-color: var(--line-2);
+}
+#graham-buffett-app .sub-pill-inactive:hover {
+  background-color: var(--panel);
+  color: var(--ink);
+}
+#graham-buffett-app input[type="range"] {
+  accent-color: var(--coral-deep);
+  cursor: pointer;
+  height: 6px;
+  border-radius: 999px;
+  background: var(--line);
+}
+#graham-buffett-app input[type="number"] {
+  border: 1px solid var(--line-2);
+  background-color: var(--card);
+  color: var(--ink);
+  transition: border-color 0.15s ease, box-shadow 0.15s ease;
+}
+#graham-buffett-app input[type="number"]:focus {
+  outline: none;
+  border-color: var(--coral);
+  box-shadow: 0 0 0 3px rgba(217, 119, 87, 0.14);
+}
+#graham-buffett-app input[type="checkbox"] {
+  accent-color: var(--coral-deep);
+  cursor: pointer;
+}
+#graham-buffett-app .pyramid-tier {
+  transition: transform 0.18s ease, box-shadow 0.18s ease;
+}
+#graham-buffett-app .pyramid-tier:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px rgba(20, 20, 19, 0.08);
+}
+
+/* Layout & Positioning Utilities */
+#graham-buffett-app .hidden { display: none !important; }
+#graham-buffett-app .block { display: block; }
+#graham-buffett-app .inline-block { display: inline-block; }
+#graham-buffett-app .flex { display: flex; }
+#graham-buffett-app .inline-flex { display: inline-flex; }
+#graham-buffett-app .grid { display: grid; }
+#graham-buffett-app .relative { position: relative; }
+#graham-buffett-app .fixed { position: fixed; }
+#graham-buffett-app .sticky { position: sticky; }
+#graham-buffett-app .inset-0 { inset: 0; }
+#graham-buffett-app .top-0 { top: 0; }
+#graham-buffett-app .z-30 { z-index: 30; }
+#graham-buffett-app .z-50 { z-index: 100020; }
+#graham-buffett-app #modal-blueprint {
+  top: var(--cv-head-total, 68px);
+  z-index: 100020;
+}
+#graham-buffett-app #modal-blueprint > div {
+  max-height: calc(100dvh - var(--cv-head-total, 68px) - 32px);
+}
+
+/* Sizing & Flex/Grid Alignment */
+#graham-buffett-app .flex-1 { flex: 1 1 0%; }
+#graham-buffett-app .flex-col { flex-direction: column; }
+#graham-buffett-app .flex-wrap { flex-wrap: wrap; }
+#graham-buffett-app .items-start { align-items: flex-start; }
+#graham-buffett-app .items-center { align-items: center; }
+#graham-buffett-app .justify-center { justify-content: center; }
+#graham-buffett-app .justify-between { justify-content: space-between; }
+#graham-buffett-app .self-center { align-self: center; }
+#graham-buffett-app .grid > *, #graham-buffett-app .flex > * { min-width: 0; }
+
+#graham-buffett-app .w-4 { width: 1rem; }
+#graham-buffett-app .h-4 { height: 1rem; }
+#graham-buffett-app .w-3\/5 { width: 60%; }
+#graham-buffett-app .w-4\/5 { width: 80%; }
+#graham-buffett-app .w-full { width: 100%; }
+#graham-buffett-app .min-w-full { min-width: 100%; }
+#graham-buffett-app .max-w-lg { max-width: 34rem; }
+#graham-buffett-app .max-w-4xl { max-width: 56rem; }
+#graham-buffett-app .max-w-7xl { max-width: 1180px; }
+#graham-buffett-app .h-48 { height: 12rem; }
+#graham-buffett-app .h-56 { height: 14rem; }
+#graham-buffett-app .h-64 { height: 16rem; }
+#graham-buffett-app .h-72 { height: 18rem; }
+#graham-buffett-app .max-h-\[90vh\] { max-height: 86vh; }
+
+#graham-buffett-app .mx-auto { margin-left: auto; margin-right: auto; }
+#graham-buffett-app .mr-1 { margin-right: 0.25rem; }
+#graham-buffett-app .mt-0\.5 { margin-top: 0.125rem; }
+#graham-buffett-app .mt-1 { margin-top: 0.25rem; }
+#graham-buffett-app .mt-1\.5 { margin-top: 0.375rem; }
+#graham-buffett-app .mt-2 { margin-top: 0.5rem; }
+#graham-buffett-app .mt-2\.5 { margin-top: 0.625rem; }
+#graham-buffett-app .mt-3 { margin-top: 0.75rem; }
+#graham-buffett-app .mt-4 { margin-top: 1rem; }
+#graham-buffett-app .mt-5 { margin-top: 1.25rem; }
+#graham-buffett-app .mt-8 { margin-top: 2rem; }
+#graham-buffett-app .mb-1 { margin-bottom: 0.25rem; }
+#graham-buffett-app .mb-2 { margin-bottom: 0.5rem; }
+#graham-buffett-app .mb-2\.5 { margin-bottom: 0.625rem; }
+#graham-buffett-app .mb-4 { margin-bottom: 1rem; }
+
+#graham-buffett-app .p-2\.5 { padding: 0.625rem; }
+#graham-buffett-app .p-3 { padding: 0.75rem; }
+#graham-buffett-app .p-3\.5 { padding: 0.875rem; }
+#graham-buffett-app .p-4 { padding: 1rem; }
+#graham-buffett-app .p-5 { padding: 1.25rem; }
+#graham-buffett-app .px-1 { padding-left: 0.25rem; padding-right: 0.25rem; }
+#graham-buffett-app .px-1\.5 { padding-left: 0.375rem; padding-right: 0.375rem; }
+#graham-buffett-app .px-2 { padding-left: 0.5rem; padding-right: 0.5rem; }
+#graham-buffett-app .px-2\.5 { padding-left: 0.625rem; padding-right: 0.625rem; }
+#graham-buffett-app .px-3 { padding-left: 0.75rem; padding-right: 0.75rem; }
+#graham-buffett-app .px-3\.5 { padding-left: 0.875rem; padding-right: 0.875rem; }
+#graham-buffett-app .px-4 { padding-left: 1.25rem; padding-right: 1.25rem; }
+#graham-buffett-app .py-0\.2 { padding-top: 0.1rem; padding-bottom: 0.1rem; }
+#graham-buffett-app .py-0\.5 { padding-top: 0.125rem; padding-bottom: 0.125rem; }
+#graham-buffett-app .py-1 { padding-top: 0.25rem; padding-bottom: 0.25rem; }
+#graham-buffett-app .py-1\.5 { padding-top: 0.375rem; padding-bottom: 0.375rem; }
+#graham-buffett-app .py-2 { padding-top: 0.5rem; padding-bottom: 0.5rem; }
+#graham-buffett-app .py-2\.5 { padding-top: 0.625rem; padding-bottom: 0.625rem; }
+#graham-buffett-app .py-3 { padding-top: 0.75rem; padding-bottom: 0.75rem; }
+#graham-buffett-app .py-4 { padding-top: 1rem; padding-bottom: 1rem; }
+#graham-buffett-app .py-6 { padding-top: 1.5rem; padding-bottom: 1.5rem; }
+#graham-buffett-app .pt-1 { padding-top: 0.25rem; }
+#graham-buffett-app .pt-1\.5 { padding-top: 0.375rem; }
+#graham-buffett-app .pt-2 { padding-top: 0.5rem; }
+#graham-buffett-app .pt-3 { padding-top: 0.75rem; }
+#graham-buffett-app .pb-1\.5 { padding-bottom: 0.375rem; }
+#graham-buffett-app .pb-2\.5 { padding-bottom: 0.625rem; }
+#graham-buffett-app .pb-3 { padding-bottom: 0.75rem; }
+#graham-buffett-app .pb-4 { padding-bottom: 1rem; }
+
+#graham-buffett-app .grid-cols-1 { grid-template-columns: repeat(1, minmax(0, 1fr)); }
+#graham-buffett-app .grid-cols-2 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+#graham-buffett-app .grid-cols-3 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+#graham-buffett-app .col-span-2 { grid-column: span 2 / span 2; }
+
+#graham-buffett-app .gap-1 { gap: 0.25rem; }
+#graham-buffett-app .gap-1\.5 { gap: 0.375rem; }
+#graham-buffett-app .gap-2 { gap: 0.5rem; }
+#graham-buffett-app .gap-2\.5 { gap: 0.625rem; }
+#graham-buffett-app .gap-3 { gap: 0.75rem; }
+#graham-buffett-app .gap-4 { gap: 1rem; }
+#graham-buffett-app .gap-6 { gap: 1.5rem; }
+
+#graham-buffett-app :is(.space-y-1 > :not([hidden]) ~ :not([hidden])) { margin-top: 0.25rem; }
+#graham-buffett-app :is(.space-y-1\.5 > :not([hidden]) ~ :not([hidden])) { margin-top: 0.375rem; }
+#graham-buffett-app :is(.space-y-2 > :not([hidden]) ~ :not([hidden])) { margin-top: 0.5rem; }
+#graham-buffett-app :is(.space-y-3 > :not([hidden]) ~ :not([hidden])) { margin-top: 0.75rem; }
+#graham-buffett-app :is(.space-y-3\.5 > :not([hidden]) ~ :not([hidden])) { margin-top: 0.875rem; }
+#graham-buffett-app :is(.space-y-4 > :not([hidden]) ~ :not([hidden])) { margin-top: 1rem; }
+#graham-buffett-app :is(.space-y-5 > :not([hidden]) ~ :not([hidden])) { margin-top: 1.25rem; }
+#graham-buffett-app :is(.space-y-6 > :not([hidden]) ~ :not([hidden])) { margin-top: 1.5rem; }
+#graham-buffett-app :is(.space-y-8 > :not([hidden]) ~ :not([hidden])) { margin-top: 2rem; }
+#graham-buffett-app :is(.divide-y > :not([hidden]) ~ :not([hidden])) { border-top-width: 1px; border-color: var(--line); }
+#graham-buffett-app :is(.divide-slate-200 > :not([hidden]) ~ :not([hidden])) { border-color: var(--line); }
+
+/* Overflow, List, Borders & Radii */
+#graham-buffett-app .overflow-x-auto { overflow-x: auto; max-width: 100%; overscroll-behavior-x: contain; }
+#graham-buffett-app .overflow-y-auto { overflow-y: auto; }
+#graham-buffett-app .list-disc { list-style-type: disc; }
+#graham-buffett-app .list-inside { list-style-position: inside; }
+#graham-buffett-app .cursor-pointer { cursor: pointer; }
+#graham-buffett-app .select-none { user-select: none; }
+
+#graham-buffett-app .rounded { border-radius: 6px; }
+#graham-buffett-app .rounded-md { border-radius: 8px; }
+#graham-buffett-app .rounded-lg { border-radius: var(--radius-s, 10px); }
+#graham-buffett-app .rounded-xl { border-radius: 14px; }
+#graham-buffett-app .rounded-2xl { border-radius: var(--radius-l, 20px); }
+#graham-buffett-app .rounded-full { border-radius: 9999px; }
+#graham-buffett-app .rounded-t-xl { border-top-left-radius: 14px; border-top-right-radius: 14px; }
+#graham-buffett-app .rounded-b-xl { border-bottom-left-radius: 14px; border-bottom-right-radius: 14px; }
+
+#graham-buffett-app .border { border-width: 1px; }
+#graham-buffett-app .border-2 { border-width: 2px; }
+#graham-buffett-app .border-t { border-top-width: 1px; }
+#graham-buffett-app .border-b { border-bottom-width: 1px; }
+
+/* Typography Scale */
+#graham-buffett-app .text-left { text-align: left; }
+#graham-buffett-app .text-center { text-align: center; }
+#graham-buffett-app .text-right { text-align: right; }
+#graham-buffett-app .text-\[10px\] { font-size: 11px; line-height: 1.5; }
+#graham-buffett-app .text-\[11px\] { font-size: 12px; line-height: 1.55; }
+#graham-buffett-app .text-xs { font-size: 13px; line-height: 1.65; }
+#graham-buffett-app .text-sm { font-size: 14.5px; line-height: 1.7; }
+#graham-buffett-app .text-base { font-size: 16.5px; line-height: 1.55; }
+#graham-buffett-app .text-lg { font-size: 18.5px; line-height: 1.45; }
+#graham-buffett-app .text-xl { font-size: 21px; line-height: 1.38; }
+#graham-buffett-app .text-2xl { font-size: 24px; line-height: 1.3; }
+#graham-buffett-app .text-3xl { font-size: 28px; line-height: 1.2; }
+#graham-buffett-app .font-medium { font-weight: 500; }
+#graham-buffett-app .font-semibold { font-weight: 600; }
+#graham-buffett-app .font-bold { font-weight: 700; }
+#graham-buffett-app .uppercase { text-transform: uppercase; }
+#graham-buffett-app .tracking-wide { letter-spacing: 0.04em; }
+#graham-buffett-app .tracking-wider { letter-spacing: 0.08em; }
+#graham-buffett-app .leading-snug { line-height: 1.38; }
+#graham-buffett-app .leading-relaxed { line-height: 1.72; }
+
+/* Cavno Warm Editorial Palette Mapping (Surfaces, Borders & Semantic Accents) */
+#graham-buffett-app .bg-white { background-color: var(--card); }
+#graham-buffett-app .bg-white\/95 { background-color: rgba(250, 249, 245, 0.95); }
+#graham-buffett-app .bg-white\/10 { background-color: rgba(250, 249, 245, 0.08); }
+#graham-buffett-app .bg-slate-50 { background-color: var(--paper); }
+#graham-buffett-app .bg-slate-100 { background-color: var(--panel); }
+#graham-buffett-app .bg-slate-200 { background-color: #E5E1D6; }
+#graham-buffett-app .bg-slate-800 { background-color: #262522; }
+#graham-buffett-app .bg-slate-900 { background-color: #191917; }
+#graham-buffett-app .bg-slate-900\/60 { background-color: rgba(20, 20, 19, 0.56); }
+
+/* Gradient Premise Banner -> Warm Charcoal to Deep Valuation Pine */
+#graham-buffett-app .bg-gradient-to-br {
+  background-image: linear-gradient(135deg, #191917 0%, #252420 55%, #1E332A 100%);
+}
+
+/* Blue / Indigo -> Cavno Terracotta & Warm Espresso Accents */
+#graham-buffett-app .bg-blue-50, #graham-buffett-app .bg-indigo-50 { background-color: #FAF0EA; }
+#graham-buffett-app .bg-blue-50\/70, #graham-buffett-app .bg-blue-50\/80 { background-color: rgba(250, 240, 234, 0.78); }
+#graham-buffett-app .bg-blue-100, #graham-buffett-app .bg-indigo-100 { background-color: #F4DFD3; }
+#graham-buffett-app .bg-blue-900, #graham-buffett-app .bg-indigo-900 { background-color: #C15F3C; }
+#graham-buffett-app .bg-blue-950, #graham-buffett-app .bg-indigo-950 { background-color: #21352C; }
+
+/* Emerald -> Botanical Valuation Sage (hsl 153) */
+#graham-buffett-app .bg-emerald-50 { background-color: #EDF3EE; }
+#graham-buffett-app .bg-emerald-50\/70 { background-color: rgba(237, 243, 238, 0.8); }
+#graham-buffett-app .bg-emerald-100 { background-color: #DCE8DF; }
+
+/* Amber -> Antique Ochre / Parchment Gold */
+#graham-buffett-app .bg-amber-50 { background-color: #F9F2E1; }
+#graham-buffett-app .bg-amber-100 { background-color: #F2E4C2; }
+#graham-buffett-app .bg-amber-400\/20 { background-color: rgba(212, 172, 92, 0.18); }
+
+/* Rose & Purple -> Muted Brick & Warm Umber */
+#graham-buffett-app .bg-rose-50 { background-color: #F9ECE9; }
+#graham-buffett-app .bg-purple-50 { background-color: #F4EFE8; }
+
+/* Border Colors */
+#graham-buffett-app .border-slate-200 { border-color: var(--line); }
+#graham-buffett-app .border-slate-300 { border-color: var(--line-2); }
+#graham-buffett-app .border-slate-900 { border-color: #191917; }
+#graham-buffett-app .border-white\/15 { border-color: rgba(250, 249, 245, 0.16); }
+#graham-buffett-app .border-black\/10 { border-color: rgba(20, 20, 19, 0.1); }
+#graham-buffett-app .border-blue-200, #graham-buffett-app .border-indigo-200 { border-color: #E8C5B4; }
+#graham-buffett-app .border-blue-300 { border-color: #DFA990; }
+#graham-buffett-app .border-blue-400 { border-color: #D97757; }
+#graham-buffett-app .border-blue-700 { border-color: #C15F3C; }
+#graham-buffett-app .border-emerald-200 { border-color: #C2D7C8; }
+#graham-buffett-app .border-amber-200 { border-color: #E5D1A1; }
+#graham-buffett-app .border-amber-300 { border-color: #D7BC7C; }
+#graham-buffett-app .border-amber-300\/30 { border-color: rgba(215, 188, 124, 0.35); }
+#graham-buffett-app .border-amber-400 { border-color: #C59B45; }
+#graham-buffett-app .border-rose-200 { border-color: #E3BEB6; }
+#graham-buffett-app .border-purple-200 { border-color: #D9CEBF; }
+
+/* Text Colors */
+#graham-buffett-app .text-white { color: #FAF9F5; }
+#graham-buffett-app .text-slate-900 { color: var(--ink); }
+#graham-buffett-app .text-slate-800 { color: #262522; }
+#graham-buffett-app .text-slate-700 { color: #3D3B36; }
+#graham-buffett-app .text-slate-600 { color: var(--ink-2); }
+#graham-buffett-app .text-slate-500 { color: #757168; }
+#graham-buffett-app .text-slate-400 { color: #969186; }
+#graham-buffett-app .text-slate-300 { color: #D4D0C5; }
+#graham-buffett-app .text-slate-200 { color: #E8E5DC; }
+
+#graham-buffett-app .text-blue-700, #graham-buffett-app .text-indigo-800 { color: #9E472A; }
+#graham-buffett-app .text-blue-800 { color: #8C3F27; }
+#graham-buffett-app .text-blue-900, #graham-buffett-app .text-blue-950, #graham-buffett-app .text-indigo-900, #graham-buffett-app .text-indigo-950 { color: #5E2918; }
+#graham-buffett-app .text-indigo-200, #graham-buffett-app .text-indigo-300, #graham-buffett-app .text-sky-200 { color: #D2DFD7; }
+#graham-buffett-app .text-sky-300 { color: #E8B098; }
+
+#graham-buffett-app .text-emerald-300 { color: #A6CEB6; }
+#graham-buffett-app .text-emerald-700 { color: #2D6045; }
+#graham-buffett-app .text-emerald-800 { color: #245038; }
+#graham-buffett-app .text-emerald-900, #graham-buffett-app .text-emerald-950 { color: #1A3C29; }
+
+#graham-buffett-app .text-amber-200 { color: #FAF2E1; }
+#graham-buffett-app .text-amber-300 { color: #E8C77B; }
+#graham-buffett-app .text-amber-800 { color: #7C5A1A; }
+#graham-buffett-app .text-amber-900, #graham-buffett-app .text-amber-950 { color: #5C4110; }
+
+#graham-buffett-app .text-rose-700 { color: #9E3B30; }
+#graham-buffett-app .text-rose-800 { color: #822F25; }
+#graham-buffett-app .text-rose-900, #graham-buffett-app .text-rose-950 { color: #612119; }
+
+#graham-buffett-app .text-purple-300 { color: #DFC8AC; }
+#graham-buffett-app .text-purple-900, #graham-buffett-app .text-purple-950 { color: #59442B; }
+
+/* Effects, Transitions & Hover States */
+#graham-buffett-app .backdrop-blur, #graham-buffett-app .backdrop-blur-sm {
+  -webkit-backdrop-filter: blur(8px);
+  backdrop-filter: blur(8px);
+}
+#graham-buffett-app .shadow-sm, #graham-buffett-app .shadow {
+  box-shadow: 0 2px 10px rgba(20, 20, 19, 0.03);
+}
+#graham-buffett-app .shadow-md {
+  box-shadow: 0 10px 28px rgba(20, 20, 19, 0.07);
+}
+#graham-buffett-app .shadow-2xl {
+  box-shadow: 0 24px 64px rgba(20, 20, 19, 0.22);
+}
+#graham-buffett-app .transition {
+  transition: color 0.16s ease, background-color 0.16s ease, border-color 0.16s ease, box-shadow 0.16s ease, transform 0.16s ease;
+}
+#graham-buffett-app .hover\:bg-amber-100:hover { background-color: #F2E4C2; }
+#graham-buffett-app .hover\:bg-slate-50:hover { background-color: var(--paper); }
+#graham-buffett-app .hover\:bg-slate-100:hover { background-color: var(--panel); }
+#graham-buffett-app .hover\:bg-slate-200:hover { background-color: #E3DFD3; }
+#graham-buffett-app .hover\:border-slate-400:hover { border-color: #B4AFA2; }
+
+/* Table Refinements & Mobile Responsiveness */
+#graham-buffett-app table {
+  min-width: 580px;
+}
+#graham-buffett-app th {
+  background-color: var(--panel);
+  color: var(--ink);
+  border-bottom: 1px solid var(--line);
+}
+#graham-buffett-app td {
+  vertical-align: top;
+}
+
+@media (min-width: 640px) {
+  #graham-buffett-app .sm\:px-6 { padding-left: 1.5rem; padding-right: 1.5rem; }
+  #graham-buffett-app .sm\:p-5 { padding: 1.35rem; }
+  #graham-buffett-app .sm\:p-6 { padding: 1.65rem; }
+  #graham-buffett-app .sm\:gap-2 { gap: 0.5rem; }
+  #graham-buffett-app .sm\:flex-row { flex-direction: row; }
+  #graham-buffett-app .sm\:items-center { align-items: center; }
+  #graham-buffett-app .sm\:justify-between { justify-content: space-between; }
+  #graham-buffett-app .sm\:grid-cols-2 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  #graham-buffett-app .sm\:grid-cols-3 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+  #graham-buffett-app .sm\:grid-cols-4 { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+  #graham-buffett-app .sm\:text-sm { font-size: 14px; line-height: 1.65; }
+  #graham-buffett-app .sm\:text-base { font-size: 16.5px; line-height: 1.5; }
+  #graham-buffett-app .sm\:text-lg { font-size: 19px; line-height: 1.4; }
+  #graham-buffett-app .sm\:text-xl { font-size: 22px; line-height: 1.35; }
+  #graham-buffett-app .sm\:text-2xl { font-size: 25px; line-height: 1.3; }
+}
+
+@media (min-width: 768px) {
+  #graham-buffett-app .md\:flex-row { flex-direction: row; }
+  #graham-buffett-app .md\:items-center { align-items: center; }
+  #graham-buffett-app .md\:justify-between { justify-content: space-between; }
+  #graham-buffett-app .md\:grid-cols-2 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  #graham-buffett-app .md\:grid-cols-3 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+  #graham-buffett-app .md\:grid-cols-4 { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+  #graham-buffett-app .md\:col-span-4 { grid-column: span 4 / span 4; }
+  #graham-buffett-app .md\:border-t-0 { border-top-width: 0; }
+  #graham-buffett-app .md\:border-l { border-left-width: 1px; }
+  #graham-buffett-app .md\:pt-0 { padding-top: 0; }
+  #graham-buffett-app .md\:pl-4 { padding-left: 1rem; }
+}
+
+@media (min-width: 1024px) {
+  #graham-buffett-app .lg\:flex-row { flex-direction: row; }
+  #graham-buffett-app .lg\:items-center { align-items: center; }
+  #graham-buffett-app .lg\:justify-between { justify-content: space-between; }
+  #graham-buffett-app .lg\:grid-cols-3 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+  #graham-buffett-app .lg\:grid-cols-4 { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+  #graham-buffett-app .lg\:grid-cols-12 { grid-template-columns: repeat(12, minmax(0, 1fr)); }
+  #graham-buffett-app .lg\:col-span-4 { grid-column: span 4 / span 4; }
+  #graham-buffett-app .lg\:col-span-5 { grid-column: span 5 / span 5; }
+  #graham-buffett-app .lg\:col-span-6 { grid-column: span 6 / span 6; }
+  #graham-buffett-app .lg\:col-span-7 { grid-column: span 7 / span 7; }
+}
+
+@media (max-width: 639px) {
+  #graham-buffett-app .w-3\/5 { width: 84%; }
+  #graham-buffett-app .w-4\/5 { width: 92%; }
+  #graham-buffett-app .text-2xl { font-size: 20px; }
+  #graham-buffett-app .text-3xl { font-size: 24px; }
+  #graham-buffett-app .gbv-hero-head > div { padding-top: 20px; padding-bottom: 20px; }
+}

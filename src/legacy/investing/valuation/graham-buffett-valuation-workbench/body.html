@@ -1,0 +1,958 @@
+<!-- Editorial Workbench Header -->
+  <header class="gbv-hero-head">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 py-6">
+      <div class="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-3">
+        <div>
+          <div class="flex flex-wrap items-center gap-2">
+            <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-semibold bg-blue-900 text-amber-200 tracking-wide">
+              哥伦比亚商学院 · 现代格雷厄姆-多德体系
+            </span>
+            <span class="text-xs text-slate-500 font-medium">
+              Greenwald, Kahn, Bellissimo, Cooper &amp; Santos (2nd Ed., 2021)
+            </span>
+          </div>
+          <h1 class="text-lg sm:text-xl font-bold text-slate-900 mt-1">
+            《价值投资：从格雷厄姆到巴菲特》底层逻辑与交互式估值系统
+          </h1>
+        </div>
+
+        <div class="flex flex-wrap items-center gap-2">
+          <button type="button" id="btn-open-blueprint" data-gbv-click="toggleBlueprintModal(true)" class="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-lg text-xs sm:text-sm font-semibold bg-amber-50 text-amber-900 border border-amber-300 hover:bg-amber-100 transition">
+            <span>◈</span>
+            <span>一图看懂全书因果闭环</span>
+          </button>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- Sticky 5-Module Navigation Bar -->
+  <div class="gbv-subnav-bar">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 py-2.5">
+      <nav class="gbv-tab-strip flex gap-2" aria-label="主模块导航">
+        <button type="button" id="nav-logic" data-gbv-click="switchMainTab('logic')" class="tab-btn-active px-3 py-2 rounded-lg text-xs sm:text-sm font-semibold transition">
+          1. 底层元逻辑与搜寻闭环
+        </button>
+        <button type="button" id="nav-pyramid" data-gbv-click="switchMainTab('pyramid')" class="tab-btn-inactive px-3 py-2 rounded-lg text-xs sm:text-sm font-semibold transition">
+          2. 三层估值与护城河沙盘
+        </button>
+        <button type="button" id="nav-workbench" data-gbv-click="switchMainTab('workbench')" class="tab-btn-inactive px-3 py-2 rounded-lg text-xs sm:text-sm font-semibold transition">
+          3. 双核估值与收益率计算台
+        </button>
+        <button type="button" id="nav-cases" data-gbv-click="switchMainTab('cases')" class="tab-btn-inactive px-3 py-2 rounded-lg text-xs sm:text-sm font-semibold transition">
+          4. 四大经典案例复盘
+        </button>
+        <button type="button" id="nav-masters" data-gbv-click="switchMainTab('masters')" class="tab-btn-inactive px-3 py-2 rounded-lg text-xs sm:text-sm font-semibold transition">
+          5. 主动研究、风控与大师谱系
+        </button>
+      </nav>
+    </div>
+  </div>
+
+  <!-- Main Workspace Container -->
+  <main class="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 py-6 space-y-8">
+
+    <!-- =================================================================== -->
+    <!-- VIEW 1: 底层元逻辑与搜寻闭环 (Intro, Ch. 1, Ch. 2)                  -->
+    <!-- =================================================================== -->
+    <section id="view-logic" class="space-y-6">
+      <!-- Top Premise Banner & KPIs -->
+      <div class="bg-gradient-to-br from-slate-900 via-slate-800 to-blue-950 text-white rounded-2xl p-5 sm:p-6 shadow-md">
+        <div class="max-w-4xl">
+          <div class="text-xs font-semibold uppercase tracking-wider text-amber-300 mb-1">
+            全书第一性原理（导论 &amp; 第1章 pp. xi–15）
+          </div>
+          <h2 class="text-xl sm:text-2xl font-bold leading-snug">
+            市场总体回报恒等式：为什么一切主动投资必须围绕“站在交易正确的一侧”重构？
+          </h2>
+          <p class="text-sm text-slate-200 mt-2 leading-relaxed">
+            尽管有效市场假说（EMH）在个体定价上屡屡失效，但<strong>在加总层面上市场存在铁律</strong>：所有投资者持有的资产总和就是整个市场，因此全体主动投资者的平均税前费前回报必然严格等于市场指数回报。每一笔买入背后都有一个卖出对手方——要持续战胜市场，你的体系必须在<strong>搜寻 → 估值 → 主动研究 → 风险管理</strong>的每一个环节回答同一个问题：<em>“为什么在这笔交易中，犯错的是对手方而不是我？”</em>
+          </p>
+        </div>
+
+        <div class="grid grid-cols-2 lg:grid-cols-4 gap-3 mt-5">
+          <div class="bg-white/10 backdrop-blur rounded-xl p-3.5 border border-white/15">
+            <div class="text-xs text-slate-300">S&amp;P SPIVA 15年主动基金淘汰率</div>
+            <div class="text-2xl font-bold text-amber-300 mono-num mt-1">&gt; 90%</div>
+            <div class="text-xs text-slate-300 mt-1">5/10/15年均超80%跑输基准（p. xiii）</div>
+          </div>
+          <div class="bg-white/10 backdrop-blur rounded-xl p-3.5 border border-white/15">
+            <div class="text-xs text-slate-300">Fama-French 价值因子年化溢价</div>
+            <div class="text-2xl font-bold text-emerald-300 mono-num mt-1">+3.35%/年</div>
+            <div class="text-xs text-slate-300 mt-1">1927–2018 零成本多空账面市值比（p. 9）</div>
+          </div>
+          <div class="bg-white/10 backdrop-blur rounded-xl p-3.5 border border-white/15">
+            <div class="text-xs text-slate-300">最低市盈率五分位 30年复利</div>
+            <div class="text-2xl font-bold text-sky-300 mono-num mt-1">12.9% vs 9.2%</div>
+            <div class="text-xs text-slate-300 mt-1">1989–2018 显著跑赢标普500（p. 15）</div>
+          </div>
+          <div class="bg-white/10 backdrop-blur rounded-xl p-3.5 border border-white/15">
+            <div class="text-xs text-slate-300">由内而外专精能力圈门槛</div>
+            <div class="text-2xl font-bold text-purple-300 mono-num mt-1">≥ 1,000 小时</div>
+            <div class="text-xs text-slate-300 mt-1">深耕单一细分行业约需1整年（p. 36）</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 4-Step Interactive Pipeline -->
+      <div class="bg-white rounded-2xl border border-slate-200 p-5 shadow-sm">
+        <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 mb-4">
+          <div>
+            <h3 class="text-base sm:text-lg font-bold text-slate-900">现代格雷厄姆-多德四步闭环体系（图 1.2, p. 11）</h3>
+            <p class="text-xs text-slate-500">点击下方任意步骤，查看华尔街常规盲区与本书系统化解法</p>
+          </div>
+          <span class="text-xs font-medium text-blue-800 bg-blue-50 px-2.5 py-1 rounded-md border border-blue-200">
+            步步立于不败之地 · 环环互锁
+          </span>
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-2.5" id="pipeline-steps-grid">
+          <button type="button" id="step-btn-0" data-gbv-click="selectPipelineStep(0)" class="text-left p-3.5 rounded-xl border-2 border-blue-700 bg-blue-50/70 transition">
+            <div class="text-xs font-bold text-blue-800">STEP 01 · 第2章</div>
+            <div class="text-sm font-bold text-slate-900 mt-0.5">搜寻策略 (Search)</div>
+            <div class="text-xs text-slate-600 mt-1">专精能力圈 × 系统性错杀猎场</div>
+          </button>
+          <button type="button" id="step-btn-1" data-gbv-click="selectPipelineStep(1)" class="text-left p-3.5 rounded-xl border border-slate-200 bg-slate-50 hover:bg-slate-100 transition">
+            <div class="text-xs font-bold text-slate-500">STEP 02 · 第3–8章</div>
+            <div class="text-sm font-bold text-slate-900 mt-0.5">分层估值 (Valuation)</div>
+            <div class="text-xs text-slate-600 mt-1">AV → EPV → 特许经营预期收益率</div>
+          </button>
+          <button type="button" id="step-btn-2" data-gbv-click="selectPipelineStep(2)" class="text-left p-3.5 rounded-xl border border-slate-200 bg-slate-50 hover:bg-slate-100 transition">
+            <div class="text-xs font-bold text-slate-500">STEP 03 · 第9章</div>
+            <div class="text-sm font-bold text-slate-900 mt-0.5">主动研究 (Active Research)</div>
+            <div class="text-xs text-slate-600 mt-1">估值导向核验 × 管理层四维审计</div>
+          </button>
+          <button type="button" id="step-btn-3" data-gbv-click="selectPipelineStep(3)" class="text-left p-3.5 rounded-xl border border-slate-200 bg-slate-50 hover:bg-slate-100 transition">
+            <div class="text-xs font-bold text-slate-500">STEP 04 · 第10章</div>
+            <div class="text-sm font-bold text-slate-900 mt-0.5">风险管理 (Risk Mgmt)</div>
+            <div class="text-xs text-slate-600 mt-1">集中风控 × 防范永久性本金损失</div>
+          </button>
+        </div>
+
+        <div id="pipeline-detail-box" class="mt-4 bg-slate-50 rounded-xl p-4 border border-slate-200 grid grid-cols-1 md:grid-cols-3 gap-4">
+          <!-- Populated dynamically by selectPipelineStep() -->
+        </div>
+      </div>
+
+      <!-- Investing Taxonomy + Empirical Anomaly Charts -->
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+        <!-- Left 5 cols: Fig 1.1 Taxonomy & Counterparty Biases -->
+        <div class="lg:col-span-5 bg-white rounded-2xl border border-slate-200 p-5 shadow-sm flex flex-col justify-between space-y-5">
+          <div>
+            <h3 class="text-base font-bold text-slate-900">投资流派底层分野（图 1.1, p. 3）</h3>
+            <p class="text-xs text-slate-500 mt-0.5">为什么紧盯“边际变化 Δ”的短期基本面派本质上是在赌博？</p>
+
+            <div class="grid grid-cols-2 gap-2 mt-3">
+              <button type="button" id="tax-passive" data-gbv-click="selectTaxonomy('passive')" class="sub-pill-inactive px-2.5 py-2 rounded-lg text-xs font-semibold border transition">
+                被动指数派 (EMH)
+              </button>
+              <button type="button" id="tax-technical" data-gbv-click="selectTaxonomy('technical')" class="sub-pill-inactive px-2.5 py-2 rounded-lg text-xs font-semibold border transition">
+                短期技术/动量派
+              </button>
+              <button type="button" id="tax-stfund" data-gbv-click="selectTaxonomy('stfund')" class="sub-pill-inactive px-2.5 py-2 rounded-lg text-xs font-semibold border transition">
+                短期基本面派 (看变化 Δ)
+              </button>
+              <button type="button" id="tax-value" data-gbv-click="selectTaxonomy('value')" class="sub-pill-active px-2.5 py-2 rounded-lg text-xs font-semibold border transition">
+                价值投资派 (看水平 Level)
+              </button>
+            </div>
+
+            <div id="taxonomy-detail" class="mt-3 p-3.5 rounded-xl bg-slate-50 border border-slate-200 text-xs sm:text-sm space-y-2">
+              <!-- Populated by selectTaxonomy() -->
+            </div>
+          </div>
+
+          <!-- Behavioral vs Institutional Biases -->
+          <div class="pt-3 border-t border-slate-200">
+            <div class="flex items-center justify-between gap-2 mb-2.5">
+              <h4 class="text-sm font-bold text-slate-900">谁在向价值投资者廉价甩卖筹码？（第2章）</h4>
+              <div class="flex gap-1">
+                <button type="button" id="bias-psych" data-gbv-click="setBiasTab('psych')" class="sub-pill-active px-2.5 py-1 rounded text-xs font-semibold border transition">个体心理偏差</button>
+                <button type="button" id="bias-inst" data-gbv-click="setBiasTab('inst')" class="sub-pill-inactive px-2.5 py-1 rounded text-xs font-semibold border transition">机构制度约束</button>
+              </div>
+            </div>
+            <div id="bias-cards-container" class="space-y-2 text-xs">
+              <!-- Populated by setBiasTab() -->
+            </div>
+          </div>
+        </div>
+
+        <!-- Right 7 cols: Empirical Value Anomaly Interactive Chart -->
+        <div class="lg:col-span-7 bg-white rounded-2xl border border-slate-200 p-5 shadow-sm flex flex-col justify-between">
+          <div>
+            <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2">
+              <div>
+                <h3 class="text-base font-bold text-slate-900">价值异象与均值回归实证数据库（第1章附录 &amp; 第2章）</h3>
+                <p class="text-xs text-slate-500">切换四组经典学术与市场实证，观察“丑陋、低增长、长期输家”的真实超额收益</p>
+              </div>
+            </div>
+
+            <div class="flex flex-wrap gap-1.5 mt-3">
+              <button type="button" id="emp-btn-ff" data-gbv-click="setEmpiricalDataset('ff')" class="sub-pill-active px-2.5 py-1.5 rounded-lg text-xs font-semibold border transition">
+                Fama-French 估值×规模
+              </button>
+              <button type="button" id="emp-btn-lsv" data-gbv-click="setEmpiricalDataset('lsv')" class="sub-pill-inactive px-2.5 py-1.5 rounded-lg text-xs font-semibold border transition">
+                LSV 低估值×低历史增长
+              </button>
+              <button type="button" id="emp-btn-dbt" data-gbv-click="setEmpiricalDataset('dbt')" class="sub-pill-inactive px-2.5 py-1.5 rounded-lg text-xs font-semibold border transition">
+                De Bondt 长期输家反转
+              </button>
+              <button type="button" id="emp-btn-drawdown" data-gbv-click="setEmpiricalDataset('drawdown')" class="sub-pill-inactive px-2.5 py-1.5 rounded-lg text-xs font-semibold border transition">
+                1989–2018 收益与熊市回撤
+              </button>
+            </div>
+
+            <div class="relative h-72 w-full mt-4">
+              <canvas id="chart-empirical"></canvas>
+            </div>
+          </div>
+
+          <div id="empirical-caption" class="mt-4 p-3.5 rounded-xl bg-blue-50/70 border border-blue-200 text-xs text-slate-700 leading-relaxed">
+            <!-- Populated by setEmpiricalDataset() -->
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- =================================================================== -->
+    <!-- VIEW 2: 三层估值与护城河沙盘 (Ch. 3, 5, 6, 7)                       -->
+    <!-- =================================================================== -->
+    <section id="view-pyramid" class="hidden space-y-6">
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+        <!-- Left 6 cols: DCF Fragility Simulator -->
+        <div class="lg:col-span-6 bg-white rounded-2xl border border-slate-200 p-5 shadow-sm space-y-4">
+          <div>
+            <span class="text-xs font-semibold text-rose-700 bg-rose-50 px-2 py-0.5 rounded border border-rose-200">第3章核心批判 (pp. 45–51)</span>
+            <h3 class="text-base sm:text-lg font-bold text-slate-900 mt-1">为什么传统两阶段 DCF 极其危险？终值倍数爆炸实验</h3>
+            <p class="text-xs text-slate-600 mt-1 leading-relaxed">
+              传统 DCF 不仅完全忽视高可靠性的当期<strong>资产负债表</strong>，更用极不准确的远期增长率 <code class="px-1 py-0.5 bg-slate-100 rounded font-semibold">g</code> 与折现率 <code class="px-1 py-0.5 bg-slate-100 rounded font-semibold">R</code> 计算永续终值 <code class="px-1.5 py-0.5 bg-rose-50 text-rose-800 rounded font-semibold">TV = CF / (R − g)</code>，导致<strong>劣质远期猜测污染优质近期信息</strong>。拖动滑块验证参数微小误差引发的估值剧震：
+            </p>
+          </div>
+
+          <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 bg-slate-50 p-3.5 rounded-xl border border-slate-200 text-xs">
+            <div>
+              <div class="flex justify-between font-semibold text-slate-700">
+                <span>基准资本成本 R</span>
+                <span id="dcf-r-val" class="text-blue-800 mono-num">8.0%</span>
+              </div>
+              <input id="dcf-r" type="range" min="6.5" max="12.0" step="0.5" value="8.0" data-gbv-input="updateDcfSim()" class="w-full mt-1.5" />
+            </div>
+            <div>
+              <div class="flex justify-between font-semibold text-slate-700">
+                <span>永续增长率 g</span>
+                <span id="dcf-g-val" class="text-blue-800 mono-num">4.0%</span>
+              </div>
+              <input id="dcf-g" type="range" min="1.0" max="5.0" step="0.5" value="4.0" data-gbv-input="updateDcfSim()" class="w-full mt-1.5" />
+            </div>
+            <div>
+              <div class="flex justify-between font-semibold text-slate-700">
+                <span>双向估计误差 ±ε</span>
+                <span id="dcf-err-val" class="text-rose-700 mono-num">±1.0%</span>
+              </div>
+              <input id="dcf-err" type="range" min="0.5" max="1.5" step="0.25" value="1.0" data-gbv-input="updateDcfSim()" class="w-full mt-1.5" />
+            </div>
+          </div>
+
+          <div class="grid grid-cols-3 gap-2.5 text-center">
+            <div class="p-2.5 rounded-xl bg-slate-100 border border-slate-200">
+              <div class="text-xs text-slate-500">悲观倍数 (R+ε, g−ε)</div>
+              <div id="dcf-mult-low" class="text-lg font-bold text-slate-800 mono-num mt-0.5">16.7x</div>
+            </div>
+            <div class="p-2.5 rounded-xl bg-blue-50 border border-blue-200">
+              <div class="text-xs text-blue-800">基准倍数 1/(R−g)</div>
+              <div id="dcf-mult-base" class="text-lg font-bold text-blue-900 mono-num mt-0.5">25.0x</div>
+            </div>
+            <div class="p-2.5 rounded-xl bg-rose-50 border border-rose-200">
+              <div class="text-xs text-rose-800">乐观倍数 (R−ε, g+ε)</div>
+              <div id="dcf-mult-high" class="text-lg font-bold text-rose-700 mono-num mt-0.5">50.0x</div>
+            </div>
+          </div>
+
+          <div class="relative h-56 w-full">
+            <canvas id="chart-dcf"></canvas>
+          </div>
+
+          <div id="dcf-swing-callout" class="text-xs bg-amber-50 border border-amber-200 text-amber-950 rounded-lg p-3">
+            <!-- Populated by updateDcfSim() -->
+          </div>
+        </div>
+
+        <!-- Right 6 cols: 3-Element Reliability Pyramid & Strategic Matrix -->
+        <div class="lg:col-span-6 bg-white rounded-2xl border border-slate-200 p-5 shadow-sm space-y-4">
+          <div>
+            <span class="text-xs font-semibold text-blue-800 bg-blue-50 px-2 py-0.5 rounded border border-blue-200">图 3.1 &amp; 图 3.2 (pp. 59–60)</span>
+            <h3 class="text-base sm:text-lg font-bold text-slate-900 mt-1">现代格雷厄姆-多德“信息可靠度分层金字塔”</h3>
+            <p class="text-xs text-slate-600 mt-1">
+              将确定性最高的资产价值置于底座，将最不确定的增长价值严格隔离在塔尖，绝不允许远期臆测污染当期事实。点击各层级查看核算准则：
+            </p>
+          </div>
+
+          <!-- Visual Pyramid -->
+          <div class="space-y-2 max-w-lg mx-auto pt-1">
+            <button type="button" id="pyr-growth" data-gbv-click="selectPyramidLayer('growth')" class="pyramid-tier w-3/5 mx-auto block py-2.5 px-3 rounded-t-xl bg-amber-100 border-2 border-amber-400 text-center">
+              <div class="text-xs font-bold text-amber-900">第3层（不确定性最高）：特许经营增长价值</div>
+              <div class="text-[11px] text-amber-800">仅当 ROIC &gt; R（拥有护城河）时存在 · 用第8章预期收益率模型定价</div>
+            </button>
+            <button type="button" id="pyr-epv" data-gbv-click="selectPyramidLayer('epv')" class="pyramid-tier w-4/5 mx-auto block py-2.5 px-4 bg-blue-100 border-2 border-blue-400 text-center">
+              <div class="text-xs font-bold text-blue-950">第2层（中等可靠）：盈利能力价值 EPV = 调整后 NOPAT / R</div>
+              <div class="text-[11px] text-blue-800">假设零增长下当期可持续可分配自由现金流的永续现值</div>
+            </button>
+            <button type="button" id="pyr-av" data-gbv-click="selectPyramidLayer('av')" class="pyramid-tier w-full mx-auto block py-3 px-4 rounded-b-xl bg-slate-800 border-2 border-slate-900 text-white text-center shadow">
+              <div class="text-xs font-bold text-amber-300">第1层（最可靠基石）：资产价值 AV（清算价值 / 重置成本）</div>
+              <div class="text-[11px] text-slate-200">行业衰退取清算价值（净流动资产）；行业存续取新进入者完整重置成本（含账外研发与客户资本）</div>
+            </button>
+          </div>
+
+          <div id="pyramid-layer-detail" class="p-3.5 rounded-xl bg-slate-50 border border-slate-200 text-xs leading-relaxed space-y-1.5">
+            <!-- Populated by selectPyramidLayer() -->
+          </div>
+
+          <!-- Strategic Triangulation Case A / B / C / Shrinking -->
+          <div class="pt-2 border-t border-slate-200">
+            <div class="text-xs font-bold text-slate-800 mb-2">AV 与 EPV 交叉比对：商业模式与行业结构诊断矩阵（表 6.3, p. 152）</div>
+            <div class="grid grid-cols-2 sm:grid-cols-4 gap-1.5">
+              <button type="button" id="sc-caseA" data-gbv-click="selectStrategicCase('caseA')" class="sub-pill-inactive px-2 py-1.5 rounded-lg text-xs font-semibold border transition">
+                情形 A: AV &gt; EPV
+              </button>
+              <button type="button" id="sc-caseB" data-gbv-click="selectStrategicCase('caseB')" class="sub-pill-inactive px-2 py-1.5 rounded-lg text-xs font-semibold border transition">
+                情形 B: AV ≈ EPV
+              </button>
+              <button type="button" id="sc-caseC" data-gbv-click="selectStrategicCase('caseC')" class="sub-pill-active px-2 py-1.5 rounded-lg text-xs font-semibold border transition">
+                情形 C: EPV &gt; AV
+              </button>
+              <button type="button" id="sc-shrink" data-gbv-click="selectStrategicCase('shrink')" class="sub-pill-inactive px-2 py-1.5 rounded-lg text-xs font-semibold border transition">
+                萎缩市场不对称陷阱
+              </button>
+            </div>
+            <div id="strategic-case-detail" class="mt-2.5 p-3.5 rounded-xl bg-emerald-50/70 border border-emerald-200 text-xs leading-relaxed">
+              <!-- Populated by selectStrategicCase() -->
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Bottom Row of View 2: Moat Width Quantifier + Leverage Margin-of-Safety Trap -->
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+        <!-- Moat Years Calculator (Ch. 7 pp. 183-184) -->
+        <div class="lg:col-span-6 bg-white rounded-2xl border border-slate-200 p-5 shadow-sm space-y-4">
+          <div class="flex flex-wrap items-center justify-between gap-2">
+            <div>
+              <span class="text-xs font-semibold text-indigo-800 bg-indigo-50 px-2 py-0.5 rounded border border-indigo-200">第7章 护城河剖析与量化 (pp. 163–184)</span>
+              <h3 class="text-base font-bold text-slate-900 mt-1">真假护城河辨析与“护城河年限”计算器</h3>
+            </div>
+            <div class="flex gap-1.5">
+              <button type="button" id="moat-pre-coke" data-gbv-click="loadMoatPreset('coke')" class="px-2.5 py-1 rounded text-xs font-semibold bg-indigo-900 text-white">可口可乐</button>
+              <button type="button" id="moat-pre-wd40" data-gbv-click="loadMoatPreset('wd40')" class="px-2.5 py-1 rounded text-xs font-semibold bg-slate-100 text-slate-700 hover:bg-slate-200">WD-40</button>
+              <button type="button" id="moat-pre-lux" data-gbv-click="loadMoatPreset('lux')" class="px-2.5 py-1 rounded text-xs font-semibold bg-slate-100 text-slate-700 hover:bg-slate-200">豪华汽车</button>
+            </div>
+          </div>
+
+          <p class="text-xs text-slate-600 leading-relaxed">
+            <strong>破除迷思：</strong>单纯的品牌知名度（奔驰1995–97税前ROA仅7.2%）、先发优势（CP/M、AltaVista）或产品差异化（Top Toaster 寓言）均无法阻止对手进入并摊薄固定成本。<strong>真正可持续的护城河 = 特定区域/细分市场的规模经济 × 客户粘性（消费习惯 / 搜索成本 / 转换成本）</strong>。新进入者跨越壁垒所需年限公式：
+          </p>
+
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 bg-slate-50 p-3.5 rounded-xl border border-slate-200 text-xs">
+            <div>
+              <div class="flex justify-between font-semibold text-slate-700">
+                <span>新进入者存活最小份额</span>
+                <span id="moat-share-val" class="text-indigo-800 mono-num">20.0%</span>
+              </div>
+              <input id="moat-share" type="range" min="1" max="40" step="1" value="20" data-gbv-input="updateMoatCalc()" class="w-full mt-1.5" />
+              <div class="text-[11px] text-slate-500 mt-0.5">规模经济决定的盈亏平衡市占率门槛</div>
+            </div>
+            <div>
+              <div class="flex justify-between font-semibold text-slate-700">
+                <span>每年自然流失/换手份额</span>
+                <span id="moat-turn-val" class="text-indigo-800 mono-num">0.2%/年</span>
+              </div>
+              <input id="moat-turn" type="range" min="0.1" max="5.0" step="0.1" value="0.2" data-gbv-input="updateMoatCalc()" class="w-full mt-1.5" />
+              <div class="text-[11px] text-slate-500 mt-0.5">客户粘性决定的年均市场份额变动率</div>
+            </div>
+          </div>
+
+          <div class="flex items-center justify-between p-4 rounded-xl bg-indigo-950 text-white">
+            <div>
+              <div class="text-xs text-indigo-200">新进入者达到规模门槛所需时间</div>
+              <div id="moat-verdict-label" class="text-sm font-semibold text-amber-300 mt-0.5">坚不可摧的百年级特许经营权</div>
+            </div>
+            <div class="text-right">
+              <div id="moat-years-out" class="text-3xl font-bold mono-num text-white">100.0 年</div>
+              <div class="text-[11px] text-indigo-300 mono-num">最小存活份额 ÷ 年份额换手率</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Enterprise vs Equity Leverage Margin of Safety Trap (Ch. 5 p. 120) -->
+        <div class="lg:col-span-6 bg-white rounded-2xl border border-slate-200 p-5 shadow-sm space-y-4">
+          <div class="flex flex-wrap items-center justify-between gap-2">
+            <div>
+              <span class="text-xs font-semibold text-amber-900 bg-amber-100 px-2 py-0.5 rounded border border-amber-300">第5章 杠杆幻觉警示 (pp. 118–120)</span>
+              <h3 class="text-base font-bold text-slate-900 mt-1">企业价值 vs 股权价值：高负债“伪安全边际”模拟器</h3>
+            </div>
+            <button type="button" id="btn-reset-lev" data-gbv-click="resetLeverageSim()" class="px-2.5 py-1 rounded text-xs font-semibold bg-slate-100 text-slate-700 hover:bg-slate-200">
+              还原第5章原书算例
+            </button>
+          </div>
+
+          <p class="text-xs text-slate-600 leading-relaxed">
+            为什么估值与安全边际必须优先在<strong>企业整体层面（Enterprise Basis）</strong>衡量？当高负债公司的市值看似比股权内在价值折价 50% 时，微小的企业价值高估就可能令股东血本无归：
+          </p>
+
+          <div class="grid grid-cols-2 gap-3 bg-slate-50 p-3.5 rounded-xl border border-slate-200 text-xs">
+            <div>
+              <div class="flex justify-between font-semibold"><span>企业整体 EPV</span><span id="lev-epv-val" class="mono-num text-blue-800">$800M</span></div>
+              <input id="lev-epv" type="range" min="400" max="1500" step="25" value="800" data-gbv-input="updateLeverageSim()" class="w-full mt-1" />
+            </div>
+            <div>
+              <div class="flex justify-between font-semibold"><span>净债务 (总债−超额现金)</span><span id="lev-debt-val" class="mono-num text-rose-700">$650M</span></div>
+              <input id="lev-debt" type="range" min="0" max="900" step="25" value="650" data-gbv-input="updateLeverageSim()" class="w-full mt-1" />
+            </div>
+            <div>
+              <div class="flex justify-between font-semibold"><span>当前股票总市值</span><span id="lev-mc-val" class="mono-num text-slate-800">$75M</span></div>
+              <input id="lev-mc" type="range" min="25" max="500" step="5" value="75" data-gbv-input="updateLeverageSim()" class="w-full mt-1" />
+            </div>
+            <div>
+              <div class="flex justify-between font-semibold"><span>企业价值下行误差冲击</span><span id="lev-shock-val" class="mono-num text-amber-800">-15%</span></div>
+              <input id="lev-shock" type="range" min="5" max="30" step="1" value="15" data-gbv-input="updateLeverageSim()" class="w-full mt-1" />
+            </div>
+          </div>
+
+          <div class="grid grid-cols-1 sm:grid-cols-3 gap-2.5 text-xs">
+            <div class="p-3 rounded-xl bg-emerald-50 border border-emerald-200">
+              <div class="text-emerald-900 font-semibold">表观股权安全边际</div>
+              <div id="lev-eq-mos" class="text-xl font-bold text-emerald-700 mono-num mt-0.5">50.0%</div>
+              <div id="lev-eq-sub" class="text-[11px] text-emerald-800 mt-0.5">股权EPV $150M vs 市值 $75M</div>
+            </div>
+            <div class="p-3 rounded-xl bg-amber-50 border border-amber-300">
+              <div class="text-amber-900 font-semibold">真实企业安全边际</div>
+              <div id="lev-ent-mos" class="text-xl font-bold text-amber-800 mono-num mt-0.5">9.4%</div>
+              <div id="lev-ent-sub" class="text-[11px] text-amber-900 mt-0.5">企业EPV $800M vs 企业市价 $725M</div>
+            </div>
+            <div class="p-3 rounded-xl bg-rose-50 border border-rose-200">
+              <div class="text-rose-900 font-semibold">误差冲击后股权残值</div>
+              <div id="lev-post-eq" class="text-xl font-bold text-rose-700 mono-num mt-0.5">$30M (-60%)</div>
+              <div id="lev-post-sub" class="text-[11px] text-rose-800 mt-0.5">企业EPV降至 $680M 后的股东权益</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- =================================================================== -->
+    <!-- VIEW 3: 双核估值与收益率计算台 (Ch. 4, 5, 8 & Math Appendix)        -->
+    <!-- =================================================================== -->
+    <section id="view-workbench" class="hidden space-y-6">
+      <!-- Mode Selector Header -->
+      <div class="bg-white rounded-2xl border border-slate-200 p-4 sm:p-5 shadow-sm flex flex-col md:flex-row md:items-center md:justify-between gap-3">
+        <div>
+          <h2 class="text-base sm:text-lg font-bold text-slate-900">格雷厄姆-多德双核交互式估值计算台</h2>
+          <p class="text-xs text-slate-500 mt-0.5">
+            资产/竞争型企业适用<strong>“模式 A：重置资产 AV + 零增长 EPV 三角校准”</strong>；高壁垒复利企业适用<strong>“模式 B：第8章特许经营预期收益率模型（含附录 V/M 迭代修正）”</strong>
+          </p>
+        </div>
+        <div class="flex gap-2">
+          <button type="button" id="wb-mode-avepv" data-gbv-click="switchWorkbenchMode('avepv')" class="sub-pill-inactive px-3.5 py-2 rounded-xl text-xs sm:text-sm font-semibold border transition">
+            模式 A：AV + EPV 校准台 (第4–5章)
+          </button>
+          <button type="button" id="wb-mode-franchise" data-gbv-click="switchWorkbenchMode('franchise')" class="sub-pill-active px-3.5 py-2 rounded-xl text-xs sm:text-sm font-semibold border transition">
+            模式 B：特许经营预期收益率模型 (第8章)
+          </button>
+        </div>
+      </div>
+
+      <!-- SUB-PANEL 3A: AV + EPV TRIANGULATOR -->
+      <div id="wb-panel-avepv" class="hidden space-y-6">
+        <div class="bg-white rounded-2xl border border-slate-200 p-5 shadow-sm">
+          <div class="flex flex-wrap items-center justify-between gap-2 pb-4 border-b border-slate-200">
+            <div>
+              <h3 class="text-base font-bold text-slate-900">资产重置成本 (AV) 与零增长盈利能力 (EPV) 联合测算（单位：百万美元 $M）</h3>
+              <p class="text-xs text-slate-500">自动执行“剔除账面商誉 → 重建账外研发/客户/人力无形资本 → 还原真实维护性资本开支 → 诊断情形 A/B/C”</p>
+            </div>
+            <div class="flex flex-wrap gap-1.5">
+              <span class="text-xs text-slate-500 self-center mr-1">一键载入原书算例：</span>
+              <button type="button" id="preset-av-magna" data-gbv-click="loadAvEpvPreset('magna')" class="px-3 py-1.5 rounded-lg text-xs font-semibold bg-blue-900 text-white">Magna (2009 危机买点)</button>
+              <button type="button" id="preset-av-hudson" data-gbv-click="loadAvEpvPreset('hudson')" class="px-3 py-1.5 rounded-lg text-xs font-semibold bg-slate-100 text-slate-700 hover:bg-slate-200">Hudson General (1998 价值陷阱)</button>
+              <button type="button" id="preset-av-coke" data-gbv-click="loadAvEpvPreset('coke')" class="px-3 py-1.5 rounded-lg text-xs font-semibold bg-slate-100 text-slate-700 hover:bg-slate-200">特许经营示范 (EPV &gt; AV)</button>
+            </div>
+          </div>
+
+          <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 mt-5">
+            <!-- Inputs Col 1: Market & Asset Reproduction -->
+            <div class="lg:col-span-4 space-y-3 text-xs bg-slate-50 p-4 rounded-xl border border-slate-200">
+              <div class="font-bold text-slate-900 text-sm border-b border-slate-200 pb-1.5">① 市场价格与资产重置项（第4章）</div>
+              <div class="grid grid-cols-2 gap-2.5">
+                <label class="block">
+                  <span class="text-slate-600 font-medium">当前股票总市值</span>
+                  <input id="av-mktcap" type="number" value="2240" data-gbv-input="calcAvEpvWorkbench()" class="mt-1 w-full px-2.5 py-1.5 rounded border border-slate-300 bg-white font-semibold mono-num" />
+                </label>
+                <label class="block">
+                  <span class="text-slate-600 font-medium">净现金 (负数为净债)</span>
+                  <input id="av-netcash" type="number" value="1742" data-gbv-input="calcAvEpvWorkbench()" class="mt-1 w-full px-2.5 py-1.5 rounded border border-slate-300 bg-white font-semibold mono-num" />
+                </label>
+                <label class="block">
+                  <span class="text-slate-600 font-medium">GAAP 账面股东权益</span>
+                  <input id="av-bookeq" type="number" value="7363" data-gbv-input="calcAvEpvWorkbench()" class="mt-1 w-full px-2.5 py-1.5 rounded border border-slate-300 bg-white font-semibold mono-num" />
+                </label>
+                <label class="block">
+                  <span class="text-slate-600 font-medium">物业设备/存货重置调整</span>
+                  <input id="av-ppeadj" type="number" value="1155" data-gbv-input="calcAvEpvWorkbench()" class="mt-1 w-full px-2.5 py-1.5 rounded border border-slate-300 bg-white font-semibold mono-num" />
+                </label>
+                <label class="block">
+                  <span class="text-slate-600 font-medium">扣除账面商誉 (正数扣减)</span>
+                  <input id="av-goodwill" type="number" value="1160" data-gbv-input="calcAvEpvWorkbench()" class="mt-1 w-full px-2.5 py-1.5 rounded border border-slate-300 bg-white font-semibold mono-num" />
+                </label>
+                <label class="block">
+                  <span class="text-slate-600 font-medium">账外研发产品组合资本</span>
+                  <input id="av-rdcap" type="number" value="2250" data-gbv-input="calcAvEpvWorkbench()" class="mt-1 w-full px-2.5 py-1.5 rounded border border-slate-300 bg-white font-semibold mono-num" />
+                </label>
+                <label class="block">
+                  <span class="text-slate-600 font-medium">账外客户关系重置价值</span>
+                  <input id="av-custcap" type="number" value="1800" data-gbv-input="calcAvEpvWorkbench()" class="mt-1 w-full px-2.5 py-1.5 rounded border border-slate-300 bg-white font-semibold mono-num" />
+                </label>
+                <label class="block">
+                  <span class="text-slate-600 font-medium">账外员工培训与组织资本</span>
+                  <input id="av-orgcap" type="number" value="750" data-gbv-input="calcAvEpvWorkbench()" class="mt-1 w-full px-2.5 py-1.5 rounded border border-slate-300 bg-white font-semibold mono-num" />
+                </label>
+              </div>
+            </div>
+
+            <!-- Inputs Col 2: EPV 5-Step Engine -->
+            <div class="lg:col-span-4 space-y-3 text-xs bg-slate-50 p-4 rounded-xl border border-slate-200">
+              <div class="font-bold text-slate-900 text-sm border-b border-slate-200 pb-1.5">② 5步法可持续盈利能力项（第5章）</div>
+              <div class="grid grid-cols-2 gap-2.5">
+                <label class="block col-span-2">
+                  <span class="text-slate-600 font-medium">可持续全周期营收 ($M)</span>
+                  <input id="epv-sales" type="number" value="24000" data-gbv-input="calcAvEpvWorkbench()" class="mt-1 w-full px-2.5 py-1.5 rounded border border-slate-300 bg-white font-semibold mono-num" />
+                </label>
+                <label class="block">
+                  <span class="text-slate-600 font-medium">全周期平均 EBIT 率 (%)</span>
+                  <input id="epv-margin" type="number" step="0.1" value="5.0" data-gbv-input="calcAvEpvWorkbench()" class="mt-1 w-full px-2.5 py-1.5 rounded border border-slate-300 bg-white font-semibold mono-num" />
+                </label>
+                <label class="block">
+                  <span class="text-slate-600 font-medium">会计调整 (加回超额研发等)</span>
+                  <input id="epv-acctadj" type="number" value="0" data-gbv-input="calcAvEpvWorkbench()" class="mt-1 w-full px-2.5 py-1.5 rounded border border-slate-300 bg-white font-semibold mono-num" />
+                </label>
+                <label class="block">
+                  <span class="text-slate-600 font-medium">可持续有效税率 (%)</span>
+                  <input id="epv-tax" type="number" step="0.5" value="33.33" data-gbv-input="calcAvEpvWorkbench()" class="mt-1 w-full px-2.5 py-1.5 rounded border border-slate-300 bg-white font-semibold mono-num" />
+                </label>
+                <label class="block">
+                  <span class="text-slate-600 font-medium">税后 (折旧 − 维护CapEx)</span>
+                  <input id="epv-daadj" type="number" value="120" data-gbv-input="calcAvEpvWorkbench()" class="mt-1 w-full px-2.5 py-1.5 rounded border border-slate-300 bg-white font-semibold mono-num" />
+                </label>
+                <label class="block col-span-2">
+                  <div class="flex justify-between text-slate-600 font-medium">
+                    <span>加权资本成本 R (6%–13% 信用光谱)</span>
+                    <span id="epv-wacc-label" class="text-blue-800 font-bold mono-num">10.0%</span>
+                  </div>
+                  <input id="epv-wacc" type="range" min="6.0" max="13.0" step="0.25" value="10.0" data-gbv-input="calcAvEpvWorkbench()" class="mt-1.5 w-full" />
+                </label>
+              </div>
+            </div>
+
+            <!-- Outputs Col 3: Chart & Diagnosis -->
+            <div class="lg:col-span-4 flex flex-col justify-between space-y-3">
+              <div class="grid grid-cols-3 gap-2 text-center text-xs">
+                <div class="p-2.5 rounded-xl bg-slate-100 border border-slate-200">
+                  <div class="text-slate-500">企业市价 / 市值</div>
+                  <div id="out-ent-price" class="font-bold text-sm text-slate-900 mono-num mt-0.5">$498M</div>
+                  <div id="out-eq-price" class="text-[11px] text-slate-500 mono-num">股权 $2,240M</div>
+                </div>
+                <div class="p-2.5 rounded-xl bg-blue-50 border border-blue-200">
+                  <div class="text-blue-800">企业重置 AV</div>
+                  <div id="out-ent-av" class="font-bold text-sm text-blue-950 mono-num mt-0.5">$10,416M</div>
+                  <div id="out-eq-av" class="text-[11px] text-blue-700 mono-num">股权 $12,158M</div>
+                </div>
+                <div class="p-2.5 rounded-xl bg-emerald-50 border border-emerald-200">
+                  <div class="text-emerald-800">企业 EPV</div>
+                  <div id="out-ent-epv" class="font-bold text-sm text-emerald-950 mono-num mt-0.5">$9,200M</div>
+                  <div id="out-eq-epv" class="text-[11px] text-emerald-700 mono-num">股权 $10,942M</div>
+                </div>
+              </div>
+
+              <div class="relative h-48 w-full">
+                <canvas id="chart-wb-avepv"></canvas>
+              </div>
+
+              <div id="out-avepv-diagnosis" class="p-3 rounded-xl bg-slate-900 text-white text-xs leading-relaxed">
+                <!-- Populated by calcAvEpvWorkbench() -->
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- SUB-PANEL 3B: FRANCHISE STOCK RETURN-BASED MODEL (Ch. 8 & Appendix) -->
+      <div id="wb-panel-franchise" class="space-y-6">
+        <div class="bg-white rounded-2xl border border-slate-200 p-5 shadow-sm">
+          <div class="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-3 pb-4 border-b border-slate-200">
+            <div>
+              <span class="text-xs font-semibold text-emerald-800 bg-emerald-50 px-2 py-0.5 rounded border border-emerald-200">第8章及数学附录 (pp. 187–229) 核心创新</span>
+              <h3 class="text-base sm:text-lg font-bold text-slate-900 mt-1">特许经营权股票“预期年化收益率分解与护城河衰减模型”</h3>
+              <p class="text-xs text-slate-500">
+                放弃高误差的内在价值点估计，直接将当前企业市价 <strong>M</strong> 下的预期总回报线性拆解为：<strong>现金分配率 + 内生增长率 + 主动再投资价值创造 − 护城河半衰期衰减</strong>，并通过 <strong>V / M = R / R*</strong> 修正高估/低估放大效应。
+              </p>
+            </div>
+            <div class="flex flex-wrap gap-1.5">
+              <button type="button" id="fr-pre-cg" data-gbv-click="loadFranchisePreset('cg')" class="sub-pill-active px-2.5 py-1.5 rounded-lg text-xs font-semibold border transition">Consolidated General 原型</button>
+              <button type="button" id="fr-pre-wd98" data-gbv-click="loadFranchisePreset('wd98')" class="sub-pill-inactive px-2.5 py-1.5 rounded-lg text-xs font-semibold border transition">WD-40 (1998 买点)</button>
+              <button type="button" id="fr-pre-wd18" data-gbv-click="loadFranchisePreset('wd18')" class="sub-pill-inactive px-2.5 py-1.5 rounded-lg text-xs font-semibold border transition">WD-40 (2018 高估)</button>
+              <button type="button" id="fr-pre-intc99" data-gbv-click="loadFranchisePreset('intc99')" class="sub-pill-inactive px-2.5 py-1.5 rounded-lg text-xs font-semibold border transition">Intel (1999 泡沫顶)</button>
+              <button type="button" id="fr-pre-intc18" data-gbv-click="loadFranchisePreset('intc18')" class="sub-pill-inactive px-2.5 py-1.5 rounded-lg text-xs font-semibold border transition">Intel (2018 并购拖累)</button>
+            </div>
+          </div>
+
+          <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 mt-5">
+            <!-- Left 6 cols: Interactive Parameters -->
+            <div class="lg:col-span-6 space-y-3.5 text-xs bg-slate-50 p-4 rounded-xl border border-slate-200">
+              <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                <label class="block">
+                  <span class="font-semibold text-slate-700">当前企业总市价 M ($M)</span>
+                  <input id="fr-m" type="number" value="4000" data-gbv-input="calcFranchiseModel()" class="mt-1 w-full px-2.5 py-1.5 rounded border border-slate-300 bg-white font-bold mono-num" />
+                </label>
+                <label class="block">
+                  <span class="font-semibold text-slate-700">当期可持续税后营业利润 NOPAT ($M)</span>
+                  <input id="fr-nopat" type="number" value="240" data-gbv-input="calcFranchiseModel()" class="mt-1 w-full px-2.5 py-1.5 rounded border border-slate-300 bg-white font-bold mono-num" />
+                </label>
+              </div>
+
+              <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-1">
+                <div>
+                  <div class="flex justify-between font-semibold text-slate-700">
+                    <span>现金分配比例 c (股息+净回购+净还债)</span>
+                    <span id="fr-c-val" class="text-blue-800 mono-num">60.0%</span>
+                  </div>
+                  <input id="fr-c" type="range" min="0" max="100" step="0.5" value="60" data-gbv-input="calcFranchiseModel()" class="w-full mt-1" />
+                </div>
+                <div>
+                  <div class="flex justify-between font-semibold text-slate-700">
+                    <span>内生增长率 g_org (需求+经营杠杆)</span>
+                    <span id="fr-gorg-val" class="text-emerald-800 mono-num">3.5%</span>
+                  </div>
+                  <input id="fr-gorg" type="range" min="-2.0" max="12.0" step="0.25" value="3.5" data-gbv-input="calcFranchiseModel()" class="w-full mt-1" />
+                </div>
+              </div>
+
+              <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                <label class="block">
+                  <span class="font-semibold text-slate-700">支持内生增长所需营运资本 I_org ($M)</span>
+                  <input id="fr-iorg" type="number" step="0.5" value="4.5" data-gbv-input="calcFranchiseModel()" class="mt-1 w-full px-2.5 py-1.5 rounded border border-slate-300 bg-white font-semibold mono-num" />
+                </label>
+                <div>
+                  <div class="flex justify-between font-semibold text-slate-700">
+                    <span>主动再投资价值创造因子 v₁ (ROI/R*)</span>
+                    <span id="fr-v1-val" class="text-indigo-800 mono-num">1.60x</span>
+                  </div>
+                  <input id="fr-v1" type="range" min="0.0" max="2.5" step="0.05" value="1.60" data-gbv-input="calcFranchiseModel()" class="w-full mt-2" />
+                  <div class="text-[11px] text-slate-500">v&gt;1 护城河内创造价值；v≈0.8 囤积现金；v≤0.5 盲目跨界并购</div>
+                </div>
+              </div>
+
+              <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 pt-2 border-t border-slate-200">
+                <div>
+                  <div class="flex justify-between font-semibold text-slate-700">
+                    <span>资本成本 R*</span>
+                    <span id="fr-rstar-val" class="text-rose-700 mono-num">7.0%</span>
+                  </div>
+                  <input id="fr-rstar" type="range" min="5.5" max="13.0" step="0.25" value="7.0" data-gbv-input="calcFranchiseModel()" class="w-full mt-1" />
+                </div>
+                <div>
+                  <div class="flex justify-between font-semibold text-slate-700">
+                    <span>护城河半衰期 T½</span>
+                    <span id="fr-hl-val" class="text-amber-800 mono-num">80 年</span>
+                  </div>
+                  <input id="fr-hl" type="range" min="15" max="100" step="1" value="80" data-gbv-input="calcFranchiseModel()" class="w-full mt-1" />
+                </div>
+                <div>
+                  <div class="flex justify-between font-semibold text-slate-700">
+                    <span>衰退后残值比 m</span>
+                    <span id="fr-mres-val" class="text-slate-700 mono-num">0%</span>
+                  </div>
+                  <input id="fr-mres" type="range" min="0" max="60" step="5" value="0" data-gbv-input="calcFranchiseModel()" class="w-full mt-1" />
+                </div>
+              </div>
+
+              <div class="pt-2 border-t border-slate-200 flex items-center justify-between gap-2">
+                <label class="inline-flex items-center gap-2 cursor-pointer select-none">
+                  <input id="fr-use-v2" type="checkbox" data-gbv-change="calcFranchiseModel()" class="rounded text-blue-800 w-4 h-4" />
+                  <span class="font-semibold text-slate-800">启用第8章附录公式(36) 二次再投资放大因子 v₂ = c·v₁ / [1 − (1−c)v₁]</span>
+                </label>
+                <span id="fr-veff-badge" class="px-2 py-0.5 rounded bg-indigo-100 text-indigo-900 font-bold mono-num">有效 v = 1.60x</span>
+              </div>
+            </div>
+
+            <!-- Right 6 cols: Return Decomposition Readout & Chart -->
+            <div class="lg:col-span-6 flex flex-col justify-between space-y-4">
+              <div class="grid grid-cols-2 sm:grid-cols-4 gap-2 text-center text-xs">
+                <div class="p-2.5 rounded-xl bg-blue-50 border border-blue-200">
+                  <div class="text-blue-800">① 现金分配率 D/M</div>
+                  <div id="fr-out-cash" class="text-lg font-bold text-blue-950 mono-num mt-0.5">3.60%</div>
+                </div>
+                <div class="p-2.5 rounded-xl bg-emerald-50 border border-emerald-200">
+                  <div class="text-emerald-800">② 内生增长 g_org</div>
+                  <div id="fr-out-org" class="text-lg font-bold text-emerald-950 mono-num mt-0.5">3.50%</div>
+                </div>
+                <div class="p-2.5 rounded-xl bg-indigo-50 border border-indigo-200">
+                  <div class="text-indigo-800">③ 主动再投资回报</div>
+                  <div id="fr-out-act" class="text-lg font-bold text-indigo-950 mono-num mt-0.5">3.66%</div>
+                </div>
+                <div class="p-2.5 rounded-xl bg-amber-50 border border-amber-200">
+                  <div class="text-amber-900">④ 护城河年衰减 f</div>
+                  <div id="fr-out-fade" class="text-lg font-bold text-amber-800 mono-num mt-0.5">-0.90%</div>
+                </div>
+              </div>
+
+              <div class="grid grid-cols-1 sm:grid-cols-3 gap-2.5 text-center text-xs">
+                <div class="p-3 rounded-xl bg-slate-100 border border-slate-200">
+                  <div class="text-slate-600 font-medium">初始基准回报 R_B</div>
+                  <div id="fr-out-rb" class="text-xl font-bold text-slate-900 mono-num mt-0.5">10.8%</div>
+                  <div class="text-[11px] text-slate-500">假设 V = M 时的静态合计数</div>
+                </div>
+                <div class="p-3 rounded-xl bg-slate-800 text-white">
+                  <div class="text-slate-300 font-medium">扣除衰减后回报 (R_B − f)</div>
+                  <div id="fr-out-rbfade" class="text-xl font-bold text-amber-300 mono-num mt-0.5">9.9%</div>
+                  <div id="fr-out-spread1" class="text-[11px] text-slate-300 mono-num">对比 R* 7.0% (+2.9%)</div>
+                </div>
+                <div class="p-3 rounded-xl bg-blue-950 text-white">
+                  <div class="text-sky-200 font-medium">附录 V/M 修正真实回报 R_B2</div>
+                  <div id="fr-out-rb2" class="text-xl font-bold text-emerald-300 mono-num mt-0.5">12.8%</div>
+                  <div class="text-[11px] text-sky-200">D/M + G·[(R_B−f)/R*] − f</div>
+                </div>
+              </div>
+
+              <div class="relative h-56 w-full">
+                <canvas id="chart-wb-return"></canvas>
+              </div>
+
+              <div id="fr-verdict-box" class="p-3.5 rounded-xl bg-emerald-50 border border-emerald-200 text-xs text-slate-800 leading-relaxed">
+                <!-- Populated by calcFranchiseModel() -->
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- =================================================================== -->
+    <!-- VIEW 4: 四大经典案例全周期复盘 (Hudson, Magna, WD-40, Intel)        -->
+    <!-- =================================================================== -->
+    <section id="view-cases" class="hidden space-y-6">
+      <div class="bg-white rounded-2xl border border-slate-200 p-5 shadow-sm">
+        <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-3 pb-4 border-b border-slate-200">
+          <div>
+            <h2 class="text-base sm:text-lg font-bold text-slate-900">全书四大完整实战案例全周期复盘（事前估值 vs 事后10–15年真实回报）</h2>
+            <p class="text-xs text-slate-500">完整覆盖情形 A（资产分部加总+催化剂）、情形 B（危机极端错杀+财务反舞弊）、情形 C（消费与科技特许经营权买点与泡沫预警）</p>
+          </div>
+          <div class="flex flex-wrap gap-1.5">
+            <button type="button" id="case-btn-hudson" data-gbv-click="selectCaseStudy('hudson')" class="sub-pill-active px-3 py-2 rounded-xl text-xs font-semibold border transition">
+              案例1：Hudson General (1998)
+            </button>
+            <button type="button" id="case-btn-magna" data-gbv-click="selectCaseStudy('magna')" class="sub-pill-inactive px-3 py-2 rounded-xl text-xs font-semibold border transition">
+              案例2：Magna 麦格纳 (2009)
+            </button>
+            <button type="button" id="case-btn-wd40" data-gbv-click="selectCaseStudy('wd40')" class="sub-pill-inactive px-3 py-2 rounded-xl text-xs font-semibold border transition">
+              案例3：WD-40 (1998–2018)
+            </button>
+            <button type="button" id="case-btn-intel" data-gbv-click="selectCaseStudy('intel')" class="sub-pill-inactive px-3 py-2 rounded-xl text-xs font-semibold border transition">
+              案例4：Intel 英特尔 (1975–2018)
+            </button>
+          </div>
+        </div>
+
+        <!-- Case Header Banner -->
+        <div id="case-header-banner" class="mt-4 p-4 rounded-xl bg-slate-900 text-white grid grid-cols-1 md:grid-cols-4 gap-4">
+          <!-- Populated by selectCaseStudy() -->
+        </div>
+
+        <!-- Case Main Content: Narrative + Chart + Financial Table -->
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 mt-5">
+          <div class="lg:col-span-5 space-y-3" id="case-narrative-cards">
+            <!-- Populated by selectCaseStudy() -->
+          </div>
+
+          <div class="lg:col-span-7 space-y-4">
+            <div class="bg-slate-50 p-4 rounded-xl border border-slate-200">
+              <div id="case-chart-title" class="text-xs font-bold text-slate-800 mb-2">案例核心估值对比图</div>
+              <div class="relative h-64 w-full">
+                <canvas id="chart-case"></canvas>
+              </div>
+            </div>
+
+            <div class="overflow-x-auto rounded-xl border border-slate-200">
+              <table class="min-w-full text-xs text-left">
+                <thead class="bg-slate-100 text-slate-700 font-semibold" id="case-table-head"></thead>
+                <tbody class="divide-y divide-slate-200 bg-white mono-num" id="case-table-body"></tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- =================================================================== -->
+    <!-- VIEW 5: 主动研究、风控架构与十一位大师谱系 (Ch. 9, 10 & Profiles)   -->
+    <!-- =================================================================== -->
+    <section id="view-masters" class="hidden space-y-6">
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+        <!-- Left 6 cols: Ch. 9 Active Research & Management 4-Pillar Scorecard -->
+        <div class="lg:col-span-6 bg-white rounded-2xl border border-slate-200 p-5 shadow-sm space-y-4">
+          <div class="flex items-center justify-between gap-2">
+            <div>
+              <span class="text-xs font-semibold text-blue-800 bg-blue-50 px-2 py-0.5 rounded border border-blue-200">第9章 主动研究策略 (pp. 301–318)</span>
+              <h3 class="text-base font-bold text-slate-900 mt-1">间接信号核验与“管理层四维质量”尽调评分器</h3>
+            </div>
+            <button type="button" id="btn-reset-dd" data-gbv-click="resetDueDiligence()" class="px-2.5 py-1 rounded text-xs font-semibold bg-slate-100 text-slate-700 hover:bg-slate-200">
+              重置核查表
+            </button>
+          </div>
+          <p class="text-xs text-slate-600">
+            主动研究必须由估值敏感度驱动。勾选目标企业已满足的间接信号与管理层准则，实时评估是否需要<strong>外部催化剂（Catalyst）</strong>介入：
+          </p>
+
+          <div id="dd-checklist-container" class="grid grid-cols-1 sm:grid-cols-2 gap-2 text-xs">
+            <!-- Populated by renderDueDiligence() -->
+          </div>
+
+          <div id="dd-score-banner" class="p-3.5 rounded-xl bg-slate-900 text-white flex items-center justify-between gap-3">
+            <!-- Populated by renderDueDiligence() -->
+          </div>
+        </div>
+
+        <!-- Right 6 cols: Ch. 10 Risk Architecture & Permanent Capital Impairment Simulator -->
+        <div class="lg:col-span-6 bg-white rounded-2xl border border-slate-200 p-5 shadow-sm space-y-4">
+          <div>
+            <span class="text-xs font-semibold text-emerald-800 bg-emerald-50 px-2 py-0.5 rounded border border-emerald-200">第10章 风险管理与组合构建 (pp. 319–337)</span>
+            <h3 class="text-base font-bold text-slate-900 mt-1">集中风控 × 分散选股：永久性本金减损与宏观对冲沙盘</h3>
+            <p class="text-xs text-slate-600 mt-1 leading-relaxed">
+              摒弃将波动率/Beta 等同于风险的现代组合理论（短期正自相关但长期均值回归）。1970年代大型养老金研究发现，雇佣100+基金经理会导致每周<strong>超 90% 交易互相抵消</strong>（高费率伪指数化）。最优架构是<strong>选股端高度专精分散（每位专家仅持 5–7 只重仓股），风控端在财富所有者层面集中统筹</strong>。
+            </p>
+          </div>
+
+          <!-- Diversification Slider -->
+          <div class="bg-slate-50 p-3.5 rounded-xl border border-slate-200 text-xs space-y-2">
+            <div class="flex justify-between font-semibold text-slate-800">
+              <span>独立不相关持仓数量 N（跨行业专精组合）</span>
+              <span id="risk-n-val" class="text-blue-800 font-bold mono-num">30 只股票（约15个行业）</span>
+            </div>
+            <input id="risk-n" type="range" min="1" max="80" step="1" value="30" data-gbv-input="updateRiskSim()" class="w-full" />
+            <div id="risk-n-readout" class="text-slate-700 leading-relaxed pt-1">
+              <!-- Populated by updateRiskSim() -->
+            </div>
+          </div>
+
+          <!-- Macro & Behavioral Risk Matrix -->
+          <div>
+            <div class="text-xs font-bold text-slate-800 mb-2">四大系统性与行为风险应对策略（点击切换场景）：</div>
+            <div class="grid grid-cols-2 sm:grid-cols-4 gap-1.5">
+              <button type="button" id="macro-inf" data-gbv-click="selectMacroRegime('inflation')" class="sub-pill-active px-2 py-1.5 rounded-lg text-xs font-semibold border transition">恶性通胀冲击</button>
+              <button type="button" id="macro-def" data-gbv-click="selectMacroRegime('deflation')" class="sub-pill-inactive px-2 py-1.5 rounded-lg text-xs font-semibold border transition">通缩萧条冲击</button>
+              <button type="button" id="macro-opt" data-gbv-click="selectMacroRegime('complacency')" class="sub-pill-inactive px-2 py-1.5 rounded-lg text-xs font-semibold border transition">尾部保险 vs 做空</button>
+              <button type="button" id="macro-beh" data-gbv-click="selectMacroRegime('behavior')" class="sub-pill-inactive px-2 py-1.5 rounded-lg text-xs font-semibold border transition">行为损耗 (-600bps)</button>
+            </div>
+            <div id="macro-regime-detail" class="mt-2.5 p-3.5 rounded-xl bg-blue-50/70 border border-blue-200 text-xs leading-relaxed">
+              <!-- Populated by selectMacroRegime() -->
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 11 Investor Profiles Coordinate Map & Filterable Directory -->
+      <div class="bg-white rounded-2xl border border-slate-200 p-5 shadow-sm space-y-5">
+        <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-3">
+          <div>
+            <span class="text-xs font-semibold text-purple-900 bg-purple-50 px-2 py-0.5 rounded border border-purple-200">全书十篇大师档案（共11位传奇价值投资者, pp. 339–422）</span>
+            <h3 class="text-base sm:text-lg font-bold text-slate-900 mt-1">格雷厄姆-多德进化谱系：二维战略坐标与核心打法拆解</h3>
+            <p class="text-xs text-slate-500">横轴代表估值锚点（从深度清算/折价套利 → 长期特许经营复利），纵轴代表组合集中度（从百股分散 → 十股内极致集中）</p>
+          </div>
+          <div class="flex flex-wrap gap-1.5">
+            <button type="button" id="mfilt-all" data-gbv-click="filterMasters('all')" class="sub-pill-active px-2.5 py-1.5 rounded-lg text-xs font-semibold border transition">全部大师 (11)</button>
+            <button type="button" id="mfilt-franchise" data-gbv-click="filterMasters('franchise')" class="sub-pill-inactive px-2.5 py-1.5 rounded-lg text-xs font-semibold border transition">护城河复利派</button>
+            <button type="button" id="mfilt-deepvalue" data-gbv-click="filterMasters('deepvalue')" class="sub-pill-inactive px-2.5 py-1.5 rounded-lg text-xs font-semibold border transition">深度价值/结构套利</button>
+            <button type="button" id="mfilt-catalyst" data-gbv-click="filterMasters('catalyst')" class="sub-pill-inactive px-2.5 py-1.5 rounded-lg text-xs font-semibold border transition">PMV与积极主义催化剂</button>
+          </div>
+        </div>
+
+        <div class="bg-slate-50 p-4 rounded-xl border border-slate-200">
+          <div class="relative h-72 w-full">
+            <canvas id="chart-masters"></canvas>
+          </div>
+        </div>
+
+        <div id="masters-cards-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+          <!-- Populated by renderMastersGrid() -->
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- Book Grounding Note -->
+  <div class="gbv-source-note border-t border-slate-200 mt-8 py-4" role="contentinfo">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 flex flex-col sm:flex-row items-center justify-between gap-2 text-xs text-slate-500">
+      <div>数据与公式严格锚定原书：Bruce C. Greenwald et al., <em>Value Investing: From Graham to Buffett and Beyond</em> (2nd Ed., Wiley, 2021)</div>
+      <div>涵盖全书 10 章正文 · 数学附录 · 4 大实战案例 · 11 位大师档案</div>
+    </div>
+  </div>
+
+  <!-- ===================================================================== -->
+  <!-- MODAL: 一图看懂全书因果闭环 (1-Page Master Logic Blueprint)             -->
+  <!-- ===================================================================== -->
+  <div id="modal-blueprint" class="hidden fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-sm flex items-center justify-center p-4">
+    <div class="bg-white rounded-2xl max-w-4xl w-full max-h-[90vh] overflow-y-auto shadow-2xl border border-slate-200 p-5 sm:p-6 space-y-4">
+      <div class="flex items-start justify-between gap-4 border-b border-slate-200 pb-3">
+        <div>
+          <span class="text-xs font-bold text-blue-800 uppercase">Master Architecture Blueprint</span>
+          <h2 class="text-lg sm:text-xl font-bold text-slate-900">《价值投资：从格雷厄姆到巴菲特》全书底层逻辑因果闭环</h2>
+        </div>
+        <button type="button" id="btn-close-blueprint" data-gbv-click="toggleBlueprintModal(false)" class="px-3 py-1 rounded-lg bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-bold">
+          关闭 ✕
+        </button>
+      </div>
+
+      <div class="space-y-3 text-xs sm:text-sm text-slate-700 leading-relaxed">
+        <div class="p-3.5 rounded-xl bg-slate-900 text-white">
+          <div class="font-bold text-amber-300">0. 元前提（第1章）：零和铁律与“站在交易正确的一侧”</div>
+          <p class="mt-1 text-slate-200">全体投资者平均回报 ≡ 市场回报（扣费后超 80%–90% 主动管理人跑输）。每次买入必有卖出对手方，唯有依靠结构性制度/心理优势或深度专精优势，在以下四步全程碾压对手方，才能获得可持续超额收益。</p>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
+          <div class="p-3.5 rounded-xl bg-blue-50 border border-blue-200">
+            <div class="font-bold text-blue-950">1. 搜寻双引擎（第2章）：去哪里找大概率犯错的卖家？</div>
+            <ul class="mt-1.5 space-y-1 list-disc list-inside text-slate-700">
+              <li><strong>由内而外专精能力圈：</strong>耗时 ≥1000 小时吃透细分行业/区域，精确评估无形资产重置成本与管理层优劣。</li>
+              <li><strong>系统性价值异象猎场：</strong>丑陋、无聊、小市值、机构被动抛售的分拆股（Spin-offs）与三年连续输家——因散户“彩票偏好/损失厌恶”与机构“规模上限/橱窗粉饰”而被系统性贱卖。</li>
+            </ul>
+          </div>
+
+          <div class="p-3.5 rounded-xl bg-emerald-50 border border-emerald-200">
+            <div class="font-bold text-emerald-950">2. 三层估值体系（第3–8章）：按信息可靠度严格隔离</div>
+            <ul class="mt-1.5 space-y-1 list-disc list-inside text-slate-700">
+              <li><strong>摒弃传统 DCF：</strong>终值 <code>1 / (R − g)</code> 对 <code>±1%</code> 参数误差产生 3 倍估值剧震，用远期猜测污染当期事实。</li>
+              <li><strong>第1层 AV（资产清算/重置成本）&amp; 第2层 EPV（零增长盈利现值）：</strong>若 <strong>AV &gt; EPV</strong> 为价值陷阱（需催化剂）；若 <strong>AV ≈ EPV</strong> 为无壁垒竞争均衡（增长不创值）；仅当 <strong>EPV &gt; AV</strong> 时存在真正护城河（规模经济×客户粘性）。</li>
+              <li><strong>第3层 特许经营预期收益率模型：</strong><code>R<sub>B</sub> = 现金分配率 + 内生增长 + 主动再投资(v) − 半衰期衰减 f</code>，并以 <code>V / M = R / R*</code> 修正估值偏离。</li>
+            </ul>
+          </div>
+
+          <div class="p-3.5 rounded-xl bg-amber-50 border border-amber-200">
+            <div class="font-bold text-amber-950">3. 主动研究与催化剂（第9章）：把精力花在刀刃上</div>
+            <ul class="mt-1.5 space-y-1 list-disc list-inside text-slate-700">
+              <li><strong>间接信号先行：</strong>追踪专精同行 13F、本地董事与中层高管增持、发股/发债信号与市场共识盲点。</li>
+              <li><strong>管理层四维审计：</strong>运营效率（优秀企业单位成本低 1/2–2/3）、护城河内资本配置、稳健财务与逆周期人才储备。仅在管理层失职（Case A）时才强制要求外部催化剂。</li>
+            </ul>
+          </div>
+
+          <div class="p-3.5 rounded-xl bg-purple-50 border border-purple-200">
+            <div class="font-bold text-purple-950">4. 风险管理与大师演化（第10章 &amp; 档案篇）</div>
+            <ul class="mt-1.5 space-y-1 list-disc list-inside text-slate-700">
+              <li><strong>真正风险是永久性本金损失：</strong>严禁杠杆买股，通过企业层面安全边际 + 约 30 只跨行业个股消除个体误判风险。</li>
+              <li><strong>选股分散专精 vs 风控顶层集中：</strong>特许经营权企业天然免疫通胀与通缩；在市场自满期买入廉价虚值期权对冲宏观尾部风险，用预设纪律克服每年 -600bps 的追涨杀跌损耗。</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===================================================================== -->
+  <!-- APPLICATION LOGIC & BOOK-GROUNDED DATASETS                            -->
+  <!-- ===================================================================== -->

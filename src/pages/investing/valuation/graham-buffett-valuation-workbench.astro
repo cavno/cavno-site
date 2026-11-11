@@ -1,0 +1,26 @@
+---
+import Base from '../../../layouts/Base.astro';
+import body from '../../../legacy/investing/valuation/graham-buffett-valuation-workbench/body.html?raw';
+import '../../../legacy/investing/valuation/graham-buffett-valuation-workbench/style.css';
+---
+<Base
+  title="《价值投资：从格雷厄姆到巴菲特》底层逻辑与交互式估值系统 · Cavno"
+  description="哥伦比亚商学院现代格雷厄姆-多德价值投资体系全景工作台：涵盖底层元逻辑与搜寻闭环、三层估值与护城河沙盘、AV+EPV 与特许经营收益率双核计算台、四大经典案例复盘及十一位大师谱系。"
+>
+  <div class="cv-wrap gbv-breadcrumb">
+    <span class="cv-eyebrow">Investing · Valuation</span>
+    <a class="cv-crumb-back" href="/investing/valuation/">← 返回估值栏目</a>
+  </div>
+
+  <article id="graham-buffett-app" class="lp gbv-app">
+    <Fragment set:html={body} />
+  </article>
+
+  <nav class="cv-wrap gbv-end" aria-label="页面导航">
+    <a href="/investing/valuation/">← 返回估值栏目</a>
+    <a href="/investing/valuation/value_investing/">配套长文：全书核心概念与内在逻辑导读 →</a>
+  </nav>
+
+  <script is:inline src="/investing/valuation/graham-buffett-valuation-workbench/assets/chart.umd.min.js" defer></script>
+  <script is:inline src="/investing/valuation/graham-buffett-valuation-workbench/assets/app.js?v=1903170113d6" defer></script>
+</Base>
