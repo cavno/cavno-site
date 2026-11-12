@@ -1,49 +1,18 @@
-<!-- Top Sticky Navigation Bar -->
-<header class="sticky top-0 z-50 bg-obsidian/90 backdrop-blur-md border-b border-white/10">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
-      <a href="#hero" class="flex items-center space-x-3 group">
-        <div class="w-9 h-9 rounded-lg bg-gradient-to-br from-creviceGold via-absurdTerracotta to-obsidian p-0.5 flex items-center justify-center shadow-lg">
-          <div class="w-full h-full bg-obsidian rounded-[7px] flex items-center justify-center">
-            <span class="font-philo font-bold text-creviceGold text-lg group-hover:scale-110 transition-transform">裂</span>
-          </div>
-        </div>
-        <div>
-          <span class="font-philo font-bold text-base sm:text-lg tracking-wider text-warmWhite block leading-none">在裂隙中安居</span>
-          <span class="text-[11px] text-mutedText tracking-widest hidden sm:block mt-1">悲剧 · 虚无 · 荒诞 · 自由 · 救赎</span>
-        </div>
-      </a>
-
-      <!-- Desktop Nav Links -->
-      <nav class="hidden lg:flex items-center space-x-1 text-sm">
-        <a href="#module-1" class="px-3 py-2 rounded-lg text-warmWhite/80 hover:text-creviceGold hover:bg-white/5 transition">Ⅰ. 五元螺旋与思想史</a>
-        <a href="#module-2" class="px-3 py-2 rounded-lg text-warmWhite/80 hover:text-creviceGold hover:bg-white/5 transition">Ⅱ. 悲剧实验室</a>
-        <a href="#module-3" class="px-3 py-2 rounded-lg text-warmWhite/80 hover:text-creviceGold hover:bg-white/5 transition">Ⅲ. 虚无与荒诞对峙</a>
-        <a href="#module-4" class="px-3 py-2 rounded-lg text-warmWhite/80 hover:text-creviceGold hover:bg-white/5 transition">Ⅳ. 自由与伪自由诊断</a>
-        <a href="#module-5" class="px-3 py-2 rounded-lg text-warmWhite/80 hover:text-creviceGold hover:bg-white/5 transition">Ⅴ. 救赎与行动工作坊</a>
-      </nav>
-
-      <!-- Quick Action Button -->
-      <div class="flex items-center space-x-2">
-        <a href="#freedom-map-tool" class="px-3.5 py-1.5 rounded-lg bg-creviceGold/15 border border-creviceGold/50 text-creviceGold text-xs sm:text-sm font-medium hover:bg-creviceGold hover:text-obsidian transition">
-          绘制我的自由地图
-        </a>
-        <button id="mobile-menu-btn" class="lg:hidden p-2 rounded-lg text-warmWhite/80 hover:text-white hover:bg-white/10" aria-label="打开导航菜单" type="button" aria-controls="mobile-menu" aria-expanded="false">
-          <svg class="w-6 h-6" fill="none" stroke="currentColor" viewbox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
-          </svg>
-        </button>
+<!-- Sticky 5-Module Sub-Navigation Bar -->
+  <nav class="ph-subnav-bar" aria-label="章节导览">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-2.5 flex items-center justify-between gap-2.5 overflow-x-auto ph-thin-scroll">
+      <div class="flex items-center gap-1.5 sm:gap-2 shrink-0">
+        <a href="#module-1" class="ph-nav-pill px-3 py-1.5 rounded-full border text-xs sm:text-sm font-medium whitespace-nowrap transition">Ⅰ. 五元螺旋与思想史</a>
+        <a href="#module-2" class="ph-nav-pill px-3 py-1.5 rounded-full border text-xs sm:text-sm font-medium whitespace-nowrap transition">Ⅱ. 悲剧实验室</a>
+        <a href="#module-3" class="ph-nav-pill px-3 py-1.5 rounded-full border text-xs sm:text-sm font-medium whitespace-nowrap transition">Ⅲ. 虚无与荒诞对峙</a>
+        <a href="#module-4" class="ph-nav-pill px-3 py-1.5 rounded-full border text-xs sm:text-sm font-medium whitespace-nowrap transition">Ⅳ. 自由与伪自由诊断</a>
+        <a href="#module-5" class="ph-nav-pill px-3 py-1.5 rounded-full border text-xs sm:text-sm font-medium whitespace-nowrap transition">Ⅴ. 救赎与行动工作坊</a>
       </div>
+      <a href="#freedom-map-tool" class="ph-cta-pill px-3.5 py-1.5 rounded-full text-xs sm:text-sm font-semibold whitespace-nowrap shrink-0 transition">
+        ✦ 绘制我的自由地图
+      </a>
     </div>
-
-    <!-- Mobile Navigation Drawer -->
-    <div id="mobile-menu" class="hidden lg:hidden bg-slateDeep border-b border-white/10 px-4 pt-2 pb-4 space-y-1 text-sm">
-      <a href="#module-1" class="mobile-link block px-3 py-2 rounded-lg hover:bg-white/5 text-warmWhite/90">Ⅰ. 五元存在论螺旋 &amp; 思想史演进</a>
-      <a href="#module-2" class="mobile-link block px-3 py-2 rounded-lg hover:bg-white/5 text-warmWhite/90">Ⅱ. 第一、二章：悲剧实验室</a>
-      <a href="#module-3" class="mobile-link block px-3 py-2 rounded-lg hover:bg-white/5 text-warmWhite/90">Ⅲ. 第三、四章：虚无深渊与荒诞对峙</a>
-      <a href="#module-4" class="mobile-link block px-3 py-2 rounded-lg hover:bg-white/5 text-warmWhite/90">Ⅳ. 第五章：自由枢纽与伪自由诊断器</a>
-      <a href="#module-5" class="mobile-link block px-3 py-2 rounded-lg hover:bg-white/5 text-warmWhite/90">Ⅴ. 第六、八章：后形而上学救赎与行动工作坊</a>
-    </div>
-  </header>
+  </nav>
 <!-- HERO SECTION: Interactive Crevice Canvas & Abstract -->
 <section id="hero" class="relative min-h-[82vh] flex flex-col justify-between border-b border-white/10 overflow-hidden">
     <!-- Interactive Canvas Background -->
@@ -157,13 +126,13 @@
     <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start mb-16">
       <!-- Left: Interactive SVG Spiral & Trajectory Simulator (5 cols) -->
       <div class="lg:col-span-5 glass-panel rounded-2xl p-6 flex flex-col items-center">
-        <div class="w-full flex items-center justify-between mb-4">
-          <span class="text-xs uppercase tracking-wider text-creviceGold font-semibold">交互式五元螺旋演进罗盘</span>
-          <div class="flex items-center space-x-1.5">
-            <button id="spiral-mode-ascend" class="px-2.5 py-1 rounded text-xs font-medium bg-creviceGold text-obsidian transition" data-ph-click="setSpiralMode('ascend')" type="button">
+        <div class="w-full flex flex-wrap items-center justify-between gap-2 mb-4">
+          <span class="text-xs uppercase tracking-wider text-creviceGold font-semibold whitespace-nowrap">交互式五元螺旋演进罗盘</span>
+          <div class="flex items-center gap-1.5 shrink-0">
+            <button id="spiral-mode-ascend" class="px-2.5 py-1 rounded text-xs font-medium whitespace-nowrap bg-creviceGold text-obsidian transition" data-ph-click="setSpiralMode('ascend')" type="button">
               螺旋上升（有自由支点）
             </button>
-            <button id="spiral-mode-fall" class="px-2.5 py-1 rounded text-xs font-medium bg-white/10 text-mutedText hover:text-warmWhite transition" data-ph-click="setSpiralMode('fall')" type="button">
+            <button id="spiral-mode-fall" class="px-2.5 py-1 rounded text-xs font-medium whitespace-nowrap bg-white/10 text-mutedText hover:text-warmWhite transition" data-ph-click="setSpiralMode('fall')" type="button">
               单向坠落（无自由/犬儒）
             </button>
           </div>
@@ -171,69 +140,64 @@
 
         <!-- SVG Compass Diagram -->
         <div class="relative w-full max-w-[360px] aspect-square flex items-center justify-center">
-          <svg id="spiral-svg" viewbox="0 0 400 400" class="w-full h-full">
+          <svg id="spiral-svg" viewBox="0 0 400 400" class="w-full h-full">
             <defs>
-              <radialgradient id="centerGlow" cx="50%" cy="50%" r="50%">
-                <stop offset="0%" stop-color="#C15F3C" stop-opacity="0.28"></stop>
-                <stop offset="100%" stop-color="#FAF9F5" stop-opacity="0"></stop>
-              </radialgradient>
-              <lineargradient id="spiralGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-                <stop offset="0%" stop-color="#C15F3C"></stop>
-                <stop offset="40%" stop-color="#94734E"></stop>
-                <stop offset="70%" stop-color="#48735A"></stop>
-                <stop offset="100%" stop-color="#C15F3C"></stop>
-              </lineargradient>
+              <radialGradient id="centerGlow" cx="50%" cy="50%" r="50%">
+                <stop offset="0%" stop-color="#C15F3C" stop-opacity="0.22"/>
+                <stop offset="100%" stop-color="#FAF9F5" stop-opacity="0"/>
+              </radialGradient>
+              <linearGradient id="spiralGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                <stop offset="0%" stop-color="#9A3B2E"/>
+                <stop offset="35%" stop-color="#6B5278"/>
+                <stop offset="68%" stop-color="#346875"/>
+                <stop offset="100%" stop-color="#C15F3C"/>
+              </linearGradient>
             </defs>
 
-            <!-- Background concentric rings -->
-            <circle cx="200" cy="200" r="165" fill="none" stroke="rgba(255,255,255,0.06)" stroke-dasharray="4 4"></circle>
-            <circle cx="200" cy="200" r="120" fill="none" stroke="rgba(255,255,255,0.06)"></circle>
-            <circle cx="200" cy="200" r="75" fill="url(#centerGlow)" stroke="rgba(212,175,55,0.2)"></circle>
+            <!-- Background concentric rings (visible warm ink lines on parchment) -->
+            <circle cx="200" cy="200" r="165" fill="none" stroke="#DDD8CA" stroke-width="1.2" stroke-dasharray="4 4"/>
+            <circle cx="200" cy="200" r="120" fill="none" stroke="#E5E1D5" stroke-width="1"/>
+            <circle cx="200" cy="200" r="76" fill="url(#centerGlow)" stroke="rgba(193,95,60,0.28)" stroke-width="1.2"/>
 
             <!-- Spiral Connecting Path -->
-            <path id="spiral-connect-path" d="M 200 45 C 330 55, 365 180, 330 275 C 295 360, 140 375, 80 285 C 35 210, 75 105, 165 95 C 235 88, 265 155, 200 200" fill="none" stroke="url(#spiralGrad)" stroke-width="3.5" stroke-linecap="round"></path>
+            <path id="spiral-connect-path" d="M 200 48 C 330 58, 365 180, 330 275 C 295 360, 140 375, 80 285 C 35 210, 75 105, 165 95 C 235 88, 265 155, 200 200" fill="none" stroke="url(#spiralGrad)" stroke-width="3.5" stroke-linecap="round"/>
 
             <!-- Falling Path (Hidden by default) -->
-            <path id="spiral-fall-path" class="hidden" d="M 200 45 L 340 165 L 285 325 L 200 375" fill="none" stroke="#A65341" stroke-width="3" stroke-dasharray="6 6"></path>
+            <path id="spiral-fall-path" class="hidden" d="M 200 48 L 340 165 L 285 325 L 200 375" fill="none" stroke="#9A3B2E" stroke-width="3" stroke-dasharray="6 6"/>
 
             <!-- Node 0: 悲剧 (Top) -->
-            <g class="cursor-pointer transition-transform" data-ph-click="selectSpiralNode(0)" tabindex="0" role="button" aria-label="悲剧
-              奠基实存">
-              <circle id="node-circle-0" cx="200" cy="45" r="26" fill="#FFFFFF" stroke="#C15F3C" stroke-width="3"></circle>
-              <text x="200" y="42" text-anchor="middle" fill="#141413" font-size="13" font-weight="bold" class="font-philo">悲剧</text>
-              <text x="200" y="57" text-anchor="middle" fill="#C15F3C" font-size="9">奠基实存</text>
+            <g class="cursor-pointer transition-transform" data-ph-click="selectSpiralNode(0)" tabindex="0" role="button" aria-label="01 悲剧：奠基实存">
+              <circle id="node-circle-0" cx="200" cy="48" r="29" fill="#FFFFFF" stroke="#9A3B2E" stroke-width="2.8"/>
+              <text x="200" y="45" text-anchor="middle" fill="#141413" font-size="13" font-weight="700" class="font-philo">悲剧</text>
+              <text x="200" y="60" text-anchor="middle" fill="#9A3B2E" font-size="9.2" font-weight="600">奠基实存</text>
             </g>
 
             <!-- Node 1: 虚无 (Right) -->
-            <g class="cursor-pointer transition-transform" data-ph-click="selectSpiralNode(1)" tabindex="0" role="button" aria-label="虚无
-              掏空根基">
-              <circle id="node-circle-1" cx="342" cy="175" r="26" fill="#FFFFFF" stroke="#94734E" stroke-width="2.5"></circle>
-              <text x="342" y="172" text-anchor="middle" fill="#141413" font-size="13" font-weight="bold" class="font-philo">虚无</text>
-              <text x="342" y="187" text-anchor="middle" fill="#71513B" font-size="9">掏空根基</text>
+            <g class="cursor-pointer transition-transform" data-ph-click="selectSpiralNode(1)" tabindex="0" role="button" aria-label="02 虚无：掏空根基">
+              <circle id="node-circle-1" cx="342" cy="175" r="29" fill="#FFFFFF" stroke="#6B5278" stroke-width="2.6"/>
+              <text x="342" y="172" text-anchor="middle" fill="#141413" font-size="13" font-weight="700" class="font-philo">虚无</text>
+              <text x="342" y="187" text-anchor="middle" fill="#6B5278" font-size="9.2" font-weight="600">掏空根基</text>
             </g>
 
             <!-- Node 2: 荒诞 (Bottom Right) -->
-            <g class="cursor-pointer transition-transform" data-ph-click="selectSpiralNode(2)" tabindex="0" role="button" aria-label="荒诞
-              清醒对峙">
-              <circle id="node-circle-2" cx="290" cy="322" r="26" fill="#FFFFFF" stroke="#9C7530" stroke-width="2.5"></circle>
-              <text x="290" y="319" text-anchor="middle" fill="#141413" font-size="13" font-weight="bold" class="font-philo">荒诞</text>
-              <text x="290" y="334" text-anchor="middle" fill="#84612B" font-size="9">清醒对峙</text>
+            <g class="cursor-pointer transition-transform" data-ph-click="selectSpiralNode(2)" tabindex="0" role="button" aria-label="03 荒诞：清醒对峙">
+              <circle id="node-circle-2" cx="290" cy="322" r="29" fill="#FFFFFF" stroke="#A67228" stroke-width="2.6"/>
+              <text x="290" y="319" text-anchor="middle" fill="#141413" font-size="13" font-weight="700" class="font-philo">荒诞</text>
+              <text x="290" y="334" text-anchor="middle" fill="#8C5E1E" font-size="9.2" font-weight="600">清醒对峙</text>
             </g>
 
             <!-- Node 3: 自由 (Bottom Left) -->
-            <g class="cursor-pointer transition-transform" data-ph-click="selectSpiralNode(3)" tabindex="0" role="button" aria-label="自由
-              核心枢纽">
-              <circle id="node-circle-3" cx="95" cy="275" r="28" fill="#FFFFFF" stroke="#48735A" stroke-width="3"></circle>
-              <text x="95" y="272" text-anchor="middle" fill="#141413" font-size="13" font-weight="bold" class="font-philo">自由</text>
-              <text x="95" y="287" text-anchor="middle" fill="#48735A" font-size="9">核心枢纽</text>
+            <g class="cursor-pointer transition-transform" data-ph-click="selectSpiralNode(3)" tabindex="0" role="button" aria-label="04 自由：核心枢纽">
+              <circle id="node-circle-3" cx="95" cy="275" r="30" fill="#FFFFFF" stroke="#346875" stroke-width="2.8"/>
+              <text x="95" y="272" text-anchor="middle" fill="#141413" font-size="13" font-weight="700" class="font-philo">自由</text>
+              <text x="95" y="287" text-anchor="middle" fill="#346875" font-size="9.2" font-weight="600">核心枢纽</text>
             </g>
 
             <!-- Node 4: 救赎 (Center / Inner Spiral) -->
-            <g class="cursor-pointer transition-transform" data-ph-click="selectSpiralNode(4)" tabindex="0" role="button" aria-label="救赎
-              裂隙安居">
-              <circle id="node-circle-4" cx="200" cy="200" r="36" fill="#F3E9DE" stroke="#C15F3C" stroke-width="3.5"></circle>
-              <text x="200" y="196" text-anchor="middle" fill="#C15F3C" font-size="15" font-weight="bold" class="font-philo">救赎</text>
-              <text x="200" y="213" text-anchor="middle" fill="#141413" font-size="9.5">裂隙安居</text>
+            <g class="cursor-pointer transition-transform" data-ph-click="selectSpiralNode(4)" tabindex="0" role="button" aria-label="05 救赎：裂隙安居">
+              <circle id="node-circle-4" cx="200" cy="200" r="37" fill="#FAF0EA" stroke="#C15F3C" stroke-width="3.2"/>
+              <text x="200" y="196" text-anchor="middle" fill="#C15F3C" font-size="15" font-weight="700" class="font-philo">救赎</text>
+              <text x="200" y="213" text-anchor="middle" fill="#141413" font-size="9.5" font-weight="600">裂隙安居</text>
             </g>
           </svg>
         </div>
@@ -879,25 +843,25 @@
 
             <!-- SVG Pentagon Radar -->
             <div class="w-full max-w-[260px] mx-auto aspect-square mb-4">
-              <svg id="pf-radar-svg" viewbox="0 0 240 240" class="w-full h-full">
-                <!-- Radar Background Grids -->
-                <polygon points="120,25 210,90 176,196 64,196 30,90" fill="none" stroke="rgba(255,255,255,0.12)" stroke-width="1"></polygon>
-                <polygon points="120,55 182,100 158,172 82,172 58,100" fill="none" stroke="rgba(255,255,255,0.08)" stroke-dasharray="3 3"></polygon>
-                <polygon points="120,85 153,109 140,148 100,148 87,109" fill="none" stroke="rgba(255,255,255,0.06)"></polygon>
+              <svg id="pf-radar-svg" viewBox="-12 0 264 236" class="w-full h-full">
+                <!-- Radar Background Grids (visible warm stone lines) -->
+                <polygon points="120,25 210,90 176,196 64,196 30,90" fill="#FAF8F2" stroke="#D2CEC2" stroke-width="1.2"/>
+                <polygon points="120,55 182,100 158,172 82,172 58,100" fill="none" stroke="#DDD9CE" stroke-width="1" stroke-dasharray="3 3"/>
+                <polygon points="120,85 153,109 140,148 100,148 87,109" fill="none" stroke="#E5E2D8" stroke-width="1"/>
                 <!-- Axis lines -->
-                <line x1="120" y1="120" x2="120" y2="25" stroke="rgba(255,255,255,0.08)"></line>
-                <line x1="120" y1="120" x2="210" y2="90" stroke="rgba(255,255,255,0.08)"></line>
-                <line x1="120" y1="120" x2="176" y2="196" stroke="rgba(255,255,255,0.08)"></line>
-                <line x1="120" y1="120" x2="64" y2="196" stroke="rgba(255,255,255,0.08)"></line>
-                <line x1="120" y1="120" x2="30" y2="90" stroke="rgba(255,255,255,0.08)"></line>
+                <line x1="120" y1="120" x2="120" y2="25" stroke="#DBD7CB" stroke-width="1"/>
+                <line x1="120" y1="120" x2="210" y2="90" stroke="#DBD7CB" stroke-width="1"/>
+                <line x1="120" y1="120" x2="176" y2="196" stroke="#DBD7CB" stroke-width="1"/>
+                <line x1="120" y1="120" x2="64" y2="196" stroke="#DBD7CB" stroke-width="1"/>
+                <line x1="120" y1="120" x2="30" y2="90" stroke="#DBD7CB" stroke-width="1"/>
                 <!-- Dynamic Data Polygon -->
-                <polygon id="pf-radar-poly" points="120,63 165,105 142,150 86,165 75,105" fill="rgba(212,175,55,0.28)" stroke="#C15F3C" stroke-width="2.5"></polygon>
+                <polygon id="pf-radar-poly" points="120,63 165,105 142,150 86,165 75,105" fill="rgba(193, 95, 60, 0.22)" stroke="#C15F3C" stroke-width="2.5"/>
                 <!-- Labels -->
-                <text x="120" y="15" text-anchor="middle" fill="#141413" font-size="10">①消费</text>
-                <text x="224" y="92" text-anchor="middle" fill="#141413" font-size="10">②表达</text>
-                <text x="188" y="214" text-anchor="middle" fill="#141413" font-size="10">③绩效</text>
-                <text x="52" y="214" text-anchor="middle" fill="#141413" font-size="10">④退出</text>
-                <text x="16" y="92" text-anchor="middle" fill="#141413" font-size="10">⑤精神</text>
+                <text x="120" y="15" text-anchor="middle" fill="#262522" font-size="10.5" font-weight="600">①消费</text>
+                <text x="226" y="93" text-anchor="middle" fill="#262522" font-size="10.5" font-weight="600">②表达</text>
+                <text x="188" y="216" text-anchor="middle" fill="#262522" font-size="10.5" font-weight="600">③绩效</text>
+                <text x="52" y="216" text-anchor="middle" fill="#262522" font-size="10.5" font-weight="600">④退出</text>
+                <text x="14" y="93" text-anchor="middle" fill="#262522" font-size="10.5" font-weight="600">⑤精神</text>
               </svg>
             </div>
 
@@ -1233,7 +1197,7 @@
     </div>
 
     <!-- Mental Health & Help-Seeking Banner (Section 3.6 & 8.5) -->
-    <div class="rounded-2xl p-6 sm:p-8 bg-gradient-to-r from-slateDeep via-indigo-950/40 to-slateDeep border border-lucidCyan/40 cyan-glow">
+    <div class="ph-care-banner rounded-2xl p-6 sm:p-8 border border-lucidCyan/40">
       <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-center">
         <div class="lg:col-span-8 space-y-2">
           <div class="inline-flex items-center space-x-2 text-xs font-semibold text-lucidCyan">
@@ -1256,8 +1220,8 @@
       </div>
     </div>
   </section>
-<!-- Epilogue Footer -->
-<footer class="bg-obsidian border-t border-white/10 py-12 px-4 sm:px-6 lg:px-8 text-center">
+<!-- Epilogue Note -->
+  <div class="ph-epilogue-note border-t border-white/10 py-10 px-4 sm:px-6 lg:px-8 text-center" role="contentinfo">
     <div class="max-w-4xl mx-auto space-y-4">
       <div class="font-philo text-lg sm:text-xl text-creviceGold italic">
         “正如鲁迅所说：‘绝望之为虚妄，正与希望相同。’在裂隙中，我们既不需要虚假的希望，也不必向绝望投降——我们可以选择向前走，并且不是一个人走。”
@@ -1266,7 +1230,4 @@
         《在裂隙中安居：悲剧、虚无、荒诞、自由与救赎——现代性的生存诊断与出路》（第三次修订版·学术规范版）交互式哲学系统
       </p>
     </div>
-  </footer>
-<!-- =====================================================================
-       JAVASCRIPT LOGIC & COMPLETE ACADEMIC DATA STORE
-  ====================================================================== -->
+  </div>

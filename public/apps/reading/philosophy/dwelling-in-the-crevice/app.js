@@ -4,16 +4,6 @@ const root=document.getElementById('crevice-app');if(!root)return;
 const byId=id=>root.querySelector('[id="'+id+'"]');
 const escapeText=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
 
-    // Mobile Menu Toggle
-    const mobileMenuBtn = byId('mobile-menu-btn');
-    const mobileMenu = byId('mobile-menu');
-    mobileMenuBtn.addEventListener('click', () => {
-      mobileMenu.classList.toggle('hidden'); mobileMenuBtn.setAttribute('aria-expanded', String(!mobileMenu.classList.contains('hidden')));
-    });
-    root.querySelectorAll('.mobile-link').forEach(link => {
-      link.addEventListener('click', () => { mobileMenu.classList.add('hidden');mobileMenuBtn.setAttribute('aria-expanded','false'); });
-    });
-
     // =========================================================================
     // 1. HERO INTERACTIVE CANVAS: Crevice Lamps, Bridges & Sisyphus
     // =========================================================================
@@ -101,7 +91,7 @@ const escapeText=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':
       ctx.lineTo(canvas.width * 0.48, midY + 25);
       ctx.lineTo(canvas.width * 0.72, midY - 30);
       ctx.lineTo(canvas.width, midY + 10);
-      ctx.strokeStyle = heroMode === 'crevice' ? 'rgba(193, 95, 60, 0.25)' : 'rgba(193, 95, 60, 0.35)';
+      ctx.strokeStyle = heroMode === 'crevice' ? 'rgba(154, 59, 46, 0.22)' : 'rgba(154, 59, 46, 0.36)';
       ctx.lineWidth = 2.5;
       ctx.stroke();
       ctx.restore();
@@ -112,8 +102,8 @@ const escapeText=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':
           const l = lamps[i];
           l.pulse += 0.03;
           const grad = ctx.createRadialGradient(l.x, l.y, 2, l.x, l.y, l.radius + Math.sin(l.pulse) * 12);
-          grad.addColorStop(0, 'rgba(217, 119, 87, 0.6)');
-          grad.addColorStop(0.4, 'rgba(193, 95, 60, 0.18)');
+          grad.addColorStop(0, 'rgba(217, 119, 87, 0.38)');
+          grad.addColorStop(0.45, 'rgba(193, 95, 60, 0.12)');
           grad.addColorStop(1, 'rgba(250, 249, 245, 0)');
           ctx.fillStyle = grad;
           ctx.beginPath();
@@ -285,8 +275,8 @@ const escapeText=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':
       for (let i = 0; i < 5; i++) {
         const c = byId(`node-circle-${i}`);
         if (c) {
-          c.setAttribute('r', i === 4 ? (i === idx ? '40' : '35') : (i === idx ? '31' : '25'));
-          c.setAttribute('fill', i === idx ? '#F3DFD4' : '#FFFFFF');
+          c.setAttribute('r', i === 4 ? (i === idx ? '40' : '37') : (i === idx ? '32' : '29'));
+          c.setAttribute('fill', i === idx ? '#FAF0EA' : (i === 4 ? '#FAF4EE' : '#FFFFFF'));
         }
       }
       const card = byId('spiral-detail-card');
@@ -417,7 +407,7 @@ const escapeText=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':
       const tabsContainer = byId('history-era-tabs');
       const contentBox = byId('history-era-content');
       tabsContainer.innerHTML = historyErasData.map((item, idx) => `
-        <button data-ph-click="renderHistoryEras(${idx})" class="px-3 py-1.5 rounded-lg text-xs font-medium transition ${idx === activeIdx ? 'bg-creviceGold text-obsidian font-bold shadow' : 'bg-white/5 text-warmWhite/80 hover:bg-white/10'}">
+        <button type="button" data-ph-click="renderHistoryEras(${idx})" class="px-3 py-1.5 rounded-lg text-xs font-medium transition ${idx === activeIdx ? 'bg-creviceGold text-obsidian font-bold shadow' : 'bg-white/5 text-warmWhite/80 hover:bg-white/10'}">
           ${idx + 1}. ${item.era}
         </button>
       `).join('');
@@ -667,7 +657,7 @@ const escapeText=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':
     function renderNihilismDiff(idx = 0) {
       const btns = byId('nihilism-diff-btns');
       btns.innerHTML = nihilismDiffData.map((d, i) => `
-        <button data-ph-click="renderNihilismDiff(${i})" class="px-2.5 py-1 rounded-lg text-xs font-medium transition ${i === idx ? 'bg-purple-500 text-warmWhite' : 'bg-white/10 text-warmWhite/80 hover:bg-white/15'}">
+        <button type="button" data-ph-click="renderNihilismDiff(${i})" class="px-2.5 py-1 rounded-lg text-xs font-medium transition ${i === idx ? 'bg-purple-500 text-warmWhite' : 'bg-white/10 text-warmWhite/80 hover:bg-white/15'}">
           vs ${d.name}
         </button>
       `).join('');
@@ -726,7 +716,7 @@ const escapeText=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':
     function renderNihilismManifest(idx = 0) {
       const list = byId('nihilism-manifest-list');
       list.innerHTML = nihilismManifestData.map((m, i) => `
-        <button data-ph-click="renderNihilismManifest(${i})" class="w-full text-left p-2.5 rounded-xl text-xs transition border ${i === idx ? 'bg-purple-500/20 border-purple-400 text-warmWhite' : 'bg-white/5 border-white/5 text-warmWhite/75 hover:bg-white/10'}">
+        <button type="button" data-ph-click="renderNihilismManifest(${i})" class="w-full text-left p-2.5 rounded-xl text-xs transition border ${i === idx ? 'bg-purple-500/20 border-purple-400 text-warmWhite' : 'bg-white/5 border-white/5 text-warmWhite/75 hover:bg-white/10'}">
           <div class="font-bold">${m.title}</div>
           <div class="text-[11px] text-mutedText mt-0.5">${m.sub}</div>
         </button>
@@ -886,7 +876,7 @@ const escapeText=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':
         const isPivot = idx === 2;
         const isActive = idx === activeIdx;
         return `
-          <button data-ph-click="renderFreedomLevels(${idx})" class="w-full text-left p-3 rounded-xl text-xs transition border flex items-center justify-between ${
+          <button type="button" data-ph-click="renderFreedomLevels(${idx})" class="w-full text-left p-3 rounded-xl text-xs transition border flex items-center justify-between ${
             isActive
               ? 'bg-lucidCyan/20 border-lucidCyan text-warmWhite shadow'
               : isPivot
@@ -971,7 +961,7 @@ const escapeText=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':
         ul.innerHTML = freedomMapState[q].map((text, idx) => `
           <li class="p-2.5 rounded-lg bg-white/5 border border-white/10 flex items-start justify-between gap-2 group">
             <span class="text-warmWhite/90 leading-relaxed">• ${escapeText(text)}</span>
-            <button data-ph-click="removeFreedomMapItem('${q}', ${idx})" class="text-mutedText hover:text-rose-400 text-xs opacity-60 group-hover:opacity-100 transition" title="移除">✕</button>
+            <button type="button" data-ph-click="removeFreedomMapItem('${q}', ${idx})" class="text-mutedText hover:text-rose-400 text-xs opacity-60 group-hover:opacity-100 transition" title="移除">✕</button>
           </li>
         `).join('');
       });
@@ -1112,7 +1102,7 @@ const escapeText=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':
     function renderTypicalSituations(idx = 0) {
       const tabs = byId('situation-tabs');
       tabs.innerHTML = typicalSituationsData.map((s, i) => `
-        <button data-ph-click="renderTypicalSituations(${i})" class="p-3 rounded-xl text-xs font-medium text-left transition border ${
+        <button type="button" data-ph-click="renderTypicalSituations(${i})" class="p-3 rounded-xl text-xs font-medium text-left transition border ${
           i === idx ? 'bg-creviceGold text-obsidian font-bold border-creviceGold shadow' : 'bg-white/5 text-warmWhite/85 border-white/10 hover:bg-white/10'
         }">
           <div>${s.name}</div>
@@ -1183,16 +1173,90 @@ const escapeText=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':
       renderTypicalSituations(0);
     };
   
-const actions={addFreedomMapItem,copyFreedomMapCard,filterRedemptionPaths,loadCompositeCase,loadPresetFreedomMap,removeFreedomMapItem,renderFreedomLevels,renderHistoryEras,renderNihilismDiff,renderNihilismManifest,renderTypicalSituations,resetAbsurdSliders,resetPseudoTest,selectSpiralNode,selectTragedyArchetype,setHeroMode,setSpiralMode,simulateSpiralShock,switchTragedyHistory,triggerCreviceLight,updateAbsurdSimulator,updatePseudoDiagnostic};
-function invoke(text){
- const match=/^(\w+)\(([^)]*)\)/.exec(text||'');if(!match||!actions[match[1]])return;
- const args=match[2].trim()?match[2].split(',').map(s=>{s=s.trim();return /^-?\d+$/.test(s)?Number(s):s.replace(/^['"]|['"]$/g,'');}):[];
- actions[match[1]](...args);
- if(text.includes('scrollIntoView'))byId('module-1').scrollIntoView({behavior:'smooth'});
+const actions = {
+  addFreedomMapItem,
+  copyFreedomMapCard,
+  filterRedemptionPaths,
+  loadCompositeCase,
+  loadPresetFreedomMap,
+  removeFreedomMapItem,
+  renderFreedomLevels,
+  renderHistoryEras,
+  renderNihilismDiff,
+  renderNihilismManifest,
+  renderTypicalSituations,
+  resetAbsurdSliders,
+  resetPseudoTest,
+  selectSpiralNode,
+  selectTragedyArchetype,
+  setHeroMode,
+  setSpiralMode,
+  simulateSpiralShock,
+  switchTragedyHistory,
+  triggerCreviceLight,
+  updateAbsurdSimulator,
+  updatePseudoDiagnostic
+};
+
+function invoke(text) {
+  const match = /^(\w+)\(([^)]*)\)/.exec(text || '');
+  if (!match || !actions[match[1]]) return;
+  const args = match[2].trim()
+    ? match[2].split(',').map((s) => {
+        s = s.trim();
+        return /^-?\d+$/.test(s) ? Number(s) : s.replace(/^['"]|['"]$/g, '');
+      })
+    : [];
+  actions[match[1]](...args);
+  if (text.includes('scrollIntoView')) {
+    const mod1 = byId('module-1');
+    if (mod1) mod1.scrollIntoView({ behavior: 'smooth' });
+  }
 }
-root.addEventListener('click',e=>{const el=e.target.closest('[data-ph-click]');if(el&&root.contains(el))invoke(el.dataset.phClick);});
-root.addEventListener('input',e=>{if(e.target.dataset.phInput)invoke(e.target.dataset.phInput);});
-root.addEventListener('keydown',e=>{const el=e.target.closest('g[role="button"]');if(el&&(e.key==='Enter'||e.key===' ')){e.preventDefault();invoke(el.dataset.phClick);}if(e.key==='Escape'){mobileMenu.classList.add('hidden');mobileMenuBtn.setAttribute('aria-expanded','false');}});
-byId('fm-new-item-input').addEventListener('keydown',e=>{if(e.key==='Enter'){e.preventDefault();addFreedomMapItem();}});
-initialize();
+
+root.addEventListener('click', (e) => {
+  const raw = e.target;
+  const base = raw && typeof raw.closest === 'function' ? raw : (raw && raw.parentElement ? raw.parentElement : null);
+  const el = base ? base.closest('[data-ph-click]') : null;
+  if (el && root.contains(el)) invoke(el.dataset.phClick);
+});
+
+root.addEventListener('input', (e) => {
+  const raw = e.target;
+  const base = raw && typeof raw.closest === 'function' ? raw : null;
+  const el = base ? base.closest('[data-ph-input]') : null;
+  if (el && root.contains(el)) invoke(el.dataset.phInput);
+});
+
+root.addEventListener('keydown', (e) => {
+  const raw = e.target;
+  const base = raw && typeof raw.closest === 'function' ? raw : null;
+  const el = base ? base.closest('g[role="button"]') : null;
+  if (el && (e.key === 'Enter' || e.key === ' ')) {
+    e.preventDefault();
+    invoke(el.dataset.phClick);
+  }
+});
+
+const fmInput = byId('fm-new-item-input');
+if (fmInput) {
+  fmInput.addEventListener('keydown', (e) => {
+    if (e.key === 'Enter') {
+      e.preventDefault();
+      addFreedomMapItem();
+    }
+  });
+}
+
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', () => {
+    if (root.dataset.phBooted !== '1') {
+      root.dataset.phBooted = '1';
+      initialize();
+    }
+  });
+} else if (root.dataset.phBooted !== '1') {
+  root.dataset.phBooted = '1';
+  initialize();
+}
 })();
