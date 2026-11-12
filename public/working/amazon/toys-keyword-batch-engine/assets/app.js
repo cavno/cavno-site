@@ -1,7 +1,11 @@
-/* 原附件数据、策略规则与内嵌 Python 保留；仅限定页面作用域并适配配色。 */
-(()=>{'use strict';const root=document.getElementById('toys-keyword-app');if(!root)return;const byId=id=>root.querySelector('[id="'+id+'"]');
+/* Cavno Working · Amazon Tools — 亚马逊美国站玩具类目 · 万级关键词广告策略批处理引擎 (Scoped IIFE) */
+(() => {
+  'use strict';
+  const root = document.getElementById('toys-keyword-app');
+  if (!root) return;
+  const byId = (id) => root.querySelector('[id="' + id + '"]');
 
-    // =========================================================================
+  // =========================================================================
     // 1. GROUNDED INITIAL DATA (Verbatim from 出单词样本.xlsx & 玩具流量分析和管理方向落地.pdf)
     // =========================================================================
     const ATTACHMENT_SAMPLE_ROWS = [
@@ -971,11 +975,11 @@
       const bDedup = byId('viewMode_dedup');
       const bRaw = byId('viewMode_raw');
       if (mode === 'dedup') {
-        bDedup.className = 'px-3 py-1.5 text-xs font-semibold rounded-md bg-slate-900 text-white transition';
-        bRaw.className = 'px-3 py-1.5 text-xs font-medium rounded-md text-slate-600 hover:text-slate-900 transition';
+        bDedup.className = 'whitespace-nowrap px-3 py-1.5 text-xs font-semibold rounded-md bg-slate-900 text-white transition';
+        bRaw.className = 'whitespace-nowrap px-3 py-1.5 text-xs font-medium rounded-md text-slate-600 hover:text-slate-900 transition';
       } else {
-        bRaw.className = 'px-3 py-1.5 text-xs font-semibold rounded-md bg-slate-900 text-white transition';
-        bDedup.className = 'px-3 py-1.5 text-xs font-medium rounded-md text-slate-600 hover:text-slate-900 transition';
+        bRaw.className = 'whitespace-nowrap px-3 py-1.5 text-xs font-semibold rounded-md bg-slate-900 text-white transition';
+        bDedup.className = 'whitespace-nowrap px-3 py-1.5 text-xs font-medium rounded-md text-slate-600 hover:text-slate-900 transition';
       }
       renderStrategyTable();
     }
@@ -1027,7 +1031,7 @@
               '<td class="py-2.5 px-3 text-right font-mono font-bold text-slate-900">' + (row.suggestedBid > 0 ? '$' + row.suggestedBid.toFixed(2) : '停止出价') + '</td>' +
               '<td class="py-2.5 px-3 text-[11px] text-slate-700 max-w-[210px]">' + escapeHtml(row.isolationAction) + '</td>' +
               '<td class="py-2.5 px-3 text-center">' +
-                '<button type="button" data-kwe-click="openDetailModalByFilteredIndex(' + detailIdx + ')" class="px-2 py-1 rounded bg-slate-100 hover:bg-blue-600 hover:text-white text-slate-700 text-[11px] font-medium transition">查看依据</button>' +
+                '<button type="button" data-kwe-click="openDetailModalByFilteredIndex(' + detailIdx + ')" class="whitespace-nowrap px-2.5 py-1 rounded bg-slate-100 hover:bg-blue-600 hover:text-white text-slate-700 text-[11px] font-medium transition">查看依据</button>' +
               '</td>' +
             '</tr>'
           );
@@ -1099,7 +1103,7 @@
           labels: bucketNames,
           datasets: [
             { label: '广告花费 ($)', data: spendData.map(function(v) { return Number(v.toFixed(2)); }), backgroundColor: '#C15F3C', borderRadius: 6 },
-            { label: '广告销售额 ($)', data: salesData.map(function(v) { return Number(v.toFixed(2)); }), backgroundColor: '#48735A', borderRadius: 6 }
+            { label: '广告销售额 ($)', data: salesData.map(function(v) { return Number(v.toFixed(2)); }), backgroundColor: '#356B54', borderRadius: 6 }
           ]
         },
         options: {
@@ -1116,14 +1120,14 @@
       // Scatter Chart by Intent Group (Top 60 terms by spend so chart stays crisp even on 50k rows)
       const topTerms = appState.dedupTerms.slice().sort(function(a, b) { return b.spend - a.spend; }).slice(0, 60);
       const colorByIntent = {
-        '自有品牌词': '#94734E',
+        '自有品牌词': '#7A4E65',
         '黄金适龄词': '#C15F3C',
-        '高相关玩具属性词': '#48735A',
-        '边缘高龄词': '#B18A44',
-        '核心泛大词': '#A65341',
-        '关联商品ASIN': '#5E8870',
-        '节日礼物场景词': '#D97757',
-        '前置高危否定词': '#8F4637'
+        '高相关玩具属性词': '#356B54',
+        '边缘高龄词': '#B5852B',
+        '核心泛大词': '#AD4435',
+        '关联商品ASIN': '#3B5B78',
+        '节日礼物场景词': '#8C6239',
+        '前置高危否定词': '#873024'
       };
 
       const points = topTerms.map(function(t) {
@@ -1134,7 +1138,7 @@
           term: t.searchTerm,
           intent: t.intent,
           orders: t.orders,
-          bg: colorByIntent[t.intent] || '#777368'
+          bg: colorByIntent[t.intent] || '#75726A'
         };
       });
 
@@ -1324,13 +1328,13 @@
             label: '周度流量入口数量指数 (PDF 图3 实盘曲线)',
             data: PDF_SEASONAL_SERIES.map(function(d) { return d.entries; }),
             borderColor: '#C15F3C',
-            backgroundColor: 'rgba(37, 99, 235, 0.12)',
+            backgroundColor: 'rgba(193, 95, 60, 0.12)',
             fill: true,
             tension: 0.3,
             pointRadius: 3.5,
             pointBackgroundColor: PDF_SEASONAL_SERIES.map(function(d) {
-              if (d.entries >= 300) return '#dc2626';
-              if (d.entries >= 170) return '#B18A44';
+              if (d.entries >= 300) return '#9E3B2E';
+              if (d.entries >= 170) return '#B5852B';
               return '#C15F3C';
             })
           }]
@@ -1693,11 +1697,11 @@
         if (tabs[i] === tabId) {
           panel.classList.remove('hidden');
           btn.classList.add('tab-btn-active');
-          btn.classList.remove('text-slate-600');
+          btn.classList.remove('kwe-tab-idle');
         } else {
           panel.classList.add('hidden');
           btn.classList.remove('tab-btn-active');
-          btn.classList.add('text-slate-600');
+          btn.classList.add('kwe-tab-idle');
         }
       }
       if (tabId === 'workbench') renderWorkbenchCharts();
@@ -1939,14 +1943,105 @@
       showToast('已下载 amazon_toys_kw_batch_processor.py 脚本文件', 'ok');
     }
 
-    // Boot Application
-    window.addEventListener('DOMContentLoaded', function() {
+    // Scoped Initialization, Chart Theme & Event Delegation
+    function configureChartDefaults() {
+      if (typeof Chart === 'undefined') return;
+      Chart.defaults.color = '#63615B';
+      Chart.defaults.borderColor = '#E3E0D5';
+      Chart.defaults.font.family = '-apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "Noto Sans SC", sans-serif';
+      if (Chart.defaults.plugins && Chart.defaults.plugins.tooltip) {
+        Chart.defaults.plugins.tooltip.backgroundColor = 'rgba(20, 20, 19, 0.94)';
+        Chart.defaults.plugins.tooltip.titleColor = '#FAF9F5';
+        Chart.defaults.plugins.tooltip.bodyColor = '#F0EEE6';
+        Chart.defaults.plugins.tooltip.padding = 10;
+        Chart.defaults.plugins.tooltip.cornerRadius = 8;
+      }
+    }
+
+    function bootEngine() {
+      if (root.dataset.kweBooted === '1') return;
+      if (typeof Chart === 'undefined') {
+        window.setTimeout(bootEngine, 30);
+        return;
+      }
+      root.dataset.kweBooted = '1';
+      configureChartDefaults();
       appState.rawRows = JSON.parse(JSON.stringify(ATTACHMENT_SAMPLE_ROWS));
-      byId('pythonCodeBlock').textContent = buildStandalonePythonSource();
+      const pyEl = byId('pythonCodeBlock');
+      if (pyEl) pyEl.textContent = buildStandalonePythonSource();
       runBatchEngine();
+    }
+
+    const actions = {
+      addCustomPreNegative,
+      applyConfigChanges,
+      changePage,
+      closeDetailModal,
+      copyPreemptiveNegatives,
+      copyPythonScript,
+      copyTriggeredNegatives,
+      downloadAbaTemplate,
+      downloadPythonScript,
+      exportFullStrategyWorkbook,
+      handleAbaFileUpload,
+      handleSearchTermUpload,
+      openDetailModalByFilteredIndex,
+      removePreNegative,
+      renderNgramTable,
+      resetPageAndRenderTable,
+      resetToAttachmentSample,
+      setSeasonPhase,
+      setTableViewMode,
+      switchTab,
+      toggleConfigDrawer
+    };
+
+    function invokeAction(expr, el, event) {
+      const m = /^(\w+)\(([^)]*)\)$/.exec((expr || '').trim());
+      if (!m || !actions[m[1]]) return;
+      const rawArgs = m[2].trim();
+      const args = rawArgs
+        ? rawArgs.split(',').map(function(token) {
+            const s = token.trim();
+            if (s === 'true') return true;
+            if (s === 'false') return false;
+            if (s === 'event') return event;
+            if (s === 'this') return el;
+            if (/^-?\d+(?:\.\d+)?$/.test(s)) return Number(s);
+            return s.replace(/^['"]|['"]$/g, '');
+          })
+        : [];
+      actions[m[1]].apply(null, args);
+    }
+
+    ['click', 'input', 'change'].forEach(function(evtName) {
+      root.addEventListener(evtName, function(event) {
+        const rawTarget = event.target;
+        const baseEl = rawTarget && typeof rawTarget.closest === 'function'
+          ? rawTarget
+          : (rawTarget && rawTarget.parentElement ? rawTarget.parentElement : null);
+        const target = baseEl ? baseEl.closest('[data-kwe-' + evtName + ']') : null;
+        if (target && root.contains(target)) {
+          invokeAction(target.getAttribute('data-kwe-' + evtName), target, event);
+        }
+      });
     });
-  
-const actions={addCustomPreNegative,applyConfigChanges,changePage,closeDetailModal,copyPreemptiveNegatives,copyPythonScript,copyTriggeredNegatives,downloadAbaTemplate,downloadPythonScript,exportFullStrategyWorkbook,handleAbaFileUpload,handleSearchTermUpload,openDetailModalByFilteredIndex,removePreNegative,renderNgramTable,resetPageAndRenderTable,resetToAttachmentSample,setSeasonPhase,setTableViewMode,switchTab,toggleConfigDrawer};
-function invoke(text,el,event){const m=/^(\w+)\(([^)]*)\)$/.exec(text||'');if(!m||!actions[m[1]])return;const args=m[2].trim()?m[2].split(',').map(s=>{s=s.trim();if(s==='event')return event;if(s==='this')return el;return /^-?\d+$/.test(s)?Number(s):s.replace(/^['"]|['"]$/g,'');}):[];actions[m[1]](...args);}
-for(const eventName of ['click','change','input'])root.addEventListener(eventName,event=>{const el=event.target.closest('[data-kwe-'+eventName+']');if(el&&root.contains(el))invoke(el.getAttribute('data-kwe-'+eventName),el,event);});
+
+    const detailModalEl = byId('detailModal');
+    if (detailModalEl) {
+      detailModalEl.addEventListener('click', function(event) {
+        if (event.target === detailModalEl) closeDetailModal();
+      });
+    }
+    document.addEventListener('keydown', function(event) {
+      if (event.key === 'Escape' && detailModalEl && !detailModalEl.classList.contains('hidden')) {
+        closeDetailModal();
+      }
+    });
+
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', bootEngine);
+    } else {
+      bootEngine();
+    }
 })();
