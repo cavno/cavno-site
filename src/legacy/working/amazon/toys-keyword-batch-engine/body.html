@@ -17,30 +17,201 @@
     </div>
   </div>
 
+  <!-- Workspace Initialization Wizard Modal -->
+  <div id="initWorkspaceModal" class="fixed inset-0 z-40 bg-slate-900/60 backdrop-blur-xs hidden items-center justify-center p-4">
+    <div class="bg-white rounded-2xl shadow-2xl max-w-2xl w-full overflow-hidden border border-slate-200">
+      <div class="px-6 py-4 kwe-modal-head flex items-center justify-between gap-3">
+        <div class="min-w-0">
+          <span class="text-xs uppercase tracking-wider kwe-eyebrow-jade font-semibold">Workspace Lifecycle Initialization</span>
+          <h3 class="text-lg font-bold mt-0.5 text-slate-900">项目工作区初始化与状态重置向导</h3>
+        </div>
+        <button id="closeInitModalBtn" type="button" data-kwe-click="closeInitWorkspaceModal()" class="px-3 py-1.5 rounded-full bg-white hover:bg-slate-100 text-slate-700 border border-slate-300 text-xs font-medium shrink-0 transition">
+          关闭 ✕
+        </button>
+      </div>
+      <div class="p-6 space-y-4 max-h-[80vh] overflow-y-auto custom-scrollbar text-xs">
+        <div class="p-3.5 rounded-xl bg-amber-50 border border-amber-200 text-amber-900 leading-relaxed">
+          <strong>为什么要先初始化工作区？</strong> 不同玩具品类（如玩具手机、儿童写字板、儿童相机）的品牌词、适龄段、客单价与前置否词完全不同。通过显式初始化工作区，可彻底隔离演示数据与正式生产批次，杜绝跨品类或多次导入造成的状态污染。
+        </div>
+
+        <div class="space-y-2">
+          <label class="block font-bold text-slate-800">1. 选择初始化模式</label>
+          <div class="grid grid-cols-1 sm:grid-cols-3 gap-2.5">
+            <label class="cursor-pointer p-3 rounded-xl border border-slate-300 hover:border-blue-500 bg-slate-50/70 flex flex-col gap-1">
+              <span class="inline-flex items-center gap-1.5 font-bold text-slate-900">
+                <input type="radio" name="initModeRadio" value="clean" checked data-kwe-change="onInitModeRadioChange()" class="text-blue-600">
+                <span>空白生产环境初始化</span>
+              </span>
+              <span class="text-[11px] text-slate-500">清空所有旧批次与样本，建立干净的新项目待导入工作区</span>
+            </label>
+            <label class="cursor-pointer p-3 rounded-xl border border-slate-300 hover:border-blue-500 bg-slate-50/70 flex flex-col gap-1">
+              <span class="inline-flex items-center gap-1.5 font-bold text-slate-900">
+                <input type="radio" name="initModeRadio" value="demo_phone" data-kwe-change="onInitModeRadioChange()" class="text-blue-600">
+                <span>玩具手机模板 + 样本批次</span>
+              </span>
+              <span class="text-[11px] text-slate-500">加载玩具智能机词库，并将附件10词登记为受控样本批次</span>
+            </label>
+            <label class="cursor-pointer p-3 rounded-xl border border-slate-300 hover:border-blue-500 bg-slate-50/70 flex flex-col gap-1">
+              <span class="inline-flex items-center gap-1.5 font-bold text-slate-900">
+                <input type="radio" name="initModeRadio" value="config_only" data-kwe-change="onInitModeRadioChange()" class="text-blue-600">
+                <span>仅更新项目参数基线</span>
+              </span>
+              <span class="text-[11px] text-slate-500">保留台账中已导入的所有历史批次，仅更新下方产品配置</span>
+            </label>
+          </div>
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-1">
+          <div>
+            <label class="block font-semibold text-slate-700 mb-1">项目 / 产品线名称</label>
+            <input id="initProjNameInput" type="text" value="US站玩具新建项目" class="w-full px-3 py-2 rounded-lg border border-slate-300 focus:outline-none focus:border-blue-500 text-xs font-medium">
+          </div>
+          <div>
+            <label class="block font-semibold text-slate-700 mb-1">父体 ASIN / SKU 标识 (选填)</label>
+            <input id="initSkuInput" type="text" placeholder="如: B0XXXXXXXX / TOY-01" class="w-full px-3 py-2 rounded-lg border border-slate-300 focus:outline-none focus:border-blue-500 text-xs font-mono">
+          </div>
+          <div>
+            <label class="block font-semibold text-slate-700 mb-1">自有品牌词根 (多个用逗号分隔，无则留空)</label>
+            <input id="initOwnBrandInput" type="text" placeholder="如: kokodi (留空则不启用品牌词剥离)" class="w-full px-3 py-2 rounded-lg border border-slate-300 focus:outline-none focus:border-blue-500 text-xs font-mono">
+          </div>
+          <div class="grid grid-cols-2 gap-2">
+            <div>
+              <label class="block font-semibold text-slate-700 mb-1">基准目标 ACOS (%)</label>
+              <input id="initAcosInput" type="number" step="1" value="22" class="w-full px-3 py-2 rounded-lg border border-slate-300 focus:outline-none focus:border-blue-500 text-xs">
+            </div>
+            <div>
+              <label class="block font-semibold text-slate-700 mb-1">基准目标 CPA ($)</label>
+              <input id="initCpaInput" type="number" step="0.2" value="6.80" class="w-full px-3 py-2 rounded-lg border border-slate-300 focus:outline-none focus:border-blue-500 text-xs">
+            </div>
+          </div>
+          <div>
+            <label class="block font-semibold text-slate-700 mb-1">预设前置否词模板</label>
+            <select id="initNegPresetSelect" class="w-full px-3 py-2 rounded-lg border border-slate-300 bg-white text-xs">
+              <option value="toy_phone">儿童玩具手机模板 (含SIM卡/运营商/真机拦截词)</option>
+              <option value="general_toys">通用美国站玩具模板 (仅保留二手/免费/错配成人婴儿词)</option>
+              <option value="empty">空白前置否词库 (完全自行添加)</option>
+            </select>
+          </div>
+          <div>
+            <label class="block font-semibold text-slate-700 mb-1">默认季节节奏阶段</label>
+            <select id="initSeasonSelect" class="w-full px-3 py-2 rounded-lg border border-slate-300 bg-white text-xs">
+              <option value="off">1. 平季稳态期 (2-9月)</option>
+              <option value="ramp">2. 旺季启动期 (10-11月初)</option>
+              <option value="peak">3. 黑五圣诞爆发期 (11中-12.20)</option>
+              <option value="shrink">4. 节后急速收缩期 (12.21后)</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="pt-4 border-t border-slate-200 flex items-center justify-between gap-3">
+          <span class="text-[11px] text-slate-500">提示：初始化后所有配置与后续导入批次会自动同步至本地持久化台账</span>
+          <div class="flex items-center gap-2">
+            <button type="button" data-kwe-click="closeInitWorkspaceModal()" class="px-4 py-2 rounded-lg border border-slate-300 bg-white hover:bg-slate-50 text-slate-700 font-medium">取消</button>
+            <button id="confirmInitWorkspaceBtn" type="button" data-kwe-click="confirmWorkspaceInitialization()" class="px-4 py-2 rounded-lg bg-blue-600 hover:bg-blue-500 text-white font-semibold shadow-xs">执行工作区初始化</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Import Batch Registration & Isolation Modal -->
+  <div id="importBatchModal" class="fixed inset-0 z-40 bg-slate-900/60 backdrop-blur-xs hidden items-center justify-center p-4">
+    <div class="bg-white rounded-2xl shadow-2xl max-w-xl w-full overflow-hidden border border-slate-200">
+      <div class="px-6 py-4 kwe-modal-head flex items-center justify-between gap-3">
+        <div class="min-w-0">
+          <span class="text-xs uppercase tracking-wider kwe-eyebrow-accent font-semibold">Batch Ingestion &amp; Isolation Gate</span>
+          <h3 class="text-lg font-bold mt-0.5 text-slate-900">导入数据批次登记与隔离策略确认</h3>
+        </div>
+        <button id="closeImportModalBtn" type="button" data-kwe-click="closeImportBatchModal()" class="px-3 py-1.5 rounded-full bg-white hover:bg-slate-100 text-slate-700 border border-slate-300 text-xs font-medium shrink-0 transition">
+          关闭 ✕
+        </button>
+      </div>
+      <div class="p-6 space-y-4 text-xs max-h-[80vh] overflow-y-auto custom-scrollbar">
+        <div id="pendingImportPreviewBox" class="p-3.5 rounded-xl bg-blue-50 border border-blue-200 space-y-1 text-slate-800"></div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+          <div>
+            <label class="block font-semibold text-slate-700 mb-1">批次标签名称 (便于台账追溯)</label>
+            <input id="importBatchLabelInput" type="text" class="w-full px-3 py-2 rounded-lg border border-slate-300 focus:outline-none focus:border-blue-500 font-medium">
+          </div>
+          <div>
+            <label class="block font-semibold text-slate-700 mb-1">报告周期 / 广告源属性</label>
+            <select id="importBatchScopeSelect" class="w-full px-3 py-2 rounded-lg border border-slate-300 bg-white">
+              <option value="全量搜索词报告">全量搜索词报告 (Auto+Manual)</option>
+              <option value="SP-Auto自动报告">SP-Auto 自动广告独立报告</option>
+              <option value="SP-Manual手动报告">SP-Manual 手动广告独立报告</option>
+              <option value="平季基准周期">平季基准周期快照</option>
+              <option value="旺季启动/爆发周期">旺季启动 / 爆发周期快照</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="space-y-2">
+          <label class="block font-bold text-slate-800">选择批次载入与隔离方式（防止多次导入数据混杂）</label>
+          <div class="space-y-2">
+            <label class="cursor-pointer p-3 rounded-xl border border-blue-200 bg-blue-50/40 flex items-start gap-2.5">
+              <input type="radio" name="batchIngestMode" value="isolate" checked class="mt-0.5 text-blue-600">
+              <div>
+                <div class="font-bold text-slate-900">独立激活此新批次（推荐默认 · 严防新旧数据串味）</div>
+                <div class="text-[11px] text-slate-600">将旧批次（含默认演示样本）自动挂起封存，当前工作台与桑基图仅计算本次新导入批次；历史批次仍保留在台账中供随时切换与对比。</div>
+              </div>
+            </label>
+            <label class="cursor-pointer p-3 rounded-xl border border-slate-200 hover:border-slate-300 bg-white flex items-start gap-2.5">
+              <input type="radio" name="batchIngestMode" value="merge" class="mt-0.5 text-blue-600">
+              <div>
+                <div class="font-bold text-slate-900">与当前已启用批次合并去重计算（适合同周期 Auto + Manual 多表拼合）</div>
+                <div class="text-[11px] text-slate-600">保留当前处于“启用中”的批次，将本次导入作为新批次一并纳入跨活动同词合并计算，并标注各自批次来源。</div>
+              </div>
+            </label>
+            <label class="cursor-pointer p-3 rounded-xl border border-slate-200 hover:border-rose-300 bg-white flex items-start gap-2.5">
+              <input type="radio" name="batchIngestMode" value="replace_all" class="mt-0.5 text-rose-600">
+              <div>
+                <div class="font-bold text-rose-700">清空全部历史批次台账，仅保留本次导入作为 BATCH-001</div>
+                <div class="text-[11px] text-slate-600">彻底移除之前所有的导入记录与样本批次，从零重建批次编号。</div>
+              </div>
+            </label>
+          </div>
+        </div>
+
+        <div class="pt-3 border-t border-slate-200 flex items-center justify-end gap-2">
+          <button type="button" data-kwe-click="closeImportBatchModal()" class="px-4 py-2 rounded-lg border border-slate-300 bg-white hover:bg-slate-50 text-slate-700 font-medium">取消导入</button>
+          <button id="confirmImportBatchBtn" type="button" data-kwe-click="commitPendingImportBatches()" class="px-4 py-2 rounded-lg bg-blue-600 hover:bg-blue-500 text-white font-semibold shadow-xs">确认登记入库并计算</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
   <!-- Editorial Workbench Hero Header -->
   <header class="kwe-hero-head">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 py-6 flex flex-col lg:flex-row lg:items-center justify-between gap-4">
-      <div class="flex items-start sm:items-center gap-3.5 min-w-0">
-        <div class="kwe-hero-seal shrink-0" aria-hidden="true">
-          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/>
-          </svg>
-        </div>
-        <div class="min-w-0">
-          <div class="flex items-center gap-2.5 flex-wrap">
-            <h1 class="font-bold text-slate-900">Amazon US Toys · 万级关键词广告策略批处理引擎</h1>
-            <span id="datasetBadge" class="kwe-dataset-pill text-xs px-2.5 py-0.5 rounded-full font-medium">已载入附件真实样本 (10行 / 8唯一词)</span>
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 py-5 space-y-4">
+      <div class="flex items-start sm:items-center justify-between gap-3 flex-wrap">
+        <div class="flex items-start sm:items-center gap-3.5 min-w-0">
+          <div class="kwe-hero-seal shrink-0" aria-hidden="true">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/>
+            </svg>
           </div>
-          <p class="kwe-hero-sub text-xs sm:text-sm text-slate-600 mt-1.5">针对玩具类目“流量极度分散 + 同Target转化分化 + 旺季词池7倍膨胀收缩”构建的 O(N) 批处理决策系统</p>
+          <div class="min-w-0">
+            <div class="flex items-center gap-2.5 flex-wrap">
+              <h1 class="font-bold text-slate-900">Amazon US Toys · 万级关键词广告策略批处理引擎</h1>
+              <span id="datasetBadge" class="kwe-dataset-pill text-xs px-2.5 py-0.5 rounded-full font-medium">已载入附件真实样本 (10行 / 8唯一词)</span>
+            </div>
+            <p class="kwe-hero-sub text-xs sm:text-sm text-slate-600 mt-1">针对玩具类目“流量极度分散 + 同Target转化分化 + 旺季词池7倍膨胀收缩”构建的 O(N) 批处理决策系统</p>
+          </div>
         </div>
       </div>
 
       <div class="kwe-hero-actions flex items-center gap-2 flex-wrap shrink-0">
+        <button id="openInitModalBtn" type="button" data-kwe-click="openInitWorkspaceModal()" class="kwe-btn-amber inline-flex items-center gap-1.5 px-3.5 py-2 rounded-full text-xs font-semibold transition whitespace-nowrap">
+          <svg class="w-4 h-4 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/></svg>
+          <span>工作区初始化</span>
+        </button>
+
         <label for="searchTermFileInput" class="kwe-btn-primary cursor-pointer inline-flex items-center gap-1.5 px-3.5 py-2 rounded-full text-xs font-semibold transition whitespace-nowrap">
           <svg class="w-4 h-4 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"/></svg>
           <span>批量导入搜索词表 (.xlsx/.csv)</span>
         </label>
-        <input id="searchTermFileInput" type="file" accept=".xlsx,.xls,.csv,.tsv" class="hidden" data-kwe-change="handleSearchTermUpload(event)">
+        <input id="searchTermFileInput" type="file" multiple accept=".xlsx,.xls,.csv,.tsv" class="hidden" data-kwe-change="handleSearchTermUpload(event)">
 
         <button id="toggleConfigBtn" type="button" data-kwe-click="toggleConfigDrawer()" class="kwe-btn-ghost inline-flex items-center gap-1.5 px-3.5 py-2 rounded-full text-xs font-medium transition whitespace-nowrap">
           <svg class="w-4 h-4 text-amber-700 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4"/></svg>
@@ -133,24 +304,51 @@
     </div>
   </section>
 
-  <!-- Sticky 5-Module Sub-Navigation Bar -->
+  <!-- Global Workspace & Active Batch Context Lock Bar -->
+  <div class="bg-slate-100 border-b border-slate-200">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 py-2 flex flex-wrap items-center justify-between gap-2 text-xs">
+      <div class="flex items-center gap-2 flex-wrap">
+        <span class="font-bold text-slate-700">当前工作区：</span>
+        <span id="ctxProjectLabel" class="px-2 py-0.5 rounded bg-white border border-slate-300 font-semibold text-slate-900"></span>
+        <span class="text-slate-400">|</span>
+        <span class="font-bold text-slate-700">参与计算批次：</span>
+        <span id="ctxBatchStatusLabel" class="px-2 py-0.5 rounded bg-emerald-100 text-emerald-900 font-semibold"></span>
+      </div>
+      <div class="flex items-center gap-2">
+        <span id="ctxStorageBadge" class="text-[11px] text-slate-500"></span>
+        <button type="button" id="quickJumpBatchBtn" data-kwe-click="switchTab('batches')" class="px-2.5 py-1 rounded-md bg-white hover:bg-blue-50 text-blue-700 border border-blue-200 font-semibold transition">
+          管理导入批次 / 切换数据源 →
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Sticky 7-Module Sub-Navigation Bar -->
   <div class="kwe-subnav-bar">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 py-2.5 flex items-center gap-2 overflow-x-auto custom-scrollbar">
-      <button type="button" id="tabBtn_workbench" data-kwe-click="switchTab('workbench')" class="tab-nav-btn tab-btn-active px-3.5 py-1.5 rounded-full border text-xs sm:text-sm font-medium whitespace-nowrap transition inline-flex items-center gap-1.5">
-        <span>① 批处理投放与匹配工作台</span>
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 py-2.5 flex items-center gap-1.5 sm:gap-2 overflow-x-auto custom-scrollbar">
+      <button type="button" id="tabBtn_batches" data-kwe-click="switchTab('batches')" class="tab-nav-btn tab-btn-active px-3 py-1.5 rounded-full border text-xs font-medium whitespace-nowrap transition inline-flex items-center gap-1.5">
+        <span>0. 初始化与导入批次台账</span>
+        <span id="batchCountPill" class="kwe-count-pill px-1.5 py-0.5 text-[11px] rounded-full font-bold">1/1</span>
       </button>
-      <button type="button" id="tabBtn_ngram" data-kwe-click="switchTab('ngram')" class="tab-nav-btn kwe-tab-idle px-3.5 py-1.5 rounded-full border text-xs sm:text-sm font-medium whitespace-nowrap transition inline-flex items-center gap-1.5">
-        <span>② 词根N-Gram与分舱架构</span>
+      <button type="button" id="tabBtn_workbench" data-kwe-click="switchTab('workbench')" class="tab-nav-btn kwe-tab-idle px-3 py-1.5 rounded-full border text-xs font-medium whitespace-nowrap transition inline-flex items-center gap-1.5">
+        <span>1. 批处理投放与匹配工作台</span>
       </button>
-      <button type="button" id="tabBtn_negatives" data-kwe-click="switchTab('negatives')" class="tab-nav-btn kwe-tab-idle px-3.5 py-1.5 rounded-full border text-xs sm:text-sm font-medium whitespace-nowrap transition inline-flex items-center gap-1.5">
-        <span>③ 前置与绩效三层否定词库</span>
+      <button type="button" id="tabBtn_sankey" data-kwe-click="switchTab('sankey')" class="tab-nav-btn kwe-tab-idle px-3 py-1.5 rounded-full border text-xs font-medium whitespace-nowrap transition inline-flex items-center gap-1.5">
+        <span>桑基图词根匹配与建组沙盘</span>
+        <span class="kwe-new-pill px-1.5 py-0.5 text-[10px] rounded-full font-bold">NEW</span>
+      </button>
+      <button type="button" id="tabBtn_ngram" data-kwe-click="switchTab('ngram')" class="tab-nav-btn kwe-tab-idle px-3 py-1.5 rounded-full border text-xs font-medium whitespace-nowrap transition inline-flex items-center gap-1.5">
+        <span>2. 词根N-Gram与分舱架构</span>
+      </button>
+      <button type="button" id="tabBtn_negatives" data-kwe-click="switchTab('negatives')" class="tab-nav-btn kwe-tab-idle px-3 py-1.5 rounded-full border text-xs font-medium whitespace-nowrap transition inline-flex items-center gap-1.5">
+        <span>3. 前置与绩效三层否定词库</span>
         <span id="negCountPill" class="kwe-neg-pill px-1.5 py-0.5 text-[11px] rounded-full font-semibold">0</span>
       </button>
-      <button type="button" id="tabBtn_seasonality" data-kwe-click="switchTab('seasonality')" class="tab-nav-btn kwe-tab-idle px-3.5 py-1.5 rounded-full border text-xs sm:text-sm font-medium whitespace-nowrap transition inline-flex items-center gap-1.5">
-        <span>④ 旺季曲线与ABA三拐点</span>
+      <button type="button" id="tabBtn_seasonality" data-kwe-click="switchTab('seasonality')" class="tab-nav-btn kwe-tab-idle px-3 py-1.5 rounded-full border text-xs font-medium whitespace-nowrap transition inline-flex items-center gap-1.5">
+        <span>4. 旺季流量曲线与ABA三拐点</span>
       </button>
-      <button type="button" id="tabBtn_architecture" data-kwe-click="switchTab('architecture')" class="tab-nav-btn kwe-tab-idle px-3.5 py-1.5 rounded-full border text-xs sm:text-sm font-medium whitespace-nowrap transition inline-flex items-center gap-1.5">
-        <span>⑤ 底层算法与Python源码</span>
+      <button type="button" id="tabBtn_architecture" data-kwe-click="switchTab('architecture')" class="tab-nav-btn kwe-tab-idle px-3 py-1.5 rounded-full border text-xs font-medium whitespace-nowrap transition inline-flex items-center gap-1.5">
+        <span>5. 底层算法与Python源码</span>
       </button>
     </div>
   </div>
@@ -158,8 +356,113 @@
   <!-- Main Content Container -->
   <main class="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 py-6 space-y-6">
 
+    <!-- Empty Workspace Banner (Shown on analytical tabs when 0 batches are active) -->
+    <div id="emptyActiveBatchBanner" class="hidden bg-amber-50 border-2 border-dashed border-amber-300 rounded-2xl p-6 text-center space-y-3">
+      <div class="text-base font-bold text-amber-950">当前工作区处于“零激活批次”干净状态，暂无参与计算的词表数据</div>
+      <p class="text-xs text-amber-800 max-w-xl mx-auto">请前往【0. 初始化与导入批次台账】导入您的亚马逊搜索词报告 (.xlsx/.csv)，或在台账中勾选启用已有批次，也可一键挂载附件样本批次进行功能演练。</p>
+      <div class="flex items-center justify-center gap-2 pt-1">
+        <label for="searchTermFileInput" class="cursor-pointer px-4 py-2 rounded-lg bg-blue-600 hover:bg-blue-500 text-white text-xs font-semibold transition">立即导入搜索词批次 (.xlsx/.csv)</label>
+        <button type="button" data-kwe-click="switchTab('batches')" class="px-4 py-2 rounded-lg bg-white border border-amber-400 text-amber-900 text-xs font-semibold hover:bg-amber-100 transition">打开批次管理台账</button>
+      </div>
+    </div>
+
+    <!-- ==================== TAB 0: WORKSPACE INIT & IMPORT BATCH LEDGER ==================== -->
+    <section id="tabPanel_batches" class="space-y-6">
+      <!-- Step Architecture Cards -->
+      <div class="grid grid-cols-1 lg:grid-cols-3 gap-4">
+        <!-- Workspace Profile Card -->
+        <div class="bg-white rounded-2xl border border-slate-200 shadow-2xs p-5 flex flex-col justify-between space-y-4">
+          <div class="space-y-2">
+            <div class="flex items-center justify-between">
+              <span class="text-[11px] font-bold uppercase tracking-wider px-2 py-0.5 rounded bg-amber-100 text-amber-900">Step 1 · 工作区初始化档案</span>
+              <span id="wsEnvBadge" class="text-[11px] px-2 py-0.5 rounded-full font-semibold"></span>
+            </div>
+            <h3 id="wsCardProjTitle" class="text-base font-bold text-slate-900"></h3>
+            <div id="wsCardMetaGrid" class="grid grid-cols-2 gap-2 pt-1 text-xs text-slate-600"></div>
+          </div>
+          <div class="pt-3 border-t border-slate-100 flex flex-wrap items-center gap-2">
+            <button type="button" data-kwe-click="openInitWorkspaceModal()" class="px-3 py-1.5 rounded-lg bg-slate-900 hover:bg-slate-800 text-white text-xs font-semibold transition">重新初始化 / 切换品类</button>
+            <button type="button" data-kwe-click="exportWorkspaceSnapshotJson()" class="px-3 py-1.5 rounded-lg border border-slate-300 bg-white hover:bg-slate-50 text-slate-700 text-xs font-medium transition">备份工作区(.json)</button>
+            <label for="restoreSnapshotInput" class="cursor-pointer px-3 py-1.5 rounded-lg border border-slate-300 bg-white hover:bg-slate-50 text-slate-700 text-xs font-medium transition">恢复备份</label>
+            <input id="restoreSnapshotInput" type="file" accept=".json" class="hidden" data-kwe-change="importWorkspaceSnapshotJson(event)">
+          </div>
+        </div>
+
+        <!-- Batch Ingestion Rules & Multi-File Dropzone -->
+        <div class="lg:col-span-2 bg-white rounded-2xl border border-slate-200 shadow-2xs p-5 flex flex-col justify-between space-y-4">
+          <div class="flex flex-col sm:flex-row sm:items-start justify-between gap-3">
+            <div>
+              <span class="text-[11px] font-bold uppercase tracking-wider px-2 py-0.5 rounded bg-blue-100 text-blue-800">Step 2 · 批次化受控导入引擎</span>
+              <h3 class="text-base font-bold text-slate-900 mt-1">支持单表独立批次隔离 & 同周期多表勾选合并去重</h3>
+              <p class="text-xs text-slate-500 mt-0.5">每次上传文件均生成独立 <code class="font-mono text-slate-700">BATCH-ID</code> 台账记录。默认采用<strong>“独立激活新批次”</strong>自动封存旧数据（包括初始演示批次），从根源杜绝新旧词表混杂！</p>
+            </div>
+            <div class="flex items-center gap-2 shrink-0">
+              <button type="button" data-kwe-click="clearAllBatchesToClean()" class="px-3 py-1.5 rounded-lg border border-rose-200 bg-rose-50 hover:bg-rose-100 text-rose-700 text-xs font-semibold transition">清空全部批次归零</button>
+              <button type="button" data-kwe-click="mountDemoBatchExplicitly()" class="px-3 py-1.5 rounded-lg border border-slate-300 bg-white hover:bg-slate-50 text-slate-700 text-xs font-medium transition">挂载样本批次</button>
+            </div>
+          </div>
+
+          <label for="searchTermFileInput" class="cursor-pointer border-2 border-dashed border-blue-300 hover:border-blue-500 bg-blue-50/40 hover:bg-blue-50/80 rounded-xl p-5 text-center transition block">
+            <div class="text-sm font-bold text-blue-900">点击选择 1 个或多个亚马逊搜索词报告 (.xlsx / .xls / .csv)</div>
+            <div class="text-xs text-slate-500 mt-1">支持同时选中 SP-Auto 与 SP-Manual 多份报表 → 弹窗确认批次标签与【独立隔离 / 多批次合并】策略后再入库计算</div>
+          </label>
+        </div>
+      </div>
+
+      <!-- Batch Ledger Table -->
+      <div class="bg-white rounded-2xl border border-slate-200 shadow-2xs overflow-hidden">
+        <div class="p-4 border-b border-slate-200 bg-slate-50/70 flex flex-wrap items-center justify-between gap-3">
+          <div>
+            <h3 class="text-sm font-bold text-slate-900">已导入数据批次台账 (Import Batch Ledger)</h3>
+            <p class="text-xs text-slate-500">勾选多个批次可跨表合并去重（如合并同周 Auto + Manual 报表）；点击“仅看此批次(Solo)”可一键单独锁定单一批次进行纯净分析</p>
+          </div>
+          <div class="flex items-center gap-2">
+            <button type="button" data-kwe-click="setAllBatchesEnabled(true)" class="px-3 py-1.5 rounded-lg border border-slate-300 bg-white hover:bg-slate-100 text-slate-700 text-xs font-medium transition">全部启用合并</button>
+            <button type="button" data-kwe-click="switchTab('sankey')" class="px-3.5 py-1.5 rounded-lg bg-blue-600 hover:bg-blue-500 text-white text-xs font-semibold transition">前往桑基图建组 →</button>
+          </div>
+        </div>
+
+        <div class="overflow-x-auto custom-scrollbar">
+          <table class="w-full text-left border-collapse">
+            <thead>
+              <tr class="bg-slate-100/80 text-[11px] font-semibold uppercase tracking-wider text-slate-600 border-b border-slate-200">
+                <th class="py-2.5 px-4">参与计算状态</th>
+                <th class="py-2.5 px-3">批次编号</th>
+                <th class="py-2.5 px-3">批次标签名称 / 源文件</th>
+                <th class="py-2.5 px-3">周期/渠道类型</th>
+                <th class="py-2.5 px-3">导入时间</th>
+                <th class="py-2.5 px-3 text-right">原始行数</th>
+                <th class="py-2.5 px-3 text-right">批次花费 ($)</th>
+                <th class="py-2.5 px-3 text-right">批次订单</th>
+                <th class="py-2.5 px-3 text-right">批次 ACOS</th>
+                <th class="py-2.5 px-4 text-right">批次隔离操作</th>
+              </tr>
+            </thead>
+            <tbody id="batchLedgerTableBody" class="divide-y divide-slate-100 text-xs"></tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- Cross-Batch Diff Analyzer (Batch A vs Batch B) -->
+      <div class="bg-white rounded-2xl border border-slate-200 shadow-2xs p-5 space-y-4">
+        <div class="flex flex-wrap items-center justify-between gap-3">
+          <div>
+            <span class="text-[11px] font-bold uppercase tracking-wider px-2 py-0.5 rounded bg-indigo-100 text-indigo-800">Multi-Batch Wave Comparison</span>
+            <h3 class="text-sm font-bold text-slate-900 mt-1">跨批次词池膨胀收缩与异动对比器（基准批次 A vs 新周期批次 B）</h3>
+            <p class="text-xs text-slate-500">当导入 ≥2 个周期批次（例如 10月平季批次 vs 11月黑五启动批次）时，自动对比识别【新涌入出单词、CVR翻倍词、CPA恶化需收口词】</p>
+          </div>
+          <div class="flex items-center gap-2 flex-wrap">
+            <select id="diffBatchASelect" data-kwe-change="renderBatchDiffComparison()" class="px-2.5 py-1.5 text-xs rounded-lg border border-slate-300 bg-white font-medium"></select>
+            <span class="text-xs font-bold text-slate-400">对比 →</span>
+            <select id="diffBatchBSelect" data-kwe-change="renderBatchDiffComparison()" class="px-2.5 py-1.5 text-xs rounded-lg border border-slate-300 bg-white font-medium"></select>
+          </div>
+        </div>
+        <div id="batchDiffResultBox" class="text-xs"></div>
+      </div>
+    </section>
+
     <!-- ==================== TAB 1: WORKBENCH ==================== -->
-    <section id="tabPanel_workbench" class="space-y-6">
+    <section id="tabPanel_workbench" class="hidden space-y-6">
       <!-- KPI Strip -->
       <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-3">
         <div class="bg-white p-4 rounded-xl border border-slate-200 shadow-2xs">
@@ -300,6 +603,127 @@
             <button type="button" id="nextPageBtn" data-kwe-click="changePage(1)" class="px-2.5 py-1 rounded border border-slate-300 bg-white hover:bg-slate-100 disabled:opacity-40">下一页</button>
           </div>
         </div>
+      </div>
+    </section>
+
+    <!-- ==================== TAB SANKEY: ROOT -> MATCH TYPE -> TERMS -> AD GROUP ==================== -->
+    <section id="tabPanel_sankey" class="hidden space-y-5">
+      <!-- Top Control Console -->
+      <div class="bg-white rounded-2xl border border-slate-200 shadow-2xs p-4 sm:p-5 space-y-4">
+        <div class="flex flex-col lg:flex-row lg:items-center justify-between gap-3">
+          <div>
+            <div class="flex items-center gap-2">
+              <span class="text-[11px] font-bold uppercase tracking-wider px-2 py-0.5 rounded bg-blue-100 text-blue-800">Visual Ad Group Topology</span>
+              <h2 class="text-base sm:text-lg font-bold text-slate-900">词根 → 匹配方式 → 裂变搜索词 → 目标广告组 桑基流向图</h2>
+            </div>
+            <p class="text-xs text-slate-500 mt-1">选定或输入任意根词，直观透视其通过【精准 / 词组 / 宽泛】分别匹配到哪些其余搜索词，并自动生成带隔离否词的广告组落地方案（点击图中任意节点或流向带可锁定高亮路径）</p>
+          </div>
+          <div class="flex items-center gap-2 flex-wrap">
+            <button type="button" id="resetSankeyFocusBtn" data-kwe-click="clearSankeyFocus()" class="hidden px-3 py-1.5 rounded-lg bg-amber-100 hover:bg-amber-200 text-amber-900 text-xs font-semibold transition">
+              清除节点高亮锁定
+            </button>
+            <button type="button" id="exportSankeyGroupsBtn" data-kwe-click="exportSankeyAdGroupPlan()" class="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-lg bg-blue-600 hover:bg-blue-500 text-white text-xs font-semibold transition shadow-2xs">
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg>
+              <span>导出当前桑基建组方案 (.xlsx)</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- Quick Seed Root Pills -->
+        <div class="flex items-center gap-1.5 flex-wrap pt-1">
+          <span class="text-xs font-semibold text-slate-600 mr-1">快捷选根词：</span>
+          <div id="sankeyQuickRootPills" class="flex items-center gap-1.5 flex-wrap"></div>
+        </div>
+
+        <!-- Detailed Controls Grid -->
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-3 pt-2 border-t border-slate-100">
+          <div>
+            <label class="block text-[11px] font-semibold text-slate-600 mb-1">1. 选择核心词根 / 全景模式</label>
+            <select id="sankeyRootSelect" data-kwe-change="onSankeyRootSelectChange()" class="w-full px-2.5 py-1.5 text-xs rounded-lg border border-slate-300 bg-white font-medium text-slate-800 focus:outline-none focus:border-blue-500"></select>
+          </div>
+          <div>
+            <label class="block text-[11px] font-semibold text-slate-600 mb-1">或输入自定义根词实时推演</label>
+            <div class="flex gap-1.5">
+              <input id="sankeyCustomRootInput" type="text" placeholder="如: kids phone 或 smart phone" class="w-full px-2.5 py-1.5 text-xs rounded-lg border border-slate-300 focus:outline-none focus:border-blue-500 font-mono">
+              <button type="button" id="applyCustomRootBtn" data-kwe-click="applyCustomSankeyRoot()" class="px-2.5 py-1.5 rounded-lg bg-slate-900 hover:bg-slate-800 text-white text-xs font-semibold shrink-0 transition">推演</button>
+            </div>
+          </div>
+          <div>
+            <label class="block text-[11px] font-semibold text-slate-600 mb-1">2. 匹配关系映射逻辑</label>
+            <select id="sankeyMatchLogicSelect" data-kwe-change="renderSankeyWorkbench()" class="w-full px-2.5 py-1.5 text-xs rounded-lg border border-slate-300 bg-white font-medium text-slate-800 focus:outline-none focus:border-blue-500">
+              <option value="simulated">建组推演：亚马逊精准/词组/宽泛语法匹配</option>
+              <option value="historical">实盘复盘：按报告原始匹配方式来源流向</option>
+            </select>
+          </div>
+          <div>
+            <label class="block text-[11px] font-semibold text-slate-600 mb-1">3. 流向带宽权重指标</label>
+            <select id="sankeyMetricSelect" data-kwe-change="renderSankeyWorkbench()" class="w-full px-2.5 py-1.5 text-xs rounded-lg border border-slate-300 bg-white font-medium text-slate-800 focus:outline-none focus:border-blue-500">
+              <option value="orders">按广告订单量 (Orders)</option>
+              <option value="spend">按广告花费 (Spend $)</option>
+              <option value="sales">按广告销售额 (Sales $)</option>
+              <option value="clicks">按点击量 (Clicks)</option>
+            </select>
+          </div>
+          <div>
+            <label class="block text-[11px] font-semibold text-slate-600 mb-1">4. 展示裂变词上限 & 交叉模式</label>
+            <div class="flex items-center gap-2">
+              <select id="sankeyTopLimitSelect" data-kwe-change="renderSankeyWorkbench()" class="w-1/2 px-2 py-1.5 text-xs rounded-lg border border-slate-300 bg-white font-medium text-slate-800">
+                <option value="12">Top 12 词</option>
+                <option value="20" selected>Top 20 词</option>
+                <option value="32">Top 32 词</option>
+              </select>
+              <label class="inline-flex items-center gap-1 text-[11px] text-slate-700 cursor-pointer select-none" title="多根词全景模式下，允许同一搜索词同时连向多个可匹配根词以排查内部抢流">
+                <input id="sankeyAllowCrossCheck" type="checkbox" data-kwe-change="renderSankeyWorkbench()" class="rounded border-slate-300 text-blue-600">
+                <span>查交叉抢流</span>
+              </label>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Sankey Diagram Canvas Card -->
+      <div class="bg-white rounded-2xl border border-slate-200 shadow-2xs p-4 sm:p-5 relative">
+        <!-- Summary Strip -->
+        <div id="sankeySummaryStrip" class="grid grid-cols-2 sm:grid-cols-4 gap-3 mb-4"></div>
+
+        <!-- Unified Scrollable Sankey Stage (keeps 4 column headers aligned with SVG columns across all viewports) -->
+        <div class="overflow-x-auto custom-scrollbar">
+          <div class="kwe-sankey-stage">
+            <div class="kwe-sankey-cols grid grid-cols-4 gap-2 px-3 py-2 rounded-lg text-xs font-semibold mb-2">
+              <div class="flex items-center gap-1.5 whitespace-nowrap"><span class="w-2 h-2 rounded-full bg-amber-400"></span>① 投放根词 (Seed Root)</div>
+              <div class="flex items-center gap-1.5 justify-center whitespace-nowrap"><span class="w-2 h-2 rounded-full bg-emerald-400"></span>② 匹配方式演化 (Match Type)</div>
+              <div class="flex items-center gap-1.5 justify-center whitespace-nowrap"><span class="w-2 h-2 rounded-full bg-sky-400"></span>③ 匹配到的其余词 (Matched Terms)</div>
+              <div class="flex items-center gap-1.5 justify-end pr-1 whitespace-nowrap"><span class="w-2 h-2 rounded-full bg-indigo-400"></span>④ 直观建立广告组 (Target Ad Group)</div>
+            </div>
+            <div id="sankeyCanvasContainer" class="w-full relative min-h-[420px]">
+              <svg id="sankeySvg" class="w-full block select-none" height="480"></svg>
+            </div>
+          </div>
+        </div>
+        <!-- Floating Tooltip -->
+        <div id="sankeyTooltip" class="hidden pointer-events-none fixed z-50 bg-slate-900/95 text-white text-xs rounded-xl px-3.5 py-2.5 shadow-xl border border-slate-700 max-w-xs"></div>
+
+        <!-- Legend & Matching Rule Footnote -->
+        <div class="mt-3 pt-3 border-t border-slate-100 flex flex-wrap items-center justify-between gap-2 text-[11px] text-slate-500">
+          <div class="flex flex-wrap items-center gap-3">
+            <span class="inline-flex items-center gap-1"><span class="w-3 h-3 rounded-xs bg-blue-600 inline-block"></span>精准匹配 [Exact]：词序与词干完全一致(含单复数)</span>
+            <span class="inline-flex items-center gap-1"><span class="w-3 h-3 rounded-xs bg-emerald-600 inline-block"></span>词组匹配 "Phrase"：保持根词连续词序的前后缀扩展</span>
+            <span class="inline-flex items-center gap-1"><span class="w-3 h-3 rounded-xs bg-indigo-500 inline-block"></span>宽泛匹配 +Broad：根词中间插词或词序重排裂变</span>
+            <span class="inline-flex items-center gap-1"><span class="w-3 h-3 rounded-xs bg-teal-600 inline-block"></span>商品/自动关联：ASIN定位或自动紧密关联</span>
+          </div>
+          <div class="text-slate-400">提示：点击任意节点可高亮上下游链路并筛选下方建组卡片</div>
+        </div>
+      </div>
+
+      <!-- Direct Ad Group Creation Blueprint Cards -->
+      <div class="space-y-3">
+        <div class="flex flex-wrap items-center justify-between gap-2">
+          <div>
+            <h3 class="text-base font-bold text-slate-900">基于当前桑基流向生成的【广告组直观建组执行单】</h3>
+            <p class="text-xs text-slate-500">直接回答“每个广告组放什么词、开什么匹配方式、出多少竞价、组内必须挂哪些否定词防止流量串台”</p>
+          </div>
+        </div>
+        <div id="sankeyAdGroupCardsGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4"></div>
       </div>
     </section>
 
