@@ -1,0 +1,48 @@
+---
+import Base from '../../../layouts/Base.astro';
+import body from '../../../legacy/investing/banking/us-bank-accounts-and-cards-guide/body.html?raw';
+import '../../../legacy/investing/banking/us-bank-accounts-and-cards-guide/style.css';
+
+const title = "美国银行账户与银行卡体系详解：账户容器、支付介质与信用闭环";
+const description = "剥离 Checking/Savings 底层资金容器与 Debit/Credit/Virtual 前端支付介质，结合 EFTA、FCBA 与 Durbin 修正案拆解 Capital One 四阶产品矩阵与资金流·信用流双轨闭环。";
+const headings = Array.from(
+  body.matchAll(/<h2 id="([^"]+)">([^<]+)<\/h2>/g),
+  ([, id, text]) => ({ id, text }),
+);
+---
+<Base title={title + ' · Cavno'} description={description}>
+  <main id="ubk-main">
+    <section class="cv-page-head ubk-page-head">
+      <div class="cv-wrap">
+        <div class="cv-eyebrow">Investing · Banking &amp; Cards</div>
+        <h1 class="cv-page-title ubk-main-title" id="ubk-title">{title.split(/(?<=[，：、])/u).map((part) => <span class="ubk-title-chunk">{part}</span>)}</h1>
+        <p class="cv-lede ubk-main-lede">{description}</p>
+        <div class="ubk-page-links">
+          <a class="cv-crumb-back" href="/investing/banking/">← 返回银行卡栏目</a>
+          <a class="cv-crumb-back" href="/investing/">Investing 总览</a>
+          <a class="cv-crumb-back" href="/investing/research/itin-functions-and-underlying-principles/">关联阅读：ITIN的作用与底层原理 →</a>
+        </div>
+      </div>
+    </section>
+
+    <div class="cv-wrap ubk-layout">
+      <aside class="ubk-toc" aria-label="文章目录">
+        <details open>
+          <summary>文章目录 <span>{headings.length} 节</span></summary>
+          <nav aria-label="章节导航">
+            {headings.map(({ id, text }) => <a href={'#' + id} set:html={text} />)}
+          </nav>
+        </details>
+      </aside>
+
+      <article class="lp ubk-essay" id="us-banking-app" aria-labelledby="ubk-title">
+        <Fragment set:html={body} />
+        <nav class="ubk-end" aria-label="文章导航">
+          <a href="/investing/banking/">← 返回银行卡栏目</a>
+          <a href="#ubk-title">回到顶部 ↑</a>
+        </nav>
+      </article>
+    </div>
+  </main>
+  <script is:inline defer src="/investing/banking/us-bank-accounts-and-cards-guide/assets/app.js?v=b34b5f06"></script>
+</Base>

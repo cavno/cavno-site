@@ -1,0 +1,468 @@
+<div class="ubk-prompt" role="note" aria-label="核心命题导引">
+  <div class="ubk-prompt-kicker">ORIGINAL QUESTION · 原始问题切入</div>
+  <p>美国的银行卡种类详解：借记卡、信用卡，以及 Checking、Savings、虚拟卡与发卡行产品阶梯之间，究竟遵循怎样的底层架构？</p>
+</div>
+
+<p class="ubk-lead">理解美国银行体系的底层逻辑，必须先把<strong>“账户（Account，资金存放的容器）”</strong>与<strong>“卡片（Card，资金流转的介质与信贷工具）”</strong>彻底剥离。国内的“储蓄卡”往往把账户和支付卡片绑定在同一个概念里；而美国金融体系是高度模块化的，不同模块承担着截然不同的流动性、利息、防欺诈和信用记录职能。</p>
+
+<div class="ubk-decouple-grid" aria-label="账户层与卡片层模块化对照">
+  <div class="ubk-decouple-card">
+    <div class="ubk-card-eyebrow">LAYER 01 · 底层账户层（后台账本容器）</div>
+    <div class="ubk-card-title">Checking &amp; Savings Account</div>
+    <p>看不见实体的后台资金容器：<strong>Checking</strong> 凭借 Routing / Account Number 承担 ACH 清算路由与日常扣款；<strong>Savings（HYSA）</strong> 专注闲置美元沉淀生息，不直接对外刷卡。</p>
+    <div class="ubk-pill-row">
+      <span class="ubk-pill">ACH 清算节点</span>
+      <span class="ubk-pill">Regulation D 历史分层</span>
+      <span class="ubk-pill">App 内部实时划转</span>
+    </div>
+  </div>
+  <div class="ubk-decouple-card ubk-decouple-card-accent">
+    <div class="ubk-card-eyebrow">LAYER 02 · 支付介质层（前端刷卡与风控工具）</div>
+    <div class="ubk-card-title">Debit · Credit · Virtual Card</div>
+    <p>挂载在不同法律关系上的前端介质：<strong>Debit Card</strong> 直接消耗 Checking 现金；<strong>Credit Card</strong> 动用银行独立循环授信并构建 FICO 信用分；<strong>Virtual Card</strong> 以单商户限额隔离盗刷风险。</p>
+    <div class="ubk-pill-row">
+      <span class="ubk-pill">EFTA vs. FCBA 法定保护</span>
+      <span class="ubk-pill">Durbin 费率管制</span>
+      <span class="ubk-pill">三大征信局上报</span>
+    </div>
+  </div>
+</div>
+
+<section class="ubk-section" aria-labelledby="sec-account-layer">
+  <h2 id="sec-account-layer">一、 底层账户层（Account Layer）：资金的容器与流动性分层</h2>
+  <p>你在银行开立的“账户”是看不见实体的后台账本，主要分为 <strong>Checking</strong> 和 <strong>Savings</strong> 两类，核心区别在于流动性与生息能力：</p>
+
+  <div class="ubk-module-stack">
+    <div class="ubk-module-card">
+      <div class="ubk-module-head">
+        <h3>Checking Account（支票账户）：日常结算中枢</h3>
+        <span class="ubk-badge ubk-badge-neutral">0.01%–0.1% APY · 无限次进出</span>
+      </div>
+      <ul class="ubk-list">
+        <li><strong>定位：</strong>活期结算层，流动性极高（资金随时进出无次数限制），但几乎没有利息（年化利率通常只有 <code>0.01%–0.1%</code>）。</li>
+        <li><strong>底层功能：</strong>它是美国金融清算网络的路由节点，拥有独立的 <code>Routing Number</code>（银行路由号）和 <code>Account Number</code>（账号）。你的工资入账、水电费自动扣款、信用卡账单还款（ACH 扣款）、以及美股券商（如 <a href="https://www.interactivebrokers.com/support/faq/content/link-us-checking-account-us-28223302" target="_blank" rel="noopener noreferrer">IBKR 盈透证券 ACH 出入金</a>）的出入金，全部通过 Checking Account 完成。</li>
+      </ul>
+    </div>
+
+    <div class="ubk-module-card">
+      <div class="ubk-module-head">
+        <h3>Savings Account（储蓄账户）：资金沉淀与生息层</h3>
+        <span class="ubk-badge ubk-badge-sage">HYSA 高息蓄水池 · 非直接支付</span>
+      </div>
+      <ul class="ubk-list">
+        <li><strong>定位：</strong>资金蓄水池，提供较高利息（尤其是纯网络银行的 HYSA 高息储蓄账户，利率紧密挂钩美联储基准利率）。</li>
+        <li><strong>底层限制：</strong>它的设计初衷是“存钱”而非“频繁支付”。受历史上美联储 <a href="https://www.ecfr.gov/current/title-12/chapter-II/subchapter-A/part-204" target="_blank" rel="noopener noreferrer">Regulation D（12 CFR Part 204）</a> 条款的影响（美联储虽于 2020 年取消联邦强制 6 次硬性上限，但 <a href="https://www.federalreserve.gov/supervisionreg/savings-deposits-frequently-asked-questions.htm" target="_blank" rel="noopener noreferrer">允许商业银行继续保留合同转出限制</a>），银行通常限制每月免费转出次数（例如每月最多 6 次），超限可能产生费用，且不能直接用来刷卡消费。</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="ubk-callout">
+    <div class="ubk-callout-title">资金协同逻辑（Checking × Savings 内部联动）</div>
+    <p>常规操作是日常只在 <strong>Checking</strong> 里留一笔应付账单扣款的流动资金，大额闲置现金放在同银行的 <strong>Savings</strong> 里吃利息；需要还信用卡时，在 App 内部实时划转（<code>Internal Transfer</code>）到 Checking 即可。</p>
+  </div>
+
+  <div class="ubk-workbench" id="ubk-yield-sim" aria-label="Checking 与 Savings 资金分层及信用使用率模拟器">
+    <div class="ubk-wb-head">
+      <div>
+        <div class="ubk-wb-eyebrow">INTERACTIVE WORKBENCH 01 · 账户协同与信用使用率测算</div>
+        <h3 class="ubk-wb-title">Checking 留存缓冲 + HYSA 生息 + 信用卡返现与额度使用率推演</h3>
+      </div>
+      <button type="button" class="ubk-reset-btn" id="ubkSimReset">恢复基准参数</button>
+    </div>
+    <p class="ubk-wb-desc">拖动滑块模拟你的美元现金池与月度刷卡规模，直观对比“全部放 Checking 刷 Debit Card”与“Checking 留足安全垫 + 闲置入 HYSA + 日常刷 Credit Card”的年化收益差额及每月上报三大征信局的额度使用率（Utilization）。</p>
+
+    <div class="ubk-sim-grid">
+      <div class="ubk-sim-controls">
+        <label class="ubk-field">
+          <span class="ubk-field-top">
+            <span>闲置美元现金总额（Cash Pool）</span>
+            <output id="ubkCashPoolOut">$20,000</output>
+          </span>
+          <input type="range" id="ubkCashPool" min="2000" max="100000" step="1000" value="20000" />
+        </label>
+
+        <label class="ubk-field">
+          <span class="ubk-field-top">
+            <span>每月日常刷卡消费额（Monthly Spend）</span>
+            <output id="ubkMonthlySpendOut">$2,200</output>
+          </span>
+          <input type="range" id="ubkMonthlySpend" min="200" max="10000" step="100" value="2200" />
+        </label>
+
+        <label class="ubk-field">
+          <span class="ubk-field-top">
+            <span>HYSA 高息储蓄年化利率（APY）</span>
+            <output id="ubkHysaApyOut">4.00%</output>
+          </span>
+          <input type="range" id="ubkHysaApy" min="2.0" max="5.5" step="0.1" value="4.0" />
+        </label>
+
+        <label class="ubk-field">
+          <span class="ubk-field-top">
+            <span>信用卡综合返现率（Cash Back）</span>
+            <output id="ubkCashbackRateOut">2.0%</output>
+          </span>
+          <input type="range" id="ubkCashbackRate" min="0" max="5.0" step="0.5" value="2.0" />
+        </label>
+
+        <label class="ubk-field">
+          <span class="ubk-field-top">
+            <span>信用卡总授信额度（Total Credit Limit）</span>
+            <output id="ubkCreditLimitOut">$10,000</output>
+          </span>
+          <input type="range" id="ubkCreditLimit" min="500" max="50000" step="500" value="10000" />
+        </label>
+      </div>
+
+      <div class="ubk-sim-results">
+        <div class="ubk-kpi-grid">
+          <div class="ubk-kpi-card">
+            <span class="ubk-kpi-label">建议 Checking 留存缓冲（1.3x 月账单）</span>
+            <strong class="ubk-kpi-val" id="ubkCheckingBuf">$2,860</strong>
+            <span class="ubk-kpi-sub" id="ubkSavingsAlloc">其余 $17,140 沉淀至 HYSA</span>
+          </div>
+          <div class="ubk-kpi-card">
+            <span class="ubk-kpi-label">HYSA 年化利息收益（对比 Checking 0.05%）</span>
+            <strong class="ubk-kpi-val ubk-tone-sage" id="ubkAnnualInterest">+$686 / 年</strong>
+            <span class="ubk-kpi-sub" id="ubkCheckingIdleInterest">全放 Checking 仅约 $10 / 年</span>
+          </div>
+          <div class="ubk-kpi-card">
+            <span class="ubk-kpi-label">信用卡年度免税返现（对比 Debit $0）</span>
+            <strong class="ubk-kpi-val ubk-tone-sage" id="ubkAnnualCashback">+$528 / 年</strong>
+            <span class="ubk-kpi-sub">基于全年刷卡消费自动累计</span>
+          </div>
+          <div class="ubk-kpi-card ubk-kpi-highlight">
+            <span class="ubk-kpi-label">模块化协同每年净增收益</span>
+            <strong class="ubk-kpi-val ubk-tone-coral" id="ubkNetAdvantage">+$1,204 / 年</strong>
+            <span class="ubk-kpi-sub">同时隔离 Checking 本金直接暴露</span>
+          </div>
+        </div>
+
+        <div class="ubk-util-box">
+          <div class="ubk-util-head">
+            <span>当月出账单信用额度使用率（Statement Utilization）</span>
+            <strong id="ubkUtilPct">22.0% · 稳健区间</strong>
+          </div>
+          <div class="ubk-util-bar" aria-hidden="true">
+            <div class="ubk-util-fill" id="ubkUtilFill" style="width: 22%"></div>
+          </div>
+          <p class="ubk-util-tip" id="ubkUtilTip">当前账单占用 22.0%（低于 30% 警戒线）。若想冲击更高 FICO 分数，可在 Statement Date 出账前先从 Checking 手动提前还掉一部分，使上报余额压降至 1%–9%。</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="ubk-section" aria-labelledby="sec-card-layer">
+  <h2 id="sec-card-layer">二、 支付介质层（Card Layer）：资产消耗 vs. 信用派生</h2>
+  <p>账户建好后，银行会发给你实体或虚拟的“卡片”作为前端支付工具。卡片分为 <strong>Debit</strong> 和 <strong>Credit</strong>，两者在法律属性和金融功能上天差地别：</p>
+
+  <div class="ubk-dual-cards">
+    <div class="ubk-compare-col">
+      <div class="ubk-col-tag ubk-col-tag-warn">ASSET DEPLETION · 消耗自有现金</div>
+      <h3>Debit Card（借记卡）：Checking 账户的物理触角</h3>
+      <p><strong>底层逻辑：</strong>它没有独立账户，只是直接挂载在 Checking Account 上的一把“钥匙”。刷卡时直接从你的 Checking 扣除现金（花的是你自己的资产），主要用于 ATM 取现或日常小额借记支付。</p>
+      <div class="ubk-subhead">三大局限（为什么美国人日常很少刷 Debit Card）：</div>
+      <ol class="ubk-numbered">
+        <li><strong>不积累信用分：</strong>借记卡不涉及借贷关系，银行不会向三大信用局（<a href="https://www.experian.com/" target="_blank" rel="noopener noreferrer">Experian</a> / <a href="https://www.equifax.com/personal/credit-report-services/" target="_blank" rel="noopener noreferrer">Equifax</a> / <a href="https://www.transunion.com/credit-reporting-agencies" target="_blank" rel="noopener noreferrer">TransUnion</a>）上报任何消费记录。</li>
+        <li><strong>防盗刷保护较弱：</strong>受<a href="https://www.consumerfinance.gov/rules-policy/final-rules/electronic-fund-transfers-regulation-e/" target="_blank" rel="noopener noreferrer">《电子资金转账法》（EFTA / Regulation E）</a>管辖。一旦卡号泄露被盗刷，被划走的是你的真实现金；如果未在规定时间内挂失，个人需承担部分损失（超过 2 个工作日上限升至 $500，超过账单寄出 60 天可能承担全部损失），且银行调查期间这笔现金处于冻结状态。</li>
+        <li><strong>几乎无消费返现：</strong>美联储<a href="https://www.federalreserve.gov/supervisionreg/regiicg.htm" target="_blank" rel="noopener noreferrer">《德宾修正案》（Durbin Amendment / Regulation II）</a>严格限制了大型银行（资产超 100 亿美元）借记卡向商户收取的刷卡手续费（上限约为 <code>$0.21 + 0.05%</code>），银行无利可图，自然不会给持卡人提供返现补贴。</li>
+      </ol>
+    </div>
+
+    <div class="ubk-compare-col ubk-compare-col-credit">
+      <div class="ubk-col-tag ubk-col-tag-good">REVOLVING CREDIT · 独立授信与保护</div>
+      <h3>Credit Card（信用卡）：独立的无抵押循环信贷额度</h3>
+      <p><strong>底层逻辑：</strong>它与你的 Checking/Savings 余额完全独立（你甚至可以在 A 银行办信用卡，用 B 银行的 Checking 还款）。本质是银行基于对你的信用评估，授予你一笔循环信贷额度（<code>Revolving Credit Line</code>）。刷卡时你花的是银行的钱（产生短期负债），每月账单日（<code>Statement Date</code>）出账后，你再从 Checking Account 划转现金去还清账单。</p>
+      <div class="ubk-subhead">三大核心价值：</div>
+      <ol class="ubk-numbered">
+        <li><strong>信用建档引擎：</strong>银行每月将你的额度使用率（<code>Utilization</code>）和准时还款表现上报给三大信用局，这是构建和提升美国个人信用分（<code>FICO Score</code>）的唯一核心路径。</li>
+        <li><strong>顶级防盗刷保护：</strong>受<a href="https://www.ftc.gov/legal-library/browse/statutes/fair-credit-billing-act" target="_blank" rel="noopener noreferrer">《公平信用结算法》（FCBA）</a>保护（法定最高个人责任不超过 $50）。盗刷的是银行的授信额度而非你的本金，全美主流信用卡均提供“零责任赔付（<code>Zero Liability</code>）”，争议调查期间你无需支付一分钱。</li>
+        <li><strong>高额返现与积分补贴：</strong>信用卡不受费率上限限制，银行向商户收取约 <code>2%–3%</code> 的刷卡手续费，再将其中的 <code>1.5%–5%</code> 以返现（Cash Back）或航空里程（Miles）的形式回馈给持卡人。</li>
+      </ol>
+    </div>
+  </div>
+
+  <div class="ubk-virtual-card">
+    <div class="ubk-module-head">
+      <h3>Virtual Card（虚拟卡，如 <a href="https://www.privacy.com/merchant-cards" target="_blank" rel="noopener noreferrer">Privacy.com</a>）：风控隔离代理层</h3>
+      <span class="ubk-badge ubk-badge-coral">一商户一卡号 · 限额熔断</span>
+    </div>
+    <p>本质上是依托底层 Checking 账户（通过 ACH 扣款）派生的虚拟借记卡号。它的核心逻辑是<strong>“一商户一卡号 + 锁定扣款上限”</strong>，用来隔离高风险商户或订阅制服务（如 Claude），防止单点泄露导致底层账户被盗刷。</p>
+  </div>
+
+  <div class="ubk-workbench" id="ubk-risk-sandbox" aria-label="三种支付介质场景沙盘对照">
+    <div class="ubk-wb-head">
+      <div>
+        <div class="ubk-wb-eyebrow">INTERACTIVE WORKBENCH 02 · 法定权责与盗刷冲击沙盘</div>
+        <h3 class="ubk-wb-title">同一笔消费在不同卡片介质下的资金流、征信与盗刷处置推演</h3>
+      </div>
+      <div class="ubk-seg" role="tablist" aria-label="支付场景切换">
+        <button type="button" role="tab" class="ubk-seg-btn active" aria-selected="true" data-scenario="fraud">卡号泄露盗刷 $1,500</button>
+        <button type="button" role="tab" class="ubk-seg-btn" aria-selected="false" data-scenario="daily">日常商超/餐饮刷卡</button>
+        <button type="button" role="tab" class="ubk-seg-btn" aria-selected="false" data-scenario="saas">高风险商户 / SaaS 订阅</button>
+      </div>
+    </div>
+    <div class="ubk-scenario-grid" id="ubkScenarioGrid" aria-live="polite">
+      <div class="ubk-sc-card">
+        <div class="ubk-sc-head">
+          <strong>刷 Debit Card（借记卡）</strong>
+          <span class="ubk-pill ubk-pill-warn" id="ubkScDebitBadge">EFTA 管辖 · 冻结自有本金</span>
+        </div>
+        <p id="ubkScDebitBody">$1,500 真实现金瞬间从 Checking 被划走，可能引发后续房租或信用卡自动还款余额不足跳票；若超过 2 个工作日才挂失，个人法定责任上限升至 $500，超过 60 天未报可能自行承担全额损失。</p>
+      </div>
+      <div class="ubk-sc-card ubk-sc-card-featured">
+        <div class="ubk-sc-head">
+          <strong>刷 Credit Card（信用卡）</strong>
+          <span class="ubk-pill ubk-pill-good" id="ubkScCreditBadge">FCBA 零责任 · 本金毫发无损</span>
+        </div>
+        <p id="ubkScCreditBody">被占用的是银行循环授信额度，你的 Checking 存款一分钱未动；受 FCBA 保护（主流发卡行均执行 $0 Zero Liability），App 内一键发起 Dispute 期间无需垫付争议款项。</p>
+      </div>
+      <div class="ubk-sc-card">
+        <div class="ubk-sc-head">
+          <strong>刷 Virtual Card（Privacy.com）</strong>
+          <span class="ubk-pill" id="ubkScVirtualBadge">商户绑定拦截 · 自动拒付</span>
+        </div>
+        <p id="ubkScVirtualBody">因虚拟卡号已死锁在首个消费商户（Merchant-Locked）且设有单笔/月度上限（如 $20/月），黑客在其他网站尝试盗刷 $1,500 会被网关毫秒级直接拒付，随时可销毁该子卡且不影响底层 Checking。</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="ubk-section" aria-labelledby="sec-capital-one">
+  <h2 id="sec-capital-one">三、 发卡行产品矩阵逻辑：以 Capital One 为例</h2>
+  <p>Capital One 看起来产品繁多，但按照底层逻辑拆解，其实只是<strong>“基础银行账户（360 系列）”</strong>加上<strong>“基于风险定价（Risk-Based Pricing）的信用卡阶梯”</strong>：</p>
+
+  <div class="ubk-filter-bar" role="toolbar" aria-label="Capital One 产品阶段筛选">
+    <span class="ubk-filter-label">按适用阶段高亮：</span>
+    <button type="button" class="ubk-tier-btn active" data-tier="all">全部矩阵（4 层）</button>
+    <button type="button" class="ubk-tier-btn" data-tier="deposit">存款结算层（360）</button>
+    <button type="button" class="ubk-tier-btn" data-tier="starter">新手破冰层（ITIN 零信用）</button>
+    <button type="button" class="ubk-tier-btn" data-tier="cashback">日常返现层（1.5%–3%）</button>
+    <button type="button" class="ubk-tier-btn" data-tier="travel">高端商旅层（Venture X）</button>
+  </div>
+
+  <div class="ubk-table-scroll">
+    <table>
+      <caption>Capital One 银行账户与风险定价信用卡四阶矩阵</caption>
+      <thead>
+        <tr>
+          <th scope="col">产品板块</th>
+          <th scope="col">代表产品名称</th>
+          <th scope="col">底层属性与门槛</th>
+          <th scope="col">核心功能与适用阶段</th>
+        </tr>
+      </thead>
+      <tbody id="ubkCapOneTbody">
+        <tr data-tier="deposit">
+          <th scope="row">基础银行账户<br /><span class="ubk-td-sub">(资金存放与结算)</span></th>
+          <td>
+            <a href="https://www.capitalone.com/bank/checking-accounts/online-checking-account/" target="_blank" rel="noopener noreferrer">360 Checking</a> /
+            <a href="https://www.capitalone.com/bank/savings-accounts/online-performance-savings-account/" target="_blank" rel="noopener noreferrer">360 Performance Savings</a>
+          </td>
+          <td>存款账户（无月费） / 配发 Debit Card</td>
+          <td>Checking 负责日常资金进出与还卡；Savings 负责大额现金吃高息。<span class="ubk-td-note">(注：ITIN 云居民网申此账户风控较严，通常先用其他渠道账户替代)</span></td>
+        </tr>
+        <tr data-tier="starter">
+          <th scope="row">信用卡：新手破冰层<br /><span class="ubk-td-sub">(Credit Building)</span></th>
+          <td>
+            <a href="https://www.capitalone.com/credit-cards/platinum-secured/" target="_blank" rel="noopener noreferrer">Platinum Secured</a> /
+            <a href="https://www.capitalone.com/learn-grow/money-management/all-about-platinum-card/" target="_blank" rel="noopener noreferrer">Platinum</a>
+          </td>
+          <td>押金卡 / 零返现基础卡 / 支持 ITIN 零信用申请</td>
+          <td>专为信用建档设计。Secured 需先交 <code>$49–$200</code> 押金获得同等额度；无返现、无年费，核心目的就是按时还款、向信用局输出记录。</td>
+        </tr>
+        <tr data-tier="cashback">
+          <th scope="row">信用卡：日常返现层<br /><span class="ubk-td-sub">(Cash Back)</span></th>
+          <td>
+            <a href="https://www.capitalone.com/learn-grow/money-management/capital-one-quicksilver-vs-savor/" target="_blank" rel="noopener noreferrer">Quicksilver 系列</a> /
+            <a href="https://www.capitalone.com/credit-cards/savor/" target="_blank" rel="noopener noreferrer">Savor</a> (原 SavorOne)
+          </td>
+          <td>消费返现卡 / 需基础信用记录</td>
+          <td>主力日常刷卡工具。Quicksilver 所有消费一律 <code>1.5%</code> 无脑返现；Savor 针对餐饮、超市、流媒体提供 <code>3%</code> 返现。<span class="ubk-td-note">(注：QuicksilverOne 收 $39 年费，专为信用尚浅者设，后期可申请免年费升级)</span></td>
+        </tr>
+        <tr data-tier="travel">
+          <th scope="row">信用卡：高端商旅层<br /><span class="ubk-td-sub">(Travel &amp; Miles)</span></th>
+          <td>
+            Venture /
+            <a href="https://www.capitalone.com/learn-grow/more-than-money/all-about-venture-x/" target="_blank" rel="noopener noreferrer">Venture X</a>
+          </td>
+          <td>高年费积分里程卡 / 需 Excellent 信用分</td>
+          <td>面向高净值人群。所有消费 <code>2x</code> 里程积分；Venture X 年费 <code>$395</code>，但每年送 <code>$300</code> 旅行报销 + <code>10,000</code> 里程（等效倒赚），附带机场贵宾厅权益。</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="ubk-vx-strip" aria-label="Capital One 进阶路径与 Venture X 等效年费拆解">
+    <div class="ubk-vx-item">
+      <span class="ubk-vx-step">STEP 01 · 破冰建档（0–6 个月）</span>
+      <strong>Platinum Secured / Platinum</strong>
+      <p>配合 ITIN + 外部银行 Checking 按时全额 ACH 还款，持续输出低 Utilization 账单记录。</p>
+    </div>
+    <div class="ubk-vx-item">
+      <span class="ubk-vx-step">STEP 02 · 免年费返现主力（6–18 个月）</span>
+      <strong>Quicksilver (1.5%) + Savor (3%)</strong>
+      <p>若起步获批 $39 年费的 QuicksilverOne，积累良好记录后可通过 Upgrade Link 无损转卡为免年费版。</p>
+    </div>
+    <div class="ubk-vx-item">
+      <span class="ubk-vx-step">STEP 03 · 商旅负年费闭环（Excellent 信用）</span>
+      <strong>Venture X 净成本测算：-$5 / 年</strong>
+      <p>账面年费 <code>$395</code> − Capital One Travel 年度报销 <code>$300</code> − 周年赠送 <code>10,000 Miles</code>（保底估值 <code>$100</code>）= 等效倒赚 <code>$5</code> + 贵宾厅权益。</p>
+    </div>
+  </div>
+</section>
+
+<section class="ubk-section" aria-labelledby="sec-dual-loop">
+  <h2 id="sec-dual-loop">四、 系统级资金流与信息流闭环</h2>
+  <p>把上述所有概念串联起来，一个成熟的美国个人金融账户体系在日常运转时遵循以下双轨闭环：</p>
+
+  <div class="ubk-workbench" id="ubk-loop-explorer" aria-label="系统级资金流与信息流双轨闭环交互图谱">
+    <div class="ubk-wb-head">
+      <div>
+        <div class="ubk-wb-eyebrow">INTERACTIVE WORKBENCH 03 · 双轨闭环节点透视</div>
+        <h3 class="ubk-wb-title">点击架构节点或切换链路视图，查看美国个人金融体系的资金流与征信流耦合机制</h3>
+      </div>
+      <div class="ubk-seg" role="group" aria-label="闭环轨道筛选">
+        <button type="button" class="ubk-loop-btn active" data-loop="all">双轨全景</button>
+        <button type="button" class="ubk-loop-btn" data-loop="cash">资金流闭环</button>
+        <button type="button" class="ubk-loop-btn" data-loop="credit">信息流闭环</button>
+        <button type="button" class="ubk-loop-btn" data-loop="itin">ITIN 切入路径</button>
+      </div>
+    </div>
+
+    <div class="ubk-svg-wrap">
+      <svg class="ubk-flow-svg" viewBox="0 0 880 390" role="img" aria-label="美国个人金融账户资金流与信息流双轨闭环图">
+        <defs>
+          <marker id="ubkArrowCash" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+            <path d="M 0 1 L 10 5 L 0 9 z" fill="#2F634D"></path>
+          </marker>
+          <marker id="ubkArrowCredit" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+            <path d="M 0 1 L 10 5 L 0 9 z" fill="#C15F3C"></path>
+          </marker>
+        </defs>
+
+        <!-- Track lane backgrounds -->
+        <rect x="14" y="14" width="852" height="218" rx="10" fill="#F4F2EC" stroke="#E5E1D8"></rect>
+        <text x="30" y="38" class="ubk-svg-lane-label" fill="#2F634D">[资金流闭环 · CASH &amp; SETTLEMENT LOOP]</text>
+
+        <rect x="14" y="246" width="852" height="130" rx="10" fill="#F7F1EC" stroke="#E8D8CE"></rect>
+        <text x="30" y="270" class="ubk-svg-lane-label" fill="#C15F3C">[信息流闭环 · CREDIT REPORTING &amp; TIER UNLOCK LOOP]</text>
+
+        <!-- Edges: Cash Flow -->
+        <g class="ubk-edge-group" data-track="cash itin">
+          <path d="M 190 96 L 268 96" stroke="#2F634D" stroke-width="2.2" fill="none" marker-end="url(#ubkArrowCash)"></path>
+          <text x="229" y="86" text-anchor="middle" class="ubk-svg-edge-text">外部入金 / ACH</text>
+        </g>
+
+        <g class="ubk-edge-group" data-track="cash">
+          <path d="M 492 78 L 598 64" stroke="#2F634D" stroke-width="2.2" fill="none" marker-end="url(#ubkArrowCash)"></path>
+          <path d="M 598 80 L 492 92" stroke="#2F634D" stroke-width="1.6" stroke-dasharray="4 3" fill="none" marker-end="url(#ubkArrowCash)"></path>
+          <text x="546" y="56" text-anchor="middle" class="ubk-svg-edge-text">闲置转入生息 / 实时划回</text>
+        </g>
+
+        <g class="ubk-edge-group" data-track="cash">
+          <path d="M 492 114 L 598 152" stroke="#2F634D" stroke-width="2.2" fill="none" marker-end="url(#ubkArrowCash)"></path>
+          <text x="552" y="148" text-anchor="middle" class="ubk-svg-edge-text">ACH 代理扣款</text>
+        </g>
+
+        <g class="ubk-edge-group" data-track="cash credit itin">
+          <path d="M 380 176 L 380 134" stroke="#2F634D" stroke-width="2.4" fill="none" marker-end="url(#ubkArrowCash)"></path>
+          <text x="444" y="160" text-anchor="middle" class="ubk-svg-edge-text">每月自动 ACH 还款</text>
+        </g>
+
+        <!-- Edges: Credit Information Flow -->
+        <g class="ubk-edge-group" data-track="credit itin">
+          <path d="M 380 226 L 380 284" stroke="#C15F3C" stroke-width="2.4" fill="none" marker-end="url(#ubkArrowCredit)"></path>
+          <text x="462" y="262" text-anchor="middle" class="ubk-svg-edge-text" fill="#C15F3C">Statement 出账上报</text>
+        </g>
+
+        <g class="ubk-edge-group" data-track="credit itin">
+          <path d="M 516 318 L 604 318" stroke="#C15F3C" stroke-width="2.4" fill="none" marker-end="url(#ubkArrowCredit)"></path>
+          <text x="560" y="308" text-anchor="middle" class="ubk-svg-edge-text" fill="#C15F3C">FICO 涨分</text>
+        </g>
+
+        <g class="ubk-edge-group" data-track="credit">
+          <path d="M 730 284 C 730 242, 540 206, 492 204" stroke="#C15F3C" stroke-width="1.8" stroke-dasharray="5 4" fill="none" marker-end="url(#ubkArrowCredit)"></path>
+        </g>
+
+        <!-- Nodes -->
+        <g class="ubk-svg-node active" tabindex="0" role="button" data-node="inflow" data-track="cash itin">
+          <rect x="30" y="64" width="160" height="64" rx="8"></rect>
+          <text x="110" y="91" text-anchor="middle" class="ubk-svg-title">外部美元资金</text>
+          <text x="110" y="111" text-anchor="middle" class="ubk-svg-sub">工资 / Wise / 华美 / 水星</text>
+        </g>
+
+        <g class="ubk-svg-node" tabindex="0" role="button" data-node="checking" data-track="cash itin">
+          <rect x="270" y="58" width="220" height="74" rx="8"></rect>
+          <text x="380" y="88" text-anchor="middle" class="ubk-svg-title">Checking Account</text>
+          <text x="380" y="110" text-anchor="middle" class="ubk-svg-sub">日常结算池 · Routing + Account</text>
+        </g>
+
+        <g class="ubk-svg-node" tabindex="0" role="button" data-node="savings" data-track="cash">
+          <rect x="600" y="42" width="244" height="66" rx="8"></rect>
+          <text x="722" y="70" text-anchor="middle" class="ubk-svg-title">Savings Account (HYSA)</text>
+          <text x="722" y="91" text-anchor="middle" class="ubk-svg-sub">闲置现金蓄水池 · 赚取高息</text>
+        </g>
+
+        <g class="ubk-svg-node" tabindex="0" role="button" data-node="virtual" data-track="cash">
+          <rect x="600" y="128" width="244" height="66" rx="8"></rect>
+          <text x="722" y="156" text-anchor="middle" class="ubk-svg-title">Privacy.com 虚拟卡</text>
+          <text x="722" y="177" text-anchor="middle" class="ubk-svg-sub">一商户一卡号 · 订阅 Claude 等 SaaS</text>
+        </g>
+
+        <g class="ubk-svg-node" tabindex="0" role="button" data-node="creditcard" data-track="cash credit itin">
+          <rect x="270" y="176" width="220" height="50" rx="8"></rect>
+          <text x="380" y="198" text-anchor="middle" class="ubk-svg-title">Credit Card（主力刷卡）</text>
+          <text x="380" y="216" text-anchor="middle" class="ubk-svg-sub">1.5%–5% 返现 + FCBA 零责任防盗刷</text>
+        </g>
+
+        <g class="ubk-svg-node" tabindex="0" role="button" data-node="bureaus" data-track="credit itin">
+          <rect x="246" y="286" width="268" height="66" rx="8"></rect>
+          <text x="380" y="314" text-anchor="middle" class="ubk-svg-title">三大信用局 Credit Bureaus</text>
+          <text x="380" y="335" text-anchor="middle" class="ubk-svg-sub">Experian · Equifax · TransUnion</text>
+        </g>
+
+        <g class="ubk-svg-node" tabindex="0" role="button" data-node="unlock" data-track="credit itin">
+          <rect x="606" y="286" width="238" height="66" rx="8"></rect>
+          <text x="725" y="314" text-anchor="middle" class="ubk-svg-title">解锁高阶信用卡与账户</text>
+          <text x="725" y="335" text-anchor="middle" class="ubk-svg-sub">Quicksilver / Savor / Venture X</text>
+        </g>
+      </svg>
+    </div>
+
+    <div class="ubk-node-detail" id="ubkNodeDetail" aria-live="polite">
+      <div class="ubk-node-detail-tag" id="ubkNodeTag">NODE 01 · 外部美元与非居民切入节点</div>
+      <h4 id="ubkNodeTitle">外部美元资金（工资入账 / Wise / 华美 / 水星银行）</h4>
+      <p id="ubkNodeDesc">任何拥有合法美国 Routing Number 与 Account Number 的支票账户均可充当清算入口。由于美国“存款账户”与“信用卡”完全解耦，云居民无需死磕同一家银行的 Checking，先打通任一合规 Checking 即可为全美主流信用卡提供自动 ACH 还款支撑。</p>
+    </div>
+  </div>
+
+  <pre class="ubk-ascii-flow" aria-label="资金流闭环与信息流闭环原始结构图"><code>[资金流闭环]
+外部美元资金 ──&gt; Checking Account (日常结算池) ──┬──&gt; 闲置资金转入 Savings Account (赚取高息)
+                      ▲                         │
+                      │ (每月自动 ACH 还款)       └──&gt; 绑定 Privacy.com 生成虚拟卡 (订阅 Claude 等 SaaS)
+                      │
+              Credit Card (日常刷卡消费，赚取返现 + 享受防盗刷保护)
+                      │
+[信息流闭环]          ▼ (每月 Statement 出账后上报)
+            三大信用局 (Experian / Equifax / TransUnion) ──&gt; 信用分上涨 ──&gt; 解锁更高级别信用卡与银行账户</code></pre>
+
+  <div class="ubk-strategy-box">
+    <div class="ubk-strategy-kicker">DECOUPLED ENTRY STRATEGY · 账户与卡片解耦切入策略</div>
+    <p>通过其他银行（如水星银行、华美或 Wise）先充当 <strong>Checking</strong> 的角色，直接跨过 Capital One 的存款账户门槛，先拿下它的 <strong>Platinum / Quicksilver</strong> 信用卡，正是利用这套<strong>“账户与卡片解耦”</strong>的底层规则，以最低阻力切入美国信用体系。（延伸机制可参阅同站研究：<a href="/investing/research/itin-functions-and-underlying-principles/">《ITIN的作用与底层原理》</a>）</p>
+  </div>
+</section>
+
+<section class="ubk-section ubk-refs-section" aria-labelledby="sec-references">
+  <h2 id="sec-references">五、 法规依据与发卡行官方参考索引</h2>
+  <ul class="ubk-ref-list">
+    <li><strong>美联储 Regulation D（储蓄存款定义与转出规则）：</strong><a href="https://www.ecfr.gov/current/title-12/chapter-II/subchapter-A/part-204" target="_blank" rel="noopener noreferrer">12 CFR Part 204 — Reserve Requirements of Depository Institutions (eCFR)</a> · <a href="https://www.federalreserve.gov/supervisionreg/savings-deposits-frequently-asked-questions.htm" target="_blank" rel="noopener noreferrer">Federal Reserve Savings Deposits FAQ</a></li>
+    <li><strong>借记卡法定保障与挂失责任阶梯（EFTA / Regulation E）：</strong><a href="https://www.consumerfinance.gov/rules-policy/final-rules/electronic-fund-transfers-regulation-e/" target="_blank" rel="noopener noreferrer">CFPB — Electronic Fund Transfers (Regulation E)</a></li>
+    <li><strong>大型银行借记卡刷卡交换费上限（Durbin Amendment / Regulation II）：</strong><a href="https://www.federalreserve.gov/supervisionreg/regiicg.htm" target="_blank" rel="noopener noreferrer">Federal Reserve — Regulation II Compliance Guide (Debit Card Interchange Fees)</a></li>
+    <li><strong>信用卡账单争议与零责任保护法定基础（FCBA）：</strong><a href="https://www.ftc.gov/legal-library/browse/statutes/fair-credit-billing-act" target="_blank" rel="noopener noreferrer">FTC — Fair Credit Billing Act (15 U.S.C. § 1666)</a></li>
+    <li><strong>清算工具与虚拟卡风控：</strong><a href="https://www.interactivebrokers.com/support/faq/content/link-us-checking-account-us-28223302" target="_blank" rel="noopener noreferrer">Interactive Brokers — Link US Checking Account via ACH</a> · <a href="https://www.privacy.com/merchant-cards" target="_blank" rel="noopener noreferrer">Privacy.com — Merchant-Locked Virtual Cards</a></li>
+    <li><strong>Capital One 账户与卡片官方说明：</strong><a href="https://www.capitalone.com/bank/checking-accounts/online-checking-account/" target="_blank" rel="noopener noreferrer">360 Checking</a> · <a href="https://www.capitalone.com/bank/savings-accounts/online-performance-savings-account/" target="_blank" rel="noopener noreferrer">360 Performance Savings</a> · <a href="https://www.capitalone.com/credit-cards/platinum-secured/" target="_blank" rel="noopener noreferrer">Platinum Secured</a> · <a href="https://www.capitalone.com/learn-grow/money-management/all-about-platinum-card/" target="_blank" rel="noopener noreferrer">Platinum</a> · <a href="https://www.capitalone.com/learn-grow/money-management/capital-one-quicksilver-vs-savor/" target="_blank" rel="noopener noreferrer">Quicksilver vs. Savor</a> · <a href="https://www.capitalone.com/learn-grow/more-than-money/all-about-venture-x/" target="_blank" rel="noopener noreferrer">Venture X</a></li>
+    <li><strong>美国三大个人征信局：</strong><a href="https://www.experian.com/" target="_blank" rel="noopener noreferrer">Experian</a> · <a href="https://www.equifax.com/personal/credit-report-services/" target="_blank" rel="noopener noreferrer">Equifax</a> · <a href="https://www.transunion.com/credit-reporting-agencies" target="_blank" rel="noopener noreferrer">TransUnion</a></li>
+  </ul>
+</section>

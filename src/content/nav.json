@@ -5,7 +5,7 @@
       "en": "Investing",
       "zh": "投资",
       "short": "Investing",
-      "desc": "期权交易、价值评估、市场案例与投资研究。",
+      "desc": "期权交易、价值评估、市场案例、投资研究与银行卡体系。",
       "planned": false,
       "subsections": [
         {
@@ -31,6 +31,12 @@
           "en": "Research",
           "zh": "投资研究",
           "desc": "市场结构、跨资产框架、投资方法与研究数据"
+        },
+        {
+          "slug": "banking",
+          "en": "Banking & Cards",
+          "zh": "银行卡",
+          "desc": "美国银行账户分层、借记与信用卡机制、发卡行阶梯与信用建档闭环"
         }
       ]
     },
