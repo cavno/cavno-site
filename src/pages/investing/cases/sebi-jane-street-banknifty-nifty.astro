@@ -1,0 +1,40 @@
+---
+import Base from '../../../layouts/Base.astro';
+import body from '../../../legacy/investing/cases/sebi-jane-street-banknifty-nifty/body.html?raw';
+import '../../../legacy/investing/cases/sebi-jane-street-banknifty-nifty/style.css';
+
+const title = 'SEBI 调查 Jane Street 操纵 BANKNIFTY / NIFTY 指数 · 全量法证拆解与损益推演终端';
+const description = '严格依据印度证券交易委员会（SEBI）105 页单方紧急临时禁令原文，1:1 还原跨市场 353 倍流动性杠杆、四大境内外实体套利闭环、三样本日六轨同步回放与 21 个涉案到期日全量台账。';
+---
+<Base title={title + ' · Cavno'} description={description}>
+  <section class="cv-page-head jsf-page-head">
+    <div class="cv-wrap">
+      <div class="cv-eyebrow">Investing · Cases</div>
+      <div class="jsf-meta-badges" aria-label="监管执法文书元数据">
+        <span class="jsf-meta-pill jsf-accent">SEBI EX-PARTE INTERIM ORDER</span>
+        <span class="jsf-meta-pill">WTM/AN/MRD/MRD-SEC-3/31516/2025-26</span>
+        <span class="jsf-meta-pill">2025-07-03 · 孟买 (105页全量还原)</span>
+        <span class="jsf-meta-pill">Ananth Narayan G. (Whole Time Member)</span>
+      </div>
+      <h1 class="cv-page-title jsf-title" id="jsf-page-title">Jane Street 集团操纵 BANKNIFTY / NIFTY 指数：全量法证拆解与损益推演终端</h1>
+      <p class="cv-lede jsf-lede">
+        严格依据印度证券交易委员会（SEBI）<a href="https://www.sebi.gov.in/sebi_data/attachdocs/jul-2025/1751584518593.pdf" target="_blank" rel="noopener noreferrer">《临时禁令原文 PDF（105页）》</a>与<a href="https://www.sebi.gov.in/enforcement/orders/jul-2025/interim-order-in-the-matter-of-index-manipulation-by-jane-street-group_95040.html" target="_blank" rel="noopener noreferrer">官方执法公告</a>，1:1 完整还原跨市场杠杆微观结构、两大操纵策略（三种实盘变体）、4 家境内外实体监管套利闭环、分钟级 LTP 价格冲击与全部 44 张核心证据表。
+      </p>
+      <div class="jsf-head-links">
+        <a class="cv-crumb-back" href="/investing/cases/">← 返回案例栏目</a>
+        <a class="cv-crumb-back" href="/investing/cases/jane-street-viz/">查看单页策略概览版 ↗</a>
+      </div>
+    </div>
+  </section>
+
+  <article id="sebi-js-app" class="cv-wrap lp jsf-app" aria-labelledby="jsf-page-title">
+    <Fragment set:html={body} />
+  </article>
+
+  <nav class="cv-wrap jsf-end" aria-label="页面底部导航">
+    <a href="/investing/cases/">← 返回案例栏目</a>
+    <a href="#jsf-page-title">回到顶部 ↑</a>
+  </nav>
+
+  <script is:inline src="/investing/cases/sebi-jane-street-banknifty-nifty/assets/app.js?v=81d58ea2df81" defer></script>
+</Base>

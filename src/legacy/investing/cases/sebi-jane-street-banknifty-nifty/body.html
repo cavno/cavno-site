@@ -1,0 +1,635 @@
+<div class="jsf-kpi-strip" aria-label="核心涉案指标总览">
+  <div class="jsf-top-kpi jsf-kpi-ochre">
+    <div class="jsf-lbl">临时禁令冻结/没收非法所得 (Table 44)</div>
+    <div class="jsf-val jsf-ochre-txt">₹4,843.58 Cr</div>
+    <div class="jsf-sub">精确值 ₹4,843,57,70,168 (21个到期日)</div>
+  </div>
+  <div class="jsf-top-kpi jsf-kpi-pos">
+    <div class="jsf-lbl">核查期指数期权总盈利 (Table 4)</div>
+    <div class="jsf-val jsf-pos-txt">+₹43,289.33 Cr</div>
+    <div class="jsf-sub">2023.01–2025.03 · 全品种净利 ₹36,502.12 Cr</div>
+  </div>
+  <div class="jsf-top-kpi jsf-kpi-neg">
+    <div class="jsf-lbl">现货与期货端“故意操纵成本”亏损</div>
+    <div class="jsf-val jsf-neg-txt">-₹7,687.21 Cr</div>
+    <div class="jsf-sub">个股期指 -7,208.23 / 现货 -288.17 / 指期 -190.81</div>
+  </div>
+  <div class="jsf-top-kpi jsf-kpi-ochre">
+    <div class="jsf-lbl">期权 / 成分股现货流动性悬殊 (Table 2)</div>
+    <div class="jsf-val jsf-ochre-txt">353 倍</div>
+    <div class="jsf-sub">₹1,03,17,127 Cr vs ₹29,225 Cr (人数 345x)</div>
+  </div>
+</div>
+
+<div class="jsf-shell">
+  <nav class="jsf-rail" aria-label="SEBI 禁令全量拆解模块导航">
+    <div class="jsf-rail-hdr">SEBI 禁令全量拆解目录</div>
+    <button type="button" class="jsf-nav-btn active" data-jsf-tab="m1"><span class="jsf-idx">01</span><span>全案总览与集团套利架构</span></button>
+    <button type="button" class="jsf-nav-btn" data-jsf-tab="m2"><span class="jsf-idx">02</span><span>底层原理与杠杆动力学沙盒</span></button>
+    <button type="button" class="jsf-nav-btn" data-jsf-tab="m3"><span class="jsf-idx">03</span><span>多轨同步回放：三大操纵样本日</span></button>
+    <button type="button" class="jsf-nav-btn" data-jsf-tab="m4"><span class="jsf-idx">04</span><span>黄金8分钟与期权链微观解剖</span></button>
+    <button type="button" class="jsf-nav-btn" data-jsf-tab="m5"><span class="jsf-idx">05</span><span>成分股占比与 LTP 冲击浏览器</span></button>
+    <button type="button" class="jsf-nav-btn" data-jsf-tab="m6"><span class="jsf-idx">06</span><span>21个涉案到期日全量台账</span></button>
+    <button type="button" class="jsf-nav-btn" data-jsf-tab="m7"><span class="jsf-idx">07</span><span>法理定性、辩解驳斥与禁令条款</span></button>
+    <div class="jsf-rail-foot">
+      <div><strong>原文章节覆盖：</strong>Chapters A–J (Paras 1–66) &amp; Tables 1–44</div>
+      <div style="margin-top:4px;"><strong>核查区间：</strong>2023-01-01 至 2025-05-22</div>
+    </div>
+  </nav>
+
+  <div class="jsf-workspace">
+
+    <!-- ==================== MODULE 1: OVERVIEW & ENTITIES ==================== -->
+    <section id="jsf-view-m1" class="jsf-module active">
+      <div class="jsf-sec-head">
+        <div class="jsf-sec-eyebrow">Chapters A, B, D &amp; Para 47–53 · 案件缘起、主体穿透与筛查方法论</div>
+        <h2 class="jsf-sec-title">一、全案核心结论、四实体跨境监管套利架构与调查时间轴</h2>
+        <p class="jsf-sec-desc">
+          SEBI 核心定性：Jane Street 集团并非在印度从事正常的资产配置、跨市场无风险套利或中性 Delta 对冲，而是利用其高达 <strong>₹15,325 Cr 印度国债保证金</strong>的资金体量，在流动性较浅的指数成分股现货与期货市场<strong>故意承担冲击与回转亏损（累计净亏 ₹7,687.21 Cr）</strong>，人为扭曲 BANKNIFTY 与 NIFTY 指数点位及收盘结算价（15:00–15:30 VWAP），从而在流动性大 <strong>98–353 倍</strong>的指数期权市场收割反向重仓暴利（指数期权总盈利 <strong>₹43,289.33 Cr</strong>）。
+        </p>
+      </div>
+
+      <div class="jsf-card">
+        <div class="jsf-card-hdr">
+          <h3 class="jsf-card-title">1. 境内外四实体协同架构与 FPI 第20(4)条监管套利拆解 <span class="jsf-ref-tag">Section B · Table 4 · Paras 29–31, 47–52</span></h3>
+          <span class="jsf-mono" style="font-size:12px;color:var(--jsf-muted);">点击任意实体卡片查看精确穿透角色与分部损益</span>
+        </div>
+
+        <div class="jsf-grid-2">
+          <div>
+            <div class="jsf-entity-grid" id="jsf-entity-cards-container"></div>
+            <div class="jsf-callout jsf-terra" style="margin-top:12px;">
+              <strong>为什么必须专门在孟买设立 JSI Investments Pvt Ltd？（Para 29–30, 51 关键法证发现）</strong><br>
+              依据《2019年 SEBI 外国投资组合投资者条例》<strong>Regulation 20(4)(a)</strong>，境外 FPI 买卖印度现货股票<strong>必须实物交割（禁止日内平仓回转净额结算 Netting）</strong>。为实施“上午暴力买入推高成分股、下午全数抛空砸盘”的日内操纵闭环，Jane Street 借助 2020 年 12 月在孟买注册的全资境内公司 <strong>JSI Investments</strong> 执行现货日内回转（核查期现货净亏 <strong>-₹287.05 Cr</strong>），而将免受交割限制且利润可随时自由汇出境外的巨额期权头寸放在<strong>新加坡与香港 FPI</strong>（两家 FPI 合计兑现净利 <strong>₹32,681 Cr</strong>）。开户邮箱域名均为 <code>janestreet.com</code>，集团亦于 2024-08-30 及 2025-02-21 书面承认四实体由海外高管统一指挥。
+            </div>
+          </div>
+
+          <div id="jsf-entity-detail-panel" class="jsf-detail-panel"></div>
+        </div>
+
+        <div style="margin-top:16px;">
+          <div style="font-weight:700;font-size:14px;margin-bottom:8px;">Table 4：核查期（2023年1月1日 – 2025年3月31日）Jane Street 集团在 NSE 全品种损益汇总（单位：₹ Crore）</div>
+          <div class="jsf-tbl-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <th>实体名称 (Entity Name)</th>
+                  <th>PAN 税号</th>
+                  <th class="jsf-num">总净利润 (Total)</th>
+                  <th class="jsf-num">指数期权 (Index Options)</th>
+                  <th class="jsf-num">股指期货 (Index Futures)</th>
+                  <th class="jsf-num">个股期权 (Stock Options)</th>
+                  <th class="jsf-num">个股期货 (Stock Futures)</th>
+                  <th class="jsf-num">现货股票 (Cash Segment)</th>
+                </tr>
+              </thead>
+              <tbody id="jsf-table4-tbody"></tbody>
+            </table>
+          </div>
+        </div>
+
+        <div class="jsf-callout jsf-gold" style="margin-top:14px;">
+          <strong>资产持仓结构铁证（Para 48–50）：</strong>2025年1月至5月月末均值显示，Jane Street 旗下 FPI 在印度的<strong>真实股票持仓仅 ₹311 Cr</strong>，但持有的<strong>印度政府债券（现金等价物衍生品保证金）高达 ₹15,325 Cr（股票持仓的 49.3 倍）</strong>。截至 2024-03-31 印度全部 11,219 家注册 FPI 中仅 <strong>2.50%</strong> 从事算法交易（参见 <a href="https://www.sebi.gov.in/reports-and-statistics/research/sep-2024/study-analysis-of-profits-and-losses-in-the-equity-derivatives-segment-fy22-fy24-_86905.html" target="_blank" rel="noopener noreferrer">SEBI 2024年9月衍生品盈亏研究报告</a>），而该报告揭示 2022–2024 财年超 1 亿名散户 F&amp;O 交易者中 <strong>93% 处于亏损状态</strong>。
+        </div>
+      </div>
+
+      <div class="jsf-grid-2">
+        <div class="jsf-card">
+          <div class="jsf-card-hdr">
+            <h3 class="jsf-card-title">2. 案件触发与监管博弈全时间轴 <span class="jsf-ref-tag">Section A · Table 1</span></h3>
+          </div>
+          <div class="jsf-timeline-track">
+            <div class="jsf-tl-node">
+              <div class="jsf-dt">2024-04 · 诉讼泄密触发</div>
+              <div>Jane Street 在纽约南区联邦法院起诉前交易员及 Millennium 窃取其<strong>“印度期权市场核心秘密策略”</strong>（<a href="https://law.justia.com/cases/federal/district-courts/new-york/nysdce/1:2024cv02783/619414/142/" target="_blank" rel="noopener noreferrer">SDNY 案卷 1:24-cv-02783-PAE</a>），媒体曝光引发 SEBI 初步核查。</div>
+            </div>
+            <div class="jsf-tl-node">
+              <div class="jsf-dt">2024-07-23 &amp; 08-30</div>
+              <div>SEBI 指令 NSE 彻查市场滥用；8月20日约谈 JS，JS 于 8月30日 提交书面陈述辩称底层交易仅为“管理/消除不需要的 Delta”。</div>
+            </div>
+            <div class="jsf-tl-node">
+              <div class="jsf-dt">2024-10-01 ~ 12月</div>
+              <div>10月1日 SEBI 出台抑制指数期权到期日过度投机新规；11月13日 NSE 提交报告；12月 SEBI 发现到期日异常波动并锁定最大现金等价敞口持有者 JS，成立专案组。</div>
+            </div>
+            <div class="jsf-tl-node jsf-alert">
+              <div class="jsf-dt">2025-02-04 &amp; 02-06 · 警示函</div>
+              <div>专案组认定初步违反 PFUTP；2月6日 NSE 依 SEBI 指令向 JS 新加坡与 JSI 发出<strong>正式警示函 (Caution Letter)</strong> 严令停止大额 Delta 配合成分股短线操纵。JS 于 2月6日、21日回函承诺整改。</div>
+            </div>
+            <div class="jsf-tl-node jsf-alert">
+              <div class="jsf-dt">2025-05-08 / 15 / 22 · 顶风作案</div>
+              <div>无视 NSE 警示函与自身书面承诺，JS 在 NIFTY 周度到期日停用现货伪装合规，改用 49 只个股期货 + 股指期货继续实施“延长标记收盘价”，三日再赚 ₹370 Cr。</div>
+            </div>
+            <div class="jsf-tl-node jsf-alert">
+              <div class="jsf-dt">2025-07-03 · 紧急临时禁令</div>
+              <div>SEBI 签发 <a href="https://www.sebi.gov.in/enforcement/orders/jul-2025/interim-order-in-the-matter-of-index-manipulation-by-jane-street-group_95040.html" target="_blank" rel="noopener noreferrer">105 页单方紧急临时禁令</a>，连带追缴冻结 <strong>₹4,843,57,70,168</strong> 非法所得并实施全面市场禁入。</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="jsf-card">
+          <div class="jsf-card-hdr">
+            <h3 class="jsf-card-title">3. SEBI 四步法证筛查漏斗 <span class="jsf-ref-tag">Section D · Paras 13–14.7</span></h3>
+          </div>
+          <div style="display:flex;flex-direction:column;gap:10px;">
+            <div style="background:var(--jsf-elevated);border:1px solid var(--jsf-line);border-left:4px solid var(--jsf-pos);padding:10px 13px;border-radius:var(--jsf-radius-sm);">
+              <div class="jsf-mono" style="font-size:12px;color:var(--jsf-pos);font-weight:700;">STEP 1 · 全品种盈亏画像 (2023.01 – 2025.03)</div>
+              <div style="font-size:13px;">发现指数期权独赚 <strong>₹43,289.33 Cr</strong>，而个股期货/指期/现货反常巨亏 <strong>₹7,687.21 Cr</strong>（SEBI 强调高利润本身不违法，但作为异常风险筛查线索）。</div>
+            </div>
+            <div style="background:var(--jsf-elevated);border:1px solid var(--jsf-line);border-left:4px solid var(--jsf-pos-mid);padding:10px 13px;border-radius:var(--jsf-radius-sm);">
+              <div class="jsf-mono" style="font-size:12px;color:var(--jsf-pos-mid);font-weight:700;">STEP 2 · 四大指数期权拆分 (BANKNIFTY / NIFTY / FINNIFTY / MIDCPNIFTY)</div>
+              <div style="font-size:13px;">锁定 <strong>BANKNIFTY 期权</strong>贡献 <strong>₹17,319.26 Cr</strong>（占指数期权总利润 <strong>40%</strong>）。</div>
+            </div>
+            <div style="background:var(--jsf-elevated);border:1px solid var(--jsf-line);border-left:4px solid var(--jsf-ochre-mid);padding:10px 13px;border-radius:var(--jsf-radius-sm);">
+              <div class="jsf-mono" style="font-size:12px;color:var(--jsf-ochre);font-weight:700;">STEP 3 · 单日盈利排序与到期日过滤</div>
+              <div style="font-size:13px;">提取 BANKNIFTY 期权盈利 <strong>Top 30 交易日</strong> → 其中 <strong>19 天为衍生品到期日</strong> → 分钟级微观回放筛选出 <strong>17 天</strong> + 初查阶段 <strong>1 天</strong> = <strong>18 个 BANKNIFTY 涉案日</strong>。</div>
+            </div>
+            <div style="background:var(--jsf-neg-tint);border:1px solid var(--jsf-neg-line);border-left:4px solid var(--jsf-neg);padding:10px 13px;border-radius:var(--jsf-radius-sm);">
+              <div class="jsf-mono" style="font-size:12px;color:var(--jsf-neg);font-weight:700;">STEP 4 · 两大操纵模式归因 + 核查期外顶风作案追踪 = 共 21 天</div>
+              <div style="font-size:13px;">
+                • <strong>15 天（BANKNIFTY）</strong>：日内指数操纵策略（以最暴利日 2024-01-17 净赚 ₹734.93 Cr 为解剖样本，15天期权赚 ₹3,914 Cr vs 底层日内亏 ₹199.7 Cr）；<br>
+                • <strong>3 天（BANKNIFTY）+ 3 天（2025年5月 NIFTY）</strong>：延长标记收盘价策略（分别获利 ₹560 Cr 与 ₹370 Cr）。
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================== MODULE 2: MICROSTRUCTURE & PAYOFF SANDBOX ==================== -->
+    <section id="jsf-view-m2" class="jsf-module">
+      <div class="jsf-sec-head">
+        <div class="jsf-sec-eyebrow">Chapter C (Paras 7–12) · Tables 2 &amp; 3 · 跨市场微观结构失衡与数学原理</div>
+        <h2 class="jsf-sec-title">二、底层原理实验室：为什么“在现货亏小钱，就能在期权赚暴利”？</h2>
+        <p class="jsf-sec-desc">
+          正常市场中，现货与衍生品通过套利护栏同向联动，价格发现自下而上（成分股基本面 → 指数点位 → 期权定价）。但在印度周度指数期权到期日，<strong>期权市场的现金等价规模膨胀至成分股现货的 353 倍、交易人数达 345 倍</strong>，导致“尾巴摇狗”式的逆向操纵成为高确定性提款机。
+        </p>
+      </div>
+
+      <div class="jsf-grid-2">
+        <div class="jsf-card">
+          <div class="jsf-card-hdr">
+            <h3 class="jsf-card-title">1. 到期日流动性倒金字塔（2024-01-17 实测）<span class="jsf-ref-tag">Table 2 · Page 7</span></h3>
+          </div>
+          <div style="display:flex;flex-direction:column;gap:12px;">
+            <div>
+              <div style="display:flex;justify-content:space-between;gap:8px;flex-wrap:wrap;font-size:13px;"><span><strong>(A) 12只 BANKNIFTY 成分股现货总成交额</strong>（决定指数实时点位）</span><span class="jsf-mono jsf-neg">₹29,225 Cr (1x 基准)</span></div>
+              <div style="height:13px;background:var(--jsf-panel);border-radius:4px;margin-top:4px;overflow:hidden;"><div style="width:2.8%;min-width:6px;height:100%;background:var(--jsf-neg);"></div></div>
+            </div>
+            <div>
+              <div style="display:flex;justify-content:space-between;gap:8px;flex-wrap:wrap;font-size:13px;"><span><strong>(B) 12只成分股个股期货成交额</strong></span><span class="jsf-mono">₹43,589 Cr (1.49x)</span></div>
+              <div style="height:13px;background:var(--jsf-panel);border-radius:4px;margin-top:4px;overflow:hidden;"><div style="width:4.2%;min-width:9px;height:100%;background:var(--jsf-ochre-mid);"></div></div>
+            </div>
+            <div>
+              <div style="display:flex;justify-content:space-between;gap:8px;flex-wrap:wrap;font-size:13px;"><span><strong>(C) BANKNIFTY 股指期货成交额</strong></span><span class="jsf-mono">₹32,607 Cr (1.12x)</span></div>
+              <div style="height:13px;background:var(--jsf-panel);border-radius:4px;margin-top:4px;overflow:hidden;"><div style="width:3.2%;min-width:7px;height:100%;background:var(--jsf-ochre);"></div></div>
+            </div>
+            <div style="padding-top:6px;border-top:1px dashed var(--jsf-line-2);">
+              <div style="display:flex;justify-content:space-between;gap:8px;flex-wrap:wrap;font-size:13px;"><span><strong>(A+B+C) 底层现货+个股期指+股指期货合计</strong></span><span class="jsf-mono">₹1,05,421 Cr (3.61x)</span></div>
+              <div style="height:13px;background:var(--jsf-panel);border-radius:4px;margin-top:4px;overflow:hidden;"><div style="width:10.2%;height:100%;background:#7A7568;"></div></div>
+            </div>
+            <div style="background:var(--jsf-pos-tint);padding:11px 13px;border-radius:var(--jsf-radius-md);border:1px solid var(--jsf-pos-line);">
+              <div style="display:flex;justify-content:space-between;gap:8px;flex-wrap:wrap;font-size:13.5px;"><span><strong>(D) BANKNIFTY 指数期权现金等价 (Delta等价) 成交额</strong></span><span class="jsf-mono jsf-pos">₹1,03,17,127 Cr</span></div>
+              <div style="height:16px;background:var(--jsf-card);border-radius:4px;margin-top:6px;overflow:hidden;"><div style="width:100%;height:100%;background:linear-gradient(90deg, var(--jsf-pos), var(--jsf-pos-mid));"></div></div>
+              <div class="jsf-mono" style="margin-top:6px;font-size:12px;color:var(--jsf-pos);display:flex;justify-content:space-between;flex-wrap:wrap;gap:6px;">
+                <span>D / A = <strong>353 倍</strong>（期权 vs 成分股现货）</span>
+                <span>D / (A+B+C) = <strong>98 倍</strong>（期权 vs 全部底层市场）</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="jsf-card">
+          <div class="jsf-card-hdr">
+            <h3 class="jsf-card-title">2. 交易主体断层与百倍到期杠杆机制 <span class="jsf-ref-tag">Table 3 &amp; Paras 7.2–11</span></h3>
+          </div>
+          <div class="jsf-grid-3" style="margin-bottom:12px;">
+            <div style="background:var(--jsf-elevated);border:1px solid var(--jsf-line);padding:10px;border-radius:var(--jsf-radius-md);text-align:center;">
+              <div style="font-size:11.5px;color:var(--jsf-muted);">前3大权重股现货交易实体</div>
+              <div class="jsf-mono" style="font-size:20px;font-weight:700;color:var(--jsf-neg);margin:4px 0;">4,675</div>
+              <div style="font-size:11px;color:var(--jsf-muted);">机构与交割资金为主</div>
+            </div>
+            <div style="background:var(--jsf-elevated);border:1px solid var(--jsf-line);padding:10px;border-radius:var(--jsf-radius-md);text-align:center;">
+              <div style="font-size:11.5px;color:var(--jsf-muted);">BANKNIFTY 股指期货实体</div>
+              <div class="jsf-mono" style="font-size:20px;font-weight:700;color:var(--jsf-ochre);margin:4px 0;">26,593</div>
+              <div style="font-size:11px;color:var(--jsf-muted);">约 5x 保证金杠杆</div>
+            </div>
+            <div style="background:var(--jsf-pos-tint);border:1px solid var(--jsf-pos-line);padding:10px;border-radius:var(--jsf-radius-md);text-align:center;">
+              <div style="font-size:11.5px;color:var(--jsf-pos);font-weight:600;">BANKNIFTY 期权独立实体</div>
+              <div class="jsf-mono" style="font-size:20px;font-weight:700;color:var(--jsf-pos);margin:4px 0;">16,15,011</div>
+              <div style="font-size:11px;color:var(--jsf-pos);">现货人数的 <strong>345.5 倍</strong></div>
+            </div>
+          </div>
+
+          <div class="jsf-btn-group" style="margin-bottom:10px;">
+            <button type="button" class="jsf-pill-btn active" data-jsf-mech="lev">Para 10：100倍到期杠杆</button>
+            <button type="button" class="jsf-pill-btn" data-jsf-mech="pcp">Para 7.2.1：Put-Call 平价</button>
+            <button type="button" class="jsf-pill-btn" data-jsf-mech="call">Para 7.2.2：实值 Call 套利</button>
+            <button type="button" class="jsf-pill-btn" data-jsf-mech="put">Para 7.2.3：实值 Put 套利</button>
+          </div>
+          <div id="jsf-mechanism-explain-box" style="background:var(--jsf-elevated);border:1px solid var(--jsf-line);border-radius:var(--jsf-radius-md);padding:12px 14px;font-size:13px;"></div>
+        </div>
+      </div>
+
+      <div class="jsf-card">
+        <div class="jsf-card-hdr">
+          <h3 class="jsf-card-title">3. 跨市场操纵损益动力学沙盒（交互式模拟器）<span class="jsf-ref-tag">Section C.III · Para 12 &amp; Section E/F 实盘参数</span></h3>
+          <div class="jsf-btn-group">
+            <button type="button" class="jsf-pill-btn active" data-jsf-preset="p_jan17_full">载入 2024-01-17 全天实盘 (7.3x)</button>
+            <button type="button" class="jsf-pill-btn" data-jsf-preset="p_jan17_8m">载入 2024-01-17 开盘8分钟 (15.3x)</button>
+            <button type="button" class="jsf-pill-btn" data-jsf-preset="p_jul10">载入 2024-07-10 尾盘砸收盘 (15.8x)</button>
+            <button type="button" class="jsf-pill-btn" data-jsf-preset="p_may15">载入 2025-05-15 NIFTY多头逼空</button>
+          </div>
+        </div>
+
+        <div class="jsf-grid-2">
+          <div>
+            <div class="jsf-slider-row">
+              <div class="jsf-slider-lbl"><span>底层成分股现货+期货操纵投入规模 (X)</span><span class="jsf-mono" id="jsf-sb-val-x">₹4,370 Cr</span></div>
+              <input type="range" id="jsf-sb-x" min="500" max="8000" step="10" value="4370" aria-label="底层成分股现货加期货操纵投入规模">
+            </div>
+            <div class="jsf-slider-row">
+              <div class="jsf-slider-lbl"><span>期权反向现金等价 Delta 倍数 (k = |Delta| / X)</span><span class="jsf-mono" id="jsf-sb-val-k">7.35 x</span></div>
+              <input type="range" id="jsf-sb-k" min="1" max="20" step="0.05" value="7.35" aria-label="期权反向现金等价 Delta 倍数">
+            </div>
+            <div class="jsf-slider-row">
+              <div class="jsf-slider-lbl"><span>人为驱动指数反向结算有效位移率 (ΔI)</span><span class="jsf-mono" id="jsf-sb-val-move">2.29 %</span></div>
+              <input type="range" id="jsf-sb-move" min="0.2" max="5.0" step="0.01" value="2.29" aria-label="人为驱动指数反向结算有效位移率">
+            </div>
+            <div class="jsf-slider-row">
+              <div class="jsf-slider-lbl"><span>底层高冲击买高卖低回转损耗率 (c)</span><span class="jsf-mono" id="jsf-sb-val-cost">1.41 %</span></div>
+              <input type="range" id="jsf-sb-cost" min="0.2" max="4.0" step="0.01" value="1.41" aria-label="底层高冲击买高卖低回转损耗率">
+            </div>
+            <div class="jsf-callout" style="font-size:12.5px;margin-top:8px;">
+              <strong>操纵不等式核心条件：</strong>只要期权反向敞口倍数 k 满足 <code>k × ΔI &gt; c</code>，底层现货/期货端看似“非理性”的冲击成本亏损 <code>L = c × X</code>，就会转化为期权端收益 <code>G = k × X × ΔI</code> 的高确定性燃料。
+            </div>
+          </div>
+
+          <div style="background:var(--jsf-elevated);border:1px solid var(--jsf-line-2);border-radius:var(--jsf-radius-md);padding:16px;display:flex;flex-direction:column;justify-content:space-between;">
+            <div class="jsf-grid-3" style="margin-bottom:12px;">
+              <div style="padding:10px;background:var(--jsf-neg-tint);border:1px solid var(--jsf-neg-line);border-radius:var(--jsf-radius-sm);">
+                <div style="font-size:11.5px;color:var(--jsf-neg);">底层操纵故意亏损 (-L)</div>
+                <div class="jsf-mono jsf-neg" style="font-size:17px;" id="jsf-sb-out-loss">-₹61.62 Cr</div>
+              </div>
+              <div style="padding:10px;background:var(--jsf-pos-tint);border:1px solid var(--jsf-pos-line);border-radius:var(--jsf-radius-sm);">
+                <div style="font-size:11.5px;color:var(--jsf-pos);">期权反向头寸收益 (+G)</div>
+                <div class="jsf-mono jsf-pos" style="font-size:17px;" id="jsf-sb-out-gain">+₹735.52 Cr</div>
+              </div>
+              <div style="padding:10px;background:var(--jsf-ochre-tint);border:1px solid var(--jsf-ochre-line);border-radius:var(--jsf-radius-sm);">
+                <div style="font-size:11.5px;color:var(--jsf-ochre);">跨市场净收割利润</div>
+                <div class="jsf-mono" style="font-size:17px;font-weight:700;color:var(--jsf-ink);" id="jsf-sb-out-net">+₹673.90 Cr</div>
+              </div>
+            </div>
+            <div id="jsf-sb-svg-waterfall" style="width:100%;height:175px;"></div>
+            <div class="jsf-mono" id="jsf-sb-breakeven-note" style="font-size:12px;color:var(--jsf-ink-2);margin-top:8px;text-align:center;"></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================== MODULE 3: SYNCHRONIZED MULTI-TRACK REPLAY ==================== -->
+    <section id="jsf-view-m3" class="jsf-module">
+      <div class="jsf-sec-head">
+        <div class="jsf-sec-eyebrow">Chapters E &amp; F (Paras 15–17) · Pages 12–87 · 两大操纵策略、三种实盘形态全景还原</div>
+        <h2 class="jsf-sec-title">三、多轨同步回放器：日内拉砸操纵 vs 空头/多头延长标记收盘价</h2>
+        <p class="jsf-sec-desc">
+          严格对齐 SEBI 原文第 48 页、第 65 页、第 85 页六轨图形分析架构（<code>Spot 指数</code>、<code>Delta 敞口</code>、<code>累计期权盈利</code>、<code>CM 现货净买卖</code>、<code>FUTSTK 个股期货净买卖</code>、<code>FUTIDX 股指期货净买卖</code>），支持逐时段步进回放、鼠标十字准星联动读数，并可随时展开<strong>SEBI 临时禁令高清证据原图</strong>核对。
+        </p>
+      </div>
+
+      <div class="jsf-card">
+        <div class="jsf-card-hdr">
+          <div class="jsf-btn-group">
+            <button type="button" class="jsf-pill-btn active" data-jsf-rday="jan17">策略一：2024-01-17 BANKNIFTY (日内先拉后砸 · 赚 ₹734.93 Cr)</button>
+            <button type="button" class="jsf-pill-btn" data-jsf-rday="jul10">策略二A：2024-07-10 BANKNIFTY (尾盘空头砸收盘 · 赚 ₹225.35 Cr)</button>
+            <button type="button" class="jsf-pill-btn" data-jsf-rday="may15">策略二B：2025-05-15 NIFTY (警示函后纯期指多头逼空 · 赚 ₹167.53 Cr)</button>
+          </div>
+          <button type="button" class="jsf-pill-btn jsf-gold-outline" id="jsf-btn-toggle-evidence">对照 SEBI 禁令原图证据 (Page 23/48/65/85)</button>
+        </div>
+
+        <div class="jsf-grid-4" id="jsf-replay-kpi-row" style="margin-bottom:12px;"></div>
+
+        <div class="jsf-replay-toolbar">
+          <div style="display:flex;flex-wrap:wrap;align-items:center;gap:8px;">
+            <button type="button" class="jsf-pill-btn active" id="jsf-btn-play-replay">▶ 自动播放推演</button>
+            <button type="button" class="jsf-pill-btn" id="jsf-btn-step-prev">◀ 上一时点</button>
+            <button type="button" class="jsf-pill-btn" id="jsf-btn-step-next">下一时点 ▶</button>
+            <button type="button" class="jsf-pill-btn" id="jsf-btn-reset-replay">显示全天完整轨迹</button>
+          </div>
+          <div style="display:flex;align-items:center;gap:10px;flex:1;min-width:200px;max-width:460px;">
+            <span class="jsf-mono" style="font-size:12px;white-space:nowrap;">时间游标: <strong id="jsf-replay-time-lbl">15:30</strong></span>
+            <input type="range" id="jsf-replay-scrubber" min="0" max="25" step="1" value="25" aria-label="回放时间游标">
+          </div>
+        </div>
+
+        <div id="jsf-replay-live-readout" class="jsf-live-readout jsf-mono"></div>
+
+        <div class="jsf-canvas-box">
+          <canvas id="jsf-replay-canvas"></canvas>
+        </div>
+
+        <div class="jsf-phase-strip" id="jsf-replay-phase-strip"></div>
+
+        <div id="jsf-evidence-drawer" class="jsf-evidence-drawer">
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;flex-wrap:wrap;gap:8px;">
+            <strong id="jsf-evidence-drawer-title" style="color:var(--jsf-ochre);font-size:14px;">SEBI 临时禁令原文内嵌证据图（第 48 页 Graphical Analysis &amp; Table 15.54 图例）</strong>
+            <button type="button" class="jsf-pill-btn" id="jsf-btn-close-evidence">收起原图</button>
+          </div>
+          <div id="jsf-evidence-img-container">
+            <img id="jsf-ev-img-jan17" src="/investing/cases/sebi-jane-street-banknifty-nifty/assets/sebi-p48-jan17.jpg" alt="SEBI Page 48 Jan 17 2024 Six-Track Chart" loading="lazy">
+            <img id="jsf-ev-img-jan17-ohlc" src="/investing/cases/sebi-jane-street-banknifty-nifty/assets/sebi-p23-jan17-ohlc.jpg" alt="SEBI Page 23 Jan 17 2024 BANKNIFTY 5min OHLC" loading="lazy">
+            <img id="jsf-ev-img-jul10" src="/investing/cases/sebi-jane-street-banknifty-nifty/assets/sebi-p65-jul10.jpg" alt="SEBI Page 65 Jul 10 2024 Chart" loading="lazy" style="display:none;">
+            <img id="jsf-ev-img-may15" src="/investing/cases/sebi-jane-street-banknifty-nifty/assets/sebi-p85-may15.jpg" alt="SEBI Page 85 May 15 2025 Chart" loading="lazy" style="display:none;">
+          </div>
+          <div style="font-size:12px;color:var(--jsf-ink-2);margin-top:6px;">
+            <strong>SEBI 原图图例释义（Para 15.54, Pages 49–50）：</strong>自下而上依次为 <code>FUTSTK</code>（个股期货净买卖绿/红柱）、<code>CM</code>（现货股票净买卖绿/红柱）、<code>Option Net Buy &amp; Cumulative</code>（蓝柱/黑线为 Call 净买卖及累计，橙柱/紫线为 Put 净买卖及累计）、<code>FUTIDX</code>（股指期货净买卖）、<code>Profit &amp; Cum. Profit</code>（粉柱为分段期权损益，蓝线为累计期权盈利）、<code>Index Spot Price &amp; Delta Exposure</code>（浅紫线为现货指数，红棕线为期权净 Delta 敞口）。
+          </div>
+        </div>
+      </div>
+
+      <div class="jsf-grid-2">
+        <div class="jsf-card">
+          <div class="jsf-card-hdr">
+            <h3 class="jsf-card-title">到期日脉冲异常验证：2024-01-17 前后三日 GTV 对比 <span class="jsf-ref-tag">Table 25 · Page 44</span></h3>
+          </div>
+          <div class="jsf-tbl-wrap">
+            <table>
+              <thead>
+                <tr><th>日期窗口</th><th>交易日</th><th class="jsf-num">12成分股现货 (Cr)</th><th class="jsf-num">12成分股期货 (Cr)</th><th class="jsf-num">BANKNIFTY 指期 (Cr)</th><th class="jsf-num">总成交额 GTV (Cr)</th></tr>
+              </thead>
+              <tbody>
+                <tr><td>T - 1 (前一日)</td><td class="jsf-mono">16-Jan-2024</td><td class="jsf-num">214.41</td><td class="jsf-num">1,935.77</td><td class="jsf-num">-</td><td class="jsf-num">2,150.18</td></tr>
+                <tr class="jsf-tot-row"><td class="jsf-neg">T (到期操纵日)</td><td class="jsf-mono jsf-neg">17-Jan-2024</td><td class="jsf-num jsf-neg">3,710.42 (17.3x)</td><td class="jsf-num jsf-neg">6,102.58 (3.15x)</td><td class="jsf-num jsf-neg">844.33</td><td class="jsf-num jsf-neg">10,657.33 (4.96x)</td></tr>
+                <tr><td>T + 1 (次一日)</td><td class="jsf-mono">18-Jan-2024</td><td class="jsf-num">626.24</td><td class="jsf-num">1,956.86</td><td class="jsf-num">-</td><td class="jsf-num">2,583.10</td></tr>
+              </tbody>
+            </table>
+          </div>
+          <p style="font-size:12.5px;color:var(--jsf-ink-2);margin-top:8px;">到期日当天 JS 底层 GTV 骤增至前一日的 <strong>4.96 倍</strong>（其中现金现货暴增 <strong>17.3 倍</strong>），到期次日立即回落至 1/4，证明其交易完全围绕期权到期结算事件定制，绝非日常做市行为（Para 15.46–15.48）。</p>
+        </div>
+
+        <div class="jsf-card">
+          <div class="jsf-card-hdr">
+            <h3 class="jsf-card-title">到期日脉冲异常验证：2024-07-10 前后三日 GTV 对比 <span class="jsf-ref-tag">Table 36 · Page 67</span></h3>
+          </div>
+          <div class="jsf-tbl-wrap">
+            <table>
+              <thead>
+                <tr><th>日期窗口</th><th>交易日</th><th class="jsf-num">12成分股现货 (Cr)</th><th class="jsf-num">12成分股期货 (Cr)</th><th class="jsf-num">BANKNIFTY 指期 (Cr)</th><th class="jsf-num">总成交额 GTV (Cr)</th></tr>
+              </thead>
+              <tbody>
+                <tr><td>T - 1 (前一日)</td><td class="jsf-mono">09-Jul-2024</td><td class="jsf-num">103.20</td><td class="jsf-num">1,589.81</td><td class="jsf-num">-</td><td class="jsf-num">1,693.01</td></tr>
+                <tr class="jsf-tot-row"><td class="jsf-neg">T (到期操纵日)</td><td class="jsf-mono jsf-neg">10-Jul-2024</td><td class="jsf-num jsf-neg">487.99 (4.73x)</td><td class="jsf-num jsf-neg">5,099.03 (3.21x)</td><td class="jsf-num jsf-neg">735.86</td><td class="jsf-num jsf-neg">6,322.88 (3.73x)</td></tr>
+                <tr><td>T + 1 (次一日)</td><td class="jsf-mono">11-Jul-2024</td><td class="jsf-num">150.15</td><td class="jsf-num">3,901.53</td><td class="jsf-num">-</td><td class="jsf-num">4,051.68</td></tr>
+              </tbody>
+            </table>
+          </div>
+          <p style="font-size:12.5px;color:var(--jsf-ink-2);margin-top:8px;">更关键的是，7月10日全天 ₹6,322.88 Cr GTV 中高达 ₹2,800 Cr 单边卖盘高度浓缩在收盘前最后 60 分钟（14:30–15:30），直指 15:00–15:30 VWAP 结算机制（Para 16.33）。</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================== MODULE 4: 8-MIN MICROSCOPIC & OPTION CHAIN ==================== -->
+    <section id="jsf-view-m4" class="jsf-module">
+      <div class="jsf-sec-head">
+        <div class="jsf-sec-eyebrow">Section E.15 (Paras 15.14–15.28) · Tables 13, 14 &amp; 15 (Pages 22–31) · 显微镜级交易还原</div>
+        <h2 class="jsf-sec-title">四、黄金 8 分钟微观解剖（09:15–09:22）：如何一边拉指数、一边埋设 15 倍空单？</h2>
+        <p class="jsf-sec-desc">
+          SEBI 将 2024-01-17 开盘前 8 分钟（<code>09:15:00 – 09:22:59</code>）单独放大检验：在市场因 HDFC Bank 利空恐慌抛售时，JS 仅用 <strong>₹572 Cr</strong> 逆势强拉前 6 大权重股（占 BANKNIFTY 权重 <strong>87.67%</strong>），将指数硬生生推高 <strong>+603.04 点</strong>，制造“利空出尽强势反弹”假象，诱使散户在最高位接盘看涨期权、割肉看跌期权。
+        </p>
+      </div>
+
+      <div class="jsf-grid-2">
+        <div class="jsf-card">
+          <div class="jsf-card-hdr">
+            <h3 class="jsf-card-title">1. 期权权利金诱多扭曲与归零/暴涨轨迹 <span class="jsf-ref-tag">Table 14 · Page 26</span></h3>
+            <div style="display:flex;align-items:center;gap:6px;flex-wrap:wrap;">
+              <label for="jsf-strike-select" style="font-size:12.5px;font-weight:600;">选择行权价:</label>
+              <select id="jsf-strike-select">
+                <option value="46800">46800 (ATM 核心)</option>
+                <option value="46900">46900</option>
+                <option value="47000" selected>47000 (典型基准)</option>
+                <option value="47100">47100 (重仓区)</option>
+                <option value="47200">47200 (最大空头行权价)</option>
+                <option value="47300">47300</option>
+                <option value="47400">47400</option>
+                <option value="47500">47500</option>
+                <option value="47600">47600</option>
+                <option value="47700">47700</option>
+              </select>
+            </div>
+          </div>
+          <div id="jsf-strike-svg-box" style="width:100%;height:260px;"></div>
+          <div id="jsf-strike-stats-callout" class="jsf-callout" style="margin-top:10px;font-size:12.5px;"></div>
+        </div>
+
+        <div class="jsf-card">
+          <div class="jsf-card-hdr">
+            <h3 class="jsf-card-title">2. 开盘8分钟期权链全行权价建仓解剖 <span class="jsf-ref-tag">Table 15 · Pages 28–31</span></h3>
+          </div>
+          <div id="jsf-table15-bars-box" style="max-height:310px;overflow-y:auto;padding-right:4px;"></div>
+          <div class="jsf-callout jsf-gold" style="margin-top:10px;font-size:12.5px;">
+            <strong>专业做市商的“尾部保护翼”细节（Table 15 全表还原）：</strong><br>
+            在 <code>47000–47400</code> 平值核心区，JS 狂卖看涨期权（如 <code>47200 CE</code> 卖空 790,050 份，单档净空头 Delta <strong>-₹1,468.93 Cr</strong>）并狂买看跌期权（<code>47200 PE</code> 买入 921,255 份，单档净空头 Delta <strong>-₹2,417.30 Cr</strong>）；与此同时，在远端深虚值 <code>48300–55500 CE</code> 以 ₹0.9–₹12 极低价买入 322 万份保护性 Call，并在 <code>39500–45700 PE</code> 卖出低价虚值 Put 回收权利金并降低交易所保证金占用。8分钟合计：Call 端净空头 <strong>-₹3,661.16 Cr</strong> + Put 端净空头 <strong>-₹5,089.84 Cr</strong> = <strong>-₹8,751.00 Cr</strong>（底层 ₹572 Cr 买盘的 <strong>15.3 倍</strong>）。
+          </div>
+        </div>
+      </div>
+
+      <div class="jsf-card">
+        <div class="jsf-card-hdr">
+          <h3 class="jsf-card-title">3. 09:15–09:22 前六大权重股（占指数 87.67%）逐分钟 LTP 价格推力对抗矩阵 <span class="jsf-ref-tag">Table 13 · Page 24</span></h3>
+          <span style="font-size:12px;color:var(--jsf-muted);">深绿 = JS 主动拉升累计价差 (INR) ｜ 陶土红 = 市场其余所有参与者抛压价差 (INR)</span>
+        </div>
+        <div class="jsf-tbl-wrap">
+          <table id="jsf-table13-dom"></table>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================== MODULE 5: CONSTITUENT & LTP BUTTERFLY EXPLORER ==================== -->
+    <section id="jsf-view-m5" class="jsf-module">
+      <div class="jsf-sec-head">
+        <div class="jsf-sec-eyebrow">Tables 7–12, 16–24, 27–35 &amp; 38–43 · 全量成分股交易占比与 LTP 冲击法证库</div>
+        <h2 class="jsf-sec-title">五、成分股成交垄断度与“JS vs 全市场”交易级净 LTP 冲击镜像图</h2>
+        <p class="jsf-sec-desc">
+          SEBI 之所以驳斥“正常流动性供给/对冲”之说，核心铁证在于<strong>订单级与成交级最新成交价（LTP）冲击分解</strong>：正常做市商被动挂单提供流动性，LTP 冲击趋近中性；而 Jane Street 在拉升阶段高频追高扫单（Above LTP），在砸盘阶段高频击穿买盘砸价（Below LTP），单家机构制造的价格推力几乎与全市场所有其他参与者之和呈镜像对抗。
+        </p>
+      </div>
+
+      <div class="jsf-card">
+        <div class="jsf-card-hdr">
+          <div class="jsf-btn-group">
+            <button type="button" class="jsf-pill-btn active" data-jsf-ds="jan17_p1_cash">Jan 17 Patch I 现货买入 (11股)</button>
+            <button type="button" class="jsf-pill-btn" data-jsf-ds="jan17_p1_fut">Jan 17 Patch I 个股期指买入 (11股)</button>
+            <button type="button" class="jsf-pill-btn" data-jsf-ds="jan17_p2_cash">Jan 17 Patch II 现货倾泻 (12股)</button>
+            <button type="button" class="jsf-pill-btn" data-jsf-ds="jan17_p2_fut">Jan 17 Patch II 期货倾泻 (12标的)</button>
+            <button type="button" class="jsf-pill-btn" data-jsf-ds="jul10_close">Jul 10 尾盘空头砸盘 (38%垄断)</button>
+            <button type="button" class="jsf-pill-btn" data-jsf-ds="may15_nifty">May 15 NIFTY 全50标的期指扫货</button>
+          </div>
+        </div>
+
+        <div id="jsf-ds-note-banner" class="jsf-callout jsf-gold" style="margin-bottom:14px;"></div>
+
+        <div style="display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;gap:10px;margin-bottom:12px;">
+          <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;">
+            <label for="jsf-ds-search" style="font-size:13px;font-weight:600;">筛选股票代码:</label>
+            <input type="text" id="jsf-ds-search" placeholder="如 HDFC, ICICI, RELIANCE">
+          </div>
+          <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;">
+            <label for="jsf-ds-sort" style="font-size:13px;font-weight:600;">排序维度:</label>
+            <select id="jsf-ds-sort">
+              <option value="js_tv">按 JS 成交金额 (₹ Cr) 降序</option>
+              <option value="share">按 JS 占全市场成交比例 (%) 降序</option>
+              <option value="abs_ltp">按 |JS 交易级净 LTP 冲击| 幅度降序</option>
+              <option value="trades">按 JS 成交笔数降序</option>
+            </select>
+          </div>
+        </div>
+
+        <div style="background:var(--jsf-elevated);border:1px solid var(--jsf-line);border-radius:var(--jsf-radius-md);padding:14px 16px;margin-bottom:16px;">
+          <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:6px;margin-bottom:10px;font-size:12.5px;">
+            <strong>交易级净 LTP 冲击镜像对抗图（上条彩色：Jane Street 净 LTP 冲击 ｜ 下条浅灰：全市场其余所有参与者合计净 LTP 冲击）</strong>
+            <span class="jsf-mono" style="color:var(--jsf-muted);">左负向砸盘 (-INR) ◀ 0 ▶ 右正向拉升 (+INR)</span>
+          </div>
+          <div id="jsf-butterfly-chart-container" style="max-height:360px;overflow-y:auto;padding-right:6px;"></div>
+        </div>
+
+        <div class="jsf-tbl-wrap" style="max-height:440px;overflow-y:auto;">
+          <table>
+            <thead>
+              <tr>
+                <th>标的证券 (Scrip)</th>
+                <th>JS 交易起止窗口</th>
+                <th class="jsf-num">JS 成交笔数</th>
+                <th class="jsf-num">JS 成交额 A (₹ Cr)</th>
+                <th class="jsf-num">全市场成交额 B (₹ Cr)</th>
+                <th class="jsf-num">JS 市场占比 (A/B)</th>
+                <th class="jsf-num">JS 订单级净 LTP (INR)</th>
+                <th class="jsf-num">JS 成交级净 LTP (INR)</th>
+                <th class="jsf-num">其余市场净 LTP (INR)</th>
+                <th class="jsf-num">区间开盘 → 收盘</th>
+              </tr>
+            </thead>
+            <tbody id="jsf-ds-table-tbody"></tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================== MODULE 6: 21 IMPUGNED DAYS LEDGER ==================== -->
+    <section id="jsf-view-m6" class="jsf-module">
+      <div class="jsf-sec-head">
+        <div class="jsf-sec-eyebrow">Chapter H (Paras 37–40) · Table 44 (Pages 94–95) · 违法所得精确核算台账</div>
+        <h2 class="jsf-sec-title">六、21 个涉案到期日非法所得全量台账（精确至个位卢比：₹4,843,57,70,168）</h2>
+        <p class="jsf-sec-desc">
+          依据印度证券上诉法庭（SAT）在 <em>Immix Trade Pvt Ltd. v. SEBI (Ruchi Soya 案, 2023-11-10)</em> 对《SEBI 法》第 11B 条解释的权威判例：<strong>违法所得追缴（Disgorgement）严禁抵扣违法者为实施操纵而承受的任何交易亏损或成本费用</strong>。因此，JS 在 15 个日内操纵日承受的 ₹199.7 Cr（18日合计 ₹201 Cr）现货/期货亏损属于“恶意作案成本（mala fide cost）”，不予扣减。
+        </p>
+      </div>
+
+      <div class="jsf-card">
+        <div class="jsf-card-hdr">
+          <div class="jsf-btn-group">
+            <button type="button" class="jsf-pill-btn active" data-jsf-fidx="ALL">全部指数 (21天 · ₹4,843.58 Cr)</button>
+            <button type="button" class="jsf-pill-btn" data-jsf-fidx="BANKNIFTY">仅 BANKNIFTY (18天 · ₹4,473.62 Cr)</button>
+            <button type="button" class="jsf-pill-btn" data-jsf-fidx="NIFTY">仅 NIFTY 顶风作案期 (3天 · ₹369.96 Cr)</button>
+          </div>
+          <div class="jsf-btn-group">
+            <button type="button" class="jsf-pill-btn active" data-jsf-fstrat="ALL">全部策略</button>
+            <button type="button" class="jsf-pill-btn" data-jsf-fstrat="Intraday">日内指数操纵 (15天 · ₹3,913.59 Cr)</button>
+            <button type="button" class="jsf-pill-btn" data-jsf-fstrat="MarkingClose">延长标记收盘价 (6天 · ₹929.99 Cr)</button>
+          </div>
+        </div>
+
+        <div id="jsf-ledger-chart-box" style="width:100%;height:240px;background:var(--jsf-elevated);border:1px solid var(--jsf-line);border-radius:var(--jsf-radius-md);padding:12px;margin-bottom:14px;"></div>
+
+        <div id="jsf-ledger-summary-bar" class="jsf-callout" style="display:flex;flex-wrap:wrap;justify-content:space-between;gap:12px;font-family:var(--mono);font-size:13px;margin-bottom:12px;"></div>
+
+        <div class="jsf-tbl-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>序号 (Sr No.)</th>
+                <th>到期交易日 (Date)</th>
+                <th>标的指数 (Index)</th>
+                <th>SEBI 认定操纵策略类型</th>
+                <th class="jsf-num">非法所得精确卢比额 (INR)</th>
+                <th class="jsf-num">折算 Crore (₹ Cr)</th>
+                <th class="jsf-num">占追缴总额比例</th>
+              </tr>
+            </thead>
+            <tbody id="jsf-table44-tbody"></tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================== MODULE 7: LEGAL & ENFORCEMENT ==================== -->
+    <section id="jsf-view-m7" class="jsf-module">
+      <div class="jsf-sec-head">
+        <div class="jsf-sec-eyebrow">Chapters G, I &amp; J (Paras 18–36, 41–66) · Pages 87–105 · 法律定性、判例与临时禁令执行机制</div>
+        <h2 class="jsf-sec-title">七、JS 辩解逐条驳斥、最高法院核心判例与第 62 条禁令条款状态模拟</h2>
+        <p class="jsf-sec-desc">
+          完整梳理 SEBI 对 Jane Street 书面抗辩的法证证伪逻辑、引用的五大司法判例，以及第 62.1 至 62.13 款“托管保证金共管 + 有条件解禁（Clause 62.11）”的制度设计。
+        </p>
+      </div>
+
+      <div class="jsf-card">
+        <div class="jsf-card-hdr">
+          <h3 class="jsf-card-title">1. Jane Street 辩解 vs SEBI 法证证伪对照表 <span class="jsf-ref-tag">Paras 15.51.4, 20–31, 48–52</span></h3>
+        </div>
+        <div class="jsf-grid-2">
+          <div style="background:var(--jsf-elevated);border:1px solid var(--jsf-line);border-radius:var(--jsf-radius-md);padding:14px;">
+            <div class="jsf-mono" style="color:var(--jsf-neg);font-weight:700;font-size:12.5px;margin-bottom:6px;">辩解一：“现货与期货交易是为了消除/管理不需要的期权 Delta 敞口”(2024-08-30 函)</div>
+            <p style="font-size:13px;color:var(--jsf-ink-2);">
+              <strong>SEBI 证伪：</strong>完全颠倒因果与方向。在 2024-01-17 Patch I（09:15–11:47），JS 在现货/期货净买入 +₹4,370.03 Cr 的<strong>同一时间窗口</strong>，并非对冲原有空头，而是<strong>主动新建 -₹32,114.96 Cr 的巨额看跌期权负 Delta（增幅 +384%，规模达底层多头的 7.3 倍，开盘前8分钟更高达 15.3 倍）</strong>。若真为管理空头 Delta，买入底层资产应使总风险收敛，而非利用底层拉升制造的期权错价同步成倍扩大反向裸空头，随后下午再把上午刚买的底层头寸全数砸盘亏钱清零。
+            </p>
+          </div>
+          <div style="background:var(--jsf-elevated);border:1px solid var(--jsf-line);border-radius:var(--jsf-radius-md);padding:14px;">
+            <div class="jsf-mono" style="color:var(--jsf-neg);font-weight:700;font-size:12.5px;margin-bottom:6px;">辩解二：“跨市场多品种同时交易属于正常量化套利与流动性供给”</div>
+            <p style="font-size:13px;color:var(--jsf-ink-2);">
+              <strong>SEBI 证伪：</strong>正常套利在各腿锁定无风险价差，且避免产生剧烈价格冲击；而 JS 在成分股单日占全市场 15%–39% 成交量，以高于 LTP 强买、低于 LTP 强卖的主动扫单方式交易（如 Jul 10 HDFC 期货 93% 交易在 LTP 及以下），导致核查期底层市场系统性净亏 <strong>-₹7,687.21 Cr</strong>（18个样本日日内回转必亏 -₹201 Cr）。独立看底层交易毫无商业理性，唯一解释是充当撬动期权结算价的操纵杠杆。
+            </p>
+          </div>
+          <div style="background:var(--jsf-elevated);border:1px solid var(--jsf-line);border-radius:var(--jsf-radius-md);padding:14px;">
+            <div class="jsf-mono" style="color:var(--jsf-neg);font-weight:700;font-size:12.5px;margin-bottom:6px;">辩解三：“2025年2月收到 NSE 警示函后已承诺遵守监管要求，停止现货异常交易”</div>
+            <p style="font-size:13px;color:var(--jsf-ink-2);">
+              <strong>SEBI 证伪：</strong>典型的“表面合规、实质规避（cynical defiance）”。2025-05-15 等三个 NIFTY 到期日，JS 虽然将现货股票交易降为零以规避警示函字面点名的现金市场，却在最后两小时动用 <strong>₹7,416.24 Cr</strong> 横扫 49 只 NIFTY 个股期货与股指期货，配合 +₹55,422.76 Cr 期权多头大反转操纵收盘价（Para 17.18, 55–56）。
+            </p>
+          </div>
+          <div style="background:var(--jsf-elevated);border:1px solid var(--jsf-line);border-radius:var(--jsf-radius-md);padding:14px;">
+            <div class="jsf-mono" style="color:var(--jsf-pos);font-weight:700;font-size:12.5px;margin-bottom:6px;">违反法规与最高法院权威判例支撑 (Sections G &amp; I)</div>
+            <ul style="font-size:13px;color:var(--jsf-ink-2);padding-left:18px;">
+              <li><strong>SEBI Act 第 12A(a)-(c) 条 &amp; PFUTP 条例第 3(a)-(d)、4(1)、4(2)(a)（制造虚假交易表象）、4(2)(e) 条（操纵证券价格或基准指数参考价 Benchmark Price）</strong>。</li>
+              <li><strong><em>SEBI v. Rakhi Trading Pvt. Ltd.</em> (2018 SC)</strong>：最高法院裁定<em>“没有人会故意为了亏损而交易（Nobody intentionally trades for loss）……有预谋的快速反向亏损交易本身即非真实交易”</em>；且一旦操纵事实确立，必然推定市场投资者受到了诱导，无需逐一举证散户因果关系（Paras 32–35）。</li>
+              <li><strong><em>Immix Trade v. SEBI</em> (2023 SAT)</strong>：追缴非法所得不扣减违法者的亏损成本（Para 39）。</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <div class="jsf-card">
+        <div class="jsf-card-hdr">
+          <h3 class="jsf-card-title">2. 第 62 条紧急临时禁令（Clauses 62.1 – 62.13）合规状态切换器 <span class="jsf-ref-tag">Section J · Pages 103–105</span></h3>
+          <div class="jsf-btn-group">
+            <button type="button" class="jsf-pill-btn jsf-terra active" data-jsf-ostate="pre">初始状态：2025-07-03 禁令刚签发（未存托管金）</button>
+            <button type="button" class="jsf-pill-btn" data-jsf-ostate="post">触发第 62.11 款：全额存入 ₹4,843.58 Cr 共管保证金后</button>
+          </div>
+        </div>
+
+        <div id="jsf-order-state-banner" class="jsf-callout jsf-terra" style="margin-bottom:12px;"></div>
+        <div class="jsf-tbl-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>条款编号</th>
+                <th>核心监管指令内容 (Section J, Para 62–63)</th>
+                <th>适用对象</th>
+                <th>当前法律效力状态</th>
+              </tr>
+            </thead>
+            <tbody id="jsf-clauses-tbody"></tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+  </div>
+</div>

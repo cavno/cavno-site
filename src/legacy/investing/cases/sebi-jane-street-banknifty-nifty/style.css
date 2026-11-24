@@ -1,0 +1,877 @@
+/* ==========================================================================
+   SEBI vs Jane Street Forensic Workbench — Cavno Warm Editorial Styling
+   Scoped strictly to .jsf-page-head, #sebi-js-app (.jsf-app), and .jsf-end.
+   Zero .cv-* class definitions; inherits Cavno tokens from global.css.
+   ========================================================================== */
+
+.jsf-page-head {
+  padding-bottom: 18px;
+}
+
+.jsf-page-head .jsf-title {
+  max-width: 1060px;
+  font-size: clamp(28px, 3.5vw, 40px);
+  line-height: 1.32;
+  letter-spacing: -0.02em;
+  margin-top: 10px;
+  overflow-wrap: anywhere;
+}
+
+.jsf-page-head .jsf-lede {
+  max-width: 980px;
+  margin-top: 12px;
+  font-size: 15.5px;
+  line-height: 1.78;
+  color: var(--ink-2);
+}
+
+.jsf-page-head .jsf-lede a {
+  color: var(--coral-deep);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.jsf-page-head .jsf-lede a:hover {
+  color: var(--ink);
+}
+
+.jsf-meta-badges {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 12px;
+  font-family: var(--mono);
+  font-size: 11.5px;
+  line-height: 1.4;
+}
+
+.jsf-meta-pill {
+  display: inline-flex;
+  align-items: center;
+  padding: 3px 10px;
+  border-radius: 999px;
+  background: var(--panel);
+  border: 1px solid var(--line);
+  color: var(--ink-2);
+}
+
+.jsf-meta-pill.jsf-accent {
+  background: #FAF0EA;
+  border-color: #E8C7B7;
+  color: #9E4427;
+  font-weight: 600;
+}
+
+.jsf-head-links {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 20px;
+  margin-top: 10px;
+}
+
+/* ---------- Core Scoped Workbench Root ---------- */
+#sebi-js-app.jsf-app {
+  --jsf-paper: var(--paper, #FAF9F5);
+  --jsf-panel: var(--panel, #F0EEE6);
+  --jsf-card: var(--card, #FFFFFF);
+  --jsf-elevated: #FCFBF8;
+  --jsf-ink: var(--ink, #141413);
+  --jsf-ink-2: var(--ink-2, #63615B);
+  --jsf-muted: #78756D;
+  --jsf-line: var(--line, #E3E0D5);
+  --jsf-line-2: var(--line-2, #CFCCC0);
+  --jsf-pos: #2D624C;
+  --jsf-pos-mid: #3D7A60;
+  --jsf-pos-tint: #EEF5F1;
+  --jsf-pos-line: #C5DDD0;
+  --jsf-neg: #9E4427;
+  --jsf-neg-mid: #C15F3C;
+  --jsf-neg-tint: #FAF0EA;
+  --jsf-neg-line: #E8C7B7;
+  --jsf-ochre: #8C6218;
+  --jsf-ochre-mid: #B38128;
+  --jsf-ochre-tint: #FBF5E6;
+  --jsf-ochre-line: #E6D3A3;
+  --jsf-plum: #5C4B7D;
+  --jsf-radius-lg: 16px;
+  --jsf-radius-md: 10px;
+  --jsf-radius-sm: 6px;
+
+  font-family: var(--sans);
+  color: var(--jsf-ink);
+  font-size: 15px;
+  line-height: 1.68;
+  min-width: 0;
+}
+
+#sebi-js-app.jsf-app *,
+#sebi-js-app.jsf-app *::before,
+#sebi-js-app.jsf-app *::after {
+  box-sizing: border-box;
+}
+
+#sebi-js-app.jsf-app :where(h2, h3, h4, p, ul, ol, figure) {
+  margin: 0;
+  padding: 0;
+}
+
+#sebi-js-app.jsf-app a {
+  color: var(--coral-deep);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+#sebi-js-app.jsf-app a:hover {
+  color: var(--jsf-ink);
+}
+
+#sebi-js-app.jsf-app code {
+  font-family: var(--mono);
+  font-size: 0.88em;
+  background: var(--jsf-panel);
+  color: var(--jsf-ink);
+  padding: 1px 6px;
+  border-radius: 5px;
+  overflow-wrap: anywhere;
+}
+
+#sebi-js-app.jsf-app button,
+#sebi-js-app.jsf-app input,
+#sebi-js-app.jsf-app select {
+  font-family: inherit;
+  color: inherit;
+}
+
+/* ---------- Top KPI Strip ---------- */
+#sebi-js-app .jsf-kpi-strip {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 12px;
+  margin: 6px 0 24px;
+}
+
+#sebi-js-app .jsf-top-kpi {
+  background: var(--jsf-card);
+  border: 1px solid var(--jsf-line);
+  border-top: 3px solid var(--jsf-line-2);
+  border-radius: var(--jsf-radius-md);
+  padding: 14px 16px;
+  min-width: 0;
+}
+
+#sebi-js-app .jsf-top-kpi.jsf-kpi-ochre { border-top-color: var(--jsf-ochre-mid); }
+#sebi-js-app .jsf-top-kpi.jsf-kpi-pos { border-top-color: var(--jsf-pos-mid); }
+#sebi-js-app .jsf-top-kpi.jsf-kpi-neg { border-top-color: var(--jsf-neg-mid); }
+
+#sebi-js-app .jsf-top-kpi .jsf-lbl {
+  font-size: 12px;
+  color: var(--jsf-ink-2);
+  line-height: 1.45;
+}
+
+#sebi-js-app .jsf-top-kpi .jsf-val {
+  font-family: var(--mono);
+  font-size: clamp(18px, 1.8vw, 22px);
+  font-weight: 700;
+  color: var(--jsf-ink);
+  margin-top: 4px;
+  line-height: 1.25;
+  font-variant-numeric: tabular-nums;
+}
+
+#sebi-js-app .jsf-top-kpi .jsf-val.jsf-pos-txt { color: var(--jsf-pos); }
+#sebi-js-app .jsf-top-kpi .jsf-val.jsf-neg-txt { color: var(--jsf-neg); }
+#sebi-js-app .jsf-top-kpi .jsf-val.jsf-ochre-txt { color: var(--jsf-ochre); }
+
+#sebi-js-app .jsf-top-kpi .jsf-sub {
+  font-family: var(--mono);
+  font-size: 11px;
+  color: var(--jsf-muted);
+  margin-top: 4px;
+  line-height: 1.4;
+  overflow-wrap: anywhere;
+}
+
+/* ---------- App Shell & Sticky Rail ---------- */
+#sebi-js-app .jsf-shell {
+  display: grid;
+  grid-template-columns: 228px minmax(0, 1fr);
+  gap: 24px;
+  align-items: start;
+  padding-bottom: 32px;
+}
+
+#sebi-js-app .jsf-rail {
+  position: sticky;
+  top: calc(var(--cv-head-total, 68px) + 18px);
+  background: var(--jsf-card);
+  border: 1px solid var(--jsf-line);
+  border-radius: var(--jsf-radius-lg);
+  padding: 14px 12px;
+}
+
+#sebi-js-app .jsf-rail-hdr {
+  font-family: var(--mono);
+  font-size: 11px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--jsf-muted);
+  padding: 0 8px 10px;
+  border-bottom: 1px solid var(--jsf-line);
+  margin-bottom: 8px;
+}
+
+#sebi-js-app .jsf-nav-btn {
+  width: 100%;
+  text-align: left;
+  background: transparent;
+  border: 1px solid transparent;
+  padding: 9px 10px;
+  border-radius: var(--jsf-radius-md);
+  cursor: pointer;
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  color: var(--jsf-ink-2);
+  font-size: 13.5px;
+  font-weight: 500;
+  line-height: 1.45;
+  transition: background-color 0.15s ease, color 0.15s ease, border-color 0.15s ease;
+  margin-bottom: 4px;
+}
+
+#sebi-js-app .jsf-nav-btn:hover {
+  background: var(--jsf-panel);
+  color: var(--jsf-ink);
+}
+
+#sebi-js-app .jsf-nav-btn.active {
+  background: var(--jsf-neg-tint);
+  color: var(--jsf-neg);
+  border-color: var(--jsf-neg-line);
+  font-weight: 600;
+}
+
+#sebi-js-app .jsf-nav-btn .jsf-idx {
+  font-family: var(--mono);
+  font-size: 11px;
+  opacity: 0.8;
+  min-width: 20px;
+  padding-top: 1px;
+}
+
+#sebi-js-app .jsf-rail-foot {
+  margin-top: 10px;
+  padding: 10px 8px 2px;
+  border-top: 1px solid var(--jsf-line);
+  font-size: 11.5px;
+  color: var(--jsf-muted);
+  line-height: 1.55;
+}
+
+/* ---------- Workspace & Module Views ---------- */
+#sebi-js-app .jsf-workspace {
+  min-width: 0;
+}
+
+#sebi-js-app .jsf-module {
+  display: none;
+  animation: jsfFadeIn 0.18s ease;
+}
+
+#sebi-js-app .jsf-module.active {
+  display: block;
+}
+
+@keyframes jsfFadeIn {
+  from { opacity: 0; transform: translateY(3px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+#sebi-js-app .jsf-sec-head {
+  background: var(--jsf-card);
+  border: 1px solid var(--jsf-line);
+  border-left: 4px solid var(--coral-deep);
+  border-radius: var(--jsf-radius-lg);
+  padding: 18px 20px;
+  margin-bottom: 16px;
+}
+
+#sebi-js-app .jsf-sec-eyebrow {
+  font-family: var(--mono);
+  font-size: 11.5px;
+  color: var(--jsf-ochre);
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+#sebi-js-app .jsf-sec-title {
+  font-family: var(--serif);
+  font-size: clamp(20px, 2.2vw, 24px);
+  font-weight: 700;
+  color: var(--jsf-ink);
+  margin: 5px 0 8px;
+  line-height: 1.38;
+}
+
+#sebi-js-app .jsf-sec-desc {
+  font-size: 14px;
+  color: var(--jsf-ink-2);
+  line-height: 1.72;
+}
+
+/* ---------- Cards & Grids ---------- */
+#sebi-js-app .jsf-card {
+  background: var(--jsf-card);
+  border: 1px solid var(--jsf-line);
+  border-radius: var(--jsf-radius-lg);
+  padding: 18px 20px;
+  margin-bottom: 16px;
+  min-width: 0;
+}
+
+#sebi-js-app .jsf-card-hdr {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 14px;
+  padding-bottom: 11px;
+  border-bottom: 1px solid var(--jsf-line);
+}
+
+#sebi-js-app .jsf-card-title {
+  font-family: var(--serif);
+  font-size: 16.5px;
+  font-weight: 700;
+  color: var(--jsf-ink);
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+  line-height: 1.45;
+}
+
+#sebi-js-app .jsf-ref-tag {
+  font-family: var(--mono);
+  font-size: 11px;
+  font-weight: 600;
+  padding: 2px 8px;
+  border-radius: var(--jsf-radius-sm);
+  background: var(--jsf-ochre-tint);
+  color: var(--jsf-ochre);
+  border: 1px solid var(--jsf-ochre-line);
+}
+
+#sebi-js-app .jsf-grid-2 {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 16px;
+}
+
+#sebi-js-app .jsf-grid-3 {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 12px;
+}
+
+#sebi-js-app .jsf-grid-4 {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 12px;
+}
+
+#sebi-js-app .jsf-grid-2 > *,
+#sebi-js-app .jsf-grid-3 > *,
+#sebi-js-app .jsf-grid-4 > * {
+  min-width: 0;
+}
+
+/* ---------- Callouts & Badges ---------- */
+#sebi-js-app .jsf-callout {
+  border-radius: var(--jsf-radius-md);
+  padding: 12px 15px;
+  font-size: 13.5px;
+  line-height: 1.68;
+  margin: 10px 0;
+  border: 1px solid var(--jsf-pos-line);
+  border-left: 4px solid var(--jsf-pos);
+  background: var(--jsf-pos-tint);
+  color: var(--jsf-ink);
+}
+
+#sebi-js-app .jsf-callout.jsf-terra {
+  border-color: var(--jsf-neg-line);
+  border-left-color: var(--jsf-neg);
+  background: var(--jsf-neg-tint);
+}
+
+#sebi-js-app .jsf-callout.jsf-gold {
+  border-color: var(--jsf-ochre-line);
+  border-left-color: var(--jsf-ochre-mid);
+  background: var(--jsf-ochre-tint);
+}
+
+#sebi-js-app .jsf-badge {
+  display: inline-block;
+  padding: 2px 8px;
+  border-radius: 999px;
+  font-family: var(--mono);
+  font-size: 11px;
+  font-weight: 600;
+  line-height: 1.4;
+  white-space: nowrap;
+}
+
+#sebi-js-app .jsf-badge-pos {
+  background: var(--jsf-pos-tint);
+  color: var(--jsf-pos);
+  border: 1px solid var(--jsf-pos-line);
+}
+
+#sebi-js-app .jsf-badge-neg {
+  background: var(--jsf-neg-tint);
+  color: var(--jsf-neg);
+  border: 1px solid var(--jsf-neg-line);
+}
+
+#sebi-js-app .jsf-badge-muted {
+  background: var(--jsf-panel);
+  color: var(--jsf-muted);
+  border: 1px solid var(--jsf-line);
+}
+
+/* ---------- Buttons & Inputs ---------- */
+#sebi-js-app .jsf-btn-group {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+#sebi-js-app .jsf-pill-btn {
+  padding: 6px 12px;
+  border-radius: var(--jsf-radius-md);
+  border: 1px solid var(--jsf-line-2);
+  background: var(--jsf-elevated);
+  color: var(--jsf-ink-2);
+  font-size: 12.5px;
+  font-weight: 600;
+  line-height: 1.4;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+#sebi-js-app .jsf-pill-btn:hover {
+  border-color: var(--coral-deep);
+  color: var(--coral-deep);
+  background: var(--jsf-card);
+}
+
+#sebi-js-app .jsf-pill-btn.active {
+  background: var(--jsf-ink);
+  color: var(--jsf-card);
+  border-color: var(--jsf-ink);
+}
+
+#sebi-js-app .jsf-pill-btn.jsf-terra.active {
+  background: var(--jsf-neg);
+  border-color: var(--jsf-neg);
+  color: #FFFFFF;
+}
+
+#sebi-js-app .jsf-pill-btn.jsf-gold-outline {
+  border-color: var(--jsf-ochre-mid);
+  background: var(--jsf-ochre-tint);
+  color: var(--jsf-ochre);
+}
+
+#sebi-js-app .jsf-pill-btn.jsf-gold-outline:hover {
+  background: var(--jsf-ochre);
+  border-color: var(--jsf-ochre);
+  color: #FFFFFF;
+}
+
+#sebi-js-app .jsf-slider-row {
+  margin-bottom: 12px;
+}
+
+#sebi-js-app .jsf-slider-lbl {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 8px;
+  flex-wrap: wrap;
+  font-size: 13px;
+  font-weight: 600;
+  margin-bottom: 4px;
+}
+
+#sebi-js-app input[type="range"] {
+  width: 100%;
+  accent-color: var(--coral-deep);
+  cursor: pointer;
+}
+
+#sebi-js-app select,
+#sebi-js-app input[type="text"] {
+  padding: 6px 10px;
+  border-radius: var(--jsf-radius-sm);
+  border: 1px solid var(--jsf-line-2);
+  background: var(--jsf-card);
+  color: var(--jsf-ink);
+  font-size: 13px;
+  max-width: 100%;
+}
+
+/* ---------- Tables ---------- */
+#sebi-js-app .jsf-tbl-wrap {
+  width: 100%;
+  max-width: 100%;
+  overflow-x: auto;
+  overscroll-behavior-x: contain;
+  -webkit-overflow-scrolling: touch;
+  border: 1px solid var(--jsf-line);
+  border-radius: var(--jsf-radius-md);
+  background: var(--jsf-card);
+}
+
+#sebi-js-app table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 13px;
+  line-height: 1.5;
+}
+
+#sebi-js-app th,
+#sebi-js-app td {
+  padding: 9px 11px;
+  border-bottom: 1px solid var(--jsf-line);
+  text-align: left;
+  white-space: nowrap;
+}
+
+#sebi-js-app th {
+  background: var(--jsf-panel);
+  color: var(--jsf-ink);
+  font-weight: 600;
+  position: sticky;
+  top: 0;
+  z-index: 2;
+}
+
+#sebi-js-app td.jsf-num,
+#sebi-js-app th.jsf-num {
+  text-align: right;
+  font-family: var(--mono);
+  font-variant-numeric: tabular-nums;
+}
+
+#sebi-js-app tbody tr:hover td {
+  background: var(--jsf-paper);
+}
+
+#sebi-js-app tr.jsf-tot-row td {
+  background: var(--jsf-panel);
+  font-weight: 700;
+  border-top: 2px solid var(--jsf-line-2);
+}
+
+#sebi-js-app .jsf-pos { color: var(--jsf-pos); font-weight: 600; }
+#sebi-js-app .jsf-neg { color: var(--jsf-neg); font-weight: 600; }
+#sebi-js-app .jsf-mono { font-family: var(--mono); font-variant-numeric: tabular-nums; }
+
+/* ---------- Module 1: Entities & Timeline ---------- */
+#sebi-js-app .jsf-entity-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 10px;
+}
+
+#sebi-js-app .jsf-entity-card {
+  background: var(--jsf-elevated);
+  border: 1.5px solid var(--jsf-line);
+  border-radius: var(--jsf-radius-md);
+  padding: 12px 14px;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  min-width: 0;
+}
+
+#sebi-js-app .jsf-entity-card:hover {
+  border-color: var(--jsf-line-2);
+  background: var(--jsf-card);
+}
+
+#sebi-js-app .jsf-entity-card.active {
+  border-color: var(--jsf-pos);
+  background: var(--jsf-pos-tint);
+}
+
+#sebi-js-app .jsf-entity-card.jsf-india.active {
+  border-color: var(--jsf-neg);
+  background: var(--jsf-neg-tint);
+}
+
+#sebi-js-app .jsf-detail-panel {
+  background: var(--jsf-elevated);
+  border: 1px solid var(--jsf-line-2);
+  border-radius: var(--jsf-radius-md);
+  padding: 16px;
+}
+
+#sebi-js-app .jsf-timeline-track {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 10px;
+}
+
+#sebi-js-app .jsf-tl-node {
+  background: var(--jsf-elevated);
+  border: 1px solid var(--jsf-line);
+  border-top: 3px solid var(--jsf-pos);
+  border-radius: var(--jsf-radius-md);
+  padding: 11px 12px;
+  font-size: 12.5px;
+  line-height: 1.58;
+}
+
+#sebi-js-app .jsf-tl-node.jsf-alert {
+  border-top-color: var(--jsf-neg);
+  background: #FDF8F5;
+}
+
+#sebi-js-app .jsf-tl-node .jsf-dt {
+  font-family: var(--mono);
+  font-weight: 700;
+  color: var(--jsf-ochre);
+  font-size: 11.5px;
+  margin-bottom: 4px;
+}
+
+/* ---------- Module 3: Multi-Track Canvas Replay & Evidence Drawer ---------- */
+#sebi-js-app .jsf-replay-toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  background: var(--jsf-panel);
+  padding: 10px 14px;
+  border-radius: var(--jsf-radius-md);
+  margin-bottom: 12px;
+}
+
+#sebi-js-app .jsf-live-readout {
+  background: var(--jsf-elevated);
+  border: 1px solid var(--jsf-line);
+  border-radius: var(--jsf-radius-sm);
+  padding: 8px 12px;
+  margin-bottom: 10px;
+  font-size: 12px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 14px;
+  justify-content: space-between;
+}
+
+#sebi-js-app .jsf-canvas-box {
+  position: relative;
+  width: 100%;
+  height: 520px;
+  background: var(--jsf-card);
+  border: 1px solid var(--jsf-line-2);
+  border-radius: var(--jsf-radius-md);
+  overflow: hidden;
+}
+
+#sebi-js-app .jsf-canvas-box canvas {
+  width: 100%;
+  height: 100%;
+  display: block;
+  cursor: crosshair;
+}
+
+#sebi-js-app .jsf-phase-strip {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(175px, 1fr));
+  gap: 8px;
+  margin-top: 12px;
+}
+
+#sebi-js-app .jsf-phase-card {
+  background: var(--jsf-elevated);
+  border: 1px solid var(--jsf-line);
+  border-radius: var(--jsf-radius-md);
+  padding: 9px 11px;
+  cursor: pointer;
+  font-size: 12px;
+  text-align: left;
+  transition: all 0.15s ease;
+}
+
+#sebi-js-app .jsf-phase-card:hover {
+  border-color: var(--jsf-line-2);
+  background: var(--jsf-card);
+}
+
+#sebi-js-app .jsf-phase-card.active {
+  border-color: var(--jsf-neg);
+  background: var(--jsf-neg-tint);
+}
+
+#sebi-js-app .jsf-phase-card .jsf-ptag {
+  font-family: var(--mono);
+  font-weight: 700;
+  color: var(--jsf-pos);
+  margin-bottom: 3px;
+}
+
+#sebi-js-app .jsf-phase-card.active .jsf-ptag {
+  color: var(--jsf-neg);
+}
+
+#sebi-js-app .jsf-evidence-drawer {
+  display: none;
+  margin-top: 14px;
+  padding: 14px 16px;
+  background: var(--jsf-elevated);
+  border: 1.5px solid var(--jsf-ochre-line);
+  border-radius: var(--jsf-radius-md);
+}
+
+#sebi-js-app .jsf-evidence-drawer.open {
+  display: block;
+}
+
+#sebi-js-app .jsf-evidence-drawer img {
+  max-width: 100%;
+  height: auto;
+  border-radius: 6px;
+  border: 1px solid var(--jsf-line-2);
+  display: block;
+  margin: 10px auto;
+}
+
+/* ---------- Module 5: LTP Butterfly Mirror Chart ---------- */
+#sebi-js-app .jsf-bfly-row {
+  display: grid;
+  grid-template-columns: 122px minmax(0, 1fr) 104px;
+  align-items: center;
+  gap: 10px;
+  padding: 6px 0;
+  border-bottom: 1px dashed var(--jsf-line);
+  font-size: 12.5px;
+}
+
+#sebi-js-app .jsf-bfly-track {
+  display: grid;
+  grid-template-columns: 1fr 2px 1fr;
+  align-items: center;
+  height: 16px;
+  background: var(--jsf-paper);
+  border-radius: 4px;
+}
+
+#sebi-js-app .jsf-bfly-left { display: flex; justify-content: flex-end; height: 12px; }
+#sebi-js-app .jsf-bfly-right { display: flex; justify-content: flex-start; height: 12px; }
+#sebi-js-app .jsf-bfly-axis { background: var(--jsf-muted); height: 16px; width: 2px; }
+#sebi-js-app .jsf-bfly-bar-neg { background: var(--jsf-neg-mid); height: 100%; border-radius: 3px 0 0 3px; }
+#sebi-js-app .jsf-bfly-bar-pos { background: var(--jsf-pos-mid); height: 100%; border-radius: 0 3px 3px 0; }
+#sebi-js-app .jsf-bfly-bar-mkt-neg { background: #B8B3A6; height: 75%; align-self: center; border-radius: 2px 0 0 2px; }
+#sebi-js-app .jsf-bfly-bar-mkt-pos { background: #B8B3A6; height: 75%; align-self: center; border-radius: 0 2px 2px 0; }
+
+/* ---------- Bottom Editorial Footer Nav ---------- */
+.jsf-end {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 16px;
+  margin-top: 12px;
+  margin-bottom: 56px;
+  padding-top: 22px;
+  border-top: 1px solid var(--line);
+  font-size: 13.5px;
+}
+
+.jsf-end a {
+  color: var(--coral-deep);
+  text-decoration: none;
+}
+
+.jsf-end a:hover {
+  text-decoration: underline;
+}
+
+/* ---------- Responsive Breakpoints (1024 / 768 / 480 / 320) ---------- */
+@media (max-width: 1024px) {
+  #sebi-js-app .jsf-shell {
+    grid-template-columns: 1fr;
+    gap: 16px;
+  }
+  #sebi-js-app .jsf-rail {
+    position: static;
+    display: flex;
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    gap: 6px;
+    padding: 10px;
+    border-radius: var(--jsf-radius-md);
+  }
+  #sebi-js-app .jsf-rail-hdr,
+  #sebi-js-app .jsf-rail-foot {
+    display: none;
+  }
+  #sebi-js-app .jsf-nav-btn {
+    width: auto;
+    flex: none;
+    white-space: nowrap;
+    margin-bottom: 0;
+    padding: 7px 11px;
+  }
+  #sebi-js-app .jsf-kpi-strip {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+  #sebi-js-app .jsf-grid-2,
+  #sebi-js-app .jsf-grid-4 {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 640px) {
+  .jsf-page-head .jsf-title {
+    font-size: 25px;
+    line-height: 1.4;
+  }
+  #sebi-js-app .jsf-kpi-strip,
+  #sebi-js-app .jsf-grid-3,
+  #sebi-js-app .jsf-entity-grid,
+  #sebi-js-app .jsf-timeline-track {
+    grid-template-columns: 1fr;
+  }
+  #sebi-js-app .jsf-card,
+  #sebi-js-app .jsf-sec-head {
+    padding: 14px 14px;
+  }
+  #sebi-js-app .jsf-canvas-box {
+    height: 440px;
+  }
+  #sebi-js-app .jsf-bfly-row {
+    grid-template-columns: 92px minmax(0, 1fr) 86px;
+    gap: 6px;
+    font-size: 11.5px;
+  }
+  #sebi-js-app .jsf-pill-btn {
+    width: 100%;
+    text-align: left;
+  }
+  #sebi-js-app .jsf-replay-toolbar .jsf-pill-btn {
+    width: auto;
+    flex: 1 1 auto;
+    text-align: center;
+  }
+}
