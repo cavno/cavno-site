@@ -1,0 +1,332 @@
+<div class="icr-prompt" role="note" aria-label="核心场景切入">
+  <div class="icr-prompt-kicker">CLOUD RESIDENT PLAYBOOK · 云居民申卡实操命题</div>
+  <p>作为一个云居民，已经拥有了 ITIN 与美国实体 PayGo 手机号，该如何从零注册第一张美国信用卡？长期视角下又该按什么顺序规划卡组？</p>
+</div>
+
+<p class="icr-lead">拥有 ITIN 和实体美号（PayGo）意味着你已经拿到了入场券，但距离成功下卡还差三块基础拼图：<strong>合规美国地址、美国本土还款账户、纯净网络环境</strong>。补齐这三项后，严格遵循“先破冰、再占位、后扩张”的申卡顺序，就能以最低风控成本搭建起完整的美卡体系。</p>
+
+<section class="icr-section" aria-labelledby="sec-prereq">
+  <h2 id="sec-prereq">一、 注册前的 3 项必要补齐</h2>
+  <p>在提交第一份申请前，确保以下要素全部就位且信息完全一致：</p>
+
+  <div class="icr-prereq-grid">
+    <div class="icr-prereq-card">
+      <div class="icr-step-num">PILLAR 01 · 合规收件与账单地址</div>
+      <h3>1. 美国收件/居住地址（与 CP565 一致）</h3>
+      <p>使用你租用好的低噪美国地址（如伊利诺伊州 Westmont 等郊区点位），且拼写格式必须与 IRS 寄给你的 <a href="https://www.irs.gov/individuals/understanding-your-cp565-notice" target="_blank" rel="noopener noreferrer">CP565 确认信</a>一字不差。</p>
+    </div>
+
+    <div class="icr-prereq-card">
+      <div class="icr-step-num">PILLAR 02 · 同名清算与押金扣款源</div>
+      <h3>2. 同名美国银行 Checking 账户</h3>
+      <p>用于支付押金卡（Secured Card）的初始押金以及后续每月的自动还款（ACH）。<strong>还款账户户名必须与信用卡申请人完全一致</strong>（可用<a href="https://www.eastwestbank.com/en/personal-banking/velo" target="_blank" rel="noopener noreferrer">华美 Velo</a>、<a href="https://support.mercury.com/hc/en-us/articles/53435100997908-How-ACH-transfers-and-domestic-wires-work-in-the-US" target="_blank" rel="noopener noreferrer">水星银行 Mercury</a>、<a href="https://www.us.hsbc.com/checking-accounts/products/premier/" target="_blank" rel="noopener noreferrer">HSBC US</a> 或 <a href="https://wise.com/us/account/usd-account" target="_blank" rel="noopener noreferrer">Wise 美元账户</a>；注意部分银行对 Wise 的 ACH 兼容性偶发不稳定，优先使用真实银行 Checking）。</p>
+    </div>
+
+    <div class="icr-prereq-card">
+      <div class="icr-step-num">PILLAR 03 · 反欺诈环境对齐</div>
+      <h3>3. 纯净的网络与设备指纹</h3>
+      <p>使用与美国地址同州的静态住宅 ISP IP，将浏览器和系统时区调至对应时区（如美中 <code>America/Chicago</code>），语言设为 <code>en-US</code>，避免在提交申请瞬间触发反欺诈拦截。</p>
+    </div>
+  </div>
+
+  <div class="icr-workbench" id="icr-readiness-box" aria-label="申卡前准入条件自检清单">
+    <div class="icr-wb-head">
+      <div>
+        <div class="icr-wb-eyebrow">INTERACTIVE WORKBENCH 01 · 提交申请前就绪度核验</div>
+        <h3 class="icr-wb-title">云居民首卡网申 Pre-Flight 四项一致性自检</h3>
+      </div>
+      <span class="icr-status-pill" id="icrReadyBadge">已完成 0 / 4 项</span>
+    </div>
+    <div class="icr-check-list">
+      <label class="icr-check-item">
+        <input type="checkbox" class="icr-ready-chk" value="addr" />
+        <span><strong>地址格式已脱敏且与 CP565 完全对齐：</strong>街道拼写与 IRS CP565 确认信一致，门牌号已规范为 <code>Suite</code> 或 <code>Unit</code>，未出现 <code>PO Box</code> 或 <code>PMB</code> 字样。</span>
+      </label>
+      <label class="icr-check-item">
+        <input type="checkbox" class="icr-ready-chk" value="bank" />
+        <span><strong>同名真实美国 Checking 余额充足：</strong>已备好本人同名 Checking（优先华美 Velo / Mercury / HSBC US），账户内留足 <code>$200+</code> 可随时响应押金与首期还款 ACH Pull。</span>
+      </label>
+      <label class="icr-check-item">
+        <input type="checkbox" class="icr-ready-chk" value="env" />
+        <span><strong>同州静态住宅 IP 与系统环境就绪：</strong>IP 归属州与账单地址同州，系统时区已切至对应美区（如 <code>America/Chicago</code>），浏览器首选语言为 <code>en-US</code>，PayGo 信号畅通可收短信与语音。</span>
+      </label>
+      <label class="icr-check-item">
+        <input type="checkbox" class="icr-ready-chk" value="docs" />
+        <span><strong>二审（Pending）三件套扫描件已备妥：</strong>高清彩色中国护照信息页 + IRS CP565 确认信 + 显示相同姓名与相同美国地址的近一期美国银行月结单（Bank Statement）。</span>
+      </label>
+    </div>
+    <div class="icr-ready-note" id="icrReadyNote">勾选上方核对项评估当前网申准备度：建议四项全部就绪后再发起正式申请，避免白白消耗一次 Hard Pull（硬查询）。</div>
+  </div>
+</section>
+
+<section class="icr-section" aria-labelledby="sec-workflow">
+  <h2 id="sec-workflow">二、 美国信用卡标准注册实操流程</h2>
+  <p>以云居民最稳妥的首卡 <strong>Capital One</strong> 为例，标准注册动作分为五步：</p>
+
+  <ol class="icr-step-timeline">
+    <li class="icr-step-card">
+      <div class="icr-step-badge">STEP 01 · Soft Pull 探路</div>
+      <h3>1. 先做 Pre-Approval（预审批，不伤信报）</h3>
+      <p>打开官网的 <a href="https://www.capitalone.com/learn-grow/money-management/capital-one-preapproval/" target="_blank" rel="noopener noreferrer">Credit Card Pre-Approval</a> 页面，输入 ITIN 和基本信息。预审批只触发<strong>软查询（Soft Pull）</strong>，不会留下硬查记录，能直接告诉你目前能批哪张卡（无押金卡还是押金卡）。</p>
+    </li>
+
+    <li class="icr-step-card">
+      <div class="icr-step-badge">STEP 02 · 字段级防坑填报</div>
+      <h3>2. 精准填写正式申请表</h3>
+      <ul class="icr-sublist">
+        <li><strong>Tax ID / SSN：</strong>直接填入 9 位 <a href="https://www.irs.gov/tin/itin/individual-taxpayer-identification-number-itin" target="_blank" rel="noopener noreferrer">ITIN</a>。</li>
+        <li><strong>Legal Name：</strong>与护照及 CP565 完全一致（<code>First Name</code> 填名，<code>Last Name</code> 填姓）。</li>
+        <li><strong>Residential Address：</strong>填入美国地址，若有信箱号尽量整合为 <code>Suite</code> 或 <code>Unit</code> 格式，切勿直接出现 <code>PO Box</code> 或 <code>PMB</code>。</li>
+        <li><strong>Annual Income（年收入）：</strong>将你的全球合法收入折算为美元如实填报（通常 <code>$50,000–$80,000</code> 区间最为稳妥；填太低难批，填得虚高易触发银行查税表或财务审查）。</li>
+        <li><strong>Monthly Rent/Mortgage：</strong>填合理数值（如 <code>$500–$1,000</code>），不要填 <code>$0</code>。</li>
+      </ul>
+    </li>
+
+    <li class="icr-step-card">
+      <div class="icr-step-badge">STEP 03 · 人工核身与二审</div>
+      <h3>3. 配合身份与地址二审（Pending 处理）</h3>
+      <p>白户大概率不会秒批，银行通常会发邮件要求补充材料，或需要用你的 PayGo 手机接听验证短信/致电客服。提前准备好高清扫描件：<strong>中国护照信息页 + IRS CP565 确认信 + 带同名同美国地址的美国银行月结单（Bank Statement）</strong>。</p>
+    </li>
+
+    <li class="icr-step-card">
+      <div class="icr-step-badge">STEP 04 · 押金缴纳与国际转寄</div>
+      <h3>4. 交纳押金（若为 Secured 卡）并转寄实体卡</h3>
+      <p>获批后绑定美国 Checking 扣缴押金（通常 <code>$49</code> / <code>$99</code> / <code>$200</code> 起），等待 7–10 个工作日寄到转信地址，再通过 DHL/FedEx 转寄回国内。</p>
+    </li>
+
+    <li class="icr-step-card">
+      <div class="icr-step-badge">STEP 05 · 前半年黄金建档期</div>
+      <h3>5. 激活与前 6 个月养卡铁律</h3>
+      <ul class="icr-sublist">
+        <li>收到卡后在 App 激活，立即绑定 Checking 开启 <strong>Autopay（全额自动还款 Statement Balance）</strong>。</li>
+        <li><strong>控制额度使用率（Utilization）：</strong>每个账单周期出账时的欠款比例严格控制在 <strong>1%–10%</strong> 以内（例如 <code>$200</code> 额度，每月只刷 <code>$10–$20</code> 即可），绝不刷爆、绝不逾期。</li>
+      </ul>
+    </li>
+  </ol>
+</section>
+
+<section class="icr-section" aria-labelledby="sec-roadmap">
+  <h2 id="sec-roadmap">三、 云居民信用卡推荐注册顺序（四阶段路线图）</h2>
+  <p>美卡申请绝不能“看见哪张好就申哪张”，核心受制于三大底层规则：</p>
+
+  <div class="icr-rules-grid">
+    <div class="icr-rule-box">
+      <div class="icr-rule-tag">RULE 01 · 准入白名单过滤</div>
+      <strong>ITIN 接受度</strong>
+      <p>Discover、SoFi、Barclays 等明确拒绝 ITIN，直接跳过以免浪费硬查询。</p>
+    </div>
+    <div class="icr-rule-box icr-rule-box-accent">
+      <div class="icr-rule-tag">RULE 02 · 全局卡槽硬约束</div>
+      <strong>Chase 5/24 铁律</strong>
+      <p>过去 24 个月内，你在<strong>全美所有银行</strong>新开的个人信用卡总数达到 5 张及以上，Chase（摩根大通）系统会直接秒拒，几乎无法人工翻案。</p>
+    </div>
+    <div class="icr-rule-box">
+      <div class="icr-rule-tag">RULE 03 · 开卡礼单向锁</div>
+      <strong>Amex 家族阶梯规则（Family Rule）</strong>
+      <p>同系列卡必须<strong>从低端到高端</strong>申领，若跳过低端卡直接拿了高端卡，将永久失去该系列低端卡的开卡奖励资格。</p>
+    </div>
+  </div>
+
+  <p>基于上述规则，云居民的最优进阶顺序如下：</p>
+
+  <div class="icr-workbench" id="icr-slot-planner" aria-label="Chase 5/24 卡槽分配与四阶段路线切换器">
+    <div class="icr-wb-head">
+      <div>
+        <div class="icr-wb-eyebrow">INTERACTIVE WORKBENCH 02 · CHASE 5/24 卡槽与路线图推演</div>
+        <h3 class="icr-wb-title">切换初始背景与阶段视图，查看 24 个月内的 5/24 卡槽分配逻辑</h3>
+      </div>
+      <div class="icr-seg" role="group" aria-label="起点路径切换">
+        <button type="button" class="icr-path-btn active" data-path="standard">常规零基础路径（Capital One 破冰）</button>
+        <button type="button" class="icr-path-btn" data-path="gt">持有海外 Amex 满 6 个月（GT 捷径）</button>
+      </div>
+    </div>
+
+    <div class="icr-slots-bar" id="icrSlotsBar" aria-live="polite">
+      <div class="icr-slot-chip" data-stage-ref="s1">
+        <span class="icr-slot-idx">SLOT 1/24 · 0–6m</span>
+        <strong id="icrSlot1Title">Capital One Platinum / Secured</strong>
+        <small id="icrSlot1Sub">纯网申零信用破冰 · 三局上报</small>
+      </div>
+      <div class="icr-slot-chip" data-stage-ref="s2">
+        <span class="icr-slot-idx">SLOT 2/24 · 6–12m</span>
+        <strong id="icrSlot2Title">Amex BCE / Hilton 无年费</strong>
+        <small id="icrSlot2Sub">拉高授信分母 · 后续加申多为 Soft Pull</small>
+      </div>
+      <div class="icr-slot-chip icr-slot-chase" data-stage-ref="s3">
+        <span class="icr-slot-idx">SLOT 3–5/24 · 12–24m</span>
+        <strong>Chase CFU + CSP + Hyatt/Marriott</strong>
+        <small>满 12 个月信报集中攻克 Chase 黄金三槽</small>
+      </div>
+      <div class="icr-slot-chip icr-slot-post" data-stage-ref="s4">
+        <span class="icr-slot-idx">POST 5/24 · 24m+</span>
+        <strong>Amex 阶梯 / Citi / 商业卡（0/24 占用）</strong>
+        <small>Green→Gold→Platinum · Biz 卡不上个人信报</small>
+      </div>
+    </div>
+
+    <div class="icr-filter-row" role="toolbar" aria-label="四阶段表格筛选">
+      <span class="icr-filter-label">聚焦阶段：</span>
+      <button type="button" class="icr-stage-btn active" data-stage="all">全部四阶段</button>
+      <button type="button" class="icr-stage-btn" data-stage="s1">第一阶段（0–6m）</button>
+      <button type="button" class="icr-stage-btn" data-stage="s2">第二阶段（6–12m）</button>
+      <button type="button" class="icr-stage-btn" data-stage="s3">第三阶段（12–24m）</button>
+      <button type="button" class="icr-stage-btn" data-stage="s4">第四阶段（24m+）</button>
+    </div>
+  </div>
+
+  <div class="icr-table-scroll">
+    <table>
+      <caption>云居民美国信用卡推荐注册顺序（四阶段路线图）</caption>
+      <thead>
+        <tr>
+          <th scope="col">阶段与时间轴</th>
+          <th scope="col">核心目标</th>
+          <th scope="col">推荐申卡顺序与具体卡种</th>
+          <th scope="col">策略逻辑与避坑提示</th>
+        </tr>
+      </thead>
+      <tbody id="icrRoadmapTbody">
+        <tr data-stage="s1">
+          <th scope="row">第一阶段：0–6 个月<br /><em class="icr-td-em">(破冰建档期)</em></th>
+          <td>在三大信用局立项，孵化出首个 FICO 分数</td>
+          <td>
+            <p><strong>首选：</strong><a href="https://www.capitalone.com/credit-cards/platinum-secured/" target="_blank" rel="noopener noreferrer">Capital One Platinum Secured</a> / <a href="https://www.capitalone.com/credit-cards/fair-and-building/" target="_blank" rel="noopener noreferrer">Quicksilver Secured</a>（若预审过则直申免押金 Platinum）</p>
+            <p><strong>捷径：</strong>若已有香港/海外 Amex 卡满 6 个月，直接走 <a href="https://www.americanexpress.com/us/customer-service/global-card-relationship/" target="_blank" rel="noopener noreferrer"><strong>Amex Global Transfer (GT)</strong></a> 拿下美版无押金卡</p>
+          </td>
+          <td>占 <strong>1/24</strong> 卡槽。Capital One 全程纯网申、同时上报三大信用局。<strong>避开</strong>年费 <code>$35</code> 的 OpenSky 及各类不知名 Fintech 建档卡。</td>
+        </tr>
+        <tr data-stage="s2">
+          <th scope="row">第二阶段：6–12 个月<br /><em class="icr-td-em">(信用成型与切入期)</em></th>
+          <td>拉高总额度、丰富账户数，同时保护 Chase 卡槽</td>
+          <td>
+            <p><strong>第 2 张卡：Amex 入门无年费卡</strong>（如 <a href="https://www.americanexpress.com/us/credit-cards/card/blue-cash-everyday/" target="_blank" rel="noopener noreferrer">Blue Cash Everyday</a> 或 <a href="https://www.americanexpress.com/us/credit-cards/card/hilton-honors/" target="_blank" rel="noopener noreferrer">Hilton Honors 无年费版</a>）</p>
+            <p class="icr-td-note"><em>(注：若信用满 6 个月且已有海外 Amex 记录，通过率极高；否则等满 9–12 个月再申)</em></p>
+          </td>
+          <td>占 <strong>2/24</strong> 卡槽。拿下首张 Amex 后，后续加申其他 Amex 卡通常只做 <strong>Soft Pull</strong>（不新增硬查询），且极易批高额度，有助于拉低整体信用使用率。</td>
+        </tr>
+        <tr data-stage="s3">
+          <th scope="row">第三阶段：12–24 个月<br /><em class="icr-td-em">(抢占 Chase 5/24 黄金槽)</em></th>
+          <td>在突破 5/24 之前，拿齐最难攻克的 Chase 核心卡</td>
+          <td>
+            <p><strong>第 3–5 张卡（Chase 体系）：</strong></p>
+            <ol class="icr-td-ol">
+              <li><a href="https://creditcards.chase.com/cash-back-credit-cards/freedom/unlimited" target="_blank" rel="noopener noreferrer">Chase Freedom Unlimited (CFU)</a> / <a href="https://creditcards.chase.com/cash-back-credit-cards/freedom/flex" target="_blank" rel="noopener noreferrer">Freedom Flex (CFF)</a></li>
+              <li><a href="https://creditcards.chase.com/rewards-credit-cards/sapphire/preferred" target="_blank" rel="noopener noreferrer">Chase Sapphire Preferred (CSP，蓝宝石)</a></li>
+              <li>酒店/航司联名卡（如 <a href="https://creditcards.chase.com/travel-credit-cards/world-of-hyatt" target="_blank" rel="noopener noreferrer">World of Hyatt</a> / Marriott）</li>
+            </ol>
+          </td>
+          <td>用满 <strong>3/24 → 5/24</strong> 卡槽。Chase 通常要求至少 12 个月独立信用记录；ITIN 申请人提交后若遇审核，需用 PayGo 致电 Chase 审核专线（Reconsideration Line）核验身份与 CP565。</td>
+        </tr>
+        <tr data-stage="s4">
+          <th scope="row">第四阶段：24 个月+<br /><em class="icr-td-em">(全面扩张与高阶权益)</em></th>
+          <td>突破 5/24 限制后，收割高回报体系与商业卡</td>
+          <td>
+            <p><strong>1. Amex 阶梯扩张：</strong>遵循低→高原则（如 Green → <a href="https://www.americanexpress.com/us/credit-cards/card/gold-card/" target="_blank" rel="noopener noreferrer">Gold</a> → <a href="https://www.americanexpress.com/us/credit-cards/card/platinum/" target="_blank" rel="noopener noreferrer">Platinum</a>；Hilton 无年费 → Surpass → Aspire）</p>
+            <p><strong>2. Citi 体系：</strong><a href="https://www.citi.com/credit-cards/citi-double-cash-credit-card" target="_blank" rel="noopener noreferrer">Citi Double Cash</a>（全消费 2% 返现）/ <a href="https://www.citi.com/credit-cards/citi-strata-premier-credit-card" target="_blank" rel="noopener noreferrer">Strata Premier</a>（支持 ITIN）</p>
+            <p><strong>3. 商业卡（配合 US LLC + EIN）：</strong>Amex Business / <a href="https://creditcards.chase.com/business-credit-cards/ink/business-preferred" target="_blank" rel="noopener noreferrer">Chase Ink 系列</a></p>
+          </td>
+          <td><strong>商业卡的战略价值：</strong>Amex 和 Chase 的商业卡通常<strong>不上报个人信报</strong>，既不占用个人 5/24 名额，大额刷卡也不会拉低个人信用分。</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<section class="icr-section" aria-labelledby="sec-redlines">
+  <h2 id="sec-redlines">四、 云居民必须守住的四条风控红线</h2>
+
+  <div class="icr-redlines-grid">
+    <div class="icr-redline-card">
+      <div class="icr-rl-tag">RED LINE 01 · 申卡频率管制</div>
+      <h3>控制申卡节奏（Velocity）</h3>
+      <p>第一年切忌急躁，两张卡的申请间隔建议拉在 <strong>3 到 6 个月</strong>以上。短期内密集的 Hard Pull 会直接触发银行反欺诈模型导致连环拒批。</p>
+    </div>
+
+    <div class="icr-redline-card">
+      <div class="icr-rl-tag">RED LINE 02 · 反洗钱与套现红线</div>
+      <h3>严禁额度循环刷卡（Credit Cycling）</h3>
+      <p>假设你的首卡额度只有 <code>$200</code>，千万不要在一个账单月内“刷满 <code>$200</code> → 提前还清 → 再刷 <code>$200</code>”反复操作。这是美国银行极度反感的洗钱/套现高危特征，极易引发直接关户（杀全家）。</p>
+    </div>
+
+    <div class="icr-redline-card">
+      <div class="icr-rl-tag">RED LINE 03 · 还款资金溯源</div>
+      <h3>切勿接受第三方代还</h3>
+      <p>务必使用自己名下的美国银行账户通过银行 App 发起 Pull（拉取还款），绝不要用他人账户或不明渠道代还信用卡。</p>
+    </div>
+
+    <div class="icr-redline-card">
+      <div class="icr-rl-tag">RED LINE 04 · 征信档案校验</div>
+      <h3>持续监控信用报告</h3>
+      <p>首卡出账 1–2 个月后，通过 Capital One App 自带的 <a href="https://www.capitalone.com/creditwise/" target="_blank" rel="noopener noreferrer"><strong>CreditWise</strong></a>（或后续注册 <a href="https://www.experian.com/" target="_blank" rel="noopener noreferrer">Experian</a> 免费账号）核对你的姓名、美国地址和账户上报状态，确认三大信用局数据无误后再启动下一张卡的申请。</p>
+    </div>
+  </div>
+
+  <div class="icr-workbench" id="icr-cycling-guard" aria-label="首卡安全刷卡额与 Credit Cycling 风控检测器">
+    <div class="icr-wb-head">
+      <div>
+        <div class="icr-wb-eyebrow">INTERACTIVE WORKBENCH 03 · 首卡养卡安全区与 CREDIT CYCLING 预警</div>
+        <h3 class="icr-wb-title">测算前 6 个月最优出账单金额（1%–10% Utilization）并检测循环刷爆风险</h3>
+      </div>
+      <button type="button" class="icr-reset-btn" id="icrCycleReset">恢复 $200 首卡示例</button>
+    </div>
+
+    <div class="icr-sim-grid">
+      <div class="icr-sim-controls">
+        <label class="icr-field">
+          <span class="icr-field-top">
+            <span>当前单卡授信额度（Credit Limit）</span>
+            <output id="icrLimitOut">$200</output>
+          </span>
+          <input type="range" id="icrLimit" min="200" max="5000" step="100" value="200" />
+        </label>
+
+        <label class="icr-field">
+          <span class="icr-field-top">
+            <span>单账单周期累计消费总额（Total Cycle Spend）</span>
+            <output id="icrSpendOut">$16</output>
+          </span>
+          <input type="range" id="icrSpend" min="0" max="6000" step="2" value="16" />
+        </label>
+
+        <label class="icr-field">
+          <span class="icr-field-top">
+            <span>Statement 出账日留存欠款额（Reported Balance）</span>
+            <output id="icrStmtOut">$16</output>
+          </span>
+          <input type="range" id="icrStmt" min="0" max="5000" step="2" value="16" />
+        </label>
+      </div>
+
+      <div class="icr-sim-output">
+        <div class="icr-kpi-row">
+          <div class="icr-kpi-box">
+            <span class="icr-kpi-label">1%–10% 黄金出账余额区间</span>
+            <strong class="icr-kpi-val" id="icrSafeBand">$2 – $20</strong>
+            <span class="icr-kpi-sub">出账后由 Autopay 全额自动还清</span>
+          </div>
+          <div class="icr-kpi-box">
+            <span class="icr-kpi-label">当月流水 / 授信额度倍数</span>
+            <strong class="icr-kpi-val" id="icrTurnoverOut">0.08x · 安全</strong>
+            <span class="icr-kpi-sub" id="icrUtilLabel">上报使用率：8.0%</span>
+          </div>
+        </div>
+
+        <div class="icr-verdict icr-verdict-good" id="icrVerdictBox" aria-live="polite">
+          <strong id="icrVerdictTitle">风控状态：绿色安全（理想养卡区间）</strong>
+          <p id="icrVerdictDesc">单月总消费 $16 未超过 $200 授信上限（无 Credit Cycling 风险），且出账上报余额占额度 8.0%，完美契合前 6 个月 1%–10% 养卡铁律。</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="icr-section icr-refs-section" aria-labelledby="sec-references">
+  <h2 id="sec-references">五、 官方机构与核心卡种参考索引</h2>
+  <ul class="icr-ref-list">
+    <li><strong>税务身份与确认函：</strong><a href="https://www.irs.gov/individuals/understanding-your-cp565-notice" target="_blank" rel="noopener noreferrer">IRS — Understanding Your CP565 Notice</a> · <a href="https://www.irs.gov/tin/itin/individual-taxpayer-identification-number-itin" target="_blank" rel="noopener noreferrer">IRS — Individual Taxpayer Identification Number (ITIN)</a></li>
+    <li><strong>同名 Checking 清算账户：</strong><a href="https://www.eastwestbank.com/en/personal-banking/velo" target="_blank" rel="noopener noreferrer">East West Bank — Velo Mobile Banking</a> · <a href="https://support.mercury.com/hc/en-us/articles/53435100997908-How-ACH-transfers-and-domestic-wires-work-in-the-US" target="_blank" rel="noopener noreferrer">Mercury — US ACH Transfers &amp; Routing Guide</a> · <a href="https://www.us.hsbc.com/checking-accounts/products/premier/" target="_blank" rel="noopener noreferrer">HSBC USA — Premier Checking</a> · <a href="https://wise.com/us/account/usd-account" target="_blank" rel="noopener noreferrer">Wise — USD Account Details</a></li>
+    <li><strong>首卡破冰与信报监控（Capital One）：</strong><a href="https://www.capitalone.com/learn-grow/money-management/capital-one-preapproval/" target="_blank" rel="noopener noreferrer">Capital One Pre-Approval</a> · <a href="https://www.capitalone.com/credit-cards/platinum-secured/" target="_blank" rel="noopener noreferrer">Platinum Secured</a> · <a href="https://www.capitalone.com/credit-cards/fair-and-building/" target="_blank" rel="noopener noreferrer">Quicksilver Secured &amp; Credit Building Cards</a> · <a href="https://www.capitalone.com/creditwise/" target="_blank" rel="noopener noreferrer">CreditWise</a> · <a href="https://www.experian.com/" target="_blank" rel="noopener noreferrer">Experian</a></li>
+    <li><strong>Amex 全球转卡与阶梯卡系：</strong><a href="https://www.americanexpress.com/us/customer-service/global-card-relationship/" target="_blank" rel="noopener noreferrer">American Express Global Card Relationship (GT)</a> · <a href="https://www.americanexpress.com/us/credit-cards/card/blue-cash-everyday/" target="_blank" rel="noopener noreferrer">Blue Cash Everyday</a> · <a href="https://www.americanexpress.com/us/credit-cards/card/hilton-honors/" target="_blank" rel="noopener noreferrer">Hilton Honors Card</a> · <a href="https://www.americanexpress.com/us/credit-cards/card/gold-card/" target="_blank" rel="noopener noreferrer">Amex Gold</a> · <a href="https://www.americanexpress.com/us/credit-cards/card/platinum/" target="_blank" rel="noopener noreferrer">Amex Platinum</a></li>
+    <li><strong>Chase 5/24 核心卡与 Citi / 商业卡：</strong><a href="https://creditcards.chase.com/cash-back-credit-cards/freedom/unlimited" target="_blank" rel="noopener noreferrer">Chase Freedom Unlimited</a> · <a href="https://creditcards.chase.com/cash-back-credit-cards/freedom/flex" target="_blank" rel="noopener noreferrer">Chase Freedom Flex</a> · <a href="https://creditcards.chase.com/rewards-credit-cards/sapphire/preferred" target="_blank" rel="noopener noreferrer">Chase Sapphire Preferred</a> · <a href="https://creditcards.chase.com/travel-credit-cards/world-of-hyatt" target="_blank" rel="noopener noreferrer">World of Hyatt</a> · <a href="https://creditcards.chase.com/business-credit-cards/ink/business-preferred" target="_blank" rel="noopener noreferrer">Chase Ink Business Preferred</a> · <a href="https://www.citi.com/credit-cards/citi-double-cash-credit-card" target="_blank" rel="noopener noreferrer">Citi Double Cash</a> · <a href="https://www.citi.com/credit-cards/citi-strata-premier-credit-card" target="_blank" rel="noopener noreferrer">Citi Strata Premier</a></li>
+  </ul>
+</section>

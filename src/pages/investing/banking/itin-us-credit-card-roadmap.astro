@@ -1,0 +1,48 @@
+---
+import Base from '../../../layouts/Base.astro';
+import body from '../../../legacy/investing/banking/itin-us-credit-card-roadmap/body.html?raw';
+import '../../../legacy/investing/banking/itin-us-credit-card-roadmap/style.css';
+
+const title = "云居民 ITIN 申请美国信用卡实操指南与四阶段路线图";
+const description = "补齐与 CP565 一致的美国地址、同名美国 Checking 还款账户及静态住宅网络环境，拆解 Capital One 五步申卡实操、Chase 5/24 与 Amex 阶梯规则下的 24 个月四阶段办卡路线及四条风控红线。";
+const headings = Array.from(
+  body.matchAll(/<h2 id="([^"]+)">([^<]+)<\/h2>/g),
+  ([, id, text]) => ({ id, text }),
+);
+---
+<Base title={title + ' · Cavno'} description={description}>
+  <main id="icr-main">
+    <section class="cv-page-head icr-page-head">
+      <div class="cv-wrap">
+        <div class="cv-eyebrow">Investing · Banking &amp; Cards</div>
+        <h1 class="cv-page-title icr-main-title" id="icr-title">{title.split(/(?<=[，：、])/u).map((part) => <span class="icr-title-chunk">{part}</span>)}</h1>
+        <p class="cv-lede icr-main-lede">{description}</p>
+        <div class="icr-page-links">
+          <a class="cv-crumb-back" href="/investing/banking/">← 返回银行卡栏目</a>
+          <a class="cv-crumb-back" href="/investing/banking/us-bank-accounts-and-cards-guide/">前置阅读：美国银行账户与银行卡体系详解 →</a>
+          <a class="cv-crumb-back" href="/investing/research/itin-functions-and-underlying-principles/">底层延伸：ITIN的作用与底层原理 →</a>
+        </div>
+      </div>
+    </section>
+
+    <div class="cv-wrap icr-layout">
+      <aside class="icr-toc" aria-label="文章目录">
+        <details open>
+          <summary>文章目录 <span>{headings.length} 节</span></summary>
+          <nav aria-label="章节导航">
+            {headings.map(({ id, text }) => <a href={'#' + id} set:html={text} />)}
+          </nav>
+        </details>
+      </aside>
+
+      <article class="lp icr-essay" id="itin-cc-roadmap-app" aria-labelledby="icr-title">
+        <Fragment set:html={body} />
+        <nav class="icr-end" aria-label="文章导航">
+          <a href="/investing/banking/">← 返回银行卡栏目</a>
+          <a href="#icr-title">回到顶部 ↑</a>
+        </nav>
+      </article>
+    </div>
+  </main>
+  <script is:inline defer src="/investing/banking/itin-us-credit-card-roadmap/assets/app.js?v=8557646b"></script>
+</Base>

@@ -1,0 +1,709 @@
+/* 仅作用于 /investing/banking/itin-us-credit-card-roadmap/；严格沿用 Base.astro 全局设计令牌 */
+.icr-page-head .icr-main-title {
+  max-width: 1040px;
+  font-size: clamp(28px, 3.5vw, 44px);
+  line-height: 1.42;
+  letter-spacing: -0.022em;
+  overflow-wrap: anywhere;
+}
+.icr-page-head .icr-main-lede {
+  max-width: 880px;
+  line-height: 1.8;
+}
+.icr-title-chunk {
+  display: inline-block;
+  max-width: 100%;
+}
+.icr-page-links {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 20px;
+}
+
+.icr-layout {
+  display: grid;
+  grid-template-columns: 248px minmax(0, 1fr);
+  gap: 56px;
+  align-items: start;
+  padding-top: 42px;
+  padding-bottom: 84px;
+}
+
+.icr-toc {
+  position: sticky;
+  top: calc(var(--cv-head-total) + 24px);
+  max-height: calc(100dvh - var(--cv-head-total) - 48px);
+  overflow-y: auto;
+  scrollbar-width: thin;
+  scrollbar-color: var(--line-2) transparent;
+  padding-right: 10px;
+  font-size: 12px;
+}
+.icr-toc summary {
+  cursor: pointer;
+  font-size: 13px;
+  font-weight: 600;
+  padding-bottom: 14px;
+  color: var(--ink);
+}
+.icr-toc summary span {
+  color: var(--ink-2);
+  font-weight: 400;
+  margin-left: 8px;
+}
+.icr-toc nav {
+  display: grid;
+  gap: 0;
+}
+.icr-toc nav a {
+  display: block;
+  border-left: 1px solid var(--line);
+  padding: 8px 12px;
+  color: var(--ink-2);
+  line-height: 1.6;
+  text-decoration: none;
+  transition: color 0.16s ease, border-color 0.16s ease, background-color 0.16s ease;
+}
+.icr-toc nav a:hover,
+.icr-toc nav a:focus-visible,
+.icr-toc nav a.cur {
+  color: var(--coral-deep);
+  border-left-color: var(--coral);
+  background: var(--panel);
+}
+
+.lp.icr-essay {
+  min-width: 0;
+  color: var(--ink);
+  font-family: var(--sans);
+  font-size: 16px;
+  line-height: 1.95;
+  overflow-wrap: anywhere;
+}
+.lp.icr-essay * {
+  box-sizing: border-box;
+}
+.lp.icr-essay p {
+  margin: 0 0 1.15em;
+}
+.lp.icr-essay strong {
+  font-weight: 600;
+}
+.lp.icr-essay a {
+  color: var(--coral-deep);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  text-decoration-color: rgba(193, 95, 60, 0.42);
+}
+.lp.icr-essay a:hover {
+  text-decoration-color: var(--coral-deep);
+}
+.lp.icr-essay code {
+  padding: 0.12em 0.36em;
+  border-radius: 4px;
+  background: var(--panel);
+  font: 0.87em/1.6 var(--mono);
+  color: var(--ink);
+}
+
+.lp.icr-essay .icr-prompt {
+  margin: 0 0 26px;
+  padding: 18px 22px;
+  border-left: 3px solid var(--coral);
+  border-radius: 0 var(--radius-s) var(--radius-s) 0;
+  background: var(--panel);
+  color: var(--ink-2);
+}
+.lp.icr-essay .icr-prompt-kicker {
+  font: 600 11px/1.4 var(--mono);
+  letter-spacing: 0.08em;
+  color: var(--coral-deep);
+  margin-bottom: 6px;
+}
+.lp.icr-essay .icr-prompt p {
+  margin: 0;
+  font-size: 15px;
+  line-height: 1.75;
+}
+.lp.icr-essay .icr-lead {
+  font-size: 17px;
+  line-height: 1.95;
+  margin-bottom: 12px;
+}
+
+.lp.icr-essay .icr-section {
+  margin-top: 50px;
+}
+.lp.icr-essay h2 {
+  margin: 0 0 18px;
+  font-family: var(--serif);
+  font-size: clamp(22px, 2.1vw, 27px);
+  font-weight: 700;
+  line-height: 1.55;
+  letter-spacing: -0.01em;
+  text-wrap: pretty;
+  scroll-margin-top: calc(var(--cv-head-total) + 24px);
+}
+.lp.icr-essay h3 {
+  margin: 0 0 8px;
+  font: 600 18.5px/1.5 var(--serif);
+  color: var(--ink);
+}
+
+/* Section 1: 3 Prerequisite Pillars */
+.lp.icr-essay .icr-prereq-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 16px;
+  margin: 18px 0 24px;
+}
+.lp.icr-essay .icr-prereq-card {
+  padding: 20px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-s);
+  background: var(--card);
+}
+.lp.icr-essay .icr-step-num {
+  font: 600 11px/1.4 var(--mono);
+  letter-spacing: 0.05em;
+  color: var(--coral-deep);
+  margin-bottom: 8px;
+}
+.lp.icr-essay .icr-prereq-card p {
+  margin: 0;
+  font-size: 14.5px;
+  line-height: 1.8;
+  color: var(--ink-2);
+}
+
+/* Shared Interactive Workbench Chrome */
+.lp.icr-essay .icr-workbench {
+  margin: 24px 0;
+  padding: 22px 24px;
+  border: 1px solid var(--line-2);
+  border-radius: var(--radius-s);
+  background: var(--panel);
+}
+.lp.icr-essay .icr-wb-head {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 14px;
+  margin-bottom: 16px;
+}
+.lp.icr-essay .icr-wb-eyebrow {
+  font: 600 11px/1.4 var(--mono);
+  letter-spacing: 0.07em;
+  color: var(--coral-deep);
+  margin-bottom: 4px;
+}
+.lp.icr-essay .icr-wb-title {
+  font: 700 18px/1.45 var(--serif);
+  color: var(--ink);
+  margin: 0;
+}
+.lp.icr-essay .icr-status-pill {
+  display: inline-flex;
+  align-items: center;
+  padding: 5px 12px;
+  border-radius: 999px;
+  border: 1px solid var(--line-2);
+  background: var(--card);
+  font: 600 12px/1.3 var(--mono);
+  color: var(--ink-2);
+}
+.lp.icr-essay .icr-status-pill.icr-ready-done {
+  border-color: rgba(47, 99, 77, 0.38);
+  background: #ECF4EF;
+  color: #265340;
+}
+
+.lp.icr-essay .icr-check-list {
+  display: grid;
+  gap: 10px;
+}
+.lp.icr-essay .icr-check-item {
+  display: grid;
+  grid-template-columns: 18px minmax(0, 1fr);
+  gap: 12px;
+  align-items: start;
+  padding: 13px 16px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-s);
+  background: var(--card);
+  font-size: 14px;
+  line-height: 1.72;
+  color: var(--ink-2);
+  cursor: pointer;
+}
+.lp.icr-essay .icr-check-item input[type="checkbox"] {
+  margin-top: 4px;
+  width: 16px;
+  height: 16px;
+  accent-color: #2F634D;
+  cursor: pointer;
+}
+.lp.icr-essay .icr-check-item strong {
+  color: var(--ink);
+}
+.lp.icr-essay .icr-ready-note {
+  margin-top: 12px;
+  font-size: 13px;
+  line-height: 1.65;
+  color: var(--ink-2);
+}
+
+/* Section 2: 5-Step Walkthrough Timeline */
+.lp.icr-essay .icr-step-timeline {
+  list-style: none;
+  margin: 18px 0 0;
+  padding: 0;
+  display: grid;
+  gap: 14px;
+}
+.lp.icr-essay .icr-step-card {
+  padding: 20px 22px;
+  border: 1px solid var(--line);
+  border-left: 3px solid var(--line-2);
+  border-radius: var(--radius-s);
+  background: var(--card);
+}
+.lp.icr-essay .icr-step-card:hover {
+  border-left-color: var(--coral);
+}
+.lp.icr-essay .icr-step-badge {
+  display: inline-block;
+  padding: 3px 9px;
+  border-radius: 4px;
+  background: var(--panel);
+  font: 600 11px/1.4 var(--mono);
+  color: var(--coral-deep);
+  margin-bottom: 8px;
+}
+.lp.icr-essay .icr-step-card > p {
+  margin: 0;
+  font-size: 15px;
+  line-height: 1.85;
+}
+.lp.icr-essay .icr-sublist {
+  margin: 6px 0 0;
+  padding-left: 1.35em;
+}
+.lp.icr-essay .icr-sublist li {
+  margin: 0.45em 0;
+  font-size: 15px;
+  line-height: 1.82;
+}
+
+/* Section 3: 3 Underlying Rules + 5/24 Slot Planner + 4-Stage Table */
+.lp.icr-essay .icr-rules-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 14px;
+  margin: 16px 0 22px;
+}
+.lp.icr-essay .icr-rule-box {
+  padding: 18px 20px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-s);
+  background: var(--card);
+}
+.lp.icr-essay .icr-rule-box-accent {
+  border-color: rgba(193, 95, 60, 0.36);
+  background: linear-gradient(180deg, #FFFFFF 0%, #FCF8F4 100%);
+}
+.lp.icr-essay .icr-rule-tag {
+  font: 600 11px/1.4 var(--mono);
+  color: var(--coral-deep);
+  margin-bottom: 6px;
+}
+.lp.icr-essay .icr-rule-box strong {
+  display: block;
+  font: 600 16px/1.45 var(--serif);
+  margin-bottom: 6px;
+}
+.lp.icr-essay .icr-rule-box p {
+  margin: 0;
+  font-size: 14px;
+  line-height: 1.75;
+  color: var(--ink-2);
+}
+
+.lp.icr-essay .icr-seg,
+.lp.icr-essay .icr-filter-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px;
+}
+.lp.icr-essay .icr-filter-row {
+  margin-top: 14px;
+}
+.lp.icr-essay .icr-filter-label {
+  font-size: 12.5px;
+  color: var(--ink-2);
+  margin-right: 4px;
+}
+.lp.icr-essay .icr-path-btn,
+.lp.icr-essay .icr-stage-btn,
+.lp.icr-essay .icr-reset-btn {
+  appearance: none;
+  border: 1px solid var(--line-2);
+  background: var(--card);
+  color: var(--ink-2);
+  border-radius: 999px;
+  padding: 6px 12px;
+  font: 500 12.5px/1.35 var(--sans);
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+.lp.icr-essay .icr-path-btn.active,
+.lp.icr-essay .icr-stage-btn.active {
+  background: var(--ink);
+  border-color: var(--ink);
+  color: var(--paper);
+}
+.lp.icr-essay .icr-reset-btn:hover {
+  border-color: var(--coral);
+  color: var(--coral-deep);
+}
+
+.lp.icr-essay .icr-slots-bar {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 10px;
+}
+.lp.icr-essay .icr-slot-chip {
+  padding: 13px 14px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-s);
+  background: var(--card);
+  display: grid;
+  gap: 4px;
+  cursor: pointer;
+  transition: border-color 0.15s ease, background-color 0.15s ease;
+}
+.lp.icr-essay .icr-slot-chip:hover,
+.lp.icr-essay .icr-slot-chip.active {
+  border-color: var(--coral);
+  background: #FFFDFB;
+}
+.lp.icr-essay .icr-slot-chase {
+  border-color: rgba(47, 99, 77, 0.34);
+}
+.lp.icr-essay .icr-slot-post {
+  background: var(--paper);
+}
+.lp.icr-essay .icr-slot-idx {
+  font: 600 11px/1.3 var(--mono);
+  color: var(--coral-deep);
+}
+.lp.icr-essay .icr-slot-chip strong {
+  font-size: 13.5px;
+  line-height: 1.4;
+  color: var(--ink);
+}
+.lp.icr-essay .icr-slot-chip small {
+  font-size: 12px;
+  line-height: 1.45;
+  color: var(--ink-2);
+}
+
+.lp.icr-essay .icr-table-scroll {
+  max-width: 100%;
+  overflow-x: auto;
+  margin: 16px 0 24px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-s);
+  background: var(--card);
+}
+.lp.icr-essay table {
+  width: 100%;
+  min-width: 720px;
+  border-collapse: collapse;
+  table-layout: fixed;
+  font-size: 14px;
+  line-height: 1.8;
+}
+.lp.icr-essay caption {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+.lp.icr-essay th,
+.lp.icr-essay td {
+  padding: 15px 16px;
+  border-right: 1px solid var(--line);
+  border-bottom: 1px solid var(--line);
+  text-align: left;
+  vertical-align: top;
+  font-weight: 400;
+}
+.lp.icr-essay thead th {
+  background: var(--panel);
+  font-weight: 600;
+}
+.lp.icr-essay tbody th {
+  font-weight: 600;
+}
+.lp.icr-essay th:nth-child(1) { width: 17%; }
+.lp.icr-essay th:nth-child(2) { width: 19%; }
+.lp.icr-essay th:nth-child(3) { width: 34%; }
+.lp.icr-essay th:nth-child(4) { width: 30%; }
+.lp.icr-essay tbody tr:nth-child(even) {
+  background: var(--paper);
+}
+.lp.icr-essay tbody tr.icr-row-dim {
+  opacity: 0.34;
+}
+.lp.icr-essay tbody tr.icr-row-focus {
+  background: #FCF6F1;
+}
+.lp.icr-essay tr > :last-child {
+  border-right: 0;
+}
+.lp.icr-essay tbody tr:last-child > * {
+  border-bottom: 0;
+}
+.lp.icr-essay td p {
+  margin: 0 0 8px;
+}
+.lp.icr-essay td p:last-child {
+  margin-bottom: 0;
+}
+.lp.icr-essay .icr-td-em {
+  font-style: normal;
+  font-weight: 400;
+  font-size: 12.5px;
+  color: var(--ink-2);
+}
+.lp.icr-essay .icr-td-note {
+  font-size: 12.5px;
+  color: var(--ink-2);
+}
+.lp.icr-essay .icr-td-ol {
+  margin: 4px 0 0;
+  padding-left: 1.3em;
+}
+.lp.icr-essay .icr-td-ol li {
+  margin: 0.25em 0;
+}
+
+/* Section 4: 4 Risk Red Lines + Credit Cycling Simulator */
+.lp.icr-essay .icr-redlines-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 16px;
+  margin: 18px 0 24px;
+}
+.lp.icr-essay .icr-redline-card {
+  padding: 20px 22px;
+  border: 1px solid rgba(158, 71, 42, 0.28);
+  border-left: 3px solid #9E472A;
+  border-radius: var(--radius-s);
+  background: var(--card);
+}
+.lp.icr-essay .icr-rl-tag {
+  font: 600 11px/1.4 var(--mono);
+  color: #8F3D21;
+  margin-bottom: 6px;
+}
+.lp.icr-essay .icr-redline-card p {
+  margin: 0;
+  font-size: 14.5px;
+  line-height: 1.82;
+  color: var(--ink-2);
+}
+
+.lp.icr-essay .icr-sim-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1.1fr);
+  gap: 18px;
+  align-items: start;
+}
+.lp.icr-essay .icr-sim-controls {
+  display: grid;
+  gap: 12px;
+  padding: 16px 18px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-s);
+  background: var(--card);
+}
+.lp.icr-essay .icr-field {
+  display: grid;
+  gap: 5px;
+}
+.lp.icr-essay .icr-field-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 8px;
+  font-size: 13px;
+  color: var(--ink-2);
+}
+.lp.icr-essay .icr-field-top output {
+  font: 600 13px/1.3 var(--mono);
+  color: var(--ink);
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+.lp.icr-essay .icr-field input[type="range"] {
+  width: 100%;
+  accent-color: var(--coral-deep);
+  cursor: pointer;
+}
+
+.lp.icr-essay .icr-kpi-row {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+  margin-bottom: 12px;
+}
+.lp.icr-essay .icr-kpi-box {
+  padding: 14px 16px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-s);
+  background: var(--card);
+  display: grid;
+  gap: 4px;
+}
+.lp.icr-essay .icr-kpi-label {
+  font-size: 12px;
+  color: var(--ink-2);
+}
+.lp.icr-essay .icr-kpi-val {
+  font: 700 19px/1.3 var(--mono);
+  color: var(--ink);
+}
+.lp.icr-essay .icr-kpi-sub {
+  font-size: 12px;
+  color: var(--ink-2);
+}
+
+.lp.icr-essay .icr-verdict {
+  padding: 15px 17px;
+  border-radius: var(--radius-s);
+  border: 1px solid var(--line);
+  background: var(--card);
+}
+.lp.icr-essay .icr-verdict-good {
+  border-color: rgba(47, 99, 77, 0.36);
+  background: #EFF5F1;
+}
+.lp.icr-essay .icr-verdict-GoodTitle { color: #265340; }
+.lp.icr-essay .icr-verdict-warn {
+  border-color: rgba(193, 95, 60, 0.42);
+  background: #FCF6F0;
+}
+.lp.icr-essay .icr-verdict-danger {
+  border-color: rgba(158, 71, 42, 0.55);
+  background: #FBECE8;
+}
+.lp.icr-essay .icr-verdict strong {
+  display: block;
+  font-size: 14px;
+  margin-bottom: 4px;
+  color: var(--ink);
+}
+.lp.icr-essay .icr-verdict p {
+  margin: 0;
+  font-size: 13px;
+  line-height: 1.68;
+  color: var(--ink-2);
+}
+
+.lp.icr-essay .icr-refs-section {
+  padding-top: 8px;
+}
+.lp.icr-essay .icr-ref-list {
+  margin: 0;
+  padding-left: 1.3em;
+  font-size: 14px;
+  line-height: 1.8;
+  color: var(--ink-2);
+}
+.lp.icr-essay .icr-ref-list li {
+  margin: 0.5em 0;
+}
+
+.lp.icr-essay .icr-end {
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 16px;
+  margin-top: 52px;
+  padding-top: 22px;
+  border-top: 1px solid var(--line);
+  font-size: 13px;
+}
+.lp.icr-essay .icr-end a {
+  color: var(--coral-deep);
+  text-decoration: none;
+}
+.lp.icr-essay .icr-end a:hover {
+  text-decoration: underline;
+}
+
+@media (max-width: 960px) {
+  .icr-layout {
+    grid-template-columns: 1fr;
+    gap: 30px;
+    padding-top: 26px;
+    padding-bottom: 56px;
+  }
+  .icr-toc {
+    position: static;
+    max-height: none;
+    overflow: visible;
+    padding: 16px 18px;
+    border: 1px solid var(--line);
+    border-radius: var(--radius-s);
+    background: var(--card);
+  }
+  .icr-toc nav {
+    max-height: 240px;
+    overflow-y: auto;
+  }
+  .icr-toc details:not([open]) summary {
+    padding-bottom: 0;
+  }
+  .lp.icr-essay .icr-prereq-grid,
+  .lp.icr-essay .icr-rules-grid,
+  .lp.icr-essay .icr-slots-bar,
+  .lp.icr-essay .icr-redlines-grid,
+  .lp.icr-essay .icr-sim-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 640px) {
+  .icr-page-head .icr-main-title {
+    font-size: 26px;
+    line-height: 1.48;
+  }
+  .lp.icr-essay .icr-kpi-row {
+    grid-template-columns: 1fr;
+  }
+  .lp.icr-essay .icr-workbench,
+  .lp.icr-essay .icr-prereq-card,
+  .lp.icr-essay .icr-step-card,
+  .lp.icr-essay .icr-redline-card {
+    padding: 16px;
+  }
+}
+
+@media print {
+  body:has(.icr-layout) { padding-top: 0; }
+  .icr-toc,
+  .icr-page-links,
+  .lp.icr-essay .icr-end { display: none !important; }
+  .icr-layout { display: block; max-width: none; padding: 0; }
+  .lp.icr-essay table { min-width: 0; font-size: 10pt; }
+  .lp.icr-essay .icr-table-scroll { overflow: visible; border-radius: 0; }
+}
